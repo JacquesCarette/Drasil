@@ -13,12 +13,11 @@ import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
 --   requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
-import Drasil.DblPendulum.IMods (angularDisplacementIM)
+import Drasil.DblPendulum.IMods (angularDisIM_1)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
 import Data.Drasil.Quantities.Physics (angularDisplacement)
 
-{--Functional Requirements--}
-
+--Functional Requirements--
 funcReqs :: [ConceptInstance]
 funcReqs = [verifyInptVals, calcAngPos, outputValues]
 
@@ -37,19 +36,16 @@ verifyInptValsDesc = foldlSent [S "Check the entered", plural inValue,
 
 calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
-    ch angularDisplacement +:+ sParen (S "from" +:+ refS angularDisplacementIM),  
-    ch pendDisplacementAngle   +:+ sParen (S "from" +:+ refS angularDisplacementIM)
+    ch angularDisplacement +:+ sParen (S "from" +:+ refS angularDisIM_1),  
+    ch pendDisplacementAngle   +:+ sParen (S "from" +:+ refS angularDisIM_1)
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch lenRod,
-  sParen (S "from" +:+ refS angularDisplacementIM) `S.and_` ch lenRod,
-  sParen (S "from" +:+ refS angularDisplacementIM)]
+  sParen (S "from" +:+ refS angularDisIM_1) `S.and_` ch lenRod,
+  sParen (S "from" +:+ refS angularDisIM_1)]
 
-
-{--Nonfunctional Requirements--}
-
+--Nonfunctional Requirements--
 nonFuncReqs :: [ConceptInstance]
 nonFuncReqs = [correct, portable]
-
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [

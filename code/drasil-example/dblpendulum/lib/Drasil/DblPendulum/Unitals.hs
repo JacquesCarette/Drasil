@@ -144,22 +144,6 @@ tension_2 = makeUCWDS "T_2" (nounPhraseSent $ phraseNP (QP.tension `the_ofThe` s
         (S "The" +:+ phraseNP (QP.tension `the_ofThe` secondObject))
         (sub (vec cT) label2) newton
 
--- ixPos_1 = makeUCWDS "p_x1i" (nounPhraseSent $ phraseNP (ixPos `the_ofThe` firstObject))
---         (S "The" +:+ phraseNP (ixPos `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
---         (sup(sub lP (Concat [labelx, label1])) initial) metre
-
--- ixPos_2 = makeUCWDS "p_x2i" (nounPhraseSent $ phraseNP (ixPos `the_ofThe` secondObject))
---         (S "The" +:+ phraseNP (ixPos `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
---         (sup(sub lP (Concat [labelx, label2])) initial) metre
-
--- iyPos_1 = makeUCWDS "p_y1i" (nounPhraseSent $ phraseNP (iyPos `the_ofThe` firstObject))
---         (S "The" +:+ phraseNP (iyPos `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
---         (sup(sub lP (Concat [labely, label1])) initial) metre
-
--- iyPos_2 = makeUCWDS "p_y2i" (nounPhraseSent $ phraseNP (iyPos `the_ofThe` secondObject))
---         (S "The" +:+ phraseNP (iyPos `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
---         (sup(sub lP (Concat [labely, label2])) initial) metre
-
 angularVel_1 = makeUCWDS "w_1" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
         (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
         (sub lW label1) angVelU
@@ -205,25 +189,23 @@ initial = label "i"
 label1  = Integ 1
 label2  = Integ 2
 
------------------------
--- CONSTRAINT CHUNKS --
------------------------
-
-lenRodCons, pendDisplacementAngleOutCons, angAccelOutCons, initialPendAngleCons :: ConstrConcept
+----------------
+-- CONSTRAINT --
+----------------
+lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2, massCon_1, massCon_2,
+  angAccelOutCon_1, angAccelOutCon_2 :: ConstrConcept
+lenRodCon_1 = constrained' lenRod_1 [gtZeroConstr] (dbl 1)
+lenRodCon_2 = constrained' lenRod_2 [gtZeroConstr] (dbl 1)
+pendDisAngleCon_1 = constrained' pendDisAngle_1 [gtZeroConstr] (dbl 30)
+pendDisAngleCon_2 = constrained' pendDisAngle_2 [gtZeroConstr] (dbl 30)
+massCon_1 = constrained' massObj_1 [gtZeroConstr] (dbl 0.5)
+massCon_2 = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
+angAccelOutCon_1    = constrained' angularAccel_1 [gtZeroConstr] (exactDbl 0)
+angAccelOutCon_2    = constrained' angularAccel_2 [gtZeroConstr] (exactDbl 0)
 
 inConstraints :: [UncertQ]
-inConstraints = map (`uq` defaultUncrt)
-  [lenRodCons, initialPendAngleCons]
+inConstraints = map (`uq` defaultUncrt) [lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2,
+  massCon_1, massCon_2]
 
 outConstraints :: [UncertQ]
-outConstraints = map (`uq` defaultUncrt) 
-  [angAccelOutCons, pendDisplacementAngleOutCons]
-
-
-lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
-initialPendAngleCons  = constrained' initialPendAngle    [gtZeroConstr] (dbl 2.1)
---gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
-pendDisplacementAngleOutCons  = constrained' pendDisplacementAngle    [gtZeroConstr] (dbl 2.1)
-angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (exactDbl 0)
-
-
+outConstraints = map (`uq` defaultUncrt) [angAccelOutCon_1, angAccelOutCon_2]

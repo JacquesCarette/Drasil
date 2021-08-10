@@ -1,5 +1,5 @@
 module Drasil.DblPendulum.DataDefs (dataDefs, positionGDD, positionYDD_1, positionXDD_1, positionXDD_2, positionYDD_2, 
-      accelGDD, forceGDD, angFrequencyDD, frequencyDD, periodSHMDD) where
+      accelGDD, forceGDD) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 dataDefs :: [DataDefinition]
 dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, 
-  accelGDD, forceGDD, frequencyDD, angFrequencyDD, periodSHMDD]
+  accelGDD, forceGDD]
 
 ------------------------
 -- Position in General--
@@ -129,43 +129,43 @@ forceGQD = mkQuantDef force forceGEqn
 forceGEqn :: Expr
 forceGEqn = sy mass `mulRe` sy acceleration
 
-------------------------------------------------------
-frequencyDD :: DataDefinition
-frequencyDD = ddNoRefs frequencyDDQD Nothing "frequencyDD" [frequencyRef]
+-- ------------------------------------------------------
+-- frequencyDD :: DataDefinition
+-- frequencyDD = ddNoRefs frequencyDDQD Nothing "frequencyDD" [frequencyRef]
 
-frequencyDDQD :: QDefinition
-frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
+-- frequencyDDQD :: QDefinition
+-- frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
 
-frequencyDDEqn :: Expr
-frequencyDDEqn = recip_ $ sy QP.period
+-- frequencyDDEqn :: Expr
+-- frequencyDDEqn = recip_ $ sy QP.period
 
-frequencyRef :: Sentence
-frequencyRef = ch QP.frequency `S.isThe` S "number of back and forth swings in one" +:+ phrase second
+-- frequencyRef :: Sentence
+-- frequencyRef = ch QP.frequency `S.isThe` S "number of back and forth swings in one" +:+ phrase second
 
-------------------------------------------------------
+-- ------------------------------------------------------
 
-angFrequencyDD :: DataDefinition
-angFrequencyDD = ddNoRefs angFrequencyDDQD Nothing "angFrequencyDD" [angFrequencyRef]
+-- angFrequencyDD :: DataDefinition
+-- angFrequencyDD = ddNoRefs angFrequencyDDQD Nothing "angFrequencyDD" [angFrequencyRef]
 
-angFrequencyDDQD :: QDefinition
-angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
+-- angFrequencyDDQD :: QDefinition
+-- angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
-angFrequencyDDEqn :: Expr
-angFrequencyDDEqn = exactDbl 2 `mulRe` sy QM.pi_ $/ sy QP.period
+-- angFrequencyDDEqn :: Expr
+-- angFrequencyDDEqn = exactDbl 2 `mulRe` sy QM.pi_ $/ sy QP.period
 
-angFrequencyRef :: Sentence
-angFrequencyRef = ch QP.period `S.is` S "from" +:+ refS periodSHMDD
+-- angFrequencyRef :: Sentence
+-- angFrequencyRef = ch QP.period `S.is` S "from" +:+ refS periodSHMDD
 
-------------------------------------------------------
+-- ------------------------------------------------------
 
-periodSHMDD :: DataDefinition
-periodSHMDD = ddNoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
+-- periodSHMDD :: DataDefinition
+-- periodSHMDD = ddNoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
 
-periodSHMDDQD :: QDefinition
-periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn
+-- periodSHMDDQD :: QDefinition
+-- periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn
 
-periodSHMDDEqn :: Expr
-periodSHMDDEqn = recip_ $ sy QP.frequency
+-- periodSHMDDEqn :: Expr
+-- periodSHMDDEqn = recip_ $ sy QP.frequency
 
-periodSHMRef :: Sentence
-periodSHMRef = ch QP.period `S.is` S "from" +:+ refS frequencyDD
+-- periodSHMRef :: Sentence
+-- periodSHMRef = ch QP.period `S.is` S "from" +:+ refS frequencyDD

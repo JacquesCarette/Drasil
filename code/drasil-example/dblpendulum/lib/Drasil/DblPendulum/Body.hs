@@ -316,7 +316,7 @@ physSystParts = map (!.)
 --------------------------------
 -- Theoretical Models defined in TMs
 tMods :: [TheoryModel]
-tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
+tMods = [accelerationTM, velocityTM, newtonSL]
 
 ---------------------------------
 -- 4.2.3 : General Definitions --

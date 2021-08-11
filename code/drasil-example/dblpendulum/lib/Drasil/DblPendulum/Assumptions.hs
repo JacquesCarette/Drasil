@@ -10,7 +10,7 @@ import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)
 import Data.Drasil.Concepts.Physics (gravity, twoD)
-import Drasil.DblPendulum.Concepts (pendMotion, firstRod, secondRod, firstObject)
+import Drasil.DblPendulum.Concepts (pendMotion, firstRod, secondRod, firstObject, secondObject)
 
 
 assumptions :: [ConceptInstance]
@@ -49,4 +49,7 @@ firstPendDesc = foldlSent[
   S "Another side attaches" `S.toThe` phrase firstObject]
 
 secondPendDesc:: Sentence
-secondPendDesc = atStartNP (the secondRod) `S.is` S "attached" `S.toThe` (phrase firstObject !.)
+secondPendDesc = foldlSent[
+  atStartNP (the secondRod) +:+. S "has two sides", 
+  S "One side attaches" `S.toThe` (phrase firstObject !.),
+  S "Another side attaches" `S.toThe` phrase secondObject]

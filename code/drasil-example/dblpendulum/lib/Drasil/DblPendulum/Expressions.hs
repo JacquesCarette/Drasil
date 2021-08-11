@@ -3,17 +3,17 @@ module Drasil.DblPendulum.Expressions where
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 
-import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity,
-    angularAccel, xAccel, yAccel, acceleration, tension, gravitationalAccel,
+import Data.Drasil.Quantities.Physics(velocity,
+    angularAccel, xAccel, yAccel, acceleration, gravitationalAccel,
     angularFrequency, torque, momentOfInertia, time,
-    momentOfInertia, period, position)
+    momentOfInertia, period)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPendulum.DataDefs (positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, 
     positionGDD, accelGDD)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, angularVel_1, angularVel_2,
     pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1,
-    yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2, pendDisAngle_1, initialPendAngle, angularAccel_1,
+    yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2, pendDisAngle_1, angularAccel_1,
     angularAccel_2, tension_1, tension_2, massObj_1, massObj_2)
 import Control.Lens ((^.))
 
@@ -97,64 +97,9 @@ yForceWithAngle_2 :: Expr
 yForceWithAngle_2 = sy tension_2 `mulRe` cos (sy pendDisAngle_2) $- 
                     (sy massObj_2 `mulRe` sy gravitationalAccel)
 
--- Angular Frequency Of the First Object
-angFrequencyExpr :: Expr
-angFrequencyExpr = sqrt (sy gravitationalAccel $/ sy lenRod_1)
-
-
-angFrequencyDerivEqns :: [Expr]
-angFrequencyDerivEqns = [angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFrequencyDerivEqn3,
-                     angFrequencyDerivEqn4, angFrequencyDerivEqn5, angFrequencyDerivEqn6, angFrequencyDerivEqn7]
-
-angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFrequencyDerivEqn3, angFrequencyDerivEqn4,
-                   angFrequencyDerivEqn5, angFrequencyDerivEqn6, angFrequencyDerivEqn7 :: Expr
-
-angFrequencyDerivEqn1 = sy torque $= neg (sy lenRod_1) `mulRe` (sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisAngle_1))
-angFrequencyDerivEqn2 = sy momentOfInertia `mulRe` sy angularAccel $= neg (sy lenRod_1) `mulRe` (sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisAngle_1))
-angFrequencyDerivEqn3 = sy momentOfInertia `mulRe` deriv (deriv (sy pendDisAngle_1) time) time $= neg (sy lenRod_1)
-             `mulRe` sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisAngle_1)
-angFrequencyDerivEqn4 = (sy mass `mulRe` square (sy lenRod_1)) `mulRe` deriv (deriv (sy pendDisAngle_1) time) time $= neg (sy lenRod_1)
-             `mulRe` sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisAngle_1)
-angFrequencyDerivEqn5 = deriv (deriv (sy pendDisAngle_1) time) time $= neg (sy gravitationalAccel $/ sy lenRod_1) `mulRe` sin (sy pendDisAngle_1)
-angFrequencyDerivEqn6 = deriv (deriv (sy pendDisAngle_1) time) time $= neg (sy gravitationalAccel $/ sy lenRod_1) `mulRe` sy pendDisAngle_1
-angFrequencyDerivEqn7 = sy angularFrequency $= sqrt (sy gravitationalAccel $/ sy lenRod_1)
-
--- Angular Frequency Of the Second Object
-
-
--- Period of Motion in the First Object
-periodPendExpr :: Expr
-periodPendExpr = exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod_1 $/ sy gravitationalAccel)
-
-periodPendDerivEqns :: [Expr]
-periodPendDerivEqns = [periodPendDerivEqn1, periodPendDerivEqn2]
-
-periodPendDerivEqn1, periodPendDerivEqn2 :: Expr
-periodPendDerivEqn1 = sy angularFrequency $= sqrt (sy gravitationalAccel $/ sy lenRod_1)
-periodPendDerivEqn2 = sy period $= exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod_1 $/ sy gravitationalAccel)
-
--- Period of Motion in the Second Object
-
-
--- Angular Displacement in the First Object
-angularDisplacementExpr :: Expr
-angularDisplacementExpr = sy initialPendAngle `mulRe` cos (sy angularFrequency `mulRe` sy time)
-
-angularDisplacementDerivEqns :: [Expr]
-angularDisplacementDerivEqns = [angularDisplacementDerivEqn1, angularDisplacementDerivEqn2, angularDisplacementDerivEqn3,
-                                 angularDisplacementDerivEqn4, angularDisplacementDerivEqn5]
-
-angularDisplacementDerivEqn1, angularDisplacementDerivEqn2, angularDisplacementDerivEqn3,
- angularDisplacementDerivEqn4, angularDisplacementDerivEqn5 :: Expr
-angularDisplacementDerivEqn1 = sy torque $= sy momentOfInertia `mulRe` sy angularAccel
-angularDisplacementDerivEqn2 = neg (sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisAngle_1) `mulRe` sy lenRod_1) $= (sy mass `mulRe` square (sy lenRod_1))
-                                `mulRe` deriv (deriv (sy pendDisAngle_1) time) time
-angularDisplacementDerivEqn3 = deriv (deriv (sy pendDisAngle_1) time) time `addRe` ((sy gravitationalAccel $/ sy lenRod_1) `mulRe` sin (sy pendDisAngle_1)) $= exactDbl 0
-angularDisplacementDerivEqn4 = deriv (deriv (sy pendDisAngle_1) time) time `addRe` ((sy gravitationalAccel $/ sy lenRod_1) `mulRe` sy pendDisAngle_1) $= exactDbl 0
-angularDisplacementDerivEqn5 = apply1 pendDisAngle_1 time $= sy initialPendAngle `mulRe` cos ( sy angularFrequency `mulRe` sy time)
-
-angularDisExpr_1 :: Expr
-angularDisExpr_1 = neg(sy gravitationalAccel) `mulRe`
+-- Angular acceleration acting on the first object
+angularAccelExpr_1 :: Expr
+angularAccelExpr_1 = neg(sy gravitationalAccel) `mulRe`
                    (exactDbl 2 `mulRe` sy massObj_1 `addRe` sy massObj_2) `mulRe` sin (sy pendDisAngle_1 ) $-
                    (sy massObj_2 `mulRe` sy gravitationalAccel `mulRe`
                    sin (sy pendDisAngle_1 $- (exactDbl 2 `mulRe` sy pendDisAngle_2))) $-
@@ -171,8 +116,9 @@ angularDisExpr_1 = neg(sy gravitationalAccel) `mulRe`
                        cos (exactDbl 2 `mulRe` sy pendDisAngle_1  $- (exactDbl 2 `mulRe` sy pendDisAngle_2)))
                    )
 
-angularDisExpr_2 :: Expr
-angularDisExpr_2 = exactDbl 2 `mulRe` sin (sy pendDisAngle_1 $- sy pendDisAngle_2) `mulRe`
+-- Angular acceleration acting on the first object
+angularAccelExpr_2 :: Expr
+angularAccelExpr_2 = exactDbl 2 `mulRe` sin (sy pendDisAngle_1 $- sy pendDisAngle_2) `mulRe`
                    (
                        square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` (sy massObj_1 `addRe` sy massObj_2 ) `addRe`
                        (sy gravitationalAccel `mulRe` (sy massObj_1 `addRe` sy massObj_2 ) `mulRe` cos (sy pendDisAngle_1)) `addRe`
@@ -187,38 +133,55 @@ angularDisExpr_2 = exactDbl 2 `mulRe` sin (sy pendDisAngle_1 $- sy pendDisAngle_
                        cos (exactDbl 2 `mulRe` sy pendDisAngle_1  $- (exactDbl 2 `mulRe` sy pendDisAngle_2)))
                    )
 
-angularDisDerivEqns :: [Expr]
-angularDisDerivEqns = [angularDisDerivEqn1, angularDisDerivEqn2, angularDisDerivEqn3, angularDisDerivEqn4,
-                       angularDisDerivEqn5, angularDisDerivEqn6, angularDisDerivEqn7, angularDisDerivEqn8]
+-- Angular acceleration explanation in IM
+angularAccelDerivEqns :: [Expr]
+angularAccelDerivEqns = [angularAccelDerivEqn1, angularAccelDerivEqn2, angularAccelDerivEqn3, angularAccelDerivEqn4,
+                       angularAccelDerivEqn5, angularAccelDerivEqn6, angularAccelDerivEqn7, angularAccelDerivEqn8]
 
-angularDisDerivEqn1, angularDisDerivEqn2, angularDisDerivEqn3, angularDisDerivEqn4,
-  angularDisDerivEqn5, angularDisDerivEqn6, angularDisDerivEqn7, angularDisDerivEqn8 :: Expr
-angularDisDerivEqn1 = sy massObj_1 `mulRe` sy xAccel_1 $=
-                      neg (sy tension_1) `mulRe` sin (sy pendDisAngle_1) $- sy massObj_2 `mulRe` sy xAccel_2
-angularDisDerivEqn2 = sy massObj_1 `mulRe` sy yAccel_1 $=
-                      sy tension_1 `mulRe` cos (sy pendDisAngle_1) $- sy massObj_2 `mulRe` sy yAccel_2 $-
-                      sy massObj_2 `mulRe` sy gravitationalAccel $- sy massObj_1 `mulRe` sy gravitationalAccel
-angularDisDerivEqn3 = sy tension_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` cos (sy pendDisAngle_1) $=
+angularAccelDerivEqn1, angularAccelDerivEqn2, angularAccelDerivEqn3, angularAccelDerivEqn4,
+  angularAccelDerivEqn5, angularAccelDerivEqn6, angularAccelDerivEqn7, angularAccelDerivEqn8 :: Expr
+angularAccelDerivEqn1 = sy massObj_1 `mulRe` sy xAccel_1 $=
+                      neg (sy tension_1) `mulRe` sin (sy pendDisAngle_1) $- (sy massObj_2 `mulRe` sy xAccel_2)
+angularAccelDerivEqn2 = sy massObj_1 `mulRe` sy yAccel_1 $=
+                      sy tension_1 `mulRe` cos (sy pendDisAngle_1) $- (sy massObj_2 `mulRe` sy yAccel_2) $-
+                      (sy massObj_2 `mulRe` sy gravitationalAccel) $- (sy massObj_1 `mulRe` sy gravitationalAccel)
+angularAccelDerivEqn3 = sy tension_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` cos (sy pendDisAngle_1) $=
                       neg (cos (sy pendDisAngle_1)) `mulRe`
-                      (sy massObj_1 `mulRe` sy xAccel_1 `addRe` sy massObj_2 `mulRe` sy xAccel_2)
-angularDisDerivEqn4 = sy tension_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` cos (sy pendDisAngle_1) $=
+                      ((sy massObj_1 `mulRe` sy xAccel_1) `addRe` (sy massObj_2 `mulRe` sy xAccel_2))
+angularAccelDerivEqn4 = sy tension_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` cos (sy pendDisAngle_1) $=
                       sin (sy pendDisAngle_1) `mulRe` 
                       (
-                          sy massObj_1 `mulRe` sy yAccel_1 `addRe` sy massObj_2 `mulRe` sy yAccel_2 `addRe`
-                          sy massObj_2 `mulRe` sy gravitationalAccel `addRe` sy massObj_1 `mulRe` sy gravitationalAccel
+                          (sy massObj_1 `mulRe` sy yAccel_1) `addRe` (sy massObj_2 `mulRe` sy yAccel_2) `addRe`
+                          (sy massObj_2 `mulRe` sy gravitationalAccel) `addRe` (sy massObj_1 `mulRe` sy gravitationalAccel)
                       )
-angularDisDerivEqn5 = sin (sy pendDisAngle_1) `mulRe` 
+angularAccelDerivEqn5 = sin (sy pendDisAngle_1) `mulRe` 
                       (
-                          sy massObj_1 `mulRe` sy yAccel_1 `addRe` sy massObj_2 `mulRe` sy yAccel_2 `addRe`
-                          sy massObj_2 `mulRe` sy gravitationalAccel `addRe` sy massObj_1 `mulRe` sy gravitationalAccel
+                          (sy massObj_1 `mulRe` sy yAccel_1) `addRe` (sy massObj_2 `mulRe` sy yAccel_2) `addRe`
+                          (sy massObj_2 `mulRe` sy gravitationalAccel) `addRe` (sy massObj_1 `mulRe` sy gravitationalAccel)
                       ) $=
                       neg (cos (sy pendDisAngle_1)) `mulRe` 
-                      (sy massObj_1 `mulRe` sy xAccel_1 `addRe` sy massObj_2 `mulRe` sy xAccel_2)
-angularDisDerivEqn6 = sy tension_2 `mulRe` sin(sy pendDisAngle_2) `mulRe` cos (sy pendDisAngle_2) $=
+                      ((sy massObj_1 `mulRe` sy xAccel_1) `addRe` (sy massObj_2 `mulRe` sy xAccel_2))
+angularAccelDerivEqn6 = sy tension_2 `mulRe` sin(sy pendDisAngle_2) `mulRe` cos (sy pendDisAngle_2) $=
                       neg (cos (sy pendDisAngle_2)) `mulRe` sy massObj_2 `mulRe` sy xAccel_2
-angularDisDerivEqn7 = sy tension_1 `mulRe` sin (sy pendDisAngle_2 ) `mulRe` cos (sy pendDisAngle_2) $=
+angularAccelDerivEqn7 = sy tension_1 `mulRe` sin (sy pendDisAngle_2 ) `mulRe` cos (sy pendDisAngle_2) $=
                       sin (sy pendDisAngle_2) `mulRe`
-                      (sy massObj_2 `mulRe` sy yAccel_2 `addRe` sy massObj_2 `mulRe` sy gravitationalAccel)
-angularDisDerivEqn8 = sin (sy pendDisAngle_2) `mulRe` 
-                      (sy massObj_2 `mulRe` sy yAccel_2 `addRe` sy massObj_2 `mulRe` sy gravitationalAccel) $=
+                      ((sy massObj_2 `mulRe` sy yAccel_2) `addRe` (sy massObj_2 `mulRe` sy gravitationalAccel))
+angularAccelDerivEqn8 = sin (sy pendDisAngle_2) `mulRe` 
+                      ((sy massObj_2 `mulRe` sy yAccel_2) `addRe` (sy massObj_2 `mulRe` sy gravitationalAccel)) $=
                       neg (cos (sy pendDisAngle_2)) `mulRe` sy massObj_2 `mulRe` sy xAccel_2
+
+-- Angular acceleration support equations in IM
+forceDerivExpr1 :: Expr
+forceDerivExpr1 = sy tension_2 `mulRe` sin (sy pendDisAngle_2)
+forceDerivExpr2 :: Expr
+forceDerivExpr2 = sy tension_2 `mulRe` cos (sy pendDisAngle_2)
+
+cosAngleExpr1 :: Expr
+cosAngleExpr1 = cos (sy pendDisAngle_1)
+sinAngleExpr1 :: Expr
+sinAngleExpr1 = sin (sy pendDisAngle_1)
+
+cosAngleExpr2 :: Expr
+cosAngleExpr2 = cos (sy pendDisAngle_2)
+sinAngleExpr2 :: Expr
+sinAngleExpr2 = sin (sy pendDisAngle_2)

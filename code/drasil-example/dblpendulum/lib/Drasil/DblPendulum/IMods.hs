@@ -1,76 +1,46 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.DblPendulum.IMods (iMods, angularDisIM_1, angularDisIM_2) where
+module Drasil.DblPendulum.IMods (iMods, angularAccelIM_1, angularAccelIM_2) where
 
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
 import Theory.Drasil
-import Utils.Drasil
-import Utils.Drasil.Concepts
+import Utils.Drasil (foldlSentCol, weave)
 import qualified Utils.Drasil.Sentence as S
-import qualified Utils.Drasil.NounPhrase as NP
-import Data.Drasil.Quantities.Physics (gravitationalAccel,
-         angularAccel, momentOfInertia,
-         time, angularDisplacement, angularFrequency, torque, angularDisplacement, time)
-import Data.Drasil.Concepts.Math (constraint, equation, amplitude, iAngle, angle)
-import Data.Drasil.Concepts.Physics (pendulum, motion, shm)
-import Data.Drasil.Theories.Physics (newtonSLR)
-
-import Drasil.DblPendulum.Expressions (angularDisplacementExpr, angularDisplacementDerivEqns, angularDisExpr_1, angularDisExpr_2)
-import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle, 
-  pendDisAngle_1, lenRod_1, lenRod_2, pendDisAngle_2, massObj_1, massObj_2, 
-  angularAccel_1, angularAccel_2, angularVel_1, angularVel_2)
+import Drasil.DblPendulum.Expressions (
+  angularAccelExpr_1, angularAccelExpr_2, angularAccelDerivEqns, forceDerivExpr1, forceDerivExpr2,
+  cosAngleExpr1, sinAngleExpr1, cosAngleExpr2, sinAngleExpr2)
+import Drasil.DblPendulum.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2,
+  massObj_1, massObj_2, angularAccel_1, angularAccel_2, angularVel_1, angularVel_2)
+import Drasil.DblPendulum.GenDefs (xForceGD_2, yForceGD_2, xForceGD_1, yForceGD_1, accelXGD_1, accelXGD_2, accelYGD_1, accelYGD_2)
 
 iMods :: [InstanceModel]
-iMods = [angularDisIM_1, angularDisIM_2]
+iMods = [angularAccelIM_1, angularAccelIM_2]
 
--- -- Angular Displacement
--- angularDisplacementIM :: InstanceModel
--- angularDisplacementIM = imNoRefs angularDisplacementMK
---   [qwC lenRod $ UpFrom (Exc, exactDbl 0)
---   ,qwC initialPendAngle $ UpFrom (Exc, exactDbl 0)
---   , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)]
---   (qw pendDisplacementAngle) [UpFrom (Exc, exactDbl 0)]
---   (Just angularDisplacementDeriv) "calOfAngularDisplacement" [angularDispConstraintNote]
+angularAccelDerivSents :: [Sentence]
+angularAccelDerivSents = [angularAccelDerivSent1, EmptyS, angularAccelDerivSent2, EmptyS, angularAccelDerivSent3,
+                       angularAccelDerivSent4, EmptyS, angularAccelDerivSent5, angularAccelDerivSent6]
 
--- angularDisplacementMK :: ModelKind 
--- angularDisplacementMK = equationalModel "angularDisplacementIM"
---   (nounPhraseSP "calculation of angular displacement") angularDisplacementFD
+angularAccelDerivSent1, angularAccelDerivSent2, angularAccelDerivSent3,
+  angularAccelDerivSent4, angularAccelDerivSent5, angularAccelDerivSent6 :: Sentence
+angularAccelDerivSent1 = foldlSentCol [S "By solving equations" +:+ refS xForceGD_2 `S.and_` refS yForceGD_2 
+                        `S.for` eS forceDerivExpr1 `S.and_` eS forceDerivExpr2 `S.and_` S "then substituting into eqaution" +:+ 
+                        refS xForceGD_1 `S.and_` refS yForceGD_1 +:+ S ", We can get equations 1 and 2"]
+angularAccelDerivSent2 = foldlSentCol [S "Multiply the equation 1 by" +:+ 
+                       eS cosAngleExpr1 `S.and_` S "the equation 2 by" +:+ eS sinAngleExpr1 `S.and_`
+                       S "rearrange to get"]
+angularAccelDerivSent3 = S "This leads to the equation 3"
+angularAccelDerivSent4 = foldlSentCol[S "Next, multiply equation" +:+ refS xForceGD_2 +:+ S "by" +:+ 
+                       eS cosAngleExpr2 `S.and_` S "equation" +:+ refS yForceGD_2 +:+ S "by" +:+ 
+                       eS sinAngleExpr2 `S.and_` S "rearrange to get"]
+angularAccelDerivSent5 = S "which leads to equation 4"
+angularAccelDerivSent6 = foldlSentCol[S "By giving equations" +:+ refS accelXGD_1 `S.and_` refS accelXGD_2 `S.and_` 
+                       refS accelYGD_1 `S.and_` refS accelYGD_2 +:+ 
+                       S "plus additional two equations, 3 and 4, we can get" +:+ refS angularAccelIM_1 `S.and_`
+                       refS angularAccelIM_2 +:+ S "via a computer algebra program"]
 
--- angularDisplacementFD :: QDefinition
--- angularDisplacementFD = mkFuncDefByQ pendDisplacementAngle [time] angularDisplacementExpr
-
--- angularDisplacementDeriv :: Derivation
--- angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave [angularDisplacementDerivSents, map eS angularDisplacementDerivEqns])
-
--- angularDisplacementDerivSents :: [Sentence]
--- angularDisplacementDerivSents = [angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacementDerivSent3,
---                              angularDisplacementDerivSent4, angularDisplacementDerivSent5]
-
--- angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacementDerivSent3,
---   angularDisplacementDerivSent4, angularDisplacementDerivSent5 :: Sentence
--- angularDisplacementDerivSent1 = foldlSentCol [S "When", phraseNP (the pendulum) `S.is` S "displaced to an", phrase iAngle `S.and_` S "released" `sC`
---                                        phraseNP (the pendulum), S "swings back and forth with periodic" +:+. phrase motion,
---                                        S "By applying", namedRef newtonSLR (phrase newtonSLR) `sC`
---                                        phraseNP (NP.the (equation `of_` motion) `NP.for` the pendulum), S "may be obtained"]
--- angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `S.denotes` phrase torque `sC`
---                                     ch momentOfInertia `S.denotes` phrase momentOfInertia `S.and_` ch angularAccel `S.denotes`
---                                     (phrase angularAccel !.), S "This implies"]
--- angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ]
--- angularDisplacementDerivSent4 = foldlSentCol [S "If", phraseNP (NP.the (amplitude `of_` angularDisplacement)), S "is small enough" `sC`
---   S "we can approximate", eS (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum,
---   S "at very small" +:+. plural angle,
---   S "Then", phraseNP (NP.the (equation `of_` motion)), S "reduces to", phraseNP (NP.the (equation `of_` shm))]                                       
--- angularDisplacementDerivSent5 = foldlSentCol [S "Thus the", phrase shm, S "is" ]
-
--- angularDispConstraintNote :: Sentence
--- angularDispConstraintNote = foldlSent [atStartNP (the constraint),
---      eS (sy initialPendAngle $> exactDbl 0) `S.is` (S "required" !.),
---      atStartNP (the angularFrequency) `S.is` definedIn'' angFrequencyGD]
-
-
-angularDisIM_1 :: InstanceModel
-angularDisIM_1 = imNoRefs angularDisMK_1
+angularAccelIM_1 :: InstanceModel
+angularAccelIM_1 = imNoRefs angularAccelMK_1
   [qwC lenRod_1 $ UpFrom (Exc, exactDbl 0),
    qwC lenRod_2 $ UpFrom (Exc, exactDbl 0),
    qwC massObj_1 $ UpFrom (Exc, exactDbl 0),
@@ -78,21 +48,18 @@ angularDisIM_1 = imNoRefs angularDisMK_1
    qwUC pendDisAngle_1,
    qwUC pendDisAngle_2]
   (qw angularAccel_1) [UpFrom (Exc, exactDbl 0)]
-  (Just angularDisDeriv_1) "calOfAngularDisplacement1" []
+  Nothing "calOfAngularAcceleration1" []
 
-angularDisMK_1 :: ModelKind 
-angularDisMK_1 = equationalModel "angularDisplacementIM1"
-  (nounPhraseSP "calculation of angular displacement") angularDisFD_1
+angularAccelMK_1 :: ModelKind 
+angularAccelMK_1 = equationalModel "angularAccelerationIM1"
+  (nounPhraseSP "calculation of angular acceleration") angularAccelFD_1
 
-angularDisFD_1 :: QDefinition
-angularDisFD_1 = mkFuncDefByQ angularAccel_1
-  [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularDisExpr_1
+angularAccelFD_1 :: QDefinition
+angularAccelFD_1 = mkFuncDefByQ angularAccel_1
+  [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularAccelExpr_1
 
-angularDisDeriv_1 :: Derivation
-angularDisDeriv_1 = mkDerivName (phrase pendDisAngle_1) (weave [])
-
-angularDisIM_2 :: InstanceModel
-angularDisIM_2 = imNoRefs angularDisMK_2
+angularAccelIM_2 :: InstanceModel
+angularAccelIM_2 = imNoRefs angularAccelMK_2
   [qwC lenRod_1 $ UpFrom (Exc, exactDbl 0),
    qwC lenRod_2 $ UpFrom (Exc, exactDbl 0),
    qwC massObj_1 $ UpFrom (Exc, exactDbl 0),
@@ -100,15 +67,15 @@ angularDisIM_2 = imNoRefs angularDisMK_2
    qwUC pendDisAngle_1,
    qwUC pendDisAngle_2]
   (qw angularAccel_2) [UpFrom (Exc, exactDbl 0)]
-  (Just angularDisDeriv_2) "calOfAngularDisplacement2" []
+  (Just angularAccelDeriv_2) "calOfAngularAcceleration2" [{-Notes-}]
 
-angularDisMK_2 :: ModelKind 
-angularDisMK_2 = equationalModel "angularDisplacementIM2"
-  (nounPhraseSP "calculation of angular displacement") angularDisFD_2
+angularAccelMK_2 :: ModelKind 
+angularAccelMK_2 = equationalModel "angularAccelerationIM2"
+  (nounPhraseSP "calculation of angular acceleration") angularAccelFD_2
 
-angularDisFD_2 :: QDefinition
-angularDisFD_2 = mkFuncDefByQ angularAccel_2
-  [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularDisExpr_2
+angularAccelFD_2 :: QDefinition
+angularAccelFD_2 = mkFuncDefByQ angularAccel_2
+  [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularAccelExpr_2
 
-angularDisDeriv_2 :: Derivation
-angularDisDeriv_2 = mkDerivName (phrase pendDisAngle_2) (weave [])
+angularAccelDeriv_2 :: Derivation
+angularAccelDeriv_2 = mkDerivName (phrase pendDisAngle_2) (weave [angularAccelDerivSents, map eS angularAccelDerivEqns])

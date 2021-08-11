@@ -41,10 +41,10 @@ import Data.Drasil.Concepts.Math (mathcon, cartesian, mathcon')
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 
 import Drasil.DblPendulum.Body (justification, charsOfReader, organizationOfDocumentsIntro,
-  physSystParts, sysCtxIntro, sysCtxDesc, sysCtxList, userCharacteristicsIntro)
-import Drasil.DblPendulum.Concepts (concepts, pendMotion, progName)
+  sysCtxIntro, sysCtxDesc, sysCtxList, userCharacteristicsIntro)
+import Drasil.DblPendulum.Concepts (concepts, pendMotion, progName, rod)
 import Drasil.DblPendulum.Requirements (nonFuncReqs)
-import Drasil.DblPendulum.Unitals (symbols, acronyms)
+import Drasil.DblPendulum.Unitals (acronyms)
 
 import Drasil.SglPendulum.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPendulum.Assumptions (assumptions)
@@ -53,7 +53,7 @@ import Drasil.SglPendulum.DataDefs (dataDefs)
 import Drasil.SglPendulum.IMods (iMods)
 import Drasil.SglPendulum.GenDefs (genDefns)
 import Drasil.SglPendulum.Unitals (inputs, outputs,
-  inConstraints, outConstraints)
+  inConstraints, outConstraints, symbols)
 import Drasil.SglPendulum.Requirements (funcReqs)
 import Drasil.SglPendulum.References (citations)
 
@@ -236,6 +236,8 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 -----------------------------------
 -- 4.1.2 Physical System Description --
 -----------------------------------
+physSystParts :: [Sentence]
+physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

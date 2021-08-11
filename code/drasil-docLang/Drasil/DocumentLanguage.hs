@@ -28,7 +28,7 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
   termTable, conceptinsTable, idMap, refbyTable, conceptDB,
   refTable, labelledcontentTable, sectionTable, theoryModelTable,
-  insmodelTable, gendefTable, dataDefnTable, refdb, sysinfodb, traceTable,
+  insmodelTable, gendefTable, eDataDefnTable, meDataDefnTable, refdb, sysinfodb, traceTable,
   generateRefbyMap)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -102,8 +102,9 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    inRefs = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++ concatMap dRefToRef imods ++ concatMap dRefToRef tmods
-    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
+    inRefs = concatMap dRefToRef eDdefs ++ concatMap dRefToRef meDdefs ++ concatMap dRefToRef gdefs ++ concatMap dRefToRef imods ++ concatMap dRefToRef tmods
+    eDdefs  = map (fst.snd) $ Map.assocs $ chkdb ^. eDataDefnTable
+    meDdefs = map (fst.snd) $ Map.assocs $ chkdb ^. meDataDefnTable
     gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
     imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
     tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
@@ -118,7 +119,7 @@ fillReferences dd si@SI{_sys = sys} = si2
     chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
       ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (filter (not.isSpace) $ abrv sys) ++ map ref cites
-      ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
+      ++ map ref conins ++ map ref eDdefs ++ map ref meDdefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon
       ++ refs) chkdb
     -- set new chunk database into system information

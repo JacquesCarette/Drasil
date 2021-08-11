@@ -25,7 +25,7 @@ assumptions :: [ConceptInstance]
 assumptions = [assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC,
   assumpRT, assumpLDFC]
 
-assumptionConstants :: [QDefinition]
+assumptionConstants :: [QDefinition Expr]
 assumptionConstants = [constantM, constantK, constantModElas,
   constantLoadDur, constantLoadSF]
 

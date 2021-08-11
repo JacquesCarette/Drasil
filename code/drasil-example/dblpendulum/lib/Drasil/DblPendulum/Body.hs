@@ -161,7 +161,6 @@ concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
 
-
 ------------------------------
 -- Section : INTRODUCTION --
 ------------------------------

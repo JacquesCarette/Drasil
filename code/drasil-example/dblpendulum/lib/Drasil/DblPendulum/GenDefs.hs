@@ -7,9 +7,7 @@ import Prelude hiding (cos, sin, sqrt)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Theory.Drasil (GenDefn, gdNoRefs,
-    equationalModel', equationalModelU, equationalRealmU,
-    MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
+import Theory.Drasil
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -28,7 +26,7 @@ import Drasil.DblPendulum.DataDefs (positionGDD,
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import qualified Drasil.DblPendulum.Expressions as E
-import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, lenRod_1, lenRod_2, xVel_1, xVel_2,
+import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, xVel_1, xVel_2,
     yVel_1, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2)
 import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
@@ -299,63 +297,3 @@ yForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
 
 yForceDeriv_2 :: Derivation
 yForceDeriv_2 = mkDerivName (phraseNP (force `onThe` secondObject)) [eS yForceMD_2]
-
-
---------------------------------------Angular Frequency Of Pendulum
--- angFrequencyGD :: GenDefn
--- angFrequencyGD = gdNoRefs (equationalModelU "angFrequencyGD" angFrequencyQD) (getUnit angularFrequency)
---            (Just angFrequencyDeriv) "angFrequencyGD" [angFrequencyGDNotes]
-
--- angFrequencyQD :: QDefinition
--- angFrequencyQD = mkQuantDef' angularFrequency (angularFrequency `the_ofThe` pendulum) E.angFrequencyExpr
-
--- angFrequencyDeriv :: Derivation
--- angFrequencyDeriv = mkDerivName (phraseNP (angularFrequency `the_ofThe` pendulum)) (weave [angFrequencyDerivSents, map eS E.angFrequencyDerivEqns])
-
-
--- angFrequencyDerivSents :: [Sentence]
--- angFrequencyDerivSents = [angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
---                       angFrequencyDerivSent4, angFrequencyDerivSent5, angFrequencyDerivSent6, angFrequencyDerivSent7]
-
--- angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
---      angFrequencyDerivSent4, angFrequencyDerivSent5, angFrequencyDerivSent6, angFrequencyDerivSent7 :: Sentence
--- angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a", phrase pendulum +:+. definedIn'' newtonSLR,
---                   S "The", phrase force, S "providing the restoring", phrase torque `S.is` phraseNP (the component `NP.of_`
---                   (weight `ofThe` pendulum)), S "bob that acts along the" +:+. phrase arcLen,
---                   (phrase torque `S.isThe` phrase len) `S.the_ofTheC` S "string", ch lenRod, S "multiplied by", phrase component
---                   `S.the_ofThe` S "net", phrase force, S "that is perpendicular to", S "radius" `S.the_ofThe` (S "arc" !.),
---                   S "The minus sign indicates the", phrase torque, S "acts in the opposite", phraseNP (direction `ofThe`angularDisplacement)]
--- angFrequencyDerivSent2 = S "So then"
--- angFrequencyDerivSent3 = S "Therefore,"
--- angFrequencyDerivSent4 = S "Substituting for" +:+ ch momentOfInertia
--- angFrequencyDerivSent5 = S "Crossing out" +:+ ch mass `S.and_` ch lenRod +:+ S "we have"
--- angFrequencyDerivSent6 = S "For small" +:+ plural angle `sC` S "we approximate" +:+ S "sin" +:+ ch pendDisplacementAngle +:+ S "to" +:+ ch pendDisplacementAngle
--- angFrequencyDerivSent7 = S "Because this" +:+ phrase equation `sC` S "has the same form as the" +:+ phraseNP (equation `for` shm) +:+. 
---                         S "the solution is easy to find" +:+ S " The" +:+ phrase angularFrequency
-
--- angFrequencyGDNotes :: Sentence
--- angFrequencyGDNotes = S "The" +:+ phrase torque `S.is` definedIn'' newtonSLR  `S.and_` phrase frequency `S.is` definedIn frequencyDD
-
- -------------------------------- Period of Pendulum Motion 
-
--- periodPend :: GenDefn
--- periodPend = gdNoRefs (equationalModelU "periodPendGD" periodPendQD) (getUnit period)
---            (Just periodPendDeriv) "periodPend" [periodPendNotes]
-
--- periodPendQD :: QDefinition
--- periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) E.periodPendExpr
-
--- periodPendDeriv :: Derivation
--- periodPendDeriv = mkDerivName (phraseNP (NP.the (period `ofThe` pendulum))) (weave [periodPendDerivSents, map eS E.periodPendDerivEqns])
-
--- periodPendDerivSents :: [Sentence]
--- periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]
-
--- periodPendDerivSent1, periodPendDerivSent2 :: Sentence
--- periodPendDerivSent1 = atStartNP (period `the_ofThe` pendulum) +:+ S "can be defined from the general definition for the" +:+ phrase equation `S.of_`
---                 namedRef angFrequencyGD (phrase angFrequencyDD)
--- periodPendDerivSent2 =  S "Therefore from the data definition of the" +:+ phrase equation `S.for` namedRef angFrequencyDD (phrase angFrequencyDD) `sC` S "we have"
-
--- periodPendNotes :: Sentence
--- periodPendNotes = atStartNP (NP.the (frequency `and_` period)) +:+ S "are defined in the data definitions for" +:+ namedRef frequencyDD (phrase frequencyDD) `S.and_`
---         namedRef periodSHMDD (phrase periodSHMDD) +:+ S "respectively"

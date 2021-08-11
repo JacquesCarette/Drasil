@@ -9,7 +9,7 @@ import Theory.Drasil (DataDefinition, ddNoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos,
       frequency, period, angularFrequency)
-import Drasil.DblPendulum.Unitals (lenRod, pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
+import Drasil.DblPendulum.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
@@ -37,7 +37,7 @@ positionGEqn = deriv (sy position) time
 -- Position in X Dirction in the First Object--
 -----------------------------------------------
 positionXDD_1 :: DataDefinition
-positionXDD_1 = ddNoRefs positionXQD_1 Nothing "positionX1DD" [positionXRef_1, positionXFigRef_1]
+positionXDD_1 = ddNoRefs positionXQD_1 Nothing "positionXDD1" [positionXRef_1, positionXFigRef_1]
 
 positionXQD_1 :: QDefinition
 positionXQD_1 = mkQuantDef xPos_1 positionXEqn_1
@@ -55,7 +55,7 @@ positionXRef_1 = ch xPos_1 `S.isThe` phrase horizontalPos
 -- Position in Y Dirction in the First Object--
 -----------------------------------------------
 positionYDD_1 :: DataDefinition
-positionYDD_1 = ddNoRefs positionYQD_1 Nothing "positionY1DD" [positionYRef_1, positionYFigRef_1]
+positionYDD_1 = ddNoRefs positionYQD_1 Nothing "positionYDD1" [positionYRef_1, positionYFigRef_1]
 
 positionYQD_1 :: QDefinition
 positionYQD_1 = mkQuantDef yPos_1 positionYEqn_1
@@ -73,7 +73,7 @@ positionYRef_1 = ch yPos_1 `S.isThe` phrase verticalPos
 -- Position in X Dirction in the Second Object--
 -----------------------------------------------
 positionXDD_2 :: DataDefinition
-positionXDD_2 = ddNoRefs positionXQD_2 Nothing "positionX2DD" [positionXRef_2, positionXFigRef_2]
+positionXDD_2 = ddNoRefs positionXQD_2 Nothing "positionXDD2" [positionXRef_2, positionXFigRef_2]
 
 positionXQD_2 :: QDefinition
 positionXQD_2 = mkQuantDef xPos_2 positionXEqn_2
@@ -91,7 +91,7 @@ positionXRef_2 = ch xPos_2 `S.isThe` phrase horizontalPos
 -- Position in Y Dirction in the Second Object--
 -----------------------------------------------
 positionYDD_2 :: DataDefinition
-positionYDD_2 = ddNoRefs positionYQD_2 Nothing "positionY2DD" [positionYRef_2, positionYFigRef_2]
+positionYDD_2 = ddNoRefs positionYQD_2 Nothing "positionYDD2" [positionYRef_2, positionYFigRef_2]
 
 positionYQD_2 :: QDefinition
 positionYQD_2 = mkQuantDef yPos_2 positionYEqn_2

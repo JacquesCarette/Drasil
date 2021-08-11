@@ -12,23 +12,14 @@ import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import qualified Utils.Drasil.NounPhrase as NP
-
--- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
-import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, direction, angle)
-import Data.Drasil.Quantities.Physics (velocity, acceleration, force,
-    momentOfInertia, torque, angularDisplacement, angularFrequency,
-    frequency, period)
-import Data.Drasil.Concepts.Physics (pendulum, weight, shm)
-import Data.Drasil.Quantities.PhysicalProperties (mass, len)
-import Data.Drasil.Theories.Physics (newtonSLR)
+import Data.Drasil.Concepts.Math (xComp, yComp)
+import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
 import Drasil.DblPendulum.DataDefs (positionGDD,
     positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, forceGDD)
-
--- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import qualified Drasil.DblPendulum.Expressions as E
-import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, xVel_1, xVel_2,
+import Drasil.DblPendulum.Unitals (lenRod_1, xVel_1, xVel_2,
     yVel_1, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2)
-import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
+import Drasil.DblPendulum.Concepts (horizontalPos,
     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
 import Control.Lens ((^.))
 

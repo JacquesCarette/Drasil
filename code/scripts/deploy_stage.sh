@@ -8,6 +8,11 @@ if [ -z "$DEPLOY_FOLDER" ]; then
   exit 1
 fi
 
+if [ -z "$WEBSITE_FOLDER" ]; then
+  echo "Missing WEBSITE_FOLDER. Run make website."
+  exit 1
+fi
+
 if [ -z "$BUILD_FOLDER" ]; then
   echo "Missing BUILD_FOLDER."
   exit 1
@@ -49,7 +54,8 @@ if [ -z "$MAKE" ]; then
 fi
 
 DOC_DEST=docs/
-SRS_DEST=srs/
+# SRS_DEST needs to be two levels deep for image filepaths to match those of the build folder
+SRS_DEST=SRS/srs
 DOX_DEST=doxygen/
 EXAMPLE_DEST=examples/
 CUR_DIR="$PWD/"
@@ -85,11 +91,11 @@ copy_examples() {
     # Only copy actual examples
     if [[ "$EXAMPLE_DIRS" == *"$example_name"* ]]; then
       mkdir -p "$EXAMPLE_DEST$example_name/$SRS_DEST"
-      if [ -d "$example/"SRS ]; then
-        cp "$example/"SRS/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      if [ -d "$example/"SRS/PDF ]; then
+        cp "$example/"SRS/PDF/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
       fi
-      if [ -d "$example/"Website/ ]; then
-        cp -r "$example/"Website/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      if [ -d "$example/"SRS/HTML ]; then
+        cp -r "$example/"SRS/HTML/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
       fi
       if [ -d "$example/"src ]; then
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
@@ -147,7 +153,7 @@ copy_traceygraphs() {
 
 copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"drasil-website/Website/. .
+  cp -r "$CUR_DIR$WEBSITE_FOLDER". .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src

@@ -16,10 +16,11 @@ import Database.Drasil (SystemInformation(SI,_sys))
 import Data.List (intercalate)
 import System.Directory (createDirectoryIfMissing, getCurrentDirectory, 
   setCurrentDirectory)
+import Data.Char (toLower)
 
 genCodeWithChoices :: [Choices] -> IO ()
 genCodeWithChoices [] = return ()
-genCodeWithChoices (c:cs) = let dir = codedDirName (getSysName fullSI) c
+genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName fullSI) c
                                 getSysName SI{_sys = sysName} = abrv sysName
   in do
     workingDir <- getCurrentDirectory
@@ -113,5 +114,5 @@ baseChoices = defaultChoices {
   constStructure = WithInputs,
   constRepr = Var,
   conceptMatch = matchConcepts [(piConst, [Pi])],
-  auxFiles = [SampleInput "../../../datafiles/Projectile/sampleInput.txt", ReadME]
+  auxFiles = [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
 }

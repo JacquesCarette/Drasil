@@ -1,3 +1,5 @@
+-- | GOOL PatternTest module. Various tests to make sure equating and
+-- the Observer class both work.
 module Test.PatternTest (patternTest) where
 
 import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
@@ -9,6 +11,7 @@ import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
 
+-- | Variables, program names, and used strings within the program.
 progName, fsmName, offState, onState, noState, strat1, strat2, obs1Name, 
   obs2Name, nName :: String
 progName = "PatternTest"
@@ -22,21 +25,26 @@ obs1Name = "obs1"
 obs2Name = "obs2"
 nName = "n"
 
+-- | Initialize Observer variables.
 observerType :: (TypeSym r) => VSType r
 observerType = obj observerName
 
+-- | Variables used in the generated code.
 n, obs1, obs2 :: (VariableSym r) => SVariable r
 n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
+-- | New Observer object.
 newObserver :: (ValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
+-- | Creates the pattern test program.
 patternTest :: (OOProg r) => GSProgram r
 patternTest = prog progName [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
+-- | Creates the main function for PatternTest.
 patternTestMainMethod :: (MethodSym r, AssignStatement r, DeclStatement r, 
   IOStatement r, Literal r, VariableValue r, ValueExpression r, GetSet r, 
   List r, StatePattern r, ObserverPattern r, StrategyPattern r) => SMethod r

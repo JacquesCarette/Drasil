@@ -3,17 +3,10 @@ version:             0.1.0.0
 github:              JacquesCarette/Drasil
 maintainer:          "Jacques Carette"
 synopsis:            Using the Drasil generators to create Drasil's website
-
-extra-source-files: []
-
-# Metadata used when publishing your package
-# category:            Web
-
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
@@ -42,12 +35,23 @@ dependencies:
 - swhs
 - template
 
-ghc-options:
-- -Wall
-- -Wredundant-constraints
-- -threaded
+library:
+  source-dirs: lib
+  when:
+  - condition: false
+    other-modules: Paths_website
 
 executables:
   website:
-    main: Drasil.Website.Main
-    source-dirs: ./
+    main: Main
+    source-dirs: app
+    ghc-options:
+    - -Wall
+    - -Wredundant-constraints
+    - -threaded
+    - -O2
+    dependencies:
+    - drasil-website
+    when:
+    - condition: false
+      other-modules: Paths_website

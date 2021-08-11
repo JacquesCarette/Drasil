@@ -5,7 +5,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, 
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -65,9 +65,6 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
-
-directoryName :: FilePath
-directoryName = "Projectile"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -130,7 +127,6 @@ si = SI {
   _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
-  _folderPath  = directoryName,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],

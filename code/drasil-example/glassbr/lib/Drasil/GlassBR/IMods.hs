@@ -33,7 +33,7 @@ pbIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-Pb") pbIsSafeQD
   [pbIsSafeDesc, probBRRef, pbTolUsr]
 
 
-pbIsSafeQD :: QDefinition
+pbIsSafeQD :: QDefinition Expr
 pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)
 
 {--}
@@ -45,7 +45,7 @@ lrIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-LR") lrIsSafeQD
   [dRef astm2009] "isSafeLR"
   [lrIsSafeDesc, capRef, qRef] 
 
-lrIsSafeQD :: QDefinition 
+lrIsSafeQD :: QDefinition Expr 
 lrIsSafeQD = mkQuantDef isSafeLR (sy lRe $> sy demand)
 
 iModDesc :: QuantityDict -> Sentence -> Sentence

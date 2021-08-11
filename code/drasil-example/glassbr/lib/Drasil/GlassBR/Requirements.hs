@@ -90,7 +90,7 @@ outputValuesTable :: LabelledContent
 outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
                               (S "Required" +:+ titleize' output_ `follows` outputValues)
   where
-    r6DDs :: [DataDefinition]
+    r6DDs :: [DataDefinition Expr]
     r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
 
 {--Nonfunctional Requirements--}

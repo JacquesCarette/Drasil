@@ -26,8 +26,8 @@ lrIsSafe = tm (equationalModel' lrIsSafeQD)
    [lrIsSafeQD] [] [] [dRef astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
 
-lrIsSafeQD :: QDefinition
-lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") lrIsSafeExpr
+lrIsSafeQD :: QDefinition ModelExpr
+lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") $ express lrIsSafeExpr
 
 lrIsSafeExpr :: Expr
 lrIsSafeExpr = sy tmLRe $> sy tmDemand
@@ -41,8 +41,8 @@ pbIsSafe = tm (equationalModel' pbIsSafeQD)
   [pbIsSafeQD] [] [] [dRef astm2009]
   "isSafeProb" [pbIsSafeDesc]
 
-pbIsSafeQD :: QDefinition
-pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") pbIsSafeExpr
+pbIsSafeQD :: QDefinition ModelExpr
+pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") $ express pbIsSafeExpr
 
 pbIsSafeExpr :: Expr
 pbIsSafeExpr = sy probFail $< sy pbTolfail

@@ -7,12 +7,12 @@ import Data.Drasil.Theories.Physics (newtonSLRQD)
 
 --below imports needed compoundNC part to work
 import Utils.Drasil.Concepts
-import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force)
+import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force, acceleration)
 
 
 concepts :: [IdeaDict]
 concepts = nw newtonSLRQD : map nw [rod, horizontal, vertical,
-  pendMotion, horizontalPos, verticalPos, horizontalVel,
+  pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
   ++ map nw defs
 
@@ -21,13 +21,15 @@ rod = nc "rod" (cn' "rod")
 horizontal = nc "horizontal" (cn "horizontal") 
 vertical = nc "vertical" (cn "vertical") 
 
-pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, 
-  firstRod, secondRod, firstObject, secondObject:: NamedChunk
+pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce,
+  horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: NamedChunk
 pendMotion = compoundNC pendulum motion
 horizontalPos = compoundNC horizontal position
 verticalPos = compoundNC vertical position
 horizontalVel = compoundNC horizontal velocity
 verticalVel = compoundNC vertical velocity
+horizontalAccel = compoundNC horizontal acceleration
+verticalAccel = compoundNC vertical acceleration
 horizontalForce = compoundNC horizontal force
 verticalForce = compoundNC vertical force
 firstRod = compoundNC first rod

@@ -5,7 +5,6 @@ import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
-
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
         output_, value,  nonFuncReqDom, code, environment, propOfCorSol)
@@ -14,9 +13,7 @@ import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 import Drasil.DblPendulum.IMods (angularAccelIM_1, angularAccelIM_2)
-import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, 
-  pendDisAngle_1, pendDisAngle_2, angularAccel_1, angularAccel_2)
-import Data.Drasil.Quantities.Physics (angularDisplacement)
+import Drasil.DblPendulum.Unitals (angularAccel_1, angularAccel_2)
 
 --Functional Requirements--
 funcReqs :: [ConceptInstance]

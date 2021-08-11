@@ -46,8 +46,6 @@ The unit system used throughout is SI (Système International d'Unités). In add
 \endhead
 ${{}^{\circ}}$ & angle & degree
 \\
-${\text{Hz}}$ & frequency & hertz
-\\
 ${\text{kg}}$ & mass & kilogram
 \\
 ${\text{m}}$ & length & metre
@@ -72,63 +70,73 @@ The symbols used in this document are summarized in the \hyperref[Table:ToS]{Tab
 \\
 \midrule
 \endhead
-${a_{\text{x}}}$ & $x$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+${a_{\text{x}1}}$ & The horizontal acceleration of the first object & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${a_{\text{y}}}$ & $y$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+${a_{\text{x}2}}$ & The horizontal acceleration of the second object & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${a_{\text{y}1}}$ & The vertical acceleration of the first object & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${a_{\text{y}2}}$ & The vertical acceleration of the second object & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{F}$ & Force & ${\text{N}}$
 \\
-$f$ & Frequency & ${\text{Hz}}$
-\\
 $\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
-\\
-$\symbf{I}$ & Moment of inertia & $\text{kg}\text{m}^{2}$
 \\
 $\symbf{\hat{i}}$ & Unit vector & --
 \\
-${L_{\text{rod}}}$ & Length of the rod & ${\text{m}}$
+${L_{1}}$ & The length of the first rod & ${\text{m}}$
+\\
+${L_{2}}$ & The length of the second rod & ${\text{m}}$
 \\
 $m$ & Mass & ${\text{kg}}$
 \\
-${p_{\text{x}}}$ & $x$-component of position & ${\text{m}}$
+${m_{1}}$ & The mass of the first object & ${\text{kg}}$
 \\
-${{p_{\text{x}}}^{\text{i}}}$ & $x$-component of initial position & ${\text{m}}$
+${m_{2}}$ & The mass of the second object & ${\text{kg}}$
 \\
-${p_{\text{y}}}$ & $y$-component of position & ${\text{m}}$
+${p_{\text{x}1}}$ & The horizontal position of the first object & ${\text{m}}$
 \\
-${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
+${p_{\text{x}2}}$ & The horizontal position of the second object & ${\text{m}}$
+\\
+${p_{\text{y}1}}$ & The vertical position of the first object & ${\text{m}}$
+\\
+${p_{\text{y}2}}$ & The vertical position of the second object & ${\text{m}}$
 \\
 $\symbf{p}$ & Position & ${\text{m}}$
 \\
-$T$ & Period & ${\text{s}}$
-\\
 $\symbf{T}$ & Tension & ${\text{N}}$
+\\
+${\symbf{T}_{1}}$ & The tension of the first object & ${\text{N}}$
+\\
+${\symbf{T}_{2}}$ & The tension of the second object & ${\text{N}}$
 \\
 $t$ & Time & ${\text{s}}$
 \\
-${v_{\text{x}}}$ & $x$-component of velocity & $\frac{\text{m}}{\text{s}}$
+${v_{\text{x}1}}$ & The horizontal velocity of the first object & $\frac{\text{m}}{\text{s}}$
 \\
-${v_{\text{y}}}$ & $y$-component of velocity & $\frac{\text{m}}{\text{s}}$
+${v_{\text{x}2}}$ & The horizontal velocity of the second object & $\frac{\text{m}}{\text{s}}$
+\\
+${v_{\text{y}1}}$ & The vertical velocity of the first object & $\frac{\text{m}}{\text{s}}$
+\\
+${v_{\text{y}2}}$ & The vertical velocity of the second object & $\frac{\text{m}}{\text{s}}$
 \\
 $\symbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
-$α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
+${w_{1}}$ & The angular velocity of the first object & $\frac{\text{rad}}{\text{s}}$
 \\
-$θ$ & Angular displacement & ${\text{rad}}$
+${w_{2}}$ & The angular velocity of the second object & $\frac{\text{rad}}{\text{s}}$
 \\
-${θ_{i}}$ & Initial pendulum angle & ${\text{rad}}$
+${α_{1}}$ & The angular acceleration of the first object & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
-${θ_{p}}$ & Displacement angle of the pendulum & ${{}^{\circ}}$
+${α_{2}}$ & The angular acceleration of the second object & $\frac{\text{rad}}{\text{s}^{2}}$
+\\
+${θ_{1}}$ & The angle of the first rod & ${{}^{\circ}}$
+\\
+${θ_{2}}$ & The angle of the second rod & ${{}^{\circ}}$
 \\
 $π$ & Ratio of circumference to diameter for any circle & --
-\\
-$\symbf{τ}$ & Torque & $\text{N}\text{m}$
-\\
-$Ω$ & Angular frequency & ${\text{s}}$
-\\
-$ω$ & Angular velocity & $\frac{\text{rad}}{\text{s}}$
 \\
 \bottomrule
 \caption{Table of Symbols}
@@ -255,8 +263,10 @@ This subsection provides a list of terms that are used in the subsequent section
 The physical system of Pendulum, as shown in \hyperref[Figure:dblpendulum]{Fig:dblpendulum}, includes the following elements:
 
 \begin{itemize}
-\item[PS1:]{The rod.}
-\item[PS2:]{The mass.}
+\item[PS1:]{The first rod (with the length of the first rod ${L_{1}}$).}
+\item[PS2:]{The second rod (with the length of the second rod ${L_{2}}$).}
+\item[PS3:]{The first object.}
+\item[PS4:]{The second object.}
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -267,10 +277,10 @@ The physical system of Pendulum, as shown in \hyperref[Figure:dblpendulum]{Fig:d
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
+Given the masses, length of the rods, initial angle of the masses and the gravitational constant, the goal statements are:
 
 \begin{itemize}
-\item[Motion-of-the-mass:\phantomsection\label{motionMass}]{Calculate the motion of the mass.}
+\item[motionMass:\phantomsection\label{motionMass}]{Calculate the motion of the masses.}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -281,11 +291,13 @@ The instance models that govern Pendulum are presented in the \hyperref[Sec:IMs]
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[pend2DMotion:\phantomsection\label{pend2DMotion}]{The pendulum motion is two-dimensional (2D).}
-\item[cartCoord:\phantomsection\label{cartCoord}]{A Cartesian coordinate system is used.}
-\item[cartCoordRight:\phantomsection\label{cartCoordRight}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
+\item[twoDMotion:\phantomsection\label{twoDMotion}]{The pendulum motion is two-dimensional (2D).}
+\item[cartSys:\phantomsection\label{cartSys}]{A Cartesian coordinate system is used.}
+\item[cartSysR:\phantomsection\label{cartSysR}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
 \item[yAxisDir:\phantomsection\label{yAxisDir}]{The direction of the $y$-axis is directed opposite to gravity.}
-\item[startOrigin:\phantomsection\label{startOrigin}]{The pendulum is attached to the origin.}
+\item[startOrigin:\phantomsection\label{startOrigin}]{The first rod is attached to the origin.}
+\item[firstPend:\phantomsection\label{firstPend}]{The first rod has two sides. One side attaches to the origin. Another side attaches to the first object.}
+\item[secondPend:\phantomsection\label{secondPend}]{The second rod has two sides. One side attaches to the first object. Another side attaches to the second object.}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -378,38 +390,6 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{TM:NewtonSecLawRotMot}
-\phantomsection 
-\label{TM:NewtonSecLawRotMot}
-\\ \midrule \\
-Label & Newton's second law for rotational motion
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           \symbf{τ}=\symbf{I} α
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\symbf{τ}$ is the torque ($\text{N}\text{m}$)}
-              \item{$\symbf{I}$ is the moment of inertia ($\text{kg}\text{m}^{2}$)}
-              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & The net torque $\symbf{τ}$ on a rigid body is proportional to its angular acceleration $α$, where $\symbf{I}$ denotes the moment of inertia of the rigid body as the constant of proportionality.
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} and \hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
@@ -418,25 +398,25 @@ This section collects the laws and equations that will be used to build the inst
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:velocityIX}
+\toprule \textbf{Refname} & \textbf{GD:velocityX1}
 \phantomsection 
-\label{GD:velocityIX}
+\label{GD:velocityX1}
 \\ \midrule \\
-Label & The $x$-component of velocity of the pendulum
+Label & The $x$-component of velocity of the first object
         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+           {v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${v_{\text{x}}}$ is the $x$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${{}^{\circ}}$)}
+              \item{${v_{\text{x}1}}$ is the the horizontal velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
+              \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -447,55 +427,55 @@ RefBy &
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of the $x$-component of velocity:}
-\label{GD:velocityIXDeriv}
-At a given point in time, velocity may be defined as
+\label{GD:velocityX1Deriv}
+At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
 \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
 \end{displaymath}
-We also know the horizontal position
+We also know the horizontal position that is defined in \hyperref[DD:positionXDD1]{DD:positionXDD1}
 
 \begin{displaymath}
-{p_{\text{x}}}={L_{\text{rod}}} \sin\left({θ_{p}}\right)
+{p_{\text{x}1}}={L_{1}} \sin\left({θ_{1}}\right)
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-{v_{\text{x}}}=\frac{\,d{L_{\text{rod}}} \sin\left({θ_{p}}\right)}{\,dt}
+{v_{\text{x}1}}=\frac{\,d{L_{1}} \sin\left({θ_{1}}\right)}{\,dt}
 \end{displaymath}
-${L_{\text{rod}}}$ is constant with respect to time, so
+${L_{1}}$ is constant with respect to time, so
 
 \begin{displaymath}
-{v_{\text{x}}}={L_{\text{rod}}} \frac{\,d\sin\left({θ_{p}}\right)}{\,dt}
+{v_{\text{x}1}}={L_{1}} \frac{\,d\sin\left({θ_{1}}\right)}{\,dt}
 \end{displaymath}
 Therefore, using the chain rule,
 
 \begin{displaymath}
-{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:velocityIY}
+\toprule \textbf{Refname} & \textbf{GD:velocityY1}
 \phantomsection 
-\label{GD:velocityIY}
+\label{GD:velocityY1}
 \\ \midrule \\
-Label & The $y$-component of velocity of the pendulum
+Label & The $y$-component of velocity of the first object
         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+           {v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${v_{\text{y}}}$ is the $y$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${{}^{\circ}}$)}
+              \item{${v_{\text{y}1}}$ is the the vertical velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
+              \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -506,58 +486,56 @@ RefBy &
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of the $y$-component of velocity:}
-\label{GD:velocityIYDeriv}
-At a given point in time, velocity may be defined as
+\label{GD:velocityY1Deriv}
+At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
 \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
 \end{displaymath}
-We also know the vertical position
+We also know the vertical position that is defined in \hyperref[DD:positionYDD1]{DD:positionYDD1}
 
 \begin{displaymath}
-{p_{\text{y}}}=-{L_{\text{rod}}} \cos\left({θ_{p}}\right)
+{p_{\text{y}1}}=-{L_{1}} \cos\left({θ_{1}}\right)
 \end{displaymath}
-Applying this again,
+Applying this,
 
 \begin{displaymath}
-{v_{\text{y}}}=-\left(\frac{\,d{L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}\right)
+{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}} \cos\left({θ_{1}}\right)}{\,dt}\right)
 \end{displaymath}
-${L_{\text{rod}}}$ is constant with respect to time, so
+${L_{1}}$ is constant with respect to time, so
 
 \begin{displaymath}
-{v_{\text{y}}}=-{L_{\text{rod}}} \frac{\,d\cos\left({θ_{p}}\right)}{\,dt}
-\end{displaymath}
-Therefore, using the chain rule,
-
-\begin{displaymath}
-{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+{v_{\text{y}1}}=-{L_{1}} \frac{\,d\cos\left({θ_{1}}\right)}{\,dt}
 \end{displaymath}
 Therefore, using the chain rule,
 
+\begin{displaymath}
+{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)
+\end{displaymath}
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:accelerationIX}
+\toprule \textbf{Refname} & \textbf{GD:velocityX2}
 \phantomsection 
-\label{GD:accelerationIX}
+\label{GD:velocityX2}
 \\ \midrule \\
-Label & The $x$-component of acceleration of the pendulum
+Label & The $x$-component of velocity of the second object
         
 \\ \midrule \\
-Units & $\frac{\text{m}}{\text{s}^{2}}$
+Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {a_{\text{x}}}=-ω^{2} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+           {v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${{}^{\circ}}$)}
-              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{${v_{\text{x}2}}$ is the the horizontal velocity of the second object ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{\text{x}1}}$ is the the horizontal velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
+              \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -567,8 +545,119 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\paragraph{Detailed derivation of the $x$-component of velocity:}
+\label{GD:velocityX2Deriv}
+At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
+
+\begin{displaymath}
+\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\end{displaymath}
+We also know the horizontal position that is defined in \hyperref[DD:positionXDD2]{DD:positionXDD2}
+
+\begin{displaymath}
+{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)
+\end{displaymath}
+Applying this,
+
+\begin{displaymath}
+{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)}{\,dt}
+\end{displaymath}
+${L_{1}}$ is constant with respect to time, so
+
+\begin{displaymath}
+{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:velocityY2}
+\phantomsection 
+\label{GD:velocityY2}
+\\ \midrule \\
+Label & The $y$-component of velocity of the second object
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${v_{\text{y}2}}$ is the the vertical velocity of the second object ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{\text{y}1}}$ is the the vertical velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
+              \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of the $y$-component of velocity:}
+\label{GD:velocityY2Deriv}
+At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
+
+\begin{displaymath}
+\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\end{displaymath}
+We also know the vertical position that is defined in \hyperref[DD:positionYDD2]{DD:positionYDD2}
+
+\begin{displaymath}
+{p_{\text{y}2}}={p_{\text{y}1}}+-{L_{2}} \cos\left({θ_{2}}\right)
+\end{displaymath}
+Applying this,
+
+\begin{displaymath}
+{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}+-{L_{2}} \cos\left({θ_{2}}\right)}{\,dt}\right)
+\end{displaymath}
+Therefore, using the chain rule,
+
+\begin{displaymath}
+{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:accelerationX1}
+\phantomsection 
+\label{GD:accelerationX1}
+\\ \midrule \\
+Label & The $x$-component of acceleration of the first object
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {a_{\text{x}1}}=-{w_{1}}^{2} {L_{1}} \sin\left({θ_{1}}\right)+{α_{1}} {L_{1}} \cos\left({θ_{1}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${a_{\text{x}1}}$ is the the horizontal acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${α_{1}}$ is the the angular acceleration of the first object ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
 \paragraph{Detailed derivation of the $x$-component of acceleration:}
-\label{GD:accelerationIXDeriv}
+\label{GD:accelerationX1Deriv}
 Our acceleration is:
 
 \begin{displaymath}
@@ -577,58 +666,59 @@ Our acceleration is:
 Earlier, we found the horizontal velocity to be
 
 \begin{displaymath}
-{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-{a_{\text{x}}}=\frac{\,dω {L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}
+{a_{\text{x}1}}=\frac{\,d{w_{1}} {L_{1}} \cos\left({θ_{1}}\right)}{\,dt}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-{a_{\text{x}}}=\frac{\,dω}{\,dt} {L_{\text{rod}}} \cos\left({θ_{p}}\right)-ω {L_{\text{rod}}} \sin\left({θ_{p}}\right) \frac{\,d{θ_{p}}}{\,dt}
+{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt} {L_{1}} \cos\left({θ_{1}}\right)-{w_{1}} {L_{1}} \sin\left({θ_{1}}\right) \frac{\,d{θ_{1}}}{\,dt}
 \end{displaymath}
 Simplifying,
 
 \begin{displaymath}
-{a_{\text{x}}}=-ω^{2} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+{a_{\text{x}1}}=-{w_{1}}^{2} {L_{1}} \sin\left({θ_{1}}\right)+{α_{1}} {L_{1}} \cos\left({θ_{1}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:accelerationIY}
+\toprule \textbf{Refname} & \textbf{GD:accelerationY1}
 \phantomsection 
-\label{GD:accelerationIY}
+\label{GD:accelerationY1}
 \\ \midrule \\
-Label & The $y$-component of acceleration of the pendulum
+Label & The $y$-component of acceleration of the first object
         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {a_{\text{y}}}=ω^{2} {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+           {a_{\text{y}1}}={w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}\right)+{α_{1}} {L_{1}} \sin\left({θ_{1}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${{}^{\circ}}$)}
-              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{${a_{\text{y}1}}$ is the the vertical acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${α_{1}}$ is the the angular acceleration of the first object ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of the $y$-component of acceleration:}
-\label{GD:accelerationIYDeriv}
+\label{GD:accelerationY1Deriv}
 Our acceleration is:
 
 \begin{displaymath}
@@ -637,218 +727,300 @@ Our acceleration is:
 Earlier, we found the vertical velocity to be
 
 \begin{displaymath}
-{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-{a_{\text{y}}}=\frac{\,dω {L_{\text{rod}}} \sin\left({θ_{p}}\right)}{\,dt}
+{a_{\text{y}1}}=\frac{\,d{w_{1}} {L_{1}} \sin\left({θ_{1}}\right)}{\,dt}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-{a_{\text{y}}}=\frac{\,dω}{\,dt} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+ω {L_{\text{rod}}} \cos\left({θ_{p}}\right) \frac{\,d{θ_{p}}}{\,dt}
+{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt} {L_{1}} \sin\left({θ_{1}}\right)+{w_{1}} {L_{1}} \cos\left({θ_{1}}\right) \frac{\,d{θ_{1}}}{\,dt}
 \end{displaymath}
 Simplifying,
 
 \begin{displaymath}
-{a_{\text{y}}}=ω^{2} {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+{a_{\text{y}1}}={w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}\right)+{α_{1}} {L_{1}} \sin\left({θ_{1}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:hForceOnPendulum}
+\toprule \textbf{Refname} & \textbf{GD:accelerationX2}
 \phantomsection 
-\label{GD:hForceOnPendulum}
+\label{GD:accelerationX2}
 \\ \midrule \\
-Label & Horizontal force on the pendulum
+Label & The $x$-component of acceleration of the second object
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2} {L_{2}} \sin\left({θ_{2}}\right)+{α_{2}} {L_{2}} \cos\left({θ_{2}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${a_{\text{x}2}}$ is the the horizontal acceleration of the second object ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{\text{x}1}}$ is the the horizontal acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${α_{2}}$ is the the angular acceleration of the second object ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of the $x$-component of acceleration:}
+\label{GD:accelerationX2Deriv}
+Our acceleration is:
+
+\begin{displaymath}
+\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\end{displaymath}
+Earlier, we found the horizontal velocity to be
+
+\begin{displaymath}
+{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)
+\end{displaymath}
+Applying this to our equation for acceleration
+
+\begin{displaymath}
+{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)}{\,dt}
+\end{displaymath}
+By the product and chain rules, we find
+
+\begin{displaymath}
+{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2} {L_{2}} \sin\left({θ_{2}}\right)+{α_{2}} {L_{2}} \cos\left({θ_{2}}\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:accelerationY2}
+\phantomsection 
+\label{GD:accelerationY2}
+\\ \midrule \\
+Label & The $y$-component of acceleration of the second object
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2} {L_{2}} \cos\left({θ_{2}}\right)+{α_{2}} {L_{2}} \sin\left({θ_{2}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${a_{\text{y}2}}$ is the the vertical acceleration of the second object ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{\text{y}1}}$ is the the vertical acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${α_{2}}$ is the the angular acceleration of the second object ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of the $y$-component of acceleration:}
+\label{GD:accelerationY2Deriv}
+Our acceleration is:
+
+\begin{displaymath}
+\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\end{displaymath}
+Earlier, we found the horizontal velocity to be
+
+\begin{displaymath}
+{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)
+\end{displaymath}
+Applying this to our equation for acceleration
+
+\begin{displaymath}
+{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)}{\,dt}
+\end{displaymath}
+By the product and chain rules, we find
+
+\begin{displaymath}
+{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2} {L_{2}} \cos\left({θ_{2}}\right)+{α_{2}} {L_{2}} \sin\left({θ_{2}}\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:xForce1}
+\phantomsection 
+\label{GD:xForce1}
+\\ \midrule \\
+Label & Horizontal force on the first object
         
 \\ \midrule \\
 Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m {a_{\text{x}}}=-\symbf{T} \sin\left({θ_{p}}\right)
+           \symbf{F}=m \symbf{a}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$\symbf{T}$ is the tension (${\text{N}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${{}^{\circ}}$)}
+              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\symbf{T}_{1}}$ is the the tension of the first object (${\text{N}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of force on the pendulum:}
-\label{GD:hForceOnPendulumDeriv}
+\paragraph{Detailed derivation of force on the first object:}
+\label{GD:xForce1Deriv}
 \begin{displaymath}
-\symbf{F}=m {a_{\text{x}}}=-\symbf{T} \sin\left({θ_{p}}\right)
+\symbf{F}=m \symbf{a}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:vForceOnPendulum}
+\toprule \textbf{Refname} & \textbf{GD:yForce1}
 \phantomsection 
-\label{GD:vForceOnPendulum}
+\label{GD:yForce1}
 \\ \midrule \\
-Label & Vertical force on the pendulum
+Label & Vertical force on the first object
         
 \\ \midrule \\
 Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}
+           \symbf{F}=m \symbf{a}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$\symbf{T}$ is the tension (${\text{N}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${{}^{\circ}}$)}
+              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\symbf{T}_{1}}$ is the the tension of the first object (${\text{N}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${m_{1}}$ is the the mass of the first object (${\text{kg}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of force on the pendulum:}
-\label{GD:vForceOnPendulumDeriv}
+\paragraph{Detailed derivation of force on the first object:}
+\label{GD:yForce1Deriv}
 \begin{displaymath}
-\symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}
+\symbf{F}=m \symbf{a}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:angFrequencyGD}
+\toprule \textbf{Refname} & \textbf{GD:xForce2}
 \phantomsection 
-\label{GD:angFrequencyGD}
+\label{GD:xForce2}
 \\ \midrule \\
-Label & The angular frequency of the pendulum
+Label & Horizontal force on the second object
         
 \\ \midrule \\
-Units & ${\text{s}}$
+Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
+           \symbf{F}=m \symbf{a}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$Ω$ is the angular frequency (${\text{s}}$)}
-              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
+              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{$m$ is the mass (${\text{kg}}$)}
+              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & The torque is defined in \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} and frequency is $f$ is defined in \hyperref[DD:frequencyDD]{DD:frequencyDD}.
-        
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
-RefBy & \hyperref[GD:periodPend]{GD:periodPend} and \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}
+RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of the angular frequency of the pendulum:}
-\label{GD:angFrequencyGDDeriv}
-Consider the torque on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}. The force providing the restoring torque is the component of weight of the pendulum bob that acts along the arc length. The torque is the length of the string ${L_{\text{rod}}}$ multiplied by the component of the net force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
-
+\paragraph{Detailed derivation of force on the second object:}
+\label{GD:xForce2Deriv}
 \begin{displaymath}
-\symbf{τ}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
-\end{displaymath}
-So then
-
-\begin{displaymath}
-\symbf{I} α=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
-\end{displaymath}
-Therefore,
-
-\begin{displaymath}
-\symbf{I} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
-\end{displaymath}
-Substituting for $\symbf{I}$
-
-\begin{displaymath}
-m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
-\end{displaymath}
-Crossing out $m$ and ${L_{\text{rod}}}$ we have
-
-\begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) \sin\left({θ_{p}}\right)
-\end{displaymath}
-For small angles, we approximate sin ${θ_{p}}$ to ${θ_{p}}$
-
-\begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) {θ_{p}}
-\end{displaymath}
-Because this equation, has the same form as the equation for simple harmonic motion the solution is easy to find.  The angular frequency
-
-\begin{displaymath}
-Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
+\symbf{F}=m \symbf{a}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:periodPend}
+\toprule \textbf{Refname} & \textbf{GD:yForce2}
 \phantomsection 
-\label{GD:periodPend}
+\label{GD:yForce2}
 \\ \midrule \\
-Label & The period of the pendulum
+Label & Vertical force on the second object
         
 \\ \midrule \\
-Units & ${\text{s}}$
+Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}
+           \symbf{F}=m \symbf{a}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$T$ is the period (${\text{s}}$)}
-              \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
+              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{$m$ is the mass (${\text{kg}}$)}
+              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${m_{2}}$ is the the mass of the second object (${\text{kg}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & The frequency and period are defined in the data definitions for \hyperref[DD:frequencyDD]{frequency} and \hyperref[DD:periodSHMDD]{period} respectively
-        
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of the period of the pendulum:}
-\label{GD:periodPendDeriv}
-The period of the pendulum can be defined from the general definition for the equation of \hyperref[GD:angFrequencyGD]{angular frequency}
-
+\paragraph{Detailed derivation of force on the second object:}
+\label{GD:yForce2Deriv}
 \begin{displaymath}
-Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
-\end{displaymath}
-Therefore from the data definition of the equation for \hyperref[DD:angFrequencyDD]{angular frequency}, we have
-
-\begin{displaymath}
-T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}
+\symbf{F}=m \symbf{a}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -858,33 +1030,230 @@ This section collects and defines all the data needed to build the instance mode
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:positionIX}
+\toprule \textbf{Refname} & \textbf{DD:positionGDD}
 \phantomsection 
-\label{DD:positionIX}
+\label{DD:positionGDD}
 \\ \midrule \\
-Label & $x$-component of initial position
+Label & Velocity
         
 \\ \midrule \\
-Symbol & ${{p_{\text{x}}}^{\text{i}}}$
+Symbol & $\symbf{v}$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:velocityY2]{GD:velocityY2}, \hyperref[GD:velocityY1]{GD:velocityY1}, \hyperref[GD:velocityX2]{GD:velocityX2}, and \hyperref[GD:velocityX1]{GD:velocityX1}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:positionXDD1}
+\phantomsection 
+\label{DD:positionXDD1}
+\\ \midrule \\
+Label & The horizontal position of the first object
+        
+\\ \midrule \\
+Symbol & ${p_{\text{x}1}}$
          
 \\ \midrule \\
 Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}} \sin\left({θ_{i}}\right)
+           {p_{\text{x}1}}={L_{1}} \sin\left({θ_{1}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${{p_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial position (${\text{m}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
+              \item{${p_{\text{x}1}}$ is the the horizontal position of the first object (${\text{m}}$)}
+              \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${{p_{\text{x}}}^{\text{i}}}$ is the horizontal position
+Notes & ${p_{\text{x}1}}$ is the horizontal position
         
-        ${{p_{\text{x}}}^{\text{i}}}$ is shown in \hyperref[Figure:dblpendulum]{Fig:dblpendulum}.
+        ${p_{\text{x}1}}$ is shown in \hyperref[Figure:dblpendulum]{Fig:dblpendulum}.
         
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:velocityX1]{GD:velocityX1}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:positionYDD1}
+\phantomsection 
+\label{DD:positionYDD1}
+\\ \midrule \\
+Label & The vertical position of the first object
+        
+\\ \midrule \\
+Symbol & ${p_{\text{y}1}}$
+         
+\\ \midrule \\
+Units & ${\text{m}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {p_{\text{y}1}}=-{L_{1}} \cos\left({θ_{1}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${p_{\text{y}1}}$ is the the vertical position of the first object (${\text{m}}$)}
+              \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${p_{\text{y}1}}$ is the vertical position
+        
+        ${p_{\text{y}1}}$ is shown in \hyperref[Figure:dblpendulum]{Fig:dblpendulum}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:velocityY1]{GD:velocityY1}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:positionXDD2}
+\phantomsection 
+\label{DD:positionXDD2}
+\\ \midrule \\
+Label & The horizontal position of the second object
+        
+\\ \midrule \\
+Symbol & ${p_{\text{x}2}}$
+         
+\\ \midrule \\
+Units & ${\text{m}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${p_{\text{x}2}}$ is the the horizontal position of the second object (${\text{m}}$)}
+              \item{${p_{\text{x}1}}$ is the the horizontal position of the first object (${\text{m}}$)}
+              \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${p_{\text{x}2}}$ is the horizontal position
+        
+        ${p_{\text{x}2}}$ is shown in \hyperref[Figure:dblpendulum]{Fig:dblpendulum}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:velocityX2]{GD:velocityX2}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:positionYDD2}
+\phantomsection 
+\label{DD:positionYDD2}
+\\ \midrule \\
+Label & The vertical position of the second object
+        
+\\ \midrule \\
+Symbol & ${p_{\text{y}2}}$
+         
+\\ \midrule \\
+Units & ${\text{m}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {p_{\text{y}2}}={p_{\text{y}1}}+-{L_{2}} \cos\left({θ_{2}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${p_{\text{y}2}}$ is the the vertical position of the second object (${\text{m}}$)}
+              \item{${p_{\text{y}1}}$ is the the vertical position of the first object (${\text{m}}$)}
+              \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${p_{\text{y}2}}$ is the vertical position
+        
+        ${p_{\text{y}2}}$ is shown in \hyperref[Figure:dblpendulum]{Fig:dblpendulum}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:velocityY2]{GD:velocityY2}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:accelerationGDD}
+\phantomsection 
+\label{DD:accelerationGDD}
+\\ \midrule \\
+Label & Acceleration
+        
+\\ \midrule \\
+Symbol & $\symbf{a}$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
 \\ \midrule \\
 Source & --
          
@@ -898,153 +1267,33 @@ RefBy &
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:positionIY}
+\toprule \textbf{Refname} & \textbf{DD:forceGDD}
 \phantomsection 
-\label{DD:positionIY}
+\label{DD:forceGDD}
 \\ \midrule \\
-Label & $y$-component of initial position
+Label & Force
         
 \\ \midrule \\
-Symbol & ${{p_{\text{y}}}^{\text{i}}}$
+Symbol & $\symbf{F}$
          
 \\ \midrule \\
-Units & ${\text{m}}$
+Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{p_{\text{y}}}^{\text{i}}}=-{L_{\text{rod}}} \cos\left({θ_{i}}\right)
+           \symbf{F}=m \symbf{a}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${{p_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial position (${\text{m}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
+              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{$m$ is the mass (${\text{kg}}$)}
+              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & ${{p_{\text{y}}}^{\text{i}}}$ is the vertical position
-        
-        ${{p_{\text{y}}}^{\text{i}}}$ is shown in \hyperref[Figure:dblpendulum]{Fig:dblpendulum}.
-        
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:frequencyDD}
-\phantomsection 
-\label{DD:frequencyDD}
-\\ \midrule \\
-Label & Frequency
-        
-\\ \midrule \\
-Symbol & $f$
-         
-\\ \midrule \\
-Units & ${\text{Hz}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           f=\frac{1}{T}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$f$ is the frequency (${\text{Hz}}$)}
-              \item{$T$ is the period (${\text{s}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $f$ is the number of back and forth swings in one second
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[GD:periodPend]{GD:periodPend}, \hyperref[DD:periodSHMDD]{DD:periodSHMDD}, and \hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angFrequencyDD}
-\phantomsection 
-\label{DD:angFrequencyDD}
-\\ \midrule \\
-Label & Angular frequency
-        
-\\ \midrule \\
-Symbol & $Ω$
-         
-\\ \midrule \\
-Units & ${\text{s}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           Ω=\frac{2 π}{T}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$Ω$ is the angular frequency (${\text{s}}$)}
-              \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
-              \item{$T$ is the period (${\text{s}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $T$ is from \hyperref[DD:periodSHMDD]{DD:periodSHMDD}
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[GD:periodPend]{GD:periodPend}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:periodSHMDD}
-\phantomsection 
-\label{DD:periodSHMDD}
-\\ \midrule \\
-Label & Period
-        
-\\ \midrule \\
-Symbol & $T$
-         
-\\ \midrule \\
-Units & ${\text{s}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           T=\frac{1}{f}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$T$ is the period (${\text{s}}$)}
-              \item{$f$ is the frequency (${\text{Hz}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $T$ is from \hyperref[DD:frequencyDD]{DD:frequencyDD}
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[GD:periodPend]{GD:periodPend} and \hyperref[DD:angFrequencyDD]{DD:angFrequencyDD}
-        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -1057,82 +1306,162 @@ This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{probl
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:calOfAngularDisplacement}
+\toprule \textbf{Refname} & \textbf{IM:calOfAngularAcceleration1}
 \phantomsection 
-\label{IM:calOfAngularDisplacement}
+\label{IM:calOfAngularAcceleration1}
 \\ \midrule \\
-Label & Calculation of angular displacement
+Label & Calculation of angular acceleration
         
 \\ \midrule \\
-Input & ${L_{\text{rod}}}$, ${θ_{i}}$, $\symbf{g}$
+Input & ${L_{1}}$, ${L_{2}}$, ${m_{1}}$, ${m_{2}}$, ${θ_{1}}$, ${θ_{2}}$
         
 \\ \midrule \\
-Output & ${θ_{p}}$
+Output & ${α_{1}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {L_{\text{rod}}}\gt{}0
+                    {L_{1}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {θ_{i}}\gt{}0
+                    {L_{2}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    \symbf{g}\gt{}0
+                    {m_{1}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {m_{2}}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {θ_{p}}\gt{}0
+                     {α_{1}}\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)
+           {α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-\symbf{g} \left(2 {m_{1}}+{m_{2}}\right) \sin\left({θ_{1}}\right)-{m_{2}} \symbf{g} \sin\left({θ_{1}}-2 {θ_{2}}\right)-2 \sin\left({θ_{1}}-{θ_{2}}\right) {m_{2}} \left({w_{2}}^{2} {L_{2}}+{w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${{}^{\circ}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
-              \item{$Ω$ is the angular frequency (${\text{s}}$)}
+              \item{${α_{1}}$ is the the angular acceleration of the first object ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${m_{1}}$ is the the mass of the first object (${\text{kg}}$)}
+              \item{${m_{2}}$ is the the mass of the second object (${\text{kg}}$)}
+              \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
+              \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & The constraint ${θ_{i}}\gt{}0$ is required. The angular frequency is defined in \hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}.
-        
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
-RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}, and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of angular displacement:}
-\label{IM:calOfAngularDisplacementDeriv}
-When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion. By applying \hyperref[TM:NewtonSecLawRotMot]{Newton's second law for rotational motion}, the equation of motion for the pendulum may be obtained:
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:calOfAngularAcceleration2}
+\phantomsection 
+\label{IM:calOfAngularAcceleration2}
+\\ \midrule \\
+Label & Calculation of angular acceleration
+        
+\\ \midrule \\
+Input & ${L_{1}}$, ${L_{2}}$, ${m_{1}}$, ${m_{2}}$, ${θ_{1}}$, ${θ_{2}}$
+        
+\\ \midrule \\
+Output & ${α_{2}}$
+         
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {L_{1}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {L_{2}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {m_{1}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {m_{2}}\gt{}0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & \begin{displaymath}
+                     {α_{2}}\gt{}0
+                     \end{displaymath}
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2 \sin\left({θ_{1}}-{θ_{2}}\right) \left({w_{1}}^{2} {L_{1}} \left({m_{1}}+{m_{2}}\right)+\symbf{g} \left({m_{1}}+{m_{2}}\right) \cos\left({θ_{1}}\right)+{w_{2}}^{2} {L_{2}} {m_{2}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${α_{2}}$ is the the angular acceleration of the second object ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
+              \item{${m_{1}}$ is the the mass of the first object (${\text{kg}}$)}
+              \item{${m_{2}}$ is the the mass of the second object (${\text{kg}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}, and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of the angle of the second rod:}
+\label{IM:calOfAngularAcceleration2Deriv}
+By solving equations \hyperref[GD:xForce2]{GD:xForce2} and \hyperref[GD:yForce2]{GD:yForce2} for ${\symbf{T}_{2}} \sin\left({θ_{2}}\right)$ and ${\symbf{T}_{2}} \cos\left({θ_{2}}\right)$ and then substituting into eqaution \hyperref[GD:xForce1]{GD:xForce1} and \hyperref[GD:yForce1]{GD:yForce1} , We can get equations 1 and 2:
 
 \begin{displaymath}
-\symbf{τ}=\symbf{I} α
+{m_{1}} {a_{\text{x}1}}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)-{m_{2}} {a_{\text{x}2}}
 \end{displaymath}
-Where $\symbf{τ}$ denotes the torque, $\symbf{I}$ denotes the moment of inertia and $α$ denotes the angular acceleration. This implies:
 
 \begin{displaymath}
--m \symbf{g} \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}
+{m_{1}} {a_{\text{y}1}}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{m_{2}} {a_{\text{y}2}}-{m_{2}} \symbf{g}-{m_{1}} \symbf{g}
 \end{displaymath}
-And rearranged as:
+Multiply the equation 1 by $\cos\left({θ_{1}}\right)$ and the equation 2 by $\sin\left({θ_{1}}\right)$ and rearrange to get:
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0
+{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)
 \end{displaymath}
-If the amplitude of angular displacement is small enough, we can approximate $\sin\left({θ_{p}}\right)={θ_{p}}$ for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} {θ_{p}}=0
+{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}+{m_{1}} \symbf{g}\right)
 \end{displaymath}
-Thus the simple harmonic motion is:
+This leads to the equation 3
 
 \begin{displaymath}
-{θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)
+\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}+{m_{1}} \symbf{g}\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)
 \end{displaymath}
+Next, multiply equation \hyperref[GD:xForce2]{GD:xForce2} by $\cos\left({θ_{2}}\right)$ and equation \hyperref[GD:yForce2]{GD:yForce2} by $\sin\left({θ_{2}}\right)$ and rearrange to get:
+
+\begin{displaymath}
+{\symbf{T}_{2}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}
+\end{displaymath}
+
+\begin{displaymath}
+{\symbf{T}_{1}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}\right)
+\end{displaymath}
+which leads to equation 4
+
+\begin{displaymath}
+\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}
+\end{displaymath}
+By giving equations \hyperref[GD:accelerationX1]{GD:accelerationX1} and \hyperref[GD:accelerationX2]{GD:accelerationX2} and \hyperref[GD:accelerationY1]{GD:accelerationY1} and \hyperref[GD:accelerationY2]{GD:accelerationY2} plus additional two equations, 3 and 4, we can get \hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} via a computer algebra program:
+
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
@@ -1143,9 +1472,17 @@ The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data co
 \\
 \midrule
 \endhead
-${L_{\text{rod}}}$ & ${L_{\text{rod}}}\gt{}0$ & $44.2$ ${\text{m}}$ & 10$\%$
+${L_{1}}$ & ${L_{1}}\gt{}0$ & $1.0$ ${\text{m}}$ & 10$\%$
 \\
-${θ_{i}}$ & ${θ_{i}}\gt{}0$ & $2.1$ ${\text{rad}}$ & 10$\%$
+${L_{2}}$ & ${L_{2}}\gt{}0$ & $1.0$ ${\text{m}}$ & 10$\%$
+\\
+${m_{1}}$ & ${m_{1}}\gt{}0$ & $0.5$ ${\text{kg}}$ & 10$\%$
+\\
+${m_{2}}$ & ${m_{2}}\gt{}0$ & $0.5$ ${\text{kg}}$ & 10$\%$
+\\
+${θ_{1}}$ & ${θ_{1}}\gt{}0$ & $30.0$ ${{}^{\circ}}$ & 10$\%$
+\\
+${θ_{2}}$ & ${θ_{2}}\gt{}0$ & $30.0$ ${{}^{\circ}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -1161,9 +1498,9 @@ The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data c
 \\
 \midrule
 \endhead
-$α$ & $α\gt{}0$
+${α_{1}}$ & ${α_{1}}\gt{}0$
 \\
-${θ_{p}}$ & ${θ_{p}}\gt{}0$
+${α_{2}}$ & ${α_{2}}\gt{}0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -1180,8 +1517,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
-\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: $θ$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}) and ${θ_{p}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}) and ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
+\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: ${α_{1}}$ (from \hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}) and ${α_{2}}$ (from \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${α_{1}}$ and ${α_{2}}$ (from \hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}).}
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
@@ -1189,15 +1526,17 @@ This section provides the functional requirements, the tasks and behaviours that
 \\
 \midrule
 \endhead
-${L_{\text{rod}}}$ & Length of the rod & ${\text{m}}$
+${L_{1}}$ & The length of the first rod & ${\text{m}}$
 \\
-$m$ & Mass & ${\text{kg}}$
+${L_{2}}$ & The length of the second rod & ${\text{m}}$
 \\
-$α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
+${m_{1}}$ & The mass of the first object & ${\text{kg}}$
 \\
-${θ_{i}}$ & Initial pendulum angle & ${\text{rad}}$
+${m_{2}}$ & The mass of the second object & ${\text{kg}}$
 \\
-${θ_{p}}$ & Displacement angle of the pendulum & ${{}^{\circ}}$
+${θ_{1}}$ & The angle of the first rod & ${{}^{\circ}}$
+\\
+${θ_{2}}$ & The angle of the second rod & ${{}^{\circ}}$
 \\
 \bottomrule
 \caption{Required Inputs following \hyperref[inputValues]{FR:Input-Values}}
@@ -1215,149 +1554,177 @@ This section provides the non-functional requirements, the qualities that the so
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
-\begin{longtable}{l l l l l l}
+\begin{longtable}{l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[pend2DMotion]{A:pend2DMotion}} & \textbf{\hyperref[cartCoord]{A:cartCoord}} & \textbf{\hyperref[cartCoordRight]{A:cartCoordRight}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
 \\
 \midrule
 \endhead
-\hyperref[pend2DMotion]{A:pend2DMotion} &  &  &  &  & 
+\hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  &  &  & 
 \\
-\hyperref[cartCoord]{A:cartCoord} &  &  &  &  & 
+\hyperref[cartSys]{A:cartSys} &  &  &  &  &  &  & 
 \\
-\hyperref[cartCoordRight]{A:cartCoordRight} &  &  &  &  & 
+\hyperref[cartSysR]{A:cartSysR} &  &  &  &  &  &  & 
 \\
-\hyperref[yAxisDir]{A:yAxisDir} &  &  &  &  & 
+\hyperref[yAxisDir]{A:yAxisDir} &  &  &  &  &  &  & 
 \\
-\hyperref[startOrigin]{A:startOrigin} &  &  &  &  & 
+\hyperref[startOrigin]{A:startOrigin} &  &  &  &  &  &  & 
+\\
+\hyperref[firstPend]{A:firstPend} &  &  &  &  &  &  & 
+\\
+\hyperref[secondPend]{A:secondPend} &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}
 \label{Table:TraceMatAvsA}
 \end{longtable}
-\begin{longtable}{l l l l l l}
+\begin{longtable}{l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[pend2DMotion]{A:pend2DMotion}} & \textbf{\hyperref[cartCoord]{A:cartCoord}} & \textbf{\hyperref[cartCoordRight]{A:cartCoordRight}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
 \\
 \midrule
 \endhead
-\hyperref[DD:positionIX]{DD:positionIX} &  &  &  &  & 
+\hyperref[DD:positionGDD]{DD:positionGDD} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionIY]{DD:positionIY} &  &  &  &  & 
+\hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:frequencyDD]{DD:frequencyDD} &  &  &  &  & 
+\hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD} &  &  &  &  & 
+\hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:periodSHMDD]{DD:periodSHMDD} &  &  &  &  & 
+\hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  & 
+\hyperref[DD:accelerationGDD]{DD:accelerationGDD} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  & 
+\hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityIX]{GD:velocityIX} &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityIY]{GD:velocityIY} &  &  &  &  & 
+\hyperref[GD:velocityX1]{GD:velocityX1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationIX]{GD:accelerationIX} &  &  &  &  & 
+\hyperref[GD:velocityY1]{GD:velocityY1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationIY]{GD:accelerationIY} &  &  &  &  & 
+\hyperref[GD:velocityX2]{GD:velocityX2} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum} &  &  &  &  & 
+\hyperref[GD:velocityY2]{GD:velocityY2} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum} &  &  &  &  & 
+\hyperref[GD:accelerationX1]{GD:accelerationX1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} &  &  &  &  & 
+\hyperref[GD:accelerationY1]{GD:accelerationY1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:periodPend]{GD:periodPend} &  &  &  &  & 
+\hyperref[GD:accelerationX2]{GD:accelerationX2} &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} &  &  &  &  & 
+\hyperref[GD:accelerationY2]{GD:accelerationY2} &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  & 
+\hyperref[GD:xForce1]{GD:xForce1} &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  & 
+\hyperref[GD:yForce1]{GD:yForce1} &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  & 
+\hyperref[GD:xForce2]{GD:xForce2} &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  & 
+\hyperref[GD:yForce2]{GD:yForce2} &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correct} &  &  &  &  & 
+\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portable} &  &  &  &  & 
+\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} &  &  &  &  &  &  & 
+\\
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  & 
+\\
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  & 
+\\
+\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:positionIX]{DD:positionIX}} & \textbf{\hyperref[DD:positionIY]{DD:positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD:frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD:periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD:velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD:velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD:accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD:accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD:periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}}
+\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}} & \textbf{\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}}
 \\
 \midrule
 \endhead
-\hyperref[DD:positionIX]{DD:positionIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionGDD]{DD:positionGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionIY]{DD:positionIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:frequencyDD]{DD:frequencyDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:periodSHMDD]{DD:periodSHMDD} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:accelerationGDD]{DD:accelerationGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityIX]{GD:velocityIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityIY]{GD:velocityIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityX1]{GD:velocityX1} & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationIX]{GD:accelerationIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityY1]{GD:velocityY1} & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationIY]{GD:accelerationIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityX2]{GD:velocityX2} & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityY2]{GD:velocityY2} & X &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationX1]{GD:accelerationX1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} &  &  & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationY1]{GD:accelerationY1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:periodPend]{GD:periodPend} &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[GD:accelerationX2]{GD:accelerationX2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  & 
+\hyperref[GD:accelerationY2]{GD:accelerationY2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:xForce1]{GD:xForce1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:yForce1]{GD:yForce1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:xForce2]{GD:xForce2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:yForce2]{GD:yForce2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X & X & X & X & X & X
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:positionIX]{DD:positionIX}} & \textbf{\hyperref[DD:positionIY]{DD:positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD:frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD:periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD:velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD:velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD:accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD:accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD:periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}} & \textbf{\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
 \midrule
 \endhead
-\hyperref[motionMass]{GS:Motion-of-the-mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[motionMass]{GS:motionMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}

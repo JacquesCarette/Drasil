@@ -4,14 +4,9 @@ module Drasil.DblPendulum.DataDefs (dataDefs, positionGDD, positionYDD_1, positi
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
-import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddNoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
-import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos,
-      frequency, period, angularFrequency)
 import Drasil.DblPendulum.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
---import Data.Drasil.Concepts.Physics (pendulum)
-import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
 import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)

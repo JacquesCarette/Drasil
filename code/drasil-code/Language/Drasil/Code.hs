@@ -1,4 +1,4 @@
--- | Re-export code-related smart constructors for external code writing and generation.
+-- | re-export smart constructors for external code writing
 module Language.Drasil.Code (
   makeCode, createCodeFiles, 
   generator, generateCode,

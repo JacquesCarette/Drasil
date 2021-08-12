@@ -1,11 +1,10 @@
 {- re-exports modules to simplify external use.-}
 module Language.Drasil (
   -- Expr
-    Expr
-  , UFunc, UFuncB, UFuncVV, UFuncVN
+  Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
-  , AssocArithOper, AssocBoolOper
-  , DerivType, Completeness, Relation
+  , AssocArithOper(..), AssocBoolOper(..)
+  , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
   -- Expr.Math
@@ -88,7 +87,7 @@ module Language.Drasil (
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucStaged, ucs, ucs', ucsWS
+  , uc, uc', ucStaged, ucs, ucs', ucsWS, ucuc
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
   -- Chunk.Relation
@@ -124,8 +123,8 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , Document(..), ShowTableOfContents(..), DType(..), Section(..)
-  , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
+  , Document(..), ShowTableOfContents(..), DType(..), Section(..), Contents(..)
+  , SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
@@ -134,7 +133,7 @@ module Language.Drasil (
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
+  , makeTabRef, makeFigRef, makeSecRef, makeURI
   -- Space
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
@@ -191,7 +190,7 @@ module Language.Drasil (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit)
+  , unitWrapper, getCu, MayHaveUnit(getUnit),
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -215,8 +214,8 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
 import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
-  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI)
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
+  , extractSection, makeTabRef, makeFigRef, makeSecRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
@@ -265,7 +264,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
-  ucStaged, ucs, ucs', ucsWS)
+  ucStaged, ucs, ucs', ucsWS, ucuc)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing

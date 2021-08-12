@@ -10,8 +10,8 @@ digraph refvsref {
 	angAccj -> angularVelocity;
 	angAccj -> angularAcceleration;
 	angAccj -> newtonSLR;
-	col2DIM -> p_CM;
-	col2DIM -> impulseS;
+	col2DRC -> p_CM;
+	col2DRC -> impulseS;
 
 
 	p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ctrOfMass"];
@@ -55,11 +55,11 @@ digraph refvsref {
 
 	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
 	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
-	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{accj, angAccj, col2DIM}
+	{accj, angAccj, col2DRC}
 	}
 
 }

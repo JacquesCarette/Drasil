@@ -1,4 +1,3 @@
--- | Makes the helper file for the GOOL HelloWorld tests.
 module Test.Helper (helper) where
 
 import GOOL.Drasil (SFile, SMethod,
@@ -8,11 +7,9 @@ import GOOL.Drasil (SFile, SMethod,
   ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
--- | Creates Helper module that contains an addition function.
 helper :: (OOProg r) => SFile r
 helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
 
--- | Creates a function that doubles the arguments and adds them together.
 doubleAndAdd :: (OOProg r) => SMethod r
 doubleAndAdd = docFunc "This function adds two numbers" 
   ["First number to add", "Second number to add"] (Just "Sum") $ 

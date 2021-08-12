@@ -4,7 +4,7 @@ module Language.Drasil.Code.Expr where
 
 import Language.Drasil (UID, DomainDesc, Completeness, RealInterval)
 
--- * Operators (mostly binary)
+-- Binary functions
 
 -- | Arithmetic operators (fractional, power, and subtraction).
 data ArithBinOp = Frac | Pow | Subt
@@ -59,8 +59,6 @@ data UFuncVV = NegV
 -- | @Vector -> Number@ operators.
 data UFuncVN = Norm | Dim
   deriving Eq
-
--- * CodeExpr
 
 -- | A one-to-one clone of Expr, with extra OO/code-related functionality.
 data CodeExpr where

@@ -1,5 +1,5 @@
 -- To generalize the use of dot printers in generating graphs
-module DataPrinters.Dot (digraph, makeEdgesDi, makeEdgesSub, makeNodesDi, makeNodesSub, replaceInvalidChars) where
+module DataPrinters.Dot (digraph, makeEdgesDi, makeEdgesSub, makeNodesDi, makeNodesSub) where
 
 import System.IO
 
@@ -13,7 +13,7 @@ type Edges = (String, [String])
 -- Takes in a file handle, name of directional graph, nodes and edges.
 digraph :: Handle -> Name -> [Nodes] -> [Edges] -> IO ()
 digraph handle nm nds edgs = do
-    hPutStrLn handle $ "digraph " ++ replaceInvalidChars nm ++ "{"
+    hPutStrLn handle $ "digraph " ++ nm ++ "{"
     mapM_ (hPutStrLn handle) $ concatMap (\ns -> map (makeNodesDi $ fst ns) $ snd ns) nds
     mapM_ (hPutStrLn handle) $ concatMap (uncurry makeEdgesDi) edgs
     hPutStrLn handle "}"

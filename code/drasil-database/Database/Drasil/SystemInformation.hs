@@ -1,9 +1,7 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
 module Database.Drasil.SystemInformation(SystemInformation(..), Block(..),
   citeDB, ReferenceDB, citationsFromBibMap, citationDB, rdb, RefMap, simpleMap,
-  conceptDB,
-  instModels, datadefs, configFiles, inputs,
-  defSequence, constraints, constants, sysinfodb, usedinfodb
+  conceptDB
   ) where
 
 import Language.Drasil
@@ -35,6 +33,7 @@ data SystemInformation where
   , _instModels  :: [InstanceModel]
   , _datadefs    :: [DataDefinition]
   , _configFiles :: [String]
+  , _folderPath  :: FilePath
   , _inputs      :: [h]
   , _outputs     :: [i]
   , _defSequence :: [Block QDefinition]
@@ -44,7 +43,7 @@ data SystemInformation where
   , _usedinfodb  :: ChunkDB
   , refdb        :: ReferenceDB
   } -> SystemInformation
-
+  
 -- | for listing 'QDefinition's in 'SystemInformation'.
 data Block a = Coupled a a [a] | Parallel a [a]
 
@@ -147,5 +146,3 @@ conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
 -- | Compare two things by their 'UID's.
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
-
-makeLenses ''SystemInformation

@@ -1,4 +1,3 @@
--- | Main module to gather all the GOOL tests and generate them.
 module Test.Main (main) where
 
 import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC, 
@@ -17,8 +16,6 @@ import Test.HelloWorld (helloWorld)
 import Test.PatternTest (patternTest)
 import Test.FileTests (fileTests)
 
--- | Renders three GOOL tests (FileTests, HelloWorld, and PatternTest)
--- in Java, Python, C#, C++, and Swift.
 main :: IO()
 main = do
   workingDir <- getCurrentDirectory
@@ -42,8 +39,7 @@ main = do
   setCurrentDirectory "swift"
   genCode (classes unSC unSP)
   setCurrentDirectory workingDir
-
--- | Gathers all information needed to generate code, sorts it, and calls the renderers.
+    
 genCode :: [PackData] -> IO()
 genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods 
   (packProg p)) + length (packAux p)) (progName $ packProg p)) files) $ makeCode (map (progMods . packProg) files) (map packAux files)
@@ -51,7 +47,6 @@ genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
 -- Cannot assign the list of tests in a where clause and re-use it because the 
 -- "r" type variable needs to be instantiated to two different types 
 -- (CodeInfo and a renderer) each time this function is called
--- | Gathers the GOOL file tests and prepares them for rendering
 classes :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) -> 
   (r' (Package r') -> PackData) -> [PackData]
 classes unRepr unRepr' = zipWith 
@@ -61,7 +56,7 @@ classes unRepr unRepr' = zipWith
   [helloWorld, patternTest, fileTests]
   (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests])
 
--- | Formats code to be rendered.
+-- | Takes code
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]
 makeCode files auxs = concat $ zipWith (++) 
   (map (map (\fd -> (filePath fd, modDoc $ fileMod fd))) files) 
@@ -74,11 +69,10 @@ makeCode files auxs = concat $ zipWith (++)
 -- IO Functions --
 ------------------
 
--- | Creates the requested 'Code' by producing files.
+-- | Creates the requested 'Code' by producing files
 createCodeFiles :: [Label] -> [(FilePath, Doc)] -> IO () -- [(FilePath, Doc)] -> IO ()
 createCodeFiles ns cs = mapM_ createCodeFile (zip ns cs)
 
--- | Helper that creates the file and renders code.
 createCodeFile :: (Label, (FilePath, Doc)) -> IO ()
 createCodeFile (n, (path, code)) = do
     createDirectoryIfMissing False n

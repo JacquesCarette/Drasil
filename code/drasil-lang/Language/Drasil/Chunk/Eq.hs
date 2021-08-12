@@ -8,7 +8,7 @@
 {-# LANGUAGE InstanceSigs #-}
 module Language.Drasil.Chunk.Eq where
 
-import Control.Lens ((^.), Getter, Setter', makeLenses, view, lens, Contravariant(contramap), Lens')
+import Control.Lens ((^.), view, lens, Lens')
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
@@ -20,7 +20,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 import Language.Drasil.ModelExpr (ModelExpr)
 import Language.Drasil.ModelExpr.Math (defines)
 import Language.Drasil.Expr.Lang (Expr(FCall, C))
-import Language.Drasil.Expr.Math (sy)
+import Language.Drasil.Expr (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (mkFunction, Space)
 import Language.Drasil.Sentence (Sentence(EmptyS))

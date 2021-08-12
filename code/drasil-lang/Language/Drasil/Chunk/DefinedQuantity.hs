@@ -6,7 +6,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import Language.Drasil.Expr.Math (sy)
+import Language.Drasil.Expr (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)

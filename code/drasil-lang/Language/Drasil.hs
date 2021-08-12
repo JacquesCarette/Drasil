@@ -197,16 +197,6 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.Expr
 import Language.Drasil.Expr.Lang
-import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqrt, sec, 
-          csc, cot, arcsin, arccos, arctan, exp,
-          dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,
-          square, half, oneHalf, oneThird, recip_,
-          completeCase, incompleteCase,
-          sumAll, defsum, prodAll, defprod,
-          realInterval,
-          apply, apply1, apply2, applyWithNamedArgs,
-          sy,
-          cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.ModelExpr (ModelExpr)
 import Language.Drasil.ModelExpr.Math (space, isIn, defines
   , andMEs, equivMEs

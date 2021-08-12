@@ -36,7 +36,7 @@ import Language.Drasil.Classes.Core
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
-import Language.Drasil.Expr (Expr)
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Reference (Reference)

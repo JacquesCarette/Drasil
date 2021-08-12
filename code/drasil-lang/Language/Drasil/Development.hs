@@ -20,12 +20,7 @@ module Language.Drasil.Development (
   ) where
 
 import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))
-import Language.Drasil.Expr (Expr(..), Relation,
-  Completeness(..), DerivType(..),
-  AssocBoolOper(..), AssocArithOper(..),
-  VVNBinOp(..), VVVBinOp(..), OrdBinOp(..), LABinOp(..),
-  EqBinOp(..), BoolBinOp(..), ArithBinOp(..),
-  UFuncVN(..), UFuncVV(..), UFuncB(..), UFunc(..))
+import Language.Drasil.Expr.Lang
 import Language.Drasil.Expr.Extract (eDep, eNames, eNames', eNamesRI)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.ModelExpr.Extract (meDep)

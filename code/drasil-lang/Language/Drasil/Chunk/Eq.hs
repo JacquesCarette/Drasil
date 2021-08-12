@@ -19,7 +19,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 
 import Language.Drasil.ModelExpr (ModelExpr)
 import Language.Drasil.ModelExpr.Math (defines)
-import Language.Drasil.Expr (Expr(FCall, C))
+import Language.Drasil.Expr.Lang (Expr(FCall, C))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (mkFunction, Space)

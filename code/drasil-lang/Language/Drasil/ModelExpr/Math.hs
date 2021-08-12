@@ -3,7 +3,7 @@ module Language.Drasil.ModelExpr.Math where
 
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
-import Language.Drasil.Expr (Completeness(..), DerivType(..))
+import Language.Drasil.Expr.Lang (Completeness(..), DerivType(..))
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr (ModelExpr(..), ($^), ($/), AssocArithOper(..),
   LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..), addRe,

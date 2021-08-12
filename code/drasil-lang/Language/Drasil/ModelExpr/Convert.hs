@@ -3,7 +3,7 @@ module Language.Drasil.ModelExpr.Convert where
 import Data.Bifunctor (bimap, second)
 
 import Language.Drasil.Space (DomainDesc(..), RealInterval(..))
-import qualified Language.Drasil.Expr as E
+import qualified Language.Drasil.Expr.Lang as E
 import Language.Drasil.ModelExpr
 
 assocArithOper :: E.AssocArithOper -> AssocArithOper 

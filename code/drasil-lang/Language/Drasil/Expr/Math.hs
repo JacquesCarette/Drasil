@@ -4,9 +4,8 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), Relation, ($^), ($/), AssocArithOper(..),
-  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
-  Completeness(..), addRe)
+import Language.Drasil.Expr
+import Language.Drasil.Expr.Lang
 import Language.Drasil.Space (RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)

@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS, cw)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Express(..), Concept,
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
-import Language.Drasil.Expr (Relation)
+import Language.Drasil.Expr.Lang (Relation)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)

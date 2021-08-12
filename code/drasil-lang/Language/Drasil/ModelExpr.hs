@@ -5,7 +5,7 @@ module Language.Drasil.ModelExpr where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Expr (Completeness, DerivType)
+import Language.Drasil.Expr.Lang (Completeness, DerivType)
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 

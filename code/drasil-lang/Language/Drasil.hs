@@ -195,12 +195,8 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN,
-          ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
-          AssocArithOper(..), AssocBoolOper(..), 
-          DerivType(..), Completeness(..), Relation,
-          ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.),
-          ($-), ($/), addI, addRe, mulI, mulRe)
+import Language.Drasil.Expr
+import Language.Drasil.Expr.Lang
 import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
           dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,

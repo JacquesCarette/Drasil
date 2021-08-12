@@ -41,10 +41,11 @@ enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 --
 -- > enumSimple _ 2 (S "DD") [def1, def2, ...]
 --
--- And it would render as:
---    * DD2: def1
---    * DD3: def2
---    * DD4: def3 ...
+-- And the resulting 'LabelledContent' would be rendered as:
+--
+--     * DD2: def1
+--     * DD3: def2
+--     * DD4: def3 ...
 enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 

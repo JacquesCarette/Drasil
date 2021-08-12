@@ -1,5 +1,5 @@
--- | Gather Drasil utility functions. For now, does not include combinators
--- (Sentence.hs, NounPhrase.hs, Concepts.hs)
+-- | Gather Drasil's utility functions and re-export for easy use.
+-- For now, does not include combinators (Sentence.hs, NounPhrase.hs, Concepts.hs)
 module Utils.Drasil (
   -- * Content-Related Utilities
   -- | From "Utils.Drasil.Contents".

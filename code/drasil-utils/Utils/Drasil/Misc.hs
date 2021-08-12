@@ -104,8 +104,8 @@ addPercent num = S (show num) :+: Percent
 -- 
 -- For example: 
 --
--- >>> zipSentList [S "Hi", S "Hey", S "Hi"] [[S"Hello"], [S"World"], [S"Hello", S"World]]
--- [[S "Hi", S"Hello"], [S "Hey", S"World"], [S "Hi", S"Hello", S"World]]
+-- >>> zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
+-- [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
 zipSentList acc _ []           = acc
 zipSentList acc [] r           = acc ++ map (EmptyS:) r

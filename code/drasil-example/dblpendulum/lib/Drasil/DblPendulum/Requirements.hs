@@ -33,9 +33,9 @@ verifyInptValsDesc = foldlSent [S "Check the entered", plural inValue,
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
 calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
-  foldlList Comma List [
-    ch angularAccel_1 +:+ sParen (S "from" +:+ refS angularAccelIM_1),  
-    ch angularAccel_2 +:+ sParen (S "from" +:+ refS angularAccelIM_2)]]
+  ch angularAccel_1 `S.and_` ch angularAccel_2,
+  sParen (S "from" +:+ refS angularAccelIM_1),
+  sParen (S "from" +:+ refS angularAccelIM_2)]
 outputValuesDesc = foldlSent [atStart output_, ch angularAccel_1 `S.and_` ch angularAccel_2,
   sParen (S "from" +:+ refS angularAccelIM_1 `S.and_` refS angularAccelIM_2)]
 

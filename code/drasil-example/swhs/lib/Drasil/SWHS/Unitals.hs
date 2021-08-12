@@ -457,7 +457,7 @@ relTol = uvc "relTol" (nounPhraseSP "relative tolerance")
 -- Max / Min Variables --
 -------------------------
 
-specParamValList :: [QDefinition]
+specParamValList :: [QDefinition Expr]
 specParamValList = [tankLengthMin, tankLengthMax, pcmDensityMin, pcmDensityMax,
   wDensityMin, wDensityMax, htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
   htFusionMin, htFusionMax, coilSAMax, htCapWMin, htCapWMax, coilHTCMin,
@@ -468,7 +468,7 @@ tankLengthMin, tankLengthMax, pcmDensityMin,
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, htCapSPMax, htCapLPMin,
   htCapLPMax, htFusionMin, htFusionMax, coilSAMax, htCapWMin, htCapWMax,
   coilHTCMin, coilHTCMax, pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux,
-  consTolAux, arMin, arMax :: QDefinition
+  consTolAux, arMin, arMax :: QDefinition Expr
 
 consTolAux = mkQuantDef consTol $ perc 1 5
 

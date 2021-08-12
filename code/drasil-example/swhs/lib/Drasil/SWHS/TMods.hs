@@ -50,7 +50,7 @@ consThermECS = mkConstraintSet consCC rels
           (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn)
         rels   = NE.fromList [consThermERel]
 
-consThermERel :: Relation
+consThermERel :: ModelExpr
 consThermERel = negVec (sy gradient) $. sy thFluxVect `addRe` sy volHtGen $=
   sy density `mulRe` sy heatCapSpec `mulRe` pderiv (sy temp) time
 
@@ -87,7 +87,7 @@ sensHtETemplate pc desc = tm (equationalModel' qd)
       eqn = sensHtEEqn pc
 
 
-sensHtEQD :: PhaseChange -> Expr -> Sentence -> QDefinition
+sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> QDefinition ModelExpr
 sensHtEQD pc eqn desc = fromEqnSt' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
   where np = nounPhraseSP ("Sensible heat energy" ++ case pc of
                                                        Liquid -> " (no state change)"
@@ -134,14 +134,14 @@ latentHtE = tm latentHtEMK
   [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [express latentHtEFD] [] [dRef latHtESrc] "latentHtE" latentHtENotes
 
-latentHtEMK :: ModelKind
+latentHtEMK :: ModelKind ModelExpr
 latentHtEMK = equationalModel "latentHtETM"
   (nounPhraseSP "Latent heat energy") latentHtEFD
 
-latentHtEFD :: QDefinition
+latentHtEFD :: QDefinition ModelExpr
 latentHtEFD = mkFuncDefByQ latentHeat [time] latentHtEExpr
 
-latentHtEExpr :: Expr
+latentHtEExpr :: ModelExpr
 latentHtEExpr = defint (eqSymb tau) (exactDbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
 
 -- Integrals need dTau at end
@@ -171,12 +171,12 @@ nwtnCooling = tm nwtnCoolingMK
   [] [express nwtnCoolingFD] [] [dRefInfo incroperaEtAl2007 $ Page [8]]
   "nwtnCooling" nwtnCoolingNotes
 
-nwtnCoolingMK :: ModelKind
+nwtnCoolingMK :: ModelKind ModelExpr
 nwtnCoolingMK = equationalModel "nwtnCoolingTM"
   (nounPhraseSP "Newton's law of cooling") nwtnCoolingFD
 
-nwtnCoolingFD :: QDefinition
-nwtnCoolingFD = mkFuncDefByQ htFlux [time] nwtnCoolingExpr
+nwtnCoolingFD :: QDefinition ModelExpr
+nwtnCoolingFD = mkFuncDefByQ htFlux [time] $ express nwtnCoolingExpr
 
 nwtnCoolingExpr :: Expr
 nwtnCoolingExpr = sy htTransCoeff `mulRe` apply1 deltaT time

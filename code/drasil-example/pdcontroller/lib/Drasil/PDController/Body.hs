@@ -16,6 +16,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries
 import qualified Data.Drasil.TheoryConcepts as IDict (dataDefn)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (second, kilogram)
 
@@ -119,7 +120,7 @@ symbMap :: ChunkDB
 symbMap
   = cdb (map qw physicscon ++ symbolsAll ++ map qw [mass])
       (nw pidControllerSystem :
-         [nw program] ++
+         [nw program, nw angular, nw linear] ++
            map nw doccon ++
              map nw doccon' ++
                concepts ++

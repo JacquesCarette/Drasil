@@ -35,6 +35,7 @@ Main
 code/analysis
 code/build
 code/docs
+code/debug
 code/deploy
 code/graphs
 code/traceygraphs

@@ -1,4 +1,4 @@
-module Language.Drasil.Generate (gen, genDot, genCode, DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC), docChoices) where
+module Language.Drasil.Generate (gen, genDot, genCode, genLog, DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC), docChoices) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -11,15 +11,16 @@ import Data.Time.Calendar (showGregorian)
 import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
-import Database.Drasil (SystemInformation)
+import Database.Drasil (SystemInformation(SI, _sys))
 import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
- makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot)
+ makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot, printAllDebugInfo)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
   unPP, unJP, unCSP, unCPPP, unSP)
 import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
+import Data.Char (isSpace)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -84,9 +85,21 @@ writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()
 genDot si = do
+    workingDir <- getCurrentDirectory
     let gi = mkGraphInfo si
     outputDot "TraceyGraph" gi
-    return mempty
+    setCurrentDirectory workingDir
+
+-- | Generates debugging logs to show all of the 'UID's used in an example.
+genLog :: SystemInformation -> PrintingInformation -> IO ()
+genLog SI{_sys = sysName} pinfo = do
+  workingDir <- getCurrentDirectory
+  createDirectoryIfMissing True $ "../../debug/" ++ filter (not.isSpace) (abrv sysName) ++ "/SRSlogs"
+  setCurrentDirectory $ "../../debug/" ++ filter (not.isSpace) (abrv sysName) ++ "/SRSlogs"
+  handle <- openFile (filter (not.isSpace) (abrv sysName) ++ "_SRS.log") WriteMode
+  mapM_ (hPutStrLn handle . render) $ printAllDebugInfo pinfo
+  hClose handle
+  setCurrentDirectory workingDir
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()

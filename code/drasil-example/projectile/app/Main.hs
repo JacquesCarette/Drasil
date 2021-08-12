@@ -2,7 +2,7 @@
 module Main (main) where
 
 import GHC.IO.Encoding
-import Language.Drasil.Generate (gen, genDot, DocSpec(DocSpec), DocType(SRS,Jupyter), Format(..), docChoices)
+import Language.Drasil.Generate (gen, genDot, genLog, DocSpec(DocSpec), DocType(SRS,Jupyter), Format(..), docChoices)
 import Drasil.Projectile.Body (printSetting, srs, fullSI)
 import Drasil.Projectile.Choices (choiceCombos, genCodeWithChoices)
 
@@ -17,5 +17,6 @@ main = do
   gen (DocSpec (docChoices Jupyter [])      "Projectile Motion Lesson") PL.nb PL.printSetting
   genCodeWithChoices choiceCombos
   genDot fullSI
+  genLog fullSI printSetting
   
   

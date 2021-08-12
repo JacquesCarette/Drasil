@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE GADTs #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.DocumentLanguage.Notebook.Core</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Generics.Multiplate</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Multiplate</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">multiplate</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkPlate</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">type</span><span> </span><span id="NBDesc"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#NBDesc"><span class="hs-identifier hs-var">NBDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#DocSection"><span class="hs-identifier hs-type">DocSection</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">data</span><span> </span><span id="DocSection"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#DocSection"><span class="hs-identifier hs-var">DocSection</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="IntrodSec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSec"><span class="hs-identifier hs-var">IntrodSec</span></a></span></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSec"><span class="hs-identifier hs-type">IntrodSec</span></a></span><span>
+</span><span id="line-10"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="BodySec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySec"><span class="hs-identifier hs-var">BodySec</span></a></span></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySec"><span class="hs-identifier hs-type">BodySec</span></a></span><span>
+</span><span id="line-11"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="SmmrySec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmrySec"><span class="hs-identifier hs-var">SmmrySec</span></a></span></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmrySec"><span class="hs-identifier hs-type">SmmrySec</span></a></span><span>
+</span><span id="line-12"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="BibSec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BibSec"><span class="hs-identifier hs-var">BibSec</span></a></span></span><span>
+</span><span id="line-13"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="ApndxSec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxSec"><span class="hs-identifier hs-var">ApndxSec</span></a></span></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxSec"><span class="hs-identifier hs-type">ApndxSec</span></a></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-comment">-- TODO: Work on detail structure of notebooks</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-comment">{--}</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-comment">-- | Introduction section. Contents are top level followed by a list of subsections.</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">data</span><span> </span><span id="IntrodSec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSec"><span class="hs-identifier hs-var">IntrodSec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="IntrodProg"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodProg"><span class="hs-identifier hs-var">IntrodProg</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSub"><span class="hs-identifier hs-type">IntrodSub</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-comment">-- | Introduction subsections</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">data</span><span> </span><span id="IntrodSub"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSub"><span class="hs-identifier hs-var">IntrodSub</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-24"></span><span>  </span><span id="InPurpose"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#InPurpose"><span class="hs-identifier hs-var">InPurpose</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSub"><span class="hs-identifier hs-type">IntrodSub</span></a></span><span> </span><span class="hs-comment">-- TODO: maybe change to [Contents]  </span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-comment">{--}</span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span class="hs-keyword">newtype</span><span> </span><span id="BodySec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySec"><span class="hs-identifier hs-var">BodySec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="BodyProg"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodyProg"><span class="hs-identifier hs-var">BodyProg</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySub"><span class="hs-identifier hs-type">BodySub</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="hs-keyword">data</span><span> </span><span id="BodySub"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySub"><span class="hs-identifier hs-var">BodySub</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-31"></span><span>  </span><span id="Review"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#Review"><span class="hs-identifier hs-var">Review</span></a></span></span><span>       </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySub"><span class="hs-identifier hs-type">BodySub</span></a></span><span>
+</span><span id="line-32"></span><span>  </span><span id="MainIdea"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#MainIdea"><span class="hs-identifier hs-var">MainIdea</span></a></span></span><span>     </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySub"><span class="hs-identifier hs-type">BodySub</span></a></span><span>
+</span><span id="line-33"></span><span>  </span><span id="MethsAndAnls"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#MethsAndAnls"><span class="hs-identifier hs-var">MethsAndAnls</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySub"><span class="hs-identifier hs-type">BodySub</span></a></span><span>
+</span><span id="line-34"></span><span>  </span><span id="Example"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#Example"><span class="hs-identifier hs-var">Example</span></a></span></span><span>      </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySub"><span class="hs-identifier hs-type">BodySub</span></a></span><span>
+</span><span id="line-35"></span><span>  </span><span>
+</span><span id="line-36"></span><span class="hs-comment">{--}</span><span>
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="hs-keyword">newtype</span><span> </span><span id="SmmrySec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmrySec"><span class="hs-identifier hs-var">SmmrySec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SmmryProg"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmryProg"><span class="hs-identifier hs-var">SmmryProg</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="hs-comment">{--}</span><span>
+</span><span id="line-41"></span><span>
+</span><span id="line-42"></span><span class="hs-keyword">newtype</span><span> </span><span id="ApndxSec"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxSec"><span class="hs-identifier hs-var">ApndxSec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ApndxProg"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxProg"><span class="hs-identifier hs-var">ApndxProg</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="hs-comment">{--}</span><span>
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="hs-keyword">data</span><span> </span><span id="DLPlate"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#DLPlate"><span class="hs-identifier hs-var">DLPlate</span></a></span></span><span> </span><span id="local-6989586621679123453"><span class="annot"><a href="#local-6989586621679123453"><span class="hs-identifier hs-type">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="DLPlate"><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#DLPlate"><span class="hs-identifier hs-var">DLPlate</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-47"></span><span>  </span><span id="docSec"><span class="annot"><span class="annottext">DLPlate f -&gt; DocSection -&gt; f DocSection
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#docSec"><span class="hs-identifier hs-var hs-var">docSec</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#DocSection"><span class="hs-identifier hs-type">DocSection</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679123453"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#DocSection"><span class="hs-identifier hs-type">DocSection</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-48"></span><span>  </span><span id="introdSec"><span class="annot"><span class="annottext">DLPlate f -&gt; IntrodSec -&gt; f IntrodSec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#introdSec"><span class="hs-identifier hs-var hs-var">introdSec</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSec"><span class="hs-identifier hs-type">IntrodSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679123453"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSec"><span class="hs-identifier hs-type">IntrodSec</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-49"></span><span>  </span><span id="introdSub"><span class="annot"><span class="annottext">DLPlate f -&gt; IntrodSub -&gt; f IntrodSub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#introdSub"><span class="hs-identifier hs-var hs-var">introdSub</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSub"><span class="hs-identifier hs-type">IntrodSub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679123453"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSub"><span class="hs-identifier hs-type">IntrodSub</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-50"></span><span>  </span><span id="bodySec"><span class="annot"><span class="annottext">DLPlate f -&gt; BodySec -&gt; f BodySec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#bodySec"><span class="hs-identifier hs-var hs-var">bodySec</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySec"><span class="hs-identifier hs-type">BodySec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679123453"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySec"><span class="hs-identifier hs-type">BodySec</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-51"></span><span>  </span><span id="bodySub"><span class="annot"><span class="annottext">DLPlate f -&gt; BodySub -&gt; f BodySub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#bodySub"><span class="hs-identifier hs-var hs-var">bodySub</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySub"><span class="hs-identifier hs-type">BodySub</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679123453"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySub"><span class="hs-identifier hs-type">BodySub</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-52"></span><span>  </span><span id="smmrySec"><span class="annot"><span class="annottext">DLPlate f -&gt; SmmrySec -&gt; f SmmrySec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#smmrySec"><span class="hs-identifier hs-var hs-var">smmrySec</span></a></span></span><span> </span><span class="hs-glyph">::</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmrySec"><span class="hs-identifier hs-type">SmmrySec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679123453"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmrySec"><span class="hs-identifier hs-type">SmmrySec</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-53"></span><span>  </span><span id="apendSec"><span class="annot"><span class="annottext">DLPlate f -&gt; ApndxSec -&gt; f ApndxSec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#apendSec"><span class="hs-identifier hs-var hs-var">apendSec</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxSec"><span class="hs-identifier hs-type">ApndxSec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679123453"><span class="hs-identifier hs-type">f</span></a></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxSec"><span class="hs-identifier hs-type">ApndxSec</span></a></span><span>
+</span><span id="line-54"></span><span class="hs-special">}</span><span>
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Multiplate</span></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#DLPlate"><span class="hs-identifier hs-type">DLPlate</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-57"></span><span>  </span><span id="local-6989586621679123404"><span class="annot"><span class="annottext">multiplate :: DLPlate f -&gt; DLPlate f
+</span><a href="#local-6989586621679123404"><span class="hs-identifier hs-var hs-var hs-var hs-var">multiplate</span></a></span></span><span> </span><span id="local-6989586621679123403"><span class="annot"><span class="annottext">p :: DLPlate f
+</span><a href="#local-6989586621679123403"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DocSection -&gt; f DocSection)
+-&gt; (IntrodSec -&gt; f IntrodSec)
+-&gt; (IntrodSub -&gt; f IntrodSub)
+-&gt; (BodySec -&gt; f BodySec)
+-&gt; (BodySub -&gt; f BodySub)
+-&gt; (SmmrySec -&gt; f SmmrySec)
+-&gt; (ApndxSec -&gt; f ApndxSec)
+-&gt; DLPlate f
+forall (f :: * -&gt; *).
+(DocSection -&gt; f DocSection)
+-&gt; (IntrodSec -&gt; f IntrodSec)
+-&gt; (IntrodSub -&gt; f IntrodSub)
+-&gt; (BodySec -&gt; f BodySec)
+-&gt; (BodySub -&gt; f BodySub)
+-&gt; (SmmrySec -&gt; f SmmrySec)
+-&gt; (ApndxSec -&gt; f ApndxSec)
+-&gt; DLPlate f
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#DLPlate"><span class="hs-identifier hs-var">DLPlate</span></a></span><span> </span><span class="annot"><span class="annottext">DocSection -&gt; f DocSection
+</span><a href="#local-6989586621679123402"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">IntrodSec -&gt; f IntrodSec
+</span><a href="#local-6989586621679123401"><span class="hs-identifier hs-var">intro</span></a></span><span> </span><span class="annot"><span class="annottext">IntrodSub -&gt; f IntrodSub
+forall (f :: * -&gt; *). Applicative f =&gt; IntrodSub -&gt; f IntrodSub
+</span><a href="#local-6989586621679123400"><span class="hs-identifier hs-var">intro'</span></a></span><span> </span><span class="annot"><span class="annottext">BodySec -&gt; f BodySec
+</span><a href="#local-6989586621679123399"><span class="hs-identifier hs-var">body</span></a></span><span> </span><span class="annot"><span class="annottext">BodySub -&gt; f BodySub
+forall (f :: * -&gt; *). Applicative f =&gt; BodySub -&gt; f BodySub
+</span><a href="#local-6989586621679123398"><span class="hs-identifier hs-var">body'</span></a></span><span> </span><span class="annot"><span class="annottext">SmmrySec -&gt; f SmmrySec
+forall (f :: * -&gt; *). Applicative f =&gt; SmmrySec -&gt; f SmmrySec
+</span><a href="#local-6989586621679123397"><span class="hs-identifier hs-var">smry</span></a></span><span> </span><span class="annot"><span class="annottext">ApndxSec -&gt; f ApndxSec
+forall (f :: * -&gt; *). Applicative f =&gt; ApndxSec -&gt; f ApndxSec
+</span><a href="#local-6989586621679123396"><span class="hs-identifier hs-var">aps</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-58"></span><span>    </span><span id="local-6989586621679123402"><span class="annot"><span class="annottext">ds :: DocSection -&gt; f DocSection
+</span><a href="#local-6989586621679123402"><span class="hs-identifier hs-var hs-var">ds</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSec"><span class="hs-identifier hs-type">IntrodSec</span></a></span><span> </span><span id="local-6989586621679123395"><span class="annot"><span class="annottext">x :: IntrodSec
+</span><a href="#local-6989586621679123395"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IntrodSec -&gt; DocSection
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodSec"><span class="hs-identifier hs-var">IntrodSec</span></a></span><span> </span><span class="annot"><span class="annottext">(IntrodSec -&gt; DocSection) -&gt; f IntrodSec -&gt; f DocSection
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">DLPlate f -&gt; IntrodSec -&gt; f IntrodSec
+forall (f :: * -&gt; *). DLPlate f -&gt; IntrodSec -&gt; f IntrodSec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#introdSec"><span class="hs-identifier hs-var hs-var">introdSec</span></a></span><span> </span><span class="annot"><span class="annottext">DLPlate f
+</span><a href="#local-6989586621679123403"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">IntrodSec
+</span><a href="#local-6989586621679123395"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-59"></span><span>    </span><span class="annot"><a href="#local-6989586621679123402"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySec"><span class="hs-identifier hs-type">BodySec</span></a></span><span> </span><span id="local-6989586621679123393"><span class="annot"><span class="annottext">x :: BodySec
+</span><a href="#local-6989586621679123393"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BodySec -&gt; DocSection
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodySec"><span class="hs-identifier hs-var">BodySec</span></a></span><span> </span><span class="annot"><span class="annottext">(BodySec -&gt; DocSection) -&gt; f BodySec -&gt; f DocSection
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">DLPlate f -&gt; BodySec -&gt; f BodySec
+forall (f :: * -&gt; *). DLPlate f -&gt; BodySec -&gt; f BodySec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#bodySec"><span class="hs-identifier hs-var hs-var">bodySec</span></a></span><span> </span><span class="annot"><span class="annottext">DLPlate f
+</span><a href="#local-6989586621679123403"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">BodySec
+</span><a href="#local-6989586621679123393"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-60"></span><span>    </span><span class="annot"><a href="#local-6989586621679123402"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmrySec"><span class="hs-identifier hs-type">SmmrySec</span></a></span><span> </span><span id="local-6989586621679123392"><span class="annot"><span class="annottext">x :: SmmrySec
+</span><a href="#local-6989586621679123392"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SmmrySec -&gt; DocSection
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmrySec"><span class="hs-identifier hs-var">SmmrySec</span></a></span><span> </span><span class="annot"><span class="annottext">(SmmrySec -&gt; DocSection) -&gt; f SmmrySec -&gt; f DocSection
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">DLPlate f -&gt; SmmrySec -&gt; f SmmrySec
+forall (f :: * -&gt; *). DLPlate f -&gt; SmmrySec -&gt; f SmmrySec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#smmrySec"><span class="hs-identifier hs-var hs-var">smmrySec</span></a></span><span> </span><span class="annot"><span class="annottext">DLPlate f
+</span><a href="#local-6989586621679123403"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">SmmrySec
+</span><a href="#local-6989586621679123392"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-61"></span><span>    </span><span class="annot"><a href="#local-6989586621679123402"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxSec"><span class="hs-identifier hs-type">ApndxSec</span></a></span><span> </span><span id="local-6989586621679123391"><span class="annot"><span class="annottext">x :: ApndxSec
+</span><a href="#local-6989586621679123391"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ApndxSec -&gt; DocSection
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxSec"><span class="hs-identifier hs-var">ApndxSec</span></a></span><span> </span><span class="annot"><span class="annottext">(ApndxSec -&gt; DocSection) -&gt; f ApndxSec -&gt; f DocSection
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">DLPlate f -&gt; ApndxSec -&gt; f ApndxSec
+forall (f :: * -&gt; *). DLPlate f -&gt; ApndxSec -&gt; f ApndxSec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#apendSec"><span class="hs-identifier hs-var hs-var">apendSec</span></a></span><span> </span><span class="annot"><span class="annottext">DLPlate f
+</span><a href="#local-6989586621679123403"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">ApndxSec
+</span><a href="#local-6989586621679123391"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-62"></span><span>    </span><span class="annot"><a href="#local-6989586621679123402"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BibSec"><span class="hs-identifier hs-type">BibSec</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DocSection -&gt; f DocSection
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">DocSection
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#BibSec"><span class="hs-identifier hs-var">BibSec</span></a></span><span>
+</span><span id="line-63"></span><span>
+</span><span id="line-64"></span><span>    </span><span id="local-6989586621679123401"><span class="annot"><span class="annottext">intro :: IntrodSec -&gt; f IntrodSec
+</span><a href="#local-6989586621679123401"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodProg"><span class="hs-identifier hs-type">IntrodProg</span></a></span><span> </span><span id="local-6989586621679123390"><span class="annot"><span class="annottext">c :: [Contents]
+</span><a href="#local-6989586621679123390"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679123389"><span class="annot"><span class="annottext">progs :: [IntrodSub]
+</span><a href="#local-6989586621679123389"><span class="hs-identifier hs-var">progs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [IntrodSub] -&gt; IntrodSec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#IntrodProg"><span class="hs-identifier hs-var">IntrodProg</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679123390"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">([IntrodSub] -&gt; IntrodSec) -&gt; f [IntrodSub] -&gt; f IntrodSec
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span>
+</span><span id="line-65"></span><span>      </span><span class="annot"><span class="annottext">(IntrodSub -&gt; f IntrodSub) -&gt; [IntrodSub] -&gt; f [IntrodSub]
+forall (t :: * -&gt; *) (f :: * -&gt; *) a b.
+(Traversable t, Applicative f) =&gt;
+(a -&gt; f b) -&gt; t a -&gt; f (t b)
+</span><span class="hs-identifier hs-var">traverse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DLPlate f -&gt; IntrodSub -&gt; f IntrodSub
+forall (f :: * -&gt; *). DLPlate f -&gt; IntrodSub -&gt; f IntrodSub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#introdSub"><span class="hs-identifier hs-var hs-var">introdSub</span></a></span><span> </span><span class="annot"><span class="annottext">DLPlate f
+</span><a href="#local-6989586621679123403"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[IntrodSub]
+</span><a href="#local-6989586621679123389"><span class="hs-identifier hs-var">progs</span></a></span><span>
+</span><span id="line-66"></span><span>    </span><span id="local-6989586621679123400"><span class="annot"><span class="annottext">intro' :: IntrodSub -&gt; f IntrodSub
+</span><a href="#local-6989586621679123400"><span class="hs-identifier hs-var hs-var">intro'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#InPurpose"><span class="hs-identifier hs-type">InPurpose</span></a></span><span> </span><span id="local-6989586621679123387"><span class="annot"><span class="annottext">s :: [Sentence]
+</span><a href="#local-6989586621679123387"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IntrodSub -&gt; f IntrodSub
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(IntrodSub -&gt; f IntrodSub) -&gt; IntrodSub -&gt; f IntrodSub
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; IntrodSub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#InPurpose"><span class="hs-identifier hs-var">InPurpose</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679123387"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-67"></span><span>    </span><span id="local-6989586621679123399"><span class="annot"><span class="annottext">body :: BodySec -&gt; f BodySec
+</span><a href="#local-6989586621679123399"><span class="hs-identifier hs-var hs-var">body</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodyProg"><span class="hs-identifier hs-type">BodyProg</span></a></span><span> </span><span id="local-6989586621679123386"><span class="annot"><span class="annottext">progs :: [BodySub]
+</span><a href="#local-6989586621679123386"><span class="hs-identifier hs-var">progs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[BodySub] -&gt; BodySec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#BodyProg"><span class="hs-identifier hs-var">BodyProg</span></a></span><span> </span><span class="annot"><span class="annottext">([BodySub] -&gt; BodySec) -&gt; f [BodySub] -&gt; f BodySec
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">(BodySub -&gt; f BodySub) -&gt; [BodySub] -&gt; f [BodySub]
+forall (t :: * -&gt; *) (f :: * -&gt; *) a b.
+(Traversable t, Applicative f) =&gt;
+(a -&gt; f b) -&gt; t a -&gt; f (t b)
+</span><span class="hs-identifier hs-var">traverse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DLPlate f -&gt; BodySub -&gt; f BodySub
+forall (f :: * -&gt; *). DLPlate f -&gt; BodySub -&gt; f BodySub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#bodySub"><span class="hs-identifier hs-var hs-var">bodySub</span></a></span><span> </span><span class="annot"><span class="annottext">DLPlate f
+</span><a href="#local-6989586621679123403"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[BodySub]
+</span><a href="#local-6989586621679123386"><span class="hs-identifier hs-var">progs</span></a></span><span>
+</span><span id="line-68"></span><span>    </span><span id="local-6989586621679123398"><span class="annot"><span class="annottext">body' :: BodySub -&gt; f BodySub
+</span><a href="#local-6989586621679123398"><span class="hs-identifier hs-var hs-var">body'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#Review"><span class="hs-identifier hs-type">Review</span></a></span><span> </span><span id="local-6989586621679123385"><span class="annot"><span class="annottext">c :: [Contents]
+</span><a href="#local-6989586621679123385"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BodySub -&gt; f BodySub
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(BodySub -&gt; f BodySub) -&gt; BodySub -&gt; f BodySub
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; BodySub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#Review"><span class="hs-identifier hs-var">Review</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679123385"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><span id="line-69"></span><span>    </span><span class="annot"><a href="#local-6989586621679123398"><span class="hs-identifier hs-var">body'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#MainIdea"><span class="hs-identifier hs-type">MainIdea</span></a></span><span> </span><span id="local-6989586621679123384"><span class="annot"><span class="annottext">c :: [Contents]
+</span><a href="#local-6989586621679123384"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679123383"><span class="annot"><span class="annottext">s :: [Section]
+</span><a href="#local-6989586621679123383"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BodySub -&gt; f BodySub
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(BodySub -&gt; f BodySub) -&gt; BodySub -&gt; f BodySub
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; BodySub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#MainIdea"><span class="hs-identifier hs-var">MainIdea</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679123384"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679123383"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-70"></span><span>    </span><span class="annot"><a href="#local-6989586621679123398"><span class="hs-identifier hs-var">body'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#MethsAndAnls"><span class="hs-identifier hs-type">MethsAndAnls</span></a></span><span> </span><span id="local-6989586621679123382"><span class="annot"><span class="annottext">c :: [Contents]
+</span><a href="#local-6989586621679123382"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679123381"><span class="annot"><span class="annottext">s :: [Section]
+</span><a href="#local-6989586621679123381"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BodySub -&gt; f BodySub
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(BodySub -&gt; f BodySub) -&gt; BodySub -&gt; f BodySub
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; BodySub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#MethsAndAnls"><span class="hs-identifier hs-var">MethsAndAnls</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679123382"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679123381"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-71"></span><span>    </span><span class="annot"><a href="#local-6989586621679123398"><span class="hs-identifier hs-var">body'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#Example"><span class="hs-identifier hs-type">Example</span></a></span><span> </span><span id="local-6989586621679123380"><span class="annot"><span class="annottext">c :: [Contents]
+</span><a href="#local-6989586621679123380"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679123379"><span class="annot"><span class="annottext">s :: [Section]
+</span><a href="#local-6989586621679123379"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BodySub -&gt; f BodySub
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(BodySub -&gt; f BodySub) -&gt; BodySub -&gt; f BodySub
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; BodySub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#Example"><span class="hs-identifier hs-var">Example</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679123380"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679123379"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-72"></span><span>    </span><span id="local-6989586621679123397"><span class="annot"><span class="annottext">smry :: SmmrySec -&gt; f SmmrySec
+</span><a href="#local-6989586621679123397"><span class="hs-identifier hs-var hs-var">smry</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmryProg"><span class="hs-identifier hs-type">SmmryProg</span></a></span><span> </span><span id="local-6989586621679123378"><span class="annot"><span class="annottext">con :: [Contents]
+</span><a href="#local-6989586621679123378"><span class="hs-identifier hs-var">con</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SmmrySec -&gt; f SmmrySec
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(SmmrySec -&gt; f SmmrySec) -&gt; SmmrySec -&gt; f SmmrySec
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; SmmrySec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#SmmryProg"><span class="hs-identifier hs-var">SmmryProg</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679123378"><span class="hs-identifier hs-var">con</span></a></span><span> </span><span>
+</span><span id="line-73"></span><span>    </span><span id="local-6989586621679123396"><span class="annot"><span class="annottext">aps :: ApndxSec -&gt; f ApndxSec
+</span><a href="#local-6989586621679123396"><span class="hs-identifier hs-var hs-var">aps</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxProg"><span class="hs-identifier hs-type">ApndxProg</span></a></span><span> </span><span id="local-6989586621679123377"><span class="annot"><span class="annottext">con :: [Contents]
+</span><a href="#local-6989586621679123377"><span class="hs-identifier hs-var">con</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ApndxSec -&gt; f ApndxSec
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(ApndxSec -&gt; f ApndxSec) -&gt; ApndxSec -&gt; f ApndxSec
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; ApndxSec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#ApndxProg"><span class="hs-identifier hs-var">ApndxProg</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679123377"><span class="hs-identifier hs-var">con</span></a></span><span>
+</span><span id="line-74"></span><span>  </span><span id="local-6989586621679123376"><span class="annot"><span class="annottext">mkPlate :: (forall a. Projector DLPlate a -&gt; a -&gt; f a) -&gt; DLPlate f
+</span><a href="#local-6989586621679123376"><span class="hs-identifier hs-var hs-var hs-var hs-var">mkPlate</span></a></span></span><span> </span><span id="local-6989586621679123375"><span class="annot"><span class="annottext">b :: forall a. Projector DLPlate a -&gt; a -&gt; f a
+</span><a href="#local-6989586621679123375"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DocSection -&gt; f DocSection)
+-&gt; (IntrodSec -&gt; f IntrodSec)
+-&gt; (IntrodSub -&gt; f IntrodSub)
+-&gt; (BodySec -&gt; f BodySec)
+-&gt; (BodySub -&gt; f BodySub)
+-&gt; (SmmrySec -&gt; f SmmrySec)
+-&gt; (ApndxSec -&gt; f ApndxSec)
+-&gt; DLPlate f
+forall (f :: * -&gt; *).
+(DocSection -&gt; f DocSection)
+-&gt; (IntrodSec -&gt; f IntrodSec)
+-&gt; (IntrodSub -&gt; f IntrodSub)
+-&gt; (BodySec -&gt; f BodySec)
+-&gt; (BodySub -&gt; f BodySub)
+-&gt; (SmmrySec -&gt; f SmmrySec)
+-&gt; (ApndxSec -&gt; f ApndxSec)
+-&gt; DLPlate f
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#DLPlate"><span class="hs-identifier hs-var">DLPlate</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Projector DLPlate DocSection -&gt; DocSection -&gt; f DocSection
+forall a. Projector DLPlate a -&gt; a -&gt; f a
+</span><a href="#local-6989586621679123375"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Projector DLPlate DocSection
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#docSec"><span class="hs-identifier hs-var hs-var">docSec</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(forall (f :: * -&gt; *). DLPlate f -&gt; IntrodSec -&gt; f IntrodSec)
+-&gt; IntrodSec -&gt; f IntrodSec
+forall a. Projector DLPlate a -&gt; a -&gt; f a
+</span><a href="#local-6989586621679123375"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *). DLPlate f -&gt; IntrodSec -&gt; f IntrodSec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#introdSec"><span class="hs-identifier hs-var hs-var">introdSec</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(forall (f :: * -&gt; *). DLPlate f -&gt; IntrodSub -&gt; f IntrodSub)
+-&gt; IntrodSub -&gt; f IntrodSub
+forall a. Projector DLPlate a -&gt; a -&gt; f a
+</span><a href="#local-6989586621679123375"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *). DLPlate f -&gt; IntrodSub -&gt; f IntrodSub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#introdSub"><span class="hs-identifier hs-var hs-var">introdSub</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(forall (f :: * -&gt; *). DLPlate f -&gt; BodySec -&gt; f BodySec)
+-&gt; BodySec -&gt; f BodySec
+forall a. Projector DLPlate a -&gt; a -&gt; f a
+</span><a href="#local-6989586621679123375"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *). DLPlate f -&gt; BodySec -&gt; f BodySec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#bodySec"><span class="hs-identifier hs-var hs-var">bodySec</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-75"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(forall (f :: * -&gt; *). DLPlate f -&gt; BodySub -&gt; f BodySub)
+-&gt; BodySub -&gt; f BodySub
+forall a. Projector DLPlate a -&gt; a -&gt; f a
+</span><a href="#local-6989586621679123375"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *). DLPlate f -&gt; BodySub -&gt; f BodySub
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#bodySub"><span class="hs-identifier hs-var hs-var">bodySub</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(forall (f :: * -&gt; *). DLPlate f -&gt; SmmrySec -&gt; f SmmrySec)
+-&gt; SmmrySec -&gt; f SmmrySec
+forall a. Projector DLPlate a -&gt; a -&gt; f a
+</span><a href="#local-6989586621679123375"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *). DLPlate f -&gt; SmmrySec -&gt; f SmmrySec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#smmrySec"><span class="hs-identifier hs-var hs-var">smmrySec</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(forall (f :: * -&gt; *). DLPlate f -&gt; ApndxSec -&gt; f ApndxSec)
+-&gt; ApndxSec -&gt; f ApndxSec
+forall a. Projector DLPlate a -&gt; a -&gt; f a
+</span><a href="#local-6989586621679123375"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *). DLPlate f -&gt; ApndxSec -&gt; f ApndxSec
+</span><a href="Drasil.DocumentLanguage.Notebook.Core.html#apendSec"><span class="hs-identifier hs-var hs-var">apendSec</span></a></span><span class="hs-special">)</span></pre></body></html>

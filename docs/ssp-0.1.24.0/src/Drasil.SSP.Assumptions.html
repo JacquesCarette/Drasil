@@ -1,0 +1,561 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SSP.Assumptions</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.NounPhrase</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NP</span></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html"><span class="hs-identifier">Drasil.SSP.Defs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Defs.html#plnStrn"><span class="hs-identifier">plnStrn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slpSrf"><span class="hs-identifier">slpSrf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slopeSrf"><span class="hs-identifier">slopeSrf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier">slope</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Defs.html#soil"><span class="hs-identifier">soil</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#soilPrpty"><span class="hs-identifier">soilPrpty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#intrslce"><span class="hs-identifier">intrslce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier">slice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#waterTable"><span class="hs-identifier">waterTable</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html"><span class="hs-identifier">Drasil.SSP.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Unitals.html#baseHydroForce"><span class="hs-identifier">baseHydroForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier">effCohesion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#fricAngle"><span class="hs-identifier">fricAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier">intNormForce</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier">intShrForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#normToShear"><span class="hs-identifier">normToShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#numbSlices"><span class="hs-identifier">numbSlices</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#scalFunc"><span class="hs-identifier">scalFunc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier">shrStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#slipDist"><span class="hs-identifier">slipDist</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#slipHght"><span class="hs-identifier">slipHght</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-14"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#surfHydroForce"><span class="hs-identifier">surfHydroForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#surfLoad"><span class="hs-identifier">surfLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#xi"><span class="hs-identifier">xi</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#zcoord"><span class="hs-identifier">zcoord</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.References.html"><span class="hs-identifier">Drasil.SSP.References</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.References.html#morgenstern1965"><span class="hs-identifier">morgenstern1965</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">analysis</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumption</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><span class="hs-identifier">condition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">constant</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">effect</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">interface</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">stress</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">twoD</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">surface</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unit_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumptions"><span class="hs-identifier hs-type">assumptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-24"></span><span id="assumptions"><span class="annot"><span class="annottext">assumptions :: [ConceptInstance]
+</span><a href="Drasil.SSP.Assumptions.html#assumptions"><span class="hs-identifier hs-var hs-var">assumptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSSC"><span class="hs-identifier hs-var">assumpSSC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpFOSL"><span class="hs-identifier hs-var">assumpFOSL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSLH"><span class="hs-identifier hs-var">assumpSLH</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSP"><span class="hs-identifier hs-var">assumpSP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSLI"><span class="hs-identifier hs-var">assumpSLI</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpINSFL"><span class="hs-identifier hs-var">assumpINSFL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpPSC"><span class="hs-identifier hs-var">assumpPSC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpENSL"><span class="hs-identifier hs-var">assumpENSL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSBSBISL"><span class="hs-identifier hs-var">assumpSBSBISL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpES"><span class="hs-identifier hs-var">assumpES</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSF"><span class="hs-identifier hs-var">assumpSF</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSL"><span class="hs-identifier hs-var">assumpSL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpWIBE"><span class="hs-identifier hs-var">assumpWIBE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpWISE"><span class="hs-identifier hs-var">assumpWISE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpNESSS"><span class="hs-identifier hs-var">assumpNESSS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpHFSM"><span class="hs-identifier hs-var">assumpHFSM</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpSSC"><span class="hs-identifier hs-type">assumpSSC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpFOSL"><span class="hs-identifier hs-type">assumpFOSL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpSLH"><span class="hs-identifier hs-type">assumpSLH</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpSP"><span class="hs-identifier hs-type">assumpSP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpSLI"><span class="hs-identifier hs-type">assumpSLI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpINSFL"><span class="hs-identifier hs-type">assumpINSFL</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpPSC"><span class="hs-identifier hs-type">assumpPSC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpENSL"><span class="hs-identifier hs-type">assumpENSL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpSBSBISL"><span class="hs-identifier hs-type">assumpSBSBISL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpES"><span class="hs-identifier hs-type">assumpES</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpSF"><span class="hs-identifier hs-type">assumpSF</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-30"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpSL"><span class="hs-identifier hs-type">assumpSL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpWIBE"><span class="hs-identifier hs-type">assumpWIBE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpWISE"><span class="hs-identifier hs-type">assumpWISE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpNESSS"><span class="hs-identifier hs-type">assumpNESSS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpHFSM"><span class="hs-identifier hs-type">assumpHFSM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span id="assumpSSC"><span class="annot"><span class="annottext">assumpSSC :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSSC"><span class="hs-identifier hs-var hs-var">assumpSSC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpSSC&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#monotonicF"><span class="hs-identifier hs-var">monotonicF</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Slip-Surface-Concave&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-33"></span><span id="assumpFOSL"><span class="annot"><span class="annottext">assumpFOSL :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpFOSL"><span class="hs-identifier hs-var hs-var">assumpFOSL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpFOS&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#slopeS"><span class="hs-identifier hs-var">slopeS</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Factor-of-Safety&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-34"></span><span id="assumpSLH"><span class="annot"><span class="annottext">assumpSLH :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSLH"><span class="hs-identifier hs-var hs-var">assumpSLH</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpSLH&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#homogeneousL"><span class="hs-identifier hs-var">homogeneousL</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Soil-Layer-Homogeneous&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-35"></span><span id="assumpSP"><span class="annot"><span class="annottext">assumpSP :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSP"><span class="hs-identifier hs-var hs-var">assumpSP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpSP&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#propertiesS"><span class="hs-identifier hs-var">propertiesS</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Soil-Properties&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-36"></span><span id="assumpSLI"><span class="annot"><span class="annottext">assumpSLI :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSLI"><span class="hs-identifier hs-var hs-var">assumpSLI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpSLI&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#isotropicP"><span class="hs-identifier hs-var">isotropicP</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Soil-Layers-Isotropic&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-37"></span><span id="assumpINSFL"><span class="annot"><span class="annottext">assumpINSFL :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpINSFL"><span class="hs-identifier hs-var hs-var">assumpINSFL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpINSFL&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#linearS"><span class="hs-identifier hs-var">linearS</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Interslice-Norm-Shear-Forces-Linear&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-38"></span><span id="assumpPSC"><span class="annot"><span class="annottext">assumpPSC :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpPSC"><span class="hs-identifier hs-var hs-var">assumpPSC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpPSC&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#planeS"><span class="hs-identifier hs-var">planeS</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Plane-Strain-Conditions&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-39"></span><span id="assumpENSL"><span class="annot"><span class="annottext">assumpENSL :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpENSL"><span class="hs-identifier hs-var hs-var">assumpENSL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpENSL&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#largeN"><span class="hs-identifier hs-var">largeN</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Effective-Norm-Stress-Large&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-40"></span><span id="assumpSBSBISL"><span class="annot"><span class="annottext">assumpSBSBISL :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSBSBISL"><span class="hs-identifier hs-var hs-var">assumpSBSBISL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpSBSBISL&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#straightS"><span class="hs-identifier hs-var">straightS</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Surface-Base-Slice-between-Interslice-Straight-Lines&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-41"></span><span id="assumpES"><span class="annot"><span class="annottext">assumpES :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpES"><span class="hs-identifier hs-var hs-var">assumpES</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpES&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#edgeS"><span class="hs-identifier hs-var">edgeS</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Edge-Slices&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-42"></span><span id="assumpSF"><span class="annot"><span class="annottext">assumpSF :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSF"><span class="hs-identifier hs-var hs-var">assumpSF</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpSF&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#seismicF"><span class="hs-identifier hs-var">seismicF</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Seismic-Force&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-43"></span><span id="assumpSL"><span class="annot"><span class="annottext">assumpSL :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSL"><span class="hs-identifier hs-var hs-var">assumpSL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpSL&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#surfaceL"><span class="hs-identifier hs-var">surfaceL</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Surface-Load&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-44"></span><span id="assumpWIBE"><span class="annot"><span class="annottext">assumpWIBE :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpWIBE"><span class="hs-identifier hs-var hs-var">assumpWIBE</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpWIBE&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#waterBIntersect"><span class="hs-identifier hs-var">waterBIntersect</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Water-Intersects-Base-Edge&quot;</span></span><span> </span><span>
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-46"></span><span id="assumpWISE"><span class="annot"><span class="annottext">assumpWISE :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpWISE"><span class="hs-identifier hs-var hs-var">assumpWISE</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpWISE&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#waterSIntersect"><span class="hs-identifier hs-var">waterSIntersect</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Water-Intersects-Surface-Edge&quot;</span></span><span> </span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-48"></span><span id="assumpNESSS"><span class="annot"><span class="annottext">assumpNESSS :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpNESSS"><span class="hs-identifier hs-var hs-var">assumpNESSS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpNESSS&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#negligibleSlopeEffect"><span class="hs-identifier hs-var">negligibleSlopeEffect</span></a></span><span> </span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Negligible-Effect-Surface-Slope-Seismic&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-50"></span><span id="assumpHFSM"><span class="annot"><span class="annottext">assumpHFSM :: ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpHFSM"><span class="hs-identifier hs-var hs-var">assumpHFSM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpHFSM&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.Assumptions.html#hydrostaticFMidpoint"><span class="hs-identifier hs-var">hydrostaticFMidpoint</span></a></span><span> </span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Hydrostatic-Force-Slice-Midpoint&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="annot"><a href="Drasil.SSP.Assumptions.html#monotonicF"><span class="hs-identifier hs-type">monotonicF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#slopeS"><span class="hs-identifier hs-type">slopeS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#homogeneousL"><span class="hs-identifier hs-type">homogeneousL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#isotropicP"><span class="hs-identifier hs-type">isotropicP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#linearS"><span class="hs-identifier hs-type">linearS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#planeS"><span class="hs-identifier hs-type">planeS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#largeN"><span class="hs-identifier hs-type">largeN</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-54"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#straightS"><span class="hs-identifier hs-type">straightS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#propertiesS"><span class="hs-identifier hs-type">propertiesS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#edgeS"><span class="hs-identifier hs-type">edgeS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#seismicF"><span class="hs-identifier hs-type">seismicF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#surfaceL"><span class="hs-identifier hs-type">surfaceL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#waterBIntersect"><span class="hs-identifier hs-type">waterBIntersect</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#waterSIntersect"><span class="hs-identifier hs-type">waterSIntersect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#negligibleSlopeEffect"><span class="hs-identifier hs-type">negligibleSlopeEffect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#hydrostaticFMidpoint"><span class="hs-identifier hs-type">hydrostaticFMidpoint</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span id="monotonicF"><span class="annot"><span class="annottext">monotonicF :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#monotonicF"><span class="hs-identifier hs-var hs-var">monotonicF</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SSP.Defs.html#slpSrf"><span class="hs-identifier hs-var">slpSrf</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is concave&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.wrt`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slopeSrf"><span class="hs-identifier hs-var">slopeSrf</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#slipDist"><span class="hs-identifier hs-var">slipDist</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#slipHght"><span class="hs-identifier hs-var">slipHght</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;coordinates&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofA`</span></span><span> </span><span>
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SSP.Defs.html#slpSrf"><span class="hs-identifier hs-var">slpSrf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;follow a concave up function&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span id="slopeS"><span class="annot"><span class="annottext">slopeS :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#slopeS"><span class="hs-identifier hs-var hs-var">slopeS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The factor of safety is assumed to be&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">constant</span></span><span class="hs-special">,</span><span>
+</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;across the entire&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SSP.Defs.html#slpSrf"><span class="hs-identifier hs-var">slpSrf</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span id="homogeneousL"><span class="annot"><span class="annottext">homogeneousL :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#homogeneousL"><span class="hs-identifier hs-var hs-var">homogeneousL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#soil"><span class="hs-identifier hs-var">soil</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;mass is homogeneous&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span>
+</span><span id="line-66"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;with consistent&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#soilPrpty"><span class="hs-identifier hs-var">soilPrpty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;throughout&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span id="propertiesS"><span class="annot"><span class="annottext">propertiesS :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#propertiesS"><span class="hs-identifier hs-var hs-var">propertiesS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#soilPrpty"><span class="hs-identifier hs-var">soilPrpty</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;are independent of dry or saturated&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">condition</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;with the exception of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">unit_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;weight&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-70"></span><span>
+</span><span id="line-71"></span><span id="isotropicP"><span class="annot"><span class="annottext">isotropicP :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#isotropicP"><span class="hs-identifier hs-var hs-var">isotropicP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#soil"><span class="hs-identifier hs-var">soil</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;mass is treated as if the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier hs-var">effCohesion</span></a></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; UncertQ -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#fricAngle"><span class="hs-identifier hs-var">fricAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;are isotropic properties&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span id="linearS"><span class="annot"><span class="annottext">linearS :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#linearS"><span class="hs-identifier hs-var hs-var">linearS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Following the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of Morgenstern&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and Price&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Citation -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#morgenstern1965"><span class="hs-identifier hs-var">morgenstern1965</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span>
+</span><span id="line-76"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;have a proportional relationship, depending on a proportionality&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">constant</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.SSP.Unitals.html#normToShear"><span class="hs-identifier hs-var">normToShear</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and a function&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.SSP.Unitals.html#scalFunc"><span class="hs-identifier hs-var">scalFunc</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;describing variation depending on&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#xi"><span class="hs-identifier hs-var">xi</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">position</span></span><span class="hs-special">]</span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span id="planeS"><span class="annot"><span class="annottext">planeS :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#planeS"><span class="hs-identifier hs-var hs-var">planeS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier hs-var">slope</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SSP.Defs.html#slpSrf"><span class="hs-identifier hs-var">slpSrf</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;extends far into and out of the geometry&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#zcoord"><span class="hs-identifier hs-var">zcoord</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span>
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;coordinate&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;This implies&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SSP.Defs.html#plnStrn"><span class="hs-identifier hs-var">plnStrn</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">condition</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span>
+</span><span id="line-85"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;making&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">twoD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">analysis</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;appropriate&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-86"></span><span>
+</span><span id="line-87"></span><span id="largeN"><span class="annot"><span class="annottext">largeN :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#largeN"><span class="hs-identifier hs-var hs-var">largeN</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The effective normal&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">stress</span></span><span class="hs-special">,</span><span>
+</span><span id="line-88"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is large enough that the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to effective normal&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">stress</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;relationship can be approximated as a linear relationship&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span id="straightS"><span class="annot"><span class="annottext">straightS :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#straightS"><span class="hs-identifier hs-var hs-var">straightS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">surface</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and base of a&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier hs-var">slice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;are approximated as straight lines&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-93"></span><span>
+</span><span id="line-94"></span><span id="edgeS"><span class="annot"><span class="annottext">edgeS :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#edgeS"><span class="hs-identifier hs-var hs-var">edgeS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#intrslce"><span class="hs-identifier hs-var">intrslce</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;at the 0th&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.SSP.Unitals.html#numbSlices"><span class="hs-identifier hs-var">numbSlices</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">:+:</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;th&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#intrslce"><span class="hs-identifier hs-var">intrslce</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">interface</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;are zero&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span id="seismicF"><span class="annot"><span class="annottext">seismicF :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#seismicF"><span class="hs-identifier hs-var hs-var">seismicF</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;There is no seismic&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;acting on the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier hs-var">slope</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-99"></span><span>
+</span><span id="line-100"></span><span id="surfaceL"><span class="annot"><span class="annottext">surfaceL :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#surfaceL"><span class="hs-identifier hs-var hs-var">surfaceL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;There is no imposed&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">surface</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;load&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span>
+</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and therefore no&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#surfLoad"><span class="hs-identifier hs-var">surfLoad</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;acting on the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier hs-var">slope</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-102"></span><span>
+</span><span id="line-103"></span><span id="waterBIntersect"><span class="annot"><span class="annottext">waterBIntersect :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#waterBIntersect"><span class="hs-identifier hs-var hs-var">waterBIntersect</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SSP.Defs.html#waterTable"><span class="hs-identifier hs-var">waterTable</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;only intersects&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-104"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the base&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofA`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier hs-var">slice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;at an edge&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier hs-var">slice</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-105"></span><span>
+</span><span id="line-106"></span><span id="waterSIntersect"><span class="annot"><span class="annottext">waterSIntersect :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#waterSIntersect"><span class="hs-identifier hs-var hs-var">waterSIntersect</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SSP.Defs.html#waterTable"><span class="hs-identifier hs-var">waterTable</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;only intersects&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slopeSrf"><span class="hs-identifier hs-var">slopeSrf</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;at the edge of a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier hs-var">slice</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-108"></span><span>
+</span><span id="line-109"></span><span id="negligibleSlopeEffect"><span class="annot"><span class="annottext">negligibleSlopeEffect :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#negligibleSlopeEffect"><span class="hs-identifier hs-var hs-var">negligibleSlopeEffect</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">effect</span></span><span class="hs-special">)</span><span>
+</span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;slope&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">surface</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#soil"><span class="hs-identifier hs-var">soil</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.onThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;seismic&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is assumed to be negligible&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-112"></span><span>
+</span><span id="line-113"></span><span id="hydrostaticFMidpoint"><span class="annot"><span class="annottext">hydrostaticFMidpoint :: Sentence
+</span><a href="Drasil.SSP.Assumptions.html#hydrostaticFMidpoint"><span class="hs-identifier hs-var hs-var">hydrostaticFMidpoint</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The resultant&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#surfHydroForce"><span class="hs-identifier hs-var">surfHydroForce</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;act into the midpoint of each&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier hs-var">slice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;surface&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.andThe`</span></span><span>
+</span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;resultant&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#baseHydroForce"><span class="hs-identifier hs-var">baseHydroForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;act into the midpoint of each&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier hs-var">slice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;base&quot;</span></span><span class="hs-special">]</span></pre></body></html>

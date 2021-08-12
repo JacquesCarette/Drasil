@@ -579,7 +579,7 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeDe
 instance Language.Drasil.Chunk.CodeBase.DefiningCodeExpr Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 
 
--- | Defines an AST for defining Modules
+-- | Defines an AST for defining Modules.
 module Language.Drasil.Mod
 
 -- | Holds information needed to define a class.
@@ -2137,7 +2137,8 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
 
 
--- | re-export smart constructors for external code writing
+-- | Re-export code-related smart constructors for external code writing
+--   and generation.
 module Language.Drasil.Code
 
 -- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
@@ -2951,14 +2952,39 @@ unCSP :: CSharpProject a -> a
 unCPPP :: CppProject a -> a
 unSP :: SwiftProject a -> a
 
+
+-- | Define and collect information about ODEs and ODE solvers from various
+--   libraries.
 module Data.Drasil.ExternalLibraries.ODELibraries
+
+-- | <a>SciPy</a> ODE library package.
 scipyODEPckg :: ODELibPckg
+
+-- | Collects variables needed for SciPy's ODEs as <a>QuantityDict</a>s.
 scipyODESymbols :: [QuantityDict]
-osloPckg :: ODELibPckg
-osloSymbols :: [QuantityDict]
-arrayVecDepVar :: ODEInfo -> CodeVarChunk
-apacheODEPckg :: ODELibPckg
-apacheODESymbols :: [QuantityDict]
-odeintPckg :: ODELibPckg
-odeintSymbols :: [QuantityDict]
+
+-- | This package solves a system of ODEs using the scipy odeint method.
+--   The odeint method solves the ode using the LSoda solver.
 scipyODELSodaPkg :: ODELibPckg
+
+-- | <a>Oslo</a> ODE library package.
+osloPckg :: ODELibPckg
+
+-- | Collects variables needed for Oslo's ODEs as <a>QuantityDict</a>s.
+osloSymbols :: [QuantityDict]
+
+-- | Oslo's Vector type behaves like an array, so needs to be represented
+--   as one or else will hit type errors in GOOL.
+arrayVecDepVar :: ODEInfo -> CodeVarChunk
+
+-- | <a>Apache Commons</a> ODE library package.
+apacheODEPckg :: ODELibPckg
+
+-- | Collects variables needed for Apache's ODEs as <a>QuantityDict</a>s.
+apacheODESymbols :: [QuantityDict]
+
+-- | <a>odeint</a> ODE library package.
+odeintPckg :: ODELibPckg
+
+-- | Collects variables needed for odeint's ODEs as <a>QuantityDict</a>s.
+odeintSymbols :: [QuantityDict]

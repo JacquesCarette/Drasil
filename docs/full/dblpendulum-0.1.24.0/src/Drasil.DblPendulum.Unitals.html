@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.DblPendulum.Unitals</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.ShortHands</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.NounPhrase</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NP</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Constraints</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gtZeroConstr</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.TheoryConcepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">thModel</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">goalStmt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physSyst</span></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>        </span><span class="annot"><span class="hs-identifier">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">typUnc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QPP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">len</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">metre</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">degree</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">radian</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ixPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="hs-identifier">angularVelocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravitationalAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tension</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yAccel</span></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="hs-identifier">xAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">torque</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularDisplacement</span></span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="hs-identifier">angularFrequency</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">frequency</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">period</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pendulum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">twoD</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">CM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">angle</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iAngle</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">unitVect</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unitVectj</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pi_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html"><span class="hs-identifier">Drasil.DblPendulum.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#rod"><span class="hs-identifier">rod</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#symbols"><span class="hs-identifier hs-type">symbols</span></a></span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-25"></span><span id="symbols"><span class="annot"><span class="annottext">symbols :: [QuantityDict]
+</span><a href="Drasil.DblPendulum.Unitals.html#symbols"><span class="hs-identifier hs-var hs-var">symbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; QuantityDict) -&gt; [UnitalChunk] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
+</span><a href="Drasil.DblPendulum.Unitals.html#unitalChunks"><span class="hs-identifier hs-var">unitalChunks</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; QuantityDict)
+-&gt; [DefinedQuantityDict] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><a href="Drasil.DblPendulum.Unitals.html#unitless"><span class="hs-identifier hs-var">unitless</span></a></span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#acronyms"><span class="hs-identifier hs-type">acronyms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">]</span><span>
+</span><span id="line-28"></span><span id="acronyms"><span class="annot"><span class="annottext">acronyms :: [CI]
+</span><a href="Drasil.DblPendulum.Unitals.html#acronyms"><span class="hs-identifier hs-var hs-var">acronyms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">twoD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">goalStmt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">physSyst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">typUnc</span></span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-32"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
+</span><a href="Drasil.DblPendulum.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; QuantityDict) -&gt; [UnitalChunk] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QPP.mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.angularAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var">initialPendAngle</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#outputs"><span class="hs-identifier hs-type">outputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-35"></span><span id="outputs"><span class="annot"><span class="annottext">outputs :: [QuantityDict]
+</span><a href="Drasil.DblPendulum.Unitals.html#outputs"><span class="hs-identifier hs-var hs-var">outputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; QuantityDict) -&gt; [UnitalChunk] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#units"><span class="hs-identifier hs-type">units</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitaryConceptDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-38"></span><span id="units"><span class="annot"><span class="annottext">units :: [UnitaryConceptDict]
+</span><a href="Drasil.DblPendulum.Unitals.html#units"><span class="hs-identifier hs-var hs-var">units</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; UnitaryConceptDict)
+-&gt; [UnitalChunk] -&gt; [UnitaryConceptDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitaryConceptDict
+forall c.
+(Unitary c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; UnitaryConceptDict
+</span><span class="hs-identifier hs-var">ucw</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
+</span><a href="Drasil.DblPendulum.Unitals.html#unitalChunks"><span class="hs-identifier hs-var">unitalChunks</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitaryConceptDict]
+-&gt; [UnitaryConceptDict] -&gt; [UnitaryConceptDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; UnitaryConceptDict)
+-&gt; [UnitalChunk] -&gt; [UnitaryConceptDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitaryConceptDict
+forall c.
+(Unitary c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; UnitaryConceptDict
+</span><span class="hs-identifier hs-var">ucw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var">initialPendAngle</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#unitalChunks"><span class="hs-identifier hs-type">unitalChunks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-41"></span><span id="unitalChunks"><span class="annot"><span class="annottext">unitalChunks :: [UnitalChunk]
+</span><a href="Drasil.DblPendulum.Unitals.html#unitalChunks"><span class="hs-identifier hs-var hs-var">unitalChunks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QPP.mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.ixPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.xPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.yPos</span></span><span class="hs-special">,</span><span>
+</span><span id="line-42"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.angularVelocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.angularAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.gravitationalAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.tension</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.acceleration</span></span><span class="hs-special">,</span><span>
+</span><span id="line-43"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.yAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.xAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.yVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.xVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.iyPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.velocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.torque</span></span><span class="hs-special">,</span><span>
+</span><span id="line-44"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.angularDisplacement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.angularVelocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var">initialPendAngle</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-45"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.angularFrequency</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.frequency</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.period</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-type">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-type">pendDisplacementAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#initialPendAngle"><span class="hs-identifier hs-type">initialPendAngle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span id="lenRod"><span class="annot"><span class="annottext">lenRod :: UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var hs-var">lenRod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+forall u.
+IsUnit u =&gt;
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;l_rod&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;length of the rod&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-50"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">len</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.DblPendulum.Concepts.html#rod"><span class="hs-identifier hs-var">rod</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-51"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">cL</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.DblPendulum.Unitals.html#lRod"><span class="hs-identifier hs-var">lRod</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">metre</span></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span id="pendDisplacementAngle"><span class="annot"><span class="annottext">pendDisplacementAngle :: UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var hs-var">pendDisplacementAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+forall u.
+IsUnit u =&gt;
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pendDisplacementAngle&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;displacement angle of the pendulum&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-54"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">angle</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-55"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lTheta</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lP</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">degree</span></span><span>
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span id="initialPendAngle"><span class="annot"><span class="annottext">initialPendAngle :: UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var hs-var">initialPendAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+forall u.
+IsUnit u =&gt;
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;initialPendAngle&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;initial pendulum angle&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-58"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">CM.iAngle</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-59"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lTheta</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lI</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">radian</span></span><span>
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#unitless"><span class="hs-identifier hs-type">unitless</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-63"></span><span id="unitless"><span class="annot"><span class="annottext">unitless :: [DefinedQuantityDict]
+</span><a href="Drasil.DblPendulum.Unitals.html#unitless"><span class="hs-identifier hs-var hs-var">unitless</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><span class="hs-identifier hs-var">QM.unitVect</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><span class="hs-identifier hs-var">QM.unitVectj</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><span class="hs-identifier hs-var">QM.pi_</span></span><span class="hs-special">]</span><span>
+</span><span id="line-64"></span><span class="hs-comment">-----------------------</span><span>
+</span><span id="line-65"></span><span>
+</span><span id="line-66"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#lRod"><span class="hs-identifier hs-type">lRod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
+</span><span id="line-67"></span><span id="lRod"><span class="annot"><span class="annottext">lRod :: Symbol
+</span><a href="Drasil.DblPendulum.Unitals.html#lRod"><span class="hs-identifier hs-var hs-var">lRod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;rod&quot;</span></span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-comment">-----------------------</span><span>
+</span><span id="line-70"></span><span class="hs-comment">-- CONSTRAINT CHUNKS --</span><span>
+</span><span id="line-71"></span><span class="hs-comment">-----------------------</span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#lenRodCons"><span class="hs-identifier hs-type">lenRodCons</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngleOutCons"><span class="hs-identifier hs-type">pendDisplacementAngleOutCons</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#angAccelOutCons"><span class="hs-identifier hs-type">angAccelOutCons</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#initialPendAngleCons"><span class="hs-identifier hs-type">initialPendAngleCons</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#inConstraints"><span class="hs-identifier hs-type">inConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-76"></span><span id="inConstraints"><span class="annot"><span class="annottext">inConstraints :: [UncertQ]
+</span><a href="Drasil.DblPendulum.Unitals.html#inConstraints"><span class="hs-identifier hs-var hs-var">inConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; UncertQ) -&gt; [ConstrConcept] -&gt; [UncertQ]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-operator hs-var">`uq`</span></span><span> </span><span class="annot"><span class="annottext">Uncertainty
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span class="hs-special">)</span><span>
+</span><span id="line-77"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.DblPendulum.Unitals.html#lenRodCons"><span class="hs-identifier hs-var">lenRodCons</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.DblPendulum.Unitals.html#initialPendAngleCons"><span class="hs-identifier hs-var">initialPendAngleCons</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#outConstraints"><span class="hs-identifier hs-type">outConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-80"></span><span id="outConstraints"><span class="annot"><span class="annottext">outConstraints :: [UncertQ]
+</span><a href="Drasil.DblPendulum.Unitals.html#outConstraints"><span class="hs-identifier hs-var hs-var">outConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; UncertQ) -&gt; [ConstrConcept] -&gt; [UncertQ]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-operator hs-var">`uq`</span></span><span> </span><span class="annot"><span class="annottext">Uncertainty
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-81"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.DblPendulum.Unitals.html#angAccelOutCons"><span class="hs-identifier hs-var">angAccelOutCons</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngleOutCons"><span class="hs-identifier hs-var">pendDisplacementAngleOutCons</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span>
+</span><span id="line-84"></span><span id="lenRodCons"><span class="annot"><span class="annottext">lenRodCons :: ConstrConcept
+</span><a href="Drasil.DblPendulum.Unitals.html#lenRodCons"><span class="hs-identifier hs-var hs-var">lenRodCons</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span>        </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+</span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">44.2</span></span><span class="hs-special">)</span><span>
+</span><span id="line-85"></span><span id="initialPendAngleCons"><span class="annot"><span class="annottext">initialPendAngleCons :: ConstrConcept
+</span><a href="Drasil.DblPendulum.Unitals.html#initialPendAngleCons"><span class="hs-identifier hs-var hs-var">initialPendAngleCons</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var">initialPendAngle</span></a></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+</span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">2.1</span></span><span class="hs-special">)</span><span>
+</span><span id="line-86"></span><span class="hs-comment">--gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)</span><span>
+</span><span id="line-87"></span><span id="pendDisplacementAngleOutCons"><span class="annot"><span class="annottext">pendDisplacementAngleOutCons :: ConstrConcept
+</span><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngleOutCons"><span class="hs-identifier hs-var hs-var">pendDisplacementAngleOutCons</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.DblPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+</span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">2.1</span></span><span class="hs-special">)</span><span>
+</span><span id="line-88"></span><span id="angAccelOutCons"><span class="annot"><span class="annottext">angAccelOutCons :: ConstrConcept
+</span><a href="Drasil.DblPendulum.Unitals.html#angAccelOutCons"><span class="hs-identifier hs-var hs-var">angAccelOutCons</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.angularAccel</span></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span></pre></body></html>

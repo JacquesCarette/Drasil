@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.NoPCM.DataDefs</span><span> </span><span class="hs-keyword">where</span><span> </span><span class="hs-comment">--exports all of it</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DataDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddNoRefs</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Assumptions</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumpVCN</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.DataDefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">balanceDecayRate</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">balanceDecayRateQD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tankVolume</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">tankVolumeQD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">waterMass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">waterMassQD</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Unitals</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">tankVol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wVol</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Drasil.NoPCM.DataDefs.html#qDefs"><span class="hs-identifier hs-type">qDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-13"></span><span id="qDefs"><span class="annot"><span class="annottext">qDefs :: [QDefinition]
+</span><a href="Drasil.NoPCM.DataDefs.html#qDefs"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">waterMassQD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-var">waterVolumeQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">tankVolumeQD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">balanceDecayRateQD</span></span><span class="hs-special">]</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><a href="Drasil.NoPCM.DataDefs.html#dataDefs"><span class="hs-identifier hs-type">dataDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-16"></span><span id="dataDefs"><span class="annot"><span class="annottext">dataDefs :: [DataDefinition]
+</span><a href="Drasil.NoPCM.DataDefs.html#dataDefs"><span class="hs-identifier hs-var hs-var">dataDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
+</span><span class="hs-identifier hs-var">waterMass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolume"><span class="hs-identifier hs-var">waterVolume</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><span class="hs-identifier hs-var">tankVolume</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><span class="hs-identifier hs-var">balanceDecayRate</span></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Drasil.NoPCM.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-type">waterVolumeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-19"></span><span id="waterVolumeQD"><span class="annot"><span class="annottext">waterVolumeQD :: QDefinition
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-var hs-var">waterVolumeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; QDefinition
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">wVol</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-var">waterVolumeEqn</span></a></span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="annot"><a href="Drasil.NoPCM.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-type">waterVolumeEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-22"></span><span id="waterVolumeEqn"><span class="annot"><span class="annottext">waterVolumeEqn :: Expr
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-var hs-var">waterVolumeEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">tankVol</span></span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.NoPCM.DataDefs.html#waterVolumeNotes"><span class="hs-identifier hs-type">waterVolumeNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-25"></span><span id="waterVolumeNotes"><span class="annot"><span class="annottext">waterVolumeNotes :: Sentence
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolumeNotes"><span class="hs-identifier hs-var hs-var">waterVolumeNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Based on&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpVCN</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">tankVol</span></span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is defined in&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><span class="hs-identifier hs-var">tankVolume</span></span><span class="hs-special">]</span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Drasil.NoPCM.DataDefs.html#waterVolume"><span class="hs-identifier hs-type">waterVolume</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-29"></span><span id="waterVolume"><span class="annot"><span class="annottext">waterVolume :: DataDefinition
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolume"><span class="hs-identifier hs-var hs-var">waterVolume</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
+-&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
+</span><span class="hs-identifier hs-var">ddNoRefs</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-var">waterVolumeQD</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="hs-string">&quot;waterVolume_nopcm&quot;</span></span><span> </span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.NoPCM.DataDefs.html#waterVolumeNotes"><span class="hs-identifier hs-var">waterVolumeNotes</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span></pre></body></html>

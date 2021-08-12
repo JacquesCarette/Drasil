@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.NoPCM.Assumptions</span><span> </span><span class="hs-keyword">where</span><span> </span><span class="hs-comment">--all of this file is exported</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.NounPhrase</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NP</span></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">model</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">material_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">vol</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pressure</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Thermodynamics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">boilPt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">meltPt</span></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Thermodynamics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">CT</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">heat</span></span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Thermodynamics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QT</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">temp</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Assumptions</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumpTEO</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpHTCC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpCWTAT</span></span><span class="hs-special">,</span><span>
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="hs-identifier">assumpLCCCW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpTHCCoT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpTHCCoL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpS14</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpPIT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumpVCN</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Concepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">tank</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">water</span></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-comment">-- import Drasil.SWHS.References (swhsCitations)</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Unitals</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">volHtGen</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempInit</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">htCapW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wDensity</span></span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-26"></span><span class="hs-comment">-- 4.2.1 : Assumptions --</span><span>
+</span><span id="line-27"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumptions"><span class="hs-identifier hs-type">assumptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span id="assumptions"><span class="annot"><span class="annottext">assumptions :: [ConceptInstance]
+</span><a href="Drasil.NoPCM.Assumptions.html#assumptions"><span class="hs-identifier hs-var hs-var">assumptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpTEO</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpHTCC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpCWTAT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpDWCoW"><span class="hs-identifier hs-var">assumpDWCoW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpSHECoW"><span class="hs-identifier hs-var">assumpSHECoW</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpLCCCW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpTHCCoT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpTHCCoL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpCTNTD"><span class="hs-identifier hs-var">assumpCTNTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpWAL"><span class="hs-identifier hs-var">assumpWAL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpPIT</span></span><span class="hs-special">,</span><span>
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpNIHGBW"><span class="hs-identifier hs-var">assumpNIHGBW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpAPT"><span class="hs-identifier hs-var">assumpAPT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpVCN</span></span><span class="hs-special">]</span><span>
+</span><span id="line-33"></span><span>  </span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpS3"><span class="hs-identifier hs-type">assumpS3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpS4"><span class="hs-identifier hs-type">assumpS4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpS5"><span class="hs-identifier hs-type">assumpS5</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpS9_npcm"><span class="hs-identifier hs-type">assumpS9_npcm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpS12"><span class="hs-identifier hs-type">assumpS12</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpS13"><span class="hs-identifier hs-type">assumpS13</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpDWCoW"><span class="hs-identifier hs-type">assumpDWCoW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpSHECoW"><span class="hs-identifier hs-type">assumpSHECoW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpCTNTD"><span class="hs-identifier hs-type">assumpCTNTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpNIHGBW"><span class="hs-identifier hs-type">assumpNIHGBW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpAPT"><span class="hs-identifier hs-type">assumpAPT</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-36"></span><span>  </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpWAL"><span class="hs-identifier hs-type">assumpWAL</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span id="assumpS3"><span class="annot"><span class="annottext">assumpS3 :: Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS3"><span class="hs-identifier hs-var hs-var">assumpS3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">water</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">tank</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is fully mixed, so the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.isThe`</span></span><span>
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;same throughout the entire&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">tank</span></span><span class="hs-special">]</span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span id="assumpS4"><span class="annot"><span class="annottext">assumpS4 :: Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS4"><span class="hs-identifier hs-var hs-var">assumpS4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">wDensity</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;has no spatial variation; that is&quot;</span></span><span>
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;it is constant over their entire&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">]</span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span id="assumpDWCoW"><span class="annot"><span class="annottext">assumpDWCoW :: ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpDWCoW"><span class="hs-identifier hs-var hs-var">assumpDWCoW</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpDWCoW&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS4"><span class="hs-identifier hs-var">assumpS4</span></a></span><span>
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Density-Water-Constant-over-Volume&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-49"></span><span>
+</span><span id="line-50"></span><span id="assumpS5"><span class="annot"><span class="annottext">assumpS5 :: Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS5"><span class="hs-identifier hs-var hs-var">assumpS5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">htCapW</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;has no spatial variation; that&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is, it is constant over its entire&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">]</span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span id="assumpSHECoW"><span class="annot"><span class="annottext">assumpSHECoW :: ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpSHECoW"><span class="hs-identifier hs-var hs-var">assumpSHECoW</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpSHECoW&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS5"><span class="hs-identifier hs-var">assumpS5</span></a></span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Specific-Heat-Energy-Constant-over-Volume&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span id="assumpS9_npcm"><span class="annot"><span class="annottext">assumpS9_npcm :: Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS9_npcm"><span class="hs-identifier hs-var hs-var">assumpS9_npcm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">model</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;only accounts for charging&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">tank</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;not discharging&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;can only&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;increase, or remain constant; it cannot decrease. This implies that the&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempInit</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is less than (or equal to) the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempC</span></span><span class="hs-special">]</span><span>
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span id="assumpCTNTD"><span class="annot"><span class="annottext">assumpCTNTD :: ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpCTNTD"><span class="hs-identifier hs-var hs-var">assumpCTNTD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpCTNTD&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS9_npcm"><span class="hs-identifier hs-var">assumpS9_npcm</span></a></span><span>
+</span><span id="line-64"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Charging-Tank-No-Temp-Discharge&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-65"></span><span>
+</span><span id="line-66"></span><span id="assumpS12"><span class="annot"><span class="annottext">assumpS12 :: Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS12"><span class="hs-identifier hs-var hs-var">assumpS12</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;No internal&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">heat</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is generated by the water; therefore, the&quot;</span></span><span>
+</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">volHtGen</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is zero&quot;</span></span><span>
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span id="assumpNIHGBW"><span class="annot"><span class="annottext">assumpNIHGBW :: ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpNIHGBW"><span class="hs-identifier hs-var hs-var">assumpNIHGBW</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpNIHGBW&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS12"><span class="hs-identifier hs-var">assumpS12</span></a></span><span>
+</span><span id="line-71"></span><span>  </span><span class="annot"><span class="hs-string">&quot;No-Internal-Heat-Generation-By-Water&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span id="assumpWAL"><span class="annot"><span class="annottext">assumpWAL :: ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpWAL"><span class="hs-identifier hs-var hs-var">assumpWAL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpWAL&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">assumpS14</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; Sentence -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">material_</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-74"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">water</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in this case&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Water-Always-Liquid&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span id="assumpS13"><span class="annot"><span class="annottext">assumpS13 :: Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS13"><span class="hs-identifier hs-var hs-var">assumpS13</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">pressure</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">tank</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is atmospheric, so the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">meltPt</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">boilPt</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of water are&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; String
+forall a. Show a =&gt; a -&gt; String
+</span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">:+:</span></span><span> </span><span class="annot"><span class="annottext">USymb -&gt; Sentence
+</span><span class="hs-identifier hs-var">Sy</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; USymb
+forall c. Unitary c =&gt; c -&gt; USymb
+</span><span class="hs-identifier hs-var">unit_symb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span>
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; String
+forall a. Show a =&gt; a -&gt; String
+</span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">100</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">:+:</span></span><span> </span><span class="annot"><span class="annottext">USymb -&gt; Sentence
+</span><span class="hs-identifier hs-var">Sy</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; USymb
+forall c. Unitary c =&gt; c -&gt; USymb
+</span><span class="hs-identifier hs-var">unit_symb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;respectively&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span id="assumpAPT"><span class="annot"><span class="annottext">assumpAPT :: ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpAPT"><span class="hs-identifier hs-var hs-var">assumpAPT</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;assumpAPT&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpS13"><span class="hs-identifier hs-var">assumpS13</span></a></span><span>
+</span><span id="line-83"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Atmospheric-Pressure-Tank&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-84"></span></pre></body></html>

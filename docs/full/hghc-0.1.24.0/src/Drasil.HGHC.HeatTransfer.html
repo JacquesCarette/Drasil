@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.HGHC.HeatTransfer</span><span> </span><span class="hs-keyword">where</span><span> </span><span class="hs-comment">--whole file is used</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.ShortHands</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DataDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddNoRefs</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Units.Thermodynamics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">heatTransferCoef</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-comment">{--}</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-type">symbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-12"></span><span id="symbols"><span class="annot"><span class="annottext">symbols :: [QuantityDict]
+</span><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-var hs-var">symbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="Drasil.HGHC.HeatTransfer.html#htOutputs"><span class="hs-identifier hs-var">htOutputs</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="Drasil.HGHC.HeatTransfer.html#htInputs"><span class="hs-identifier hs-var">htInputs</span></a></span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#dataDefs"><span class="hs-identifier hs-type">dataDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-15"></span><span id="dataDefs"><span class="annot"><span class="annottext">dataDefs :: [DataDefinition]
+</span><a href="Drasil.HGHC.HeatTransfer.html#dataDefs"><span class="hs-identifier hs-var hs-var">dataDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuelDD"><span class="hs-identifier hs-var">htTransCladFuelDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCoolDD"><span class="hs-identifier hs-var">htTransCladCoolDD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#qDefs"><span class="hs-identifier hs-type">qDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span id="qDefs"><span class="annot"><span class="annottext">qDefs :: [QDefinition]
+</span><a href="Drasil.HGHC.HeatTransfer.html#qDefs"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuel"><span class="hs-identifier hs-var">htTransCladFuel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCool"><span class="hs-identifier hs-var">htTransCladCool</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htVars"><span class="hs-identifier hs-type">htVars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-21"></span><span id="htVars"><span class="annot"><span class="annottext">htVars :: [QuantityDict]
+</span><a href="Drasil.HGHC.HeatTransfer.html#htVars"><span class="hs-identifier hs-var hs-var">htVars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladThick"><span class="hs-identifier hs-var">cladThick</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#coolFilmCond"><span class="hs-identifier hs-var">coolFilmCond</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#gapFilmCond"><span class="hs-identifier hs-var">gapFilmCond</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladCond"><span class="hs-identifier hs-var">cladCond</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htInputs"><span class="hs-identifier hs-type">htInputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htOutputs"><span class="hs-identifier hs-type">htOutputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-24"></span><span id="htInputs"><span class="annot"><span class="annottext">htInputs :: [QuantityDict]
+</span><a href="Drasil.HGHC.HeatTransfer.html#htInputs"><span class="hs-identifier hs-var hs-var">htInputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; QuantityDict) -&gt; [QuantityDict] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="Drasil.HGHC.HeatTransfer.html#htVars"><span class="hs-identifier hs-var">htVars</span></a></span><span>
+</span><span id="line-25"></span><span id="htOutputs"><span class="annot"><span class="annottext">htOutputs :: [QuantityDict]
+</span><a href="Drasil.HGHC.HeatTransfer.html#htOutputs"><span class="hs-identifier hs-var hs-var">htOutputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QDefinition -&gt; QuantityDict) -&gt; [QDefinition] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[QDefinition]
+</span><a href="Drasil.HGHC.HeatTransfer.html#qDefs"><span class="hs-identifier hs-var">qDefs</span></a></span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#cladThick"><span class="hs-identifier hs-type">cladThick</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#coolFilmCond"><span class="hs-identifier hs-type">coolFilmCond</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#gapFilmCond"><span class="hs-identifier hs-type">gapFilmCond</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#cladCond"><span class="hs-identifier hs-type">cladCond</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
+</span><span id="line-28"></span><span id="cladThick"><span class="annot"><span class="annottext">cladThick :: QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladThick"><span class="hs-identifier hs-var hs-var">cladThick</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;cladThick&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'''</span></span><span> </span><span class="annot"><span class="hs-string">&quot;clad thickness&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lTau</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lClad"><span class="hs-identifier hs-var">lClad</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-30"></span><span id="coolFilmCond"><span class="annot"><span class="annottext">coolFilmCond :: QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#coolFilmCond"><span class="hs-identifier hs-var hs-var">coolFilmCond</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;coolFilmCond&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;initial coolant film conductance&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lH</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lCoolant"><span class="hs-identifier hs-var">lCoolant</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-32"></span><span id="gapFilmCond"><span class="annot"><span class="annottext">gapFilmCond :: QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#gapFilmCond"><span class="hs-identifier hs-var hs-var">gapFilmCond</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;gapFilmCond&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;initial gap film conductance&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lH</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lGap"><span class="hs-identifier hs-var">lGap</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-34"></span><span id="cladCond"><span class="annot"><span class="annottext">cladCond :: QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladCond"><span class="hs-identifier hs-var hs-var">cladCond</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;cladCond&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cnIES</span></span><span> </span><span class="annot"><span class="hs-string">&quot;clad conductivity&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lK</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lClad"><span class="hs-identifier hs-var">lClad</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCoolEq"><span class="hs-identifier hs-type">htTransCladCoolEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuelEq"><span class="hs-identifier hs-type">htTransCladFuelEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCool"><span class="hs-identifier hs-type">htTransCladCool</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuel"><span class="hs-identifier hs-type">htTransCladFuel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="hs-comment">---</span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCoolDD"><span class="hs-identifier hs-type">htTransCladCoolDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-42"></span><span id="htTransCladCoolDD"><span class="annot"><span class="annottext">htTransCladCoolDD :: DataDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCoolDD"><span class="hs-identifier hs-var hs-var">htTransCladCoolDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
+-&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
+</span><span class="hs-identifier hs-var">ddNoRefs</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCool"><span class="hs-identifier hs-var">htTransCladCool</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="hs-string">&quot;htTransCladCool&quot;</span></span><span class="hs-comment">--Label</span><span>
+</span><span id="line-43"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-comment">--no additional notes</span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span id="htTransCladCool"><span class="annot"><span class="annottext">htTransCladCool :: QDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCool"><span class="hs-identifier hs-var hs-var">htTransCladCool</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; Sentence
+-&gt; Symbol
+-&gt; Space
+-&gt; UnitDefn
+-&gt; Expr
+-&gt; QDefinition
+forall u.
+IsUnit u =&gt;
+String
+-&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">fromEqn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;htTransCladCool&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="hs-string">&quot;convective heat transfer coefficient between clad and coolant&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lH</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lClad"><span class="hs-identifier hs-var">lClad</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">heatTransferCoef</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCoolEq"><span class="hs-identifier hs-var">htTransCladCoolEq</span></a></span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span id="htTransCladCoolEq"><span class="annot"><span class="annottext">htTransCladCoolEq :: Expr
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCoolEq"><span class="hs-identifier hs-var hs-var">htTransCladCoolEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladCond"><span class="hs-identifier hs-var">cladCond</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#coolFilmCond"><span class="hs-identifier hs-var">coolFilmCond</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladCond"><span class="hs-identifier hs-var">cladCond</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladThick"><span class="hs-identifier hs-var">cladThick</span></a></span><span> </span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#coolFilmCond"><span class="hs-identifier hs-var">coolFilmCond</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="hs-comment">---</span><span>
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuelDD"><span class="hs-identifier hs-type">htTransCladFuelDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-56"></span><span id="htTransCladFuelDD"><span class="annot"><span class="annottext">htTransCladFuelDD :: DataDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuelDD"><span class="hs-identifier hs-var hs-var">htTransCladFuelDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
+-&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
+</span><span class="hs-identifier hs-var">ddNoRefs</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuel"><span class="hs-identifier hs-var">htTransCladFuel</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="hs-string">&quot;htTransCladFuel&quot;</span></span><span class="hs-comment">--Label</span><span>
+</span><span id="line-57"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-comment">--no additional notes</span><span>
+</span><span id="line-58"></span><span>
+</span><span id="line-59"></span><span id="htTransCladFuel"><span class="annot"><span class="annottext">htTransCladFuel :: QDefinition
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuel"><span class="hs-identifier hs-var hs-var">htTransCladFuel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; Sentence
+-&gt; Symbol
+-&gt; Space
+-&gt; UnitDefn
+-&gt; Expr
+-&gt; QDefinition
+forall u.
+IsUnit u =&gt;
+String
+-&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">fromEqn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;htTransCladFuel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span>
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="hs-string">&quot;effective heat transfer coefficient between clad and fuel surface&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lH</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lEffective"><span class="hs-identifier hs-var">lEffective</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">heatTransferCoef</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuelEq"><span class="hs-identifier hs-var">htTransCladFuelEq</span></a></span><span>
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span id="htTransCladFuelEq"><span class="annot"><span class="annottext">htTransCladFuelEq :: Expr
+</span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuelEq"><span class="hs-identifier hs-var hs-var">htTransCladFuelEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladCond"><span class="hs-identifier hs-var">cladCond</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#gapFilmCond"><span class="hs-identifier hs-var">gapFilmCond</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladCond"><span class="hs-identifier hs-var">cladCond</span></a></span><span>
+</span><span id="line-64"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#cladThick"><span class="hs-identifier hs-var">cladThick</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.HGHC.HeatTransfer.html#gapFilmCond"><span class="hs-identifier hs-var">gapFilmCond</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-65"></span><span>
+</span><span id="line-66"></span><span class="hs-comment">---</span><span>
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#hghc"><span class="hs-identifier hs-type">hghc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonConcept</span></span><span>
+</span><span id="line-69"></span><span id="hghc"><span class="annot"><span class="annottext">hghc :: CommonConcept
+</span><a href="Drasil.HGHC.HeatTransfer.html#hghc"><span class="hs-identifier hs-var hs-var">hghc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; String -&gt; CommonConcept
+</span><span class="hs-identifier hs-var">dcc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hghc&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;HGHC&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;HGHC program&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;HGHC&quot;</span></span><span>
+</span><span id="line-70"></span><span>
+</span><span id="line-71"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#nuclearPhys"><span class="hs-identifier hs-type">nuclearPhys</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#fp"><span class="hs-identifier hs-type">fp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedChunk</span></span><span>
+</span><span id="line-72"></span><span id="nuclearPhys"><span class="annot"><span class="annottext">nuclearPhys :: NamedChunk
+</span><a href="Drasil.HGHC.HeatTransfer.html#nuclearPhys"><span class="hs-identifier hs-var hs-var">nuclearPhys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;nuclearPhys&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;nuclear physics&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-73"></span><span id="fp"><span class="annot"><span class="annottext">fp :: NamedChunk
+</span><a href="Drasil.HGHC.HeatTransfer.html#fp"><span class="hs-identifier hs-var hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;fp&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;FP&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lCoolant"><span class="hs-identifier hs-type">lCoolant</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lClad"><span class="hs-identifier hs-type">lClad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lEffective"><span class="hs-identifier hs-type">lEffective</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lGap"><span class="hs-identifier hs-type">lGap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
+</span><span id="line-76"></span><span id="lCoolant"><span class="annot"><span class="annottext">lCoolant :: Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lCoolant"><span class="hs-identifier hs-var hs-var">lCoolant</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;b&quot;</span></span><span>
+</span><span id="line-77"></span><span id="lClad"><span class="annot"><span class="annottext">lClad :: Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lClad"><span class="hs-identifier hs-var hs-var">lClad</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;c&quot;</span></span><span>
+</span><span id="line-78"></span><span id="lEffective"><span class="annot"><span class="annottext">lEffective :: Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lEffective"><span class="hs-identifier hs-var hs-var">lEffective</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;g&quot;</span></span><span>
+</span><span id="line-79"></span><span id="lGap"><span class="annot"><span class="annottext">lGap :: Symbol
+</span><a href="Drasil.HGHC.HeatTransfer.html#lGap"><span class="hs-identifier hs-var hs-var">lGap</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;p&quot;</span></span></pre></body></html>

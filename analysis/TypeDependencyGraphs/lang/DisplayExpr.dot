@@ -4,5 +4,6 @@ DisplayExpr -> DisplayExpr;
 DisplayExpr -> Space;
 DisplayExpr -> DisplayBinOp;
 DisplayExpr -> DisplayAssocBinOp;
+DisplayExpr -> UID;
 DisplayExpr	[shape=oval, color=darkviolet, label="DisplayExpr"];
 }

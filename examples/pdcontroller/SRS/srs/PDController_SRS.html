@@ -1,0 +1,2324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="PDController_SRS.css">
+    <title>
+      Software Requirements Specification for PD Controller
+    </title>
+    <meta charset="utf-8">
+    <script>
+    MathJax = {
+      loader: {load: ['[tex]/textmacros', 'output/chtml']},
+      tex: {
+        packages: {'[+]': ['textmacros']}
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js">
+    </script>
+  </head>
+  <body>
+    <div class="title">
+      <h1>Software Requirements Specification for PD Controller</h1>
+    </div>
+    <div class="author"><h2>Naveen Ganesh Muralidharan</h2></div>
+    <div id="Sec:ToC">
+      <div class="section">
+        <h1>Table of Contents</h1>
+        <p class="paragraph">
+          An outline of all sections included in this SRS is recorded here for easy reference.
+        </p>
+        <ul class="list">
+          <li><a href=#Sec:ToC>Table of Contents</a></li>
+          <li>
+            <a href=#Sec:RefMat>Reference Material</a>
+            <ul class="list">
+              <li><a href=#Sec:ToU>Table of Units</a></li>
+              <li><a href=#Sec:ToS>Table of Symbols</a></li>
+              <li><a href=#Sec:TAbbAcc>Abbreviations and Acronyms</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:Intro>Introduction</a>
+            <ul class="list">
+              <li><a href=#Sec:DocPurpose>Purpose of Document</a></li>
+              <li><a href=#Sec:ReqsScope>Scope of Requirements</a></li>
+              <li>
+                <a href=#Sec:ReaderChars>Characteristics of Intended Reader</a>
+              </li>
+              <li><a href=#Sec:DocOrg>Organization of Document</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:GenSysDesc>General System Description</a>
+            <ul class="list">
+              <li><a href=#Sec:SysContext>System Context</a></li>
+              <li><a href=#Sec:UserChars>User Characteristics</a></li>
+              <li><a href=#Sec:SysConstraints>System Constraints</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:SpecSystDesc>Specific System Description</a>
+            <ul class="list">
+              <li>
+                <a href=#Sec:ProbDesc>Problem Description</a>
+                <ul class="list">
+                  <li><a href=#Sec:TermDefs>Terminology and Definitions</a></li>
+                  <li><a href=#Sec:PhysSyst>Physical System Description</a></li>
+                  <li><a href=#Sec:GoalStmt>Goal Statements</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>
+                <ul class="list">
+                  <li><a href=#Sec:Assumps>Assumptions</a></li>
+                  <li><a href=#Sec:TMs>Theoretical Models</a></li>
+                  <li><a href=#Sec:GDs>General Definitions</a></li>
+                  <li><a href=#Sec:DDs>Data Definitions</a></li>
+                  <li><a href=#Sec:IMs>Instance Models</a></li>
+                  <li><a href=#Sec:DataConstraints>Data Constraints</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:Requirements>Requirements</a>
+            <ul class="list">
+              <li><a href=#Sec:FRs>Functional Requirements</a></li>
+              <li><a href=#Sec:NFRs>Non-Functional Requirements</a></li>
+            </ul>
+          </li>
+          <li><a href=#Sec:LCs>Likely Changes</a></li>
+          <li>
+            <a href=#Sec:TraceMatrices>Traceability Matrices and Graphs</a>
+          </li>
+          <li><a href=#Sec:References>References</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="Sec:RefMat">
+      <div class="section">
+        <h1>Reference Material</h1>
+        <p class="paragraph">
+          This section records information for easy reference.
+        </p>
+        <div id="Sec:ToU">
+          <div class="subsection">
+            <h2>Table of Units</h2>
+            <p class="paragraph">
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description and the SI name.
+            </p>
+            <div id="Table:ToU">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>SI Name</th>
+                </tr>
+                <tr>
+                  <td><em>kg</em></td>
+                  <td>mass</td>
+                  <td>kilogram</td>
+                </tr>
+                <tr>
+                  <td><em>s</em></td>
+                  <td>time</td>
+                  <td>second</td>
+                </tr>
+              </table>
+              <p class="caption">Table of Units</p>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:ToS">
+          <div class="subsection">
+            <h2>Table of Symbols</h2>
+            <p class="paragraph">
+              The symbols used in this document are summarized in the <a href=#Table:ToS>Table of Symbols</a> along with their units. The symbols are listed in alphabetical order.
+            </p>
+            <div id="Table:ToS">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>-∞</em></td>
+                  <td>Negative Infinity</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>AbsTol</em></td>
+                  <td>Absolute Tolerance</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>C<sub>s</sub></em></td>
+                  <td>Control Variable in the frequency domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>c</em></td>
+                  <td>Damping coefficient of the spring</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>c<sub>t</sub></em></td>
+                  <td>Control Variable in the time domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>D<sub>s</sub></em></td>
+                  <td>Derivative control in the frequency domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>E<sub>s</sub></em></td>
+                  <td>Process Error in the frequency domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>e<sub>t</sub></em></td>
+                  <td>Process Error in the time domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>F<sub>s</sub></em></td>
+                  <td>Laplace Transform of a function</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>f<sub>t</sub></em></td>
+                  <td>Function in the time domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>H<sub>s</sub></em></td>
+                  <td>Transfer Function in the frequency domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>K<sub>d</sub></em></td>
+                  <td>Derivative Gain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>K<sub>p</sub></em></td>
+                  <td>Proportional Gain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>k</em></td>
+                  <td>Stiffness coefficient of the spring</td>
+                  <td><em>s</em></td>
+                </tr>
+                <tr>
+                  <td><em>L⁻¹[F(s)]</em></td>
+                  <td>Inverse Laplace Transform of a function</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>m</em></td>
+                  <td>Mass</td>
+                  <td><em>kg</em></td>
+                </tr>
+                <tr>
+                  <td><em>P<sub>s</sub></em></td>
+                  <td>Proportional control in the frequency domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>R<sub>s</sub></em></td>
+                  <td>Set-Point in the frequency domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>r<sub>t</sub></em></td>
+                  <td>Set-Point</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>RelTol</em></td>
+                  <td>Relative Tolerance</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>s</em></td>
+                  <td>Complex frequency-domain parameter</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>t</em></td>
+                  <td>Time</td>
+                  <td><em>s</em></td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>sim</sub></em></td>
+                  <td>Simulation Time</td>
+                  <td><em>s</em></td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>step</sub></em></td>
+                  <td>Step Time</td>
+                  <td><em>s</em></td>
+                </tr>
+                <tr>
+                  <td><em>Y<sub>s</sub></em></td>
+                  <td>Process Variable in the frequency domain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>y<sub>t</sub></em></td>
+                  <td>Process Variable</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>∞</em></td>
+                  <td>Infinity</td>
+                  <td>--</td>
+                </tr>
+              </table>
+              <p class="caption">Table of Symbols</p>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:TAbbAcc">
+          <div class="subsection">
+            <h2>Abbreviations and Acronyms</h2>
+            <div id="Table:TAbbAcc">
+              <table class="table">
+                <tr>
+                  <th>Abbreviation</th>
+                  <th>Full Form</th>
+                </tr>
+                <tr>
+                  <td>A</td>
+                  <td>Assumption</td>
+                </tr>
+                <tr>
+                  <td>D</td>
+                  <td>Derivative</td>
+                </tr>
+                <tr>
+                  <td>DD</td>
+                  <td>Data Definition</td>
+                </tr>
+                <tr>
+                  <td>GD</td>
+                  <td>General Definition</td>
+                </tr>
+                <tr>
+                  <td>GS</td>
+                  <td>Goal Statement</td>
+                </tr>
+                <tr>
+                  <td>I</td>
+                  <td>Integral</td>
+                </tr>
+                <tr>
+                  <td>IM</td>
+                  <td>Instance Model</td>
+                </tr>
+                <tr>
+                  <td>P</td>
+                  <td>Proportional</td>
+                </tr>
+                <tr>
+                  <td>PD</td>
+                  <td>Proportional Derivative</td>
+                </tr>
+                <tr>
+                  <td>PID</td>
+                  <td>Proportional Integral Derivative</td>
+                </tr>
+                <tr>
+                  <td>PS</td>
+                  <td>Physical System Description</td>
+                </tr>
+                <tr>
+                  <td>R</td>
+                  <td>Requirement</td>
+                </tr>
+                <tr>
+                  <td>SRS</td>
+                  <td>Software Requirements Specification</td>
+                </tr>
+                <tr>
+                  <td>TM</td>
+                  <td>Theoretical Model</td>
+                </tr>
+                <tr>
+                  <td>Uncert.</td>
+                  <td>Typical Uncertainty</td>
+                </tr>
+              </table>
+              <p class="caption">Abbreviations and Acronyms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:Intro">
+      <div class="section">
+        <h1>Introduction</h1>
+        <p class="paragraph">
+          Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore a simulation of the PD Controller with a Second Order System is created in this project that can be used to tune the gain constants.
+        </p>
+        <p class="paragraph">
+          The following section provides an overview of the Software Requirements Specification (SRS) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+        </p>
+        <div id="Sec:DocPurpose">
+          <div class="subsection">
+            <h2>Purpose of Document</h2>
+            <p class="paragraph">
+              The purpose of this document is to capture all the necessary information including assumptions, data definitions, constraints, models, and requirements to facilitate an unambiguous development of the PD Controller software and test procedures.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:ReqsScope">
+          <div class="subsection">
+            <h2>Scope of Requirements</h2>
+            <p class="paragraph">
+              The scope of the requirements includes a PD Control Loop with three subsystems, namely: a PD Controller, a Summing Point, and a Power Plant. Only the Proportional and Derivative controllers are used in this software; the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual tuning of the PD Controller.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:ReaderChars">
+          <div class="subsection">
+            <h2>Characteristics of Intended Reader</h2>
+            <p class="paragraph">
+              Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of PD Controller can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:DocOrg">
+          <div class="subsection">
+            <h2>Organization of Document</h2>
+            <p class="paragraph">
+              The sections in this document are based on <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>data definitions</a> and trace back to find any additional information they require.
+            </p>
+            <p class="paragraph">
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance model referred as <a href=#IM:pdEquationIM>IM:pdEquationIM</a> provides an Ordinary Differential Equation (ODE) that models the PD Controller.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:GenSysDesc">
+      <div class="section">
+        <h1>General System Description</h1>
+        <p class="paragraph">
+          This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
+        </p>
+        <div id="Sec:SysContext">
+          <div class="subsection">
+            <h2>System Context</h2>
+            <p class="paragraph">
+              <a href=#Figure:systemContextDiag>Fig:systemContextDiag</a> shows the system context. The circle represents an external entity outside the software, the user in this case. The rectangle represents the software system itself, PD Controller in this case. Arrows are used to show the data flow between the system and its environment.
+            </p>
+            <div id="Figure:systemContextDiag">
+              <figure>
+                <img src="../../../../datafiles/pdcontroller/Fig_SystemContext.png" alt="System Context" >
+                <figcaption>System Context</figcaption>
+              </figure>
+            </div>
+            <p class="paragraph">
+              PD Controller is self-contained. The only external interaction is with the user. The responsibilities of the user and the system are as follows:
+            </p>
+            <ul class="list">
+              <li>
+                User Responsibilities
+                <ul class="list">
+                  <li>Feed inputs to the model</li>
+                  <li>Review the response of the Power Plant</li>
+                  <li>Tune the controller gains</li>
+                </ul>
+              </li>
+              <li>
+                PD Controller Responsibilities
+                <ul class="list">
+                  <li>Check the validity of the inputs</li>
+                  <li>Calculate the outputs of the PD Controller and Power Plant</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div id="Sec:UserChars">
+          <div class="subsection">
+            <h2>User Characteristics</h2>
+            <p class="paragraph">
+              The end-user of PD Controller is expected to have taken a course on Control Systems at an undergraduate level.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:SysConstraints">
+          <div class="subsection">
+            <h2>System Constraints</h2>
+            <p class="paragraph">There are no system constraints.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:SpecSystDesc">
+      <div class="section">
+        <h1>Specific System Description</h1>
+        <p class="paragraph">
+          This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+        </p>
+        <div id="Sec:ProbDesc">
+          <div class="subsection">
+            <h2>Problem Description</h2>
+            <p class="paragraph">
+              A system is needed to provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
+            </p>
+            <div id="Sec:TermDefs">
+              <div class="subsubsection">
+                <h3>Terminology and Definitions</h3>
+                <p class="paragraph">
+                  This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+                </p>
+                <ul class="list">
+                  <li>
+                    PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.
+                  </li>
+                  <li>PD Controller: Proportional-Derivative Controller.</li>
+                  <li>
+                    Summing Point: Control block where the difference between the Set-Point and the Process Variable is computed.
+                  </li>
+                  <li>Power Plant: A second order system to be controlled.</li>
+                  <li>
+                    Second Order System: A system whose input-output relationship is denoted by a second-order differential equation.
+                  </li>
+                  <li>
+                    Process Error: Input to the PID controller. Process Error is the difference between the Set-Point and the Process Variable.
+                  </li>
+                  <li>
+                    Simulation Time: Total execution time of the PD simulation.
+                  </li>
+                  <li>Process Variable: The output value from the power plant.</li>
+                  <li>
+                    Set-Point: The desired value that the control system must reach. This also knows as the reference variable.
+                  </li>
+                  <li>
+                    Proportional Gain: Gain constant of the proportional controller.
+                  </li>
+                  <li>
+                    Derivative Gain: Gain constant of the derivative controller.
+                  </li>
+                  <li>
+                    Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.
+                  </li>
+                  <li>
+                    Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).
+                  </li>
+                  <li>
+                    Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.
+                  </li>
+                  <li>
+                    Time domain: The analysis of mathematical functions in terms of time.
+                  </li>
+                  <li>
+                    Laplace transform: An integral transform that converts a function of a real variable t (often time) to a function of a complex variable s (complex frequency).
+                  </li>
+                  <li>
+                    Control Variable: The Control Variable is the output of the PD controller.
+                  </li>
+                  <li>Step Time: Simulation step time.</li>
+                  <li>Absolute Tolerance: Absolute tolerance for the integrator.</li>
+                  <li>Relative Tolerance: Relative tolerance for the integrator.</li>
+                  <li>
+                    Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
+                  </li>
+                  <li>
+                    Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
+                  </li>
+                  <li>
+                    Stiffness Coefficient: Quantity that characterizes a spring's stiffness.
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div id="Sec:PhysSyst">
+              <div class="subsubsection">
+                <h3>Physical System Description</h3>
+                <p class="paragraph">
+                  The physical system of PD Controller, as shown in <a href=#Figure:pidSysDiagram>Fig:pidSysDiagram</a>, includes the following elements:
+                </p>
+                <div class="list">
+                  <p>PS1: The Summing Point.</p>
+                  <p>PS2: The PD Controller.</p>
+                  <p>PS3: The Power Plant.</p>
+                </div>
+                <div id="Figure:pidSysDiagram">
+                  <figure>
+                    <img src="../../../../datafiles/pdcontroller/Fig_PDController.png" alt="The physical system" width="70.0%" >
+                    <figcaption>The physical system</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:GoalStmt">
+              <div class="subsubsection">
+                <h3>Goal Statements</h3>
+                <p class="paragraph">
+                  Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step Time, the goal statements are:
+                </p>
+                <div class="list">
+                  <p>
+                    <div id="processVariable">
+                      Process-Variable: Calculate the output of the Power Plant (Process Variable) over time.
+                    </div>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:SolCharSpec">
+          <div class="subsection">
+            <h2>Solution Characteristics Specification</h2>
+            <p class="paragraph">
+              The instance models that govern PD Controller are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+            </p>
+            <div id="Sec:Assumps">
+              <div class="subsubsection">
+                <h3>Assumptions</h3>
+                <p class="paragraph">
+                  This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
+                </p>
+                <div class="list">
+                  <p>
+                    <div id="pwrPlant">
+                      Power plant: The Power Plant and the Sensor are coupled as a single unit. (RefBy: <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>, <a href=#pwrPlantTxFnx>A:Transfer Function</a>, <a href=#massSpring>A:Spring Mass</a>, and <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="decoupled">
+                      Decoupled equation: The decoupled form of the PD Controller equation used in this simulation. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="setPoint">
+                      Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a> and <a href=#IM:pdEquationIM>IM:pdEquationIM</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="externalDisturb">
+                      External disturbance: There are no external disturbances to the Power Plant during the simulation. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="initialValue">
+                      Initial Value: The initial value of the Process Variable is assumed to be zero. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="parallelEq">
+                      Parallel Equation: The Parallel form of the equation is used for the PD Controller. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="unfilteredDerivative">
+                      Unfiltered Derivative: A pure derivative function is used for this simulation; there are no filters applied. (RefBy: <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="pwrPlantTxFnx">
+                      Transfer Function: The combined Power Plant and Sensor (<a href=#pwrPlant>A:Power plant</a>) are characterized by a Second Order mass-spring-damper System. (RefBy: <a href=#TM:tmSOSystem>TM:tmSOSystem</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="massSpring">
+                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="dampingCoeffSpring">
+                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="stiffnessCoeffSpring">
+                      Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                    </div>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:TMs">
+              <div class="subsubsection">
+                <h3>Theoretical Models</h3>
+                <p class="paragraph">
+                  This section focuses on the general equations and laws that PD Controller is based on.
+                </p>
+                <div id="TM:laplaceTransform">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:laplaceTransform</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Laplace Transform</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{F_{\text{s}}}=\int_{-∞}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>F<sub>s</sub></em> is the Laplace Transform of a function (Unitless)
+                          </li>
+                          <li>
+                            <em>f<sub>t</sub></em> is the Function in the time domain (Unitless)
+                          </li>
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          Bilateral Laplace Transform. The Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (<a href=#laplaceWiki>laplaceWiki</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#laplaceWiki>laplaceWiki</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddProcessError>DD:ddProcessError</a>, <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>, and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="TM:invLaplaceTransform">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:invLaplaceTransform</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Inverse Laplace Transform</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{f_{\text{t}}}=L⁻¹[F(s)]\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>f<sub>t</sub></em> is the Function in the time domain (Unitless)
+                          </li>
+                          <li>
+                            <em>L⁻¹[F(s)]</em> is the Inverse Laplace Transform of a function (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          Inverse Laplace Transform of F(S). The Inverse Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (<a href=#laplaceWiki>laplaceWiki</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#laplaceWiki>laplaceWiki</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="TM:tmSOSystem">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:tmSOSystem</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Second Order Mass-Spring-Damper System</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\frac{1}{m s^{2}+c s+k}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>m</em> is the mass (<em>kg</em>)</li>
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                          <li>
+                            <em>c</em> is the Damping coefficient of the spring (Unitless)
+                          </li>
+                          <li>
+                            <em>k</em> is the Stiffness coefficient of the spring (<em>s</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Transfer Function (from <a href=#pwrPlantTxFnx>A:Transfer Function</a>) of a Second Order System (mass-spring-damper) is characterized by this equation.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#abbasi2015>abbasi2015</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:GDs">
+              <div class="subsubsection">
+                <h3>General Definitions</h3>
+                <p class="paragraph">
+                  This section collects the laws and equations that will be used to build the instance models.
+                </p>
+                <div id="GD:gdPowerPlant">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:gdPowerPlant</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">The Transfer Function of the Power Plant</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\frac{1}{s^{2}+s+20}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness Coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#pidWiki>pidWiki</a> and <a href=#abbasi2015>abbasi2015</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:DDs">
+              <div class="subsubsection">
+                <h3>Data Definitions</h3>
+                <p class="paragraph">
+                  This section collects and defines all the data needed to build the instance models.
+                </p>
+                <div id="DD:ddProcessError">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:ddProcessError</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Process Error in the frequency domain</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>E<sub>s</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{E_{\text{s}}}={R_{\text{s}}}-{Y_{\text{s}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
+                          </li>
+                          <li>
+                            <em>R<sub>s</sub></em> is the Set-Point in the frequency domain (Unitless)
+                          </li>
+                          <li>
+                            <em>Y<sub>s</sub></em> is the Process Variable in the frequency domain (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPoint>A:Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A:Initial Value</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>, and <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:ddPropCtrl">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:ddPropCtrl</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Proportional control in the frequency domain
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>P<sub>s</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{P_{\text{s}}}={K_{\text{p}}} {E_{\text{s}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>P<sub>s</sub></em> is the Proportional control in the frequency domain (Unitless)
+                          </li>
+                          <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
+                          <li>
+                            <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Proportional Controller is the product of the Proportional Gain and the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:ddDerivCtrl">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:ddDerivCtrl</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Derivative control in the frequency domain</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>D<sub>s</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{D_{\text{s}}}={K_{\text{d}}} {E_{\text{s}}} s\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>D<sub>s</sub></em> is the Derivative control in the frequency domain (Unitless)
+                          </li>
+                          <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
+                          <li>
+                            <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
+                          </li>
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Derivative Controller is the product of the Derivative Gain and the differential of the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). A pure form of the Derivative controller is used in this application (from <a href=#unfilteredDerivative>A:Unfiltered Derivative</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:ddCtrlVar">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:ddCtrlVar</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Control Variable in the frequency domain</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>C<sub>s</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{C_{\text{s}}}={E_{\text{s}}} \left({K_{\text{p}}}+{K_{\text{d}}} s\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>C<sub>s</sub></em> is the Control Variable in the frequency domain (Unitless)
+                          </li>
+                          <li>
+                            <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
+                          </li>
+                          <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
+                          <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Control Variable is the output of the controller. In this case, it is the sum of the Proportional (from <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>) and Derivative (from <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>) controllers. The parallel (from <a href=#parallelEq>A:Parallel Equation</a>) and de-coupled (from <a href=#decoupled>A:Decoupled equation</a>) form of the PD equation is used in this document.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:IMs">
+              <div class="subsubsection">
+                <h3>Instance Models</h3>
+                <p class="paragraph">
+                  This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
+                </p>
+                <div id="IM:pdEquationIM">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:pdEquationIM</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Computation of the Process Variable as a function of time
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>r<sub>t</sub></em>, <em>K<sub>p</sub></em>, <em>K<sub>d</sub></em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>y<sub>t</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[{r_{\text{t}}}\gt{}0\]
+                        \[{K_{\text{p}}}\gt{}0\]
+                        \[{K_{\text{d}}}\gt{}0\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td>\[{y_{\text{t}}}\gt{}0\]</td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em>y<sub>t</sub></em> is the Process Variable (Unitless)</li>
+                          <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
+                          <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
+                          <li><em>r<sub>t</sub></em> is the Set-Point (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#abbasi2015>abbasi2015</a> and <a href=#johnson2008>johnson2008</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calculateValues>FR:Calculate-Values</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:pdEquationIMDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of Process Variable:</h4>
+                    <p class="paragraph">
+                      The Process Variable <em>Y<sub>s</sub></em> in a PD Control Loop is the product of the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>), Control Variable (from <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>), and the Power Plant (from <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>).
+                    </p>
+                    \[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}\]
+                    <p class="paragraph">
+                      Substituting the values and rearranging the equation.
+                    </p>
+                    \[s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0\]
+                    <p class="paragraph">
+                      Computing the Inverse Laplace Transform of a function (from <a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a>) of the equation.
+                    </p>
+                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                    <p class="paragraph">
+                      The Set-Point <em>r<sub>t</sub></em> is a step function and a constant (from <a href=#setPoint>A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to
+                    </p>
+                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:DataConstraints">
+              <div class="subsubsection">
+                <h3>Data Constraints</h3>
+                <p class="paragraph">
+                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                </p>
+                <div id="Table:InDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                      <th>Typical Value</th>
+                      <th>Uncert.</th>
+                    </tr>
+                    <tr>
+                      <td><em>K<sub>d</sub></em></td>
+                      <td><em>K<sub>d</sub>&thinsp;&ge;&thinsp;0</em></td>
+                      <td><em>1</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>K<sub>p</sub></em></td>
+                      <td><em>K<sub>p</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>20</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>r<sub>t</sub></em></td>
+                      <td><em>r<sub>t</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>1</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>sim</sub></em></td>
+                      <td>
+                        <em>1&thinsp;&le;&thinsp;t<sub>sim</sub>&thinsp;&le;&thinsp;60</em>
+                      </td>
+                      <td><em>10</em> <em>s</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>step</sub></em></td>
+                      <td>
+                        <em>\(\frac{1}{100}\)&thinsp;&le;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>sim</sub></em>
+                      </td>
+                      <td><em>0.01</em> <em>s</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Input Data Constraints</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:Requirements">
+      <div class="section">
+        <h1>Requirements</h1>
+        <p class="paragraph">
+          This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+        </p>
+        <div id="Sec:FRs">
+          <div class="subsection">
+            <h2>Functional Requirements</h2>
+            <p class="paragraph">
+              This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+            </p>
+            <div class="list">
+              <p>
+                <div id="inputValues">
+                  Input-Values: Input the values from <a href=#Table:ReqInputs>Tab:ReqInputs</a>.
+                </div>
+              </p>
+              <p>
+                <div id="verifyInputs">
+                  Verify-Input-Values: Ensure that the input values are within the limits specified in the <a href=#Sec:DataConstraints>data constraints</a>.
+                </div>
+              </p>
+              <p>
+                <div id="calculateValues">
+                  Calculate-Values: Calculate the Process Variable (from <a href=#IM:pdEquationIM>IM:pdEquationIM</a>) over the simulation time.
+                </div>
+              </p>
+              <p>
+                <div id="outputValues">
+                  Output-Values: Output the Process Variable (from <a href=#IM:pdEquationIM>IM:pdEquationIM</a>) over the simulation time.
+                </div>
+              </p>
+            </div>
+            <div id="Table:ReqInputs">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>K<sub>d</sub></em></td>
+                  <td>Derivative Gain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>K<sub>p</sub></em></td>
+                  <td>Proportional Gain</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>r<sub>t</sub></em></td>
+                  <td>Set-Point</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>sim</sub></em></td>
+                  <td>Simulation Time</td>
+                  <td><em>s</em></td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>step</sub></em></td>
+                  <td>Step Time</td>
+                  <td><em>s</em></td>
+                </tr>
+              </table>
+              <p class="caption">
+                Required Inputs following <a href=#inputValues>FR:Input-Values</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:NFRs">
+          <div class="subsection">
+            <h2>Non-Functional Requirements</h2>
+            <p class="paragraph">
+              This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+            </p>
+            <div class="list">
+              <p>
+                <div id="portability">
+                  Portable: The code shall be portable to multiple Operating Systems.
+                </div>
+              </p>
+              <p>
+                <div id="security">
+                  Secure: The code shall be immune to common security problems such as memory leaks, divide by zero errors, and the square root of negative numbers.
+                </div>
+              </p>
+              <p>
+                <div id="maintainability">
+                  Maintainable: The dependencies among the instance models, requirements, likely changes, assumptions and all other relevant sections of this document shall be traceable to each other in the trace matrix.
+                </div>
+              </p>
+              <p>
+                <div id="verifiability">
+                  Verifiable: The code shall be verifiable against a Verification and Validation plan.
+                </div>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:LCs">
+      <div class="section">
+        <h1>Likely Changes</h1>
+        <p class="paragraph">
+          This section lists the likely changes to be made to the software.
+        </p>
+        <div class="list">
+          <p>
+            <div id="likeChgPP">
+              DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from <a href=#massSpring>A:Spring Mass</a>, <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>).
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:TraceMatrices">
+      <div class="section">
+        <h1>Traceability Matrices and Graphs</h1>
+        <p class="paragraph">
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Tab:TraceMatAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Table:TraceMatAvsAll>Tab:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Tab:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Tab:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+        </p>
+        <div id="Table:TraceMatAvsA">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#pwrPlant>A:Power plant</a></th>
+              <th><a href=#decoupled>A:Decoupled equation</a></th>
+              <th><a href=#setPoint>A:Set-Point</a></th>
+              <th><a href=#externalDisturb>A:External disturbance</a></th>
+              <th><a href=#initialValue>A:Initial Value</a></th>
+              <th><a href=#parallelEq>A:Parallel Equation</a></th>
+              <th><a href=#unfilteredDerivative>A:Unfiltered Derivative</a></th>
+              <th><a href=#pwrPlantTxFnx>A:Transfer Function</a></th>
+              <th><a href=#massSpring>A:Spring Mass</a></th>
+              <th>
+                <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>
+              </th>
+              <th>
+                <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>
+              </th>
+            </tr>
+            <tr>
+              <td><a href=#pwrPlant>A:Power plant</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#decoupled>A:Decoupled equation</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#setPoint>A:Set-Point</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#externalDisturb>A:External disturbance</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#initialValue>A:Initial Value</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#parallelEq>A:Parallel Equation</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#unfilteredDerivative>A:Unfiltered Derivative</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#pwrPlantTxFnx>A:Transfer Function</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#massSpring>A:Spring Mass</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>
+              </td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>
+              </td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions
+          </p>
+        </div>
+        <div id="Table:TraceMatAvsAll">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#pwrPlant>A:Power plant</a></th>
+              <th><a href=#decoupled>A:Decoupled equation</a></th>
+              <th><a href=#setPoint>A:Set-Point</a></th>
+              <th><a href=#externalDisturb>A:External disturbance</a></th>
+              <th><a href=#initialValue>A:Initial Value</a></th>
+              <th><a href=#parallelEq>A:Parallel Equation</a></th>
+              <th><a href=#unfilteredDerivative>A:Unfiltered Derivative</a></th>
+              <th><a href=#pwrPlantTxFnx>A:Transfer Function</a></th>
+              <th><a href=#massSpring>A:Spring Mass</a></th>
+              <th>
+                <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>
+              </th>
+              <th>
+                <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>
+              </th>
+            </tr>
+            <tr>
+              <td><a href=#DD:ddProcessError>DD:ddProcessError</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:ddPropCtrl>DD:ddPropCtrl</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:laplaceTransform>TM:laplaceTransform</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:tmSOSystem>TM:tmSOSystem</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:gdPowerPlant>GD:gdPowerPlant</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+            </tr>
+            <tr>
+              <td><a href=#IM:pdEquationIM>IM:pdEquationIM</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifyInputs>FR:Verify-Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#calculateValues>FR:Calculate-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portability>NFR:Portable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#security>NFR:Secure</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainability>NFR:Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiability>NFR:Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#likeChgPP>LC:DC Gain and Time Constant</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Assumptions and Other Items
+          </p>
+        </div>
+        <div id="Table:TraceMatRefvsRef">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#DD:ddProcessError>DD:ddProcessError</a></th>
+              <th><a href=#DD:ddPropCtrl>DD:ddPropCtrl</a></th>
+              <th><a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a></th>
+              <th><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></th>
+              <th><a href=#TM:laplaceTransform>TM:laplaceTransform</a></th>
+              <th><a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a></th>
+              <th><a href=#TM:tmSOSystem>TM:tmSOSystem</a></th>
+              <th><a href=#GD:gdPowerPlant>GD:gdPowerPlant</a></th>
+              <th><a href=#IM:pdEquationIM>IM:pdEquationIM</a></th>
+            </tr>
+            <tr>
+              <td><a href=#DD:ddProcessError>DD:ddProcessError</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:ddPropCtrl>DD:ddPropCtrl</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:laplaceTransform>TM:laplaceTransform</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:tmSOSystem>TM:tmSOSystem</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:gdPowerPlant>GD:gdPowerPlant</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:pdEquationIM>IM:pdEquationIM</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Items and Other Sections
+          </p>
+        </div>
+        <div id="Table:TraceMatAllvsR">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#DD:ddProcessError>DD:ddProcessError</a></th>
+              <th><a href=#DD:ddPropCtrl>DD:ddPropCtrl</a></th>
+              <th><a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a></th>
+              <th><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></th>
+              <th><a href=#TM:laplaceTransform>TM:laplaceTransform</a></th>
+              <th><a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a></th>
+              <th><a href=#TM:tmSOSystem>TM:tmSOSystem</a></th>
+              <th><a href=#GD:gdPowerPlant>GD:gdPowerPlant</a></th>
+              <th><a href=#IM:pdEquationIM>IM:pdEquationIM</a></th>
+              <th><a href=#inputValues>FR:Input-Values</a></th>
+              <th><a href=#verifyInputs>FR:Verify-Input-Values</a></th>
+              <th><a href=#calculateValues>FR:Calculate-Values</a></th>
+              <th><a href=#outputValues>FR:Output-Values</a></th>
+              <th><a href=#portability>NFR:Portable</a></th>
+              <th><a href=#security>NFR:Secure</a></th>
+              <th><a href=#maintainability>NFR:Maintainable</a></th>
+              <th><a href=#verifiability>NFR:Verifiable</a></th>
+            </tr>
+            <tr>
+              <td><a href=#processVariable>GS:Process-Variable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifyInputs>FR:Verify-Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#calculateValues>FR:Calculate-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portability>NFR:Portable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#security>NFR:Secure</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainability>NFR:Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiability>NFR:Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
+          </p>
+        </div>
+        <p class="paragraph">
+          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Figure:TraceGraphRefvsRef>Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Figure:TraceGraphAllvsR>Fig:TraceGraphAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href=#Figure:TraceGraphAllvsAll>Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+        </p>
+        <div id="Figure:TraceGraphAvsA">
+          <figure>
+            <img src="../../../../traceygraphs/pdcontroller/avsa.svg" alt="TraceGraphAvsA" >
+            <figcaption>TraceGraphAvsA</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAvsAll">
+          <figure>
+            <img src="../../../../traceygraphs/pdcontroller/avsall.svg" alt="TraceGraphAvsAll" >
+            <figcaption>TraceGraphAvsAll</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphRefvsRef">
+          <figure>
+            <img src="../../../../traceygraphs/pdcontroller/refvsref.svg" alt="TraceGraphRefvsRef" >
+            <figcaption>TraceGraphRefvsRef</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsR">
+          <figure>
+            <img src="../../../../traceygraphs/pdcontroller/allvsr.svg" alt="TraceGraphAllvsR" >
+            <figcaption>TraceGraphAllvsR</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsAll">
+          <figure>
+            <img src="../../../../traceygraphs/pdcontroller/allvsall.svg" alt="TraceGraphAllvsAll" >
+            <figcaption>TraceGraphAllvsAll</figcaption>
+          </figure>
+        </div>
+        <p class="paragraph">
+          For convenience, the following graphs can be found at the links below:
+        </p>
+        <ul class="list">
+          <li>
+            <a href="../../../../traceygraphs/pdcontroller/avsa.svg">TraceGraphAvsA</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/pdcontroller/avsall.svg">TraceGraphAvsAll</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/pdcontroller/refvsref.svg">TraceGraphRefvsRef</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/pdcontroller/allvsr.svg">TraceGraphAllvsR</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/pdcontroller/allvsall.svg">TraceGraphAllvsAll</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="Sec:References">
+      <div class="section">
+        <h1>References</h1>
+        <ul class="hide-list-style">
+          <li>
+            <div id="abbasi2015">
+              [1]: Abbasi, Nasser M. <em>A differential equation view of closed loop control systems</em>. November, 2020. <a href="https://www.12000.org/my_notes/connecting_systems/report.htm">https://www.12000.org/my_notes/connecting_systems/report.htm</a>.
+            </div>
+          </li>
+          <li>
+            <div id="johnson2008">
+              [2]: Johnson, Michael A. and Moradi, Mohammad H. <em>PID Control: New Identification and Design Methods, Chapter 1</em>. Springer Science and Business Media, 2006. Print.
+            </div>
+          </li>
+          <li>
+            <div id="smithLai2005">
+              [3]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+            </div>
+          </li>
+          <li>
+            <div id="laplaceWiki">
+              [4]: Wikipedia Contributors. <em>Laplace transform</em>. November, 2020. <a href="https://en.wikipedia.org/wiki/Laplace_transform">https://en.wikipedia.org/wiki/Laplace_transform</a>.
+            </div>
+          </li>
+          <li>
+            <div id="pidWiki">
+              [5]: Wikipedia Contributors. <em>PID controller</em>. October, 2020. <a href="https://en.wikipedia.org/wiki/PID_controller">https://en.wikipedia.org/wiki/PID_controller</a>.
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

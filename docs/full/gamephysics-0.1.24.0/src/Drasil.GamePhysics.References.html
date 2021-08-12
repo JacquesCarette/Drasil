@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GamePhysics.References</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.References.html#chaslesWiki"><span class="hs-identifier">chaslesWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.References.html#citations"><span class="hs-identifier">citations</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">,</span><span>
+</span><span id="line-2"></span><span>  </span><span class="annot"><span class="hs-identifier">smithLai2005</span></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cartesianWiki</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parnasClements1986</span></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><span class="hs-identifier">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lineSource</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pointSource</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">dampingSource</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">bWaugh</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">cTitus</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">dParnas</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">daAruliah</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">epWhite</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gWilson</span></span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">imMitchell</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">jBueche</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">kdHuff</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mDavis</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mdPlumblet</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nChueHong</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pWilson</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rGuy</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">shdHaddock</span></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">wikiAuthors</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Drasil.GamePhysics.References.html#chaslesWiki"><span class="hs-identifier hs-type">chaslesWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.References.html#jfBeucheIntro"><span class="hs-identifier hs-type">jfBeucheIntro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.References.html#parnas1978"><span class="hs-identifier hs-type">parnas1978</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.References.html#sciComp2013"><span class="hs-identifier hs-type">sciComp2013</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.GamePhysics.References.html#citations"><span class="hs-identifier hs-type">citations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
+</span><span id="line-15"></span><span id="citations"><span class="annot"><span class="annottext">citations :: BibRef
+</span><a href="Drasil.GamePhysics.References.html#citations"><span class="hs-identifier hs-var hs-var">citations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GamePhysics.References.html#parnas1978"><span class="hs-identifier hs-var">parnas1978</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GamePhysics.References.html#sciComp2013"><span class="hs-identifier hs-var">sciComp2013</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GamePhysics.References.html#chaslesWiki"><span class="hs-identifier hs-var">chaslesWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">parnasClements1986</span></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GamePhysics.References.html#jfBeucheIntro"><span class="hs-identifier hs-var">jfBeucheIntro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">cartesianWiki</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">lineSource</span></span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">pointSource</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">dampingSource</span></span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-comment">--FIXME: check for references made within document</span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span id="chaslesWiki"><span class="annot"><span class="annottext">chaslesWiki :: Citation
+</span><a href="Drasil.GamePhysics.References.html#chaslesWiki"><span class="hs-identifier hs-var hs-var">chaslesWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cMisc</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">wikiAuthors</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Chasles' theorem (kinematics)&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
+</span><span class="hs-identifier hs-var">Nov</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2018</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;chaslesWiki&quot;</span></span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span id="jfBeucheIntro"><span class="annot"><span class="annottext">jfBeucheIntro :: Citation
+</span><a href="Drasil.GamePhysics.References.html#jfBeucheIntro"><span class="hs-identifier hs-var hs-var">jfBeucheIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cMisc</span></span><span>
+</span><span id="line-27"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">jBueche</span></span><span class="hs-special">]</span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Introduction to Physics for Scientists, Fourth Edition&quot;</span></span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">publisher</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Mcgraw-Hill College&quot;</span></span><span> </span><span class="hs-comment">--FIXME: not sure if this is publisher of 4th edition</span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">1986</span></span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;jfBeucheIntro&quot;</span></span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span id="parnas1978"><span class="annot"><span class="annottext">parnas1978 :: Citation
+</span><a href="Drasil.GamePhysics.References.html#parnas1978"><span class="hs-identifier hs-var hs-var">parnas1978</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cInProceedings</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">dParnas</span></span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span><span>    </span><span class="annot"><span class="hs-string">&quot;Designing Software for Ease of Extension and Contraction&quot;</span></span><span>
+</span><span id="line-35"></span><span>    </span><span class="annot"><span class="hs-string">&quot;ICSE '78: Proceedings of the 3rd international conference on Software engineering&quot;</span></span><span> </span><span>
+</span><span id="line-36"></span><span>    </span><span class="annot"><span class="hs-number">1978</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
+</span><span class="hs-identifier hs-var">pages</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-number">264</span></span><span class="hs-glyph">..</span><span class="annot"><span class="hs-number">277</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;parnas1978&quot;</span></span><span>
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span id="sciComp2013"><span class="annot"><span class="annottext">sciComp2013 :: Citation
+</span><a href="Drasil.GamePhysics.References.html#sciComp2013"><span class="hs-identifier hs-var hs-var">sciComp2013</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cArticle</span></span><span>
+</span><span id="line-39"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">gWilson</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">daAruliah</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">cTitus</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">nChueHong</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">mDavis</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">rGuy</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">shdHaddock</span></span><span class="hs-special">,</span><span>
+</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">kdHuff</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">imMitchell</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">mdPlumblet</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">bWaugh</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">epWhite</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">pWilson</span></span><span class="hs-special">]</span><span>
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Best Practices for Scientific Computing, 2013&quot;</span></span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="hs-string">&quot;PLoS Biol&quot;</span></span><span> </span><span class="annot"><span class="hs-number">2013</span></span><span>
+</span><span id="line-43"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">volume</span></span><span> </span><span class="annot"><span class="hs-number">12</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">number</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;sciComp2013&quot;</span></span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span></pre></body></html>

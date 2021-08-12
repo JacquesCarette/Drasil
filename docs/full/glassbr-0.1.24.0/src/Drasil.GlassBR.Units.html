@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GlassBR.Units</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Units.html#sFlawPU"><span class="hs-identifier">sFlawPU</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">UnitDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">newUnit</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(^$)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(^:)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">metre</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">newton</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-comment">--N^(-7)*m^12--</span><span>
+</span><span id="line-7"></span><span class="annot"><a href="Drasil.GlassBR.Units.html#sFlawPU"><span class="hs-identifier hs-type">sFlawPU</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
+</span><span id="line-8"></span><span id="sFlawPU"><span class="annot"><span class="annottext">sFlawPU :: UnitDefn
+</span><a href="Drasil.GlassBR.Units.html#sFlawPU"><span class="hs-identifier hs-var hs-var">sFlawPU</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
+</span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="hs-string">&quot;surface flaw parameter&quot;</span></span><span> </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitEquation
+</span><a href="#local-6989586621679115548"><span class="hs-identifier hs-var">m12</span></a></span><span> </span><span class="annot"><span class="annottext">UnitEquation -&gt; UnitEquation -&gt; UnitEquation
+</span><span class="hs-operator hs-var">^$</span></span><span> </span><span class="annot"><span class="annottext">UnitEquation
+</span><a href="#local-6989586621679115547"><span class="hs-identifier hs-var">n7</span></a></span><span> </span><span>
+</span><span id="line-9"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-10"></span><span>    </span><span id="local-6989586621679115548"><span class="annot"><span class="annottext">m12 :: UnitEquation
+</span><a href="#local-6989586621679115548"><span class="hs-identifier hs-var hs-var">m12</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
+</span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="annot"><span class="hs-number">12</span></span><span>
+</span><span id="line-11"></span><span>    </span><span id="local-6989586621679115547"><span class="annot"><span class="annottext">n7 :: UnitEquation
+</span><a href="#local-6989586621679115547"><span class="hs-identifier hs-var hs-var">n7</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">newton</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
+</span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">7</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span></pre></body></html>

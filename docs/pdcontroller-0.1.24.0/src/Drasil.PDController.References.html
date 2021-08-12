@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.PDController.References</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">laplaceWiki</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pidWiki</span></span><span class="hs-special">)</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="annot"><a href="Drasil.PDController.References.html#citations"><span class="hs-identifier hs-type">citations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
+</span><span id="line-7"></span><span id="citations"><span class="annot"><span class="annottext">citations :: BibRef
+</span><a href="Drasil.PDController.References.html#citations"><span class="hs-identifier hs-var hs-var">citations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.PDController.References.html#johnson2008"><span class="hs-identifier hs-var">johnson2008</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.PDController.References.html#abbasi2015"><span class="hs-identifier hs-var">abbasi2015</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">laplaceWiki</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">pidWiki</span></span><span class="hs-special">]</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="annot"><a href="Drasil.PDController.References.html#johnson2008"><span class="hs-identifier hs-type">johnson2008</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.References.html#abbasi2015"><span class="hs-identifier hs-type">abbasi2015</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="annot"><a href="Drasil.PDController.References.html#pidCtrlEditor1"><span class="hs-identifier hs-type">pidCtrlEditor1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.References.html#pidCtrlEditor2"><span class="hs-identifier hs-type">pidCtrlEditor2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Person</span></span><span>
+</span><span id="line-12"></span><span id="pidCtrlEditor1"><span class="annot"><span class="annottext">pidCtrlEditor1 :: Person
+</span><a href="Drasil.PDController.References.html#pidCtrlEditor1"><span class="hs-identifier hs-var hs-var">pidCtrlEditor1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">personWM</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Michael&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;A&quot;</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;Johnson&quot;</span></span><span>
+</span><span id="line-13"></span><span id="pidCtrlEditor2"><span class="annot"><span class="annottext">pidCtrlEditor2 :: Person
+</span><a href="Drasil.PDController.References.html#pidCtrlEditor2"><span class="hs-identifier hs-var hs-var">pidCtrlEditor2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">personWM</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Mohammad&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;H&quot;</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;Moradi&quot;</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span id="johnson2008"><span class="annot"><span class="annottext">johnson2008 :: Citation
+</span><a href="Drasil.PDController.References.html#johnson2008"><span class="hs-identifier hs-var hs-var">johnson2008</span></a></span></span><span>
+</span><span id="line-16"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cBookA</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><a href="Drasil.PDController.References.html#pidCtrlEditor1"><span class="hs-identifier hs-var">pidCtrlEditor1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><a href="Drasil.PDController.References.html#pidCtrlEditor2"><span class="hs-identifier hs-var">pidCtrlEditor2</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span>      </span><span class="annot"><span class="hs-string">&quot;PID Control: New Identification and Design Methods, Chapter 1&quot;</span></span><span>
+</span><span id="line-18"></span><span>      </span><span class="annot"><span class="hs-string">&quot;Springer Science and Business Media&quot;</span></span><span>
+</span><span id="line-19"></span><span>      </span><span class="annot"><span class="hs-number">2006</span></span><span>
+</span><span id="line-20"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-21"></span><span>      </span><span class="annot"><span class="hs-string">&quot;johnson2008&quot;</span></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span id="abbasi2015"><span class="annot"><span class="annottext">abbasi2015 :: Citation
+</span><a href="Drasil.PDController.References.html#abbasi2015"><span class="hs-identifier hs-var hs-var">abbasi2015</span></a></span></span><span>
+</span><span id="line-24"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cMisc</span></span><span>
+</span><span id="line-25"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">personWM</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Nasser&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;M&quot;</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;Abbasi&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;A differential equation view of closed loop control systems&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-27"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">howPublishedU</span></span><span>
+</span><span id="line-28"></span><span>         </span><span class="annot"><span class="hs-string">&quot;https://www.12000.org/my_notes/connecting_systems/report.htm&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>       </span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
+</span><span class="hs-identifier hs-var">Nov</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2020</span></span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span>      </span><span class="annot"><span class="hs-string">&quot;abbasi2015&quot;</span></span><span>
+</span><span id="line-31"></span></pre></body></html>

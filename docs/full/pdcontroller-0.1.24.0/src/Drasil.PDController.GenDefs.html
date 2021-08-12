@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.PDController.GenDefs</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Assumptions.html"><span class="hs-identifier">Drasil.PDController.Assumptions</span></a></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Concepts.html"><span class="hs-identifier">Drasil.PDController.Concepts</span></a></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.References.html"><span class="hs-identifier">Drasil.PDController.References</span></a></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.TModel.html"><span class="hs-identifier">Drasil.PDController.TModel</span></a></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">GenDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gd</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">othModel'</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">pidWiki</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html"><span class="hs-identifier">Drasil.PDController.Unitals</span></a></span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#genDefns"><span class="hs-identifier hs-type">genDefns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span>
+</span><span id="line-19"></span><span id="genDefns"><span class="annot"><span class="annottext">genDefns :: [GenDefn]
+</span><a href="Drasil.PDController.GenDefs.html#genDefns"><span class="hs-identifier hs-var hs-var">genDefns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.PDController.GenDefs.html#gdPowerPlant"><span class="hs-identifier hs-var">gdPowerPlant</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlant"><span class="hs-identifier hs-type">gdPowerPlant</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-24"></span><span id="gdPowerPlant"><span class="annot"><span class="annottext">gdPowerPlant :: GenDefn
+</span><a href="Drasil.PDController.GenDefs.html#gdPowerPlant"><span class="hs-identifier hs-var hs-var">gdPowerPlant</span></a></span></span><span>
+</span><span id="line-25"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u
+-&gt; Maybe Derivation
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+</span><span class="hs-identifier hs-var">gd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind
+</span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
+</span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantRC"><span class="hs-identifier hs-var">gdPowerPlantRC</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-26"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; DecRef
+</span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">pidWiki</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; DecRef
+</span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.PDController.References.html#abbasi2015"><span class="hs-identifier hs-var">abbasi2015</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-27"></span><span>      </span><span class="annot"><span class="hs-string">&quot;gdPowerPlant&quot;</span></span><span>
+</span><span id="line-28"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantNote"><span class="hs-identifier hs-var">gdPowerPlantNote</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlantRC"><span class="hs-identifier hs-type">gdPowerPlantRC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
+</span><span id="line-31"></span><span id="gdPowerPlantRC"><span class="annot"><span class="annottext">gdPowerPlantRC :: RelationConcept
+</span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantRC"><span class="hs-identifier hs-var hs-var">gdPowerPlantRC</span></a></span></span><span>
+</span><span id="line-32"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Relation -&gt; RelationConcept
+</span><span class="hs-identifier hs-var">makeRC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;gdPowerPlantRC&quot;</span></span><span>
+</span><span id="line-33"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccTransferFxn"><span class="hs-identifier hs-var">ccTransferFxn</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#powerPlant"><span class="hs-identifier hs-var">powerPlant</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-34"></span><span>      </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span>
+</span><span id="line-35"></span><span>      </span><span class="annot"><span class="annottext">Relation
+</span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantEqn"><span class="hs-identifier hs-var">gdPowerPlantEqn</span></a></span><span>
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlantEqn"><span class="hs-identifier hs-type">gdPowerPlantEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-38"></span><span id="gdPowerPlantEqn"><span class="annot"><span class="annottext">gdPowerPlantEqn :: Relation
+</span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantEqn"><span class="hs-identifier hs-var hs-var">gdPowerPlantEqn</span></a></span></span><span>
+</span><span id="line-39"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Relation
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">20</span></span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlantNote"><span class="hs-identifier hs-type">gdPowerPlantNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-42"></span><span id="gdPowerPlantNote"><span class="annot"><span class="annottext">gdPowerPlantNote :: Sentence
+</span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantNote"><span class="hs-identifier hs-var hs-var">gdPowerPlantNote</span></a></span></span><span>
+</span><span id="line-43"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span>
+</span><span id="line-44"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccTransferFxn"><span class="hs-identifier hs-var">ccTransferFxn</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#secondOrderSystem"><span class="hs-identifier hs-var">secondOrderSystem</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-45"></span><span>         </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.PDController.TModel.html#tmSOSystem"><span class="hs-identifier hs-var">tmSOSystem</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-46"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is reduced to this equation by substituting the&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-47"></span><span>         </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;(m) to 1 Kg&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.PDController.Assumptions.html#aMass"><span class="hs-identifier hs-var">aMass</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span>
+</span><span id="line-48"></span><span>         </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccDampingCoeff"><span class="hs-identifier hs-var">ccDampingCoeff</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
+</span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symDampingCoeff"><span class="hs-identifier hs-var">symDampingCoeff</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-49"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to 1&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.PDController.Assumptions.html#aDampingCoeff"><span class="hs-identifier hs-var">aDampingCoeff</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span>
+</span><span id="line-50"></span><span>         </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.andThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccStiffCoeff"><span class="hs-identifier hs-var">ccStiffCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
+</span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symStifnessCoeff"><span class="hs-identifier hs-var">symStifnessCoeff</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-51"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to 20&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.PDController.Assumptions.html#aStiffnessCoeff"><span class="hs-identifier hs-var">aStiffnessCoeff</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-52"></span><span>       </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is converted to the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-53"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;by applying the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccLaplaceTransform"><span class="hs-identifier hs-var">ccLaplaceTransform</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.PDController.TModel.html#tmLaplace"><span class="hs-identifier hs-var">tmLaplace</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-54"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Additionally, there are no external disturbances to the power plant&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-55"></span><span>         </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.PDController.Assumptions.html#aExtDisturb"><span class="hs-identifier hs-var">aExtDisturb</span></a></span><span class="hs-special">]</span></pre></body></html>

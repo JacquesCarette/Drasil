@@ -181,11 +181,12 @@ filterInvalidChars :: String -> String
 
 module Language.Drasil.Format
 
--- | Possible formats for output.
+-- | Possible formats for output
 data Format
 TeX :: Format
 Plain :: Format
 HTML :: Format
+JSON :: Format
 
 module Language.Drasil.HTML.CSS
 
@@ -292,6 +293,7 @@ Point :: Ops
 Perc :: Ops
 LArrow :: Ops
 RArrow :: Ops
+ForAll :: Ops
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence
@@ -546,6 +548,54 @@ indent :: Doc -> Doc
 --   
 --   Build case expressions.
 makeCases :: [(Expr, Expr)] -> (Expr -> Doc) -> Doc
+
+module Language.Drasil.JSON.Helpers
+data Variation
+Class :: Variation
+Id :: Variation
+
+-- | Table row tag wrapper
+tr :: Doc -> Doc
+
+-- | Table cell tag wrapper
+td :: Doc -> Doc
+
+-- | Figure tag wrapper
+figure :: Doc -> Doc
+
+-- | List tag wrapper
+li :: Doc -> Doc
+
+-- | Paragraph in list tag wrapper
+pa :: Doc -> Doc
+ba :: Doc -> Doc
+
+-- | Ordered list tag wrapper
+ol :: [String] -> Doc -> Doc
+
+-- | Unordered list tag wrapper
+ul :: [String] -> Doc -> Doc
+
+-- | Table tag wrapper
+table :: [String] -> Doc -> Doc
+nbformat :: Doc -> Doc
+wrap :: String -> [String] -> Doc -> Doc
+wrap' :: String -> [String] -> Doc -> Doc
+wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
+refwrap :: Doc -> Doc -> Doc
+refID :: Doc -> Doc
+
+-- | Helper for setting up links to references
+reflink :: String -> Doc -> Doc
+
+-- | Helper for setting up links to external URIs
+reflinkURI :: String -> Doc -> Doc
+
+-- | Helper for setting up figures
+image :: Doc -> Doc -> MaxWidthPercent -> Doc
+h :: Int -> Doc
+stripnewLine :: String -> Doc
+makeMetadata :: Doc
 
 module Language.Drasil.Printing.Citation
 
@@ -862,9 +912,9 @@ Figure :: Label -> Caption -> Filepath -> MaxWidthPercent -> LayoutObj
 -- | Holds all information needed for a graph.
 Graph :: [(Spec, Spec)] -> Maybe Width -> Maybe Height -> Caption -> Label -> LayoutObj
 
--- | Holds tags, more contents, and a label. this shouldn't be here, it
---   should have been expanded.
+-- | Holds tags, more contents, and a label.
 HDiv :: Tags -> [LayoutObj] -> Label -> LayoutObj
+Cell :: [LayoutObj] -> LayoutObj
 
 -- | Bibliography section.
 Bib :: BibRef -> LayoutObj
@@ -898,6 +948,10 @@ PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 stg :: Lens' PrintingInformation Stage
 configuration :: Lens' PrintingInformation PrintingConfiguration
 ckdb :: Lens' PrintingInformation ChunkDB
+
+-- | Builds a document's printing information based on the system
+--   information.
+piSys :: SystemInformation -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
@@ -946,9 +1000,11 @@ layout :: PrintingInformation -> Int -> SecCons -> LayoutObj
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [LayoutObj]
+createLayout' :: PrintingInformation -> [Section] -> [LayoutObj]
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> LayoutObj
+cel :: PrintingInformation -> Int -> Section -> LayoutObj
 
 -- | Helper that translates <a>Contents</a> to a printable representation
 --   of <a>LayoutObj</a>. Called internally by <a>layout</a>.
@@ -1026,6 +1082,90 @@ symbolDoc :: Symbol -> Doc
 
 -- | Helper for printing units in <a>Doc</a> format.
 unitDoc :: Linearity -> USymb -> Doc
+
+module Language.Drasil.Log.Print
+
+-- | Gathers all printing functions and creates the debugging tables from
+--   them.
+printAllDebugInfo :: PrintingInformation -> [Doc]
+
+-- | Debugging table separator.
+cdbSection :: Doc -> Doc
+
+-- | Header for debugging tables.
+header :: Doc -> Doc
+
+-- | Creates a table of all UIDs and their "highest" recorded level of
+--   information. See <a>mkListShowUsedUIDs</a> for more details.
+renderUsedUIDs :: [(UID, String)] -> Doc
+
+-- | For the last section of the log output. Shows which chunk UID is being
+--   used at which stage. Note that chunks used at a "higher stage" (like
+--   <a>Concept</a>s and <a>QuantityDict</a>s) will still be built off of
+--   the more basic types (like <a>IdeaDict</a>s), they are just not
+--   explicitly used in that manner. Also, some chunks may have been
+--   "downgraded" when put into the database (for example, mapping a
+--   <a>QuantityDict</a> wrapper onto things like Constrained and Unital
+--   chunks happens often).
+mkListShowUsedUIDs :: PrintingInformation -> [(UID, String)]
+
+-- | General function to make the debugging tables. Takes in printing
+--   information, a function that extracts a certain field from the
+--   printing information, a title, three column headers, and three
+--   functions that sort the data from the printing information field into
+--   the required display formats (often <a>UID</a>s, terms, shortnames,
+--   definitions, etc.).
+mkTableFromLenses :: PrintingInformation -> (ChunkDB -> UMap a) -> String -> String -> String -> String -> (a -> Doc) -> (a -> Doc) -> (a -> Doc) -> Doc
+
+-- | Makes a table with all symbolic quantities in the SRS.
+mkTableSymb :: PrintingInformation -> Doc
+
+-- | Makes a table with terms in the SRS.
+mkTableOfTerms :: PrintingInformation -> Doc
+
+-- | Makes a table with all concepts in the SRS.
+mkTableConcepts :: PrintingInformation -> Doc
+
+-- | Makes a table with all units used in the SRS.
+mkTableUnitDefn :: PrintingInformation -> Doc
+
+-- | Makes a table with all data definitions in the SRS.
+mkTableDataDef :: PrintingInformation -> Doc
+
+-- | Makes a table with all general definitions in the SRS.
+mkTableGenDef :: PrintingInformation -> Doc
+
+-- | Makes a table with all theoretical models in the SRS.
+mkTableTMod :: PrintingInformation -> Doc
+
+-- | Makes a table with all instance models in the SRS.
+mkTableIMod :: PrintingInformation -> Doc
+
+-- | Makes a table with all concept instances in the SRS.
+mkTableCI :: PrintingInformation -> Doc
+
+-- | Makes a table with all sections in the SRS.
+mkTableSec :: PrintingInformation -> Doc
+
+-- | Makes a table with all labelled content in the SRS.
+mkTableLC :: PrintingInformation -> Doc
+
+-- | Makes a table with all references in the SRS.
+mkTableRef :: PrintingInformation -> Doc
+
+-- | Chunks that depend on other chunks. An empty list means the chunks do
+--   not depend on anything.
+mkTableDepChunks :: PrintingInformation -> Doc
+
+-- | Chunks that are referenced and used by other chunks. Those chunks
+--   build on top of the ones listed here.
+mkTableReferencedChunks :: PrintingInformation -> Doc
+
+-- | Chunks that use and are used by other chunks.
+mkTableDepReffedChunks :: PrintingInformation -> Doc
+
+-- | Get all <a>UID</a>s from a database (<a>ChunkDB</a>).
+mkListAll :: ChunkDB -> [UID]
 
 
 -- | Printing Monad. Starts with a specific data type (reader monad) and
@@ -1362,12 +1502,31 @@ module Language.Drasil.HTML.Print
 -- | Generate an HTML document from a Drasil <a>Document</a>.
 genHTML :: PrintingInformation -> String -> Document -> Doc
 
+-- | For when we add other things to reference like website, newspaper
+renderCite :: Citation -> (Doc, Doc)
+
+-- | Referring to <a>fence</a> (for parenthesis and brackeds). Either
+--   opened or closed.
+data OpenClose
+Open :: OpenClose
+Close :: OpenClose
+
+-- | Allows for open/closed variants of parenthesis, curly brackets,
+--   absolute value symbols, and normal symbols.
+fence :: OpenClose -> Fence -> String
+
+module Language.Drasil.JSON.Print
+
+-- | Generate a python notebook document (using json).
+genJSON :: PrintingInformation -> Document -> Doc
+
 module Language.Drasil.Printers
 
--- | Possible formats for output.
+-- | Possible formats for output
 data Format
 TeX :: Format
 HTML :: Format
+JSON :: Format
 
 -- | Creates the directory for output, gathers all individual graph output
 --   functions and calls them.
@@ -1499,6 +1658,13 @@ unitDoc :: Linearity -> USymb -> Doc
 -- | Generates a LaTeX document.
 genTeX :: Document -> PrintingInformation -> Doc
 
+-- | Generate a python notebook document (using json).
+genJSON :: PrintingInformation -> Document -> Doc
+
+-- | Gathers all printing functions and creates the debugging tables from
+--   them.
+printAllDebugInfo :: PrintingInformation -> [Doc]
+
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.
 data PrintingInformation
@@ -1506,6 +1672,10 @@ PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 [_ckdb] :: PrintingInformation -> ChunkDB
 [_stg] :: PrintingInformation -> Stage
 [_configuration] :: PrintingInformation -> PrintingConfiguration
+
+-- | Builds a document's printing information based on the system
+--   information.
+piSys :: SystemInformation -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Able to be printed.
 class HasPrintingOptions c

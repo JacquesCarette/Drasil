@@ -1,0 +1,1099 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SglPendulum.GenDefs</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#genDefns"><span class="hs-identifier">genDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXGD"><span class="hs-identifier">velocityIXGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYGD"><span class="hs-identifier">velocityIYGD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-3"></span><span>         </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXGD"><span class="hs-identifier">accelerationIXGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYGD"><span class="hs-identifier">accelerationIYGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumGD"><span class="hs-identifier">hForceOnPendulumGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumGD"><span class="hs-identifier">vForceOnPendulumGD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-4"></span><span>         </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyGD"><span class="hs-identifier">angFrequencyGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#periodPend"><span class="hs-identifier">periodPend</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sqrt</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.List.NonEmpty</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NE</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">GenDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gdNoRefs</span></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>    </span><span class="annot"><span class="hs-identifier">equationalModel'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equationalModelU</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equationalRealmU</span></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>    </span><span class="annot"><span class="hs-identifier">MultiDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkDefiningExpr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkMultiDefnForQuant</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.NounPhrase</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NP</span></span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="hs-comment">-- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">xComp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yComp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">component</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">direction</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angle</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">force</span></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>    </span><span class="annot"><span class="hs-identifier">momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">torque</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularDisplacement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularFrequency</span></span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>    </span><span class="annot"><span class="hs-identifier">frequency</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">period</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yVel</span></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pendulum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">weight</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">shm</span></span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">len</span></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Theories.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSLR</span></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.DataDefs.html"><span class="hs-identifier">Drasil.SglPendulum.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPendulum.DataDefs.html#frequencyDD"><span class="hs-identifier">frequencyDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.DataDefs.html#periodSHMDD"><span class="hs-identifier">periodSHMDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.DataDefs.html#angFrequencyDD"><span class="hs-identifier">angFrequencyDD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span class="hs-comment">-- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)</span><span>
+</span><span id="line-29"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Expressions.html"><span class="hs-identifier">Drasil.SglPendulum.Expressions</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">E</span></span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html"><span class="hs-identifier">Drasil.SglPendulum.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier">pendDisplacementAngle</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPendulum.Concepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">arcLen</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">horizontalPos</span></span><span class="hs-special">,</span><span>
+</span><span id="line-32"></span><span>    </span><span class="annot"><span class="hs-identifier">verticalPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">horizontalVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">verticalVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">horizontalForce</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">verticalForce</span></span><span class="hs-special">)</span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#genDefns"><span class="hs-identifier hs-type">genDefns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span>
+</span><span id="line-35"></span><span id="genDefns"><span class="annot"><span class="annottext">genDefns :: [GenDefn]
+</span><a href="Drasil.SglPendulum.GenDefs.html#genDefns"><span class="hs-identifier hs-var hs-var">genDefns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXGD"><span class="hs-identifier hs-var">velocityIXGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYGD"><span class="hs-identifier hs-var">velocityIYGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXGD"><span class="hs-identifier hs-var">accelerationIXGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYGD"><span class="hs-identifier hs-var">accelerationIYGD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-36"></span><span>       </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumGD"><span class="hs-identifier hs-var">hForceOnPendulumGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumGD"><span class="hs-identifier hs-var">vForceOnPendulumGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyGD"><span class="hs-identifier hs-var">angFrequencyGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPend"><span class="hs-identifier hs-var">periodPend</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="hs-comment">---------------------</span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXGD"><span class="hs-identifier hs-type">velocityIXGD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-41"></span><span id="velocityIXGD"><span class="annot"><span class="annottext">velocityIXGD :: GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXGD"><span class="hs-identifier hs-var hs-var">velocityIXGD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXQD"><span class="hs-identifier hs-var">velocityIXQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">)</span><span>
+</span><span id="line-42"></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDeriv"><span class="hs-identifier hs-var">velocityIXDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;velocityIX&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXQD"><span class="hs-identifier hs-type">velocityIXQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-45"></span><span id="velocityIXQD"><span class="annot"><span class="annottext">velocityIXQD :: QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXQD"><span class="hs-identifier hs-var hs-var">velocityIXQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">xVel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">xComp</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><span class="hs-operator hs-var">`NP.of_`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">velocity</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-46"></span><span>    </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIXExpr"><span class="hs-identifier hs-var">E.velocityIXExpr</span></a></span><span>
+</span><span id="line-47"></span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDeriv"><span class="hs-identifier hs-type">velocityIXDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-49"></span><span id="velocityIXDeriv"><span class="annot"><span class="annottext">velocityIXDeriv :: Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDeriv"><span class="hs-identifier hs-var hs-var">velocityIXDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">xComp</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+forall a. [[a]] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSents"><span class="hs-identifier hs-var">velocityIXDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivEqns"><span class="hs-identifier hs-var">velocityIXDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSents"><span class="hs-identifier hs-type">velocityIXDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-52"></span><span id="velocityIXDerivSents"><span class="annot"><span class="annottext">velocityIXDerivSents :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSents"><span class="hs-identifier hs-var hs-var">velocityIXDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIDerivSent1"><span class="hs-identifier hs-var">velocityIDerivSent1</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent2"><span class="hs-identifier hs-var">velocityIXDerivSent2</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent3"><span class="hs-identifier hs-var">velocityIXDerivSent3</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent4"><span class="hs-identifier hs-var">velocityIXDerivSent4</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-53"></span><span>                            </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent5"><span class="hs-identifier hs-var">velocityIXDerivSent5</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivEqns"><span class="hs-identifier hs-type">velocityIXDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-56"></span><span id="velocityIXDerivEqns"><span class="annot"><span class="annottext">velocityIXDerivEqns :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivEqns"><span class="hs-identifier hs-var hs-var">velocityIXDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIDerivEqn1"><span class="hs-identifier hs-var">E.velocityIDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIXDerivEqn2"><span class="hs-identifier hs-var">E.velocityIXDerivEqn2</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-57"></span><span>    </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIXDerivEqn3"><span class="hs-identifier hs-var">E.velocityIXDerivEqn3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIXDerivEqn4"><span class="hs-identifier hs-var">E.velocityIXDerivEqn4</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXQD"><span class="hs-identifier hs-var">velocityIXQD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-58"></span><span>
+</span><span id="line-59"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIDerivSent1"><span class="hs-identifier hs-type">velocityIDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent2"><span class="hs-identifier hs-type">velocityIXDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent3"><span class="hs-identifier hs-type">velocityIXDerivSent3</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-60"></span><span>    </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent4"><span class="hs-identifier hs-type">velocityIXDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent5"><span class="hs-identifier hs-type">velocityIXDerivSent5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span id="velocityIDerivSent1"><span class="annot"><span class="annottext">velocityIDerivSent1 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIDerivSent1"><span class="hs-identifier hs-var hs-var">velocityIDerivSent1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;At a given point in time&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">velocity</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;may be defined as&quot;</span></span><span>
+</span><span id="line-64"></span><span id="velocityIXDerivSent2"><span class="annot"><span class="annottext">velocityIXDerivSent2 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent2"><span class="hs-identifier hs-var hs-var">velocityIXDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;We also know the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">horizontalPos</span></span><span>
+</span><span id="line-65"></span><span id="velocityIXDerivSent3"><span class="annot"><span class="annottext">velocityIXDerivSent3 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent3"><span class="hs-identifier hs-var hs-var">velocityIXDerivSent3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Applying this,&quot;</span></span><span>
+</span><span id="line-66"></span><span id="velocityIXDerivSent4"><span class="annot"><span class="annottext">velocityIXDerivSent4 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent4"><span class="hs-identifier hs-var hs-var">velocityIXDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;constant&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.wrt`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span>  </span><span class="annot"><span class="hs-string">&quot;time, so&quot;</span></span><span>
+</span><span id="line-67"></span><span id="velocityIXDerivSent5"><span class="annot"><span class="annottext">velocityIXDerivSent5 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXDerivSent5"><span class="hs-identifier hs-var hs-var">velocityIXDerivSent5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Therefore, using the chain rule,&quot;</span></span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-comment">---------------------</span><span>
+</span><span id="line-70"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYGD"><span class="hs-identifier hs-type">velocityIYGD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-71"></span><span id="velocityIYGD"><span class="annot"><span class="annottext">velocityIYGD :: GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYGD"><span class="hs-identifier hs-var hs-var">velocityIYGD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYQD"><span class="hs-identifier hs-var">velocityIYQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">)</span><span>
+</span><span id="line-72"></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDeriv"><span class="hs-identifier hs-var">velocityIYDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;velocityIY&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYQD"><span class="hs-identifier hs-type">velocityIYQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-75"></span><span id="velocityIYQD"><span class="annot"><span class="annottext">velocityIYQD :: QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYQD"><span class="hs-identifier hs-var hs-var">velocityIYQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">yVel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">yComp</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><span class="hs-operator hs-var">`NP.of_`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">velocity</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIYExpr"><span class="hs-identifier hs-var">E.velocityIYExpr</span></a></span><span>
+</span><span id="line-76"></span><span> </span><span>
+</span><span id="line-77"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDeriv"><span class="hs-identifier hs-type">velocityIYDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-78"></span><span id="velocityIYDeriv"><span class="annot"><span class="annottext">velocityIYDeriv :: Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDeriv"><span class="hs-identifier hs-var hs-var">velocityIYDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">yComp</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">velocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+forall a. [[a]] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSents"><span class="hs-identifier hs-var">velocityIYDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivEqns"><span class="hs-identifier hs-var">velocityIYDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-79"></span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSents"><span class="hs-identifier hs-type">velocityIYDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-81"></span><span id="velocityIYDerivSents"><span class="annot"><span class="annottext">velocityIYDerivSents :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSents"><span class="hs-identifier hs-var hs-var">velocityIYDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIDerivSent1"><span class="hs-identifier hs-var">velocityIDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent2"><span class="hs-identifier hs-var">velocityIYDerivSent2</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-82"></span><span>                        </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent3"><span class="hs-identifier hs-var">velocityIYDerivSent3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent4"><span class="hs-identifier hs-var">velocityIYDerivSent4</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-83"></span><span>                        </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent5"><span class="hs-identifier hs-var">velocityIYDerivSent5</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent5"><span class="hs-identifier hs-var">velocityIYDerivSent5</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-84"></span><span>
+</span><span id="line-85"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivEqns"><span class="hs-identifier hs-type">velocityIYDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-86"></span><span id="velocityIYDerivEqns"><span class="annot"><span class="annottext">velocityIYDerivEqns :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivEqns"><span class="hs-identifier hs-var hs-var">velocityIYDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIDerivEqn1"><span class="hs-identifier hs-var">E.velocityIDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIYDerivEqn2"><span class="hs-identifier hs-var">E.velocityIYDerivEqn2</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-87"></span><span>    </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIYDerivEqn3"><span class="hs-identifier hs-var">E.velocityIYDerivEqn3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#velocityIYDerivEqn4"><span class="hs-identifier hs-var">E.velocityIYDerivEqn4</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYQD"><span class="hs-identifier hs-var">velocityIYQD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-88"></span><span>
+</span><span id="line-89"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent2"><span class="hs-identifier hs-type">velocityIYDerivSent2</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent3"><span class="hs-identifier hs-type">velocityIYDerivSent3</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent4"><span class="hs-identifier hs-type">velocityIYDerivSent4</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent5"><span class="hs-identifier hs-type">velocityIYDerivSent5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-90"></span><span id="velocityIYDerivSent2"><span class="annot"><span class="annottext">velocityIYDerivSent2 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent2"><span class="hs-identifier hs-var hs-var">velocityIYDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;We also know the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">verticalPos</span></span><span>
+</span><span id="line-91"></span><span id="velocityIYDerivSent3"><span class="annot"><span class="annottext">velocityIYDerivSent3 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent3"><span class="hs-identifier hs-var hs-var">velocityIYDerivSent3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Applying this again,&quot;</span></span><span>
+</span><span id="line-92"></span><span id="velocityIYDerivSent4"><span class="annot"><span class="annottext">velocityIYDerivSent4 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent4"><span class="hs-identifier hs-var hs-var">velocityIYDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;constant&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.wrt`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;time, so&quot;</span></span><span>
+</span><span id="line-93"></span><span id="velocityIYDerivSent5"><span class="annot"><span class="annottext">velocityIYDerivSent5 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYDerivSent5"><span class="hs-identifier hs-var hs-var">velocityIYDerivSent5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Therefore, using the chain rule,&quot;</span></span><span>
+</span><span id="line-94"></span><span>
+</span><span id="line-95"></span><span class="hs-comment">-----------------------</span><span>
+</span><span id="line-96"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXGD"><span class="hs-identifier hs-type">accelerationIXGD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-97"></span><span id="accelerationIXGD"><span class="annot"><span class="annottext">accelerationIXGD :: GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXGD"><span class="hs-identifier hs-var hs-var">accelerationIXGD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXQD"><span class="hs-identifier hs-var">accelerationIXQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">)</span><span>
+</span><span id="line-98"></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDeriv"><span class="hs-identifier hs-var">accelerationIXDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;accelerationIX&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
+</span><span id="line-99"></span><span>
+</span><span id="line-100"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXQD"><span class="hs-identifier hs-type">accelerationIXQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-101"></span><span id="accelerationIXQD"><span class="annot"><span class="annottext">accelerationIXQD :: QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXQD"><span class="hs-identifier hs-var hs-var">accelerationIXQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">xAccel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">xComp</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><span class="hs-operator hs-var">`NP.of_`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-102"></span><span>    </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#accelerationIXExpr"><span class="hs-identifier hs-var">E.accelerationIXExpr</span></a></span><span>
+</span><span id="line-103"></span><span>
+</span><span id="line-104"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDeriv"><span class="hs-identifier hs-type">accelerationIXDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-105"></span><span id="accelerationIXDeriv"><span class="annot"><span class="annottext">accelerationIXDeriv :: Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDeriv"><span class="hs-identifier hs-var hs-var">accelerationIXDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">xComp</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+forall a. [[a]] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSents"><span class="hs-identifier hs-var">accelerationIXDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivEqns"><span class="hs-identifier hs-var">accelerationIXDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-106"></span><span>
+</span><span id="line-107"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSents"><span class="hs-identifier hs-type">accelerationIXDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-108"></span><span id="accelerationIXDerivSents"><span class="annot"><span class="annottext">accelerationIXDerivSents :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSents"><span class="hs-identifier hs-var hs-var">accelerationIXDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIDerivSent1"><span class="hs-identifier hs-var">accelerationIDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent2"><span class="hs-identifier hs-var">accelerationIXDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent3"><span class="hs-identifier hs-var">accelerationIXDerivSent3</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-109"></span><span>    </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent4"><span class="hs-identifier hs-var">accelerationIXDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent5"><span class="hs-identifier hs-var">accelerationIXDerivSent5</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-110"></span><span>
+</span><span id="line-111"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivEqns"><span class="hs-identifier hs-type">accelerationIXDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-112"></span><span id="accelerationIXDerivEqns"><span class="annot"><span class="annottext">accelerationIXDerivEqns :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivEqns"><span class="hs-identifier hs-var hs-var">accelerationIXDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#accelerationIDerivEqn1"><span class="hs-identifier hs-var">E.accelerationIDerivEqn1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXQD"><span class="hs-identifier hs-var">velocityIXQD</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span>
+</span><span id="line-113"></span><span>    </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#accelerationIXDerivEqn3"><span class="hs-identifier hs-var">E.accelerationIXDerivEqn3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#accelerationIXDerivEqn4"><span class="hs-identifier hs-var">E.accelerationIXDerivEqn4</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXQD"><span class="hs-identifier hs-var">accelerationIXQD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-114"></span><span>
+</span><span id="line-115"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIDerivSent1"><span class="hs-identifier hs-type">accelerationIDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent2"><span class="hs-identifier hs-type">accelerationIXDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent3"><span class="hs-identifier hs-type">accelerationIXDerivSent3</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-116"></span><span>     </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent4"><span class="hs-identifier hs-type">accelerationIXDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent5"><span class="hs-identifier hs-type">accelerationIXDerivSent5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-117"></span><span>
+</span><span id="line-118"></span><span id="accelerationIDerivSent1"><span class="annot"><span class="annottext">accelerationIDerivSent1 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIDerivSent1"><span class="hs-identifier hs-var hs-var">accelerationIDerivSent1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Our&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is&quot;</span></span><span>
+</span><span id="line-119"></span><span id="accelerationIXDerivSent2"><span class="annot"><span class="annottext">accelerationIXDerivSent2 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent2"><span class="hs-identifier hs-var hs-var">accelerationIXDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Earlier&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we found the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">horizontalVel</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to be&quot;</span></span><span>
+</span><span id="line-120"></span><span id="accelerationIXDerivSent3"><span class="annot"><span class="annottext">accelerationIXDerivSent3 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent3"><span class="hs-identifier hs-var hs-var">accelerationIXDerivSent3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Applying this to our equation for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span>
+</span><span id="line-121"></span><span id="accelerationIXDerivSent4"><span class="annot"><span class="annottext">accelerationIXDerivSent4 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent4"><span class="hs-identifier hs-var hs-var">accelerationIXDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;By the product and chain rules, we find&quot;</span></span><span>
+</span><span id="line-122"></span><span id="accelerationIXDerivSent5"><span class="annot"><span class="annottext">accelerationIXDerivSent5 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXDerivSent5"><span class="hs-identifier hs-var hs-var">accelerationIXDerivSent5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Simplifying,&quot;</span></span><span>
+</span><span id="line-123"></span><span>
+</span><span id="line-124"></span><span class="hs-comment">-----------------------</span><span>
+</span><span id="line-125"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYGD"><span class="hs-identifier hs-type">accelerationIYGD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-126"></span><span id="accelerationIYGD"><span class="annot"><span class="annottext">accelerationIYGD :: GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYGD"><span class="hs-identifier hs-var hs-var">accelerationIYGD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYQD"><span class="hs-identifier hs-var">accelerationIYQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">)</span><span>
+</span><span id="line-127"></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDeriv"><span class="hs-identifier hs-var">accelerationIYDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;accelerationIY&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
+</span><span id="line-128"></span><span>
+</span><span id="line-129"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYQD"><span class="hs-identifier hs-type">accelerationIYQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-130"></span><span id="accelerationIYQD"><span class="annot"><span class="annottext">accelerationIYQD :: QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYQD"><span class="hs-identifier hs-var hs-var">accelerationIYQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">yAccel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">yComp</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><span class="hs-operator hs-var">`NP.of_`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#accelerationIYExpr"><span class="hs-identifier hs-var">E.accelerationIYExpr</span></a></span><span>
+</span><span id="line-131"></span><span>
+</span><span id="line-132"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDeriv"><span class="hs-identifier hs-type">accelerationIYDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-133"></span><span id="accelerationIYDeriv"><span class="annot"><span class="annottext">accelerationIYDeriv :: Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDeriv"><span class="hs-identifier hs-var hs-var">accelerationIYDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">yComp</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+forall a. [[a]] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSents"><span class="hs-identifier hs-var">accelerationIYDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivEqns"><span class="hs-identifier hs-var">accelerationIYDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-134"></span><span>
+</span><span id="line-135"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSents"><span class="hs-identifier hs-type">accelerationIYDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-136"></span><span id="accelerationIYDerivSents"><span class="annot"><span class="annottext">accelerationIYDerivSents :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSents"><span class="hs-identifier hs-var hs-var">accelerationIYDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIDerivSent1"><span class="hs-identifier hs-var">accelerationIDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent2"><span class="hs-identifier hs-var">accelerationIYDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent3"><span class="hs-identifier hs-var">accelerationIYDerivSent3</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-137"></span><span>    </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent4"><span class="hs-identifier hs-var">accelerationIYDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent5"><span class="hs-identifier hs-var">accelerationIYDerivSent5</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-138"></span><span>
+</span><span id="line-139"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivEqns"><span class="hs-identifier hs-type">accelerationIYDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-140"></span><span id="accelerationIYDerivEqns"><span class="annot"><span class="annottext">accelerationIYDerivEqns :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivEqns"><span class="hs-identifier hs-var hs-var">accelerationIYDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#accelerationIDerivEqn1"><span class="hs-identifier hs-var">E.accelerationIDerivEqn1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYQD"><span class="hs-identifier hs-var">velocityIYQD</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span>
+</span><span id="line-141"></span><span>    </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#accelerationIYDerivEqn3"><span class="hs-identifier hs-var">E.accelerationIYDerivEqn3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#accelerationIYDerivEqn4"><span class="hs-identifier hs-var">E.accelerationIYDerivEqn4</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYQD"><span class="hs-identifier hs-var">accelerationIYQD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-142"></span><span>
+</span><span id="line-143"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent2"><span class="hs-identifier hs-type">accelerationIYDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent3"><span class="hs-identifier hs-type">accelerationIYDerivSent3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent4"><span class="hs-identifier hs-type">accelerationIYDerivSent4</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-144"></span><span>    </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent5"><span class="hs-identifier hs-type">accelerationIYDerivSent5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-145"></span><span id="accelerationIYDerivSent2"><span class="annot"><span class="annottext">accelerationIYDerivSent2 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent2"><span class="hs-identifier hs-var hs-var">accelerationIYDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Earlier&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we found the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">verticalVel</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to be&quot;</span></span><span>
+</span><span id="line-146"></span><span id="accelerationIYDerivSent3"><span class="annot"><span class="annottext">accelerationIYDerivSent3 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent3"><span class="hs-identifier hs-var hs-var">accelerationIYDerivSent3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Applying this to our equation for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span>
+</span><span id="line-147"></span><span id="accelerationIYDerivSent4"><span class="annot"><span class="annottext">accelerationIYDerivSent4 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent4"><span class="hs-identifier hs-var hs-var">accelerationIYDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;By the product and chain rules, we find&quot;</span></span><span>
+</span><span id="line-148"></span><span id="accelerationIYDerivSent5"><span class="annot"><span class="annottext">accelerationIYDerivSent5 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYDerivSent5"><span class="hs-identifier hs-var hs-var">accelerationIYDerivSent5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Simplifying,&quot;</span></span><span>
+</span><span id="line-149"></span><span>
+</span><span id="line-150"></span><span class="hs-comment">-------------------------------------Horizontal force acting on the pendulum </span><span>
+</span><span id="line-151"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumGD"><span class="hs-identifier hs-type">hForceOnPendulumGD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-152"></span><span id="hForceOnPendulumGD"><span class="annot"><span class="annottext">hForceOnPendulumGD :: GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumGD"><span class="hs-identifier hs-var hs-var">hForceOnPendulumGD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MultiDefn -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalRealmU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hForceOnPendulum&quot;</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumMD"><span class="hs-identifier hs-var">hForceOnPendulumMD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-153"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumDeriv"><span class="hs-identifier hs-var">hForceOnPendulumDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;hForceOnPendulum&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
+</span><span id="line-154"></span><span>
+</span><span id="line-155"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumMD"><span class="hs-identifier hs-type">hForceOnPendulumMD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span>
+</span><span id="line-156"></span><span id="hForceOnPendulumMD"><span class="annot"><span class="annottext">hForceOnPendulumMD :: MultiDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumMD"><span class="hs-identifier hs-var hs-var">hForceOnPendulumMD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
+</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="#local-6989586621679086490"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
+</span><a href="#local-6989586621679086488"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-157"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086490"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679086490"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; Maybe String
+-&gt; Space
+-&gt; (Stage -&gt; Symbol)
+-&gt; Maybe UnitDefn
+-&gt; QuantityDict
+</span><span class="hs-identifier hs-var">mkQuant'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">horizontalForce</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span>
+</span><span id="line-158"></span><span>                    </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
+</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
+</span><span id="line-159"></span><span>          </span><span id="local-6989586621679086488"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679086488"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+forall a. [a] -&gt; NonEmpty a
+</span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-160"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
+</span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hForceOnPendulumViaComponent&quot;</span></span><span>
+</span><span id="line-161"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#hForceOnPendulumViaComponent"><span class="hs-identifier hs-var">E.hForceOnPendulumViaComponent</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-162"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
+</span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hForceOnPendulumViaAngle&quot;</span></span><span>
+</span><span id="line-163"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#hForceOnPendulumViaAngle"><span class="hs-identifier hs-var">E.hForceOnPendulumViaAngle</span></a></span><span>
+</span><span id="line-164"></span><span>                  </span><span class="hs-special">]</span><span>
+</span><span id="line-165"></span><span>
+</span><span id="line-166"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumDeriv"><span class="hs-identifier hs-type">hForceOnPendulumDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-167"></span><span id="hForceOnPendulumDeriv"><span class="annot"><span class="annottext">hForceOnPendulumDeriv :: Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumDeriv"><span class="hs-identifier hs-var hs-var">hForceOnPendulumDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MultiDefn -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumMD"><span class="hs-identifier hs-var">hForceOnPendulumMD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-168"></span><span>
+</span><span id="line-169"></span><span class="hs-comment">----------------------------------------Vertical force acting on the pendulum </span><span>
+</span><span id="line-170"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumGD"><span class="hs-identifier hs-type">vForceOnPendulumGD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-171"></span><span id="vForceOnPendulumGD"><span class="annot"><span class="annottext">vForceOnPendulumGD :: GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumGD"><span class="hs-identifier hs-var hs-var">vForceOnPendulumGD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MultiDefn -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalRealmU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;vForceOnPendulum&quot;</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumMD"><span class="hs-identifier hs-var">vForceOnPendulumMD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-172"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumDeriv"><span class="hs-identifier hs-var">vForceOnPendulumDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;vForceOnPendulum&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
+</span><span id="line-173"></span><span>
+</span><span id="line-174"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumMD"><span class="hs-identifier hs-type">vForceOnPendulumMD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span>
+</span><span id="line-175"></span><span id="vForceOnPendulumMD"><span class="annot"><span class="annottext">vForceOnPendulumMD :: MultiDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumMD"><span class="hs-identifier hs-var hs-var">vForceOnPendulumMD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
+</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="#local-6989586621679086478"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
+</span><a href="#local-6989586621679086477"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-176"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086478"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679086478"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; Maybe String
+-&gt; Space
+-&gt; (Stage -&gt; Symbol)
+-&gt; Maybe UnitDefn
+-&gt; QuantityDict
+</span><span class="hs-identifier hs-var">mkQuant'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">verticalForce</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span>
+</span><span id="line-177"></span><span>                    </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
+</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
+</span><span id="line-178"></span><span>          </span><span id="local-6989586621679086477"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679086477"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+forall a. [a] -&gt; NonEmpty a
+</span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-179"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
+</span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;vForceOnPendulumViaComponent&quot;</span></span><span>
+</span><span id="line-180"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#vForceOnPendulumViaComponent"><span class="hs-identifier hs-var">E.vForceOnPendulumViaComponent</span></a></span><span> </span><span class="hs-special">,</span><span>
+</span><span id="line-181"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
+</span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;vForceOnPendulumViaAngle&quot;</span></span><span>    </span><span>
+</span><span id="line-182"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#vForceOnPendulumViaAngle"><span class="hs-identifier hs-var">E.vForceOnPendulumViaAngle</span></a></span><span>
+</span><span id="line-183"></span><span>                  </span><span class="hs-special">]</span><span>
+</span><span id="line-184"></span><span>
+</span><span id="line-185"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumDeriv"><span class="hs-identifier hs-type">vForceOnPendulumDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-186"></span><span id="vForceOnPendulumDeriv"><span class="annot"><span class="annottext">vForceOnPendulumDeriv :: Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumDeriv"><span class="hs-identifier hs-var hs-var">vForceOnPendulumDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MultiDefn -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumMD"><span class="hs-identifier hs-var">vForceOnPendulumMD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-187"></span><span>
+</span><span id="line-188"></span><span class="hs-comment">--------------------------------------Angular Frequency Of Pendulum</span><span>
+</span><span id="line-189"></span><span>
+</span><span id="line-190"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyGD"><span class="hs-identifier hs-type">angFrequencyGD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-191"></span><span id="angFrequencyGD"><span class="annot"><span class="annottext">angFrequencyGD :: GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyGD"><span class="hs-identifier hs-var hs-var">angFrequencyGD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;angFrequencyGD&quot;</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyQD"><span class="hs-identifier hs-var">angFrequencyQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularFrequency</span></span><span class="hs-special">)</span><span>
+</span><span id="line-192"></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDeriv"><span class="hs-identifier hs-var">angFrequencyDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;angFrequencyGD&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyGDNotes"><span class="hs-identifier hs-var">angFrequencyGDNotes</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-193"></span><span>
+</span><span id="line-194"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyQD"><span class="hs-identifier hs-type">angFrequencyQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-195"></span><span id="angFrequencyQD"><span class="annot"><span class="annottext">angFrequencyQD :: QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyQD"><span class="hs-identifier hs-var hs-var">angFrequencyQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularFrequency</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularFrequency</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#angFrequencyExpr"><span class="hs-identifier hs-var">E.angFrequencyExpr</span></a></span><span>
+</span><span id="line-196"></span><span>
+</span><span id="line-197"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDeriv"><span class="hs-identifier hs-type">angFrequencyDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-198"></span><span id="angFrequencyDeriv"><span class="annot"><span class="annottext">angFrequencyDeriv :: Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDeriv"><span class="hs-identifier hs-var hs-var">angFrequencyDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularFrequency</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+forall a. [[a]] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSents"><span class="hs-identifier hs-var">angFrequencyDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="Drasil.SglPendulum.Expressions.html#angFrequencyDerivEqns"><span class="hs-identifier hs-var">E.angFrequencyDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-199"></span><span>
+</span><span id="line-200"></span><span>
+</span><span id="line-201"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSents"><span class="hs-identifier hs-type">angFrequencyDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-202"></span><span id="angFrequencyDerivSents"><span class="annot"><span class="annottext">angFrequencyDerivSents :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSents"><span class="hs-identifier hs-var hs-var">angFrequencyDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent1"><span class="hs-identifier hs-var">angFrequencyDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent2"><span class="hs-identifier hs-var">angFrequencyDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent3"><span class="hs-identifier hs-var">angFrequencyDerivSent3</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-203"></span><span>                      </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent4"><span class="hs-identifier hs-var">angFrequencyDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent5"><span class="hs-identifier hs-var">angFrequencyDerivSent5</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent6"><span class="hs-identifier hs-var">angFrequencyDerivSent6</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent7"><span class="hs-identifier hs-var">angFrequencyDerivSent7</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-204"></span><span>
+</span><span id="line-205"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent1"><span class="hs-identifier hs-type">angFrequencyDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent2"><span class="hs-identifier hs-type">angFrequencyDerivSent2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent3"><span class="hs-identifier hs-type">angFrequencyDerivSent3</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-206"></span><span>     </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent4"><span class="hs-identifier hs-type">angFrequencyDerivSent4</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent5"><span class="hs-identifier hs-type">angFrequencyDerivSent5</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent6"><span class="hs-identifier hs-type">angFrequencyDerivSent6</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent7"><span class="hs-identifier hs-type">angFrequencyDerivSent7</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-207"></span><span id="angFrequencyDerivSent1"><span class="annot"><span class="annottext">angFrequencyDerivSent1 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent1"><span class="hs-identifier hs-var hs-var">angFrequencyDerivSent1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Consider the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">torque</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;on a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">definedIn''</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><span class="hs-identifier hs-var">newtonSLR</span></span><span class="hs-special">,</span><span>
+</span><span id="line-208"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;providing the restoring&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">torque</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">component</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><span class="hs-operator hs-var">`NP.of_`</span></span><span>
+</span><span id="line-209"></span><span>                  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">weight</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;bob that acts along the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">arcLen</span></span><span class="hs-special">,</span><span>
+</span><span id="line-210"></span><span>                  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">torque</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.isThe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">len</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.the_ofTheC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;string&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;multiplied by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">component</span></span><span>
+</span><span id="line-211"></span><span>                  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;net&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;that is perpendicular to&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;radius&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.the_ofThe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;arc&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-212"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The minus sign indicates the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">torque</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;acts in the opposite&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">direction</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularDisplacement</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-213"></span><span id="angFrequencyDerivSent2"><span class="annot"><span class="annottext">angFrequencyDerivSent2 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent2"><span class="hs-identifier hs-var hs-var">angFrequencyDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;So then&quot;</span></span><span>
+</span><span id="line-214"></span><span id="angFrequencyDerivSent3"><span class="annot"><span class="annottext">angFrequencyDerivSent3 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent3"><span class="hs-identifier hs-var hs-var">angFrequencyDerivSent3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Therefore,&quot;</span></span><span>
+</span><span id="line-215"></span><span id="angFrequencyDerivSent4"><span class="annot"><span class="annottext">angFrequencyDerivSent4 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent4"><span class="hs-identifier hs-var hs-var">angFrequencyDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Substituting for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">momentOfInertia</span></span><span>
+</span><span id="line-216"></span><span id="angFrequencyDerivSent5"><span class="annot"><span class="annottext">angFrequencyDerivSent5 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent5"><span class="hs-identifier hs-var hs-var">angFrequencyDerivSent5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Crossing out&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">mass</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we have&quot;</span></span><span>
+</span><span id="line-217"></span><span id="angFrequencyDerivSent6"><span class="annot"><span class="annottext">angFrequencyDerivSent6 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent6"><span class="hs-identifier hs-var hs-var">angFrequencyDerivSent6</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;For small&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">angle</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we approximate&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;sin&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span>
+</span><span id="line-218"></span><span id="angFrequencyDerivSent7"><span class="annot"><span class="annottext">angFrequencyDerivSent7 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyDerivSent7"><span class="hs-identifier hs-var hs-var">angFrequencyDerivSent7</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Because this&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">equation</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;has the same form as the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">equation</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`for`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">shm</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span>
+</span><span id="line-219"></span><span>                        </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the solution is easy to find&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot; The&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularFrequency</span></span><span>
+</span><span id="line-220"></span><span>
+</span><span id="line-221"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyGDNotes"><span class="hs-identifier hs-type">angFrequencyGDNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-222"></span><span id="angFrequencyGDNotes"><span class="annot"><span class="annottext">angFrequencyGDNotes :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyGDNotes"><span class="hs-identifier hs-var hs-var">angFrequencyGDNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">torque</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">definedIn''</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><span class="hs-identifier hs-var">newtonSLR</span></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">frequency</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall r.
+(Referable r, HasShortName r, HasSymbol r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">definedIn</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SglPendulum.DataDefs.html#frequencyDD"><span class="hs-identifier hs-var">frequencyDD</span></a></span><span>
+</span><span id="line-223"></span><span>
+</span><span id="line-224"></span><span> </span><span class="hs-comment">-------------------------------- Period of Pendulum Motion </span><span>
+</span><span id="line-225"></span><span>
+</span><span id="line-226"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#periodPend"><span class="hs-identifier hs-type">periodPend</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-227"></span><span id="periodPend"><span class="annot"><span class="annottext">periodPend :: GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPend"><span class="hs-identifier hs-var hs-var">periodPend</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;periodPendGD&quot;</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendQD"><span class="hs-identifier hs-var">periodPendQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">period</span></span><span class="hs-special">)</span><span>
+</span><span id="line-228"></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendDeriv"><span class="hs-identifier hs-var">periodPendDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;periodPend&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendNotes"><span class="hs-identifier hs-var">periodPendNotes</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-229"></span><span>
+</span><span id="line-230"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#periodPendQD"><span class="hs-identifier hs-type">periodPendQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-231"></span><span id="periodPendQD"><span class="annot"><span class="annottext">periodPendQD :: QDefinition
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendQD"><span class="hs-identifier hs-var hs-var">periodPendQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">period</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">period</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SglPendulum.Expressions.html#periodPendExpr"><span class="hs-identifier hs-var">E.periodPendExpr</span></a></span><span>
+</span><span id="line-232"></span><span>
+</span><span id="line-233"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#periodPendDeriv"><span class="hs-identifier hs-type">periodPendDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-234"></span><span id="periodPendDeriv"><span class="annot"><span class="annottext">periodPendDeriv :: Derivation
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendDeriv"><span class="hs-identifier hs-var hs-var">periodPendDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">period</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+forall a. [[a]] -&gt; [a]
+</span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSents"><span class="hs-identifier hs-var">periodPendDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="Drasil.SglPendulum.Expressions.html#periodPendDerivEqns"><span class="hs-identifier hs-var">E.periodPendDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-235"></span><span>
+</span><span id="line-236"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSents"><span class="hs-identifier hs-type">periodPendDerivSents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-237"></span><span id="periodPendDerivSents"><span class="annot"><span class="annottext">periodPendDerivSents :: [Sentence]
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSents"><span class="hs-identifier hs-var hs-var">periodPendDerivSents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSent1"><span class="hs-identifier hs-var">periodPendDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSent2"><span class="hs-identifier hs-var">periodPendDerivSent2</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-238"></span><span>
+</span><span id="line-239"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSent1"><span class="hs-identifier hs-type">periodPendDerivSent1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSent2"><span class="hs-identifier hs-type">periodPendDerivSent2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-240"></span><span id="periodPendDerivSent1"><span class="annot"><span class="annottext">periodPendDerivSent1 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSent1"><span class="hs-identifier hs-var hs-var">periodPendDerivSent1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">period</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;can be defined from the general definition for the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">equation</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span>
+</span><span id="line-241"></span><span>                </span><span class="annot"><span class="annottext">GenDefn -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyGD"><span class="hs-identifier hs-var">angFrequencyGD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SglPendulum.DataDefs.html#angFrequencyDD"><span class="hs-identifier hs-var">angFrequencyDD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-242"></span><span id="periodPendDerivSent2"><span class="annot"><span class="annottext">periodPendDerivSent2 :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendDerivSent2"><span class="hs-identifier hs-var hs-var">periodPendDerivSent2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Therefore from the data definition of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">equation</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.for`</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SglPendulum.DataDefs.html#angFrequencyDD"><span class="hs-identifier hs-var">angFrequencyDD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SglPendulum.DataDefs.html#angFrequencyDD"><span class="hs-identifier hs-var">angFrequencyDD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we have&quot;</span></span><span>
+</span><span id="line-243"></span><span>
+</span><span id="line-244"></span><span class="annot"><a href="Drasil.SglPendulum.GenDefs.html#periodPendNotes"><span class="hs-identifier hs-type">periodPendNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-245"></span><span id="periodPendNotes"><span class="annot"><span class="annottext">periodPendNotes :: Sentence
+</span><a href="Drasil.SglPendulum.GenDefs.html#periodPendNotes"><span class="hs-identifier hs-var hs-var">periodPendNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">frequency</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">period</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;are defined in the data definitions for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SglPendulum.DataDefs.html#frequencyDD"><span class="hs-identifier hs-var">frequencyDD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SglPendulum.DataDefs.html#frequencyDD"><span class="hs-identifier hs-var">frequencyDD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span>
+</span><span id="line-246"></span><span>        </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SglPendulum.DataDefs.html#periodSHMDD"><span class="hs-identifier hs-var">periodSHMDD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SglPendulum.DataDefs.html#periodSHMDD"><span class="hs-identifier hs-var">periodSHMDD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;respectively&quot;</span></span><span>
+</span><span id="line-247"></span></pre></body></html>

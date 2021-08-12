@@ -1,8 +1,4 @@
 digraph symbol{
 Symbol -> String;
-Symbol -> Int;
-Symbol -> Special;
-Symbol -> Decoration;
-Symbol -> Symbol;
 Symbol	[shape=oval, color=darkviolet, label="Symbol"];
 }

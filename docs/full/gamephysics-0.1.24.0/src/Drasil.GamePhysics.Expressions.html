@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GamePhysics.Expressions</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html"><span class="hs-identifier">Drasil.GamePhysics.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier">massj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#velj"><span class="hs-identifier">velj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#torquej"><span class="hs-identifier">torquej</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#forcej"><span class="hs-identifier">forcej</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#angAccj"><span class="hs-identifier">angAccj</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-7"></span><span>    </span><span class="annot"><span class="hs-identifier">gravitationalAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">angularVelocity</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="annot"><a href="Drasil.GamePhysics.Expressions.html#transMotExpr"><span class="hs-identifier hs-type">transMotExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-10"></span><span id="transMotExpr"><span class="annot"><span class="annottext">transMotExpr :: Expr
+</span><a href="Drasil.GamePhysics.Expressions.html#transMotExpr"><span class="hs-identifier hs-var hs-var">transMotExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Expr
+forall f a.
+(HasUID f, HasSymbol f, HasUID a, HasSymbol a) =&gt;
+f -&gt; a -&gt; Expr
+</span><span class="hs-identifier hs-var">apply1</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#forcej"><span class="hs-identifier hs-var">forcej</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier hs-var">massj</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Drasil.GamePhysics.Expressions.html#transMotExprDeriv1"><span class="hs-identifier hs-type">transMotExprDeriv1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DisplayExpr</span></span><span>
+</span><span id="line-13"></span><span id="transMotExprDeriv1"><span class="annot"><span class="annottext">transMotExprDeriv1 :: DisplayExpr
+</span><a href="Drasil.GamePhysics.Expressions.html#transMotExprDeriv1"><span class="hs-identifier hs-var hs-var">transMotExprDeriv1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; DisplayExpr
+forall a b. (Display a, Display b) =&gt; a -&gt; b -&gt; DisplayExpr
+</span><span class="hs-identifier hs-var">defines</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#angAccj"><span class="hs-identifier hs-var">angAccj</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; DisplayExpr) -&gt; Expr -&gt; DisplayExpr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; Expr -&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Expr
+forall f a.
+(HasUID f, HasSymbol f, HasUID a, HasSymbol a) =&gt;
+f -&gt; a -&gt; Expr
+</span><span class="hs-identifier hs-var">apply1</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#velj"><span class="hs-identifier hs-var">velj</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><a href="Drasil.GamePhysics.Expressions.html#rotMotExpr"><span class="hs-identifier hs-type">rotMotExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-16"></span><span id="rotMotExpr"><span class="annot"><span class="annottext">rotMotExpr :: Expr
+</span><a href="Drasil.GamePhysics.Expressions.html#rotMotExpr"><span class="hs-identifier hs-var hs-var">rotMotExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Expr
+forall f a.
+(HasUID f, HasSymbol f, HasUID a, HasSymbol a) =&gt;
+f -&gt; a -&gt; Expr
+</span><span class="hs-identifier hs-var">apply1</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#torquej"><span class="hs-identifier hs-var">torquej</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">momentOfInertia</span></span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Drasil.GamePhysics.Expressions.html#rotMotExprDeriv1"><span class="hs-identifier hs-type">rotMotExprDeriv1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DisplayExpr</span></span><span>
+</span><span id="line-19"></span><span id="rotMotExprDeriv1"><span class="annot"><span class="annottext">rotMotExprDeriv1 :: DisplayExpr
+</span><a href="Drasil.GamePhysics.Expressions.html#rotMotExprDeriv1"><span class="hs-identifier hs-var hs-var">rotMotExprDeriv1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; DisplayExpr
+forall a b. (Display a, Display b) =&gt; a -&gt; b -&gt; DisplayExpr
+</span><span class="hs-identifier hs-var">defines</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#angAccj"><span class="hs-identifier hs-var">angAccj</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; DisplayExpr) -&gt; Expr -&gt; DisplayExpr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; Expr -&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Expr
+forall f a.
+(HasUID f, HasSymbol f, HasUID a, HasSymbol a) =&gt;
+f -&gt; a -&gt; Expr
+</span><span class="hs-identifier hs-var">apply1</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularVelocity</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span>
+</span><span id="line-20"></span></pre></body></html>

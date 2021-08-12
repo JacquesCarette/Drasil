@@ -328,16 +328,20 @@ precA :: AssocArithOper -> Int
 --   (Commutative) operators.
 precB :: AssocBoolOper -> Int
 
--- | Render an algebraic expression into our code expression language
+-- | Render an algebraic expression into our code expression language.
 expr :: Expr -> CodeExpr
 
--- | Convert 'RealInterval Expr Expr's into 'RealInterval CodeExpr
---   CodeExpr's.
+-- | Convert <tt>RealInterval</tt> <tt>Expr</tt> <tt>Expr</tt>s into
+--   <tt>RealInterval</tt> <a>CodeExpr</a> <a>CodeExpr</a>s.
 realInterval :: RealInterval Expr Expr -> RealInterval CodeExpr CodeExpr
 
--- | Convert 'Constraint Expr's into 'Constraint CodeExpr's.
+-- | Convert constrained expressions (<tt>ConstraintE</tt>) into
+--   <tt>Constraint''CodeExpr</tt>s.
 constraint :: ConstraintE -> Constraint CodeExpr
 
+
+-- | Defines constructors for <a>CodeExpr</a>s often used in relation to
+--   code generation.
 module Language.Drasil.CodeExpr
 
 -- | A one-to-one clone of Expr, with extra OO/code-related functionality.
@@ -421,38 +425,6 @@ norm :: CodeExpr -> CodeExpr
 -- | Smart constructor for applying logical negation to an expression.
 not_ :: CodeExpr -> CodeExpr
 
--- | Constructs a CodeExpr for actor creation (constructor call)
-new :: (Callable f, HasUID f, CodeIdea f) => f -> [CodeExpr] -> CodeExpr
-
--- | Constructs a CodeExpr for actor creation (constructor call) that uses
---   named arguments
-newWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID a, IsArgumentName a) => f -> [CodeExpr] -> [(a, CodeExpr)] -> CodeExpr
-
--- | Constructs a CodeExpr for actor messaging (method call)
-message :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c) => c -> f -> [CodeExpr] -> CodeExpr
-
--- | Constructs a CodeExpr for actor messaging (method call) that uses
---   named arguments
-msgWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c, HasUID a, IsArgumentName a) => c -> f -> [CodeExpr] -> [(a, CodeExpr)] -> CodeExpr
-
--- | Constructs a CodeExpr representing the field of an actor
-field :: CodeVarChunk -> CodeVarChunk -> CodeExpr
-
--- | Applies a given function with a list of parameters.
-apply :: (HasUID f, HasSymbol f) => f -> [CodeExpr] -> CodeExpr
-
--- | Similar to <a>apply</a>, but converts second argument into
---   <tt>Symbol</tt>s.
-apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> CodeExpr
-
--- | Similar to <a>apply</a>, but the applied function takes two parameters
---   (which are both <tt>Symbol</tt>s).
-apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> CodeExpr
-
--- | Similar to <a>apply</a>, but takes a relation to apply to
---   <a>FCall</a>.
-applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [CodeExpr] -> [(a, CodeExpr)] -> CodeExpr
-
 -- | Smart constructor for the boolean <i>and</i> operator.
 ($&&) :: CodeExpr -> CodeExpr -> CodeExpr
 
@@ -507,5 +479,37 @@ mulRe :: CodeExpr -> CodeExpr -> CodeExpr
 -- | Smart constructor for indexing.
 idx :: CodeExpr -> CodeExpr -> CodeExpr
 
--- | Render an algebraic expression into our code expression language
+-- | Constructs a CodeExpr for actor creation (constructor call)
+new :: (Callable f, HasUID f, CodeIdea f) => f -> [CodeExpr] -> CodeExpr
+
+-- | Constructs a CodeExpr for actor creation (constructor call) that uses
+--   named arguments
+newWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID a, IsArgumentName a) => f -> [CodeExpr] -> [(a, CodeExpr)] -> CodeExpr
+
+-- | Constructs a CodeExpr for actor messaging (method call)
+message :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c) => c -> f -> [CodeExpr] -> CodeExpr
+
+-- | Constructs a CodeExpr for actor messaging (method call) that uses
+--   named arguments
+msgWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c, HasUID a, IsArgumentName a) => c -> f -> [CodeExpr] -> [(a, CodeExpr)] -> CodeExpr
+
+-- | Constructs a CodeExpr representing the field of an actor
+field :: CodeVarChunk -> CodeVarChunk -> CodeExpr
+
+-- | Applies a given function with a list of parameters.
+apply :: (HasUID f, HasSymbol f) => f -> [CodeExpr] -> CodeExpr
+
+-- | Similar to <a>apply</a>, but converts second argument into
+--   <tt>Symbol</tt>s.
+apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> CodeExpr
+
+-- | Similar to <a>apply</a>, but the applied function takes two parameters
+--   (which are both <tt>Symbol</tt>s).
+apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> CodeExpr
+
+-- | Similar to <a>apply</a>, but takes a relation to apply to
+--   <a>FCall</a>.
+applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [CodeExpr] -> [(a, CodeExpr)] -> CodeExpr
+
+-- | Render an algebraic expression into our code expression language.
 expr :: Expr -> CodeExpr

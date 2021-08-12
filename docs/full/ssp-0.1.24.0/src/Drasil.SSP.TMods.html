@@ -1,0 +1,525 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SSP.TMods</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.TMods.html#tMods"><span class="hs-identifier">tMods</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.TMods.html#factOfSafety"><span class="hs-identifier">factOfSafety</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.TMods.html#equilibrium"><span class="hs-identifier">equilibrium</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.TMods.html#mcShrStrgth"><span class="hs-identifier">mcShrStrgth</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.TMods.html#effStress"><span class="hs-identifier">effStress</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-3"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">tan</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.List.NonEmpty</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NE</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">distance</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">force</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">model</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">friction</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">linear</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Theories.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSL</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html"><span class="hs-identifier">Drasil.SSP.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpENSL"><span class="hs-identifier">assumpENSL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Assumptions.html#assumpSBSBISL"><span class="hs-identifier">assumpSBSBISL</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html"><span class="hs-identifier">Drasil.SSP.Defs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Defs.html#factorOfSafety"><span class="hs-identifier">factorOfSafety</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.References.html"><span class="hs-identifier">Drasil.SSP.References</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.References.html#fredlund1977"><span class="hs-identifier">fredlund1977</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html"><span class="hs-identifier">Drasil.SSP.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier">effCohesion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier">effNormStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#effectiveStress"><span class="hs-identifier">effectiveStress</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-25"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#fricAngle"><span class="hs-identifier">fricAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#fs"><span class="hs-identifier">fs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#fx"><span class="hs-identifier">fx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#fy"><span class="hs-identifier">fy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#genericM"><span class="hs-identifier">genericM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#mobilizedShear"><span class="hs-identifier">mobilizedShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#nrmFSubWat"><span class="hs-identifier">nrmFSubWat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#porePressure"><span class="hs-identifier">porePressure</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#resistiveShear"><span class="hs-identifier">resistiveShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier">shrStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#totNormStress"><span class="hs-identifier">totNormStress</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.DataDefs.html"><span class="hs-identifier">Drasil.SSP.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.DataDefs.html#normStressDD"><span class="hs-identifier">normStressDD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="hs-comment">--------------------------</span><span>
+</span><span id="line-30"></span><span class="hs-comment">--  Theoretical Models  --</span><span>
+</span><span id="line-31"></span><span class="hs-comment">--------------------------</span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Drasil.SSP.TMods.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-33"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
+</span><a href="Drasil.SSP.TMods.html#tMods"><span class="hs-identifier hs-var hs-var">tMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.SSP.TMods.html#factOfSafety"><span class="hs-identifier hs-var">factOfSafety</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.SSP.TMods.html#equilibrium"><span class="hs-identifier hs-var">equilibrium</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgth"><span class="hs-identifier hs-var">mcShrStrgth</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.SSP.TMods.html#effStress"><span class="hs-identifier hs-var">effStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><span class="hs-identifier hs-var">newtonSL</span></span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="hs-comment">------------- New Chunk -----------</span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Drasil.SSP.TMods.html#factOfSafety"><span class="hs-identifier hs-type">factOfSafety</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
+</span><span id="line-37"></span><span id="factOfSafety"><span class="annot"><span class="annottext">factOfSafety :: TheoryModel
+</span><a href="Drasil.SSP.TMods.html#factOfSafety"><span class="hs-identifier hs-var hs-var">factOfSafety</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; [QuantityDict]
+-&gt; [ConceptChunk]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+forall q c.
+(Quantity q, MayHaveUnit q, Concept c) =&gt;
+ModelKind
+-&gt; [q]
+-&gt; [c]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;factOfSafetyTM&quot;</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SSP.TMods.html#factOfSafetyQD"><span class="hs-identifier hs-var">factOfSafetyQD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-38"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.SSP.Unitals.html#fs"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#resistiveShear"><span class="hs-identifier hs-var">resistiveShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#mobilizedShear"><span class="hs-identifier hs-var">mobilizedShear</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-39"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SSP.TMods.html#factOfSafetyQD"><span class="hs-identifier hs-var">factOfSafetyQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; DecRef
+</span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#fredlund1977"><span class="hs-identifier hs-var">fredlund1977</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;factOfSafety&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="hs-comment">------------------------------------</span><span>
+</span><span id="line-42"></span><span class="annot"><a href="Drasil.SSP.TMods.html#factOfSafetyQD"><span class="hs-identifier hs-type">factOfSafetyQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-43"></span><span id="factOfSafetyQD"><span class="annot"><span class="annottext">factOfSafetyQD :: QDefinition
+</span><a href="Drasil.SSP.TMods.html#factOfSafetyQD"><span class="hs-identifier hs-var hs-var">factOfSafetyQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.SSP.Unitals.html#fs"><span class="hs-identifier hs-var">fs</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="Drasil.SSP.Defs.html#factorOfSafety"><span class="hs-identifier hs-var">factorOfSafety</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SSP.TMods.html#factOfSafetyExpr"><span class="hs-identifier hs-var">factOfSafetyExpr</span></a></span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Drasil.SSP.TMods.html#factOfSafetyExpr"><span class="hs-identifier hs-type">factOfSafetyExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-46"></span><span id="factOfSafetyExpr"><span class="annot"><span class="annottext">factOfSafetyExpr :: Expr
+</span><a href="Drasil.SSP.TMods.html#factOfSafetyExpr"><span class="hs-identifier hs-var hs-var">factOfSafetyExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#resistiveShear"><span class="hs-identifier hs-var">resistiveShear</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#mobilizedShear"><span class="hs-identifier hs-var">mobilizedShear</span></a></span><span>
+</span><span id="line-47"></span><span>
+</span><span id="line-48"></span><span class="hs-comment">--</span><span>
+</span><span id="line-49"></span><span class="hs-comment">------------- New Chunk -----------</span><span>
+</span><span id="line-50"></span><span class="annot"><a href="Drasil.SSP.TMods.html#equilibrium"><span class="hs-identifier hs-type">equilibrium</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
+</span><span id="line-51"></span><span id="equilibrium"><span class="annot"><span class="annottext">equilibrium :: TheoryModel
+</span><a href="Drasil.SSP.TMods.html#equilibrium"><span class="hs-identifier hs-var hs-var">equilibrium</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; [QuantityDict]
+-&gt; [ConceptChunk]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+forall q c.
+(Quantity q, MayHaveUnit q, Concept c) =&gt;
+ModelKind
+-&gt; [q]
+-&gt; [c]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstraintSet -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalConstraints'</span></span><span> </span><span class="annot"><span class="annottext">ConstraintSet
+</span><a href="Drasil.SSP.TMods.html#equilibriumCS"><span class="hs-identifier hs-var">equilibriumCS</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-52"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#fx"><span class="hs-identifier hs-var">fx</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-53"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Expr -&gt; DisplayExpr) -&gt; [Expr] -&gt; [DisplayExpr]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; DisplayExpr
+forall c. Display c =&gt; c -&gt; DisplayExpr
+</span><span class="hs-identifier hs-var">toDispExpr</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="Drasil.SSP.TMods.html#equilibriumRels"><span class="hs-identifier hs-var">equilibriumRels</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; DecRef
+</span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#fredlund1977"><span class="hs-identifier hs-var">fredlund1977</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;equilibrium&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.TMods.html#eqDesc"><span class="hs-identifier hs-var">eqDesc</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="hs-comment">------------------------------------  </span><span>
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Drasil.SSP.TMods.html#equilibriumRels"><span class="hs-identifier hs-type">equilibriumRels</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-58"></span><span id="equilibriumRels"><span class="annot"><span class="annottext">equilibriumRels :: [Expr]
+</span><a href="Drasil.SSP.TMods.html#equilibriumRels"><span class="hs-identifier hs-var hs-var">equilibriumRels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; Expr) -&gt; [UnitalChunk] -&gt; [Expr]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; (UnitalChunk -&gt; Expr) -&gt; UnitalChunk -&gt; Expr
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">sumAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;i&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; (UnitalChunk -&gt; Expr) -&gt; UnitalChunk -&gt; Expr
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#fx"><span class="hs-identifier hs-var">fx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#fy"><span class="hs-identifier hs-var">fy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#genericM"><span class="hs-identifier hs-var">genericM</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="hs-comment">-- FIXME: variable &quot;i&quot; is a hack.  But we need to sum over something!</span><span>
+</span><span id="line-61"></span><span class="annot"><a href="Drasil.SSP.TMods.html#equilibriumCS"><span class="hs-identifier hs-type">equilibriumCS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstraintSet</span></span><span>
+</span><span id="line-62"></span><span id="equilibriumCS"><span class="annot"><span class="annottext">equilibriumCS :: ConstraintSet
+</span><a href="Drasil.SSP.TMods.html#equilibriumCS"><span class="hs-identifier hs-var hs-var">equilibriumCS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; NonEmpty Expr -&gt; ConstraintSet
+</span><span class="hs-identifier hs-var">mkConstraintSet</span></span><span>
+</span><span id="line-63"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;equilibriumCS&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;equilibrium&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.TMods.html#eqDesc"><span class="hs-identifier hs-var">eqDesc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(NonEmpty Expr -&gt; ConstraintSet) -&gt; NonEmpty Expr -&gt; ConstraintSet
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-64"></span><span>  </span><span class="annot"><span class="annottext">[Expr] -&gt; NonEmpty Expr
+forall a. [a] -&gt; NonEmpty a
+</span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="Drasil.SSP.TMods.html#equilibriumRels"><span class="hs-identifier hs-var">equilibriumRels</span></a></span><span>
+</span><span id="line-65"></span><span class="hs-comment">-- makeRC &quot;equilibriumRC&quot; (nounPhraseSP &quot;equilibrium&quot;) eqDesc eqRel</span><span>
+</span><span id="line-66"></span><span>
+</span><span id="line-67"></span><span class="annot"><a href="Drasil.SSP.TMods.html#eqDesc"><span class="hs-identifier hs-type">eqDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-68"></span><span id="eqDesc"><span class="annot"><span class="annottext">eqDesc :: Sentence
+</span><a href="Drasil.SSP.TMods.html#eqDesc"><span class="hs-identifier hs-var hs-var">eqDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;For a body in static equilibrium, the net&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`and_PP`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#genericM"><span class="hs-identifier hs-var">genericM</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;acting on the body will cancel out&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-70"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Assuming a 2D problem&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpENSL"><span class="hs-identifier hs-var">assumpENSL</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#fx"><span class="hs-identifier hs-var">fx</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span>
+</span><span id="line-71"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#fy"><span class="hs-identifier hs-var">fy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;will be equal to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;All&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span>
+</span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and their&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">distance</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from the chosen point of rotation&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-73"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;will create a net&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#genericM"><span class="hs-identifier hs-var">genericM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;equal to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="hs-comment">--</span><span>
+</span><span id="line-76"></span><span class="hs-comment">------------- New Chunk -----------</span><span>
+</span><span id="line-77"></span><span class="annot"><a href="Drasil.SSP.TMods.html#mcShrStrgth"><span class="hs-identifier hs-type">mcShrStrgth</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
+</span><span id="line-78"></span><span id="mcShrStrgth"><span class="annot"><span class="annottext">mcShrStrgth :: TheoryModel
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgth"><span class="hs-identifier hs-var hs-var">mcShrStrgth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; [QuantityDict]
+-&gt; [ConceptChunk]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+forall q c.
+(Quantity q, MayHaveUnit q, Concept c) =&gt;
+ModelKind
+-&gt; [q]
+-&gt; [c]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;mcShrSrgth&quot;</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-var">mcShrStrgthQD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-79"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier hs-var">effNormStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#fricAngle"><span class="hs-identifier hs-var">fricAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier hs-var">effCohesion</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-80"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-81"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-var">mcShrStrgthQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; DecRef
+</span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#fredlund1977"><span class="hs-identifier hs-var">fredlund1977</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;mcShrStrgth&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthDesc"><span class="hs-identifier hs-var">mcShrStrgthDesc</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="hs-comment">------------------------------------</span><span>
+</span><span id="line-84"></span><span class="annot"><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-type">mcShrStrgthQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-85"></span><span id="mcShrStrgthQD"><span class="annot"><span class="annottext">mcShrStrgthQD :: QDefinition
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-var hs-var">mcShrStrgthQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; Sentence
+-&gt; (Stage -&gt; Symbol)
+-&gt; Space
+-&gt; Expr
+-&gt; QDefinition
+</span><span class="hs-identifier hs-var">fromEqnSt'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting String UnitalChunk String -&gt; String
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String UnitalChunk String
+forall c. HasUID c =&gt; Lens' c String
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Mohr-Coulumb shear strength&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-86"></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthDesc"><span class="hs-identifier hs-var">mcShrStrgthDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
+</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthExpr"><span class="hs-identifier hs-var">mcShrStrgthExpr</span></a></span><span>
+</span><span id="line-87"></span><span>
+</span><span id="line-88"></span><span class="annot"><a href="Drasil.SSP.TMods.html#mcShrStrgthExpr"><span class="hs-identifier hs-type">mcShrStrgthExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-89"></span><span id="mcShrStrgthExpr"><span class="annot"><span class="annottext">mcShrStrgthExpr :: Expr
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthExpr"><span class="hs-identifier hs-var hs-var">mcShrStrgthExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier hs-var">effNormStress</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">tan</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#fricAngle"><span class="hs-identifier hs-var">fricAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier hs-var">effCohesion</span></a></span><span>
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span class="annot"><a href="Drasil.SSP.TMods.html#mcShrStrgthDesc"><span class="hs-identifier hs-type">mcShrStrgthDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-92"></span><span id="mcShrStrgthDesc"><span class="annot"><span class="annottext">mcShrStrgthDesc :: Sentence
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthDesc"><span class="hs-identifier hs-var hs-var">mcShrStrgthDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;In this&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">model</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is proportional to the product of the&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier hs-var">effNormStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier hs-var">effNormStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;on the plane&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;with its static&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">friction</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in the angular form&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span>
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">tan</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; Expr -&gt; Expr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#fricAngle"><span class="hs-identifier hs-var">fricAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;versus&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#effNormStress"><span class="hs-identifier hs-var">effNormStress</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;relationship is not truly&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">linear</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;but assuming the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#nrmFSubWat"><span class="hs-identifier hs-var">nrmFSubWat</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is strong enough, it can be approximated with a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">linear</span></span><span class="hs-special">,</span><span>
+</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;fit&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SSP.Assumptions.html#assumpSBSBISL"><span class="hs-identifier hs-var">assumpSBSBISL</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;where the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier hs-var">effCohesion</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-102"></span><span>  </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SSP.Unitals.html#effCohesion"><span class="hs-identifier hs-var">effCohesion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;represents the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-103"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;intercept of the fitted line&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-104"></span><span>
+</span><span id="line-105"></span><span class="hs-comment">--</span><span>
+</span><span id="line-106"></span><span class="hs-comment">------------- New Chunk -----------</span><span>
+</span><span id="line-107"></span><span class="annot"><a href="Drasil.SSP.TMods.html#effStress"><span class="hs-identifier hs-type">effStress</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
+</span><span id="line-108"></span><span id="effStress"><span class="annot"><span class="annottext">effStress :: TheoryModel
+</span><a href="Drasil.SSP.TMods.html#effStress"><span class="hs-identifier hs-var hs-var">effStress</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; [QuantityDict]
+-&gt; [ConceptChunk]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+forall q c.
+(Quantity q, MayHaveUnit q, Concept c) =&gt;
+ModelKind
+-&gt; [q]
+-&gt; [c]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; [DecRef]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;effectiveStressTM&quot;</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-var">effStressQD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-109"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#effectiveStress"><span class="hs-identifier hs-var">effectiveStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#totNormStress"><span class="hs-identifier hs-var">totNormStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#porePressure"><span class="hs-identifier hs-var">porePressure</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-110"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-111"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-var">effStressQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; DecRef
+</span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#fredlund1977"><span class="hs-identifier hs-var">fredlund1977</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;effStress&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.TMods.html#effStressDesc"><span class="hs-identifier hs-var">effStressDesc</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-112"></span><span>
+</span><span id="line-113"></span><span class="hs-comment">------------------------------------</span><span>
+</span><span id="line-114"></span><span class="annot"><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-type">effStressQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-115"></span><span id="effStressQD"><span class="annot"><span class="annottext">effStressQD :: QDefinition
+</span><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-var hs-var">effStressQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; Sentence
+-&gt; (Stage -&gt; Symbol)
+-&gt; Space
+-&gt; Expr
+-&gt; QDefinition
+</span><span class="hs-identifier hs-var">fromEqnSt'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#effectiveStress"><span class="hs-identifier hs-var">effectiveStress</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting String UnitalChunk String -&gt; String
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String UnitalChunk String
+forall c. HasUID c =&gt; Lens' c String
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;effective stress&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-116"></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SSP.TMods.html#effStressDesc"><span class="hs-identifier hs-var">effStressDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
+</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#effectiveStress"><span class="hs-identifier hs-var">effectiveStress</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.SSP.TMods.html#effStressExpr"><span class="hs-identifier hs-var">effStressExpr</span></a></span><span>
+</span><span id="line-117"></span><span>
+</span><span id="line-118"></span><span class="annot"><a href="Drasil.SSP.TMods.html#effStressExpr"><span class="hs-identifier hs-type">effStressExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-119"></span><span id="effStressExpr"><span class="annot"><span class="annottext">effStressExpr :: Expr
+</span><a href="Drasil.SSP.TMods.html#effStressExpr"><span class="hs-identifier hs-var hs-var">effStressExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#totNormStress"><span class="hs-identifier hs-var">totNormStress</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#porePressure"><span class="hs-identifier hs-var">porePressure</span></a></span><span>
+</span><span id="line-120"></span><span>
+</span><span id="line-121"></span><span class="annot"><a href="Drasil.SSP.TMods.html#effStressDesc"><span class="hs-identifier hs-type">effStressDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-122"></span><span id="effStressDesc"><span class="annot"><span class="annottext">effStressDesc :: Sentence
+</span><a href="Drasil.SSP.TMods.html#effStressDesc"><span class="hs-identifier hs-var hs-var">effStressDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#totNormStress"><span class="hs-identifier hs-var">totNormStress</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; DataDefinition -&gt; Sentence
+forall q r.
+(HasSymbol q, HasUID q, Referable r, HasShortName r) =&gt;
+q -&gt; r -&gt; Sentence
+</span><span class="hs-operator hs-var">`definedIn'''`</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.SSP.DataDefs.html#normStressDD"><span class="hs-identifier hs-var">normStressDD</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span></pre></body></html>

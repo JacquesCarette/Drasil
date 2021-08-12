@@ -1,0 +1,10 @@
+digraph nbsection{
+NbSection -> IntrodSec;
+NbSection -> BodySec;
+NbSection -> SmmrySec;
+NbSection -> ApndxSec;
+NbSection -> SystemInformation;
+NbSection -> NBDecl;
+NbSection -> NBDesc;
+NbSection	[shape=oval, color=darkviolet, label="NbSection"];
+}

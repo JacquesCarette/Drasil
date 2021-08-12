@@ -11,10 +11,11 @@
 
 module Language.Drasil.Printers
 
--- | Possible formats for output.
+-- | Possible formats for output
 data Format
 TeX :: Format
 HTML :: Format
+JSON :: Format
 
 -- | Creates the directory for output, gathers all individual graph output
 --   functions and calls them.
@@ -146,6 +147,13 @@ unitDoc :: Linearity -> USymb -> Doc
 -- | Generates a LaTeX document.
 genTeX :: Document -> PrintingInformation -> Doc
 
+-- | Generate a python notebook document (using json).
+genJSON :: PrintingInformation -> Document -> Doc
+
+-- | Gathers all printing functions and creates the debugging tables from
+--   them.
+printAllDebugInfo :: PrintingInformation -> [Doc]
+
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.
 data PrintingInformation
@@ -153,6 +161,10 @@ PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 [_ckdb] :: PrintingInformation -> ChunkDB
 [_stg] :: PrintingInformation -> Stage
 [_configuration] :: PrintingInformation -> PrintingConfiguration
+
+-- | Builds a document's printing information based on the system
+--   information.
+piSys :: SystemInformation -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Able to be printed.
 class HasPrintingOptions c

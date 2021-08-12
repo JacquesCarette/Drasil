@@ -107,13 +107,14 @@ forall a. Maybe a
 </span><span id="line-24"></span><span id="euclidNorm"><span class="annot"><span class="annottext">euclidNorm :: DefinedQuantityDict
 </span><a href="Data.Drasil.Quantities.Math.html#euclidNorm"><span class="hs-identifier hs-var hs-var">euclidNorm</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Data.Drasil.Concepts.Math.html#euclidN"><span class="hs-identifier hs-var">CM.euclidN</span></a></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
-</span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Symbol
-</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;||&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Concepts.Math.html#euclidN"><span class="hs-identifier hs-var">CM.euclidN</span></a></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Decoration -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">Atop</span></span><span> </span><span class="annot"><span class="annottext">Decoration
+</span><span class="hs-identifier hs-var">Magnitude</span></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
-</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;||&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span>  </span><span>
+</span><span class="hs-identifier hs-var">lD</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-25"></span><span>
 </span><span id="line-26"></span><span>
 </span><span id="line-27"></span><span class="annot"><a href="Data.Drasil.Quantities.Math.html#area"><span class="hs-identifier hs-type">area</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Math.html#diameter"><span class="hs-identifier hs-type">diameter</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Math.html#surface"><span class="hs-identifier hs-type">surface</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Math.html#surArea"><span class="hs-identifier hs-type">surArea</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Math.html#orientation"><span class="hs-identifier hs-type">orientation</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>

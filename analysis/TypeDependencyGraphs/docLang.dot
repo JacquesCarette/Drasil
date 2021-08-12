@@ -1,7 +1,67 @@
 digraph alltypes {
+	subgraph notebook {
+	}
 	subgraph references {
 	}
 	subgraph srs {
+	}
+	subgraph core {
+		subgraph docsection{
+		DocSection -> IntrodSec;
+		DocSection -> BodySec;
+		DocSection -> SmmrySec;
+		DocSection -> ApndxSec;
+		DocSection	[shape=oval, color=darkviolet, label="DocSection"];
+		}
+		subgraph introdsec{
+		IntrodSec -> Contents;
+		IntrodSec -> IntrodSub;
+		IntrodSec	[shape=oval, color=darkviolet, label="IntrodSec"];
+		}
+		subgraph introdsub{
+		IntrodSub -> Sentence;
+		IntrodSub -> IntrodSub;
+		IntrodSub	[shape=oval, color=darkviolet, label="IntrodSub"];
+		}
+		subgraph bodysub{
+		BodySub -> Contents;
+		BodySub -> BodySub;
+		BodySub -> Section;
+		BodySub	[shape=oval, color=darkviolet, label="BodySub"];
+		}
+		subgraph apndxsec{
+		ApndxSec	[shape=oval, color=darkgreen, label="ApndxSec"];
+		}
+		subgraph bodysec{
+		BodySec -> BodySub;
+		BodySec	[shape=oval, color=darkgreen, label="BodySec"];
+		}
+		subgraph smmrysec{
+		SmmrySec -> Contents;
+		SmmrySec	[shape=oval, color=darkgreen, label="SmmrySec"];
+		}
+		subgraph nbdesc{
+		NBDesc -> DocSection;
+		NBDesc	[shape=oval, color=red2, label="NBDesc"];
+		}
+	}
+	subgraph documentlanguage {
+	}
+	subgraph nbdecl {
+		subgraph nbsection{
+		NbSection -> IntrodSec;
+		NbSection -> BodySec;
+		NbSection -> SmmrySec;
+		NbSection -> ApndxSec;
+		NbSection -> SystemInformation;
+		NbSection -> NBDecl;
+		NbSection -> NBDesc;
+		NbSection	[shape=oval, color=darkviolet, label="NbSection"];
+		}
+		subgraph nbdecl{
+		NBDecl -> NbSection;
+		NBDecl	[shape=oval, color=red2, label="NBDecl"];
+		}
 	}
 	subgraph core {
 		subgraph docsection{
@@ -234,6 +294,10 @@ digraph alltypes {
 	}
 	subgraph units {
 	}
+	subgraph body {
+	}
+	subgraph introduction {
+	}
 	subgraph auxiliarycontantss {
 	}
 	subgraph generalsytdescs {
@@ -333,6 +397,8 @@ digraph alltypes {
 	subgraph documentlanguage {
 	}
 	subgraph extractdocdecs {
+	}
+	subgraph srsdocument {
 	}
 	subgraph tracetable {
 	}

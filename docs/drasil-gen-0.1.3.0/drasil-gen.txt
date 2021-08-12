@@ -20,14 +20,33 @@ genDot :: SystemInformation -> IO ()
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
 
--- | Document types include Software Requirements Specification, MG, MIS,
---   and Website. The first three will generate as TeX files while the
---   Website generates as HTML.
+-- | Generates debugging logs to show all of the <a>UID</a>s used in an
+--   example.
+genLog :: SystemInformation -> PrintingInformation -> IO ()
+
+-- | Document types include Software Requirements Specification and
+--   Website. Choosing SRS will generate both TeX and HTML files, while
+--   Website generates only as HTML. This also determines what folders the
+--   generated files will be placed into.
 data DocType
 SRS :: DocType
 Website :: DocType
+Jupyter :: DocType
 
 -- | Document specifications. Holds the type of document (<a>DocType</a>)
 --   and its name (<a>Filename</a>).
 data DocSpec
-DocSpec :: DocType -> Filename -> DocSpec
+DocSpec :: DocChoices -> Filename -> DocSpec
+
+-- | Possible formats for output
+data Format
+TeX :: Format
+HTML :: Format
+
+-- | Document choices include the type of document as well as the file
+--   formats we want to generate as.
+data DocChoices
+DC :: DocType -> [Format] -> DocChoices
+
+-- | Constructor for users to choose their document options
+docChoices :: DocType -> [Format] -> DocChoices

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.NoPCM.ODEs</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier">noPCMODEOpts</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier">noPCMODEInfo</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">odeInfo</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">odeOptions</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">quantvar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEInfo</span></span><span class="hs-special">,</span><span>
+</span><span id="line-4"></span><span>  </span><span class="annot"><span class="hs-identifier">ODEMethod</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">RK45</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEOptions</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.CodeExpr</span></span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Unitals</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">tauW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempInit</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">timeFinal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">timeStep</span></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">absTol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">relTol</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-type">noPCMODEOpts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ODEOptions</span></span><span>
+</span><span id="line-14"></span><span id="noPCMODEOpts"><span class="annot"><span class="annottext">noPCMODEOpts :: ODEOptions
+</span><a href="Drasil.NoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-var hs-var">noPCMODEOpts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ODEMethod
+-&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; ODEOptions
+</span><span class="hs-identifier hs-var">odeOptions</span></span><span> </span><span class="annot"><span class="annottext">ODEMethod
+</span><span class="hs-identifier hs-var">RK45</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertainChunk -&gt; CodeExpr
+forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk
+</span><span class="hs-identifier hs-var">absTol</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertainChunk -&gt; CodeExpr
+forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk
+</span><span class="hs-identifier hs-var">relTol</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
+forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">timeStep</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-type">noPCMODEInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ODEInfo</span></span><span>
+</span><span id="line-17"></span><span id="noPCMODEInfo"><span class="annot"><span class="annottext">noPCMODEInfo :: ODEInfo
+</span><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-var hs-var">noPCMODEInfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+-&gt; CodeVarChunk
+-&gt; [CodeVarChunk]
+-&gt; CodeExpr
+-&gt; CodeExpr
+-&gt; CodeExpr
+-&gt; [CodeExpr]
+-&gt; ODEOptions
+-&gt; ODEInfo
+</span><span class="hs-identifier hs-var">odeInfo</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeVarChunk
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; CodeVarChunk
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeVarChunk
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; CodeVarChunk
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempC</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
+forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">timeFinal</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
+forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempInit</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeExpr
+forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
+forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempC</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; CodeExpr
+forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">ODEOptions
+</span><a href="Drasil.NoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-var">noPCMODEOpts</span></a></span><span>
+</span><span id="line-20"></span></pre></body></html>

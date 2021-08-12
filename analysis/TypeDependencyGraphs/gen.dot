@@ -1,10 +1,12 @@
 digraph alltypes {
 	subgraph formats {
 		subgraph doctype{
-		DocType	[shape=oval, color=darkviolet, label="DocType"];
+		DocType -> DocType;
+		DocType -> Format;
+		DocType	[shape=oval, color=cyan3, label="DocType"];
 		}
 		subgraph docspec{
-		DocSpec -> DocType;
+		DocSpec -> DocChoices;
 		DocSpec -> Filename;
 		DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 		}

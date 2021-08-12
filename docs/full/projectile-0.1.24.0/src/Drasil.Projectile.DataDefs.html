@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Projectile.DataDefs</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#dataDefs"><span class="hs-identifier">dataDefs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIX"><span class="hs-identifier">speedIX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIY"><span class="hs-identifier">speedIY</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">sin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">cos</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DataDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddNoRefs</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">iSpeed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ixVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyVel</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Theories.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">vecMag</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Figures.html"><span class="hs-identifier">Drasil.Projectile.Figures</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Figures.html#figLaunch"><span class="hs-identifier">figLaunch</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html"><span class="hs-identifier">Drasil.Projectile.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier">launAngle</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#dataDefs"><span class="hs-identifier hs-type">dataDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-16"></span><span id="dataDefs"><span class="annot"><span class="annottext">dataDefs :: [DataDefinition]
+</span><a href="Drasil.Projectile.DataDefs.html#dataDefs"><span class="hs-identifier hs-var hs-var">dataDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
+</span><span class="hs-identifier hs-var">vecMag</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.Projectile.DataDefs.html#speedIX"><span class="hs-identifier hs-var">speedIX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="Drasil.Projectile.DataDefs.html#speedIY"><span class="hs-identifier hs-var">speedIY</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="hs-comment">----------</span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIX"><span class="hs-identifier hs-type">speedIX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIY"><span class="hs-identifier hs-type">speedIY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
+</span><span id="line-20"></span><span id="speedIX"><span class="annot"><span class="annottext">speedIX :: DataDefinition
+</span><a href="Drasil.Projectile.DataDefs.html#speedIX"><span class="hs-identifier hs-var hs-var">speedIX</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
+-&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
+</span><span class="hs-identifier hs-var">ddNoRefs</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.Projectile.DataDefs.html#speedIXQD"><span class="hs-identifier hs-var">speedIXQD</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="hs-string">&quot;speedIX&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Projectile.DataDefs.html#speedRef"><span class="hs-identifier hs-var">speedRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Projectile.DataDefs.html#figRef"><span class="hs-identifier hs-var">figRef</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-21"></span><span id="speedIY"><span class="annot"><span class="annottext">speedIY :: DataDefinition
+</span><a href="Drasil.Projectile.DataDefs.html#speedIY"><span class="hs-identifier hs-var hs-var">speedIY</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
+-&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
+</span><span class="hs-identifier hs-var">ddNoRefs</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.Projectile.DataDefs.html#speedIYQD"><span class="hs-identifier hs-var">speedIYQD</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="hs-string">&quot;speedIY&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Projectile.DataDefs.html#speedRef"><span class="hs-identifier hs-var">speedRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Projectile.DataDefs.html#figRef"><span class="hs-identifier hs-var">figRef</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIXQD"><span class="hs-identifier hs-type">speedIXQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIYQD"><span class="hs-identifier hs-type">speedIYQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-24"></span><span id="speedIXQD"><span class="annot"><span class="annottext">speedIXQD :: QDefinition
+</span><a href="Drasil.Projectile.DataDefs.html#speedIXQD"><span class="hs-identifier hs-var hs-var">speedIXQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; QDefinition
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">ixVel</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; QDefinition) -&gt; Expr -&gt; QDefinition
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">iSpeed</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span id="speedIYQD"><span class="annot"><span class="annottext">speedIYQD :: QDefinition
+</span><a href="Drasil.Projectile.DataDefs.html#speedIYQD"><span class="hs-identifier hs-var hs-var">speedIYQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; QDefinition
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; QDefinition) -&gt; Expr -&gt; QDefinition
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">iSpeed</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="hs-comment">----------</span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedRef"><span class="hs-identifier hs-type">speedRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-30"></span><span id="speedRef"><span class="annot"><span class="annottext">speedRef :: Sentence
+</span><a href="Drasil.Projectile.DataDefs.html#speedRef"><span class="hs-identifier hs-var hs-var">speedRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">iSpeed</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><span class="hs-identifier hs-var">vecMag</span></span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#figRef"><span class="hs-identifier hs-type">figRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-33"></span><span id="figRef"><span class="annot"><span class="annottext">figRef :: Sentence
+</span><a href="Drasil.Projectile.DataDefs.html#figRef"><span class="hs-identifier hs-var hs-var">figRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;shown in&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.Projectile.Figures.html#figLaunch"><span class="hs-identifier hs-var">figLaunch</span></a></span><span>
+</span><span id="line-34"></span></pre></body></html>

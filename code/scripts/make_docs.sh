@@ -21,6 +21,13 @@ mkdir -p "$FULL_DOCS_FOLDER"
 # Build full variant
 stack haddock --haddock-arguments "--show-all" --ghc-options="$GHC_FLAGS"
 
+if [ "$?" -eq "0" ]; then
+  echo "Successfully created fully exposed variant of Haddock docs!"
+else
+  echo "Fully exposed Haddock build failed!"
+  exit 1
+fi
+
 # Get doc folder
 DOCS_LOC="$(stack path --local-install-root)/doc"
 
@@ -32,7 +39,14 @@ cp -rf "$DOCS_LOC/." "$FULL_DOCS_FOLDER"
 stack clean
 
 # Build small variant
-stack haddock --ghc-options="$GHC_FLAGS" 
+stack haddock --ghc-options="$GHC_FLAGS"
+
+if [ "$?" -eq "0" ]; then
+  echo "Successfully created normal Haddock docs!"
+else
+  echo "Normal Haddock build failed!"
+  exit 1
+fi
 
 # Find new docs folder
 DOCS_LOC="$(stack path --local-install-root)/doc"

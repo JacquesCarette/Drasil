@@ -23,19 +23,19 @@ vertical = nc "vertical" (cn "vertical")
 
 pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce,
   horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: NamedChunk
-pendMotion = compoundNC pendulum motion
-horizontalPos = compoundNC horizontal position
-verticalPos = compoundNC vertical position
-horizontalVel = compoundNC horizontal velocity
-verticalVel = compoundNC vertical velocity
+pendMotion      = compoundNC pendulum motion
+horizontalPos   = compoundNC horizontal position
+verticalPos     = compoundNC vertical position
+horizontalVel   = compoundNC horizontal velocity
+verticalVel     = compoundNC vertical velocity
 horizontalAccel = compoundNC horizontal acceleration
-verticalAccel = compoundNC vertical acceleration
+verticalAccel   = compoundNC vertical acceleration
 horizontalForce = compoundNC horizontal force
-verticalForce = compoundNC vertical force
-firstRod = compoundNC first rod
-secondRod = compoundNC second_ rod
-firstObject = compoundNC first object
-secondObject = compoundNC second_ object
+verticalForce   = compoundNC vertical force
+firstRod        = compoundNC first rod
+secondRod       = compoundNC second_ rod
+firstObject     = compoundNC first object
+secondObject    = compoundNC second_ object
 
 defs :: [ConceptChunk]
 defs = [arcLen]

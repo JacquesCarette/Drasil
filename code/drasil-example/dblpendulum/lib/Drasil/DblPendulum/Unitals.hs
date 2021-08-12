@@ -163,14 +163,14 @@ label2  = Integ 2
 ----------------
 lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2, massCon_1, massCon_2,
   angAccelOutCon_1, angAccelOutCon_2 :: ConstrConcept
-lenRodCon_1 = constrained' lenRod_1 [gtZeroConstr] (dbl 1)
-lenRodCon_2 = constrained' lenRod_2 [gtZeroConstr] (dbl 1)
+lenRodCon_1       = constrained' lenRod_1 [gtZeroConstr] (dbl 1)
+lenRodCon_2       = constrained' lenRod_2 [gtZeroConstr] (dbl 1)
 pendDisAngleCon_1 = constrained' pendDisAngle_1 [gtZeroConstr] (dbl 30)
 pendDisAngleCon_2 = constrained' pendDisAngle_2 [gtZeroConstr] (dbl 30)
-massCon_1 = constrained' massObj_1 [gtZeroConstr] (dbl 0.5)
-massCon_2 = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
-angAccelOutCon_1    = constrained' angularAccel_1 [gtZeroConstr] (exactDbl 0)
-angAccelOutCon_2    = constrained' angularAccel_2 [gtZeroConstr] (exactDbl 0)
+massCon_1         = constrained' massObj_1 [gtZeroConstr] (dbl 0.5)
+massCon_2         = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
+angAccelOutCon_1  = constrained' angularAccel_1 [gtZeroConstr] (exactDbl 0)
+angAccelOutCon_2  = constrained' angularAccel_2 [gtZeroConstr] (exactDbl 0)
 
 inConstraints :: [UncertQ]
 inConstraints = map (`uq` defaultUncrt) [lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2,

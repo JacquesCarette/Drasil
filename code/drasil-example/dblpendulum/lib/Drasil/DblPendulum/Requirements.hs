@@ -21,9 +21,9 @@ funcReqs = [verifyInptVals, calcAngPos, outputValues]
 
 verifyInptVals, calcAngPos, outputValues :: ConceptInstance
 
-verifyInptVals = cic "verifyInptVals" verifyInptValsDesc "Verify-Input-Values" funcReqDom
-calcAngPos  = cic "calcAngPos"   calcAngPosDesc   "Calculate-Angular-Position-Of-Mass" funcReqDom
-outputValues = cic "outputValues" outputValuesDesc "Output-Values" funcReqDom
+verifyInptVals = cic "verifyInptVals" verifyInptValsDesc  "Verify-Input-Values"                 funcReqDom
+calcAngPos     = cic "calcAngPos"     calcAngPosDesc      "Calculate-Angular-Position-Of-Mass"  funcReqDom
+outputValues   = cic "outputValues"   outputValuesDesc    "Output-Values"                       funcReqDom
 
 verifyInptValsDesc, calcAngPosDesc, outputValuesDesc :: Sentence
 

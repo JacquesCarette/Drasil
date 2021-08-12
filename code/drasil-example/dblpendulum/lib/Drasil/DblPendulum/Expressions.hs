@@ -18,7 +18,7 @@ velXExpr_1 = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
 velYExpr_1 = sy angularVel_1 `mulRe` (positionXDD_1 ^. defnExpr)
 
 velDerivEqn1, velXDerivEqn2_1, velXDerivEqn3_1, velXDerivEqn4_1 :: Expr
-velDerivEqn1 = sy velocity $= positionGDD ^. defnExpr
+velDerivEqn1    = sy velocity $= positionGDD ^. defnExpr
 velXDerivEqn2_1 = sy xPos_1 $= positionXDD_1 ^. defnExpr
 velXDerivEqn3_1 = sy xVel_1 $= deriv (positionXDD_1 ^. defnExpr) time
 velXDerivEqn4_1 = sy xVel_1 $= sy lenRod_1 `mulRe` deriv (sin (sy pendDisAngle_1)) time
@@ -49,7 +49,7 @@ accelYExpr_1 = (square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` cos (sy pen
                 `addRe` (sy angularAccel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1))
 
 accelDerivEqn1, accelXDerivEqn3_1, accelXDerivEqn4_1 :: Expr
-accelDerivEqn1 = sy acceleration $= accelGDD ^. defnExpr
+accelDerivEqn1    = sy acceleration $= accelGDD ^. defnExpr
 accelXDerivEqn3_1 = sy xAccel_1 $= deriv (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time
 accelXDerivEqn4_1 = sy xAccel_1 $= deriv (sy angularVel_1) time `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
                     $- (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` deriv (sy pendDisAngle_1) time)

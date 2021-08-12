@@ -18,13 +18,13 @@ assumptions = [twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin, firstPend, 
 
 twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin, firstPend, secondPend:: ConceptInstance 
 
-twoDMotion  = cic "twoDMotion"      twoDMotionDesc    "twoDMotion"    assumpDom
-cartSys     = cic "cartSys"         cartSysDesc       "cartSys"       assumpDom
-cartSysR    = cic "cartSysR"    cartSysRDesc  "cartSysR"  assumpDom
-yAxisDir    = cic "yAxisDir"          yAxisDirDesc        "yAxisDir"        assumpDom
-startOrigin = cic "startOrigin"       startOriginDesc     "startOrigin"     assumpDom
-firstPend   = cic "firstPend"       firstPendDesc     "firstPend"     assumpDom
-secondPend   = cic "secondPend"       secondPendDesc     "secondPend"     assumpDom
+twoDMotion  = cic "twoDMotion"    twoDMotionDesc    "twoDMotion"    assumpDom
+cartSys     = cic "cartSys"       cartSysDesc       "cartSys"       assumpDom
+cartSysR    = cic "cartSysR"      cartSysRDesc      "cartSysR"      assumpDom
+yAxisDir    = cic "yAxisDir"      yAxisDirDesc      "yAxisDir"      assumpDom
+startOrigin = cic "startOrigin"   startOriginDesc   "startOrigin"   assumpDom
+firstPend   = cic "firstPend"     firstPendDesc     "firstPend"     assumpDom
+secondPend  = cic "secondPend"    secondPendDesc    "secondPend"    assumpDom
 
 twoDMotionDesc :: Sentence
 twoDMotionDesc = atStartNP (the pendMotion) `S.is` phrase twoD +:+. sParen (getAcc twoD)

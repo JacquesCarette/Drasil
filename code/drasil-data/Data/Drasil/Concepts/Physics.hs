@@ -3,6 +3,7 @@ module Data.Drasil.Concepts.Physics where
 --  up with a better one.
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
+import qualified Utils.Drasil.NounPhrase as NP
 import Utils.Drasil
 import Utils.Drasil.Concepts
 
@@ -54,7 +55,7 @@ angular = dcc "angular" (cn' "angular")
 body = dccWDS "body" (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity")
-  (S "the" +:+ phrase chgInVelocity `S.of_` S "a" +:+ phrase rigidBody)
+  (S "the" +:+ phraseNP (chgInVelocity `ofA` rigidBody))
 chgMomentum = dccWDS "chgMomentum" (cn' "change in momentum")
   (S "The rate of change of a body's" +:+ phrase impulseV)  
 collision = dcc "collision" (cn' "collision")
@@ -96,7 +97,7 @@ gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant")
 height = dccWDS "height" (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 isotropy = dccWDS "isotropy" (cn "isotropy")
-  (S "a condition where the" +:+ phrase value `S.of_` S "a" +:+ phrase property `S.is`
+  (S "a condition where the" +:+ phraseNP (value `ofA` property) `S.is`
    S "independent of the direction in which it is measured")
 joint = dcc "joint" (cn' "joint")
   "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
@@ -110,8 +111,8 @@ linear = dcc "linear" (cn' "linear")
 mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
   "the energy that comes from motion and position"
 momentum = dccWDS "momentum" (cn "momentum")
-  ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_` phrase QPP.mass `S.and_`
-   phrase velocity)
+  ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_`
+  phraseNP (QPP.mass `and_` velocity))
 moment = dccWDS "moment" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
 motion = dccWDS "motion" (cn "motion")
@@ -123,7 +124,7 @@ pendulum = dccWDS "pendulum" (cn "pendulum")
        `S.of_` phrase gravity)
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
-positionVec = dccWDS " positionVec" (cn' "position vector")
+positionVec = dccWDS "positionVec" (cn' "position vector")
    (S "a vector from the origin" `S.ofThe` phrase cartesian +:+ S "defined"
     `S.toThe` phrase point +:+ S "where the" +:+ phrase force +:+ S "is applied")
 potEnergy = dccWDS "potEnergy" (cn "potential energy")
@@ -170,33 +171,33 @@ weight = dcc "weight" (cn' "weight")
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
 
-xDist = dccWDS "xDist" (nounPhraseSent $ phrase distance +:+ S "in the" +:+ phrase xDir) (atStart distance +:+ S "in the" +:+ phrase xDir)
-yDist = dccWDS "yDist" (nounPhraseSent $ phrase distance +:+ S "in the" +:+ phrase yDir) (atStart distance +:+ S "in the" +:+ phrase yDir)
+xDist = dccWDS "xDist" (distance `inThe` xDir) (atStartNP $ distance `inThe` xDir)
+yDist = dccWDS "yDist" (distance `inThe` yDir) (atStartNP $ distance `inThe` yDir)
 
 iPos = dccWDS "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
-xPos = dccWDS "xPos" (nounPhraseSent $ phrase xComp `S.of_` phrase position) (S "The" +:+ phrase xComp `S.of_` phrase position)
-yPos = dccWDS "yPos" (nounPhraseSent $ phrase yComp `S.of_` phrase position) (S "The" +:+ phrase yComp `S.of_` phrase position)
+xPos = dccWDS "xPos" (xComp `of_` position) (atStartNP $ NP.the $ xComp `of_` position)
+yPos = dccWDS "yPos" (yComp `of_` position) (atStartNP $ NP.the $ yComp `of_` position)
 
-ixPos = dccWDS "ixPos" (nounPhraseSent $ phrase xComp `S.of_` phrase iPos) (S "The" +:+ phrase xComp `S.of_` phrase iPos)
-iyPos = dccWDS "iyPos" (nounPhraseSent $ phrase yComp `S.of_` phrase iPos) (S "The" +:+ phrase yComp `S.of_` phrase iPos)
+ixPos = dccWDS "ixPos" (xComp `of_` iPos) (atStartNP $ NP.the $ xComp `of_` iPos)
+iyPos = dccWDS "iyPos" (yComp `of_` iPos) (atStartNP $ NP.the $ yComp `of_` iPos)
 
 fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
 fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
-xVel = dccWDS "xVel" (nounPhraseSent $ phrase xComp `S.of_` phrase velocity) (S "The" +:+ phrase xComp `S.of_` phrase velocity)
-yVel = dccWDS "yVel" (nounPhraseSent $ phrase yComp `S.of_` phrase velocity) (S "The" +:+ phrase yComp `S.of_` phrase velocity)
+xVel = dccWDS "xVel" (xComp `of_` velocity) (atStartNP $ NP.the $ xComp `of_` velocity)
+yVel = dccWDS "yVel" (yComp `of_` velocity) (atStartNP $ NP.the $ yComp `of_` velocity)
 
-ixVel = dccWDS "ixVel" (nounPhraseSent $ phrase xComp `S.of_` phrase iVel) (S "The" +:+ phrase xComp `S.of_` phrase iVel)
-iyVel = dccWDS "iyVel" (nounPhraseSent $ phrase yComp `S.of_` phrase iVel) (S "The" +:+ phrase yComp `S.of_` phrase iVel)
+ixVel = dccWDS "ixVel" (xComp `of_` iVel) (atStartNP $ NP.the $ xComp `of_` iVel)
+iyVel = dccWDS "iyVel" (yComp `of_` iVel) (atStartNP $ NP.the $ yComp `of_` iVel)
 
-xAccel = dccWDS "xScalAcc" (nounPhraseSent $ phrase xComp `S.of_` phrase acceleration) (S "The" +:+ phrase xComp `S.of_` phrase acceleration)
-yAccel = dccWDS "yScalAcc" (nounPhraseSent $ phrase yComp `S.of_` phrase acceleration) (S "The" +:+ phrase yComp `S.of_` phrase acceleration)
+xAccel = dccWDS "xScalAcc" (xComp `of_` acceleration) (atStartNP $ NP.the $ xComp `of_` acceleration)
+yAccel = dccWDS "yScalAcc" (yComp `of_` acceleration) (atStartNP $ NP.the $ yComp `of_` acceleration)
 
 constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
-xConstAccel = dccWDS "xConstAccel" (nounPhraseSent $ phrase xComp `S.of_` phrase constAccel) (S "The" +:+ phrase xComp `S.of_` phrase constAccel)
-yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `S.of_` phrase constAccel) (S "The" +:+ phrase yComp `S.of_` phrase constAccel)
+xConstAccel = dccWDS "xConstAccel" (xComp `of_` constAccel) (atStartNP $ NP.the $ xComp `of_` constAccel)
+yConstAccel = dccWDS "yConstAccel" (yComp `of_` constAccel) (atStartNP $ NP.the $ yComp `of_` constAccel)
 
 
 --FIXME: COMBINATION HACK (for all below)

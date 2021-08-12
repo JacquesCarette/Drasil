@@ -2,7 +2,7 @@ module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.Development (ArithBinOp(..), AssocArithOper(..),
+import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
   VVNBinOp(..), VVVBinOp(..), eprec, precA, precB)

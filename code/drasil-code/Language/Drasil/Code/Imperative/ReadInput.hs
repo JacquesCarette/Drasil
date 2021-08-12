@@ -7,7 +7,7 @@ import Language.Drasil hiding (Data)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..), 
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.Development (Expr(Matrix))
+import Language.Drasil.Expr.Development (Expr(Matrix))
 
 import Control.Lens ((^.))
 import Data.List (intersperse, isPrefixOf, transpose)

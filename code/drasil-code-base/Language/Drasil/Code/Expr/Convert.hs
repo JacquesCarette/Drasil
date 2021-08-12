@@ -3,7 +3,7 @@ module Language.Drasil.Code.Expr.Convert (
 ) where
 
 import qualified Language.Drasil as L
-import qualified Language.Drasil.Development as LD
+import qualified Language.Drasil.Expr.Development as LD
 
 import Data.Bifunctor (Bifunctor(bimap, second))
 

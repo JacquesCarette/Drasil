@@ -7,7 +7,7 @@ import Database.Drasil (ChunkDB)
 import Language.Drasil hiding (space)
 import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim, 
   LinePattern(..), getDataInputs, isJunk)
-import Language.Drasil.Development (Expr(Matrix))
+import Language.Drasil.Expr.Development (Expr(Matrix))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc, sentenceDoc, 
   unitDoc)
 

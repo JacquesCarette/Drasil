@@ -26,6 +26,7 @@ library:
   - Language.Drasil.Development
   - Language.Drasil.Display
   - Language.Drasil.Expr
+  - Language.Drasil.Expr.Development
   - Language.Drasil.ModelExpr
   - Language.Drasil.ModelExpr.Development
   - Language.Drasil.ShortHands

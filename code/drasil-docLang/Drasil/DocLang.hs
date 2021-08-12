@@ -4,7 +4,7 @@ module Drasil.DocLang (
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
   -- DocumentLanguage
-  mkDoc, fillTraceSI,
+  mkDoc, fillTraceSI, fillcdbSRS, findAllRefs,
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
@@ -12,6 +12,12 @@ module Drasil.DocLang (
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   getTraceConfigUID,
+  -- NBDecl
+  NBDecl, NbSection(BibSec, IntrodSec, BodySec),
+  -- DocumentLanguage.Notebook.Core
+  IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..), ApndxSec(..),
+  -- DocumentLanguage.Notebook.DocumentLanguage
+  mkNb,
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
   -- DocumentLanguage.RefHelpers 
@@ -50,13 +56,17 @@ module Drasil.DocLang (
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.DocumentLanguage (mkDoc, fillTraceSI)
+import Drasil.DocumentLanguage (mkDoc, fillTraceSI, fillcdbSRS, findAllRefs)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..), getTraceConfigUID)
+import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), IntrodSub(..), BodySec(..), 
+  BodySub(..), ApndxSec(..), SmmrySec(..))
+import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)
+import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(BibSec, IntrodSec, BodySec))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

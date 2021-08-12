@@ -58,9 +58,9 @@ jobs:
       - name: "Install dependencies"
         run: stack --no-terminal test --bench --only-dependencies
       - name: "Build"
-        run: make prog stackArgs="--no-terminal" GHCFLAGS="-Werror"
+        run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
       - name: "Stable"
-        run: make stackArgs="--no-terminal" NOISY=yes
+        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
       - name: "TeX"
         run: make tex SUMMARIZE_TEX=yes
       - name: "Code"
@@ -69,9 +69,9 @@ jobs:
         run: make doxygen
       - name: "Docs"
         run: make docs
-      - name: "Analysis"
-        run: make analysis
       - name: "Graphs"
         run: make graphs
+      - name: "Analysis"
+        run: make analysis
       - name: "Website"
         run: make website

@@ -42,14 +42,14 @@ digraph allvsall {
 	angAccj -> angularVelocity;
 	angAccj -> angularAcceleration;
 	angAccj -> newtonSLR;
-	col2DRC -> assumpOT;
-	col2DRC -> assumpOD;
-	col2DRC -> assumpAD;
-	col2DRC -> assumpCT;
-	col2DRC -> assumpDI;
-	col2DRC -> assumpCAJI;
-	col2DRC -> p_CM;
-	col2DRC -> impulseS;
+	col2DIM -> assumpOT;
+	col2DIM -> assumpOD;
+	col2DIM -> assumpAD;
+	col2DIM -> assumpCT;
+	col2DIM -> assumpDI;
+	col2DIM -> assumpCAJI;
+	col2DIM -> p_CM;
+	col2DIM -> impulseS;
 	lcEC -> assumpCT;
 	lcID -> assumpDI;
 	lcIJC -> assumpCAJI;
@@ -109,11 +109,11 @@ digraph allvsall {
 
 	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
 	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
-	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{accj, angAccj, col2DRC}
+	{accj, angAccj, col2DIM}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];

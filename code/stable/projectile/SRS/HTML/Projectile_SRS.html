@@ -1,0 +1,3185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="Projectile_SRS.css">
+    <title>Software Requirements Specification for Projectile</title>
+    <meta charset="utf-8">
+    <script>
+    MathJax = {
+      loader: {load: ['[tex]/textmacros', 'output/chtml']},
+      tex: {
+        packages: {'[+]': ['textmacros']}
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js">
+    </script>
+  </head>
+  <body>
+    <div class="title">
+      <h1>Software Requirements Specification for Projectile</h1>
+    </div>
+    <div class="author">
+      <h2>
+        Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
+      </h2>
+    </div>
+    <div id="Sec:ToC">
+      <div class="section">
+        <h1>Table of Contents</h1>
+        <p class="paragraph">
+          An outline of all sections included in this SRS is recorded here for easy reference.
+        </p>
+        <ul class="list">
+          <li><a href=#Sec:ToC>Table of Contents</a></li>
+          <li>
+            <a href=#Sec:RefMat>Reference Material</a>
+            <ul class="list">
+              <li><a href=#Sec:ToU>Table of Units</a></li>
+              <li><a href=#Sec:ToS>Table of Symbols</a></li>
+              <li><a href=#Sec:TAbbAcc>Abbreviations and Acronyms</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:Intro>Introduction</a>
+            <ul class="list">
+              <li><a href=#Sec:ReqsScope>Scope of Requirements</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:SpecSystDesc>Specific System Description</a>
+            <ul class="list">
+              <li>
+                <a href=#Sec:ProbDesc>Problem Description</a>
+                <ul class="list">
+                  <li><a href=#Sec:TermDefs>Terminology and Definitions</a></li>
+                  <li><a href=#Sec:PhysSyst>Physical System Description</a></li>
+                  <li><a href=#Sec:GoalStmt>Goal Statements</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>
+                <ul class="list">
+                  <li><a href=#Sec:Assumps>Assumptions</a></li>
+                  <li><a href=#Sec:TMs>Theoretical Models</a></li>
+                  <li><a href=#Sec:GDs>General Definitions</a></li>
+                  <li><a href=#Sec:DDs>Data Definitions</a></li>
+                  <li><a href=#Sec:IMs>Instance Models</a></li>
+                  <li><a href=#Sec:DataConstraints>Data Constraints</a></li>
+                  <li>
+                    <a href=#Sec:CorSolProps>Properties of a Correct Solution</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:Requirements>Requirements</a>
+            <ul class="list">
+              <li><a href=#Sec:FRs>Functional Requirements</a></li>
+              <li><a href=#Sec:NFRs>Non-Functional Requirements</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:TraceMatrices>Traceability Matrices and Graphs</a>
+          </li>
+          <li>
+            <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a>
+          </li>
+          <li><a href=#Sec:References>References</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="Sec:RefMat">
+      <div class="section">
+        <h1>Reference Material</h1>
+        <p class="paragraph">
+          This section records information for easy reference.
+        </p>
+        <div id="Sec:ToU">
+          <div class="subsection">
+            <h2>Table of Units</h2>
+            <p class="paragraph">
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description and the SI name.
+            </p>
+            <div id="Table:ToU">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>SI Name</th>
+                </tr>
+                <tr>
+                  <td><em>m</em></td>
+                  <td>length</td>
+                  <td>metre</td>
+                </tr>
+                <tr>
+                  <td><em>rad</em></td>
+                  <td>angle</td>
+                  <td>radian</td>
+                </tr>
+                <tr>
+                  <td><em>s</em></td>
+                  <td>time</td>
+                  <td>second</td>
+                </tr>
+              </table>
+              <p class="caption">Table of Units</p>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:ToS">
+          <div class="subsection">
+            <h2>Table of Symbols</h2>
+            <p class="paragraph">
+              The symbols used in this document are summarized in the <a href=#Table:ToS>Table of Symbols</a> along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
+            </p>
+            <div id="Table:ToS">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>a</em></td>
+                  <td>Scalar acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>a<sup>c</sup></em></td>
+                  <td>Constant acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>a<sub>x</sub></em></td>
+                  <td><em>x</em>-component of acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>a<sub>x</sub><sup>c</sup></em></td>
+                  <td><em>x</em>-component of constant acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>a<sub>y</sub></em></td>
+                  <td><em>y</em>-component of acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>a<sub>y</sub><sup>c</sup></em></td>
+                  <td><em>y</em>-component of constant acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>a</b></em></td>
+                  <td>Acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>a</b><sup>c</sup></em></td>
+                  <td>Constant acceleration vector</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>d<sub>offset</sub></em></td>
+                  <td>
+                    Distance between the target position and the landing position
+                  </td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>g</b></em></td>
+                  <td>Gravitational acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>p</em></td>
+                  <td>Scalar position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>p<sup>i</sup></em></td>
+                  <td>Initial position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>p<sub>land</sub></em></td>
+                  <td>Landing position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>p<sub>target</sub></em></td>
+                  <td>Target position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>p<sub>x</sub></em></td>
+                  <td><em>x</em>-component of position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>p<sub>x</sub><sup>i</sup></em></td>
+                  <td><em>x</em>-component of initial position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>p<sub>y</sub></em></td>
+                  <td><em>y</em>-component of position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>p<sub>y</sub><sup>i</sup></em></td>
+                  <td><em>y</em>-component of initial position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>p</b></em></td>
+                  <td>Position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>s</em></td>
+                  <td>Output message as a string</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>t</em></td>
+                  <td>Time</td>
+                  <td><em>s</em></td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>flight</sub></em></td>
+                  <td>Flight duration</td>
+                  <td><em>s</em></td>
+                </tr>
+                <tr>
+                  <td><em>v</em></td>
+                  <td>Speed</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sup>i</sup></em></td>
+                  <td>Initial speed</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sub>launch</sub></em></td>
+                  <td>Launch speed</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sub>x</sub></em></td>
+                  <td><em>x</em>-component of velocity</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sub>x</sub><sup>i</sup></em></td>
+                  <td><em>x</em>-component of initial velocity</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sub>y</sub></em></td>
+                  <td><em>y</em>-component of velocity</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sub>y</sub><sup>i</sup></em></td>
+                  <td><em>y</em>-component of initial velocity</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>v</b></em></td>
+                  <td>Velocity</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>v</b>(t)</em></td>
+                  <td>1D speed</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>v</b><sup>i</sup></em></td>
+                  <td>Initial velocity</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>ε</em></td>
+                  <td>Hit tolerance</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>θ</em></td>
+                  <td>Launch angle</td>
+                  <td><em>rad</em></td>
+                </tr>
+                <tr>
+                  <td><em>π</em></td>
+                  <td>Ratio of circumference to diameter for any circle</td>
+                  <td>--</td>
+                </tr>
+              </table>
+              <p class="caption">Table of Symbols</p>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:TAbbAcc">
+          <div class="subsection">
+            <h2>Abbreviations and Acronyms</h2>
+            <div id="Table:TAbbAcc">
+              <table class="table">
+                <tr>
+                  <th>Abbreviation</th>
+                  <th>Full Form</th>
+                </tr>
+                <tr>
+                  <td>1D</td>
+                  <td>One-Dimensional</td>
+                </tr>
+                <tr>
+                  <td>2D</td>
+                  <td>Two-Dimensional</td>
+                </tr>
+                <tr>
+                  <td>A</td>
+                  <td>Assumption</td>
+                </tr>
+                <tr>
+                  <td>DD</td>
+                  <td>Data Definition</td>
+                </tr>
+                <tr>
+                  <td>GD</td>
+                  <td>General Definition</td>
+                </tr>
+                <tr>
+                  <td>GS</td>
+                  <td>Goal Statement</td>
+                </tr>
+                <tr>
+                  <td>IM</td>
+                  <td>Instance Model</td>
+                </tr>
+                <tr>
+                  <td>PS</td>
+                  <td>Physical System Description</td>
+                </tr>
+                <tr>
+                  <td>R</td>
+                  <td>Requirement</td>
+                </tr>
+                <tr>
+                  <td>SRS</td>
+                  <td>Software Requirements Specification</td>
+                </tr>
+                <tr>
+                  <td>TM</td>
+                  <td>Theoretical Model</td>
+                </tr>
+                <tr>
+                  <td>Uncert.</td>
+                  <td>Typical Uncertainty</td>
+                </tr>
+              </table>
+              <p class="caption">Abbreviations and Acronyms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:Intro">
+      <div class="section">
+        <h1>Introduction</h1>
+        <p class="paragraph">
+          Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. The program documented here is called Projectile.
+        </p>
+        <p class="paragraph">
+          The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+        </p>
+        <div id="Sec:ReqsScope">
+          <div class="subsection">
+            <h2>Scope of Requirements</h2>
+            <p class="paragraph">
+              The scope of the requirements includes the analysis of a two-dimensional (2D) projectile motion problem with constant acceleration.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:SpecSystDesc">
+      <div class="section">
+        <h1>Specific System Description</h1>
+        <p class="paragraph">
+          This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+        </p>
+        <div id="Sec:ProbDesc">
+          <div class="subsection">
+            <h2>Problem Description</h2>
+            <p class="paragraph">
+              A system is needed to efficiently and correctly predict the landing position of a projectile.
+            </p>
+            <div id="Sec:TermDefs">
+              <div class="subsubsection">
+                <h3>Terminology and Definitions</h3>
+                <p class="paragraph">
+                  This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+                </p>
+                <ul class="list">
+                  <li>
+                    Launcher: Where the projectile is launched from and the device that does the launching.
+                  </li>
+                  <li>Projectile: The object to be launched at the target.</li>
+                  <li>Target: Where the projectile should be launched to.</li>
+                  <li>
+                    Gravity: The force that attracts one physical body with mass to another.
+                  </li>
+                  <li>
+                    Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from <a href=#cartesianWiki>cartesianWiki</a>).
+                  </li>
+                  <li>Rectilinear: Occuring in one dimension.</li>
+                </ul>
+              </div>
+            </div>
+            <div id="Sec:PhysSyst">
+              <div class="subsubsection">
+                <h3>Physical System Description</h3>
+                <p class="paragraph">
+                  The physical system of Projectile, as shown in <a href=#Figure:Launch>Fig:Launch</a>, includes the following elements:
+                </p>
+                <div class="list">
+                  <p>PS1: The launcher.</p>
+                  <p>
+                    PS2: The projectile (with initial velocity <em><b>v</b><sup>i</sup></em> and launch angle <em>θ</em>).
+                  </p>
+                  <p>PS3: The target.</p>
+                </div>
+                <div id="Figure:Launch">
+                  <figure>
+                    <img src="../../../../datafiles/projectile/Launch.jpg" alt="The physical system" width="70.0%" >
+                    <figcaption>The physical system</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:GoalStmt">
+              <div class="subsubsection">
+                <h3>Goal Statements</h3>
+                <p class="paragraph">
+                  Given the initial velocity vector of the projectile, the goal statements are:
+                </p>
+                <div class="list">
+                  <p>
+                    <div id="targetHit">
+                      targetHit: Determine if the projectile hits the target.
+                    </div>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:SolCharSpec">
+          <div class="subsection">
+            <h2>Solution Characteristics Specification</h2>
+            <p class="paragraph">
+              The instance models that govern Projectile are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+            </p>
+            <div id="Sec:Assumps">
+              <div class="subsubsection">
+                <h3>Assumptions</h3>
+                <p class="paragraph">
+                  This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
+                </p>
+                <div class="list">
+                  <p>
+                    <div id="twoDMotion">
+                      twoDMotion: The projectile motion is two-dimensional (2D). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="cartSyst">
+                      cartSyst: A Cartesian coordinate system is used (from <a href=#neglectCurv>A:neglectCurv</a>). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="yAxisGravity">
+                      yAxisGravity: The direction of the <em>y</em>-axis is directed opposite to gravity. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>, and <a href=#accelYGravity>A:accelYGravity</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="launchOrigin">
+                      launchOrigin: The launcher is coincident with the origin. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="targetXAxis">
+                      targetXAxis: The target lies on the <em>x</em>-axis (from <a href=#neglectCurv>A:neglectCurv</a>). (RefBy: <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="posXDirection">
+                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (RefBy: <a href=#IM:offsetIM>IM:offsetIM</a>, <a href=#IM:messageIM>IM:messageIM</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="constAccel">
+                      constAccel: The acceleration is constant (from <a href=#accelXZero>A:accelXZero</a>, <a href=#accelYGravity>A:accelYGravity</a>, <a href=#neglectDrag>A:neglectDrag</a>, and <a href=#freeFlight>A:freeFlight</a>). (RefBy: <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:posVec>GD:posVec</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="accelXZero">
+                      accelXZero: The acceleration in the <em>x</em>-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#constAccel>A:constAccel</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="accelYGravity">
+                      accelYGravity: The acceleration in the <em>y</em>-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A:yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a> and <a href=#constAccel>A:constAccel</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="neglectDrag">
+                      neglectDrag: Air drag is neglected. (RefBy: <a href=#constAccel>A:constAccel</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="pointMass">
+                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectPos>GD:rectPos</a> and <a href=#GD:rectVel>GD:rectVel</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="freeFlight">
+                      freeFlight: The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: <a href=#constAccel>A:constAccel</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="neglectCurv">
+                      neglectCurv: The distance is small enough that the curvature of the Earth can be neglected. (RefBy: <a href=#targetXAxis>A:targetXAxis</a> and <a href=#cartSyst>A:cartSyst</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="timeStartZero">
+                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD:velVec</a>, <a href=#GD:rectPos>GD:rectPos</a>, <a href=#GD:rectVel>GD:rectVel</a>, <a href=#GD:posVec>GD:posVec</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="gravAccelValue">
+                      gravAccelValue: The acceleration due to gravity is assumed to have the value provided in the section for <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a>. (RefBy: <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                    </div>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:TMs">
+              <div class="subsubsection">
+                <h3>Theoretical Models</h3>
+                <p class="paragraph">
+                  This section focuses on the general equations and laws that Projectile is based on.
+                </p>
+                <div id="TM:acceleration">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:acceleration</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Acceleration</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#accelerationWiki>accelerationWiki</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#GD:rectVel>GD:rectVel</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="TM:velocity">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:velocity</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Velocity</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#velocityWiki>velocityWiki</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#GD:rectPos>GD:rectPos</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:GDs">
+              <div class="subsubsection">
+                <h3>General Definitions</h3>
+                <p class="paragraph">
+                  This section collects the laws and equations that will be used to build the instance models.
+                </p>
+                <div id="GD:rectVel">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:rectVel</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Rectilinear (1D) velocity as a function of time for constant acceleration
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\symbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>v</b>(t)</em> is the 1D speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>v<sup>i</sup></em> is the initial speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>a<sup>c</sup></em> is the constant acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#hibbeler2004>hibbeler2004</a> (pg. 8)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:velVec>GD:velVec</a> and <a href=#GD:rectPos>GD:rectPos</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="GD:rectVelDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of rectilinear velocity:</h4>
+                    <p class="paragraph">
+                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A:pointMass</a>); that is, motion in a straight line. The velocity is <em>v</em> and the acceleration is <em>a</em>. The motion in <a href=#TM:acceleration>TM:acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em>v<sup>i</sup></em>. From <a href=#TM:acceleration>TM:acceleration</a>, using the above symbols we have:
+                    </p>
+                    \[{a^{c}}=\frac{\,dv}{\,dt}\]
+                    <p class="paragraph">Rearranging and integrating, we have:</p>
+                    \[\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt\]
+                    <p class="paragraph">
+                      Performing the integration, we have the required equation:
+                    </p>
+                    \[\symbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]
+                  </div>
+                </div>
+                <div id="GD:rectPos">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:rectPos</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Rectilinear (1D) position as a function of time for constant acceleration
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>m</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>p</em> is the scalar position (<em>m</em>)</li>
+                          <li>
+                            <em>p<sup>i</sup></em> is the initial position (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>v<sup>i</sup></em> is the initial speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em>a<sup>c</sup></em> is the constant acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#hibbeler2004>hibbeler2004</a> (pg. 8)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"><a href=#GD:posVec>GD:posVec</a></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="GD:rectPosDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of rectilinear position:</h4>
+                    <p class="paragraph">
+                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A:pointMass</a>); that is, motion in a straight line. The position is <em>p</em> and the velocity is <em>v</em>. The motion in <a href=#TM:velocity>TM:velocity</a> is now one-dimensional. The initial position (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em>p<sup>i</sup></em>. From <a href=#TM:velocity>TM:velocity</a>, using the above symbols we have:
+                    </p>
+                    \[v=\frac{\,dp}{\,dt}\]
+                    <p class="paragraph">Rearranging and integrating, we have:</p>
+                    \[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt\]
+                    <p class="paragraph">
+                      From <a href=#GD:rectVel>GD:rectVel</a>, we can replace <em>v</em>:
+                    </p>
+                    \[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt\]
+                    <p class="paragraph">
+                      Performing the integration, we have the required equation:
+                    </p>
+                    \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
+                  </div>
+                </div>
+                <div id="GD:velVec">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:velVec</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Velocity vector as a function of time for 2D motion under constant acceleration
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\symbf{v}=\begin{bmatrix}
+                                    {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                                    {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                                    \end{bmatrix}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>v<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>a<sub>x</sub><sup>c</sup></em> is the <em>x</em>-component of constant acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em>v<sub>y</sub><sup>i</sup></em> is the <em>y</em>-component of initial velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>a<sub>y</sub><sup>c</sup></em> is the <em>y</em>-component of constant acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="GD:velVecDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of velocity vector:</h4>
+                    <p class="paragraph">
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the velocity vector as <em><b>v</b> = \(\begin{bmatrix}
+                                                                                                                                                                                                              {v_{\text{x}}}\\
+                                                                                                                                                                                                              {v_{\text{y}}}
+                                                                                                                                                                                                              \end{bmatrix}\)</em> and the acceleration vector as <em><b>a</b> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                   {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                   {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                   \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
+                    </p>
+                    \[\symbf{v}=\begin{bmatrix}
+                                {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                                {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                                \end{bmatrix}\]
+                  </div>
+                </div>
+                <div id="GD:posVec">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:posVec</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Position vector as a function of time for 2D motion under constant acceleration
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>m</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\symbf{p}=\begin{bmatrix}
+                                    {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                    {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                                    \end{bmatrix}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                          <li>
+                            <em>p<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial position (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>v<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em>a<sub>x</sub><sup>c</sup></em> is the <em>x</em>-component of constant acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em>p<sub>y</sub><sup>i</sup></em> is the <em>y</em>-component of initial position (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>v<sub>y</sub><sup>i</sup></em> is the <em>y</em>-component of initial velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>a<sub>y</sub><sup>c</sup></em> is the <em>y</em>-component of constant acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="GD:posVecDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of position vector:</h4>
+                    <p class="paragraph">
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the position vector as <em><b>p</b> = \(\begin{bmatrix}
+                                                                                                                                                                                                              {p_{\text{x}}}\\
+                                                                                                                                                                                                              {p_{\text{y}}}
+                                                                                                                                                                                                              \end{bmatrix}\)</em>, the velocity vector as <em><b>v</b> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                            {v_{\text{x}}}\\
+                                                                                                                                                                                                                                                                            {v_{\text{y}}}
+                                                                                                                                                                                                                                                                            \end{bmatrix}\)</em>, and the acceleration vector as <em><b>a</b> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                  {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                                                                                  {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                                                                                  \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
+                    </p>
+                    \[\symbf{p}=\begin{bmatrix}
+                                {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                                \end{bmatrix}\]
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:DDs">
+              <div class="subsubsection">
+                <h3>Data Definitions</h3>
+                <p class="paragraph">
+                  This section collects and defines all the data needed to build the instance models.
+                </p>
+                <div id="DD:vecMag">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:vecMag</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Speed</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>v</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[v=\|\symbf{v}\|\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>v</em> is the speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          For a given velocity vector <em><b>v</b></em>, the magnitude of the vector (<em>||<b>v</b>||</em>) is the scalar called speed.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#DD:speedIY>DD:speedIY</a> and <a href=#DD:speedIX>DD:speedIX</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:speedIX">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:speedIX</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph"><em>x</em>-component of initial velocity</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td>
+                        <p class="paragraph"><em>v<sub>x</sub><sup>i</sup></em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{{v_{\text{x}}}^{\text{i}}}={v^{\text{i}}} \cos\left(θ\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>v<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>v<sup>i</sup></em> is the initial speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>θ</em> is the launch angle (<em>rad</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>v<sup>i</sup></em> is from <a href=#DD:vecMag>DD:vecMag</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>θ</em> is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:speedIY">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:speedIY</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph"><em>y</em>-component of initial velocity</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td>
+                        <p class="paragraph"><em>v<sub>y</sub><sup>i</sup></em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{{v_{\text{y}}}^{\text{i}}}={v^{\text{i}}} \sin\left(θ\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>v<sub>y</sub><sup>i</sup></em> is the <em>y</em>-component of initial velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>v<sup>i</sup></em> is the initial speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>θ</em> is the launch angle (<em>rad</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>v<sup>i</sup></em> is from <a href=#DD:vecMag>DD:vecMag</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>θ</em> is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:IMs">
+              <div class="subsubsection">
+                <h3>Instance Models</h3>
+                <p class="paragraph">
+                  This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
+                </p>
+                <div id="IM:calOfLandingTime">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:calOfLandingTime</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Calculation of landing time</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph"><em>v<sub>launch</sub></em>, <em>θ</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>t<sub>flight</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[{v_{\text{launch}}}\gt{}0\]
+                        \[0\lt{}θ\lt{}\frac{π}{2}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td>\[{t_{\text{flight}}}\gt{}0\]</td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>t<sub>flight</sub></em> is the flight duration (<em>s</em>)
+                          </li>
+                          <li>
+                            <em>v<sub>launch</sub></em> is the launch speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>θ</em> is the launch angle (<em>rad</em>)</li>
+                          <li>
+                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A:posXDirection</a> and <a href=#yAxisGravity>A:yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em><b>g</b></em> is defined in <a href=#gravAccelValue>A:gravAccelValue</a>.
+                        </p>
+                        <p class="paragraph">
+                          The constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#timeStartZero>A:timeStartZero</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:calOfLandingTimeDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of flight duration:</h4>
+                    <p class="paragraph">
+                      We know that <em>p<sub>y</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A:launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;<b>g</b></em> (<a href=#accelYGravity>A:accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD:posVec</a> gives us:
+                    </p>
+                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\symbf{g} t^{2}}{2}\]
+                    <p class="paragraph">
+                      To find the time that the projectile lands, we want to find the <em>t</em> value (<em>t<sub>flight</sub></em>) where <em>p<sub>y</sub> = 0</em> (since the target is on the <em>x</em>-axis from <a href=#targetXAxis>A:targetXAxis</a>). From the equation above we get:
+                    </p>
+                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\symbf{g} {t_{\text{flight}}}^{2}}{2}=0\]
+                    <p class="paragraph">
+                      Dividing by <em>t<sub>flight</sub></em> (with the constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em>) gives us:
+                    </p>
+                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{\symbf{g} {t_{\text{flight}}}}{2}=0\]
+                    <p class="paragraph">
+                      Solving for <em>t<sub>flight</sub></em> gives us:
+                    </p>
+                    \[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\symbf{g}}\]
+                    <p class="paragraph">
+                      From <a href=#DD:speedIY>DD:speedIY</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>y</sub><sup>i</sup></em>:
+                    </p>
+                    \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}\]
+                  </div>
+                </div>
+                <div id="IM:calOfLandingDist">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:calOfLandingDist</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Calculation of landing position</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph"><em>v<sub>launch</sub></em>, <em>θ</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>p<sub>land</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[{v_{\text{launch}}}\gt{}0\]
+                        \[0\lt{}θ\lt{}\frac{π}{2}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td>\[{p_{\text{land}}}\gt{}0\]</td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\symbf{g}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>p<sub>land</sub></em> is the landing position (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>v<sub>launch</sub></em> is the launch speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>θ</em> is the launch angle (<em>rad</em>)</li>
+                          <li>
+                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A:posXDirection</a> and <a href=#yAxisGravity>A:yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em><b>g</b></em> is defined in <a href=#gravAccelValue>A:gravAccelValue</a>.
+                        </p>
+                        <p class="paragraph">
+                          The constraint <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A:posXDirection</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:offsetIM>IM:offsetIM</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:calOfLandingDistDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of landing position:</h4>
+                    <p class="paragraph">
+                      We know that <em>p<sub>x</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A:launchOrigin</a>) and <em>a<sub>x</sub><sup>c</sup> = 0</em> (<a href=#accelXZero>A:accelXZero</a>). Substituting these values into the x-direction of <a href=#GD:posVec>GD:posVec</a> gives us:
+                    </p>
+                    \[{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}} t\]
+                    <p class="paragraph">
+                      To find the landing position, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>):
+                    </p>
+                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}\]
+                    <p class="paragraph">
+                      From <a href=#DD:speedIX>DD:speedIX</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>x</sub><sup>i</sup></em>:
+                    </p>
+                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}\]
+                    <p class="paragraph">
+                      Rearranging this gives us the required equation:
+                    </p>
+                    \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\symbf{g}}\]
+                  </div>
+                </div>
+                <div id="IM:offsetIM">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:offsetIM</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Offset</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>p<sub>land</sub></em>, <em>p<sub>target</sub></em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>d<sub>offset</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[{p_{\text{land}}}\gt{}0\]
+                        \[{p_{\text{target}}}\gt{}0\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>d<sub>offset</sub></em> is the distance between the target position and the landing position (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>p<sub>land</sub></em> is the landing position (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>p<sub>target</sub></em> is the target position (<em>m</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>p<sub>land</sub></em> is from <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>.
+                        </p>
+                        <p class="paragraph">
+                          The constraints <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em> and <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> are from <a href=#posXDirection>A:posXDirection</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputValues>FR:Output-Values</a>, <a href=#IM:messageIM>IM:messageIM</a>, and <a href=#calcValues>FR:Calculate-Values</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="IM:messageIM">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:messageIM</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Output message</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>d<sub>offset</sub></em>, <em>p<sub>target</sub></em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>s</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[{d_{\text{offset}}}\gt{}-{p_{\text{land}}}\]
+                        \[{p_{\text{target}}}\gt{}0\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[s=\begin{cases}
+                            \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
+                            \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
+                            \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
+                            \end{cases}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>s</em> is the output message as a string (Unitless)</li>
+                          <li>
+                            <em>d<sub>offset</sub></em> is the distance between the target position and the landing position (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>p<sub>target</sub></em> is the target position (<em>m</em>)
+                          </li>
+                          <li><em>ε</em> is the hit tolerance (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>d<sub>offset</sub></em> is from <a href=#IM:offsetIM>IM:offsetIM</a>.
+                        </p>
+                        <p class="paragraph">
+                          The constraint <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A:posXDirection</a>.
+                        </p>
+                        <p class="paragraph">
+                          The constraint <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>land</sub></em> is from the fact that <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em>, from <a href=#posXDirection>A:posXDirection</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>ε</em> is defined in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:DataConstraints">
+              <div class="subsubsection">
+                <h3>Data Constraints</h3>
+                <p class="paragraph">
+                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                </p>
+                <div id="Table:InDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                      <th>Typical Value</th>
+                      <th>Uncert.</th>
+                    </tr>
+                    <tr>
+                      <td><em>p<sub>target</sub></em></td>
+                      <td><em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>1000</em> <em>m</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>v<sub>launch</sub></em></td>
+                      <td><em>v<sub>launch</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>100</em> <em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>θ</em></td>
+                      <td>
+                        <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em>
+                      </td>
+                      <td><em>\(\frac{π}{4}\)</em> <em>rad</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Input Data Constraints</p>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:CorSolProps">
+              <div class="subsubsection">
+                <h3>Properties of a Correct Solution</h3>
+                <p class="paragraph">
+                  The <a href=#Table:OutDataConstraints>Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                </p>
+                <div id="Table:OutDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                    </tr>
+                    <tr>
+                      <td><em>p<sub>land</sub></em></td>
+                      <td><em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>d<sub>offset</sub></em></td>
+                      <td>
+                        <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>land</sub></em>
+                      </td>
+                    </tr>
+                  </table>
+                  <p class="caption">Output Data Constraints</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:Requirements">
+      <div class="section">
+        <h1>Requirements</h1>
+        <p class="paragraph">
+          This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+        </p>
+        <div id="Sec:FRs">
+          <div class="subsection">
+            <h2>Functional Requirements</h2>
+            <p class="paragraph">
+              This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+            </p>
+            <div class="list">
+              <p>
+                <div id="inputValues">
+                  Input-Values: Input the values from <a href=#Table:ReqInputs>Tab:ReqInputs</a>.
+                </div>
+              </p>
+              <p>
+                <div id="verifyInVals">
+                  Verify-Input-Values: Check the entered input values to ensure that they do not exceed the <a href=#Sec:DataConstraints>data constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.
+                </div>
+              </p>
+              <p>
+                <div id="calcValues">
+                  Calculate-Values: Calculate the following values: <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>p<sub>land</sub></em> (from <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM:messageIM</a>).
+                </div>
+              </p>
+              <p>
+                <div id="outputValues">
+                  Output-Values: Output <em>s</em> (from <a href=#IM:messageIM>IM:messageIM</a>) and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
+                </div>
+              </p>
+            </div>
+            <div id="Table:ReqInputs">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>p<sub>target</sub></em></td>
+                  <td>Target position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sub>launch</sub></em></td>
+                  <td>Launch speed</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>θ</em></td>
+                  <td>Launch angle</td>
+                  <td><em>rad</em></td>
+                </tr>
+              </table>
+              <p class="caption">
+                Required Inputs following <a href=#inputValues>FR:Input-Values</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:NFRs">
+          <div class="subsection">
+            <h2>Non-Functional Requirements</h2>
+            <p class="paragraph">
+              This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+            </p>
+            <div class="list">
+              <p>
+                <div id="correct">
+                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Properties of a Correct Solution</a>.
+                </div>
+              </p>
+              <p>
+                <div id="verifiable">
+                  Verifiable: The code is tested with complete verification and validation plan.
+                </div>
+              </p>
+              <p>
+                <div id="understandable">
+                  Understandable: The code is modularized with complete module guide and module interface specification.
+                </div>
+              </p>
+              <p><div id="reusable">Reusable: The code is modularized.</div></p>
+              <p>
+                <div id="maintainable">
+                  Maintainable: The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+                </div>
+              </p>
+              <p>
+                <div id="portable">
+                  Portable: The code is able to be run in different environments.
+                </div>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:TraceMatrices">
+      <div class="section">
+        <h1>Traceability Matrices and Graphs</h1>
+        <p class="paragraph">
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Tab:TraceMatAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Table:TraceMatAvsAll>Tab:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Tab:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Tab:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+        </p>
+        <div id="Table:TraceMatAvsA">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#twoDMotion>A:twoDMotion</a></th>
+              <th><a href=#cartSyst>A:cartSyst</a></th>
+              <th><a href=#yAxisGravity>A:yAxisGravity</a></th>
+              <th><a href=#launchOrigin>A:launchOrigin</a></th>
+              <th><a href=#targetXAxis>A:targetXAxis</a></th>
+              <th><a href=#posXDirection>A:posXDirection</a></th>
+              <th><a href=#constAccel>A:constAccel</a></th>
+              <th><a href=#accelXZero>A:accelXZero</a></th>
+              <th><a href=#accelYGravity>A:accelYGravity</a></th>
+              <th><a href=#neglectDrag>A:neglectDrag</a></th>
+              <th><a href=#pointMass>A:pointMass</a></th>
+              <th><a href=#freeFlight>A:freeFlight</a></th>
+              <th><a href=#neglectCurv>A:neglectCurv</a></th>
+              <th><a href=#timeStartZero>A:timeStartZero</a></th>
+              <th><a href=#gravAccelValue>A:gravAccelValue</a></th>
+            </tr>
+            <tr>
+              <td><a href=#twoDMotion>A:twoDMotion</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#cartSyst>A:cartSyst</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#yAxisGravity>A:yAxisGravity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#launchOrigin>A:launchOrigin</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#targetXAxis>A:targetXAxis</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#posXDirection>A:posXDirection</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#constAccel>A:constAccel</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#accelXZero>A:accelXZero</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#accelYGravity>A:accelYGravity</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#neglectDrag>A:neglectDrag</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#pointMass>A:pointMass</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#freeFlight>A:freeFlight</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#neglectCurv>A:neglectCurv</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#timeStartZero>A:timeStartZero</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#gravAccelValue>A:gravAccelValue</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions
+          </p>
+        </div>
+        <div id="Table:TraceMatAvsAll">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#twoDMotion>A:twoDMotion</a></th>
+              <th><a href=#cartSyst>A:cartSyst</a></th>
+              <th><a href=#yAxisGravity>A:yAxisGravity</a></th>
+              <th><a href=#launchOrigin>A:launchOrigin</a></th>
+              <th><a href=#targetXAxis>A:targetXAxis</a></th>
+              <th><a href=#posXDirection>A:posXDirection</a></th>
+              <th><a href=#constAccel>A:constAccel</a></th>
+              <th><a href=#accelXZero>A:accelXZero</a></th>
+              <th><a href=#accelYGravity>A:accelYGravity</a></th>
+              <th><a href=#neglectDrag>A:neglectDrag</a></th>
+              <th><a href=#pointMass>A:pointMass</a></th>
+              <th><a href=#freeFlight>A:freeFlight</a></th>
+              <th><a href=#neglectCurv>A:neglectCurv</a></th>
+              <th><a href=#timeStartZero>A:timeStartZero</a></th>
+              <th><a href=#gravAccelValue>A:gravAccelValue</a></th>
+            </tr>
+            <tr>
+              <td><a href=#DD:vecMag>DD:vecMag</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:speedIX>DD:speedIX</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:speedIY>DD:speedIY</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:acceleration>TM:acceleration</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:velocity>TM:velocity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:rectVel>GD:rectVel</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:rectPos>GD:rectPos</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:velVec>GD:velVec</a></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:posVec>GD:posVec</a></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+            </tr>
+            <tr>
+              <td><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+            </tr>
+            <tr>
+              <td><a href=#IM:offsetIM>IM:offsetIM</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:messageIM>IM:messageIM</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifyInVals>FR:Verify-Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR:Correct</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR:Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR:Understandable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR:Reusable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR:Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Assumptions and Other Items
+          </p>
+        </div>
+        <div id="Table:TraceMatRefvsRef">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#DD:vecMag>DD:vecMag</a></th>
+              <th><a href=#DD:speedIX>DD:speedIX</a></th>
+              <th><a href=#DD:speedIY>DD:speedIY</a></th>
+              <th><a href=#TM:acceleration>TM:acceleration</a></th>
+              <th><a href=#TM:velocity>TM:velocity</a></th>
+              <th><a href=#GD:rectVel>GD:rectVel</a></th>
+              <th><a href=#GD:rectPos>GD:rectPos</a></th>
+              <th><a href=#GD:velVec>GD:velVec</a></th>
+              <th><a href=#GD:posVec>GD:posVec</a></th>
+              <th><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></th>
+              <th><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></th>
+              <th><a href=#IM:offsetIM>IM:offsetIM</a></th>
+              <th><a href=#IM:messageIM>IM:messageIM</a></th>
+            </tr>
+            <tr>
+              <td><a href=#DD:vecMag>DD:vecMag</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:speedIX>DD:speedIX</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:speedIY>DD:speedIY</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:acceleration>TM:acceleration</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:velocity>TM:velocity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:rectVel>GD:rectVel</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:rectPos>GD:rectPos</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:velVec>GD:velVec</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:posVec>GD:posVec</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:offsetIM>IM:offsetIM</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:messageIM>IM:messageIM</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Items and Other Sections
+          </p>
+        </div>
+        <div id="Table:TraceMatAllvsR">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#DD:vecMag>DD:vecMag</a></th>
+              <th><a href=#DD:speedIX>DD:speedIX</a></th>
+              <th><a href=#DD:speedIY>DD:speedIY</a></th>
+              <th><a href=#TM:acceleration>TM:acceleration</a></th>
+              <th><a href=#TM:velocity>TM:velocity</a></th>
+              <th><a href=#GD:rectVel>GD:rectVel</a></th>
+              <th><a href=#GD:rectPos>GD:rectPos</a></th>
+              <th><a href=#GD:velVec>GD:velVec</a></th>
+              <th><a href=#GD:posVec>GD:posVec</a></th>
+              <th><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></th>
+              <th><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></th>
+              <th><a href=#IM:offsetIM>IM:offsetIM</a></th>
+              <th><a href=#IM:messageIM>IM:messageIM</a></th>
+              <th><a href=#inputValues>FR:Input-Values</a></th>
+              <th><a href=#verifyInVals>FR:Verify-Input-Values</a></th>
+              <th><a href=#calcValues>FR:Calculate-Values</a></th>
+              <th><a href=#outputValues>FR:Output-Values</a></th>
+              <th><a href=#correct>NFR:Correct</a></th>
+              <th><a href=#verifiable>NFR:Verifiable</a></th>
+              <th><a href=#understandable>NFR:Understandable</a></th>
+              <th><a href=#reusable>NFR:Reusable</a></th>
+              <th><a href=#maintainable>NFR:Maintainable</a></th>
+              <th><a href=#portable>NFR:Portable</a></th>
+            </tr>
+            <tr>
+              <td><a href=#targetHit>GS:targetHit</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifyInVals>FR:Verify-Input-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR:Correct</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR:Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR:Understandable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR:Reusable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR:Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR:Portable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
+          </p>
+        </div>
+        <p class="paragraph">
+          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Figure:TraceGraphRefvsRef>Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Figure:TraceGraphAllvsR>Fig:TraceGraphAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href=#Figure:TraceGraphAllvsAll>Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+        </p>
+        <div id="Figure:TraceGraphAvsA">
+          <figure>
+            <img src="../../../../traceygraphs/projectile/avsa.svg" alt="TraceGraphAvsA" >
+            <figcaption>TraceGraphAvsA</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAvsAll">
+          <figure>
+            <img src="../../../../traceygraphs/projectile/avsall.svg" alt="TraceGraphAvsAll" >
+            <figcaption>TraceGraphAvsAll</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphRefvsRef">
+          <figure>
+            <img src="../../../../traceygraphs/projectile/refvsref.svg" alt="TraceGraphRefvsRef" >
+            <figcaption>TraceGraphRefvsRef</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsR">
+          <figure>
+            <img src="../../../../traceygraphs/projectile/allvsr.svg" alt="TraceGraphAllvsR" >
+            <figcaption>TraceGraphAllvsR</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsAll">
+          <figure>
+            <img src="../../../../traceygraphs/projectile/allvsall.svg" alt="TraceGraphAllvsAll" >
+            <figcaption>TraceGraphAllvsAll</figcaption>
+          </figure>
+        </div>
+        <p class="paragraph">
+          For convenience, the following graphs can be found at the links below:
+        </p>
+        <ul class="list">
+          <li>
+            <a href="../../../../traceygraphs/projectile/avsa.svg">TraceGraphAvsA</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/projectile/avsall.svg">TraceGraphAvsAll</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/projectile/refvsref.svg">TraceGraphRefvsRef</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/projectile/allvsr.svg">TraceGraphAllvsR</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/projectile/allvsall.svg">TraceGraphAllvsAll</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="Sec:AuxConstants">
+      <div class="section">
+        <h1>Values of Auxiliary Constants</h1>
+        <p class="paragraph">
+          This section contains the standard values that are used for calculations in Projectile.
+        </p>
+        <div id="Table:TAuxConsts">
+          <table class="table">
+            <tr>
+              <th>Symbol</th>
+              <th>Description</th>
+              <th>Value</th>
+              <th>Unit</th>
+            </tr>
+            <tr>
+              <td><em><b>g</b></em></td>
+              <td>gravitational acceleration</td>
+              <td><em>9.8</em></td>
+              <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+            </tr>
+            <tr>
+              <td><em>ε</em></td>
+              <td>hit tolerance</td>
+              <td><em>2.0%</em></td>
+              <td>--</td>
+            </tr>
+            <tr>
+              <td><em>π</em></td>
+              <td>ratio of circumference to diameter for any circle</td>
+              <td><em>3.14159265</em></td>
+              <td>--</td>
+            </tr>
+          </table>
+          <p class="caption">Auxiliary Constants</p>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:References">
+      <div class="section">
+        <h1>References</h1>
+        <ul class="hide-list-style">
+          <li>
+            <div id="hibbeler2004">
+              [1]: Hibbeler, R. C. <em>Engineering Mechanics: Dynamics</em>. Pearson Prentice Hall, 2004. Print.
+            </div>
+          </li>
+          <li>
+            <div id="accelerationWiki">
+              [2]: Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
+            </div>
+          </li>
+          <li>
+            <div id="cartesianWiki">
+              [3]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+            </div>
+          </li>
+          <li>
+            <div id="velocityWiki">
+              [4]: Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

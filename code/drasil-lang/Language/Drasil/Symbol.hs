@@ -87,6 +87,26 @@ compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat x) (Concat y) = complsy x y
 compsy (Concat a) b = complsy a [b]
 compsy b (Concat a) = complsy [b] a
+compsy (Atop d1 a) (Atop d2 a') = 
+  case compsy a a' of
+    EQ -> compare d1 d2
+    other -> other
+compsy a (Atop Magnitude b) =
+  case compsy a b of
+    EQ -> LT
+    other -> other
+compsy (Atop Magnitude b) a =
+ case compsy b a of
+    EQ -> GT
+    other -> other
+compsy a (Atop Delta b) =
+  case compsy a b of
+    EQ -> LT
+    other -> other
+compsy (Atop Delta b) a =
+ case compsy b a of
+    EQ -> GT
+    other -> other
 -- The next two cases are very specific (but common) patterns where a superscript is added
 -- to some "conceptual" base symbol to add further context. For example: `v_f^{AB}` (expressed in LaTeX
 -- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the
@@ -108,10 +128,6 @@ compsy (Corners _ _ _ _ b) a =
   case compsy b a of
     EQ -> GT
     other -> other
-compsy (Atop d1 a) (Atop d2 a') = 
-  case compsy a a' of
-    EQ -> compare d1 d2
-    other -> other
 compsy a (Atop _ b) =
   case compsy a b of
     EQ -> LT
@@ -120,6 +136,29 @@ compsy (Atop _ b) a =
  case compsy b a of
     EQ -> GT
     other -> other
+{-
+compsy a (Atop d b) =
+  case d of
+    Magnitude -> case compsy a b of
+                  EQ -> GT
+                  other -> other
+    Delta -> case compsy a b of
+                  EQ -> GT
+                  other -> other
+    _ -> case compsy a b of
+                  EQ -> LT
+                  other -> other
+compsy (Atop d a) b =
+  case d of
+    Magnitude -> case compsy a b of
+                  EQ -> LT
+                  other -> other
+    Delta -> case compsy a b of
+                  EQ -> LT
+                  other -> other
+    _ -> case compsy a b of
+                  EQ -> GT
+                  other -> other-}
 compsy (Special a)  (Special b)  = compare a b
 compsy (Integ    x) (Integ    y) = compare x y
 compsy (Variable x) (Variable y) = compsyLower x y

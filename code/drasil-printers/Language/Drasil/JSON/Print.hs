@@ -121,7 +121,7 @@ pExpr (Font Bold e)  = pExpr e
 --pExpr (Spc Thin)     = text "&#8239;" -- **HTML used
 -- Uses TeX for Mathjax for all other exprs 
 pExpr e              = printMath $ toMath $ TeX.pExpr e
-  -- **before
+  -- before
   --where mjDelimDisp d = text "$" <> d <> text "$"
   --      mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
 

@@ -354,7 +354,7 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
 
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
-  "nass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Rational
+  "mass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
   (exactDbl 1000)) defaultUncrt
 

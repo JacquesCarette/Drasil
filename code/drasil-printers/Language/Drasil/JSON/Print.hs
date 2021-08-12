@@ -173,6 +173,7 @@ pOps Point    = "."
 pOps Perc     = "%"
 pOps LArrow   = " &larr; "
 pOps RArrow   = " &rarr; "
+pOps ForAll   = " ForAll "
 
 
 -- | Renders HTML table, called by 'printLO'

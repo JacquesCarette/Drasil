@@ -131,7 +131,7 @@ TRACEY_GRAPHS_FOLDER_NAME = traceygraphs
 TRACEY_GRAPHS_FOLDER = $(TRACEY_GRAPHS_FOLDER_NAME)/
 TRACEY_GRAPH_NAMES = allvsall allvsr avsa avsall refvsref
 WEBSITE_FOLDER_NAME = Website
-WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/
+WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 
 #####################################
 #### `make` command line options ####

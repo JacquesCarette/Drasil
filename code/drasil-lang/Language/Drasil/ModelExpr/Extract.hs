@@ -2,7 +2,7 @@ module Language.Drasil.ModelExpr.Extract where
 
 import Data.List (nub)
 
-import Language.Drasil.ModelExpr (ModelExpr(..))
+import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
 import Language.Drasil.Space (RealInterval(..))
 
 -- | Generic traverse of all expressions that could lead to names.

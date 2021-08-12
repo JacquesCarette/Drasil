@@ -1,7 +1,7 @@
 module Language.Drasil.ExprClasses where
 
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.ModelExpr (ModelExpr)
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ModelExpr.Convert (expr)
 
 -- | Data that can be expressed using 'ModelExpr'.

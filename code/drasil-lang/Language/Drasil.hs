@@ -197,10 +197,10 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.Expr
 import Language.Drasil.Expr.Lang
-import Language.Drasil.ModelExpr (ModelExpr)
-import Language.Drasil.ModelExpr.Math (space, isIn, defines
+import Language.Drasil.ModelExpr (space, isIn, defines
   , andMEs, equivMEs
   , deriv, pderiv)
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection

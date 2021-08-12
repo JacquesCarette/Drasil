@@ -17,8 +17,8 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 
-import Language.Drasil.ModelExpr (ModelExpr)
-import Language.Drasil.ModelExpr.Math (defines)
+import Language.Drasil.ModelExpr (defines)
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Expr.Lang (Expr(FCall, C))
 import Language.Drasil.Expr (sy)
 import Language.Drasil.NounPhrase.Core (NP)

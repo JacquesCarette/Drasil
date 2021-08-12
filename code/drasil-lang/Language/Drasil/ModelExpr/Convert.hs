@@ -4,7 +4,7 @@ import Data.Bifunctor (bimap, second)
 
 import Language.Drasil.Space (DomainDesc(..), RealInterval(..))
 import qualified Language.Drasil.Expr.Lang as E
-import Language.Drasil.ModelExpr
+import Language.Drasil.ModelExpr.Lang
 
 assocArithOper :: E.AssocArithOper -> AssocArithOper 
 assocArithOper E.AddI  = AddI

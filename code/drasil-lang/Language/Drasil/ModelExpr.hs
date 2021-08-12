@@ -1,156 +1,26 @@
-{-# LANGUAGE GADTs #-}
+{-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 
--- | The Drasil Modelling Expression language
+-- | The Drasil Modelling Expression language constructors
 module Language.Drasil.ModelExpr where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Expr.Lang (Completeness, DerivType)
-import Language.Drasil.Space (Space, DomainDesc, RealInterval)
+import Control.Lens ((^.))
+
+import Language.Drasil.ModelExpr.Lang
 import Language.Drasil.UID (UID)
+import Language.Drasil.Expr.Lang (Completeness(..), DerivType(..))
+import Language.Drasil.ExprClasses (Express(express))
+import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
+import Language.Drasil.Classes (IsArgumentName)
 
 infixr 8 $^
 infixl 7 $/
 infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
-
--- Binary functions
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp = Frac | Pow | Subt
-  deriving Eq
-
--- | Equality operators (equal or not equal).
-data EqBinOp = Eq | NEq
-  deriving Eq
-
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
-  deriving Eq
-
--- | Index operator.
-data LABinOp = Index
-  deriving Eq
-
--- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
-data OrdBinOp = Lt | Gt | LEq | GEq
-  deriving Eq
-
--- | @Vector x Vector -> Vector@ binary operations (cross product).
-data VVVBinOp = Cross
-  deriving Eq
-
--- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
-  deriving Eq
-
--- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = AddI | AddRe | MulI | MulRe
-  deriving Eq
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper = And | Or | Equivalence
-  deriving (Eq, Show)
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
-  deriving Eq
-
--- | @Bool -> Bool@ operators.
-data UFuncB = Not
-  deriving Eq
-
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
-  deriving Eq
-
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
-  deriving Eq
-
--- | Statements involving 2 arguments.
-data StatBinOp = Defines
-  deriving Eq
-
--- | @Value -> Space -> Bool@ operators.
-data SpaceBinOp = IsIn
-  deriving Eq
-
--- | Drasil expressions.
-data ModelExpr where
-  -- | Turns a decimal value ('Double') into an expression.
-  Dbl       :: Double -> ModelExpr
-  -- | Turns an integer into an expression.
-  Int       :: Integer -> ModelExpr
-  -- | Represents decimal values that are exact as integers.
-  ExactDbl  :: Integer -> ModelExpr
-  -- | Turns a string into an expression.
-  Str       :: String -> ModelExpr
-  -- | Introduce Space values into the expression language.
-  Spc       :: Space -> ModelExpr
-
-  -- | Turns two integers into a fraction (or percent).
-  Perc      :: Integer -> Integer -> ModelExpr
-  -- | Takes an associative arithmetic operator with a list of expressions.
-  AssocA    :: AssocArithOper -> [ModelExpr] -> ModelExpr
-  -- | Takes an associative boolean operator with a list of expressions.
-  AssocB    :: AssocBoolOper  -> [ModelExpr] -> ModelExpr
-  -- | Derivative syntax is:
-  --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
-  --   For example: Deriv Part y x1 would be (dy/dx1).
-  Deriv     :: DerivType -> ModelExpr -> UID -> ModelExpr
-  -- | C stands for "Chunk", for referring to a chunk in an expression.
-  --   Implicitly assumes that the chunk has a symbol.
-  C         :: UID -> ModelExpr
-  -- | A function call accepts a list of parameters and a list of named parameters.
-  --   For example
-  --
-  --   * F(x) is (FCall F [x] []).
-  --   * F(x,y) would be (FCall F [x,y]).
-  --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
-  FCall     :: UID -> [ModelExpr] -> [(UID, ModelExpr)] -> ModelExpr
-  -- | For multi-case expressions, each pair represents one case.
-  Case      :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
-  -- | Represents a matrix of expressions.
-  Matrix    :: [[ModelExpr]] -> ModelExpr
-  
-  -- | Unary operation for most functions (eg. sin, cos, log, etc.).
-  UnaryOp       :: UFunc -> ModelExpr -> ModelExpr
-  -- | Unary operation for @Bool -> Bool@ operations.
-  UnaryOpB      :: UFuncB -> ModelExpr -> ModelExpr
-  -- | Unary operation for @Vector -> Vector@ operations.
-  UnaryOpVV     :: UFuncVV -> ModelExpr -> ModelExpr
-  -- | Unary operation for @Vector -> Number@ operations.
-  UnaryOpVN     :: UFuncVN -> ModelExpr -> ModelExpr
-
-  -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
-  ArithBinaryOp :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for boolean operators (implies, iff).
-  BoolBinaryOp  :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for equality between expressions.
-  EqBinaryOp    :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for indexing two expressions.
-  LABinaryOp    :: LABinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for ordering expressions (less than, greater than, etc.).
-  OrdBinaryOp   :: OrdBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Space-related binary operations.
-  SpaceBinaryOp :: SpaceBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Statement-related binary operations.
-  StatBinaryOp  :: StatBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
-  VVVBinaryOp   :: VVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
-  VVNBinaryOp   :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-
-  -- | Operators are generalized arithmetic operators over a 'DomainDesc'
-  --   of an 'Expr'.  Could be called BigOp.
-  --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> ModelExpr
-  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
 
 ($=), ($!=) :: ModelExpr -> ModelExpr -> ModelExpr
 -- | Smart constructor for equating two expressions.
@@ -234,59 +104,248 @@ a $&& b = AssocB And [a, b]
 -- | Smart constructor for the boolean /or/ operator.
 a $|| b = AssocB Or  [a, b]
 
--- | The variable type is just a renamed 'String'.
-type Variable = String
+-- | Smart constructor for taking the absolute value of an expression.
+abs_ :: ModelExpr -> ModelExpr
+abs_ = UnaryOp Abs
 
--- instance Num Expr where
---   (Int 0)        + b              = b
---   a              + (Int 0)        = a
---   (AssocA Add l) + (AssocA Add m) = AssocA Add (l ++ m)
---   (AssocA Add l) + b              = AssocA Add (l ++ [b])
---   a              + (AssocA Add l) = AssocA Add (a : l)
---   a              + b              = AssocA Add [a, b]
+-- | Smart constructor for negating an expression.
+neg :: ModelExpr -> ModelExpr 
+neg = UnaryOp Neg
 
---   (AssocA Mul l) * (AssocA Mul m) = AssocA Mul (l ++ m)
---   (AssocA Mul l) * b              = AssocA Mul (l ++ [b])
---   a              * (AssocA Mul l) = AssocA Mul (a : l)
---   a              * b              = AssocA Mul [a, b]
+-- | Smart constructor to take the log of an expression.
+log :: ModelExpr -> ModelExpr
+log = UnaryOp Log
 
---   a - b = ArithBinaryOp Subt a b
+-- | Smart constructor to take the ln of an expression.
+ln :: ModelExpr -> ModelExpr
+ln = UnaryOp Ln
+
+-- | Smart constructor to take the square root of an expression.
+sqrt :: ModelExpr -> ModelExpr
+sqrt = UnaryOp Sqrt
+
+-- | Smart constructor to apply sin to an expression.
+sin :: ModelExpr -> ModelExpr
+sin = UnaryOp Sin
+
+-- | Smart constructor to apply cos to an expression.
+cos :: ModelExpr -> ModelExpr 
+cos = UnaryOp Cos
+
+-- | Smart constructor to apply tan to an expression.
+tan :: ModelExpr -> ModelExpr
+tan = UnaryOp Tan
+
+-- | Smart constructor to apply sec to an expression.
+sec :: ModelExpr -> ModelExpr 
+sec = UnaryOp Sec
+
+-- | Smart constructor to apply csc to an expression.
+csc :: ModelExpr -> ModelExpr
+csc = UnaryOp Csc
+
+-- | Smart constructor to apply cot to an expression.
+cot :: ModelExpr -> ModelExpr 
+cot = UnaryOp Cot
+
+-- | Smart constructor to apply arcsin to an expression.
+arcsin :: ModelExpr -> ModelExpr 
+arcsin = UnaryOp Arcsin
+
+-- | Smart constructor to apply arccos to an expression.
+arccos :: ModelExpr -> ModelExpr 
+arccos = UnaryOp Arccos
+
+-- | Smart constructor to apply arctan to an expression.
+arctan :: ModelExpr -> ModelExpr 
+arctan = UnaryOp Arctan
+
+-- | Smart constructor for the exponential (base e) function.
+exp :: ModelExpr -> ModelExpr
+exp = UnaryOp Exp
+
+-- | Smart constructor for calculating the dimension of a vector.
+dim :: ModelExpr -> ModelExpr
+dim = UnaryOpVN Dim
+
+-- | Smart constructor for calculating the normal form of a vector.
+norm :: ModelExpr -> ModelExpr
+norm = UnaryOpVN Norm
+
+-- | Smart constructor for negating vectors.
+negVec :: ModelExpr -> ModelExpr
+negVec = UnaryOpVV NegV
+
+-- | Smart constructor for applying logical negation to an expression.
+not_ :: ModelExpr -> ModelExpr
+not_ = UnaryOpB Not
+
+-- | Smart constructor for indexing.
+idx :: ModelExpr -> ModelExpr -> ModelExpr
+idx = LABinaryOp Index
+
+-- | Smart constructor for integers.
+int :: Integer -> ModelExpr
+int = Int
+
+-- | Smart constructor for doubles.
+dbl :: Double -> ModelExpr
+dbl = Dbl
+
+-- | Smart constructor for exact doubles.
+exactDbl :: Integer -> ModelExpr
+exactDbl = ExactDbl
+
+-- | Bring a Space into the ModelExpr.
+space :: Space -> ModelExpr
+space = Spc
+
+-- | Smart constructor for fractions.
+frac :: Integer -> Integer -> ModelExpr
+frac l r = exactDbl l $/ exactDbl r
+
+-- | Smart constructor for rational expressions (only in 1/x form).
+recip_ :: ModelExpr -> ModelExpr
+recip_ denom = exactDbl 1 $/ denom
+
+-- | Smart constructor for strings.
+str :: String -> ModelExpr
+str = Str
+
+-- | Smart constructors for percents.
+perc :: Integer -> Integer -> ModelExpr
+perc = Perc
+
+-- | Smart constructor for the summation, product, and integral functions over an interval.
+defint, defsum, defprod :: Symbol -> ModelExpr -> ModelExpr -> ModelExpr -> ModelExpr
+-- | Smart constructor for the summation, product, and integral functions over all Real numbers.
+intAll, sumAll, prodAll :: Symbol -> ModelExpr -> ModelExpr
+
+defint v low high = Operator AddRe (BoundedDD v Continuous low high)
+intAll v = Operator AddRe (AllDD v Continuous)
+
+defsum v low high = Operator AddRe (BoundedDD v Discrete low high)
+sumAll v = Operator AddRe (AllDD v Discrete)
+
+defprod v low high = Operator MulRe (BoundedDD v Discrete low high)
+prodAll v = Operator MulRe (AllDD v Discrete)
+-- TODO: Above only does for Reals
+
+-- | Smart constructor for 'real interval' membership.
+realInterval :: HasUID c => c -> RealInterval ModelExpr ModelExpr -> ModelExpr
+realInterval c = RealI (c ^. uid)
+
+-- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
+euclidean :: [ModelExpr] -> ModelExpr
+euclidean = sqrt . foldr1 addRe . map square
+
+{-# ANN sum' "HLint: ignore Use sum" #-}
+-- | Used by 'euclidean' function (in place of 'sum') to fix representation of computation.
+sum' :: (Num a, Foldable t) => t a -> a
+sum' = foldr1 (+)
   
---   fromInteger = Int
---   abs         = UnaryOp Abs
---   negate      = UnaryOp Neg
+-- | Smart constructor to cross product two expressions.
+cross :: ModelExpr -> ModelExpr -> ModelExpr
+cross = VVVBinaryOp Cross
 
---   -- this is a Num wart
---   signum _ = error "should not use signum in expressions"
+-- | Smart constructor for case statement with complete set of cases.
+completeCase :: [(ModelExpr,ModelExpr)] -> ModelExpr
+completeCase = Case Complete
 
--- | Expressions are equal if their constructors and contents are equal.
-instance Eq ModelExpr where
-  Dbl a               == Dbl b               =   a == b
-  Int a               == Int b               =   a == b
-  Str a               == Str b               =   a == b
-  AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
-  AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
-  Deriv t1 a b        == Deriv t2 c d        =  t1 == t2 && a == c && b == d
-  C a                 == C b                 =   a == b
-  FCall a b c         == FCall d e f         =   a == d && b == e && c == f
-  Case a b            == Case c d            =   a == c && b == d 
-  UnaryOp a b         == UnaryOp c d         =   a == c && b == d
-  UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
-  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
-  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
-  ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
-  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
-  EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
-  OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
-  SpaceBinaryOp o a b == SpaceBinaryOp p c d =   o == p && a == c && b == d
-  StatBinaryOp o a b  == StatBinaryOp p c d  =   o == p && a == c && b == d
-  LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
-  VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
-  VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
-  _                   == _                   =   False
--- ^ TODO: This needs to add more equality checks
+-- | Smart constructor for case statement with incomplete set of cases.
+incompleteCase :: [(ModelExpr,ModelExpr)] -> ModelExpr
+incompleteCase = Case Incomplete
 
--- instance Fractional Expr where
---   a / b = ArithBinaryOp Frac a b
---   fromRational r = ArithBinaryOp Frac (fromInteger $ numerator   r)
---                                       (fromInteger $ denominator r)
+-- | Smart constructor to square a function.
+square :: ModelExpr -> ModelExpr
+square x = x $^ exactDbl 2
+
+-- | Smart constructor to half a function exactly.
+half :: ModelExpr -> ModelExpr
+half x = x $/ exactDbl 2
+
+-- | Constructs 1/2.
+oneHalf :: ModelExpr
+oneHalf = frac 1 2
+
+-- | Constructs 1/3.
+oneThird :: ModelExpr
+oneThird = frac 1 3
+
+-- | Matrix helper function.
+m2x2 :: ModelExpr -> ModelExpr -> ModelExpr -> ModelExpr -> ModelExpr
+m2x2 a b c d = Matrix [[a,b],[c,d]]
+-- | Matrix helper function.
+vec2D :: ModelExpr -> ModelExpr -> ModelExpr
+vec2D a b    = Matrix [[a],[b]]
+-- | Matrix helper function.
+dgnl2x2 :: ModelExpr -> ModelExpr -> ModelExpr
+dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
+
+-- Some helper functions to do function application
+
+-- FIXME: These constructors should check that the UID is associated with a
+-- chunk that is actually callable.
+-- | Applies a given function with a list of parameters.
+apply :: (HasUID f, HasSymbol f) => f -> [ModelExpr] -> ModelExpr
+apply f ps = FCall (f ^. uid) ps []
+
+-- | Similar to 'apply', but converts second argument into 'Symbol's.
+apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> ModelExpr
+apply1 f a = FCall (f ^. uid) [sy a] []
+
+-- | Similar to 'apply', but the applied function takes two parameters (which are both 'Symbol's).
+apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) 
+  => f -> a -> b -> ModelExpr
+apply2 f a b = FCall (f ^. uid) [sy a, sy b] []
+
+-- | Similar to 'apply', but takes a relation to apply to 'FCall'.
+applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 
+  -> [ModelExpr] -> [(a, ModelExpr)] -> ModelExpr
+applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
+  (map snd ns))
+
+-- Note how |sy| 'enforces' having a symbol
+-- | Get an 'ModelExpr' from a 'Symbol'.
+sy :: (HasUID c, HasSymbol c) => c -> ModelExpr
+sy x = C (x ^. uid)
+
+-- This also wants a symbol constraint.
+-- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
+deriv, pderiv :: (HasUID c, HasSymbol c, Express e) => e -> c -> ModelExpr
+deriv e c = Deriv Total (express e) (c ^. uid)
+pderiv e c = Deriv Part (express e) (c ^. uid)
+
+-- | One expression is "defined" by another.
+defines :: (Express a, Express b) => a -> b -> ModelExpr
+defines a b = StatBinaryOp Defines (express a) (express b)
+
+isIn :: Express a => a -> ModelExpr -> ModelExpr
+isIn a s@(Spc _) = SpaceBinaryOp IsIn (express a) s
+isIn _ _         = error "isIn target must be a Space"
+
+-- | Helper for creating new smart constructors for Associative Binary
+--   operations that require at least 1 expression.
+assocCreate :: Express d => AssocBoolOper -> [d] -> ModelExpr
+assocCreate abo [] = error $ "Need at least 1 expression to create " ++ show abo
+assocCreate _ [x]  = express x
+assocCreate b des  = AssocB b $ assocSanitize b $ map express des
+
+-- | Helper for associative operations, removes embedded variants of the same kind
+assocSanitize :: AssocBoolOper -> [ModelExpr] -> [ModelExpr]
+assocSanitize _ [] = []
+assocSanitize b (it@(AssocB c des):r)
+  | b == c    = assocSanitize b des ++ assocSanitize b r
+  | otherwise = it : assocSanitize b r
+assocSanitize b (de:des) = de : assocSanitize b des
+
+-- | Binary associative "And".
+andMEs :: Express d => [d] -> ModelExpr
+andMEs = assocCreate And
+
+-- | Binary associative "Equivalence".
+equivMEs :: Express a => [a] -> ModelExpr
+equivMEs des
+  | length des >= 2 = assocCreate Equivalence des
+  | otherwise       = error $ "Need at least 2 expressions to create " ++ show Equivalence
+

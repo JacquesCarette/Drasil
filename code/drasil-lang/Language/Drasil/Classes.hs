@@ -31,7 +31,7 @@ module Language.Drasil.Classes (
 
 -- some classes are so 'core' that they are defined elswhere
 -- also helps with cycles...
-import Language.Drasil.Classes.Core
+import Language.Drasil.Classes.Core (HasSymbol, HasUID)
 
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
@@ -46,7 +46,7 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Uncertainty.Core (Uncertainty)
 
-import Control.Lens (Lens', Contravariant)
+import Control.Lens (Lens')
 
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as 
 -- being worthy of naming.

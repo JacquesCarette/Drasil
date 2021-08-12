@@ -1,5 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
-
+-- | GOOL test program for various OO program functionality.
+-- Should run print statements, basic loops, math, and create a helper module without errors.
 module Test.HelloWorld (helloWorld) where
 
 import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
@@ -12,14 +13,17 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
+-- | Creates the HelloWorld program and necessary files.
 helloWorld :: (OOProg r) => GSProgram r
 helloWorld = prog "HelloWorld" [docMod description 
   ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" [] 
   [helloWorldMain] []), helper]
 
+-- | Description of program.
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
+-- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMain :: (OOProg r) => SMethod r
 helloWorldMain = mainFunction (body [ helloInitVariables, 
     helloListSlice,
@@ -27,6 +31,7 @@ helloWorldMain = mainFunction (body [ helloInitVariables,
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])
 
+-- | Initialize variables used in the generated program.
 helloInitVariables :: (OOProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
   varDec $ var "a" int, 
@@ -54,11 +59,13 @@ helloInitVariables = block [comment "Initializing variables",
   printLn (valueOf $ var "boringList" (listType bool)),
   listDec 2 $ var "mySlicedList" (listType double)]
 
+-- | Initialize and assign a value to a new variable @mySlicedList@.
 helloListSlice :: (OOProg r) => MSBlock r
 helloListSlice = listSlice (var "mySlicedList" (listType double)) 
   (valueOf $ var "myOtherList" (listType double)) (Just (litInt 1)) 
   (Just (litInt 3)) Nothing
 
+-- | Create an If statement.
 helloIfBody :: (OOProg r) => MSBody r
 helloIfBody = addComments "If body" (body [
   block [
@@ -127,33 +134,40 @@ helloIfBody = addComments "If body" (body [
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
 
+-- | Print the 5th given argument.
 helloElseBody :: (OOProg r) => MSBody r
 helloElseBody = bodyStatements [printLn (arg 5)]
 
+-- | If-else statement checking if a list is empty. 
 helloIfExists :: (OOProg r) => MSStatement r
 helloIfExists = ifExists (valueOf $ var "boringList" (listType bool)) 
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
+-- | Creates a switch statement.
 helloSwitch :: (OOProg r) => MSStatement r
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)), 
   (litInt 0, oneLiner (var "b" int &= litInt 5))]
   (oneLiner (var "b" int &= litInt 0))
 
+-- | Creates a for loop.
 helloForLoop :: (OOProg r) => MSStatement r
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn 
   (valueOf i)))
   where i = var "i" int
 
+-- | Creates a while loop.
 helloWhileLoop :: (OOProg r) => MSStatement r
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements 
   [printStrLn "Hello", (&++) (var "a" int)]) 
 
+-- | Creates a for-each loop.
 helloForEachLoop :: (OOProg r) => MSStatement r
 helloForEachLoop = forEach i (valueOf $ listVar "myOtherList" double) 
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i, 
   litDouble 1.0])))
   where i = var "num" double
 
+-- | Creates a try statement to catch an intentional error.
 helloTryCatch :: (OOProg r) => MSStatement r
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))

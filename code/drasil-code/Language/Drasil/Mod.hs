@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs #-}
--- | Defines an AST for defining Modules
+-- | Defines an AST for defining Modules.
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, 
   Version, Description, Import, ($:=), pubStateVar, privStateVar, classDef, 

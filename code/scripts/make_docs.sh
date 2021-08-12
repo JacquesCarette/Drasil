@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Since Drasil hides many modules in the built libraries, the normal Haddock docs
 # become a bit difficult to read or appear to be missing components when read.
 #

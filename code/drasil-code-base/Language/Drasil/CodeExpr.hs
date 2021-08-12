@@ -1,15 +1,19 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
--- Defines constructors for CodeExprs often used in relation to code generation.
-module Language.Drasil.CodeExpr (CodeExpr, 
+-- | Defines constructors for 'CodeExpr's often used in relation to code generation.
+module Language.Drasil.CodeExpr (CodeExpr,
+  -- * CodeExpr Smart Constructors (mostly Unary)
   sy, str, int, dbl, exactDbl, matrix,
   frac, recip_, abs_, neg, log,  ln, sqrt,
   sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan,
   exp, dim, norm, not_,
+  -- * CodeExpr Binary Operators
+  ($&&), ($-), ($/), ($^), ($=>), ($<=>), ($=), ($!=), ($<), ($>),
+  ($<=), ($>=),
+  addI, addRe, mulI, mulRe, idx,
+  -- * Programming-related CodeExpr Constructors
   new, newWithNamedArgs, message, msgWithNamedArgs,
   field, apply, apply1, apply2, applyWithNamedArgs,
-  ($&&), ($-), ($/), ($^), ($=>), ($<=>), ($=), ($!=), ($<), ($>),
-  ($<=), ($>=), 
-  addI, addRe, mulI, mulRe, idx,
+  -- * 'Expr' -> 'CodeExpr'
   expr) where
 
 import Prelude hiding (exp, sin, cos, tan, sqrt, log)
@@ -54,7 +58,6 @@ frac l r = exactDbl l $/ exactDbl r
 -- | Smart constructor for rational expressions (only in 1/x form).
 recip_ :: CodeExpr -> CodeExpr
 recip_ denom = exactDbl 1 $/ denom
-
 
 -- | Smart constructor for taking the absolute value of an expression.
 abs_ :: CodeExpr -> CodeExpr

@@ -101,15 +101,20 @@ fillTermMap si = si2
     trms     = map (fst.snd) $ Map.assocs $ termTable chkdb
     concepts = map (fst.snd) $ Map.assocs $ defTable chkdb
 
-    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
-    gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
-    imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
-    tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
+    -- TODO: Uncomment these when the second part of #2775 is resolved.
+    -- Some Definitions and models overwrite the term for a given UID.
+    -- We don't really want this behaviour, so it should be resolved by
+    -- changing some of the constructors for ModelKind found in drasil-theory
+
+    -- ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
+    -- gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
+    -- imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
+    -- tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
     concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
     -- fill in the appropriate chunkdb field
     chkdb2 = chkdb {termTable = termMap $ nub $ map nw symbs ++ map nw trms
-      ++ map nw concepts ++ map nw ddefs ++ map nw gdefs ++ map nw imods
-      ++ map nw tmods ++ map nw concIns}
+      ++ map nw concepts ++ map nw concIns}
+      -- ++ map nw ddefs ++ map nw gdefs ++ map nw imods ++ map nw tmods}
     -- return the filled in system information
     si2 = set sysinfodb chkdb2 si
 

@@ -150,8 +150,7 @@ resShrDeriv = mkDerivNoHeader [foldlSent [S "Derived by substituting",
 
 --
 mobShr :: RelationConcept
-mobShr = makeRC "mobShr"
-  (nounPhraseSP "mobilized shear force") mobShrDesc mobShrRel -- genDef4Label
+mobShr = addRelToCC mobShrI "mobShr" mobShrRel -- genDef4Label
 
 mobShrRel :: Relation
 mobShrRel = inxi mobShrI $= inxi shrResI $/ sy fs $= shrResEqn $/ sy fs
@@ -160,7 +159,7 @@ mobShrDesc :: Sentence
 mobShrDesc = (baseLngth `definedIn'''` lengthLb !.)
 
 mobShrDeriv :: Derivation
-mobShrDeriv = mkDerivNoHeader [foldlSent_ [atStart mobShrI `S.is` S "derived by dividing",
+mobShrDeriv = mkDerivNoHeader [foldlSent_ [atStart' mobShrI `S.is` S "derived by dividing",
   phrase definition `S.the_ofThe` ch shrResI, S "from", refS resShrGD,
   S "by", phraseNP (definition `the_ofThe` fs), S "from" +:+. refS factOfSafety,
   S "The", getTandS fs, S "is not indexed by", ch index,

@@ -259,8 +259,8 @@ resistiveShear = makeUCWDS "resistiveShear" (cn' "resistive shear force")
     phrase mobilizedShear +:+ S "that can be withstood before failure")
   cP newton
 
-mobShrI = makeUCWDS "mobShr" (cn "mobilized shear forces")
-  (pluralNP (the mobilizedShear) +:+ S "per meter" `S.inThe` phrase zDir +:+
+mobShrI = makeUCWDS "mobShrFs" (cn' "mobilized shear force")
+  (phraseNP (the mobilizedShear) +:+ S "per meter" `S.inThe` phrase zDir +:+
    S "for each slice")
   (vec cS) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
               -- This is fine for now, as they are the same concept, but when this

@@ -1,11 +1,8 @@
 module Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Language.Drasil hiding (section)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
-  _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -33,25 +30,13 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
-
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
-
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
-
-import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
-  DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
-  IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  PDSub(..), ProblemDescription(PDProg), RefSec(RefProg), RefTab(TAandA, TUnits),
-  ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
-  SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc, fillcdbSRS)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in

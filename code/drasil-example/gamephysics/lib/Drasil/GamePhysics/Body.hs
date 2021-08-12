@@ -1,24 +1,13 @@
 module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (organization, section)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, _datadefs,
-  _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
-import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
-  Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
-  RefSec(..), RefTab(..), SCSSub(..), SRSDecl, SSDSec(SSDProg), SSDSub(..),
-  SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
-  OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, purpDoc,
-  fillcdbSRS)
-import qualified Drasil.DocLang.SRS as SRS
+
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, document, endUser, environment, game, guide,

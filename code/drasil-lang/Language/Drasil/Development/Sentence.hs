@@ -1,8 +1,15 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
--- Various helpers for building Sentences from other bits.
+-- | Various helpers for building Sentences from other bits.
 -- Really ought to be moved out to (likely) docLang, but is here for now.
-module Language.Drasil.Development.Sentence (short, introduceAbb, atStart,
-  atStart', titleize, titleize', phrase, plural, phrasePoss, pluralPoss) where
+module Language.Drasil.Development.Sentence (
+  -- * All Lowercase
+  phrase, plural, phrasePoss, pluralPoss,
+  -- * Capitalize First Word
+  atStart, atStart',
+  -- * Capitalize All Words
+  titleize, titleize',
+  -- * Short Form (lowercase)
+  short, introduceAbb) where
 
 import Control.Lens ((^.))
 

@@ -1,7 +1,13 @@
 {-# Language TypeFamilies #-}
-module Language.Drasil.Chunk.Concept 
-  ( ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs, cic, cw
-  , CommonConcept, ConceptInstance
+-- | Contains functions to create the concept related chunk types found in "Language.Drasil.Chunk.Concept.Core".
+module Language.Drasil.Chunk.Concept (
+  -- * Concept Chunks
+  -- ** From an idea ('IdeaDict')
+  ConceptChunk, dcc, dccWDS, cc, cc', ccs, cw,
+  -- ** From a common idea ('CI')
+  CommonConcept, dcc', dccWDS',
+  -- ** From a 'ConceptChunk'
+  ConceptInstance, cic
   ) where
 
 import Language.Drasil.Classes.Core (HasUID(uid))
@@ -24,7 +30,7 @@ dcc :: String -> NP -> String -> ConceptChunk
 dcc i ter des = ConDict (mkIdea i ter Nothing) (S des) []
 -- ^ Concept domain tagging is not yet implemented in this constructor.
 
--- | Identical to 'dcc', but takes an abbreviation ('String').
+-- | Identical to 'dcc', but takes an abbreviation ('String') and returns a 'CommonConcept' instead.
 dcc' :: String -> NP -> String -> String -> CommonConcept
 dcc' i t d a = ComConDict (commonIdea i t a []) (S d)
 
@@ -32,12 +38,12 @@ dcc' i t d a = ComConDict (commonIdea i t a []) (S d)
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
 dccWDS i t d = ConDict (mkIdea i t Nothing) d []
 
--- | Similar to 'dcc', except the definition is a 'Sentence' and takes
--- an abbreviation ('String').
+-- | Similar to 'dcc', except the definition is a 'Sentence', takes
+-- an abbreviation ('String') and returns a 'CommonConcept' instead.
 dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
 dccWDS' i t d a = ComConDict (commonIdea i t a []) d
 
--- | Constructor for 'ConceptChunk'. Takes the definition of the 
+-- | Constructor for projecting an idea into a 'ConceptChunk'. Takes the definition of the 
 -- 'ConceptChunk' as a 'String'. Does not allow concept domain tagging.
 cc :: Idea c => c -> String -> ConceptChunk
 cc n d = ConDict (nw n) (S d) []
@@ -46,7 +52,7 @@ cc n d = ConDict (nw n) (S d) []
 cc' :: Idea c => c -> Sentence -> ConceptChunk
 cc' n d = ConDict (nw n) d []
 
--- | Similar to 'cc'', but allows explicit tagging.
+-- | Similar to 'cc'', but allows explicit domain tagging.
 ccs :: (Idea c, Concept d) => c -> Sentence -> [d] -> ConceptChunk --Explicit tagging
 ccs n d l = ConDict (nw n) d $ map (^. uid) l
 

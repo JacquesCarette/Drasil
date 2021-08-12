@@ -1,9 +1,14 @@
-module Language.Drasil.People 
-  ( People, Person
+-- | Defines types and functions to encode people, names, and naming convention.
+-- Used for referencing and authorship of work.
+module Language.Drasil.People (
+    -- * Class
+    HasName
+    -- * Types
+  , Person, People, Conv(..) --This is needed to unwrap names for the bibliography
+    -- * Constructors
   , person, person', personWM, personWM', mononym
-  , HasName
+    -- * Accessors
   , name, nameStr
-  , Conv(..) --This is needed to unwrap names for the bibliography
   , lstName
   , rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople --For sorting references

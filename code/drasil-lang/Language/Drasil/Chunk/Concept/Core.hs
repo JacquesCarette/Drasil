@@ -1,5 +1,9 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Concept.Core(ConceptChunk(ConDict), CommonConcept(ComConDict)
+-- | Define concept-related chunks. A concept is usually something that has
+-- a term, definition, and comes from some domain of knowledge.
+module Language.Drasil.Chunk.Concept.Core(
+  -- * Concept-related Datatypes
+  ConceptChunk(ConDict), CommonConcept(ComConDict)
   , ConceptInstance(ConInst)
   , sDom)
   where
@@ -24,7 +28,10 @@ sDom [d] = d
 sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
   show (length d) ++ " instead."
 
--- | The ConceptChunk datatype is a Concept that contains an idea ('IdeaDict'), a definition ('Sentence'), and a domain (['UID']).
+-- | The ConceptChunk datatype records a concept that contains an idea ('IdeaDict'),
+-- a definition ('Sentence'), and an associated domain of knowledge (['UID']).
+--
+-- Ex. The concept of "Accuracy" may be defined as the quality or state of being correct or precise.
 data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the concept.
                             , _defn' :: Sentence -- ^ The definition of the concept.
                             , cdom' :: [UID] -- ^ Domain of the concept.
@@ -45,6 +52,7 @@ instance Definition    ConceptChunk where defn = defn'
 instance ConceptDomain ConceptChunk where cdom = cdom' 
 
 -- | Contains a common idea ('CI') with a definition ('Sentence').
+-- Similar to 'ConceptChunk', but must have an abbreviation.
 data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence}
 makeLenses ''CommonConcept
 
@@ -64,6 +72,12 @@ instance CommonIdea    CommonConcept where abrv = abrv . view comm
 instance ConceptDomain CommonConcept where cdom = cdom . view comm 
 
 -- | Contains a 'ConceptChunk', reference address, and a 'ShortName'.
+-- It is a concept that can be referred to, or rather, a instance of where a concept is applied.
+-- Often used in Goal Statements, Assumptions, Requirements, etc.
+--
+-- Ex. Something like the assumption that gravity is 9.81 m/s. When we write our equations,
+-- we can then link this assumption so that we do not have to explicitly define
+-- that assumption when needed to verify our work.
 data ConceptInstance = ConInst { _cc :: ConceptChunk , ra :: String, shnm :: ShortName}
 makeLenses ''ConceptInstance
 

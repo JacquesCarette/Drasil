@@ -1,4 +1,4 @@
--- | Defining classes that represent knowledge about Documents
+-- | Defining classes that represent knowledge about Documents.
 module Language.Drasil.Classes.Document (
   HasCitation(getCitations)
   ) where

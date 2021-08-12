@@ -1,19 +1,20 @@
-module Language.Drasil.Data.Citation 
-  ( -- Types
-    CiteField(..), HP(..), CitationKind(..)
-    -- "smart" constructors
-  , author, editor
-      -- CiteField
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-      -- FIXME: these should be checked for bounds
-      -- Int -> CiteField
-  , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
-  , pages
-      -- Month -> CiteField
-  , month
-
+-- | Contains all necessary types and constructors for citing sources in Drasil.
+module Language.Drasil.Data.Citation (
+  -- * Types
+  CiteField(..), HP(..), CitationKind(..),
+  -- * 'CiteField' Constructors
+  -- ** 'People' -> 'CiteField'
+  author, editor,
+  -- ** 'String' -> 'CiteField'
+  address, bookTitle, howPublished, howPublishedU, institution, journal, note,
+  organization, publisher, school, series, title, typeField,
+  -- FIXME: these should be checked for bounds
+  -- ** 'Int' -> 'CiteField'
+  chapter, edition, number, volume, year,
+  -- ** ['Int'] -> 'CiteField'
+  pages,
+  -- ** 'Month' -> 'CiteField'
+  month
   ) where
 
 import Language.Drasil.People (People)

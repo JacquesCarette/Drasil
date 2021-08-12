@@ -1,3 +1,4 @@
+-- | Special type for unicode characters.
 module Language.Drasil.Unicode(Special(Partial, Circle), RenderSpecial(special)) where
 
 -- | Special characters include partial derivatives and the degree circle.

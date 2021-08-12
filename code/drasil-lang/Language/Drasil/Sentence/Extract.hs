@@ -1,3 +1,5 @@
+-- | Extract various kinds of UIDs from a Sentence. Used in conjunction with the
+-- chunk database in order to render terms, symbols, and references properly.
 module Language.Drasil.Sentence.Extract(sdep, shortdep, lnames, lnames') where
 
 import Data.List (nub)

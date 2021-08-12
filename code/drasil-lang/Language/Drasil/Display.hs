@@ -1,6 +1,6 @@
-{- re-export many things to simplify external use -}
+-- | Re-export display-related functions and types to simplify external use.
 module Language.Drasil.Display (
-    -- Symbol
+    -- * Symbol
     Decoration(..), Symbol(..), compsy
     ) where
 

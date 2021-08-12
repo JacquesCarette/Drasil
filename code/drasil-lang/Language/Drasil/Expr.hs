@@ -7,6 +7,8 @@ import Prelude hiding (sqrt)
 import Language.Drasil.Space (DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 
+-- * Expression Types
+
 -- | A relation is just an expression ('Expr').
 type Relation = Expr
 
@@ -76,6 +78,8 @@ data UFuncVN = Norm | Dim
 data Completeness = Complete | Incomplete
   deriving Eq
 
+-- ** Expr
+
 -- | Drasil expressions.
 data Expr where
   -- | Turns a decimal value ('Double') into an expression.
@@ -141,6 +145,8 @@ data Expr where
   Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
+
+-- * Binary Operators
 
 ($=), ($!=) :: Expr -> Expr -> Expr
 -- | Smart constructor for equating two expressions.
@@ -223,6 +229,8 @@ mulRe l r = AssocA MulRe [l, r]
 a $&& b = AssocB And [a, b]
 -- | Smart constructor for the boolean /or/ operator.
 a $|| b = AssocB Or  [a, b]
+
+-- * Misc.
 
 -- | The variable type is just a renamed 'String'.
 type Variable = String

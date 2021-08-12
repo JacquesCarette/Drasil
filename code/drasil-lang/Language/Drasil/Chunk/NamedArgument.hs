@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedArgument (NamedArgument(..), narg) where
+-- | Named arguments used in generating code.
+module Language.Drasil.Chunk.NamedArgument (
+  -- * Chunk Type
+  NamedArgument(..),
+  -- * Constructor
+  narg) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasSpace(typ), 
@@ -9,7 +14,8 @@ import Language.Drasil.Chunk.UnitDefn(MayHaveUnit(getUnit))
 
 import Control.Lens ((^.), makeLenses, view)
 
--- | Any quantity can be a named argument (wrapper for 'QuantityDict')
+-- | Any quantity can be a named argument (wrapper for 'QuantityDict'),
+-- but with more of a focus on generating code arguments.
 newtype NamedArgument = NA {_qtd :: QuantityDict}
 makeLenses ''NamedArgument
 

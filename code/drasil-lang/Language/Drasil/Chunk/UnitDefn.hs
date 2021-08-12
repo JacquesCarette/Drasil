@@ -1,13 +1,22 @@
 {-# Language TemplateHaskell #-}
+-- | For defining units built from a concept.
 module Language.Drasil.Chunk.UnitDefn (
-    UnitDefn(..)
-  , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
-  , scale, shift
-  , derUC, derUC', derUC''
-  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit)
-  , IsUnit(getUnits)
+  -- * Classes
+  MayHaveUnit(getUnit),
+  IsUnit(getUnits),
+  -- * Chunk Type
+  UnitDefn(..),
+  -- * Constructors
+  makeDerU, newUnit,
+  derUC, derUC', derUC'',
+  fund, fund', derCUC, derCUC', derCUC'',
+  unitWrapper,
+  -- * Unit Combinators ('UnitEquation's)
+  (^:), (/:), (*:), (*$), (/$),(^$),
+  -- * Unit Relation Functions
+  scale, shift,
+  -- * Helpers
+  fromUDefn, unitCon, getCu, compUnitDefn
   ) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -28,6 +37,8 @@ import Language.Drasil.UID
 -- a unit symbol, maybe another (when it is a synonym),
 -- perhaps a definition, and a list of 'UID' of the units that make up
 -- the definition.
+--
+-- Ex. Meter is a unit of length defined by the symbol (m).
 data UnitDefn = UD { _vc :: ConceptChunk 
                    , _cas :: UnitSymbol
                    , _cu :: [UID] }
@@ -101,13 +112,12 @@ unitCon :: String -> ConceptChunk
 unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 
--- TODO: Could use a clearer definition here
--- | For allowing lists to mix the two, thus forgetting
--- the definition part.
+-- | For allowing lists to mix together chunks that are units by projecting them into a 'UnitDefn'.
+-- For now, this only works on 'UnitDefn's. 
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
 unitWrapper u = UD (cc' u (u ^. defn)) (Defined (usymb u) (USynonym $ usymb u)) (getUnits u)
 
--- | Helper get derived units if they exist.
+-- | Helper to get derived units if they exist.
 getSecondSymb :: UnitDefn -> Maybe USymb
 getSecondSymb c = get_symb2 $ view cas c
   where

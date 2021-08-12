@@ -1,4 +1,7 @@
-module Language.Drasil.Stages( Stage(..)) where
+-- | Stages used for displaying symbols.
+module Language.Drasil.Stages(
+   -- * Type
+   Stage(..)) where
 -- FIXME: More fine-grained stages.
 -- | Stages correspond to what we're trying to look up. They range from abstract
 -- to concrete. Equational stages are more theoretical and oriented towards abstract design

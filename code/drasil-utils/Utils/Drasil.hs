@@ -1,37 +1,54 @@
+-- | Gather Drasil utility functions. For now, does not include combinators
+-- (Sentence.hs, NounPhrase.hs, Concepts.hs)
 module Utils.Drasil (
-  -- Contents
+  -- * Content-Related Utilities
+  -- | From "Utils.Drasil.Contents".
   enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD,
   lbldExpr, unlbldExpr,
-  -- Document
+  -- * Document-Related Utilities
+  -- | From "Utils.Drasil.Document".
   blank, indent, indentList,
-  -- English
+  -- * Language-Related Utilities
+  -- | From "Utils.Drasil.English".
   capitalize, stringList,
-  -- Fold
-  EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
+  -- * Fold-type Utilities.
+  -- | From "Utils.Drasil.Fold". Defines many general fold functions
+  -- for use with Drasil-related types.
+
+  -- ** Folding Options as Types
+  EnumType(..), WrapType(..), SepType(..), FoldType(..),
+  -- ** Folding Functions
+  -- *** Expression-related
+  foldConstraints,
+  -- *** Sentence-related
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
   foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
-  -- Lists
+  -- * List-type Utilities.
+  -- | From "Utils.Drasil.Lists". General functions involving lists.
   replaceAll, subsetOf,
-  -- Misc
-  addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart, definedIn,
-  definedIn', definedIn'', definedIn''', displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN,
-  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
-  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
-  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
-  showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
-  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList, fterms
+  -- * Misc. Uitlities
+  -- | From "Utils.Drasil.Misc". General sorting functions, useful combinators,
+  -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
+  
+  -- ** Reference-related Functions
+  -- | Attach a 'Reference' and a 'Sentence' in different ways.
+  chgsStart, definedIn, definedIn', definedIn'', definedIn''',
+  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows,
+  makeListRef,
+  -- ** Sentence-related Functions
+  -- | See Reference-related Functions as well.
+  addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet,
+  eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded,
+  maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
+  unwrap, fterms,
+  -- ** List-related Functions
+  bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
+  mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
+  tAndDOnly, tAndDWAcc, tAndDWSym,
+  weave, zipSentList
   -- Concepts
-  --and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
-  --compoundNCP1, compoundNCPlPh, for, for', of_, of_',
-  --of_'', of__, ofA, ofA', ofN_, the, the', the'', aNINP, aNINP', inThe', with, ofThe', the_ofThe'', onThe', 
-  --combineNINP, combineNPNI
-  -- Sentence
-  --andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe',
-  --sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'', forTT, forTT'
-  -- NounPhrase
-  --insertStringNP, prependStringNP, insertSentNP, prependSentNP,
-  --theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', inTheNP, inTheNP', inTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',
-  --forNP, forNP', forNP'', ofNP, ofNP', ofNP'', ofNP''', withNP, andNP, andNP', andNP'', andNP''',
+    -- may want to add concept-level combinators back into Drasil.Utils,
+    -- but for now leave as a separate and exposed module.
 ) where
 
 import Utils.Drasil.Contents
@@ -41,5 +58,3 @@ import Utils.Drasil.Fold
 import Utils.Drasil.Lists
 import Utils.Drasil.Misc
 --import Utils.Drasil.Concepts
---import Utils.Drasil.NounPhrase
---import Utils.Drasil.Sentence

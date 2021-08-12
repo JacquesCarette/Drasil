@@ -1,20 +1,27 @@
-module Utils.Drasil.Contents (enumBullet, enumBulletU, enumSimple,
-  enumSimpleU, lbldExpr, unlbldExpr, mkEnumSimpleD) where
+-- | General functions that are useful in manipulating some Drasil types into
+-- printable 'Contents'.
+module Utils.Drasil.Contents (
+  -- * List Creation Functions
+  enumBullet, enumBulletU, enumSimple,
+  enumSimpleU, mkEnumSimpleD,
+  -- * Displaying Expressions
+  lbldExpr, unlbldExpr
+  ) where
 
 import Language.Drasil
 import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
 
 import Control.Lens ((^.))
 
--- | Constructs 'LabelledContent' from an expression and a reference.
+-- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: Display c => c -> Reference -> LabelledContent
 lbldExpr c lbl = llcc lbl $ EqnBlock $ toDispExpr c
 
--- | Same as 'eqUnR' except content is unlabelled.
+-- | Same as 'eqUnR' except content is unlabelled (does not attach a 'Reference').
 unlbldExpr :: Display c => c -> Contents
 unlbldExpr c = UlC $ ulcc $ EqnBlock $ toDispExpr c
 
--- | Applies 'Enumeration', 'Bullet' and 'Flat' to a list.
+-- | Creates a bulleted list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 
@@ -22,12 +29,22 @@ enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 enumBulletU :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
 enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 
--- | Enumerates a list and applies `Simple` and `Enumeration` to it:
+-- | Currently Unused. Creates a simple bulleted list that labels things with
+-- a title and number:
 --
 --     * lb - Reference,
 --     * s - start index for the enumeration,
 --     * t - title of the list,
 --     * l - list to be enumerated.
+--
+-- For example, if we want to create a list of data definitions, we could call the function as follows:
+--
+-- > enumSimple _ 2 (S "DD") [def1, def2, ...]
+--
+-- And it would render as:
+--    * DD2: def1
+--    * DD3: def2
+--    * DD4: def3 ...
 enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
@@ -36,22 +53,22 @@ enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enu
 enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | Converts lists of tuples containing a title ('Sentence') and 'ItemType' into
--- a 'ListTuple' which can be used with 'Contents' but not directly referable.
+-- a bulleted list (['ListTuple']) which can be used with 'Contents' but not directly referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
--- | Convenience function for transforming types which are
--- instances of the constraints 'Referable', 'HasShortName', and 'Definition', into
--- Simple-type 'Enumeration's.
+-- | Convenience function for transforming referable concepts into a bulleted list.
+-- Used in drasil-docLang in making the assumptions, goals, and requirements sections.
+-- Output is of the kind @Concept Name: definition of concept@.
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
 mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 
--- | Convenience function for converting lists into
--- Simple-type 'Enumeration's.
+-- | Helper function for converting a list of something into a bulleted list.
+-- Used in 'mkEnumSimpleD'.
 mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
 mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
 
--- | Creates a 'ListTuple', filling in the title with a 'ShortName' and filling
--- reference information.
+-- | Helper function that creates a bullet point from a function and an item.
+-- Used in 'mkEnumSimpleD'.
 mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
 mkListTuple f x = (getSentSN $ shortname x, f x, Just $ refAdd x)

@@ -6,7 +6,8 @@ import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
 
-import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA, ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe, isThe) 
+import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA,
+  ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe, isThe)
 
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the word "and" between

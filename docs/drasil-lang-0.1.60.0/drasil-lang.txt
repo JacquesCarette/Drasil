@@ -533,8 +533,108 @@ IsIn :: DisplayBinOp
 
 -- | Associative Binary Display Operations.
 data DisplayAssocBinOp
-DAnd :: DisplayAssocBinOp
+And :: DisplayAssocBinOp
 Equivalence :: DisplayAssocBinOp
+
+-- | <tt>Bool -&gt; Bool</tt> operators.
+data UFuncB
+Not :: UFuncB
+
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+NegV :: UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
+Norm :: UFuncVN
+Dim :: UFuncVN
+
+-- | Arithmetic operators (fractional, power, and subtraction).
+data ArithBinOp
+Frac :: ArithBinOp
+Pow :: ArithBinOp
+Subt :: ArithBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
+data BoolBinOp
+Impl :: BoolBinOp
+Iff :: BoolBinOp
+
+-- | Equality operators (equal or not equal).
+data EqBinOp
+Eq :: EqBinOp
+NEq :: EqBinOp
+
+-- | Index operator.
+data LABinOp
+Index :: LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
+data OrdBinOp
+Lt :: OrdBinOp
+Gt :: OrdBinOp
+LEq :: OrdBinOp
+GEq :: OrdBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product).
+data VVVBinOp
+Cross :: VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
+data VVNBinOp
+Dot :: VVNBinOp
+
+-- | Get dependencies from an equation.
+eDep :: Expr -> [String]
+
+-- | Generic traverse of all expressions that could lead to names.
+eNames :: Expr -> [String]
+
+-- | Generic traverse of all positions that could lead to <a>eNames</a>
+--   without functions. FIXME : this should really be done via post-facto
+--   filtering, but right now the information needed to do this is not
+--   available!
+eNames' :: Expr -> [String]
+
+-- | Generic traversal of everything that could come from an interval to
+--   names (similar to <a>eNames</a>).
+eNamesRI :: RealInterval Expr Expr -> [String]
+
+-- | Get dependencies from display expressions.
+deDep :: DisplayExpr -> [String]
+
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <tt>Symbol</tt>.
+sdep :: Sentence -> [UID]
+
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> [UID]
+
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
+
+-- | precA - precedence for arithmetic-related Binary-Associative
+--   (Commutative) operators.
+precA :: AssocArithOper -> Int
+
+-- | precB - precedence for boolean-related Binary-Associative
+--   (Commutative) operators.
+precB :: AssocBoolOper -> Int
+
+-- | eprec - <a>Expression</a> precedence.
+eprec :: Expr -> Int
+
+-- | dePrec - "Display Expression" precedence.
+dePrec :: DisplayExpr -> Int
+
+-- | dePrecAssoc - precedence for associative binary operators.
+dePrecAssoc :: DisplayAssocBinOp -> Int
+
+module Language.Drasil
 
 -- | Drasil expressions.
 data Expr
@@ -651,54 +751,36 @@ Neg :: UFunc
 
 -- | <tt>Bool -&gt; Bool</tt> operators.
 data UFuncB
-Not :: UFuncB
 
 -- | <tt>Vector -&gt; Vector</tt> operators.
 data UFuncVV
-NegV :: UFuncVV
 
 -- | <tt>Vector -&gt; Number</tt> operators.
 data UFuncVN
-Norm :: UFuncVN
-Dim :: UFuncVN
 
 -- | Arithmetic operators (fractional, power, and subtraction).
 data ArithBinOp
-Frac :: ArithBinOp
-Pow :: ArithBinOp
-Subt :: ArithBinOp
 
 -- | Conditional and Biconditional operators (Expressions can imply one
 --   another, or exist if and only if another expression exists).
 data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
 
 -- | Equality operators (equal or not equal).
 data EqBinOp
-Eq :: EqBinOp
-NEq :: EqBinOp
 
 -- | Index operator.
 data LABinOp
-Index :: LABinOp
 
 -- | Ordered binary operators (less than, greater than, less than or equal
 --   to, greater than or equal to).
 data OrdBinOp
-Lt :: OrdBinOp
-Gt :: OrdBinOp
-LEq :: OrdBinOp
-GEq :: OrdBinOp
 
 -- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
 --   product).
 data VVVBinOp
-Cross :: VVVBinOp
 
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
-Dot :: VVNBinOp
 
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
@@ -723,111 +805,6 @@ Total :: DerivType
 data Completeness
 Complete :: Completeness
 Incomplete :: Completeness
-
--- | A relation is just an expression (<a>Expr</a>).
-type Relation = Expr
-
--- | Get dependencies from an equation.
-eDep :: Expr -> [String]
-
--- | Generic traverse of all expressions that could lead to names.
-eNames :: Expr -> [String]
-
--- | Generic traverse of all positions that could lead to <a>eNames</a>
---   without functions. FIXME : this should really be done via post-facto
---   filtering, but right now the information needed to do this is not
---   available!
-eNames' :: Expr -> [String]
-
--- | Generic traversal of everything that could come from an interval to
---   names (similar to <a>eNames</a>).
-eNamesRI :: RealInterval Expr Expr -> [String]
-
--- | Get dependencies from display expressions.
-deDep :: DisplayExpr -> [String]
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <tt>Symbol</tt>.
-sdep :: Sentence -> [UID]
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> [UID]
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
-
--- | precA - precedence for arithmetic-related Binary-Associative
---   (Commutative) operators.
-precA :: AssocArithOper -> Int
-
--- | precB - precedence for boolean-related Binary-Associative
---   (Commutative) operators.
-precB :: AssocBoolOper -> Int
-
--- | eprec - <a>Expression</a> precedence.
-eprec :: Expr -> Int
-
--- | dePrec - "Display Expression" precedence.
-dePrec :: DisplayExpr -> Int
-
--- | dePrecAssoc - precedence for associative binary operators.
-dePrecAssoc :: DisplayAssocBinOp -> Int
-
-module Language.Drasil
-
--- | Drasil expressions.
-data Expr
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc
-
--- | <tt>Bool -&gt; Bool</tt> operators.
-data UFuncB
-
--- | <tt>Vector -&gt; Vector</tt> operators.
-data UFuncVV
-
--- | <tt>Vector -&gt; Number</tt> operators.
-data UFuncVN
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-
--- | Equality operators (equal or not equal).
-data EqBinOp
-
--- | Index operator.
-data LABinOp
-
--- | Ordered binary operators (less than, greater than, less than or equal
---   to, greater than or equal to).
-data OrdBinOp
-
--- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
-data VVVBinOp
-
--- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
-data VVNBinOp
-
--- | Associative operators (adding and multiplication). Also specifies
---   whether it is for integers or for real numbers.
-data AssocArithOper
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper
-
--- | Determines the type of the derivative (either a partial derivative or
---   a total derivative).
-data DerivType
-
--- | For case expressions (either complete or incomplete).
-data Completeness
 
 -- | A relation is just an expression (<a>Expr</a>).
 type Relation = Expr
@@ -1290,7 +1267,7 @@ sDom :: [UID] -> UID
 -- | The commonIdea smart constructor requires a chunk id (<a>UID</a>), a
 --   term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
 --   ([<a>UID</a>]).
-commonIdea :: String -> NP -> String -> [UID] -> CI
+commonIdea :: UID -> NP -> String -> [UID] -> CI
 
 -- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
 --   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation
@@ -1305,7 +1282,7 @@ getAccStr :: CI -> String
 
 -- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
 --   (often a domain).
-commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
+commonIdeaWithDict :: UID -> NP -> String -> [IdeaDict] -> CI
 
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
 prependAbrv :: CommonIdea c => c -> String -> String
@@ -1426,7 +1403,7 @@ cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Const
 -- | Similar to <a>cnstrw</a>, but types must also have a <a>Concept</a>.
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
 
--- | A QDefinition is a <a>QuantityDict</a> with a defining expression
+-- | A QDefinition is a <tt>QuantityDict</tt> with a defining expression
 --   (<a>Expr</a>), a definition (<a>Sentence</a>), and a domain
 --   ([<a>UID</a>]).
 data QDefinition
@@ -1434,7 +1411,7 @@ data QDefinition
 -- | Create a <a>QDefinition</a> with a <a>UID</a>, term (<a>NP</a>),
 --   definition (<a>Sentence</a>), <a>Symbol</a>, <a>Space</a>, unit, and
 --   defining expression.
-fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
+fromEqn :: IsUnit u => UID -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
 
 -- | Same as <a>fromEqn</a>, but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> Expr -> QDefinition
@@ -1618,6 +1595,7 @@ ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
 
 -- | Similar to <a>ucs</a>, but uses a <a>Sentence</a> for description.
 ucsWS :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
+ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
 
 -- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit.
 class (Quantity c) => Unitary c
@@ -2157,7 +2135,6 @@ nounPhraseSent :: Sentence -> NP
 --   and <a>Section</a>s which hold the contents of the document.
 data Document
 Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
-Notebook :: Title -> Author -> [Section] -> Document
 
 -- | Determines whether or not the table of contents appears on the
 --   generated artifacts.
@@ -2244,8 +2221,7 @@ mkParagraph :: Sentence -> Contents
 mkRawLC :: RawContent -> Reference -> LabelledContent
 
 -- | Manually removes the first section of a document (table of contents
---   section). temp fix for Notebook (see if we need this in notebook
---   later)
+--   section).
 checkToC :: Document -> Document
 
 -- | Smart constructor for labelled content chunks.
@@ -2306,8 +2282,7 @@ Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 Bib :: BibRef -> RawContent
 
 -- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). | CodeBlock CodeExpr -- ^ Block
---   for codes TODO: Fill this one in.
+--   height, and a label (<a>Sentence</a>). TODO: Fill this one in.
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into
@@ -2325,10 +2300,6 @@ makeFigRef :: String -> Reference
 -- | Create a reference for a section. Takes in the name of a section and a
 --   shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
-
--- | Create a reference for a equation. Takes in the name of the equation
---   and a shortname for the equation.
-makeEqnRef :: String -> Reference
 
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference

@@ -1,5 +1,0 @@
-digraph secheader{
-SecHeader -> Title;
-SecHeader -> Reference;
-SecHeader	[shape=oval, color=darkviolet, label="SecHeader"];
-}

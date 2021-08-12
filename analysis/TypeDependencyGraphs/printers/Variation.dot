@@ -1,9 +1,5 @@
 digraph variation{
-Variation -> td;
-Variation -> figure;
-Variation -> li;
-Variation -> pa;
-Variation -> ba;
+Variation -> String;
 Variation -> Doc;
 Variation	[shape=oval, color=darkviolet, label="Variation"];
 }

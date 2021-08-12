@@ -1,7 +1,0 @@
-digraph example{
-Example -> SystemInformation;
-Example -> Sentence;
-Example -> Choices;
-Example -> FilePath;
-Example	[shape=oval, color=cyan3, label="Example"];
-}

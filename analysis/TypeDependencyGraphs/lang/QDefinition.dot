@@ -1,6 +1,5 @@
 digraph qdefinition{
-QDefinition -> QuantityDict;
-QDefinition -> Sentence;
+QDefinition -> DefinedQuantityDict;
 QDefinition -> UID;
 QDefinition -> Expr;
 QDefinition	[shape=oval, color=cyan3, label="QDefinition"];

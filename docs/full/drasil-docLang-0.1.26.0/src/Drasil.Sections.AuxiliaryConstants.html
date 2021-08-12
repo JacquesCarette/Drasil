@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Sections.AuxiliaryConstants</span><span> </span><span>
+</span><span id="line-2"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#valsOfAuxConstantsF"><span class="hs-identifier">valsOfAuxConstantsF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstants"><span class="hs-identifier">tableOfConstants</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstantsRef"><span class="hs-identifier">tableOfConstantsRef</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html"><span class="hs-identifier">Drasil.DocLang.SRS</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">SRS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocLang.SRS.html#valsOfAuxCons"><span class="hs-identifier">valsOfAuxCons</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Units.html"><span class="hs-identifier">Drasil.DocumentLanguage.Units</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Units.html#toSentence"><span class="hs-identifier">toSentence</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">description</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">symbol_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tAuxConsts</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">CM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">unit_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-comment">-- | Gets the auxiliary constant values given an introductory 'Idea' and a 'QDefinition'.</span><span>
+</span><span id="line-13"></span><span id="local-6989586621679118851"><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#valsOfAuxConstantsF"><span class="hs-identifier hs-type">valsOfAuxConstantsF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679118851"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679118851"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
+</span><span id="line-14"></span><span id="valsOfAuxConstantsF"><span class="annot"><span class="annottext">valsOfAuxConstantsF :: a -&gt; [QDefinition] -&gt; Section
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#valsOfAuxConstantsF"><span class="hs-identifier hs-var hs-var">valsOfAuxConstantsF</span></a></span></span><span> </span><span id="local-6989586621679118850"><span class="annot"><span class="annottext">kWord :: a
+</span><a href="#local-6989586621679118850"><span class="hs-identifier hs-var">kWord</span></a></span></span><span> </span><span id="local-6989586621679118849"><span class="annot"><span class="annottext">listOfConstants :: [QDefinition]
+</span><a href="#local-6989586621679118849"><span class="hs-identifier hs-var">listOfConstants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#valsOfAuxCons"><span class="hs-identifier hs-var">SRS.valsOfAuxCons</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; [QDefinition] -&gt; [Contents]
+forall a. Idea a =&gt; a -&gt; [QDefinition] -&gt; [Contents]
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#contentGenerator"><span class="hs-identifier hs-var">contentGenerator</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679118850"><span class="hs-identifier hs-var">kWord</span></a></span><span> </span><span class="annot"><span class="annottext">[QDefinition]
+</span><a href="#local-6989586621679118849"><span class="hs-identifier hs-var">listOfConstants</span></a></span><span class="hs-special">)</span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-comment">-- | Gets a table of constants from a 'QDefinition'. Also uses an 'Idea' as the introduction.</span><span>
+</span><span id="line-17"></span><span id="local-6989586621679118898"><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#contentGenerator"><span class="hs-identifier hs-type">contentGenerator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679118898"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679118898"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span></span><span>
+</span><span id="line-18"></span><span id="contentGenerator"><span class="annot"><span class="annottext">contentGenerator :: a -&gt; [QDefinition] -&gt; [Contents]
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#contentGenerator"><span class="hs-identifier hs-var hs-var">contentGenerator</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;There are no auxiliary constants&quot;</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#contentGenerator"><span class="hs-identifier hs-var">contentGenerator</span></a></span><span> </span><span id="local-6989586621679118845"><span class="annot"><span class="annottext">a :: a
+</span><a href="#local-6989586621679118845"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679118844"><span class="annot"><span class="annottext">b :: [QDefinition]
+</span><a href="#local-6989586621679118844"><span class="hs-identifier hs-var">b</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">a -&gt; Contents
+forall a. Idea a =&gt; a -&gt; Contents
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#intro"><span class="hs-identifier hs-var">intro</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679118845"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
+</span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; LabelledContent -&gt; Contents
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[QDefinition] -&gt; LabelledContent
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstants"><span class="hs-identifier hs-var">tableOfConstants</span></a></span><span> </span><span class="annot"><span class="annottext">[QDefinition]
+</span><a href="#local-6989586621679118844"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-comment">--FIXME: general introduction?</span><span>
+</span><span id="line-22"></span><span class="hs-comment">-- | Helper that creates a general introduction using an 'Idea'.</span><span>
+</span><span id="line-23"></span><span id="local-6989586621679118893"><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#intro"><span class="hs-identifier hs-type">intro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679118893"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679118893"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-24"></span><span id="intro"><span class="annot"><span class="annottext">intro :: a -&gt; Contents
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#intro"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span> </span><span id="local-6989586621679118841"><span class="annot"><span class="annottext">kWord :: a
+</span><a href="#local-6989586621679118841"><span class="hs-identifier hs-var">kWord</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;This section contains the standard values that are used for calculations in&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Sentence
+forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679118841"><span class="hs-identifier hs-var">kWord</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-comment">-- | Helper that gets a table of constants from a 'QDefinition'.</span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstants"><span class="hs-identifier hs-type">tableOfConstants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-28"></span><span id="tableOfConstants"><span class="annot"><span class="annottext">tableOfConstants :: [QDefinition] -&gt; LabelledContent
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstants"><span class="hs-identifier hs-var hs-var">tableOfConstants</span></a></span></span><span> </span><span id="local-6989586621679118838"><span class="annot"><span class="annottext">f :: [QDefinition]
+</span><a href="#local-6989586621679118838"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstantsRef"><span class="hs-identifier hs-var">tableOfConstantsRef</span></a></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [[Sentence]] -&gt; Sentence -&gt; Bool -&gt; RawContent
+</span><span class="hs-identifier hs-var">Table</span></span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">symbol_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">description</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">CM.unit_</span></span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[QDefinition -&gt; Sentence] -&gt; [QDefinition] -&gt; [[Sentence]]
+forall a b. [a -&gt; b] -&gt; [a] -&gt; [[b]]
+</span><span class="hs-identifier hs-var">mkTable</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679118831"><span class="annot"><span class="annottext">c :: QDefinition
+</span><a href="#local-6989586621679118831"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; Expr -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="#local-6989586621679118831"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Getting Expr QDefinition Expr -&gt; Expr
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr QDefinition Expr
+forall c. DefiningExpr c =&gt; Lens' c Expr
+</span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
+forall u. MayHaveUnit u =&gt; u -&gt; Sentence
+</span><a href="Drasil.DocumentLanguage.Units.html#toSentence"><span class="hs-identifier hs-var">toSentence</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QDefinition]
+</span><a href="#local-6989586621679118838"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">tAuxConsts</span></span><span class="hs-special">)</span><span>
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstantsRef"><span class="hs-identifier hs-type">tableOfConstantsRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-35"></span><span id="tableOfConstantsRef"><span class="annot"><span class="annottext">tableOfConstantsRef :: Reference
+</span><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstantsRef"><span class="hs-identifier hs-var hs-var">tableOfConstantsRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeTabRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">tAuxConsts</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Getting String NamedChunk String -&gt; String
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String NamedChunk String
+forall c. HasUID c =&gt; Lens' c String
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span></pre></body></html>

@@ -1,0 +1,1042 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.DocLang.SRS</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-2"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfCont"><span class="hs-identifier">tOfCont</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#refMat"><span class="hs-identifier">refMat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfUnit"><span class="hs-identifier">tOfUnit</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfSymb"><span class="hs-identifier">tOfSymb</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfAbbAcc"><span class="hs-identifier">tOfAbbAcc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#intro"><span class="hs-identifier">intro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#prpsOfDoc"><span class="hs-identifier">prpsOfDoc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#scpOfReq"><span class="hs-identifier">scpOfReq</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-3"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#charOfIR"><span class="hs-identifier">charOfIR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#orgOfDoc"><span class="hs-identifier">orgOfDoc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#stakeholder"><span class="hs-identifier">stakeholder</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#theCustomer"><span class="hs-identifier">theCustomer</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#theClient"><span class="hs-identifier">theClient</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#genSysDes"><span class="hs-identifier">genSysDes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sysCont"><span class="hs-identifier">sysCont</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-4"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#userChar"><span class="hs-identifier">userChar</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sysCon"><span class="hs-identifier">sysCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#specSysDes"><span class="hs-identifier">specSysDes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#probDesc"><span class="hs-identifier">probDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#termAndDefn"><span class="hs-identifier">termAndDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#physSyst"><span class="hs-identifier">physSyst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#goalStmt"><span class="hs-identifier">goalStmt</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-5"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#solCharSpec"><span class="hs-identifier">solCharSpec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#assumpt"><span class="hs-identifier">assumpt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#thModel"><span class="hs-identifier">thModel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#genDefn"><span class="hs-identifier">genDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#dataDefn"><span class="hs-identifier">dataDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#inModel"><span class="hs-identifier">inModel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#datCon"><span class="hs-identifier">datCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#propCorSol"><span class="hs-identifier">propCorSol</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-6"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#require"><span class="hs-identifier">require</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#nonfuncReq"><span class="hs-identifier">nonfuncReq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#funcReq"><span class="hs-identifier">funcReq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#likeChg"><span class="hs-identifier">likeChg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#unlikeChg"><span class="hs-identifier">unlikeChg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#traceyMandG"><span class="hs-identifier">traceyMandG</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#valsOfAuxCons"><span class="hs-identifier">valsOfAuxCons</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#reference"><span class="hs-identifier">reference</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#appendix"><span class="hs-identifier">appendix</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#offShelfSol"><span class="hs-identifier">offShelfSol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#scpOfTheProj"><span class="hs-identifier">scpOfTheProj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#prodUCTable"><span class="hs-identifier">prodUCTable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#indPRCase"><span class="hs-identifier">indPRCase</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#termogy"><span class="hs-identifier">termogy</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfContLabel"><span class="hs-identifier">tOfContLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#refMatLabel"><span class="hs-identifier">refMatLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfUnitLabel"><span class="hs-identifier">tOfUnitLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfSymbLabel"><span class="hs-identifier">tOfSymbLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfAbbAccLabel"><span class="hs-identifier">tOfAbbAccLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#introLabel"><span class="hs-identifier">introLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#docPurposeLabel"><span class="hs-identifier">docPurposeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#reqsScopeLabel"><span class="hs-identifier">reqsScopeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#readerCharsLabel"><span class="hs-identifier">readerCharsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#docOrgLabel"><span class="hs-identifier">docOrgLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#stakeholderLabel"><span class="hs-identifier">stakeholderLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#clientLabel"><span class="hs-identifier">clientLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#customerLabel"><span class="hs-identifier">customerLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#genSysDescLabel"><span class="hs-identifier">genSysDescLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sysContextLabel"><span class="hs-identifier">sysContextLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#userCharsLabel"><span class="hs-identifier">userCharsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sysConstraintsLabel"><span class="hs-identifier">sysConstraintsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#specSystDescLabel"><span class="hs-identifier">specSystDescLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#physSystLabel"><span class="hs-identifier">physSystLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#probDescLabel"><span class="hs-identifier">probDescLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#termDefsLabel"><span class="hs-identifier">termDefsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#goalStmtLabel"><span class="hs-identifier">goalStmtLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#solCharSpecLabel"><span class="hs-identifier">solCharSpecLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#assumptLabel"><span class="hs-identifier">assumptLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#thModelLabel"><span class="hs-identifier">thModelLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#genDefnLabel"><span class="hs-identifier">genDefnLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#dataDefnLabel"><span class="hs-identifier">dataDefnLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#inModelLabel"><span class="hs-identifier">inModelLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#datConLabel"><span class="hs-identifier">datConLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#corSolPropsLabel"><span class="hs-identifier">corSolPropsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#requirementsLabel"><span class="hs-identifier">requirementsLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-14"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#funcReqLabel"><span class="hs-identifier">funcReqLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#nonfuncReqLabel"><span class="hs-identifier">nonfuncReqLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#likeChgLabel"><span class="hs-identifier">likeChgLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#unlikeChgLabel"><span class="hs-identifier">unlikeChgLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#traceMatricesLabel"><span class="hs-identifier">traceMatricesLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#valsOfAuxConsLabel"><span class="hs-identifier">valsOfAuxConsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#referenceLabel"><span class="hs-identifier">referenceLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#appendixLabel"><span class="hs-identifier">appendixLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#offShelfSolnsLabel"><span class="hs-identifier">offShelfSolnsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#indPRCaseLabel"><span class="hs-identifier">indPRCaseLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#projScopeLabel"><span class="hs-identifier">projScopeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#useCaseTableLabel"><span class="hs-identifier">useCaseTableLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#terminologyLabel"><span class="hs-identifier">terminologyLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sectionReferences"><span class="hs-identifier">sectionReferences</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-17"></span><span class="hs-comment">--Temporary file for keeping the &quot;srs&quot; document constructor until I figure out</span><span>
+</span><span id="line-18"></span><span class="hs-comment">-- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-comment">--May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Doc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">appendix</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">assumption</span></span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="hs-identifier">charOfIR</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">client</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">customer</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">consVals</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">datumConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">functionalRequirement</span></span><span class="hs-special">,</span><span>
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="hs-identifier">generalSystemDescription</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">goalStmt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">indPRCase</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">introduction</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">likelyChg</span></span><span class="hs-special">,</span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="hs-identifier">unlikelyChg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nonfunctionalRequirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">offShelfSolution</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">orgOfDoc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physSyst</span></span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="hs-identifier">prodUCTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">problemDescription</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">propOfCorSol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">prpsOfDoc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">reference</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">requirement</span></span><span class="hs-special">,</span><span>
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="hs-identifier">scpOfReq</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">scpOfTheProj</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">solutionCharSpec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">specificsystemdescription</span></span><span class="hs-special">,</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="hs-identifier">stakeholder</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCont</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">systemConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">termAndDef</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">terminology</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">traceyMandG</span></span><span class="hs-special">,</span><span>
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="hs-identifier">tOfCont</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tOfSymb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tOfUnit</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">userCharacteristic</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">refMat</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">abbAcc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.TheoryConcepts</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Doc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">thModel</span></span><span class="hs-special">)</span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-comment">-- Ordered by appearance in SRS.</span><span>
+</span><span id="line-37"></span><span class="hs-comment">-- | Standard SRS section builders.</span><span>
+</span><span id="line-38"></span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfCont"><span class="hs-identifier hs-type">tOfCont</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#refMat"><span class="hs-identifier hs-type">refMat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfUnit"><span class="hs-identifier hs-type">tOfUnit</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfSymb"><span class="hs-identifier hs-type">tOfSymb</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfAbbAcc"><span class="hs-identifier hs-type">tOfAbbAcc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#intro"><span class="hs-identifier hs-type">intro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#prpsOfDoc"><span class="hs-identifier hs-type">prpsOfDoc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#scpOfReq"><span class="hs-identifier hs-type">scpOfReq</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-39"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#charOfIR"><span class="hs-identifier hs-type">charOfIR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#orgOfDoc"><span class="hs-identifier hs-type">orgOfDoc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#stakeholder"><span class="hs-identifier hs-type">stakeholder</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#theCustomer"><span class="hs-identifier hs-type">theCustomer</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#theClient"><span class="hs-identifier hs-type">theClient</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#genSysDes"><span class="hs-identifier hs-type">genSysDes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sysCont"><span class="hs-identifier hs-type">sysCont</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-40"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#userChar"><span class="hs-identifier hs-type">userChar</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sysCon"><span class="hs-identifier hs-type">sysCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#specSysDes"><span class="hs-identifier hs-type">specSysDes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#probDesc"><span class="hs-identifier hs-type">probDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#termAndDefn"><span class="hs-identifier hs-type">termAndDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#physSyst"><span class="hs-identifier hs-type">physSyst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#goalStmt"><span class="hs-identifier hs-type">goalStmt</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-41"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#solCharSpec"><span class="hs-identifier hs-type">solCharSpec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#assumpt"><span class="hs-identifier hs-type">assumpt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#thModel"><span class="hs-identifier hs-type">thModel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#genDefn"><span class="hs-identifier hs-type">genDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#dataDefn"><span class="hs-identifier hs-type">dataDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#inModel"><span class="hs-identifier hs-type">inModel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#datCon"><span class="hs-identifier hs-type">datCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#propCorSol"><span class="hs-identifier hs-type">propCorSol</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#require"><span class="hs-identifier hs-type">require</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#nonfuncReq"><span class="hs-identifier hs-type">nonfuncReq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#funcReq"><span class="hs-identifier hs-type">funcReq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#likeChg"><span class="hs-identifier hs-type">likeChg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#unlikeChg"><span class="hs-identifier hs-type">unlikeChg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#traceyMandG"><span class="hs-identifier hs-type">traceyMandG</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#valsOfAuxCons"><span class="hs-identifier hs-type">valsOfAuxCons</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-43"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#reference"><span class="hs-identifier hs-type">reference</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#appendix"><span class="hs-identifier hs-type">appendix</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#offShelfSol"><span class="hs-identifier hs-type">offShelfSol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#scpOfTheProj"><span class="hs-identifier hs-type">scpOfTheProj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#prodUCTable"><span class="hs-identifier hs-type">prodUCTable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#indPRCase"><span class="hs-identifier hs-type">indPRCase</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-44"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#termogy"><span class="hs-identifier hs-type">termogy</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="hs-comment">-- | Table of Contents section.</span><span>
+</span><span id="line-47"></span><span id="tOfCont"><span class="annot"><span class="annottext">tOfCont :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#tOfCont"><span class="hs-identifier hs-var hs-var">tOfCont</span></a></span></span><span>       </span><span id="local-6989586621679117613"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117613"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117612"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117612"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.tOfCont</span></span><span class="hs-special">)</span><span>                   </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117613"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117612"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfContLabel"><span class="hs-identifier hs-var">tOfContLabel</span></a></span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="hs-comment">-- | Reference Material section.</span><span>
+</span><span id="line-50"></span><span id="refMat"><span class="annot"><span class="annottext">refMat :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#refMat"><span class="hs-identifier hs-var hs-var">refMat</span></a></span></span><span>        </span><span id="local-6989586621679117609"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117609"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117608"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117608"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.refMat</span></span><span class="hs-special">)</span><span>                    </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117609"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117608"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#refMatLabel"><span class="hs-identifier hs-var">refMatLabel</span></a></span><span>
+</span><span id="line-51"></span><span class="hs-comment">-- | Table of Units section.</span><span>
+</span><span id="line-52"></span><span id="tOfUnit"><span class="annot"><span class="annottext">tOfUnit :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#tOfUnit"><span class="hs-identifier hs-var hs-var">tOfUnit</span></a></span></span><span>       </span><span id="local-6989586621679117606"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117606"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117605"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117605"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.tOfUnit</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117606"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117605"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfUnitLabel"><span class="hs-identifier hs-var">tOfUnitLabel</span></a></span><span>
+</span><span id="line-53"></span><span class="hs-comment">-- | Table of Symbols section.</span><span>
+</span><span id="line-54"></span><span id="tOfSymb"><span class="annot"><span class="annottext">tOfSymb :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#tOfSymb"><span class="hs-identifier hs-var hs-var">tOfSymb</span></a></span></span><span>       </span><span id="local-6989586621679117604"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117604"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117603"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117603"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.tOfSymb</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117604"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117603"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfSymbLabel"><span class="hs-identifier hs-var">tOfSymbLabel</span></a></span><span>
+</span><span id="line-55"></span><span class="hs-comment">-- | Table of Abbreviations and Acronyms section.</span><span>
+</span><span id="line-56"></span><span id="tOfAbbAcc"><span class="annot"><span class="annottext">tOfAbbAcc :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#tOfAbbAcc"><span class="hs-identifier hs-var hs-var">tOfAbbAcc</span></a></span></span><span>     </span><span id="local-6989586621679117602"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117602"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117601"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117601"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.abbAcc</span></span><span class="hs-special">)</span><span>                   </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117602"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117601"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfAbbAccLabel"><span class="hs-identifier hs-var">tOfAbbAccLabel</span></a></span><span>
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="hs-comment">-- | Introduction section.</span><span>
+</span><span id="line-59"></span><span id="intro"><span class="annot"><span class="annottext">intro :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#intro"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span>         </span><span id="local-6989586621679117600"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117600"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117599"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117599"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.introduction</span></span><span class="hs-special">)</span><span>              </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117600"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117599"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#introLabel"><span class="hs-identifier hs-var">introLabel</span></a></span><span>
+</span><span id="line-60"></span><span class="hs-comment">-- | Purpose of Document section.</span><span>
+</span><span id="line-61"></span><span id="prpsOfDoc"><span class="annot"><span class="annottext">prpsOfDoc :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#prpsOfDoc"><span class="hs-identifier hs-var hs-var">prpsOfDoc</span></a></span></span><span>     </span><span id="local-6989586621679117598"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117598"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117597"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117597"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.prpsOfDoc</span></span><span class="hs-special">)</span><span>                 </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117598"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117597"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#docPurposeLabel"><span class="hs-identifier hs-var">docPurposeLabel</span></a></span><span>
+</span><span id="line-62"></span><span class="hs-comment">-- | Scope of Requirements section.</span><span>
+</span><span id="line-63"></span><span id="scpOfReq"><span class="annot"><span class="annottext">scpOfReq :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#scpOfReq"><span class="hs-identifier hs-var hs-var">scpOfReq</span></a></span></span><span>      </span><span id="local-6989586621679117596"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117596"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117595"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117595"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.scpOfReq</span></span><span class="hs-special">)</span><span>                 </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117596"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117595"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#reqsScopeLabel"><span class="hs-identifier hs-var">reqsScopeLabel</span></a></span><span>
+</span><span id="line-64"></span><span class="hs-comment">-- | Characteristics of Intended Reader section.</span><span>
+</span><span id="line-65"></span><span id="charOfIR"><span class="annot"><span class="annottext">charOfIR :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#charOfIR"><span class="hs-identifier hs-var hs-var">charOfIR</span></a></span></span><span>      </span><span id="local-6989586621679117594"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117594"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117593"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117593"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.charOfIR</span></span><span class="hs-special">)</span><span>                 </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117594"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117593"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#readerCharsLabel"><span class="hs-identifier hs-var">readerCharsLabel</span></a></span><span>
+</span><span id="line-66"></span><span class="hs-comment">-- | Organization of Document section.</span><span>
+</span><span id="line-67"></span><span id="orgOfDoc"><span class="annot"><span class="annottext">orgOfDoc :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#orgOfDoc"><span class="hs-identifier hs-var hs-var">orgOfDoc</span></a></span></span><span>      </span><span id="local-6989586621679117592"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117592"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117591"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117591"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.orgOfDoc</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117592"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117591"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#docOrgLabel"><span class="hs-identifier hs-var">docOrgLabel</span></a></span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-comment">-- | Stakeholders section.</span><span>
+</span><span id="line-70"></span><span id="stakeholder"><span class="annot"><span class="annottext">stakeholder :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#stakeholder"><span class="hs-identifier hs-var hs-var">stakeholder</span></a></span></span><span>   </span><span id="local-6989586621679117590"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117590"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117589"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117589"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.stakeholder</span></span><span class="hs-special">)</span><span>              </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117590"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117589"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#stakeholderLabel"><span class="hs-identifier hs-var">stakeholderLabel</span></a></span><span>
+</span><span id="line-71"></span><span class="hs-comment">-- | The Customer section.</span><span>
+</span><span id="line-72"></span><span id="theCustomer"><span class="annot"><span class="annottext">theCustomer :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#theCustomer"><span class="hs-identifier hs-var hs-var">theCustomer</span></a></span></span><span>   </span><span id="local-6989586621679117588"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117588"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117587"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117587"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleizeNP</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.customer</span></span><span class="hs-special">)</span><span>          </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117588"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117587"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#customerLabel"><span class="hs-identifier hs-var">customerLabel</span></a></span><span>
+</span><span id="line-73"></span><span class="hs-comment">-- | The Client section.</span><span>
+</span><span id="line-74"></span><span id="theClient"><span class="annot"><span class="annottext">theClient :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#theClient"><span class="hs-identifier hs-var hs-var">theClient</span></a></span></span><span>     </span><span id="local-6989586621679117584"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117584"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117583"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117583"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleizeNP</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.client</span></span><span class="hs-special">)</span><span>            </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117584"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117583"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#clientLabel"><span class="hs-identifier hs-var">clientLabel</span></a></span><span>
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span class="hs-comment">-- | General System Description section.</span><span>
+</span><span id="line-77"></span><span id="genSysDes"><span class="annot"><span class="annottext">genSysDes :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#genSysDes"><span class="hs-identifier hs-var hs-var">genSysDes</span></a></span></span><span>     </span><span id="local-6989586621679117582"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117582"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117581"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117581"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.generalSystemDescription</span></span><span class="hs-special">)</span><span>  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117582"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117581"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#genSysDescLabel"><span class="hs-identifier hs-var">genSysDescLabel</span></a></span><span>
+</span><span id="line-78"></span><span class="hs-comment">-- | System Context section.</span><span>
+</span><span id="line-79"></span><span id="sysCont"><span class="annot"><span class="annottext">sysCont :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#sysCont"><span class="hs-identifier hs-var hs-var">sysCont</span></a></span></span><span>       </span><span id="local-6989586621679117580"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117580"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117579"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117579"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.sysCont</span></span><span class="hs-special">)</span><span>                   </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117580"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117579"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#sysContextLabel"><span class="hs-identifier hs-var">sysContextLabel</span></a></span><span>
+</span><span id="line-80"></span><span class="hs-comment">-- | User Characteristics section.</span><span>
+</span><span id="line-81"></span><span id="userChar"><span class="annot"><span class="annottext">userChar :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#userChar"><span class="hs-identifier hs-var hs-var">userChar</span></a></span></span><span>      </span><span id="local-6989586621679117578"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117578"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117577"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117577"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.userCharacteristic</span></span><span class="hs-special">)</span><span>       </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117578"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117577"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#userCharsLabel"><span class="hs-identifier hs-var">userCharsLabel</span></a></span><span>
+</span><span id="line-82"></span><span class="hs-comment">-- | System Constraints section.</span><span>
+</span><span id="line-83"></span><span id="sysCon"><span class="annot"><span class="annottext">sysCon :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#sysCon"><span class="hs-identifier hs-var hs-var">sysCon</span></a></span></span><span>        </span><span id="local-6989586621679117576"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117576"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117575"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117575"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.systemConstraint</span></span><span class="hs-special">)</span><span>         </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117576"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117575"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#sysConstraintsLabel"><span class="hs-identifier hs-var">sysConstraintsLabel</span></a></span><span>
+</span><span id="line-84"></span><span>
+</span><span id="line-85"></span><span class="hs-comment">-- | Specific System Description section.</span><span>
+</span><span id="line-86"></span><span id="specSysDes"><span class="annot"><span class="annottext">specSysDes :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#specSysDes"><span class="hs-identifier hs-var hs-var">specSysDes</span></a></span></span><span>    </span><span id="local-6989586621679117574"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117574"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117573"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117573"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.specificsystemdescription</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117574"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117573"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#specSystDescLabel"><span class="hs-identifier hs-var">specSystDescLabel</span></a></span><span>
+</span><span id="line-87"></span><span>
+</span><span id="line-88"></span><span class="hs-comment">-- | Problem Description section.</span><span>
+</span><span id="line-89"></span><span id="probDesc"><span class="annot"><span class="annottext">probDesc :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#probDesc"><span class="hs-identifier hs-var hs-var">probDesc</span></a></span></span><span>      </span><span id="local-6989586621679117572"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117572"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117571"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117571"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.problemDescription</span></span><span class="hs-special">)</span><span>        </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117572"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117571"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#probDescLabel"><span class="hs-identifier hs-var">probDescLabel</span></a></span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- | Terminology and Definitions section.</span><span>
+</span><span id="line-91"></span><span id="termAndDefn"><span class="annot"><span class="annottext">termAndDefn :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#termAndDefn"><span class="hs-identifier hs-var hs-var">termAndDefn</span></a></span></span><span>   </span><span id="local-6989586621679117570"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117570"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117569"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117569"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.termAndDef</span></span><span class="hs-special">)</span><span>               </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117570"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117569"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#termDefsLabel"><span class="hs-identifier hs-var">termDefsLabel</span></a></span><span>
+</span><span id="line-92"></span><span class="hs-comment">-- | Physical System Description section.</span><span>
+</span><span id="line-93"></span><span id="physSyst"><span class="annot"><span class="annottext">physSyst :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#physSyst"><span class="hs-identifier hs-var hs-var">physSyst</span></a></span></span><span>      </span><span id="local-6989586621679117568"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117568"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117567"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117567"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.physSyst</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117568"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117567"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#physSystLabel"><span class="hs-identifier hs-var">physSystLabel</span></a></span><span>
+</span><span id="line-94"></span><span class="hs-comment">-- | Goal Statement section.</span><span>
+</span><span id="line-95"></span><span id="goalStmt"><span class="annot"><span class="annottext">goalStmt :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#goalStmt"><span class="hs-identifier hs-var hs-var">goalStmt</span></a></span></span><span>      </span><span id="local-6989586621679117566"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117566"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117565"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117565"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.goalStmt</span></span><span class="hs-special">)</span><span>                 </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117566"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117565"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#goalStmtLabel"><span class="hs-identifier hs-var">goalStmtLabel</span></a></span><span>
+</span><span id="line-96"></span><span>
+</span><span id="line-97"></span><span class="hs-comment">-- | Solution Characteristics Specification section.</span><span>
+</span><span id="line-98"></span><span id="solCharSpec"><span class="annot"><span class="annottext">solCharSpec :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#solCharSpec"><span class="hs-identifier hs-var hs-var">solCharSpec</span></a></span></span><span>   </span><span id="local-6989586621679117564"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117564"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117563"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117563"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.solutionCharSpec</span></span><span class="hs-special">)</span><span>          </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117564"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117563"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#solCharSpecLabel"><span class="hs-identifier hs-var">solCharSpecLabel</span></a></span><span>
+</span><span id="line-99"></span><span class="hs-comment">-- | Assumptions section.</span><span>
+</span><span id="line-100"></span><span id="assumpt"><span class="annot"><span class="annottext">assumpt :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#assumpt"><span class="hs-identifier hs-var hs-var">assumpt</span></a></span></span><span>       </span><span id="local-6989586621679117562"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117562"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117561"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117561"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.assumption</span></span><span class="hs-special">)</span><span>               </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117562"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117561"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#assumptLabel"><span class="hs-identifier hs-var">assumptLabel</span></a></span><span>
+</span><span id="line-101"></span><span class="hs-comment">-- | Theoretical Models section.</span><span>
+</span><span id="line-102"></span><span id="thModel"><span class="annot"><span class="annottext">thModel :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#thModel"><span class="hs-identifier hs-var hs-var">thModel</span></a></span></span><span>       </span><span id="local-6989586621679117560"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117560"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117559"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117559"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.thModel</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117560"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117559"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#thModelLabel"><span class="hs-identifier hs-var">thModelLabel</span></a></span><span>
+</span><span id="line-103"></span><span class="hs-comment">-- | General Definitions section.</span><span>
+</span><span id="line-104"></span><span id="genDefn"><span class="annot"><span class="annottext">genDefn :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#genDefn"><span class="hs-identifier hs-var hs-var">genDefn</span></a></span></span><span>       </span><span id="local-6989586621679117558"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117558"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117557"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117557"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.genDefn</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117558"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117557"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#genDefnLabel"><span class="hs-identifier hs-var">genDefnLabel</span></a></span><span>
+</span><span id="line-105"></span><span class="hs-comment">-- | Data Definitions section.</span><span>
+</span><span id="line-106"></span><span id="dataDefn"><span class="annot"><span class="annottext">dataDefn :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#dataDefn"><span class="hs-identifier hs-var hs-var">dataDefn</span></a></span></span><span>      </span><span id="local-6989586621679117556"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117556"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117555"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117555"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.dataDefn</span></span><span class="hs-special">)</span><span>                 </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117556"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117555"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#dataDefnLabel"><span class="hs-identifier hs-var">dataDefnLabel</span></a></span><span>
+</span><span id="line-107"></span><span class="hs-comment">-- | Instance Models section.</span><span>
+</span><span id="line-108"></span><span id="inModel"><span class="annot"><span class="annottext">inModel :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#inModel"><span class="hs-identifier hs-var hs-var">inModel</span></a></span></span><span>       </span><span id="local-6989586621679117554"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117554"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117553"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117553"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.inModel</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117554"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117553"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#inModelLabel"><span class="hs-identifier hs-var">inModelLabel</span></a></span><span>
+</span><span id="line-109"></span><span class="hs-comment">-- | Data Constraints section.</span><span>
+</span><span id="line-110"></span><span id="datCon"><span class="annot"><span class="annottext">datCon :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#datCon"><span class="hs-identifier hs-var hs-var">datCon</span></a></span></span><span>        </span><span id="local-6989586621679117552"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117552"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117551"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117551"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.datumConstraint</span></span><span class="hs-special">)</span><span>          </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117552"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117551"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#datConLabel"><span class="hs-identifier hs-var">datConLabel</span></a></span><span>
+</span><span id="line-111"></span><span class="hs-comment">-- | Properties of a Correct Solution section.</span><span>
+</span><span id="line-112"></span><span id="propCorSol"><span class="annot"><span class="annottext">propCorSol :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#propCorSol"><span class="hs-identifier hs-var hs-var">propCorSol</span></a></span></span><span>    </span><span id="local-6989586621679117550"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117550"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117549"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117549"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.propOfCorSol</span></span><span class="hs-special">)</span><span>             </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117550"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117549"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#corSolPropsLabel"><span class="hs-identifier hs-var">corSolPropsLabel</span></a></span><span>
+</span><span id="line-113"></span><span>
+</span><span id="line-114"></span><span class="hs-comment">-- | Requirements section.</span><span>
+</span><span id="line-115"></span><span id="require"><span class="annot"><span class="annottext">require :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#require"><span class="hs-identifier hs-var hs-var">require</span></a></span></span><span>       </span><span id="local-6989586621679117548"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117548"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117547"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117547"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.requirement</span></span><span class="hs-special">)</span><span>              </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117548"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117547"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#requirementsLabel"><span class="hs-identifier hs-var">requirementsLabel</span></a></span><span>
+</span><span id="line-116"></span><span class="hs-comment">-- | Non-Functional Requirements section.</span><span>
+</span><span id="line-117"></span><span id="nonfuncReq"><span class="annot"><span class="annottext">nonfuncReq :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#nonfuncReq"><span class="hs-identifier hs-var hs-var">nonfuncReq</span></a></span></span><span>    </span><span id="local-6989586621679117546"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117546"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117545"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117545"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.nonfunctionalRequirement</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117546"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117545"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#nonfuncReqLabel"><span class="hs-identifier hs-var">nonfuncReqLabel</span></a></span><span>
+</span><span id="line-118"></span><span class="hs-comment">-- | Functional Requirements section.</span><span>
+</span><span id="line-119"></span><span id="funcReq"><span class="annot"><span class="annottext">funcReq :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#funcReq"><span class="hs-identifier hs-var hs-var">funcReq</span></a></span></span><span>       </span><span id="local-6989586621679117544"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117544"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117543"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117543"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.functionalRequirement</span></span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117544"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117543"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#funcReqLabel"><span class="hs-identifier hs-var">funcReqLabel</span></a></span><span>
+</span><span id="line-120"></span><span>
+</span><span id="line-121"></span><span class="hs-comment">-- | Likely Changes section.</span><span>
+</span><span id="line-122"></span><span id="likeChg"><span class="annot"><span class="annottext">likeChg :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#likeChg"><span class="hs-identifier hs-var hs-var">likeChg</span></a></span></span><span>       </span><span id="local-6989586621679117542"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117542"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117541"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117541"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.likelyChg</span></span><span class="hs-special">)</span><span>                </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117542"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117541"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#likeChgLabel"><span class="hs-identifier hs-var">likeChgLabel</span></a></span><span>
+</span><span id="line-123"></span><span class="hs-comment">-- | Unlikely Changes section.</span><span>
+</span><span id="line-124"></span><span id="unlikeChg"><span class="annot"><span class="annottext">unlikeChg :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#unlikeChg"><span class="hs-identifier hs-var hs-var">unlikeChg</span></a></span></span><span>     </span><span id="local-6989586621679117540"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117540"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117539"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117539"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.unlikelyChg</span></span><span class="hs-special">)</span><span>              </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117540"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117539"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#unlikeChgLabel"><span class="hs-identifier hs-var">unlikeChgLabel</span></a></span><span>
+</span><span id="line-125"></span><span>
+</span><span id="line-126"></span><span class="hs-comment">-- | Traceablilty Matrices and Graphs section.</span><span>
+</span><span id="line-127"></span><span id="traceyMandG"><span class="annot"><span class="annottext">traceyMandG :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#traceyMandG"><span class="hs-identifier hs-var hs-var">traceyMandG</span></a></span></span><span>   </span><span id="local-6989586621679117538"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117538"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117537"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117537"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.traceyMandG</span></span><span class="hs-special">)</span><span>              </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117538"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117537"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#traceMatricesLabel"><span class="hs-identifier hs-var">traceMatricesLabel</span></a></span><span>
+</span><span id="line-128"></span><span class="hs-comment">-- | Values of Auxiliary Constants section.</span><span>
+</span><span id="line-129"></span><span id="valsOfAuxCons"><span class="annot"><span class="annottext">valsOfAuxCons :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#valsOfAuxCons"><span class="hs-identifier hs-var hs-var">valsOfAuxCons</span></a></span></span><span> </span><span id="local-6989586621679117536"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117536"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117535"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117535"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.consVals</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117536"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117535"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#valsOfAuxConsLabel"><span class="hs-identifier hs-var">valsOfAuxConsLabel</span></a></span><span>
+</span><span id="line-130"></span><span class="hs-comment">-- | References section.</span><span>
+</span><span id="line-131"></span><span id="reference"><span class="annot"><span class="annottext">reference :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#reference"><span class="hs-identifier hs-var hs-var">reference</span></a></span></span><span>     </span><span id="local-6989586621679117534"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117534"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117533"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117533"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.reference</span></span><span class="hs-special">)</span><span>                </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117534"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117533"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#referenceLabel"><span class="hs-identifier hs-var">referenceLabel</span></a></span><span>
+</span><span id="line-132"></span><span class="hs-comment">-- | Appendix section.</span><span>
+</span><span id="line-133"></span><span id="appendix"><span class="annot"><span class="annottext">appendix :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#appendix"><span class="hs-identifier hs-var hs-var">appendix</span></a></span></span><span>      </span><span id="local-6989586621679117532"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117532"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117531"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117531"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.appendix</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117532"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117531"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#appendixLabel"><span class="hs-identifier hs-var">appendixLabel</span></a></span><span>
+</span><span id="line-134"></span><span class="hs-comment">-- | Off-the-Shelf Solutions section.</span><span>
+</span><span id="line-135"></span><span id="offShelfSol"><span class="annot"><span class="annottext">offShelfSol :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#offShelfSol"><span class="hs-identifier hs-var hs-var">offShelfSol</span></a></span></span><span>   </span><span id="local-6989586621679117530"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117530"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117529"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117529"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.offShelfSolution</span></span><span class="hs-special">)</span><span>         </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117530"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117529"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#offShelfSolnsLabel"><span class="hs-identifier hs-var">offShelfSolnsLabel</span></a></span><span>
+</span><span id="line-136"></span><span>
+</span><span id="line-137"></span><span class="hs-comment">-- Unused</span><span>
+</span><span id="line-138"></span><span class="hs-comment">-- | Scope of the Project section.</span><span>
+</span><span id="line-139"></span><span id="scpOfTheProj"><span class="annot"><span class="annottext">scpOfTheProj :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#scpOfTheProj"><span class="hs-identifier hs-var hs-var">scpOfTheProj</span></a></span></span><span>  </span><span id="local-6989586621679117528"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117528"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117527"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117527"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NamedChunk -&gt; Sentence) -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">Doc.scpOfTheProj</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117528"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117527"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#projScopeLabel"><span class="hs-identifier hs-var">projScopeLabel</span></a></span><span>
+</span><span id="line-140"></span><span class="hs-comment">-- | Product Use Case Table section.</span><span>
+</span><span id="line-141"></span><span id="prodUCTable"><span class="annot"><span class="annottext">prodUCTable :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#prodUCTable"><span class="hs-identifier hs-var hs-var">prodUCTable</span></a></span></span><span>   </span><span id="local-6989586621679117525"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117525"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117524"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117524"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.prodUCTable</span></span><span class="hs-special">)</span><span>               </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117525"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117524"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#useCaseTableLabel"><span class="hs-identifier hs-var">useCaseTableLabel</span></a></span><span>
+</span><span id="line-142"></span><span class="hs-comment">-- | Individual Product Use Case section.</span><span>
+</span><span id="line-143"></span><span id="indPRCase"><span class="annot"><span class="annottext">indPRCase :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#indPRCase"><span class="hs-identifier hs-var hs-var">indPRCase</span></a></span></span><span>     </span><span id="local-6989586621679117523"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117523"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117522"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117522"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.indPRCase</span></span><span class="hs-special">)</span><span>                </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117523"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117522"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#indPRCaseLabel"><span class="hs-identifier hs-var">indPRCaseLabel</span></a></span><span>
+</span><span id="line-144"></span><span class="hs-comment">-- | Terminology section.</span><span>
+</span><span id="line-145"></span><span id="termogy"><span class="annot"><span class="annottext">termogy :: [Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocLang.SRS.html#termogy"><span class="hs-identifier hs-var hs-var">termogy</span></a></span></span><span>       </span><span id="local-6989586621679117521"><span class="annot"><span class="annottext">cs :: [Contents]
+</span><a href="#local-6989586621679117521"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679117520"><span class="annot"><span class="annottext">ss :: [Section]
+</span><a href="#local-6989586621679117520"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.terminology</span></span><span class="hs-special">)</span><span>               </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679117521"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679117520"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#terminologyLabel"><span class="hs-identifier hs-var">terminologyLabel</span></a></span><span>
+</span><span id="line-146"></span><span>
+</span><span id="line-147"></span><span class="hs-comment">--Labels--</span><span>
+</span><span id="line-148"></span><span class="hs-comment">-- | Collections all 'Section' 'Reference's.</span><span>
+</span><span id="line-149"></span><span class="annot"><a href="Drasil.DocLang.SRS.html#sectionReferences"><span class="hs-identifier hs-type">sectionReferences</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
+</span><span id="line-150"></span><span id="sectionReferences"><span class="annot"><span class="annottext">sectionReferences :: [Reference]
+</span><a href="Drasil.DocLang.SRS.html#sectionReferences"><span class="hs-identifier hs-var hs-var">sectionReferences</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfContLabel"><span class="hs-identifier hs-var">tOfContLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#refMatLabel"><span class="hs-identifier hs-var">refMatLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfUnitLabel"><span class="hs-identifier hs-var">tOfUnitLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfSymbLabel"><span class="hs-identifier hs-var">tOfSymbLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfAbbAccLabel"><span class="hs-identifier hs-var">tOfAbbAccLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-151"></span><span>  </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#introLabel"><span class="hs-identifier hs-var">introLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#docPurposeLabel"><span class="hs-identifier hs-var">docPurposeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#reqsScopeLabel"><span class="hs-identifier hs-var">reqsScopeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#readerCharsLabel"><span class="hs-identifier hs-var">readerCharsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#docOrgLabel"><span class="hs-identifier hs-var">docOrgLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-152"></span><span>  </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#stakeholderLabel"><span class="hs-identifier hs-var">stakeholderLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#clientLabel"><span class="hs-identifier hs-var">clientLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#customerLabel"><span class="hs-identifier hs-var">customerLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#genSysDescLabel"><span class="hs-identifier hs-var">genSysDescLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#sysContextLabel"><span class="hs-identifier hs-var">sysContextLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-153"></span><span>  </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#userCharsLabel"><span class="hs-identifier hs-var">userCharsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#sysConstraintsLabel"><span class="hs-identifier hs-var">sysConstraintsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#specSystDescLabel"><span class="hs-identifier hs-var">specSystDescLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#physSystLabel"><span class="hs-identifier hs-var">physSystLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#probDescLabel"><span class="hs-identifier hs-var">probDescLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-154"></span><span>  </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#termDefsLabel"><span class="hs-identifier hs-var">termDefsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#goalStmtLabel"><span class="hs-identifier hs-var">goalStmtLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#solCharSpecLabel"><span class="hs-identifier hs-var">solCharSpecLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#assumptLabel"><span class="hs-identifier hs-var">assumptLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#thModelLabel"><span class="hs-identifier hs-var">thModelLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-155"></span><span>  </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#genDefnLabel"><span class="hs-identifier hs-var">genDefnLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#dataDefnLabel"><span class="hs-identifier hs-var">dataDefnLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#inModelLabel"><span class="hs-identifier hs-var">inModelLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#datConLabel"><span class="hs-identifier hs-var">datConLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#corSolPropsLabel"><span class="hs-identifier hs-var">corSolPropsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#requirementsLabel"><span class="hs-identifier hs-var">requirementsLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-156"></span><span>  </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#funcReqLabel"><span class="hs-identifier hs-var">funcReqLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#nonfuncReqLabel"><span class="hs-identifier hs-var">nonfuncReqLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#likeChgLabel"><span class="hs-identifier hs-var">likeChgLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#unlikeChgLabel"><span class="hs-identifier hs-var">unlikeChgLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#traceMatricesLabel"><span class="hs-identifier hs-var">traceMatricesLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-157"></span><span>  </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#valsOfAuxConsLabel"><span class="hs-identifier hs-var">valsOfAuxConsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#referenceLabel"><span class="hs-identifier hs-var">referenceLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#appendixLabel"><span class="hs-identifier hs-var">appendixLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#offShelfSolnsLabel"><span class="hs-identifier hs-var">offShelfSolnsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#indPRCaseLabel"><span class="hs-identifier hs-var">indPRCaseLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-158"></span><span>  </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#projScopeLabel"><span class="hs-identifier hs-var">projScopeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#useCaseTableLabel"><span class="hs-identifier hs-var">useCaseTableLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.DocLang.SRS.html#terminologyLabel"><span class="hs-identifier hs-var">terminologyLabel</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-159"></span><span>
+</span><span id="line-160"></span><span class="hs-comment">--FIXME: create using section information somehow?</span><span>
+</span><span id="line-161"></span><span class="hs-comment">-- | Makes a 'Reference' to a 'Section'.</span><span>
+</span><span id="line-162"></span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfContLabel"><span class="hs-identifier hs-type">tOfContLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#refMatLabel"><span class="hs-identifier hs-type">refMatLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfUnitLabel"><span class="hs-identifier hs-type">tOfUnitLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfSymbLabel"><span class="hs-identifier hs-type">tOfSymbLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#tOfAbbAccLabel"><span class="hs-identifier hs-type">tOfAbbAccLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-163"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#introLabel"><span class="hs-identifier hs-type">introLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#docPurposeLabel"><span class="hs-identifier hs-type">docPurposeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#reqsScopeLabel"><span class="hs-identifier hs-type">reqsScopeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#readerCharsLabel"><span class="hs-identifier hs-type">readerCharsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#docOrgLabel"><span class="hs-identifier hs-type">docOrgLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-164"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#stakeholderLabel"><span class="hs-identifier hs-type">stakeholderLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#clientLabel"><span class="hs-identifier hs-type">clientLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#customerLabel"><span class="hs-identifier hs-type">customerLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#genSysDescLabel"><span class="hs-identifier hs-type">genSysDescLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sysContextLabel"><span class="hs-identifier hs-type">sysContextLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-165"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#userCharsLabel"><span class="hs-identifier hs-type">userCharsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#sysConstraintsLabel"><span class="hs-identifier hs-type">sysConstraintsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#specSystDescLabel"><span class="hs-identifier hs-type">specSystDescLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#physSystLabel"><span class="hs-identifier hs-type">physSystLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#probDescLabel"><span class="hs-identifier hs-type">probDescLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-166"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#termDefsLabel"><span class="hs-identifier hs-type">termDefsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#goalStmtLabel"><span class="hs-identifier hs-type">goalStmtLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#solCharSpecLabel"><span class="hs-identifier hs-type">solCharSpecLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#assumptLabel"><span class="hs-identifier hs-type">assumptLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#thModelLabel"><span class="hs-identifier hs-type">thModelLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-167"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#genDefnLabel"><span class="hs-identifier hs-type">genDefnLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#dataDefnLabel"><span class="hs-identifier hs-type">dataDefnLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#inModelLabel"><span class="hs-identifier hs-type">inModelLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#datConLabel"><span class="hs-identifier hs-type">datConLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#corSolPropsLabel"><span class="hs-identifier hs-type">corSolPropsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#requirementsLabel"><span class="hs-identifier hs-type">requirementsLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-168"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#funcReqLabel"><span class="hs-identifier hs-type">funcReqLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#nonfuncReqLabel"><span class="hs-identifier hs-type">nonfuncReqLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#likeChgLabel"><span class="hs-identifier hs-type">likeChgLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#unlikeChgLabel"><span class="hs-identifier hs-type">unlikeChgLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#traceMatricesLabel"><span class="hs-identifier hs-type">traceMatricesLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-169"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#valsOfAuxConsLabel"><span class="hs-identifier hs-type">valsOfAuxConsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#referenceLabel"><span class="hs-identifier hs-type">referenceLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#appendixLabel"><span class="hs-identifier hs-type">appendixLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#offShelfSolnsLabel"><span class="hs-identifier hs-type">offShelfSolnsLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#indPRCaseLabel"><span class="hs-identifier hs-type">indPRCaseLabel</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-170"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.SRS.html#projScopeLabel"><span class="hs-identifier hs-type">projScopeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#useCaseTableLabel"><span class="hs-identifier hs-type">useCaseTableLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.SRS.html#terminologyLabel"><span class="hs-identifier hs-type">terminologyLabel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-171"></span><span>
+</span><span id="line-172"></span><span id="tOfContLabel"><span class="annot"><span class="annottext">tOfContLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfContLabel"><span class="hs-identifier hs-var hs-var">tOfContLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ToC&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.tOfCont</span></span><span>
+</span><span id="line-173"></span><span>
+</span><span id="line-174"></span><span id="refMatLabel"><span class="annot"><span class="annottext">refMatLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#refMatLabel"><span class="hs-identifier hs-var hs-var">refMatLabel</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;RefMat&quot;</span></span><span>           </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.refMat</span></span><span>
+</span><span id="line-175"></span><span id="tOfUnitLabel"><span class="annot"><span class="annottext">tOfUnitLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfUnitLabel"><span class="hs-identifier hs-var hs-var">tOfUnitLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ToU&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.tOfUnit</span></span><span>
+</span><span id="line-176"></span><span id="tOfSymbLabel"><span class="annot"><span class="annottext">tOfSymbLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfSymbLabel"><span class="hs-identifier hs-var hs-var">tOfSymbLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ToS&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.tOfSymb</span></span><span>
+</span><span id="line-177"></span><span id="tOfAbbAccLabel"><span class="annot"><span class="annottext">tOfAbbAccLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#tOfAbbAccLabel"><span class="hs-identifier hs-var hs-var">tOfAbbAccLabel</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TAbbAcc&quot;</span></span><span>          </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.abbAcc</span></span><span>
+</span><span id="line-178"></span><span>
+</span><span id="line-179"></span><span id="introLabel"><span class="annot"><span class="annottext">introLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#introLabel"><span class="hs-identifier hs-var hs-var">introLabel</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Intro&quot;</span></span><span>            </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.introduction</span></span><span>
+</span><span id="line-180"></span><span id="docPurposeLabel"><span class="annot"><span class="annottext">docPurposeLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#docPurposeLabel"><span class="hs-identifier hs-var hs-var">docPurposeLabel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DocPurpose&quot;</span></span><span>       </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.prpsOfDoc</span></span><span>
+</span><span id="line-181"></span><span id="reqsScopeLabel"><span class="annot"><span class="annottext">reqsScopeLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#reqsScopeLabel"><span class="hs-identifier hs-var hs-var">reqsScopeLabel</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ReqsScope&quot;</span></span><span>        </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.scpOfReq</span></span><span>
+</span><span id="line-182"></span><span id="readerCharsLabel"><span class="annot"><span class="annottext">readerCharsLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#readerCharsLabel"><span class="hs-identifier hs-var hs-var">readerCharsLabel</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ReaderChars&quot;</span></span><span>      </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.charOfIR</span></span><span>
+</span><span id="line-183"></span><span id="docOrgLabel"><span class="annot"><span class="annottext">docOrgLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#docOrgLabel"><span class="hs-identifier hs-var hs-var">docOrgLabel</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DocOrg&quot;</span></span><span>           </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.orgOfDoc</span></span><span>
+</span><span id="line-184"></span><span>
+</span><span id="line-185"></span><span id="stakeholderLabel"><span class="annot"><span class="annottext">stakeholderLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#stakeholderLabel"><span class="hs-identifier hs-var hs-var">stakeholderLabel</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Stakeholder&quot;</span></span><span>      </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.stakeholder</span></span><span>
+</span><span id="line-186"></span><span id="clientLabel"><span class="annot"><span class="annottext">clientLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#clientLabel"><span class="hs-identifier hs-var hs-var">clientLabel</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Client&quot;</span></span><span>           </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleizeNP</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.client</span></span><span>
+</span><span id="line-187"></span><span id="customerLabel"><span class="annot"><span class="annottext">customerLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#customerLabel"><span class="hs-identifier hs-var hs-var">customerLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Customer&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleizeNP</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.customer</span></span><span>
+</span><span id="line-188"></span><span>
+</span><span id="line-189"></span><span id="genSysDescLabel"><span class="annot"><span class="annottext">genSysDescLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#genSysDescLabel"><span class="hs-identifier hs-var hs-var">genSysDescLabel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;GenSysDesc&quot;</span></span><span>       </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.generalSystemDescription</span></span><span>
+</span><span id="line-190"></span><span id="sysContextLabel"><span class="annot"><span class="annottext">sysContextLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#sysContextLabel"><span class="hs-identifier hs-var hs-var">sysContextLabel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;SysContext&quot;</span></span><span>       </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.sysCont</span></span><span>
+</span><span id="line-191"></span><span id="userCharsLabel"><span class="annot"><span class="annottext">userCharsLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#userCharsLabel"><span class="hs-identifier hs-var hs-var">userCharsLabel</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;UserChars&quot;</span></span><span>        </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.userCharacteristic</span></span><span>
+</span><span id="line-192"></span><span id="sysConstraintsLabel"><span class="annot"><span class="annottext">sysConstraintsLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#sysConstraintsLabel"><span class="hs-identifier hs-var hs-var">sysConstraintsLabel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;SysConstraints&quot;</span></span><span>   </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.systemConstraint</span></span><span>
+</span><span id="line-193"></span><span>
+</span><span id="line-194"></span><span id="specSystDescLabel"><span class="annot"><span class="annottext">specSystDescLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#specSystDescLabel"><span class="hs-identifier hs-var hs-var">specSystDescLabel</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;SpecSystDesc&quot;</span></span><span>     </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.specificsystemdescription</span></span><span>
+</span><span id="line-195"></span><span id="physSystLabel"><span class="annot"><span class="annottext">physSystLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#physSystLabel"><span class="hs-identifier hs-var hs-var">physSystLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;PhysSyst&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.physSyst</span></span><span>
+</span><span id="line-196"></span><span id="probDescLabel"><span class="annot"><span class="annottext">probDescLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#probDescLabel"><span class="hs-identifier hs-var hs-var">probDescLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ProbDesc&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.problemDescription</span></span><span>
+</span><span id="line-197"></span><span id="termDefsLabel"><span class="annot"><span class="annottext">termDefsLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#termDefsLabel"><span class="hs-identifier hs-var hs-var">termDefsLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TermDefs&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.termAndDef</span></span><span>
+</span><span id="line-198"></span><span id="goalStmtLabel"><span class="annot"><span class="annottext">goalStmtLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#goalStmtLabel"><span class="hs-identifier hs-var hs-var">goalStmtLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;GoalStmt&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.goalStmt</span></span><span>
+</span><span id="line-199"></span><span>
+</span><span id="line-200"></span><span id="solCharSpecLabel"><span class="annot"><span class="annottext">solCharSpecLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#solCharSpecLabel"><span class="hs-identifier hs-var hs-var">solCharSpecLabel</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;SolCharSpec&quot;</span></span><span>      </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.solutionCharSpec</span></span><span>
+</span><span id="line-201"></span><span id="assumptLabel"><span class="annot"><span class="annottext">assumptLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#assumptLabel"><span class="hs-identifier hs-var hs-var">assumptLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Assumps&quot;</span></span><span>          </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.assumption</span></span><span>
+</span><span id="line-202"></span><span id="thModelLabel"><span class="annot"><span class="annottext">thModelLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#thModelLabel"><span class="hs-identifier hs-var hs-var">thModelLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TMs&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.thModel</span></span><span>
+</span><span id="line-203"></span><span id="genDefnLabel"><span class="annot"><span class="annottext">genDefnLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#genDefnLabel"><span class="hs-identifier hs-var hs-var">genDefnLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;GDs&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.genDefn</span></span><span>
+</span><span id="line-204"></span><span id="dataDefnLabel"><span class="annot"><span class="annottext">dataDefnLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#dataDefnLabel"><span class="hs-identifier hs-var hs-var">dataDefnLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DDs&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.dataDefn</span></span><span>
+</span><span id="line-205"></span><span id="inModelLabel"><span class="annot"><span class="annottext">inModelLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#inModelLabel"><span class="hs-identifier hs-var hs-var">inModelLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;IMs&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.inModel</span></span><span>
+</span><span id="line-206"></span><span id="datConLabel"><span class="annot"><span class="annottext">datConLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#datConLabel"><span class="hs-identifier hs-var hs-var">datConLabel</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DataConstraints&quot;</span></span><span>  </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.datumConstraint</span></span><span>
+</span><span id="line-207"></span><span id="corSolPropsLabel"><span class="annot"><span class="annottext">corSolPropsLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#corSolPropsLabel"><span class="hs-identifier hs-var hs-var">corSolPropsLabel</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;CorSolProps&quot;</span></span><span>      </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.propOfCorSol</span></span><span>
+</span><span id="line-208"></span><span>
+</span><span id="line-209"></span><span id="requirementsLabel"><span class="annot"><span class="annottext">requirementsLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#requirementsLabel"><span class="hs-identifier hs-var hs-var">requirementsLabel</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Requirements&quot;</span></span><span>     </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.requirement</span></span><span>
+</span><span id="line-210"></span><span id="funcReqLabel"><span class="annot"><span class="annottext">funcReqLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#funcReqLabel"><span class="hs-identifier hs-var hs-var">funcReqLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;FRs&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.functionalRequirement</span></span><span>
+</span><span id="line-211"></span><span id="nonfuncReqLabel"><span class="annot"><span class="annottext">nonfuncReqLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#nonfuncReqLabel"><span class="hs-identifier hs-var hs-var">nonfuncReqLabel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;NFRs&quot;</span></span><span>             </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.nonfunctionalRequirement</span></span><span>
+</span><span id="line-212"></span><span>
+</span><span id="line-213"></span><span id="likeChgLabel"><span class="annot"><span class="annottext">likeChgLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#likeChgLabel"><span class="hs-identifier hs-var hs-var">likeChgLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;LCs&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.likelyChg</span></span><span>
+</span><span id="line-214"></span><span id="unlikeChgLabel"><span class="annot"><span class="annottext">unlikeChgLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#unlikeChgLabel"><span class="hs-identifier hs-var hs-var">unlikeChgLabel</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;UCs&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">Doc.unlikelyChg</span></span><span>
+</span><span id="line-215"></span><span>
+</span><span id="line-216"></span><span id="traceMatricesLabel"><span class="annot"><span class="annottext">traceMatricesLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#traceMatricesLabel"><span class="hs-identifier hs-var hs-var">traceMatricesLabel</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TraceMatrices&quot;</span></span><span>    </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.traceyMandG</span></span><span>
+</span><span id="line-217"></span><span id="valsOfAuxConsLabel"><span class="annot"><span class="annottext">valsOfAuxConsLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#valsOfAuxConsLabel"><span class="hs-identifier hs-var hs-var">valsOfAuxConsLabel</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;AuxConstants&quot;</span></span><span>     </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.consVals</span></span><span>
+</span><span id="line-218"></span><span id="referenceLabel"><span class="annot"><span class="annottext">referenceLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#referenceLabel"><span class="hs-identifier hs-var hs-var">referenceLabel</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;References&quot;</span></span><span>       </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.reference</span></span><span> </span><span>
+</span><span id="line-219"></span><span id="appendixLabel"><span class="annot"><span class="annottext">appendixLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#appendixLabel"><span class="hs-identifier hs-var hs-var">appendixLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Appendix&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.appendix</span></span><span>
+</span><span id="line-220"></span><span id="offShelfSolnsLabel"><span class="annot"><span class="annottext">offShelfSolnsLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#offShelfSolnsLabel"><span class="hs-identifier hs-var hs-var">offShelfSolnsLabel</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;offShelfSolns&quot;</span></span><span>    </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.offShelfSolution</span></span><span>
+</span><span id="line-221"></span><span>
+</span><span id="line-222"></span><span class="hs-comment">-- Used only under People/Dan/Presentations/CommitteeMeeting4/BodyNew.hs</span><span>
+</span><span id="line-223"></span><span id="indPRCaseLabel"><span class="annot"><span class="annottext">indPRCaseLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#indPRCaseLabel"><span class="hs-identifier hs-var hs-var">indPRCaseLabel</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;IndividualProdUC&quot;</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.indPRCase</span></span><span>
+</span><span id="line-224"></span><span class="hs-comment">-- Seem to be unused. Should they be deleted?</span><span>
+</span><span id="line-225"></span><span id="projScopeLabel"><span class="annot"><span class="annottext">projScopeLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#projScopeLabel"><span class="hs-identifier hs-var hs-var">projScopeLabel</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ProjScope&quot;</span></span><span>        </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">(NamedChunk -&gt; Sentence) -&gt; NamedChunk -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(NamedChunk -&gt; Sentence) -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">Doc.scpOfTheProj</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>
+</span><span id="line-226"></span><span id="useCaseTableLabel"><span class="annot"><span class="annottext">useCaseTableLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#useCaseTableLabel"><span class="hs-identifier hs-var hs-var">useCaseTableLabel</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;UseCaseTable&quot;</span></span><span>     </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.prodUCTable</span></span><span>
+</span><span id="line-227"></span><span id="terminologyLabel"><span class="annot"><span class="annottext">terminologyLabel :: Reference
+</span><a href="Drasil.DocLang.SRS.html#terminologyLabel"><span class="hs-identifier hs-var hs-var">terminologyLabel</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Terminology&quot;</span></span><span>      </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">titleize</span></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">Doc.terminology</span></span></pre></body></html>

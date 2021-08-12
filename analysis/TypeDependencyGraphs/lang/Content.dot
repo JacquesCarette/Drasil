@@ -1,4 +1,0 @@
-digraph content{
-Content -> Contents;
-Content	[shape=oval, color=darkviolet, label="Content"];
-}

@@ -1,4 +1,0 @@
-digraph cslegend{
-CSLegend -> String;
-CSLegend	[shape=oval, color=cyan3, label="CSLegend"];
-}

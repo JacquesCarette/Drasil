@@ -37,9 +37,9 @@ digraph alltypes {
 	}
 	subgraph commonidea {
 		subgraph ci{
-		CI -> UID;
-		CI -> NP;
+		CI -> NamedChunk;
 		CI -> String;
+		CI -> UID;
 		CI	[shape=oval, color=cyan3, label="CI"];
 		}
 	}
@@ -70,8 +70,7 @@ digraph alltypes {
 	}
 	subgraph eq {
 		subgraph qdefinition{
-		QDefinition -> QuantityDict;
-		QDefinition -> Sentence;
+		QDefinition -> DefinedQuantityDict;
 		QDefinition -> UID;
 		QDefinition -> Expr;
 		QDefinition	[shape=oval, color=cyan3, label="QDefinition"];
@@ -432,25 +431,10 @@ digraph alltypes {
 		Section -> Reference;
 		Section	[shape=oval, color=cyan3, label="Section"];
 		}
-		subgraph section{
-		Section -> Depth;
-		Section -> SecHeader;
-		Section -> Content;
-		Section	[shape=oval, color=cyan3, label="Section"];
-		}
 		subgraph seccons{
 		SecCons -> Section;
 		SecCons -> Contents;
 		SecCons	[shape=oval, color=darkviolet, label="SecCons"];
-		}
-		subgraph secheader{
-		SecHeader -> Title;
-		SecHeader -> Reference;
-		SecHeader	[shape=oval, color=darkviolet, label="SecHeader"];
-		}
-		subgraph content{
-		Content -> Contents;
-		Content	[shape=oval, color=darkviolet, label="Content"];
 		}
 		subgraph document{
 		Document -> Title;
@@ -1577,69 +1561,9 @@ digraph alltypes {
 	}
 	subgraph patterntets {
 	}
-	subgraph notebook {
-	}
 	subgraph references {
 	}
 	subgraph srs {
-	}
-	subgraph core {
-		subgraph docsection{
-		DocSection -> IntrodSec;
-		DocSection -> BodySec;
-		DocSection -> SmmrySec;
-		DocSection -> ApndxSec;
-		DocSection	[shape=oval, color=darkviolet, label="DocSection"];
-		}
-		subgraph introdsec{
-		IntrodSec -> Contents;
-		IntrodSec -> IntrodSub;
-		IntrodSec	[shape=oval, color=darkviolet, label="IntrodSec"];
-		}
-		subgraph introdsub{
-		IntrodSub -> Sentence;
-		IntrodSub -> IntrodSub;
-		IntrodSub	[shape=oval, color=darkviolet, label="IntrodSub"];
-		}
-		subgraph bodysub{
-		BodySub -> Contents;
-		BodySub -> BodySub;
-		BodySub -> Section;
-		BodySub	[shape=oval, color=darkviolet, label="BodySub"];
-		}
-		subgraph apndxsec{
-		ApndxSec	[shape=oval, color=darkgreen, label="ApndxSec"];
-		}
-		subgraph bodysec{
-		BodySec -> BodySub;
-		BodySec	[shape=oval, color=darkgreen, label="BodySec"];
-		}
-		subgraph smmrysec{
-		SmmrySec -> Contents;
-		SmmrySec	[shape=oval, color=darkgreen, label="SmmrySec"];
-		}
-		subgraph nbdesc{
-		NBDesc -> DocSection;
-		NBDesc	[shape=oval, color=red2, label="NBDesc"];
-		}
-	}
-	subgraph documentlanguage {
-	}
-	subgraph nbdecl {
-		subgraph nbsection{
-		NbSection -> IntrodSec;
-		NbSection -> BodySec;
-		NbSection -> SmmrySec;
-		NbSection -> ApndxSec;
-		NbSection -> SystemInformation;
-		NbSection -> NBDecl;
-		NbSection -> NBDesc;
-		NbSection	[shape=oval, color=darkviolet, label="NbSection"];
-		}
-		subgraph nbdecl{
-		NBDecl -> NbSection;
-		NBDecl	[shape=oval, color=red2, label="NBDecl"];
-		}
 	}
 	subgraph core {
 		subgraph docsection{
@@ -1872,10 +1796,6 @@ digraph alltypes {
 	}
 	subgraph units {
 	}
-	subgraph body {
-	}
-	subgraph introduction {
-	}
 	subgraph auxiliarycontantss {
 	}
 	subgraph generalsytdescs {
@@ -2022,19 +1942,6 @@ digraph alltypes {
 		OpenClose -> Doc;
 		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
 		}
-	}
-	subgraph helpers {
-		subgraph variation{
-		Variation -> td;
-		Variation -> figure;
-		Variation -> li;
-		Variation -> pa;
-		Variation -> ba;
-		Variation -> Doc;
-		Variation	[shape=oval, color=darkviolet, label="Variation"];
-		}
-	}
-	subgraph print {
 	}
 	subgraph createmd {
 		subgraph seperator{
@@ -3616,8 +3523,6 @@ digraph alltypes {
 	}
 	subgraph drails {
 	}
-	subgraph main {
-	}
 	subgraph asumptionss {
 	}
 	subgraph body {
@@ -3636,13 +3541,13 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph main {
+	}
 	subgraph references {
 	}
 	subgraph requirements {
 	}
 	subgraph unitals {
-	}
-	subgraph main {
 	}
 	subgraph arbiter {
 	}
@@ -3653,8 +3558,6 @@ digraph alltypes {
 	subgraph body {
 	}
 	subgraph cangehs {
-	}
-	subgraph coicehs {
 	}
 	subgraph concepts {
 	}
@@ -3670,6 +3573,8 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph main {
+	}
 	subgraph references {
 	}
 	subgraph requirements {
@@ -3678,15 +3583,11 @@ digraph alltypes {
 	}
 	subgraph unitals {
 	}
-	subgraph main {
-	}
 	subgraph asumptionss {
 	}
 	subgraph body {
 	}
 	subgraph cangehs {
-	}
-	subgraph coicehs {
 	}
 	subgraph concepts {
 	}
@@ -3697,6 +3598,8 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph main {
 	}
 	subgraph moduledefs {
 	}
@@ -3720,11 +3623,7 @@ digraph alltypes {
 	}
 	subgraph units {
 	}
-	subgraph main {
-	}
 	subgraph body {
-	}
-	subgraph coicehs {
 	}
 	subgraph heattranfers {
 	}
@@ -3736,8 +3635,6 @@ digraph alltypes {
 	}
 	subgraph cangehs {
 	}
-	subgraph coicehs {
-	}
 	subgraph datadefs {
 	}
 	subgraph definitions {
@@ -3748,6 +3645,8 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph main {
+	}
 	subgraph odes {
 	}
 	subgraph references {
@@ -3756,15 +3655,11 @@ digraph alltypes {
 	}
 	subgraph unitals {
 	}
-	subgraph main {
-	}
 	subgraph asumptionss {
 	}
 	subgraph body {
 	}
 	subgraph cangehs {
-	}
-	subgraph coicehs {
 	}
 	subgraph concepts {
 	}
@@ -3778,6 +3673,8 @@ digraph alltypes {
 	}
 	subgraph introsection {
 	}
+	subgraph main {
+	}
 	subgraph odes {
 	}
 	subgraph references {
@@ -3790,25 +3687,9 @@ digraph alltypes {
 	}
 	subgraph unitals {
 	}
-	subgraph main {
-	}
-	subgraph analyiss {
-	}
-	subgraph body {
-	}
-	subgraph introsection {
-	}
-	subgraph main {
-	}
-	subgraph motion {
-	}
-	subgraph review {
-	}
 	subgraph asumptionss {
 	}
 	subgraph body {
-	}
-	subgraph coicehs {
 	}
 	subgraph concepts {
 	}
@@ -3824,37 +3705,13 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
-	subgraph references {
-	}
-	subgraph requirements {
-	}
-	subgraph unitals {
-	}
 	subgraph main {
-	}
-	subgraph asumptionss {
-	}
-	subgraph body {
-	}
-	subgraph datadefs {
-	}
-	subgraph expresionss {
-	}
-	subgraph figures {
-	}
-	subgraph gendefs {
-	}
-	subgraph goals {
-	}
-	subgraph imods {
 	}
 	subgraph references {
 	}
 	subgraph requirements {
 	}
 	subgraph unitals {
-	}
-	subgraph main {
 	}
 	subgraph asumptionss {
 	}
@@ -3863,8 +3720,6 @@ digraph alltypes {
 	subgraph body {
 	}
 	subgraph cangehs {
-	}
-	subgraph coicehs {
 	}
 	subgraph datadefs {
 	}
@@ -3878,6 +3733,8 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph main {
+	}
 	subgraph references {
 	}
 	subgraph requirements {
@@ -3886,15 +3743,11 @@ digraph alltypes {
 	}
 	subgraph unitals {
 	}
-	subgraph main {
-	}
 	subgraph asumptionss {
 	}
 	subgraph body {
 	}
 	subgraph cangehs {
-	}
-	subgraph coicehs {
 	}
 	subgraph concepts {
 	}
@@ -3902,9 +3755,13 @@ digraph alltypes {
 	}
 	subgraph gendefs {
 	}
+	subgraph generate {
+	}
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph main {
 	}
 	subgraph references {
 	}
@@ -3920,9 +3777,9 @@ digraph alltypes {
 	}
 	subgraph unitals {
 	}
-	subgraph main {
-	}
 	subgraph body {
+	}
+	subgraph main {
 	}
 	subgraph formats {
 		subgraph doctype{
@@ -3991,40 +3848,60 @@ digraph alltypes {
 	}
 	subgraph drails {
 	}
-	subgraph main {
-	}
 	subgraph analyiss {
 	}
 	subgraph body {
 		subgraph folderlocation{
 		FolderLocation -> FilePath;
-		FolderLocation -> String;
 		FolderLocation	[shape=oval, color=cyan3, label="FolderLocation"];
 		}
 	}
 	subgraph caestudys {
-		subgraph casestudy{
-		CaseStudy -> SystemInformation;
-		CaseStudy -> Sentence;
-		CaseStudy -> Choices;
-		CaseStudy	[shape=oval, color=cyan3, label="CaseStudy"];
+		subgraph modularity{
+		Modularity	[shape=oval, color=darkviolet, label="Modularity"];
 		}
-		subgraph cslegend{
-		CSLegend -> String;
-		CSLegend	[shape=oval, color=cyan3, label="CSLegend"];
+		subgraph implementtype{
+		ImplementType	[shape=oval, color=darkviolet, label="ImplementType"];
+		}
+		subgraph logging{
+		Logging	[shape=oval, color=darkviolet, label="Logging"];
+		}
+		subgraph instruct{
+		InStruct	[shape=oval, color=darkviolet, label="InStruct"];
+		}
+		subgraph construct{
+		ConStruct	[shape=oval, color=darkviolet, label="ConStruct"];
+		}
+		subgraph conrep{
+		ConRep	[shape=oval, color=darkviolet, label="ConRep"];
+		}
+		subgraph realnumrep{
+		RealNumRep	[shape=oval, color=darkviolet, label="RealNumRep"];
+		}
+		subgraph casestudy{
+		CaseStudy -> Name;
+		CaseStudy -> Modularity;
+		CaseStudy -> ImplementType;
+		CaseStudy -> Logging;
+		CaseStudy -> InStruct;
+		CaseStudy -> ConStruct;
+		CaseStudy -> ConRep;
+		CaseStudy -> RealNumRep;
+		CaseStudy	[shape=oval, color=darkviolet, label="CaseStudy"];
+		}
+		subgraph name{
+		Name -> String;
+		Name	[shape=oval, color=red2, label="Name"];
 		}
 	}
 	subgraph documentation {
 	}
 	subgraph example {
-		subgraph example{
-		Example -> SystemInformation;
-		Example -> Sentence;
-		Example -> Choices;
-		Example -> FilePath;
-		Example	[shape=oval, color=cyan3, label="Example"];
-		}
+	}
+	subgraph graphs {
 	}
 	subgraph introduction {
+	}
+	subgraph main {
 	}
 }

@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.HTML.CSS</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">text</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">vcat</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Expr</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-comment">-- | Generates the CSS selectors necessary for a document.</span><span>
+</span><span id="line-8"></span><span class="annot"><a href="Language.Drasil.HTML.CSS.html#makeCSS"><span class="hs-identifier hs-type">makeCSS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>  </span><span>
+</span><span id="line-9"></span><span id="makeCSS"><span class="annot"><span class="annottext">makeCSS :: Document -&gt; Doc
+</span><a href="Language.Drasil.HTML.CSS.html#makeCSS"><span class="hs-identifier hs-var hs-var">makeCSS</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-10"></span><span class="hs-comment">-- TODO: Autogenerate necessary css selectors only, make CSS configurable</span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;body {min-width: 400px; max-width: 1400px;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.title {text-align: center;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.author {text-align: center;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-14"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.paragraph {text-align: justify;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-16"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.cases {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  display: inline-block;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-18"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  vertical-align: middle;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-20"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.case {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  float: right;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  padding-left: 1em;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-24"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.cases &gt; span {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-25"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  display: block;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  padding-top: 0.1em;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-27"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  padding-left: 0em;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-29"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.casebr {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-30"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  display: inline-block;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-31"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  vertical-align: middle;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-32"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  margin: 0 0.2em 0.4ex;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-33"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  text-align: center;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-34"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  font-size: 500%;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-36"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.caption {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-37"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  text-align: center;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-38"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  font-weight: bold;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-39"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  padding-bottom: 1%;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-40"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  line-height: 0;}&quot;</span></span><span>
+</span><span id="line-41"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-43"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.fraction {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-44"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  display: inline-block;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-45"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  vertical-align: middle;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-46"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  margin: 0 0.2em 0.4ex;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-47"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  text-align: center;}&quot;</span></span><span>
+</span><span id="line-48"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-50"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.fraction &gt; span {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-51"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  display: block;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  padding-top: 0.15em;}&quot;</span></span><span>
+</span><span id="line-53"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-54"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.fdn {border-top: thin solid black;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-56"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.table {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-57"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  text-align: left;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-58"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  padding-left: 1%;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-59"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  width: 90%;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-60"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  margin-bottom: 2%;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-61"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  margin-top: 2%}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-63"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;table, th, td {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-64"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  border-collapse: collapse;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-65"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  margin-left: auto;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-66"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  margin-right: auto;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;th, td {border: 1px solid black; padding: 0.5em;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.tdefn, .ddefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.tdefn th {width: 15%;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-70"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.ddefn th {width: 15%;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-71"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.section {width: 80%; margin: 0 auto; text-align: left;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-73"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.code {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-74"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  display: inline-block;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-75"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  text-align: left;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-76"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;  font-family: Monaco, Consolas, \&quot;Andale Mono\&quot;,&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-77"></span><span>      </span><span class="annot"><span class="hs-string">&quot;\&quot;DejaVu Sans Mono\&quot;, monospace;&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-78"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  font-size: 95%;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-79"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  line-height: 140%;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-80"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  white-space: pre;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-81"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  white-space: pre-wrap;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-82"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  white-space: -moz-pre-wrap;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-83"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  white-space: -o-pre-wrap;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-84"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  background: #faf8f0;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-85"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.list {text-align: left;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-86"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-87"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;figure {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-88"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;text-align: center;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-89"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;font-weight: bold;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-90"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-92"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;figure &gt; img {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-93"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;max-width: 100%;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-94"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-96"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.matrix {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-97"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  position: relative;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-98"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  display: inline-table;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-99"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  margin: 10px;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-100"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  vertical-align: middle;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-101"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.matrix:before, .matrix:after {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-102"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  content: \&quot;\&quot;;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-103"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  position: absolute;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-104"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  top: 0;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-105"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  border: 1px solid #000;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-106"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  width: 5px;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-107"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  height: 100%;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-108"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.matrix:before {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-109"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  left: -5px;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-110"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  border-right: 0px;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-111"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.matrix:after {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-112"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  right: -5px;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-113"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  border-left: 0px;}&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-114"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.matrix td {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-115"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  padding: 5px;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-116"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  text-align: center;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-117"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  border: 0px;}&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-119"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ul.hide-list-style {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-120"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  list-style-type: none;}&quot;</span></span><span>
+</span><span id="line-121"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-123"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ul.hide-list-style-no-indent {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-124"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;  list-style-type: none;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-125"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;padding: 0;}&quot;</span></span><span>
+</span><span id="line-126"></span><span>    </span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-127"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-128"></span><span>
+</span><span id="line-129"></span><span class="hs-comment">-- | Create the link to the necessary CSS file.</span><span>
+</span><span id="line-130"></span><span class="annot"><a href="Language.Drasil.HTML.CSS.html#linkCSS"><span class="hs-identifier hs-type">linkCSS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>  </span><span>
+</span><span id="line-131"></span><span id="linkCSS"><span class="annot"><span class="annottext">linkCSS :: String -&gt; Doc
+</span><a href="Language.Drasil.HTML.CSS.html#linkCSS"><span class="hs-identifier hs-var hs-var">linkCSS</span></a></span></span><span> </span><span id="local-6989586621679127144"><span class="annot"><span class="annottext">fn :: String
+</span><a href="#local-6989586621679127144"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-132"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;&lt;link rel=\&quot;stylesheet\&quot; type=\&quot;text/css\&quot; href=\&quot;&quot;</span></span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679127144"><span class="hs-identifier hs-var">fn</span></a></span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span class="annot"><span class="hs-string">&quot;.css\&quot;&gt;&quot;</span></span><span>
+</span><span id="line-133"></span></pre></body></html>

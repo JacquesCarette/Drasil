@@ -1,6 +1,7 @@
 module Language.Drasil.Printing.Import.Symbol (symbol, pUnit) where
 
 import Language.Drasil (USymb(..))
+import Language.Drasil.ShortHands (cDelta)
 import Language.Drasil.Display (Decoration(..), Symbol(..))
 import qualified Language.Drasil.Printing.AST as P
 
@@ -27,9 +28,11 @@ symbol Empty                    = P.Row []
 
 -- | Helper that adds decoration to symbols (for vectors, derivatives, etc.).
 sFormat :: Decoration -> Symbol -> P.Expr
-sFormat Hat    s = P.Over P.Hat $ symbol s
-sFormat Vector s = P.Font P.Bold $ symbol s
-sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
+sFormat Hat        s = P.Over P.Hat $ symbol s
+sFormat Vector     s = P.Font P.Bold $ symbol s
+sFormat Prime      s = P.Row [symbol s, P.MO P.Prime]
+sFormat Delta      s = P.Row [symbol cDelta, symbol s]
+sFormat Magnitude  s = P.Fenced P.Norm P.Norm $ symbol s
 
 -- | Renders a unit symbol as a printable expression.
 pUnit :: USymb -> P.Expr

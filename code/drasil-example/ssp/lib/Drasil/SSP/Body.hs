@@ -2,11 +2,9 @@
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Language.Drasil hiding (Verb, number, organization, section, variable)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
-  _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs,
-  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
+  genDefn, dataDefn, datCon)
 import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
@@ -14,18 +12,6 @@ import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
-
-import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
-  LFunc(..), RefSec(..), RefTab(..), TConvention(..),
-  TSIntro(..), Fields, Field(..), SRSDecl, SSDSec(..), SSDSub(..),
-  Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
-  SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc,
-  fillcdbSRS)
-
-import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
-  genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, document, effect, endUser, environment,

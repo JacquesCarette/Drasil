@@ -19,6 +19,7 @@ dependencies:
 - drasil-code-base
 - drasil-database
 - drasil-lang
+- drasil-theory
 - drasil-utils
 - json
 - split

@@ -10,7 +10,7 @@ data LinkType = Internal | Cite2 Spec | External
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log 
   | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin | Arccos | Arctan | Not
   | Dim | Exp | Neg | Cross | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff
-  | Subt | And | Or | Add | Mul | Summ | Inte | Prod | Point | Perc | LArrow | RArrow
+  | Subt | And | Or | Add | Mul | Summ | Inte | Prod | Point | Perc | LArrow | RArrow | ForAll
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence = Paren | Curly | Norm | Abs

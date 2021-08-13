@@ -355,7 +355,7 @@ $(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)gooltest_build.sh"
 
 # Generate code from examples and test each one.
-gool: $(CODE_EXAMPLES) $(GOOLTEST)
+gool: $(CODE_EXAMPLES)
 
 # Generate doxygen documentation for all examples.
 doxygen: TARGET=doc

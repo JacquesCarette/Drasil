@@ -6,6 +6,6 @@ If anything, this could be called by the recipes that need it
 -}
 import Language.Drasil
 
--- | Default Reference section introduction.
+-- | Default Reference Material section introduction.
 intro :: Contents
 intro = mkParagraph $ S "This section records information for easy reference."

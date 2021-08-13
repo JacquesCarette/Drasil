@@ -64,7 +64,7 @@ jobs:
       - name: "TeX"
         run: make tex SUMMARIZE_TEX=yes
       - name: "Code"
-        run: make code
+        run: make gool
       - name: "Doxygen"
         run: make doxygen
       - name: "Docs"

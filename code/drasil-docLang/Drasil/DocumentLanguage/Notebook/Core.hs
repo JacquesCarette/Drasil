@@ -12,7 +12,7 @@ data DocSection = IntrodSec IntrodSec
                 | BibSec
                 | ApndxSec ApndxSec
 
--- **TODO: Work on detail structure of notebooks
+-- TODO: Work on detail structure of notebooks
 
 {--}
 
@@ -21,7 +21,7 @@ data IntrodSec = IntrodProg [Contents] [IntrodSub]
 
 -- | Introduction subsections
 data IntrodSub where
-  InPurpose :: [Sentence] -> IntrodSub -- **maybe change to [Contents]  
+  InPurpose :: [Sentence] -> IntrodSub -- TODO: maybe change to [Contents]  
 
 {--}
 

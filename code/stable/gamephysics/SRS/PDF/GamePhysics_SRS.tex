@@ -84,6 +84,10 @@ $\symbf{d}$ & Distance between the center of mass of the rigid bodies & ${\text{
 \\
 $\symbf{\hat{d}}$ & Unit vector directed from the center of the large mass to the center of the smaller mass & ${\text{m}}$
 \\
+$\|\symbf{d}\|$ & Euclidean norm of the distance between the center of mass of two bodies & ${\text{m}}$
+\\
+${\|\symbf{d}\|^{2}}$ & Squared distance & ${\text{m}^{2}}$
+\\
 $\symbf{F}$ & Force & ${\text{N}}$
 \\
 ${\symbf{F}_{1}}$ & Force exerted by the first body (on another body) & ${\text{N}}$
@@ -132,6 +136,8 @@ ${m_{T}}$ & Total Mass of the Rigid Body & ${\text{kg}}$
 \\
 $\symbf{n}$ & Collision normal vector & ${\text{m}}$
 \\
+$\|\symbf{n}\|$ & Length of the normal vector & ${\text{m}}$
+\\
 $PE$ & Potential energy & ${\text{J}}$
 \\
 $\symbf{p}$ & Position & ${\text{m}}$
@@ -150,13 +156,17 @@ $\symbf{u}$ & Displacement & ${\text{m}}$
 \\
 $\symbf{u}\text{(}t\text{)}$ & Linear displacement & ${\text{m}}$
 \\
+$\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A & ${\text{m}}$
+\\
+$\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body B & ${\text{m}}$
+\\
 ${\symbf{u}_{\text{O}\text{B}}}$ & Displacement vector between the origin and point B & ${\text{m}}$
 \\
 $\symbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
-$Δ\symbf{v}$ & Change in velocity & $\frac{\text{m}}{\text{s}}$
-\\
 $\symbf{v}\text{(}t\text{)}$ & Linear velocity & $\frac{\text{m}}{\text{s}}$
+\\
+$Δ\symbf{v}$ & Change in velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${\symbf{v}^{\text{A}\text{P}}}$ & Velocity of the Point of Collision P in Body A & $\frac{\text{m}}{\text{s}}$
 \\
@@ -177,16 +187,6 @@ ${{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ & Initial Relative Velocity Betwee
 ${\symbf{v}_{j}}$ & Velocity of the J-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${\symbf{v}_{\text{O}}}$ & Velocity at Point Origin & $\frac{\text{m}}{\text{s}}$
-\\
-$\text{||}\symbf{d}\text{||}$ & Euclidean norm of the distance between the center of mass of two bodies & ${\text{m}}$
-\\
-$\text{||}\symbf{n}\text{||}$ & Length of the normal vector & ${\text{m}}$
-\\
-$\text{||}{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\text{||}$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A & ${\text{m}}$
-\\
-$\text{||}{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\text{||}$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body B & ${\text{m}}$
-\\
-${\text{||}\symbf{d}\text{||}^{2}}$ & Squared distance & ${\text{m}^{2}}$
 \\
 $α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
@@ -440,7 +440,7 @@ Label & Newton's law of universal gravitation
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\symbf{d}\text{||}^{2}} \symbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\symbf{d}\text{||}^{2}} \frac{\symbf{d}}{\text{||}\symbf{d}\text{||}}
+           \symbf{F}=G \frac{{m_{1}} {m_{2}}}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\|\symbf{d}\|^{2}} \frac{\symbf{d}}{\|\symbf{d}\|}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -448,12 +448,12 @@ Description & \begin{symbDescription}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$)}
               \item{${m_{1}}$ is the mass of the first body (${\text{kg}}$)}
               \item{${m_{2}}$ is the mass of the second body (${\text{kg}}$)}
-              \item{$\text{||}\symbf{d}\text{||}$ is the Euclidean norm of the distance between the center of mass of two bodies (${\text{m}}$)}
+              \item{$\|\symbf{d}\|$ is the Euclidean norm of the distance between the center of mass of two bodies (${\text{m}}$)}
               \item{$\symbf{\hat{d}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (${\text{m}}$)}
               \item{$\symbf{d}$ is the distance between the center of mass of the rigid bodies (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Two rigid bodies in the universe attract each other with a force $\symbf{F}$ that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$, and inversely proportional to the squared distance ${\text{||}\symbf{d}\text{||}^{2}}$ between them.
+Notes & Two rigid bodies in the universe attract each other with a force $\symbf{F}$ that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$, and inversely proportional to the squared distance ${\|\symbf{d}\|^{2}}$ between them.
         
 \\ \midrule \\
 Source & --
@@ -517,14 +517,14 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{g}=-\frac{G M}{\text{||}\symbf{d}\text{||}^{2}} \symbf{\hat{d}}
+           \symbf{g}=-\frac{G M}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$)}
               \item{$M$ is the mass of the larger rigid body (${\text{kg}}$)}
-              \item{$\text{||}\symbf{d}\text{||}$ is the Euclidean norm of the distance between the center of mass of two bodies (${\text{m}}$)}
+              \item{$\|\symbf{d}\|$ is the Euclidean norm of the distance between the center of mass of two bodies (${\text{m}}$)}
               \item{$\symbf{\hat{d}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -544,27 +544,27 @@ RefBy & \hyperref[IM:transMot]{IM:transMot}
 From \hyperref[TM:UniversalGravLaw]{Newton's law of universal gravitation}, we have:
 
 \begin{displaymath}
-\symbf{F}=\frac{G {m_{1}} {m_{2}}}{{\text{||}\symbf{d}\text{||}^{2}}} \symbf{\hat{d}}
+\symbf{F}=\frac{G {m_{1}} {m_{2}}}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}
 \end{displaymath}
 The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass $\symbf{\hat{d}}$ for the x or y axes is:
 
 \begin{displaymath}
-\symbf{\hat{d}}=\frac{\symbf{d}}{\text{||}\symbf{d}\text{||}}
+\symbf{\hat{d}}=\frac{\symbf{d}}{\|\symbf{d}\|}
 \end{displaymath}
 Given the above assumptions, let $M$ and $m$ be the mass of the massive and light body respectively. Equating $\symbf{F}$ above with Newton's second law for the force experienced by the light body, we get:
 
 \begin{displaymath}
-{\symbf{F}_{\symbf{g}}}=G \frac{M m}{{\text{||}\symbf{d}\text{||}^{2}}} \symbf{\hat{d}}=m \symbf{g}
+{\symbf{F}_{\symbf{g}}}=G \frac{M m}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=m \symbf{g}
 \end{displaymath}
 where $\symbf{g}$ is the gravitational acceleration. Dividing the above equation by $m$,  we have:
 
 \begin{displaymath}
-G \frac{M}{{\text{||}\symbf{d}\text{||}^{2}}} \symbf{\hat{d}}=\symbf{g}
+G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=\symbf{g}
 \end{displaymath}
 and thus the negative sign indicates that the force is an attractive force:
 
 \begin{displaymath}
-\symbf{g}=-G \frac{M}{{\text{||}\symbf{d}\text{||}^{2}}} \symbf{\hat{d}}
+\symbf{g}=-G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -581,7 +581,7 @@ Units & $\text{N}\text{s}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           j=\frac{-\left(1+{C_{\text{R}}}\right) {{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\symbf{n}\text{||}^{2}+\frac{\text{||}{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\text{||}^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\text{||}{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\text{||}^{2}}{{\symbf{I}_{\text{B}}}}}
+           j=\frac{-\left(1+{C_{\text{R}}}\right) {{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -591,10 +591,10 @@ Description & \begin{symbDescription}
               \item{$\symbf{n}$ is the collision normal vector (${\text{m}}$)}
               \item{${m_{\text{A}}}$ is the mass of rigid body A (${\text{kg}}$)}
               \item{${m_{\text{B}}}$ is the mass of rigid body B (${\text{kg}}$)}
-              \item{$\text{||}\symbf{n}\text{||}$ is the length of the normal vector (${\text{m}}$)}
-              \item{$\text{||}{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\text{||}$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (${\text{m}}$)}
+              \item{$\|\symbf{n}\|$ is the length of the normal vector (${\text{m}}$)}
+              \item{$\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (${\text{m}}$)}
               \item{${\symbf{I}_{\text{A}}}$ is the moment of inertia of rigid body A ($\text{kg}\text{m}^{2}$)}
-              \item{$\text{||}{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\text{||}$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (${\text{m}}$)}
+              \item{$\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (${\text{m}}$)}
               \item{${\symbf{I}_{\text{B}}}$ is the moment of inertia of rigid body B ($\text{kg}\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\

@@ -1,3 +1,4 @@
+-- | Useful functions for working with English-related 'String's.
 module Utils.Drasil.English (capitalize, stringList) where
     
 import Data.Char (toLower, toUpper)

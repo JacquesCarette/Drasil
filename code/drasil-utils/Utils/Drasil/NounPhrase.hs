@@ -1,9 +1,38 @@
-module Utils.Drasil.NounPhrase (insertString, prependString, insertSent, prependSent,
-the, theGen, a_, a_Gen, ofThe, ofThePS, ofTheGen, inThe, inThePS, inTheGen, the_ofThe, the_ofThePS, the_ofTheGen,
-for, forPS, forGen, of_, of_PS, of_Gen, of_GenGen, with, and_, and_PS, and_Gen, and_GenGen, andThe) where
+-- | Defines various NounPhrase-level combinators. These hold more information
+-- than those of the Sentence level but may not necessarily have a conceptual link.
+-- See the [Wiki](https://github.com/JacquesCarette/Drasil/wiki/Combinator-Documentation)
+-- for more information and details about the naming process for combinators.
+-- A summary of the function naming scheme is as follows:
+-- 
+--    * Combinators that conflict with haskell-native functions have an underscore appended.
+--    * Default plural case for combinators will be first term singular, second term plural.
+--    * @P@ and @S@ denote the plural case of the combinator when it does not follow the above default.
+--    * @Gen@ denotes the general function case.
+--
+-- This module should be used as a qualified import (usually as @NP@),
+-- as many function names clash with those in Concepts.hs and Sentence.hs.
+module Utils.Drasil.NounPhrase (
+  -- * General Combinator Helper Functions
+  insertString, prependString, insertSent, prependSent,
+  -- * Prepositions
+  -- ** \"The\" Combinators
+  the, theGen,
+  -- ** \"A\" Combinators
+  a_, a_Gen,
+  -- * Conjunctions
+  -- ** \"And\" Combinators
+  and_, and_PS, and_Gen, and_GenGen, andThe,
+  -- ** \"The\" Combinators
+  ofThe, ofThePS, ofTheGen, inThe, inThePS, inTheGen,
+  the_ofThe, the_ofThePS, the_ofTheGen,
+  -- ** \"For\" Combinators
+  for, forPS, forGen,
+  -- ** \"Of\" Combinators
+  of_, of_PS, of_Gen, of_GenGen,
+  -- ** Other Combinators
+  with) where
 
 import Language.Drasil
---import Utils.Drasil.Phrase
 import qualified Utils.Drasil.Sentence as S
 
 

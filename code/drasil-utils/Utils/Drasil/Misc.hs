@@ -1,11 +1,23 @@
 {-# Language TypeFamilies, PostfixOperators #-}
-module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
-  chgsStart, definedIn, definedIn', definedIn'', definedIn''', displayStrConstrntsAsSet, displayDblConstrntsAsSet,
-  eqN, eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
-  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
-  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
-  showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
-  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList, fterms) where
+-- | Miscellaneous utility functions for use throughout Drasil.
+module Utils.Drasil.Misc (
+  -- * Reference-related Functions
+  -- | Attach a 'Reference' and a 'Sentence' in different ways.
+  chgsStart, definedIn, definedIn', definedIn'', definedIn''',
+  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows,
+  makeListRef,
+  -- * Sentence-related Functions
+  -- | See Reference-related Functions as well.
+  addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet,
+  eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded,
+  maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
+  unwrap, fterms,
+  -- * List-related Functions
+  bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
+  mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
+  tAndDOnly, tAndDWAcc, tAndDWSym,
+  weave, zipSentList
+  ) where
 
 import Language.Drasil
 import Language.Drasil.Display
@@ -18,7 +30,7 @@ import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.Function (on)
 import Data.List (sortBy, transpose)
 
--- | Sorts a list of 'HasSymbols' by Symbol.
+-- | Sorts a list of 'HasSymbols' by 'Symbol'.
 sortBySymbol :: HasSymbol a => [a] -> [a]
 sortBySymbol = sortBy compareBySymbol
 
@@ -30,8 +42,8 @@ sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
 compareBySymbol :: HasSymbol a => a -> a -> Ordering
 compareBySymbol a b = compsy (eqSymb a) (eqSymb b)
 
---Ideally this would create a reference to the equation too
---Doesn't use equation concept so utils doesn't depend on data
+-- Ideally this would create a reference to the equation too.
+-- Doesn't use equation concept so utils doesn't depend on data
 -- | Prepends the word "Equation" to an 'Int'.
 eqN :: Int -> Sentence
 eqN n = S "Equation" +:+ sParen (S $ show n)
@@ -92,8 +104,8 @@ addPercent num = S (show num) :+: Percent
 -- 
 -- For example: 
 --
--- >>> zipSentList [S "Hi", S "Hey", S "Hi"] [[S"Hello"], [S"World"], [S"Hello", S"World]]
--- [[S "Hi", S"Hello"], [S "Hey", S"World"], [S "Hi", S"Hello", S"World]]
+-- >>> zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
+-- [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
 zipSentList acc _ []           = acc
 zipSentList acc [] r           = acc ++ map (EmptyS:) r
@@ -123,7 +135,7 @@ mkTableFromColumns l =
 itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
 
--- | Takes a list and a reference, then generates references to 
+-- | Takes a list and a 'Section', then generates a list of that section's reference to 
 -- match the length of the list.
 makeListRef :: [a] -> Section -> [Sentence]
 makeListRef l = replicate (length l) . refS

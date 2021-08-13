@@ -1,12 +1,22 @@
-module Utils.Drasil.Sentence (andIts, andThe, fromThe, inThe, onThe, the_isExpctdToHvC, isThe, the_ofGiv, forTPS, forTPP,
-  the_ofGivC, ofThe, the_ofThe, the_ofTheC, of_, ofA, or_, versus, and_, are, in_, is, toThe, for, forT, forGen,
-  denotes, wrt, defnAs) where
+-- | Defines various sentence level combinators that may be based in English and
+-- not necessarily have a conceptual link. See the [Wiki](https://github.com/JacquesCarette/Drasil/wiki/Combinator-Documentation)
+-- for more information. There are also @C@ variants to each combinator to
+-- denote those meant for use at the start of a sentence (capitalizes the first word).
+-- This module should be used as a qualified import (usually as @S@),
+-- as many function names clash with those in Concepts.hs and NounPhrase.hs.
+module Utils.Drasil.Sentence (
+  -- * \"And\" Combinators
+  and_, andIts, andThe,
+  -- * \"The\" Combinators
+  fromThe, inThe, onThe, toThe, isThe, ofThe,
+  the_ofThe, the_ofTheC, the_ofGiv, the_ofGivC, the_isExpctdToHvC,
+  -- * \"For\" Combinators
+  forTPS, forTPP, for, forT, forGen,
+  -- * Other Combinators
+  of_, ofA, or_, are, in_, is, defnAs, denotes, versus, wrt) where
 
 import Language.Drasil
 
----------
--- This contains English-based combinators that may not necessarily have a conceptual link
---------
 
 sentHelper :: String -> Sentence -> Sentence -> Sentence
 -- | Inserts a String between two Sentences

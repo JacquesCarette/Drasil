@@ -1,7 +1,17 @@
 {-# Language TypeFamilies #-}
-module Utils.Drasil.Fold (EnumType(..), WrapType(..), SepType(..), FoldType(..),
-  foldConstraints, foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol,
-  foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList) where
+-- | Folding-related functions and types.
+module Utils.Drasil.Fold (
+  -- * English-related Datatypes
+  -- | For help working with listing information in English. Allows the below functions
+  -- to make different kinds of lists based on the options defined here.
+  EnumType(..), WrapType(..), SepType(..), FoldType(..),
+  -- * Folding Functions
+  -- ** Expression-related
+  foldConstraints,
+  -- ** Sentence-related
+  foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol,
+  foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList
+  ) where
 
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S (and_, or_)
@@ -22,19 +32,19 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 
--- | Helper for formatting constraints.
+-- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
 foldConstraints _ [] = EmptyS
 foldConstraints c e  = E $ andMEs $ map constraintToExpr e
   where
     constraintToExpr (Range _ ri) = express $ realInterval c ri
 
-{--** Sentence Folding **--}
--- | Partial function application of foldle for sentences specifically. folds with spaces and adds "." at the end.
+-- | Partial function application of 'foldle' for sentences specifically.
+-- Folds with spaces and adds a period (".") at the end.
 foldlSent :: [Sentence] -> Sentence
 foldlSent = foldle (+:+) (+:+.) EmptyS
 
--- | 'foldlSent' but does not end with period.
+-- | 'foldlSent' but does not add a period.
 foldlSent_ :: [Sentence] -> Sentence
 foldlSent_ = foldl (+:+) EmptyS
 

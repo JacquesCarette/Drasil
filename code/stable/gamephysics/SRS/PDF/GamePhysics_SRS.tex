@@ -184,13 +184,13 @@ ${{\symbf{v}_{\text{f}}}^{\text{A}\text{B}}}$ & Final Relative Velocity Between 
 \\
 ${{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}_{j}}$ & Velocity of the J-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}_{j}}$ & Velocity of the J-Th Body & $\frac{\text{m}}{\text{s}}$
 \\
 ${\symbf{v}_{\text{O}}}$ & Velocity at Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
 $α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
-${α_{j}}$ & Force on the rotational motion of a set of 2D rigid body & $\frac{\text{rad}}{\text{s}^{2}}$
+${α_{j}}$ & J-Th Body's Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
 $θ$ & Angular displacement & ${\text{rad}}$
 \\
@@ -1245,7 +1245,7 @@ The goal \hyperref[linearGS]{GS:Determine-Linear-Properties} is met by \hyperref
 \phantomsection 
 \label{IM:transMot}
 \\ \midrule \\
-Label & Force on the translational motion of a set of 2D rigid bodies
+Label & J-Th Body's Acceleration
         
 \\ \midrule \\
 Input & ${\symbf{v}_{j}}$, $t$, $\symbf{g}$, ${\symbf{F}_{j}}$, ${m_{j}}$
@@ -1277,7 +1277,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\symbf{a}_{j}}$ is the force on the translational motion of a set of 2D rigid bodies ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\symbf{a}_{j}}$ is the j-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{F}_{j}}$ is the force applied to the j-th body at time t (${\text{N}}$)}
               \item{$t$ is the time (${\text{s}}$)}
@@ -1300,7 +1300,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of force on the translational motion of a set of 2D rigid bodies:}
+\paragraph{Detailed derivation of j-th body's acceleration:}
 \label{IM:transMotDeriv}
 We may calculate the total acceleration of rigid body $j$ by calculating the derivative of it's velocity with respect to time (from \hyperref[DD:linAcc]{DD:linAcc}).
 
@@ -1320,7 +1320,7 @@ Performing the derivative, we obtain:
 \phantomsection 
 \label{IM:rotMot}
 \\ \midrule \\
-Label & Force on the rotational motion of a set of 2D rigid body
+Label & J-Th Body's Angular Acceleration
         
 \\ \midrule \\
 Input & $ω$, $t$, ${\symbf{τ}_{j}}$, $\symbf{I}$
@@ -1351,7 +1351,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${α_{j}}$ is the Force on the rotational motion of a set of 2D rigid body ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{${α_{j}}$ is the j-th body's angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \item{${\symbf{τ}_{j}}$ is the torque applied to the j-th body ($\text{N}\text{m}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$\symbf{I}$ is the moment of inertia ($\text{kg}\text{m}^{2}$)}
@@ -1371,7 +1371,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of Force on the rotational motion of a set of 2D rigid body:}
+\paragraph{Detailed derivation of j-th body's angular acceleration:}
 \label{IM:rotMotDeriv}
 We may calculate the total angular acceleration of rigid body $j$ by calculating the derivative of its angular velocity with respect to time (from \hyperref[DD:angAccel]{DD:angAccel}).
 

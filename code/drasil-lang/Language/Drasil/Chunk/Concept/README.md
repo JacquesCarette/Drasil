@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: August 13, 2021
 ----------------------------------------------------------
 
 Core.hs
-  - DefnAndDomain ConceptChunk, CommonConcept, and ConceptInstance data types
+  - `ConceptChunk`, `CommonConcept`, and `ConceptInstance` data types
 
 README.md
   - This file

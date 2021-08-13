@@ -1,6 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Unitary (Unitary(..), UnitaryChunk, mkUnitary,
-  unitary, unitary', unit_symb) where
+-- | Defines chunks to add units to a quantity. Similar to 'UnitalChunk'.
+module Language.Drasil.Chunk.Unitary (
+  -- * Chunk Types
+  Unitary(..), UnitaryChunk,
+  -- * Constructors
+  mkUnitary, unitary, unitary', unit_symb) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -19,7 +23,9 @@ import Control.Lens ((^.), makeLenses)
 class (Quantity c) => Unitary c where
   unit :: c -> UnitDefn
 
--- | UnitaryChunks are 'Unitary's with 'Symbols'. Contains a 'QuantityDict' and a 'UnitDefn'.
+-- | UnitaryChunks are for ideas with quantities that must have units. Contains a 'QuantityDict' and a 'UnitDefn'.
+--
+-- Ex. A pendulum arm is an idea associated with a symbol (l) and units (cm, m, etc.).
 data UnitaryChunk = UC { _quant :: QuantityDict
                        , _un :: UnitDefn
                        }

@@ -3,7 +3,7 @@ module Drasil.NBSections.Body (reviewSec, mainIdeaSec, mthdAndanls, exampleSec) 
 import Language.Drasil
 import qualified Drasil.DocLang.Notebook as NB (review, mainIdea, methAndAnls, example)
 
--- **** Leave blank for now
+-- ---- Leave blank for now
 --bodyIntro :: Contents
 --bodyIntro = foldlSP [S ""]
 

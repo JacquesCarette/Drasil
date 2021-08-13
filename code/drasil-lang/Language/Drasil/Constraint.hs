@@ -1,7 +1,10 @@
 {-# Language GADTs #-}
+-- | Defines types and functions for constrained values.
 module Language.Drasil.Constraint (
-    Constraint(..), ConstraintE, ConstraintReason(..)
-  , physc, sfwrc, isPhysC, isSfwrC
+  -- * Types
+  Constraint(..), ConstraintE, ConstraintReason(..),
+  -- * Functions
+  physc, sfwrc, isPhysC, isSfwrC
   ) where
 
 import Language.Drasil.Expr.Lang

@@ -1,4 +1,5 @@
 {-# Language TemplateHaskell #-}
+-- | Contains types and functions common to aspects of generating documents.
 module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
@@ -12,6 +13,8 @@ import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
+
+-- * Lists
 
 -- | Denotes the different possible types that can be used as a list.
 data ListType = Bullet      [(ItemType, Maybe String)] -- ^ Bulleted list.
@@ -39,6 +42,8 @@ type Height   = Float
 type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item. For use in lists.
 type Filepath = String
 type Lbl      = Sentence  -- ^ Label.
+
+-- * Contents
 
 -- | Contents may be labelled or unlabelled.
 data Contents = UlC UnlabelledContent
@@ -113,6 +118,8 @@ instance HasContents Contents where
 instance Referable LabelledContent where
   refAdd       = getAdd . getRefAdd
   renderRef   = getRefAdd
+
+-- * Helper
 
 -- | Helper to prepend labels to 'LabelledContent' when referencing.
 prependLabel :: RawContent -> IRefProg

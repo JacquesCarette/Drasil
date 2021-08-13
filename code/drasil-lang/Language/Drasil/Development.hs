@@ -1,6 +1,6 @@
-{- re-export many things to simplify external use -}
+-- | Developing the expression language in Drasil. Re-export many things to simplify external use.
 module Language.Drasil.Development (
-  -- NounPhrase
+  -- * NounPhrase
     NounPhrase(phraseNP, pluralNP)
   -- Sentence.Extract
   , sdep, lnames, lnames'

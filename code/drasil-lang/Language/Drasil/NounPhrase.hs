@@ -1,10 +1,20 @@
-module Language.Drasil.NounPhrase (NounPhrase(..), NP, atStartNP, atStartNP',
-  cn, cn', cn'', cn''', cnICES, cnIES, cnIP, cnIS, cnIrr, cnUM, compoundPhrase,
+module Language.Drasil.NounPhrase (
+  -- * Types
+  NounPhrase(..), NP,
+  -- * Phrase Accessors
+  atStartNP, atStartNP', titleizeNP, titleizeNP',
+  -- * Constructors
+  -- ** Common Noun Constructors
+  cn, cn', cn'', cn''', cnICES, cnIES, cnIP, cnIS, cnIrr, cnUM,
+  -- ** Proper Noun Constructors
+  pn, pn', pn'', pn''', pnIrr,
+  -- ** Noun Phrase Constructors
+  nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent,
+  -- * Combinators
+  compoundPhrase,
   compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1,
-  nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent, pn, pn',
-  pn'', pn''', pnIrr, titleizeNP, titleizeNP'
-  -- re-export these
-  , CapitalizationRule(..), PluralRule(..)
+  -- * Re-exported Types
+  CapitalizationRule(..), PluralRule(..)
   ) where
 
 import Data.Char (isLatin1, isLetter, toLower, toUpper)
@@ -210,8 +220,8 @@ cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss)) CapFirst = S (toUpper s : ss)
 cap (S s)      CapWords = capString s capFirstWord capWords
-cap (P symb :+: x) CapFirst = P symb :+: x                  -- TODO: See why the Table of Symbols uses the CapWords case instead of CapFirst for items of the form:
-cap (P symb :+: x) CapWords = P symb :+: x                  -- "x-component". Instead, it displays as "x-Component". Using a temp fix for now by ignoring everything after a P symbol.
+cap (P symb :+: x) CapFirst = P symb :+: x -- TODO: See why the Table of Symbols uses the CapWords case instead of CapFirst for items of the form:
+cap (P symb :+: x) CapWords = P symb :+: x -- "x-component". Instead, it displays as "x-Component". Using a temp fix for now by ignoring everything after a P symbol.
 cap (Ch style _ s) CapFirst = Ch style CapF s
 cap (Ch style _ s) CapWords = Ch style CapW s
 cap (S s1 :+: S s2 :+: x) r = cap (S (s1 ++ s2) :+: x) r

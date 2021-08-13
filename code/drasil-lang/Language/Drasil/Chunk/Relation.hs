@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Relation (RelationConcept, makeRC, addRelToCC) where
+-- | For adding a relation (expression) to a concept.
+module Language.Drasil.Chunk.Relation (
+  -- * Chunk Type
+  RelationConcept,
+  -- * Constructors
+  makeRC, addRelToCC) where
 
 import Control.Lens (makeLenses, (^.), view, set)
 
@@ -12,7 +17,9 @@ import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
--- | For a 'ConceptChunk' that also has a 'Relation' attached.
+-- | For a concept ('ConceptChunk') that also has a 'Relation' attached.
+--
+-- Ex. We can describe a pendulum arm and then apply an associated equation so that we know its behaviour.
 data RelationConcept = RC { _conc :: ConceptChunk
                           , _rel  :: Relation
                           }

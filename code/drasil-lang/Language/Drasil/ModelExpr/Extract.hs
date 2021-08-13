@@ -1,3 +1,4 @@
+-- | Defines functions to find Chunk UIDs within 'ModelExpr's.
 module Language.Drasil.ModelExpr.Extract where
 
 import Data.List (nub)

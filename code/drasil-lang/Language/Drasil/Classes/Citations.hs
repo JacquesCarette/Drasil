@@ -1,4 +1,4 @@
--- | Defining classes that represent knowledge about Citations
+-- | Defining classes that represent knowledge about Citations.
 module Language.Drasil.Classes.Citations (
     HasFields(getFields)
   ) where

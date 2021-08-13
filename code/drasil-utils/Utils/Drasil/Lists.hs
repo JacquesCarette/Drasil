@@ -1,3 +1,4 @@
+-- | Functions for working with lists.
 module Utils.Drasil.Lists where
 
 -- | Replaces all elements of a target list that belong to a provided "bad"

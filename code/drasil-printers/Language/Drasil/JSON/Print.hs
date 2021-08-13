@@ -117,9 +117,9 @@ pExpr (Over Hat s)   = pExpr s <> text "&#770;"
 pExpr (MO o)         = text $ pOps o
 pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
 pExpr (Font Bold e)  = pExpr e 
---pExpr (Font Bold e)  = bold $ pExpr e -- **used before
---pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- **HTML used
---pExpr (Spc Thin)     = text "&#8239;" -- **HTML used
+--pExpr (Font Bold e)  = bold $ pExpr e -- used before
+--pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- HTML used
+--pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs 
 pExpr e              = printMath $ toMath $ TeX.pExpr e
   -- before
@@ -127,7 +127,7 @@ pExpr e              = printMath $ toMath $ TeX.pExpr e
   --      mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
 
 
--- **TODO: edit all operations in markdown format
+-- TODO: edit all operations in markdown format
 pOps :: Ops -> String
 pOps IsIn     = "&thinsp;&isin;&thinsp;"
 pOps Integer  = "&#8484;"

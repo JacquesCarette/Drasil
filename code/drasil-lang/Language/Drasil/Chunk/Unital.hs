@@ -1,6 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Unital 
-  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucStaged, ucs , ucs', ucsWS, ucuc) where
+-- | Defines chunks to add units to a quantity. Similar to 'UnitaryChunk'.
+module Language.Drasil.Chunk.Unital (
+  -- * Chunk Type
+  UnitalChunk(..),
+  -- * Constructors
+  makeUCWDS , uc , uc' , ucStaged, ucs , ucs', ucsWS, ucuc) where
 
 import Control.Lens (makeLenses, view, (^.))
 
@@ -18,8 +22,11 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Stages (Stage)
 
--- | UnitalChunks are concepts with quantities and a unit definition.
+-- | Similar to a `DefinedQuantityDict`, UnitalChunks are concepts
+-- with quantities that must have a unit definition.
 -- Contains 'DefinedQuantityDict's and a 'UnitDefn'.
+--
+-- Ex. A pendulum arm is a tangible object with a symbol (l) and units (cm, m, etc.).
 data UnitalChunk = UC { _defq' :: DefinedQuantityDict
                       , _uni :: UnitDefn
                       }
@@ -96,5 +103,6 @@ makeUCWDS :: (IsUnit u) => String -> NP -> Sentence -> Symbol ->
 makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
   where uu = unitWrapper un
 
+-- | Attach units to a chunk that has a symbol and definition.
 ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
 ucuc c = UC (tempdqdWr' c) 

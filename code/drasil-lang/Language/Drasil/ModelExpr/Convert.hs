@@ -1,3 +1,4 @@
+-- | Defines functions to convert from the base expression language to 'ModelExpr's.
 module Language.Drasil.ModelExpr.Convert where
 
 import Data.Bifunctor (bimap, second)

@@ -1,3 +1,4 @@
+-- | Defines classes for use with Drasil's expression language.
 module Language.Drasil.ExprClasses where
 
 import Language.Drasil.Expr.Lang (Expr)

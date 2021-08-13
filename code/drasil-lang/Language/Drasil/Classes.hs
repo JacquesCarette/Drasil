@@ -1,32 +1,34 @@
-{-# Language TypeFamilies, ConstraintKinds #-}
--- | Defining all the classes which represent knowledge-about-knowledge
-{-# LANGUAGE ConstrainedClassMethods #-}
+{-# LANGUAGE TypeFamilies, ConstraintKinds, ConstrainedClassMethods #-}
+
+-- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (
-  -- the classes
+    -- * Classes
+    -- ** Chunks
     NamedIdea(term)
-  , HasSpace(typ)
-  , HasUnitSymbol(usymb)
-  , HasReference(getReferences)
-  , HasDecRef(getDecRefs)
-  , HasReasVal(reasVal)
-  , HasDerivation(derivations)
-  , HasAdditionalNotes(getNotes)
   , Idea(getA)
+  , CommonIdea(abrv)
+  , Concept
   , Definition(defn)
   , ConceptDomain(cdom)
-  , Constrained(constraints)
-  , CommonIdea(abrv)
-  , DefiningExpr(defnExpr)
-  , Express(express)
   , Quantity
-  , HasUncertainty(unc)
-  , Concept
+  , HasSpace(typ)
+  , HasUnitSymbol(usymb)
+  , HasReasVal(reasVal)
+  , Constrained(constraints)
+  , HasUncertainty(unc)  
   , Callable
   , IsArgumentName
-
-  -- the unsorted rest
+  , HasAdditionalNotes(getNotes)
+    -- the unsorted rest
   , IsUnit(udefn, getUnits)
   , UnitEq(uniteq)
+    -- ** References
+  , HasReference(getReferences)
+  , HasDecRef(getDecRefs)
+    -- ** Expr and expressions
+  , Express(express)
+  , HasDerivation(derivations)
+  , DefiningExpr(defnExpr)
   ) where
 
 -- some classes are so 'core' that they are defined elswhere

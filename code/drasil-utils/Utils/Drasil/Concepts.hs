@@ -1,12 +1,46 @@
-module Utils.Drasil.Concepts (and_, and_PS, and_PP, and_TGen, and_Gen, andIts, andThe, with, of_, of_NINP, of_PSNPNI, of_PS, ofA,
-ofAPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, onThePS, onThePP, inThe, inThePS, inThePP, isThe, toThe, for, forTGen, in_, in_PS, inA, is, the, theGen, a_, a_Gen,
-compoundNC, compoundNCPP, compoundNCGen, compoundNCPS, compoundNCPSPP, compoundNCGenP, combineNINP, combineNPNI, combineNINI) where
+-- | Defines various chunk combinators. The full naming scheme can be found
+-- in the [Wiki](https://github.com/JacquesCarette/Drasil/wiki/Combinator-Documentation).
+-- For convenience, here is a summary:
+--
+--    * Combinators that conflict with haskell-native functions have an underscore appended.
+--    * Default plural case for combinators will be first term singular, second term plural.
+--    * @P@ and @S@ denote the plural case of the combinator when it does not follow the above default.
+--    * @Gen@ denotes the general function case.
+--    * Although this should eventually be phased out, @T@ denotes a combinator meant for use with titles.
+--    * @NI@ and @NP@ denote whether something must be a part of the 'NamedIdea' or 'NounPhrase' class.
+module Utils.Drasil.Concepts (
+  -- * Prepositions
+  -- ** \"The\" Combinators
+  the, theGen,
+  -- ** \"A\" Combinators
+  a_, a_Gen,
+  -- * Conjunctions
+  -- ** \"And\" Combinators
+  and_, and_PS, and_PP, and_TGen, and_Gen,
+  andIts, andThe,
+  -- ** \"Of\" Combinators
+  of_, of_NINP, of_PSNPNI, of_PS, ofA, ofAPS, ofThe, ofThePS,
+  -- ** \"The\" Combinators
+  the_ofThe, the_ofThePS, onThe, onThePS, onThePP,
+  inThe, inThePS, inThePP, isThe, toThe,
+  -- ** \"For\" Combinators
+  for, forTGen,
+  -- ** \"In\" Combinators
+  in_, in_PS, inA,
+  -- ** Other Combinators
+  is, with,
+  -- * Direct Term Combinators
+  -- | Some are specific to 'NamedChunk's.
+  compoundNC, compoundNCPP, compoundNCGen,
+  compoundNCPS, compoundNCPSPP, compoundNCGenP,
+  combineNINP, combineNPNI, combineNINI) where
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
 
-import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA, ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe, isThe) 
+import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA,
+  ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe, isThe)
 
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the word "and" between

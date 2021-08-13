@@ -6,6 +6,8 @@ module Language.Drasil.Expr.Lang where
 import Language.Drasil.Space (DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 
+-- * Expression Types
+
 -- | A relation is just an expression ('Expr').
 type Relation = Expr
 
@@ -75,6 +77,8 @@ data UFuncVN = Norm | Dim
 -- | For case expressions (either complete or incomplete).
 data Completeness = Complete | Incomplete
   deriving Eq
+
+-- ** Expr
 
 -- | Drasil expressions.
 data Expr where

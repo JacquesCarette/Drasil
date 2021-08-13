@@ -1,6 +1,11 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference (Reference(Reference), ref, refS,
-  namedRef, complexRef, namedComplexRef) where
+-- | Defines a type used to hold referencing information.
+module Language.Drasil.Reference (
+  -- * Type
+  Reference(Reference),
+  -- * Constructors
+  ref, refS, namedRef, complexRef, namedComplexRef
+  ) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
@@ -10,8 +15,6 @@ import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
 import Control.Lens ((^.), makeLenses)
-
---Reference Type--
 
 -- | A Reference contains the identifier ('UID'), a reference address ('LblType'),
 -- a human-readable shortname ('ShortName'), and any extra information about the reference ('RefInfo').
@@ -29,8 +32,8 @@ instance HasUID        Reference where uid = ui
 instance HasRefAddress Reference where getRefAdd = ra
 -- | Finds the shortname of the reference address used for the 'Reference'.
 instance HasShortName  Reference where shortname = sn
--- | Finds the reference information of a 'Reference'.
-{-instance Referable Reference where
+{--- Finds the reference information of a 'Reference'.
+instance Referable Reference where
   refAdd r = r ^. ui
   renderRef = ra-}
 

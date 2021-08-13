@@ -1,8 +1,11 @@
 {-# Language TemplateHaskell #-}
-
-module Language.Drasil.Chunk.UncertainQuantity 
-  ( UncertQ, UncertainChunk(..) , uq, uqc
-  , uqcND, uncrtnChunk, uvc, uncrtnw) where
+-- | For adding an uncertainty value to quantities with constraints.
+module Language.Drasil.Chunk.UncertainQuantity (
+  -- * Chunk Types
+  UncertQ, UncertainChunk(..),
+  -- * Constructors
+  uq, uqc,
+  uqcND, uncrtnChunk, uvc, uncrtnw) where
  
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, cuc', cnstrw, cvc)
@@ -24,6 +27,8 @@ import Control.Lens ((^.), makeLenses, view)
 
 -- | UncertainChunk is a symbolic quantity with constraints, a typical value, and an uncertainty. 
 -- Contains a 'ConstrainedChunk' and an 'Uncertainty'.
+--
+-- Ex. Measuring the length of a pendulum arm may be recorded with an uncertainty value.
 data UncertainChunk  = UCh { _conc :: ConstrainedChunk , _unc' :: Uncertainty }
 makeLenses ''UncertainChunk
 
@@ -67,6 +72,8 @@ uncrtnw c = UCh (cnstrw c) (c ^. unc)
 
 -- | UncertQs are conceptual symbolic quantities with constraints and an 'Uncertainty'.
 -- Contains a 'ConstrConcept' and an 'Uncertainty'.
+--
+-- Ex. Measuring the length of a pendulum arm may be recorded with an uncertainty value.
 data UncertQ = UQ { _coco :: ConstrConcept , _unc'' :: Uncertainty }
 makeLenses ''UncertQ
   

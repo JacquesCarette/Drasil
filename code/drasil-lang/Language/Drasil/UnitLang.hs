@@ -1,5 +1,8 @@
+-- | Language for defining and manipulating units.
 module Language.Drasil.UnitLang (
+    -- * Types
     USymb(US), UDefn(..), UnitSymbol(BaseSI, DerivedSI, Defined)
+    -- * Functions
   , fromUDefn, compUSymb, getUSymb, getDefn
   ) where
 

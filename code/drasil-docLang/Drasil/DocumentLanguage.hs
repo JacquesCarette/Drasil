@@ -76,8 +76,10 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
 
+-- TODO: Move all of these "filler" functions to a new file?
+-- TODO: Add in 'fillTermMap' once #2775 is complete.
 -- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill in for rest of system information.
--- Currently fills in references and traceability matrix information.
+-- Currently fills in references, traceability matrix information and 'IdeaDict's.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 fillcdbSRS srsDec si = fillSecAndLC srsDec $ fillReferences srsDec $ fillTraceSI srsDec si
 
@@ -90,6 +92,36 @@ fillConcepts si = si2
     tmtbl = termTable chkdb
     chkdb2 = chkdb{termTable = termMap $ nub (map nw doccon ++ map nw doccon' ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' ++ map nw physicalcon ++ map nw educon ++ map nw mathcon ++ map nw mathcon' ++ map nw compcon ++ map nw compcon' ++ map nw solidcon ++ map nw thermocon ++ (map (fst.snd) $ Map.assocs tmtbl))}
 -}
+
+{- FIXME: See #2775
+-- Fill in term map from all concepts and quantities.
+fillTermMap :: SystemInformation -> SystemInformation
+fillTermMap si = si2
+  where
+    -- Get current contents of si
+    chkdb = si ^. sysinfodb
+    -- extract everything that could possibly lead to an 'IdeaDict'
+    symbs    = map (fst.snd) $ Map.assocs $ symbolTable chkdb
+    trms     = map (fst.snd) $ Map.assocs $ termTable chkdb
+    concepts = map (fst.snd) $ Map.assocs $ defTable chkdb
+
+    -- TODO: Uncomment these when the second part of #2775 is resolved.
+    -- Some Definitions and models overwrite the term for a given UID.
+    -- We don't really want this behaviour, so it should be resolved by
+    -- changing some of the constructors for ModelKind found in drasil-theory
+
+    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
+    gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
+    imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
+    tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
+    concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
+    -- fill in the appropriate chunkdb field
+    chkdb2 = chkdb {termTable = termMap $ nub $ map nw symbs ++ map nw trms
+      ++ map nw concepts ++ map nw concIns
+      ++ map nw ddefs ++ map nw gdefs ++ map nw imods ++ map nw tmods}
+    -- return the filled in system information
+    si2 = set sysinfodb chkdb2 si
+    -}
 
 -- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
 fillSecAndLC :: SRSDecl -> SystemInformation -> SystemInformation

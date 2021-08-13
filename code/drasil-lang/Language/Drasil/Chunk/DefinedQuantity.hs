@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdNoUnit, dqd',
+-- | Contains types that define quantities from concepts. Similar to 'QuantityDict'.
+module Language.Drasil.Chunk.DefinedQuantity (
+  -- * Chunk Type
+  DefinedQuantityDict,
+  -- * Constructors
+  dqd, dqdNoUnit, dqd',
   dqdQd, dqdWr, tempdqdWr') where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
@@ -15,7 +20,11 @@ import Language.Drasil.Symbol (Symbol)
 
 import Control.Lens ((^.), makeLenses, view)
 
--- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'. Contains a 'ConceptChunk', a 'Symbol' dependent on 'Stage', a 'Space', and maybe a 'UnitDefn'.
+-- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'.
+-- Contains a 'ConceptChunk', a 'Symbol' dependent on 'Stage', a 'Space', and maybe a 'UnitDefn'.
+-- Used when we want to assign a quantity to a concept. Includes the space, symbol, and units for that quantity.
+--
+-- Ex. A pendulum arm can be defined as a concept with a symbol (l), space (Real numbers), and units (cm, m, etc.).
 data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _symb :: Stage -> Symbol
                                , _spa :: Space
@@ -63,7 +72,7 @@ dqd' = DQD
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
--- | temporary constructor, not to be used outside drasil-lang.
+-- | Temporary projection constructor, not to be used outside @drasil-lang@.
 tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 tempdqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 

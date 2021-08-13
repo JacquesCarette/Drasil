@@ -1,5 +1,12 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Uncertainty.Core (Uncertainty, uncert, prec, uncty, exact) where
+-- | Defines uncertainty types and functions.
+module Language.Drasil.Uncertainty.Core (
+  -- * Type
+  Uncertainty,
+  -- * Lenses
+  uncert, prec,
+  -- * Constructors
+  uncty, exact) where
 
 import Control.Lens (makeLenses)
 

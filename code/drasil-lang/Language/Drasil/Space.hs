@@ -1,6 +1,9 @@
 {-# LANGUAGE GADTs #-}
-module Language.Drasil.Space
-  (Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
+-- | Number space types and functions.
+module Language.Drasil.Space (
+  -- * Types
+  Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
+  -- * Functions
   getActorName, getInnerSpace, mkFunction) where
 
 import qualified Data.List.NonEmpty as NE

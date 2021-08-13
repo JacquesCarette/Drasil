@@ -1,6 +1,12 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrConcept(..),
-  cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
+-- | Add constraints and a reasonable value to chunks that are quantities.
+module Language.Drasil.Chunk.Constrained (
+  -- * Constrained Chunks
+  -- ** From an Idea
+  ConstrainedChunk(..), cuc, cvc, cnstrw,
+  -- ** From a Concept
+  ConstrConcept(..),
+  cnstrw', constrained', constrainedNRV', cuc', cuc'') where
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -24,6 +30,9 @@ import Language.Drasil.Symbol (Symbol)
 
 -- | ConstrainedChunks are symbolic quantities ('QuantityDict')
 -- with 'Constraint's and maybe a typical value ('Maybe' 'Expr').
+--
+-- Ex. Measuring the length of a pendulum would have some reasonable value (between 1 cm and 2 m)
+-- and the constraint that the length cannot be a negative value.
 data ConstrainedChunk = ConstrainedChunk { _qd     :: QuantityDict
                                          , _constr :: [ConstraintE]
                                          , _reasV  :: Maybe Expr
@@ -66,6 +75,10 @@ cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)
 
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
+-- Similar to 'ConstrainedChunk' but includes a definition and domain. 
+--
+-- Ex. Measuring the length of a pendulum arm could be a concept that has some reasonable value
+-- (between 1 cm and 2 m) and the constraint that the length cannot be a negative value.
 data ConstrConcept = ConstrConcept { _defq    :: DefinedQuantityDict
                                    , _constr' :: [ConstraintE]
                                    , _reasV'  :: Maybe Expr

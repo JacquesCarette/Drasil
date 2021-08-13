@@ -1,13 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: August 13, 2021
 --------------------------------------------------
 
-Extract.hs
-  - Contains helpers for extracting information
-
-GetChunk.hs
-  - Contains helpers for extracting chunks
+Core.hs
+  - Defines content-related types for use in Drasil.
 
 README.md
   - This file

@@ -10,7 +10,7 @@ import qualified Data.List.NonEmpty as NE
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet = CL {
     _con  :: ConceptChunk,
-    _invs :: NE.NonEmpty Expr
+    _invs :: NE.NonEmpty ModelExpr -- TODO: parameterize?
 }
 makeLenses ''ConstraintSet
 
@@ -30,5 +30,5 @@ instance Express       ConstraintSet where
     express = andMEs . map express . NE.toList . (^. invs)
 
 -- | Smart constructor for building ConstraintSets
-mkConstraintSet :: ConceptChunk -> NE.NonEmpty Relation -> ConstraintSet
+mkConstraintSet :: ConceptChunk -> NE.NonEmpty ModelExpr -> ConstraintSet
 mkConstraintSet = CL

@@ -4,7 +4,12 @@ module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
 
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil
+import Language.Drasil (ConceptChunk, dccWDS, fromEqnSt', mkFuncDefByQ, qw, dRef,
+  dRefInfo, atStart, phrase, plural, makeURI, atStartNP, nounPhraseSP, refS,
+  (!.), (+:), (+:+), (+:+.), ch, eS, sC, sParen, shortname', eqSymb, QDefinition,
+  Definition(..), HasSpace(..), HasSymbol(..), Express(..), ModelExpr,
+  Reference, RefInfo(Page), Sentence(S, (:+:), E))
+import Language.Drasil.ModelExpr
 import Control.Lens ((^.))
 import Theory.Drasil (ConstraintSet, mkConstraintSet,
   TheoryModel, tm, equationalModel', equationalConstraints',
@@ -98,7 +103,7 @@ sensHtESrc = makeURI "sensHtESrc"
   "http://en.wikipedia.org/wiki/Sensible_heat" $
   shortname' $ S "Definition of Sensible Heat"
 
-sensHtEEqn :: PhaseChange -> Expr
+sensHtEEqn :: PhaseChange -> ModelExpr
 sensHtEEqn pChange = case pChange of
   Liquid -> liquidFormula
   AllPhases -> incompleteCase [(sy htCapS `mulRe` sy mass `mulRe` sy deltaT,
@@ -176,9 +181,9 @@ nwtnCoolingMK = equationalModel "nwtnCoolingTM"
   (nounPhraseSP "Newton's law of cooling") nwtnCoolingFD
 
 nwtnCoolingFD :: QDefinition ModelExpr
-nwtnCoolingFD = mkFuncDefByQ htFlux [time] $ express nwtnCoolingExpr
+nwtnCoolingFD = mkFuncDefByQ htFlux [time] nwtnCoolingExpr
 
-nwtnCoolingExpr :: Expr
+nwtnCoolingExpr :: ModelExpr
 nwtnCoolingExpr = sy htTransCoeff `mulRe` apply1 deltaT time
 
 nwtnCoolingNotes :: [Sentence]

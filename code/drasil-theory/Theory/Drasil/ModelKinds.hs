@@ -10,7 +10,7 @@ module Theory.Drasil.ModelKinds (
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
+import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr, ModelExpr,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..), UID)
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
@@ -25,12 +25,10 @@ import Theory.Drasil.MultiDefn (MultiDefn)
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds e where
   DEModel               ::              RelationConcept -> ModelKinds Expr
-  EquationalConstraints ::              ConstraintSet   -> ModelKinds Expr
+  EquationalConstraints ::              ConstraintSet   -> ModelKinds ModelExpr -- TODO: Figure out the 'right' resultant type
   EquationalModel       :: Express e => QDefinition e   -> ModelKinds e
   EquationalRealm       :: Express e => MultiDefn e     -> ModelKinds e
   OthModel              ::              RelationConcept -> ModelKinds Expr
-
-makeLenses ''ModelKinds
 
 -- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
 data ModelKind e = MK {
@@ -52,11 +50,11 @@ deModel' :: RelationConcept -> ModelKind Expr
 deModel' rc = MK (DEModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'
-equationalConstraints :: UID -> NP -> ConstraintSet-> ModelKind Expr
+equationalConstraints :: UID -> NP -> ConstraintSet-> ModelKind ModelExpr
 equationalConstraints u n qs = MK (EquationalConstraints qs) u n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
-equationalConstraints' :: ConstraintSet-> ModelKind Expr
+equationalConstraints' :: ConstraintSet-> ModelKind ModelExpr
 equationalConstraints' qs = MK (EquationalConstraints qs) (qs ^. uid) (qs ^. term)
 
 -- | Smart constructor for 'EquationalModel's

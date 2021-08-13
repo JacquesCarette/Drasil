@@ -27,6 +27,7 @@ import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI)
 
+-- | Generate a python notebook document (using json).
 genJSON :: PrintingInformation -> L.Document -> Doc
 genJSON sm doc = build (makeDocument sm doc)
 
@@ -121,7 +122,7 @@ pExpr (Font Bold e)  = pExpr e
 --pExpr (Spc Thin)     = text "&#8239;" -- **HTML used
 -- Uses TeX for Mathjax for all other exprs 
 pExpr e              = printMath $ toMath $ TeX.pExpr e
-  -- **before
+  -- before
   --where mjDelimDisp d = text "$" <> d <> text "$"
   --      mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
 
@@ -173,6 +174,7 @@ pOps Point    = "."
 pOps Perc     = "%"
 pOps LArrow   = " &larr; "
 pOps RArrow   = " &rarr; "
+pOps ForAll   = " ForAll "
 
 
 -- | Renders HTML table, called by 'printLO'

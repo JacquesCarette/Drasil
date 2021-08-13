@@ -5,6 +5,7 @@ module Language.Drasil.DisplayExpr (DisplayExpr(..),
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Space (Space)
+import Language.Drasil.UID ( UID )
 
 -- | Binary Display Operations.
 data DisplayBinOp = Defines | IsIn
@@ -24,3 +25,4 @@ data DisplayExpr where
     SpaceExpr     :: Space -> DisplayExpr
     BinOp         :: DisplayBinOp -> DisplayExpr -> DisplayExpr -> DisplayExpr
     AssocBinOp    :: DisplayAssocBinOp -> [DisplayExpr] -> DisplayExpr
+    ForAll        :: UID -> Space -> DisplayExpr -> DisplayExpr

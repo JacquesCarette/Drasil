@@ -1,11 +1,8 @@
 module Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Language.Drasil hiding (section)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
-  _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -33,25 +30,13 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
-
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
-
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
-
-import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
-  DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
-  IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  PDSub(..), ProblemDescription(PDProg), RefSec(RefProg), RefTab(TAandA, TUnits),
-  ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
-  SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc, fillcdbSRS)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -60,7 +45,7 @@ import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
   orgDocIntro, physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
@@ -217,8 +202,8 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans]
-  ++ map nw [absTol, relTol] ++ [nw materialProprty])
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
+  ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
   tMods concIns section labCon []
 

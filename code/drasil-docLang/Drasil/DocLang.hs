@@ -11,7 +11,6 @@ module Drasil.DocLang (
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
-  getTraceConfigUID,
   -- NBDecl
   NBDecl, NbSection(BibSec, IntrodSec, BodySec),
   -- DocumentLanguage.Notebook.Core
@@ -62,7 +61,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
-  TSIntro(..), TUIntro(..), getTraceConfigUID)
+  TSIntro(..), TUIntro(..))
 import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), IntrodSub(..), BodySec(..), 
   BodySub(..), ApndxSec(..), SmmrySec(..))
 import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)

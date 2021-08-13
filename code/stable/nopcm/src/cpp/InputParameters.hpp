@@ -22,7 +22,7 @@ using std::string;
     \param L length of tank: the length of the tank (m)
     \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
     \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
-    \param rho_W density of water: nass per unit volume of water (kg/m^3)
+    \param rho_W density of water: mass per unit volume of water (kg/m^3)
     \param D diameter of tank: the diameter of the tank (m)
     \param A_tol absolute tolerance
     \param R_tol relative tolerance
@@ -46,7 +46,7 @@ double derived_values(double D, double L);
     \param L length of tank: the length of the tank (m)
     \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
     \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
-    \param rho_W density of water: nass per unit volume of water (kg/m^3)
+    \param rho_W density of water: mass per unit volume of water (kg/m^3)
     \param D diameter of tank: the diameter of the tank (m)
     \param E_W change in heat energy in the water: change in thermal energy within the water (J)
 */

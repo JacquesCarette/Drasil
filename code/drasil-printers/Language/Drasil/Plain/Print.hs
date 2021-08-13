@@ -161,6 +161,7 @@ opsDoc Point = text "."
 opsDoc Perc = text "%"
 opsDoc LArrow = text " <- "
 opsDoc RArrow = text " -> "
+opsDoc ForAll = text " ForAll "
 
 -- | Helper for printing the left side of some characters "(, {, \\|, |".
 fenceDocL :: Fence -> Doc

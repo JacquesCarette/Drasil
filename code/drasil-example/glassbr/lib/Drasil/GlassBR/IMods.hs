@@ -6,12 +6,12 @@ import Theory.Drasil (InstanceModel, imNoDeriv, qwC, equationalModelN)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
-
-import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand,
+import Data.Drasil.SI_Units
+import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity,
   pbTolUsr, qRef)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (charWeight, demand, demandq, isSafeLR, isSafePb,
+import Drasil.GlassBR.Unitals (charWeight, demand, isSafeLR, isSafePb,
   lRe, pbTol, plateLen, plateWidth, probBr, standOffDist)
 
 import Data.Drasil.Concepts.Documentation (goal)
@@ -19,9 +19,10 @@ import Data.Drasil.Concepts.Documentation (goal)
 iMods :: [InstanceModel]
 iMods = [pbIsSafe, lrIsSafe]
 
-symb :: [DefinedQuantityDict]
-symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
-  [dqdQd (qw calofDemand) demandq]
+symb :: [UnitalChunk]
+symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
+-- ++
+ -- [dqdQd (qw calofDemand) demandq]
 
 {--}
 

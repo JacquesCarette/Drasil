@@ -1,6 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-module Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
+-- | Contains chunks related to adding an expression to a quantitative concept. 
+module Language.Drasil.Chunk.Eq (
+  -- * Chunk Type
+  QDefinition,
+  -- * Constructor
+  fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ) where
 
@@ -26,6 +31,8 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)
 
 -- | A QDefinition is a 'QuantityDict' with a defining expression ('Expr'), a definition ('Sentence'), and a domain (['UID']).
+-- This chunk now contains almost enough information to generate code, definitions, and models.
+-- Used for high-level quantities with equations and inputs.
 data QDefinition = EC
   { _qua    :: DefinedQuantityDict
   , _inputs :: [UID]

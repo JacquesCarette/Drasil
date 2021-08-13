@@ -1,22 +1,24 @@
-{- re-export many things to simplify external use -}
+-- | Developing the expression language in Drasil. Re-export many things to simplify external use.
 module Language.Drasil.Development (
-  -- NounPhrase
+  -- * NounPhrase
     NounPhrase(phraseNP, pluralNP)
-  -- Expr
+  -- * Expr
   , Expr(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..), VVVBinOp(..), VVNBinOp(..)
   , AssocArithOper(..), AssocBoolOper(..)
   , DerivType(..), Completeness(..), Relation
+  -- ** Expr Precedence
+  -- Expr.Precedence
+  , precA, precB, eprec
+  -- ModelExpr.Precedence
+  , mePrec
+  -- * Extracting UID Functions
   -- Expr.Extract
   , eDep, eNames, eNames', eNamesRI
   -- ModelExpr.Extract
   , meDep
   -- Sentence.Extract
   , sdep, lnames, lnames'
-  -- Expr.Precedence
-  , precA, precB, eprec
-  -- ModelExpr.Precedence
-  , mePrec
   ) where
 
 import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))

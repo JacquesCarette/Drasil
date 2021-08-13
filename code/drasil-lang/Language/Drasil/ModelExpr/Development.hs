@@ -1,10 +1,15 @@
+-- | Re-export functions and types related to 'ModelExpr'
 module Language.Drasil.ModelExpr.Development (
+  -- * Types
+
   -- ModelExpr
     ModelExpr(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..)
   , SpaceBinOp(..), StatBinOp(..), VVVBinOp(..), VVNBinOp(..)
   , AssocArithOper(..), AssocBoolOper(..)
   , DerivType(..), Completeness(..)
+  -- * Functions
+
   -- ModelExpr.Convert
   , expr
   -- ModelExpr.Extract

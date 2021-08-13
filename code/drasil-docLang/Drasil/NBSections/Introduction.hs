@@ -6,7 +6,7 @@ import qualified Drasil.DocLang.Notebook as NB (intro, prpsOfDoc)
 -- | Constructor for the Notebook introduction section
 -- problemIntroduction - Sentence introducing the specific example problem
 -- programDefinition  - Sentence definition of the specific example
--- **** programDefinition : maybe just topic 
+-- ---- programDefinition : maybe just topic 
 introductionSection :: [Contents] -> [Section] -> Section
 introductionSection = NB.intro 
 

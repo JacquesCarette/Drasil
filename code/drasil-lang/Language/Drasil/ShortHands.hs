@@ -1,4 +1,4 @@
--- | Alphabet of capital/lowercase English letters as symbols
+-- | Alphabet of capital/lowercase English letters as symbols.
 module Language.Drasil.ShortHands where
 
 import Language.Drasil.Symbol (Symbol)

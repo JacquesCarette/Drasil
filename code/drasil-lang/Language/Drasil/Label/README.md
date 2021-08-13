@@ -1,10 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: August 13, 2021
 --------------------------------------------------
 
 Core.hs
-  - Defines the Label type
+  - Defines the Label type used in References.
 
 README.md
   - This file

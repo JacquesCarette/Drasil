@@ -1,5 +1,11 @@
-module Language.Drasil.Uncertainty (defaultUncrt, uncty,
-    uncVal, uncPrec, exact) where
+-- | Uncertainty functions.
+module Language.Drasil.Uncertainty (
+    -- * Constructor
+    defaultUncrt,
+    -- * Accessors
+    uncVal, uncPrec,
+    -- * Re-exported
+    uncty, exact) where
 
 import Control.Lens ((^.))
 

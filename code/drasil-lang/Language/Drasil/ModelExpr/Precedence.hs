@@ -1,3 +1,4 @@
+-- | Defines operator precedence.
 module Language.Drasil.ModelExpr.Precedence where
 
 import Language.Drasil.ModelExpr 

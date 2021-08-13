@@ -1,14 +1,15 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Citation
-  ( -- Types
-    Citation, BibRef, EntryID
-    -- Accessors
-  , citeID, citeKind
-    -- Citation smart constructors
-  , cArticle, cBookA, cBookE, cBooklet
-  , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
-  , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
-  , cProceedings, cTechReport, cUnpublished
+-- | Defines the chunk type to hold citations.
+module Language.Drasil.Chunk.Citation (
+  -- * Types
+  Citation, BibRef, EntryID,
+  -- * Accessors
+  citeID, citeKind,
+  -- * Citation smart constructors
+  cArticle, cBookA, cBookE, cBooklet,
+  cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP,
+  cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis,
+  cProceedings, cTechReport, cUnpublished
   ) where
 
 import Language.Drasil.People (People)
@@ -26,12 +27,17 @@ import Language.Drasil.UID (UID)
 
 import Control.Lens (makeLenses, (^.))
 
-type BibRef = [Citation] -- ^ A list of 'Citation's.
-type EntryID = String -- ^ A 'String' that should contain no spaces.
+-- | A list of 'Citation's.
+type BibRef = [Citation]
+-- | A 'String' that should contain no spaces.
+type EntryID = String
 
 -- | All citations require a unique identifier used by the Drasil chunk.
 -- We will re-use the 'UID' part as an EntryID ('String') used for creating reference links.
 -- Finally we will have the reference information ('CitationKind', 'CiteField's, and a 'ShortName').
+--
+-- Ex. A reference to a thesis paper like Koothoor's "Document driven approach to certifying
+-- scientific computing software" would include the affiliated university, publishing year, and city.
 data Citation = Cite
   { _citeKind :: CitationKind
   , _fields :: [CiteField]

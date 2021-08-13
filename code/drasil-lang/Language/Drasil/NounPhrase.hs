@@ -1,10 +1,20 @@
-module Language.Drasil.NounPhrase (NounPhrase(..), NP, atStartNP, atStartNP',
-  cn, cn', cn'', cn''', cnICES, cnIES, cnIP, cnIS, cnIrr, cnUM, compoundPhrase,
+module Language.Drasil.NounPhrase (
+  -- * Types
+  NounPhrase(..), NP,
+  -- * Phrase Accessors
+  atStartNP, atStartNP', titleizeNP, titleizeNP',
+  -- * Constructors
+  -- ** Common Noun Constructors
+  cn, cn', cn'', cn''', cnICES, cnIES, cnIP, cnIS, cnIrr, cnUM,
+  -- ** Proper Noun Constructors
+  pn, pn', pn'', pn''', pnIrr,
+  -- ** Noun Phrase Constructors
+  nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent,
+  -- * Combinators
+  compoundPhrase,
   compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1,
-  nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent, pn, pn',
-  pn'', pn''', pnIrr, titleizeNP, titleizeNP'
-  -- re-export these
-  , CapitalizationRule(..), PluralRule(..)
+  -- * Re-exported Types
+  CapitalizationRule(..), PluralRule(..)
   ) where
 
 import Data.Char (isLatin1, isLetter, toLower, toUpper)

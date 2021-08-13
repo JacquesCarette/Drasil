@@ -1,5 +1,4 @@
 {-# LANGUAGE GADTs #-}
-
 -- | The Drasil Modelling Expression language
 module Language.Drasil.ModelExpr where
 

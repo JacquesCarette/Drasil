@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Quantity (QuantityDict, codeVC, implVar, implVar', 
+-- | Defines chunks that add quantities to an idea. Similar to 'DefinedQuantityDict'.
+module Language.Drasil.Chunk.Quantity (
+  -- * Chunk Type
+  QuantityDict,
+  -- * Constructors
+  codeVC, implVar, implVar', 
   mkQuant, mkQuant', qw, vc, vc'', vcSt, vcUnit) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -18,6 +23,9 @@ import Language.Drasil.Symbol (Symbol(Empty))
 -- | QuantityDict is a combination of an 'IdeaDict' with a quantity.
 -- Contains an 'IdeaDict', 'Space', a function from 
 -- 'Stage' -> 'Symbol', and 'Maybe' a 'UnitDefn'.
+--
+-- Ex. A pendulum arm does not necessarily have to be defined as a concept before
+-- we assign a space (Real numbers), a symbol (l), or units (cm, m, etc.).
 data QuantityDict = QD { _id' :: IdeaDict
                        , _typ' :: Space
                        , _symb' :: Stage -> Symbol

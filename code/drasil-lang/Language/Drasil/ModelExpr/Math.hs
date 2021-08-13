@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
+-- | Defines mathematical operations for the model expression language.
 module Language.Drasil.ModelExpr.Math where
 
 import Prelude hiding (sqrt)

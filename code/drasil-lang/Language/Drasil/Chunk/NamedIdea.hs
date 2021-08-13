@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, nw, mkIdea) where
+-- | The lowest level of chunks in Drasil. It all starts with an identifier and a term.
+module Language.Drasil.Chunk.NamedIdea (
+  -- * Chunk Types
+  NamedChunk, IdeaDict,
+  -- * Constructors
+  nc, nw, mkIdea) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
@@ -9,9 +14,12 @@ import Control.Lens ((^.), makeLenses)
 import Language.Drasil.NounPhrase (NP)
 
 -- === DATA TYPES/INSTANCES === --
--- | Note that a 'NamedChunk' does not have an acronym/abbreviation
+-- | Used for anything worth naming. Note that a 'NamedChunk' does not have an acronym/abbreviation
 -- as that's a 'CommonIdea', which has its own representation. Contains
--- a 'UID' and a term ('NP').
+-- a 'UID' and a term that we can capitalize or pluralize ('NP').
+--
+-- Ex. Anything worth naming must start out somewhere. Before we can assign equations
+-- and values and symbols to something like the arm of a pendulum, we must first give it a name. 
 data NamedChunk = NC {_uu :: UID, _np :: NP}
 makeLenses ''NamedChunk
 
@@ -25,12 +33,14 @@ instance NamedIdea NamedChunk where term = np
 instance Idea      NamedChunk where getA _ = Nothing
   
 -- | 'NamedChunk' constructor, takes a 'UID' and a term.
-nc :: String -> NP -> NamedChunk
+nc :: UID -> NP -> NamedChunk
 nc = NC
 
--- | 'IdeaDict' is the canonical dictionary associated to 'Idea'.
--- Contains a 'NamedChunk' and maybe an abbreviation ('String').
 -- Don't export the record accessors.
+-- | 'IdeaDict' is the canonical dictionary associated to an 'Idea'.
+-- Contains a 'NamedChunk' that could have an abbreviation ('Maybe' 'String').
+--
+-- Ex. The project name "Double Pendulum" may have the abbreviation "DblPendulum".
 data IdeaDict = IdeaDict { _nc' :: NamedChunk, mabbr :: Maybe String }
 makeLenses ''IdeaDict
 
@@ -45,7 +55,7 @@ instance Idea      IdeaDict where getA = mabbr
   
 -- | 'IdeaDict' constructor, takes a 'UID', 'NP', and 
 -- an abbreviation in the form of 'Maybe' 'String'
-mkIdea :: String -> NP -> Maybe String -> IdeaDict
+mkIdea :: UID -> NP -> Maybe String -> IdeaDict
 mkIdea s np' = IdeaDict (nc s np')
 
 -- | Historical name: nw comes from 'named wrapped' from when

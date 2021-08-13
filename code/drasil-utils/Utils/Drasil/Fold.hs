@@ -35,9 +35,9 @@ foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 -- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
 foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ andDEs $ map constraintToExpr e
+foldConstraints c e  = E $ andMEs $ map constraintToExpr e
   where
-    constraintToExpr (Range _ ri)         = toDispExpr $ realInterval c ri
+    constraintToExpr (Range _ ri) = express $ realInterval c ri
 
 -- | Partial function application of 'foldle' for sentences specifically.
 -- Folds with spaces and adds a period (".") at the end.

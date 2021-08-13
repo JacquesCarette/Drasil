@@ -25,7 +25,7 @@ tmLaplace
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
-      [toDispExpr laplaceRel]
+      [express laplaceRel]
       []
       [dRef laplaceWiki]
       "laplaceTransform"
@@ -57,7 +57,7 @@ tmInvLaplace
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
-      [toDispExpr invLaplaceRel]
+      [express invLaplaceRel]
       []
       [dRef laplaceWiki]
       "invLaplaceTransform"
@@ -86,7 +86,7 @@ tmSOSystem
       [qw mass, qw qdDampingCoeff, qw qdStiffnessCoeff, qw qdFreqDomain]
       ([] :: [ConceptChunk])
       []
-      [toDispExpr soSystemRel]
+      [express soSystemRel]
       []
       [dRef abbasi2015]
       "tmSOSystem"

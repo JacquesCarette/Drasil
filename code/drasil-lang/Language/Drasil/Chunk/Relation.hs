@@ -10,7 +10,7 @@ import Control.Lens (makeLenses, (^.), view, set)
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS, cw)
 import Language.Drasil.Classes.Core (HasUID(uid))
-import Language.Drasil.Classes (Display(..), Concept,
+import Language.Drasil.Classes (Express(..), Concept,
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.NounPhrase (NP)
@@ -37,8 +37,8 @@ instance Idea          RelationConcept where getA = getA . view conc
 instance Definition    RelationConcept where defn = conc . defn
 -- | Finds the domain of the 'ConceptChunk' used to make the 'RelationConcept'.
 instance ConceptDomain RelationConcept where cdom = cdom . view conc
--- | Convert the 'RelationConcept' into the display expression language.
-instance Display       RelationConcept where toDispExpr = toDispExpr . (^. rel)
+-- | Convert the 'RelationConcept' into the model expression language.
+instance Express       RelationConcept where express = express . (^. rel)
 
 -- | Create a 'RelationConcept' from a given 'UID', term ('NP'), definition ('Sentence'), and 'Relation'.
 makeRC :: UID -> NP -> Sentence -> Relation -> RelationConcept

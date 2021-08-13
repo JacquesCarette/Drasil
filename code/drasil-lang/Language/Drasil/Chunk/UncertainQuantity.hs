@@ -10,7 +10,7 @@ module Language.Drasil.Chunk.UncertainQuantity (
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, cuc', cnstrw, cvc)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty (unc))
 import Language.Drasil.Constraint (ConstraintE)
@@ -104,7 +104,7 @@ instance ConceptDomain  UncertQ where cdom = cdom . view coco
 -- | Finds the units of the 'ConstrConcept' used to make the 'UncertQ'.
 instance MayHaveUnit    UncertQ where getUnit = getUnit . view coco
 -- | Convert the symbol of the 'UncertQ' to a 'DisplayExpr'.
-instance Display        UncertQ where toDispExpr = toDispExpr . sy
+instance Express        UncertQ where express = express . sy
 
 {-- Constructors --}
 -- | Smart constructor that requires a 'Quantity', a percentage, and a typical value with an 'Uncertainty'.

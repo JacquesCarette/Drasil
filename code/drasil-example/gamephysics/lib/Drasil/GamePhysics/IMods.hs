@@ -78,7 +78,7 @@ transMotDerivStmts = [
   ]
 
 transMotDerivEqns :: [Sentence]
-transMotDerivEqns = map eS [transMotExprDeriv1, toDispExpr transMotQD]
+transMotDerivEqns = map eS [transMotExprDeriv1, express transMotQD]
 
 {-- Rotational Motion --}
 
@@ -118,7 +118,7 @@ rotMotDerivStmts = [
   ]
 
 rotMotDerivEqns :: [Sentence]
-rotMotDerivEqns = map eS [rotMotExprDeriv1, toDispExpr rotMotQD]
+rotMotDerivEqns = map eS [rotMotExprDeriv1, express rotMotQD]
 
 {-- 2D Collision --}
 

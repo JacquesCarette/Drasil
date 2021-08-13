@@ -16,7 +16,7 @@ class Theory t where
   quantities    :: Lens' t [QuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
   defined_quant :: Lens' t [QDefinition]
-  invariants    :: Lens' t [DisplayExpr]  -- TODO: temporary hack until designed, previously `Lens' t [Relation]`
+  invariants    :: Lens' t [ModelExpr]
   defined_fun   :: Lens' t [QDefinition]
 
 data SpaceDefn -- FIXME: This should be defined.
@@ -46,7 +46,7 @@ data TheoryModel = TM
   , _quan  :: [QuantityDict]
   , _ops   :: [ConceptChunk]
   , _defq  :: [QDefinition]
-  , _invs  :: [DisplayExpr]
+  , _invs  :: [ModelExpr]
   , _dfun  :: [QDefinition]
   , _rf    :: [DecRef]
   ,  lb    :: ShortName
@@ -106,7 +106,7 @@ instance Referable TheoryModel where
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
 tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ->
     [q] -> [c] -> [QDefinition] ->
-    [DisplayExpr] -> [QDefinition] -> [DecRef] ->
+    [ModelExpr] -> [QDefinition] -> [DecRef] ->
     String -> [Sentence] -> TheoryModel
 tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ (mkind ^. uid) ++ " is empty"
 tm mkind q c dq inv dfn r  lbe = 
@@ -115,7 +115,7 @@ tm mkind q c dq inv dfn r  lbe =
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ->
-    [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> 
+    [q] -> [c] -> [QDefinition] -> [ModelExpr] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs mkind q c dq inv dfn lbe = 
   TM mkind [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' $ S lbe)

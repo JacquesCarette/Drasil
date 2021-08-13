@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Unitary (unitary)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
 import Language.Drasil.Constraint (ConstraintE)
@@ -109,8 +109,8 @@ instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 -- | Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
--- | Convert the symbol of the 'ConstrConcept' to a 'DisplayExpr'.
-instance Display       ConstrConcept where toDispExpr = toDispExpr . sy
+-- | Convert the symbol of the 'ConstrConcept' to a 'ModelExpr'.
+instance Express       ConstrConcept where express = express . sy
 
 -- | Creates a 'ConstrConcept' with a quantitative concept, a list of 'Constraint's and an 'Expr'.
 constrained' :: (Concept c, MayHaveUnit c, Quantity c) =>

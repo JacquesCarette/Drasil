@@ -1,10 +1,7 @@
 -- | Defines operator precedence.
-module Language.Drasil.Expr.Precedence where
+module Language.Drasil.ModelExpr.Precedence where
 
-import Language.Drasil.Expr (Expr(..),
-  ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
-  UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  AssocBoolOper(..), AssocArithOper(..), VVVBinOp)
+import Language.Drasil.ModelExpr 
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -13,7 +10,7 @@ import Language.Drasil.Expr (Expr(..),
 -- | prec2Arith - precedence for arithmetic-related binary operations.
 prec2Arith :: ArithBinOp -> Int
 prec2Arith Frac = 190
-prec2Arith Pow = 200
+prec2Arith Pow  = 200
 prec2Arith Subt = 180
 
 -- | prec2Bool - precedence for boolean-related binary operations.
@@ -32,6 +29,12 @@ prec2LA _ = 250
 prec2Ord :: OrdBinOp -> Int
 prec2Ord _  = 130
 
+prec2Spc :: SpaceBinOp -> Int
+prec2Spc _ = 170
+
+prec2Stat :: StatBinOp -> Int
+prec2Stat _ = 130
+
 -- | prec2VVV - precedence for Vec->Vec->Vec-related binary operations.
 prec2VVV :: VVVBinOp -> Int
 prec2VVV _ = 190
@@ -42,21 +45,22 @@ prec2VVN _ = 190
 
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
-precA MulI = 190
+precA MulI  = 190
 precA MulRe = 190
-precA AddI = 180
+precA AddI  = 180
 precA AddRe = 180
 
 -- | precB - precedence for boolean-related Binary-Associative (Commutative) operators.
 precB :: AssocBoolOper -> Int
-precB And = 120
-precB Or = 110
+precB And         = 120
+precB Or          = 110
+precB Equivalence = 100
 
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
 prec1 Neg = 230
 prec1 Exp = 200
-prec1 _ = 250
+prec1 _   = 250
 
 -- | prec1B - precedence of boolean-related unary operators.
 prec1B :: UFuncB -> Int
@@ -70,30 +74,34 @@ prec1VV _ = 250
 prec1VN :: UFuncVN -> Int
 prec1VN _ = 230
 
--- | eprec - "Expression" precedence.
-eprec :: Expr -> Int
-eprec Int{}                  = 500
-eprec Dbl{}                  = 500
-eprec ExactDbl{}             = 500
-eprec Str{}                  = 500
-eprec Perc{}                 = 500
-eprec (AssocA op _)          = precA op
-eprec (AssocB op _)          = precB op
-eprec C{}                    = 500
-eprec Deriv{}                = prec2Arith Frac
-eprec FCall{}                = 210
-eprec Case{}                 = 200
-eprec Matrix{}               = 220
-eprec (UnaryOp fn _)         = prec1 fn
-eprec (UnaryOpB fn _)        = prec1B fn
-eprec (UnaryOpVV fn _)       = prec1VV fn
-eprec (UnaryOpVN fn _)       = prec1VN fn
-eprec (Operator o _ _)       = precA o
-eprec (ArithBinaryOp bo _ _) = prec2Arith bo
-eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
-eprec (EqBinaryOp bo _ _)    = prec2Eq bo
-eprec (LABinaryOp bo _ _)    = prec2LA bo
-eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
-eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
-eprec (VVNBinaryOp bo _ _)   = prec2VVN bo
-eprec RealI{}                = 170
+-- | eprec - `ModelExpr` precedence.
+mePrec :: ModelExpr -> Int
+mePrec Int{}                  = 500
+mePrec Dbl{}                  = 500
+mePrec ExactDbl{}             = 500
+mePrec Spc{}                  = 500
+mePrec Str{}                  = 500
+mePrec Perc{}                 = 500
+mePrec (AssocA op _)          = precA op
+mePrec (AssocB op _)          = precB op
+mePrec C{}                    = 500
+mePrec Deriv{}                = prec2Arith Frac
+mePrec FCall{}                = 210
+mePrec Case{}                 = 200
+mePrec Matrix{}               = 220
+mePrec (UnaryOp fn _)         = prec1 fn
+mePrec (UnaryOpB fn _)        = prec1B fn
+mePrec (UnaryOpVV fn _)       = prec1VV fn
+mePrec (UnaryOpVN fn _)       = prec1VN fn
+mePrec (Operator o _ _)       = precA o
+mePrec (ArithBinaryOp bo _ _) = prec2Arith bo
+mePrec (BoolBinaryOp bo _ _)  = prec2Bool bo
+mePrec (EqBinaryOp bo _ _)    = prec2Eq bo
+mePrec (LABinaryOp bo _ _)    = prec2LA bo
+mePrec (SpaceBinaryOp bo _ _) = prec2Spc bo
+mePrec (StatBinaryOp bo _ _)  = prec2Stat bo
+mePrec (OrdBinaryOp bo _ _)   = prec2Ord bo
+mePrec (VVVBinaryOp bo _ _)   = prec2VVV bo
+mePrec (VVNBinaryOp bo _ _)   = prec2VVN bo
+mePrec RealI{}                = 170
+mePrec ForAll{}               = 130

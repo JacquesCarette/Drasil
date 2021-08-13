@@ -32,12 +32,12 @@ module Language.Drasil (
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
-  -- ** Expression Display Language 
+  -- ** Expression Modelling Language 
   -- | Defines display-related expression functions. Used in models.
 
-  -- Language.Drasil.Expr.Display
-  , DisplayExpr
-  , defines, spaceDE, isIn, andDEs, equivDEs
+  -- Language.Drasil.Expr.ModelExpr
+  , ModelExpr
+  , defines, space, isIn, andMEs, equivMEs
   -- ** Unicode symbols
   -- | Some expressions need special unicode characters.
 
@@ -51,16 +51,11 @@ module Language.Drasil (
   -- ** Classes
   -- | Contains many of the classes used in Drasil, along with their methods.
 
+  -- *** Chunk-related
+
   -- Language.Drasil.Classes.Core
   , HasUID(uid)
-  , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
-  , Referable(..)
-  -- Language.Drasil.Classes.Core2
-  , HasShortName(shortname)
-  -- Language.Drasil.Classes.Document
-  , HasCitation(getCitations)
-  , HasFields(getFields)
   -- Language.Drasil.Classes
   , NamedIdea(term)
   , Idea(getA)
@@ -78,9 +73,21 @@ module Language.Drasil (
   , HasDerivation(derivations)
   , IsUnit(getUnits)
   , DefiningExpr(defnExpr)
-  , Display(toDispExpr)
+  , Express(express)
+  -- *** References
+
+  -- Language.Drasil.Classes.Core
+  , HasRefAddress(getRefAdd)
+  , Referable(..)
+  -- Language.Drasil.Classes.Core2
+  , HasShortName(shortname)
+  -- Language.Drasil.Classes
   , HasReference(getReferences)
   , HasDecRef(getDecRefs)
+  -- Language.Drasil.Classes.Document
+  , HasCitation(getCitations)
+  , HasFields(getFields)
+  -- *** Programming-related
   , Callable
   , IsArgumentName
   -- ** Types
@@ -245,7 +252,6 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.DisplayExpr
 import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN,
           ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
@@ -262,7 +268,8 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
           apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
-import Language.Drasil.Expr.Display
+import Language.Drasil.ModelExpr (ModelExpr)
+import Language.Drasil.ModelExpr.Math (defines, space, isIn, andMEs, equivMEs)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
@@ -282,7 +289,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasReasVal(reasVal), HasDerivation(derivations), 
   HasReference(getReferences), HasDecRef(getDecRefs), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
-  IsArgumentName, Display(..))
+  IsArgumentName, Express(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)

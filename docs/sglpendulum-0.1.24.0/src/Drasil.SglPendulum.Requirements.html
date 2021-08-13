@@ -100,60 +100,15 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
-</span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
-</span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-40"></span><span>    </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-39"></span><span>    </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">angularDisplacement</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
-forall r.
-(HasUID r, HasRefAddress r, HasShortName r) =&gt;
-r -&gt; Sentence
-</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
-</span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>  </span><span>
-</span><span id="line-41"></span><span>    </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
-</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
-forall r.
-(HasUID r, HasRefAddress r, HasShortName r) =&gt;
-r -&gt; Sentence
-</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
-</span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-42"></span><span>  </span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-43"></span><span id="outputValuesDesc"><span class="annot"><span class="annottext">outputValuesDesc :: Sentence
-</span><a href="Drasil.SglPendulum.Requirements.html#outputValuesDesc"><span class="hs-identifier hs-var hs-var">outputValuesDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">output_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
-</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
-forall r.
-(HasUID r, HasRefAddress r, HasShortName r) =&gt;
-r -&gt; Sentence
-</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
-</span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-40"></span><span>    </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
@@ -162,26 +117,45 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-46"></span><span>
+</span><span id="line-41"></span><span>    </span><span>
+</span><span id="line-42"></span><span id="outputValuesDesc"><span class="annot"><span class="annottext">outputValuesDesc :: Sentence
+</span><a href="Drasil.SglPendulum.Requirements.html#outputValuesDesc"><span class="hs-identifier hs-var hs-var">outputValuesDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">output_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
+</span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="hs-comment">{--Nonfunctional Requirements--}</span><span>
 </span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="hs-comment">{--Nonfunctional Requirements--}</span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#nonFuncReqs"><span class="hs-identifier hs-type">nonFuncReqs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-51"></span><span id="nonFuncReqs"><span class="annot"><span class="annottext">nonFuncReqs :: [ConceptInstance]
+</span><span id="line-48"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#nonFuncReqs"><span class="hs-identifier hs-type">nonFuncReqs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span id="nonFuncReqs"><span class="annot"><span class="annottext">nonFuncReqs :: [ConceptInstance]
 </span><a href="Drasil.SglPendulum.Requirements.html#nonFuncReqs"><span class="hs-identifier hs-var hs-var">nonFuncReqs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#correct"><span class="hs-identifier hs-var">correct</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#portable"><span class="hs-identifier hs-var">portable</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#correct"><span class="hs-identifier hs-type">correct</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-55"></span><span id="correct"><span class="annot"><span class="annottext">correct :: ConceptInstance
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#correct"><span class="hs-identifier hs-type">correct</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-53"></span><span id="correct"><span class="annot"><span class="annottext">correct :: ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#correct"><span class="hs-identifier hs-var hs-var">correct</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;correct&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-56"></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-54"></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">output_</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
@@ -189,7 +163,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`the_ofThePS`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">code</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;have the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-57"></span><span> </span><span class="annot"><span class="annottext">Section -&gt; Sentence -&gt; Sentence
+</span><span id="line-55"></span><span> </span><span class="annot"><span class="annottext">Section -&gt; Sentence -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
@@ -198,18 +172,18 @@ r -&gt; Sentence -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">propOfCorSol</span></span><span class="hs-special">)</span><span>
-</span><span id="line-58"></span><span> </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Correct&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-56"></span><span> </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Correct&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-59"></span><span>
-</span><span id="line-60"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#portable"><span class="hs-identifier hs-type">portable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-61"></span><span id="portable"><span class="annot"><span class="annottext">portable :: ConceptInstance
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#portable"><span class="hs-identifier hs-type">portable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-59"></span><span id="portable"><span class="annot"><span class="annottext">portable :: ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#portable"><span class="hs-identifier hs-var hs-var">portable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;portable&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
@@ -219,5 +193,5 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">environment</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-63"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Portable&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-61"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Portable&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span></pre></body></html>

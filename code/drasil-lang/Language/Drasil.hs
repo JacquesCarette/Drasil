@@ -20,9 +20,9 @@ module Language.Drasil (
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
-  -- DisplayExpr
-  , DisplayExpr
-  , defines, spaceDE, isIn, andDEs, equivDEs
+  -- ModelExpr
+  , ModelExpr
+  , defines, space, isIn, andMEs, equivMEs
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
   -- UID
@@ -53,7 +53,7 @@ module Language.Drasil (
   , CommonIdea(abrv)
   , Constrained(constraints)
   , DefiningExpr(defnExpr)
-  , Display(toDispExpr)
+  , Express(express)
   , HasUncertainty(unc)
   , Quantity
   , Callable
@@ -195,7 +195,6 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.DisplayExpr
 import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN,
           ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
@@ -212,7 +211,8 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
           apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
-import Language.Drasil.Expr.Display
+import Language.Drasil.ModelExpr (ModelExpr)
+import Language.Drasil.ModelExpr.Math (defines, space, isIn, andMEs, equivMEs)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
@@ -232,7 +232,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasReasVal(reasVal), HasDerivation(derivations), 
   HasReference(getReferences), HasDecRef(getDecRefs), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
-  IsArgumentName, Display(..))
+  IsArgumentName, Express(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)

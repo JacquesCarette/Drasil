@@ -6,7 +6,7 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  HasSpace(typ), Quantity, Display(toDispExpr))
+  HasSpace(typ), Quantity, Express(..))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea,nc)
 import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Math (sy)
@@ -41,8 +41,8 @@ instance Quantity      QuantityDict where
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the units of the 'QuantityDict'.
 instance MayHaveUnit   QuantityDict where getUnit = view unit'
--- | Convert the symbol of the 'QuantityDict' to a 'DisplayExpr'.
-instance Display       QuantityDict where toDispExpr = toDispExpr . sy
+-- | Convert the symbol of the 'QuantityDict' to a 'ModelExpr'.
+instance Express       QuantityDict where express = express . sy
 
 -- | Smart constructor for a 'QuantityDict' from another 'Quantity' with units.
 qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict

@@ -10,12 +10,12 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDe
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
-  ConceptDomain(cdom), Display(toDispExpr))
+  ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (mkIdea, nw)
 
-import Language.Drasil.Expr.Display (defines)
+import Language.Drasil.ModelExpr.Math (defines)
 import Language.Drasil.Expr (Expr(FCall, C))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase.Core (NP)
@@ -54,8 +54,8 @@ instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the units of the 'QuantityDict' used to make the 'QDefinition'.
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 -- | Displays the relation given by the expression in 'QDefinition'.
-instance Display       QDefinition where
-  toDispExpr q = f (q ^. defnExpr)
+instance Express       QDefinition where
+  express q = f (q ^. defnExpr)
     where
       f = case q ^. inputs of
         [] -> defines (sy q)

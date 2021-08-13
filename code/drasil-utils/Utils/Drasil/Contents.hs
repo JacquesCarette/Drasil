@@ -7,12 +7,12 @@ import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
 import Control.Lens ((^.))
 
 -- | Constructs 'LabelledContent' from an expression and a reference.
-lbldExpr :: Display c => c -> Reference -> LabelledContent
-lbldExpr c lbl = llcc lbl $ EqnBlock $ toDispExpr c
+lbldExpr :: Express c => c -> Reference -> LabelledContent
+lbldExpr c lbl = llcc lbl $ EqnBlock $ express c
 
 -- | Same as 'eqUnR' except content is unlabelled.
-unlbldExpr :: Display c => c -> Contents
-unlbldExpr c = UlC $ ulcc $ EqnBlock $ toDispExpr c
+unlbldExpr :: Express c => c -> Contents
+unlbldExpr c = UlC $ ulcc $ EqnBlock $ express c
 
 -- | Applies 'Enumeration', 'Bullet' and 'Flat' to a list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?

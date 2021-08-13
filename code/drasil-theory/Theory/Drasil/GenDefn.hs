@@ -21,33 +21,33 @@ data GenDefn = GD { _mk    :: ModelKind
 makeLenses ''GenDefn
 
 -- | Finds the 'UID' of a 'GenDefn'.
-instance HasUID             GenDefn where uid           = mk . uid
+instance HasUID             GenDefn where uid         = mk . uid
 -- | Finds the term ('NP') of the 'GenDefn'.
-instance NamedIdea          GenDefn where term          = mk . term
+instance NamedIdea          GenDefn where term        = mk . term
 -- | Finds the idea contained in the 'GenDefn'.
-instance Idea               GenDefn where getA          = getA . (^. mk)
+instance Idea               GenDefn where getA        = getA . (^. mk)
 -- | Finds the definition of the 'GenDefn'.
-instance Definition         GenDefn where defn          = mk . defn
+instance Definition         GenDefn where defn        = mk . defn
 -- | Finds the domain of the 'GenDefn'.
-instance ConceptDomain      GenDefn where cdom          = cdom . (^. mk)
--- | Converts the 'GenDefn's related expression into the display language.
-instance Display            GenDefn where toDispExpr    = toDispExpr . (^. mk)
+instance ConceptDomain      GenDefn where cdom        = cdom . (^. mk)
+-- | Converts the 'GenDefn's related expression into a 'ModelExpr'.
+instance Express            GenDefn where express     = express . (^. mk)
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
-instance HasDerivation      GenDefn where derivations   = deri
+instance HasDerivation      GenDefn where derivations = deri
 {-- | Finds 'Reference's contained in the 'GenDefn'.
 instance HasReference       GenDefn where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'GenDefn'.
-instance HasDecRef          GenDefn where getDecRefs = rf
+instance HasDecRef          GenDefn where getDecRefs  = rf
 -- | Finds the 'ShortName' of the 'GenDefn'.
 instance HasShortName       GenDefn where shortname     = view sn
 -- | Finds the reference address of the 'GenDefn'.
-instance HasRefAddress      GenDefn where getRefAdd   l = RP (prepend $ abrv l) (view ra l)
+instance HasRefAddress      GenDefn where getRefAdd l = RP (prepend $ abrv l) (view ra l)
 -- | Finds the units of the 'GenDefn'.
-instance HasAdditionalNotes GenDefn where getNotes      = notes
+instance HasAdditionalNotes GenDefn where getNotes    = notes
 -- | Finds the units of the 'GenDefn'.
-instance MayHaveUnit        GenDefn where getUnit       = gdUnit
+instance MayHaveUnit        GenDefn where getUnit     = gdUnit
 -- | Finds the idea of a 'GenDefn' (abbreviation).
-instance CommonIdea         GenDefn where abrv _        = abrv genDefn
+instance CommonIdea         GenDefn where abrv _      = abrv genDefn
 -- | Finds the reference address of a 'GenDefn'.
 instance Referable          GenDefn where
   refAdd      = view ra

@@ -16,7 +16,7 @@ module Language.Drasil.Classes (
   , Constrained(constraints)
   , CommonIdea(abrv)
   , DefiningExpr(defnExpr)
-  , Display(toDispExpr)
+  , Express(express)
   , Quantity
   , HasUncertainty(unc)
   , Concept
@@ -35,8 +35,8 @@ import Language.Drasil.Classes.Core
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
-import Language.Drasil.DisplayClasses (Display(toDispExpr))
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.DecoratedReference(DecRef)

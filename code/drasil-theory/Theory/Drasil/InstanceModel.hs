@@ -42,7 +42,7 @@ instance Definition         InstanceModel where defn = mk . defn
 -- | Finds the domain of the 'InstanceModel'.
 instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 -- | Converts the 'InstanceModel's related expression into the display language.
-instance Display            InstanceModel where toDispExpr = toDispExpr . (^. mk)
+instance Express            InstanceModel where express = express . (^. mk)
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
 instance HasDerivation      InstanceModel where derivations = deri
 {--- | Finds 'Reference's contained in the 'InstanceModel'.

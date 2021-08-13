@@ -3,16 +3,7 @@ module Language.Drasil.Expr.Extract where
 import Data.List (nub)
 
 import Language.Drasil.Expr (Expr(..))
-import Language.Drasil.DisplayExpr
 import Language.Drasil.Space (RealInterval(..))
-
--- | Generic traverse of all display expressions that could lead to names.
-deNames :: DisplayExpr -> [String]
-deNames (AlgebraicExpr e)  = eNames e
-deNames (SpaceExpr _)      = []
-deNames (BinOp _ l r)      = deNames l ++ deNames r
-deNames (AssocBinOp _ des) = concatMap deNames des
-deNames (ForAll _ _ de)      = deNames de
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [String]
@@ -48,14 +39,6 @@ eNamesRI :: RealInterval Expr Expr -> [String]
 eNamesRI (Bounded (_, il) (_, iu)) = eNames il ++ eNames iu
 eNamesRI (UpTo (_, iu))            = eNames iu
 eNamesRI (UpFrom (_, il))          = eNames il
-
--- | Generic traverse of all display expressions that could lead to names (same as 'deNames').
-deNames' :: DisplayExpr -> [String]
-deNames' (AlgebraicExpr e)  = eNames e
-deNames' (SpaceExpr _)      = []
-deNames' (BinOp _ l r)      = deNames l ++ deNames r
-deNames' (AssocBinOp _ des) = concatMap deNames des
-deNames' (ForAll _ _ de)   = deNames de
 
 -- | Generic traverse of all positions that could lead to 'eNames' without
 -- functions.  FIXME : this should really be done via post-facto filtering, but
@@ -101,11 +84,3 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 -- | Get dependencies from an equation.  
 eDep :: Expr -> [String]
 eDep = nub . eNames
-
--- | Get dependencies from display expressions.
-deDep :: DisplayExpr -> [String]
-deDep (AlgebraicExpr e)  = eDep e
-deDep (SpaceExpr _)      = []
-deDep (BinOp _ l r)      = nub $ deDep l ++ deDep r
-deDep (AssocBinOp _ des) = nub $ concatMap deDep des 
-deDep (ForAll _ _ de)       =  deDep de 

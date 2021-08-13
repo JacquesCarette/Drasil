@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.CommonIdea
   (CI, commonIdea, getAcc, getAccStr, commonIdeaWithDict, prependAbrv) where
 
-import Language.Drasil.Chunk.NamedIdea (IdeaDict)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, NamedChunk, nc)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
@@ -15,13 +15,13 @@ import Control.Lens (makeLenses, (^.), view)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).
-data CI = CI { _cid :: UID, _ni :: NP, _ab :: String, cdom' :: [UID]}
+data CI = CI { _nc' :: NamedChunk, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
 
--- | Finds 'UID' of 'CI'.
-instance HasUID        CI where uid  = cid
--- | Finds term ('NP') of 'CI'.
-instance NamedIdea     CI where term = ni
+-- | Finds 'UID' of the 'NamedChunk' used to make the 'CI'.
+instance HasUID        CI where uid  = nc' . uid
+-- | Finds term ('NP') of the 'NamedChunk' used to make the 'CI'.
+instance NamedIdea     CI where term = nc' . term
 -- | Finds the idea of a 'CI' (abbreviation).
 instance Idea          CI where getA = Just . view ab
 -- | Finds the idea of a 'CI' (abbreviation).
@@ -31,12 +31,12 @@ instance ConceptDomain CI where cdom = cdom'
   
 -- | The commonIdea smart constructor requires a chunk id ('UID'), a
 -- term ('NP'), an abbreviation ('String'), and a domain (['UID']).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-commonIdea = CI
+commonIdea :: UID -> NP -> String -> [UID] -> CI
+commonIdea s np = CI (nc s np)
 
 -- | Similar to 'commonIdea', but takes a list of 'IdeaDict' (often a domain).
-commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-commonIdeaWithDict x y z = CI x y z . map (^.uid)
+commonIdeaWithDict :: UID -> NP -> String -> [IdeaDict] -> CI
+commonIdeaWithDict x y z = CI (nc x y) z . map (^.uid)
 
 -- | Get abbreviation in 'Sentence' form from a 'CI'.
 getAcc :: CI -> Sentence

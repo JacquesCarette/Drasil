@@ -151,6 +151,9 @@ data ModelExpr where
   Operator :: AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> ModelExpr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
+  
+  -- | Universal quantification
+  ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
 
 ($=), ($!=) :: ModelExpr -> ModelExpr -> ModelExpr
 -- | Smart constructor for equating two expressions.

@@ -188,6 +188,10 @@ modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC (sm ^. stg)
 modelExpr (Spc s)                    sm = space sm s
 modelExpr (SpaceBinaryOp IsIn l r)   sm = P.Row [modelExpr l sm, P.MO P.IsIn, modelExpr r sm]
 modelExpr (StatBinaryOp Defines l r) sm = P.Row [modelExpr l sm, P.MO P.Eq, modelExpr r sm]
+modelExpr (ForAll c s de)            sm = P.Row [
+    P.MO P.ForAll, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c, P.MO P.IsIn, space sm s,
+    P.MO P.Dot, modelExpr de sm
+  ]
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr

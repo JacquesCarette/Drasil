@@ -3,26 +3,12 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
+import Drasil.DocLang (auxSpecSent, termDefnF')
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
-
-import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
-  DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..),
-  InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  ProblemDescription(..), PDSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
-  ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl, SSDSec(..), SSDSub(..),
-  SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
-  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
-  Verbosity(Verbose), auxSpecSent, intro, mkDoc,
-  termDefnF', tsymb, traceMatStandard, purpDoc, fillcdbSRS)
-
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,

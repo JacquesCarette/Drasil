@@ -1,10 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Database.Drasil.ChunkDB (ChunkDB(defTable, CDB), RefbyMap, TraceMap, UMap,
+module Database.Drasil.ChunkDB (
+  ChunkDB(symbolTable, termTable, defTable, CDB), RefbyMap, TraceMap, UMap,
   asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
   conceptinsTable, dataDefnTable, datadefnLookup, defResolve, gendefLookup,
   gendefTable, generateRefbyMap, idMap, termMap, insmodelLookup, insmodelTable, -- idMap, termMap for docLang
   labelledconLookup, labelledcontentTable, refbyLookup, refbyTable, refResolve, refTable,
-  sectionLookup, sectionTable, symbResolve, termResolve, termTable,
+  sectionLookup, sectionTable, symbResolve, termResolve, unitTable,
   theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
 
 import Language.Drasil

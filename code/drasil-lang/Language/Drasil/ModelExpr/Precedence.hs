@@ -103,5 +103,4 @@ mePrec (OrdBinaryOp bo _ _)   = prec2Ord bo
 mePrec (VVVBinaryOp bo _ _)   = prec2VVV bo
 mePrec (VVNBinaryOp bo _ _)   = prec2VVN bo
 mePrec RealI{}                = 170
-
-
+mePrec ForAll{}               = 130

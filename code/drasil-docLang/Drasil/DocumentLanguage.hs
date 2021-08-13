@@ -76,9 +76,10 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
 
--- Assuming ChunkDB with no traces and minimal/no references, fill in for rest of system information.
+-- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill in for rest of system information.
+-- Currently fills in references and traceability matrix information.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
-fillcdbSRS srsDec si = fillReferences srsDec $ fillTraceSI srsDec si
+fillcdbSRS srsDec si = fillSecAndLC srsDec $ fillReferences srsDec $ fillTraceSI srsDec si
 
 {-Don't want to manually add concepts here, Drasil should do it automatically. Perhaps through traversal?
 fillConcepts :: SystemInformation -> SystemInformation
@@ -89,6 +90,35 @@ fillConcepts si = si2
     tmtbl = termTable chkdb
     chkdb2 = chkdb{termTable = termMap $ nub (map nw doccon ++ map nw doccon' ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' ++ map nw physicalcon ++ map nw educon ++ map nw mathcon ++ map nw mathcon' ++ map nw compcon ++ map nw compcon' ++ map nw solidcon ++ map nw thermocon ++ (map (fst.snd) $ Map.assocs tmtbl))}
 -}
+
+-- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
+fillSecAndLC :: SRSDecl -> SystemInformation -> SystemInformation
+fillSecAndLC dd si = si2
+  where
+    -- Get current contents of si
+    chkdb = si ^. sysinfodb
+    -- extract sections and labelledcontent
+    allSections = concatMap findAllSec $ mkSections si $ mkDocDesc si dd
+    allLC = concatMap findAllLC allSections
+    existingSections = map (fst.snd) $ Map.assocs $ chkdb ^. sectionTable
+    existingLC = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
+    -- fill in the appropriate chunkdb fields
+    chkdb2 = set labelledcontentTable (idMap $ nub $ existingLC ++ allLC)
+      $ set sectionTable (idMap $ nub $ existingSections ++ allSections) chkdb
+    -- return the filled in system information
+    si2 = set sysinfodb chkdb2 si
+    -- Helper and finder functions
+    findAllSec :: Section -> [Section]
+    findAllSec s@(Section _ cs _) = s : concatMap findAllSubSec cs
+    findAllSubSec :: SecCons -> [Section]
+    findAllSubSec (Sub s) = findAllSec s
+    findAllSubSec _ = []
+    findAllLC :: Section -> [LabelledContent]
+    findAllLC (Section _ cs _) = concatMap findLCSecCons cs
+    findLCSecCons :: SecCons -> [LabelledContent]
+    findLCSecCons (Sub s) = findAllLC s
+    findLCSecCons (Con (LlC lblcons)) = [lblcons]
+    findLCSecCons _ = []
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
 fillReferences :: SRSDecl -> SystemInformation -> SystemInformation

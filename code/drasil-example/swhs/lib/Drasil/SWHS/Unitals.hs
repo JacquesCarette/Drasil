@@ -1,7 +1,7 @@
 module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
-import Language.Drasil.Display (Symbol(Concat))
+import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
 import Utils.Drasil.Concepts
 
@@ -167,7 +167,7 @@ wVol = uc' "wVol" (vol `of_` water)
 
 deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
   "change in the average kinetic energy of a given material"
-  (Concat [cDelta, eqSymb temp]) centigrade
+  (Atop Delta $ eqSymb temp) centigrade
 
 tau = ucStaged "tau" (nounPhraseSP "dummy variable for integration over time")
   "binary value representing the presence or absence of integration over time"
@@ -354,7 +354,7 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
 
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
-  "nass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Rational
+  "mass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
   (exactDbl 1000)) defaultUncrt
 

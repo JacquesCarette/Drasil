@@ -145,6 +145,9 @@ data ModelExpr where
   Operator :: AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> ModelExpr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
+  
+  -- | Universal quantification
+  ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
 
 -- | The variable type is just a renamed 'String'.
 type Variable = String

@@ -205,7 +205,7 @@ sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
 sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 
--- | Capitalization helper function given a sent.
+-- | Capitalization helper function given a sentence.
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss)) CapFirst = S (toUpper s : ss)

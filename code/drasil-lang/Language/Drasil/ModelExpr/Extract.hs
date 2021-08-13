@@ -36,6 +36,7 @@ meNames (VVNBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (Operator _ _ e)      = meNames e
 meNames (Matrix a)            = concatMap (concatMap meNames) a
 meNames (RealI c b)           = c : meNamesRI b
+meNames (ForAll _ _ de)       = meNames de
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'meNames').
 meNamesRI :: RealInterval ModelExpr ModelExpr -> [String]
@@ -77,6 +78,7 @@ meNames' (VVNBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (Operator _ _ e)      = meNames' e
 meNames' (Matrix a)            = concatMap (concatMap meNames') a
 meNames' (RealI c b)           = c : meNamesRI' b
+meNames' (ForAll _ _ de)       = meNames' de
 
 -- | Generic traversal of everything that could come from an interval to names without functions (similar to 'meNames'').
 meNamesRI' :: RealInterval ModelExpr ModelExpr -> [String]

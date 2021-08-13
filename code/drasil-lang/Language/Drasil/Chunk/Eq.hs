@@ -15,7 +15,9 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
   ConceptDomain(cdom), Express(express))
-import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+import Language.Drasil.Chunk.Concept (cc')
+import Language.Drasil.Chunk.NamedIdea (mkIdea, nw)
 
 import Language.Drasil.ModelExpr (defines)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -29,30 +31,23 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)
 
 data QDefinition e where
-  QD :: Express e => QuantityDict -> Sentence -> [UID] -> e -> [UID] -> QDefinition e
+  QD :: Express e => DefinedQuantityDict -> [UID] -> e -> QDefinition e
 
-qdQua :: Express e => Lens' (QDefinition e) QuantityDict
-qdQua = lens (\(QD qua _ _ _ _) -> qua) (\(QD _ s ins e cd) qua' -> QD qua' s ins e cd)
-
-qdDefn :: Express e => Lens' (QDefinition e) Sentence
-qdDefn = lens (\(QD _ s _ _ _) -> s) (\(QD qua _ ins e cd) s' -> QD qua s' ins e cd)
+qdQua :: Express e => Lens' (QDefinition e) DefinedQuantityDict
+qdQua = lens (\(QD qua _ _) -> qua) (\(QD _ ins e) qua' -> QD qua' ins e)
 
 qdInputs :: Express e => Lens' (QDefinition e) [UID]
-qdInputs = lens (\(QD _ _ ins _ _) -> ins) (\(QD qua s _ e cd) ins' -> QD qua s ins' e cd)
+qdInputs = lens (\(QD _ ins _) -> ins) (\(QD qua _ e) ins' -> QD qua ins' e)
 
 qdExpr :: Express e => Lens' (QDefinition e) e
-qdExpr = lens (\(QD _ _ _ e _) -> e) (\(QD qua s ins _ cd) e' -> QD qua s ins e' cd)
-
-qdCD :: Express e => Lens' (QDefinition e) [UID]
-qdCD = lens (\(QD _ _ _ _ cd) -> cd) (\(QD qua s ins e _) cd' -> QD qua s ins e cd')
-  
+qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
 
 instance Express e => HasUID        (QDefinition e) where uid = qdQua . uid
 instance Express e => NamedIdea     (QDefinition e) where term = qdQua . term
 instance Express e => Idea          (QDefinition e) where getA = getA . (^. qdQua)
 instance Express e => HasSpace      (QDefinition e) where typ = qdQua . typ
 instance Express e => HasSymbol     (QDefinition e) where symbol = symbol . (^. qdQua)
-instance Express e => Definition    (QDefinition e) where defn = qdDefn
+instance Express e => Definition    (QDefinition e) where defn = qdQua . defn
 instance Express e => Quantity      (QDefinition e) where
 instance Express e => Eq            (QDefinition e) where a == b = (a ^. uid) == (b ^. uid)
 instance Express e => MayHaveUnit   (QDefinition e) where getUnit = getUnit . view qdQua
@@ -65,7 +60,7 @@ instance Express e => Express       (QDefinition e) where
       f = case q ^. qdInputs of
         [] -> defines (sy q)
         is -> defines (FCall (q ^. uid) (map C is) [])
-instance Express e => ConceptDomain (QDefinition e) where cdom = (^. qdCD)
+instance Express e => ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
 
 -- data QDefinition e = Express e => QD
 --   { _qdQua    :: QuantityDict
@@ -123,25 +118,25 @@ instance Express e => ConceptDomain (QDefinition e) where cdom = (^. qdCD)
 -- | Create a 'QDefinition' with a 'UID', term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
 fromEqn :: (Express e, IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
-fromEqn nm desc def symb sp un expr =
-  QD (mkQuant nm desc symb sp (Just $ unitWrapper un) Nothing) def [] expr []
+fromEqn nm desc def symb sp un =
+  QD (dqd (cc' (mkIdea nm desc Nothing) def) symb sp un) []
 
 -- | Same as 'fromEqn', but has no units.
 fromEqn' :: Express e => String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
-fromEqn' nm desc def symb sp expr =
-  QD (mkQuant nm desc symb sp Nothing Nothing) def [] expr []
+fromEqn' nm desc def symb sp =
+  QD (dqd' (cc' (mkIdea nm desc Nothing) def) (const symb) sp Nothing) []
 
 -- | Same as 'fromEqn', but symbol depends on stage.
 fromEqnSt :: (Express e, IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> e -> QDefinition e
-fromEqnSt nm desc def symb sp un expr =
-  QD (mkQuant' nm desc Nothing sp symb (Just $ unitWrapper un)) def [] expr []
+fromEqnSt nm desc def symb sp un =
+  QD (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp (Just $ unitWrapper un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: Express e => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
   QDefinition e
-fromEqnSt' nm desc def symb sp expr =
-  QD (mkQuant' nm desc Nothing sp symb Nothing) def [] expr []
+fromEqnSt' nm desc def symb sp =
+  QD (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp Nothing) []
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: Express e => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space ->
@@ -161,16 +156,16 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. 
 ec :: (Quantity c, MayHaveUnit c, Express e) => c -> e -> QDefinition e
-ec c eqn = QD (qw c) EmptyS [] eqn []
+ec c = QD (dqd' (cc' (nw c) EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 
 -- | Factored version of 'QDefinition' functions
 mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
                HasUID i, HasSymbol i, HasSpace i,
                Express e) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
-mkFuncDef0 f n s u is e = QD
-  (mkQuant' (f ^. uid) n Nothing (mkFunction (map (^. typ) is) (f ^. typ)) (symbol f) u)
-  s (map (^. uid) is) e []
+mkFuncDef0 f n s u is = QD
+  (dqd' (cc' (mkIdea (f ^. uid) n Nothing) s) (symbol f)
+    (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, resultant units, and a defining Expr
 mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f,
@@ -194,4 +189,3 @@ mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c,
 mkFuncDefByQ f = case getUnit f of
   Just u  -> mkFuncDef  f (f ^. term) EmptyS u
   Nothing -> mkFuncDef' f (f ^. term) EmptyS
-

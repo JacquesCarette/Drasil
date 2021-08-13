@@ -9,6 +9,7 @@ import Numeric (showEFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L
+import qualified Language.Drasil.ShortHands as LD (cDelta)
 import qualified Language.Drasil.Display as LD
 import Utils.Drasil (checkValidStr, foldNums)
 
@@ -97,9 +98,11 @@ symbol LD.Empty                    = empty
 
 -- | Converts a decorated symbol into a printable document form.
 sFormat :: L.Decoration -> L.Symbol -> D
-sFormat LD.Hat    s = commandD "hat" (symbol s)
-sFormat LD.Vector s = commandD "symbf" (symbol s)
-sFormat LD.Prime  s = symbol s <> pure (text "'")
+sFormat LD.Hat       s = commandD "hat" (symbol s)
+sFormat LD.Vector    s = commandD "symbf" (symbol s)
+sFormat LD.Prime     s = symbol s <> pure (text "'")
+sFormat LD.Delta     s = symbol LD.cDelta <> symbol s
+sFormat LD.Magnitude s = fence Open Norm <> symbol s <> fence Open Norm
 
 -- | Determine wether braces and brackets are opening or closing.
 data OpenClose = Open | Close
@@ -181,8 +184,9 @@ pOps Prod     = command0 "displaystyle" <> command0 "prod"
 pOps Inte     = texSym "int"
 pOps Point    = pure $ text "."
 pOps Perc     = texSym "%"
-pOps LArrow   = commandD "leftarrow" empty
+pOps LArrow   = commandD "leftarrow"  empty
 pOps RArrow   = commandD "rightarrow" empty
+pOps ForAll   = commandD "ForAll"     empty
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D

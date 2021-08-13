@@ -3,7 +3,7 @@
 module Language.Drasil (
   -- * The Drasil Expression Language
   -- | Encodes mathematical and display related expressions.
-  -- To see the code-related expressions, look in @drasil-code@.
+  -- To see the code-related expressions, look in "Language.Drasil.Code".
 
   -- ** Base Expression Language
   -- | Defines the expression types and common operators.
@@ -63,24 +63,24 @@ module Language.Drasil (
   , HasFields(getFields)
   -- Language.Drasil.Classes
   , NamedIdea(term)
-  , HasAdditionalNotes(getNotes)
-  , HasSpace(typ)
-  , HasUnitSymbol(usymb)
-  , HasReference(getReferences)
-  , HasDecRef(getDecRefs)
-  , HasReasVal(reasVal)
-  , HasDerivation(derivations)
   , Idea(getA)
+  , CommonIdea(abrv)
   , Definition(defn)
   , ConceptDomain(cdom)
   , Concept
-  , IsUnit(getUnits)
-  , CommonIdea(abrv)
+  , HasSpace(typ)
+  , HasUnitSymbol(usymb)
+  , Quantity
+  , HasReasVal(reasVal)
+  , HasUncertainty(unc)
   , Constrained(constraints)
+  , HasAdditionalNotes(getNotes)
+  , HasDerivation(derivations)
+  , IsUnit(getUnits)
   , DefiningExpr(defnExpr)
   , Display(toDispExpr)
-  , HasUncertainty(unc)
-  , Quantity
+  , HasReference(getReferences)
+  , HasDecRef(getDecRefs)
   , Callable
   , IsArgumentName
   -- ** Types
@@ -121,8 +121,8 @@ module Language.Drasil (
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
   -- Language.Drasil.Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucStaged, ucs, ucs', ucsWS
-  -- *** "Language.Drasil.Chunk.UnitDefn"
+  , uc, uc', ucStaged, ucs, ucs', ucsWS, ucuc
+  -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
   , (^:), (/:), (*:), (*$), (/$), (^$), newUnit
@@ -130,7 +130,7 @@ module Language.Drasil (
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
-  -- *** Constrained and Uncertain values
+  -- *** Constrained and Uncertain Values
 
   -- Language.Drasil.Constraint
   , ConstraintReason(..), Constraint(..), ConstraintE
@@ -315,7 +315,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
-  ucStaged, ucs, ucs', ucsWS)
+  ucStaged, ucs, ucs', ucsWS, ucuc)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
@@ -360,4 +360,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))
+  , unitWrapper, getCu, MayHaveUnit(getUnit))

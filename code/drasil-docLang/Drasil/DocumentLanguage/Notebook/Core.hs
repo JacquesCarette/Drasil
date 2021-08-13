@@ -21,7 +21,7 @@ data IntrodSec = IntrodProg [Contents] [IntrodSub]
 
 -- | Introduction subsections
 data IntrodSub where
-  InPurpose :: [Sentence] -> IntrodSub -- maybe change to [Contents]  
+  InPurpose :: [Sentence] -> IntrodSub -- TODO: maybe change to [Contents]  
 
 {--}
 

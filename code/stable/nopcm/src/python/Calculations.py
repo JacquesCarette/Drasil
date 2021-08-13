@@ -10,7 +10,7 @@ def func_V_W(V_tank):
     return V_tank
 
 ## \brief Calculates mass of water: the quantity of matter within the water (kg)
-# \param rho_W density of water: nass per unit volume of water (kg/m^3)
+# \param rho_W density of water: mass per unit volume of water (kg/m^3)
 # \param V_W volume of water: the amount of space occupied by a given quantity of water (m^3)
 # \return mass of water: the quantity of matter within the water (kg)
 def func_m_W(rho_W, V_W):

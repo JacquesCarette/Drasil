@@ -1,13 +1,13 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2018
+Last updated: August 13, 2021
 --------------------------------------------------
 
 **Drasil**
-  - Contains the base for the Drasil language
+  - Contains the base for the Drasil language.
 
 Drasil.hs
-  - Re-exports everything in drasil-lang
+  - Re-exports most things in drasil-lang for convenient use across Drasil
  
 README.md
   - This file

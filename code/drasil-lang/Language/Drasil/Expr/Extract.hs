@@ -13,6 +13,7 @@ deNames (AlgebraicExpr e)  = eNames e
 deNames (SpaceExpr _)      = []
 deNames (BinOp _ l r)      = deNames l ++ deNames r
 deNames (AssocBinOp _ des) = concatMap deNames des
+deNames (ForAll _ _ de)      = deNames de
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [String]
@@ -55,6 +56,7 @@ deNames' (AlgebraicExpr e)  = eNames e
 deNames' (SpaceExpr _)      = []
 deNames' (BinOp _ l r)      = deNames l ++ deNames r
 deNames' (AssocBinOp _ des) = concatMap deNames des
+deNames' (ForAll _ _ de)   = deNames de
 
 -- | Generic traverse of all positions that could lead to 'eNames' without
 -- functions.  FIXME : this should really be done via post-facto filtering, but
@@ -107,3 +109,4 @@ deDep (AlgebraicExpr e)  = eDep e
 deDep (SpaceExpr _)      = []
 deDep (BinOp _ l r)      = nub $ deDep l ++ deDep r
 deDep (AssocBinOp _ des) = nub $ concatMap deDep des 
+deDep (ForAll _ _ de)       =  deDep de 

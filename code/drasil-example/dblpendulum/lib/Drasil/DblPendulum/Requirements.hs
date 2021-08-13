@@ -36,12 +36,10 @@ verifyInptValsDesc = foldlSent [S "Check the entered", plural inValue,
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
 calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
-  foldlList Comma List [
-    ch angularDisplacement +:+ sParen (S "from" +:+ refS angularDisplacementIM),  
-    ch pendDisplacementAngle   +:+ sParen (S "from" +:+ refS angularDisplacementIM)
-  ]]
+    ch angularDisplacement `S.and_` ch pendDisplacementAngle,
+    sParen (S "from" +:+ refS angularDisplacementIM)]
+    
 outputValuesDesc = foldlSent [atStart output_, ch lenRod,
-  sParen (S "from" +:+ refS angularDisplacementIM) `S.and_` ch lenRod,
   sParen (S "from" +:+ refS angularDisplacementIM)]
 
 

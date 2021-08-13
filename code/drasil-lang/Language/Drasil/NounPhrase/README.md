@@ -1,10 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: August 13, 2021
 --------------------------------------------------
 
 Core.hs
-  - Noun phrase representations in Drasil
+  - Data types for noun phrase representations.
 
 README.md
   - This file

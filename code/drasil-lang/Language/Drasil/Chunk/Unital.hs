@@ -4,17 +4,17 @@ module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
   UnitalChunk(..),
   -- * Constructors
-  makeUCWDS , uc , uc' , ucStaged, ucs , ucs', ucsWS) where
+  makeUCWDS , uc , uc' , ucStaged, ucs , ucs', ucsWS, ucuc) where
 
 import Control.Lens (makeLenses, view, (^.))
 
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', tempdqdWr')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity, HasSpace(typ))
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Symbol (Symbol)
@@ -50,8 +50,10 @@ instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 instance Quantity      UnitalChunk where 
 -- | Finds the unit definition of a 'UnitalChunk'.
 instance Unitary       UnitalChunk where unit = view uni
--- | Finds the units of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
+-- | Finds the units used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
+-- | Finds the units used to make the 'UnitalChunk'.
+instance TempHasUnit       UnitalChunk where findUnit = view uni   
 -- | Equal if 'UID's are equal.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Convert the symbol of the 'UnitalChunk' to a 'DisplayExpr'.
@@ -100,3 +102,7 @@ makeUCWDS :: (IsUnit u) => String -> NP -> Sentence -> Symbol ->
   u -> UnitalChunk
 makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
   where uu = unitWrapper un
+
+-- | Attach units to a chunk that has a symbol and definition.
+ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
+ucuc c = UC (tempdqdWr' c) 

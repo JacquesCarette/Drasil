@@ -96,7 +96,9 @@ class HasContents c where
   accessContents :: Lens' c RawContent
 
 -- | Finds 'UID' of the 'LabelledContent'.
-instance HasUID        LabelledContent where uid = ref . uid  
+instance HasUID        LabelledContent where uid = ref . uid
+-- | 'LabelledContent's are equal if their reference 'UID's are equal.
+instance Eq            LabelledContent where a == b = (a ^. uid) == (b ^. uid) 
 -- | Finds the reference address contained in the 'Reference' of 'LabelledContent'.
 instance HasRefAddress LabelledContent where getRefAdd (LblC lb c) = RP (prependLabel c) $ getAdd $ getRefAdd lb
 -- | Access the 'RawContent' within the 'LabelledContent'.

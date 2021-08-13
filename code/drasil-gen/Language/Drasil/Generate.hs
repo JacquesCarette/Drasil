@@ -1,4 +1,4 @@
-module Language.Drasil.Generate (gen, genDot, genCode, DocType(SRS, Website, Jupyter), DocSpec(DocSpec)) where
+module Language.Drasil.Generate (gen, genDot, genCode, genLog, DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC), docChoices) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -11,42 +11,39 @@ import Data.Time.Calendar (showGregorian)
 import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
-import Database.Drasil (SystemInformation)
+import Database.Drasil (SystemInformation(SI, _sys))
 import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
- makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot)
+ makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot, printAllDebugInfo)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
   unPP, unJP, unCSP, unCPPP, unSP)
-import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec))
+import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
+import Data.Char (isSpace)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
 gen ds fn sm = prnt sm ds fn
 
+-- TODO: Include Jupyter into the SRS setup.
 -- | Generate the output artifacts (TeX+Makefile or HTML).
 prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
-prnt sm dt@(DocSpec Website fn) body =
-  do prntDoc dt body sm
-     prntCSS Website fn body
-prnt sm dt@(DocSpec Jupyter _) body =
-  do prntDoc dt body sm
-prnt sm dt@(DocSpec docType fn) body =
-  do prntDoc dt body sm
-     prntMake dt
-     prntCSS docType fn body
---
+prnt sm (DocSpec (DC Jupyter _) fn) body =
+  do prntDoc body sm fn Jupyter JSON
+prnt sm (DocSpec (DC dtype fmts) fn) body =
+  do mapM_ (prntDoc body sm fn dtype) fmts
 
 -- | Helper for writing the documents (TeX / HTML) to file.
-prntDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
-
-prntDoc (DocSpec Website fn) d pinfo = prntDoc' "Website" fn HTML d pinfo
-prntDoc (DocSpec Jupyter fn) d pinfo = prntDoc' "Jupyter" fn JSON d pinfo
-prntDoc (DocSpec SRS fn) d pinfo = 
-  do prntDoc' "SRS/HTML" fn HTML d pinfo
-     prntDoc' "SRS/PDF" fn TeX d pinfo
-
+prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
+prntDoc d pinfo fn Jupyter _ = prntDoc' "Jupyter" fn JSON d pinfo
+prntDoc d pinfo fn dtype fmt =
+  case fmt of
+    HTML -> do prntDoc' (show dtype ++ "/HTML") fn HTML d pinfo
+               prntCSS dtype fn d
+    TeX -> do prntDoc' (show dtype ++ "/PDF") fn TeX d pinfo
+              prntMake $ DocSpec (DC dtype []) fn
+    _ -> mempty
 
 -- | Helper that takes the directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
@@ -59,11 +56,11 @@ prntDoc' dt' fn format body' sm = do
   where getExt TeX  = ".tex"
         getExt HTML = ".html"
         getExt JSON = ".ipynb"
-        getExt _    = error "we can only write TeX/HTML (for now)"
+        getExt _    = error "We can only write in TeX, HTML and in Python Notebooks (for now)."
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
-prntMake ds@(DocSpec dt _) =
+prntMake ds@(DocSpec (DC dt _) _) =
   do outh <- openFile (show dt ++ "/PDF/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [ds]
      hClose outh
@@ -76,9 +73,7 @@ prntCSS docType fn body = do
   hPutStrLn outh2 $ render (makeCSS body)
   hClose outh2
   where
-    getFD Website = "Website/"
-    getFD SRS = "SRS/HTML/"
-    getFD _ = ""
+    getFD dtype = show dtype ++ "/HTML/"
 
 -- | Renders the documents.
 writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc
@@ -90,9 +85,21 @@ writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()
 genDot si = do
+    workingDir <- getCurrentDirectory
     let gi = mkGraphInfo si
     outputDot "TraceyGraph" gi
-    return mempty
+    setCurrentDirectory workingDir
+
+-- | Generates debugging logs to show all of the 'UID's used in an example.
+genLog :: SystemInformation -> PrintingInformation -> IO ()
+genLog SI{_sys = sysName} pinfo = do
+  workingDir <- getCurrentDirectory
+  createDirectoryIfMissing True $ "../../debug/" ++ filter (not.isSpace) (abrv sysName) ++ "/SRSlogs"
+  setCurrentDirectory $ "../../debug/" ++ filter (not.isSpace) (abrv sysName) ++ "/SRSlogs"
+  handle <- openFile (filter (not.isSpace) (abrv sysName) ++ "_SRS.log") WriteMode
+  mapM_ (hPutStrLn handle . render) $ printAllDebugInfo pinfo
+  hClose handle
+  setCurrentDirectory workingDir
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
@@ -112,3 +119,7 @@ genCode chs spec = do
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
+
+-- | Constructor for users to choose their document options
+docChoices :: DocType -> [Format] -> DocChoices
+docChoices = DC

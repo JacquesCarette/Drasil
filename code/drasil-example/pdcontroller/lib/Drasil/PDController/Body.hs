@@ -1,5 +1,11 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
+import Language.Drasil
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import qualified Utils.Drasil.Sentence as S
+
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
@@ -10,29 +16,9 @@ import Data.Drasil.ExternalLibraries.ODELibraries
 import qualified Data.Drasil.TheoryConcepts as IDict (dataDefn)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (second, kilogram)
-import Database.Drasil
-       (Block, ChunkDB, ReferenceDB, SystemInformation(SI), _authors, _concepts,
-        _configFiles, _constants, _constraints, _datadefs, _defSequence,
-        _inputs, _kind, _outputs, _purpose, _quants, _sys, _instModels,
-        _sysinfodb, _usedinfodb, cdb, rdb, refdb)
-import Drasil.DocLang
-       (DerivationDisplay(..),
-        DocSection(Bibliography, GSDSec, IntroSec, LCsSec, RefSec, ReqrmntSec,
-                   SSDSec, TraceabilitySec,TableOfContents),
-        Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
-        IntroSec(..), IntroSub(..), PDSub(..), ProblemDescription(PDProg),
-        RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
-        SRSDecl, SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec),
-        SolChSpec(SCSProg), TSIntro(..), TraceabilitySec(TraceabilityProg),
-        Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, fillcdbSRS)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
-
-import Language.Drasil
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import qualified Utils.Drasil.Sentence as S
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
@@ -134,7 +120,7 @@ symbMap :: ChunkDB
 symbMap
   = cdb (map qw physicscon ++ symbolsAll ++ map qw [mass])
       (nw pidControllerSystem :
-         [nw program] ++
+         [nw program, nw angular, nw linear] ++
            map nw doccon ++
              map nw doccon' ++
                concepts ++

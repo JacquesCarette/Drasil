@@ -12,7 +12,7 @@ import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
 
-import Control.Lens (makeLenses, view)
+import Control.Lens ((^.), makeLenses, view)
 
 -- * Section Types
 
@@ -46,6 +46,8 @@ data Content   = Content   Contents
 -} 
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
+-- | 'Section's are equal if 'UID's are equal.
+instance Eq Section where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the short name of a 'Section'.
 instance HasShortName  Section where shortname = shortname . view lab
 -- | Finds the reference information of a 'Section'.

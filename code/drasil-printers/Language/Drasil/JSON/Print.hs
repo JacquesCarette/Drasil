@@ -27,6 +27,7 @@ import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI)
 
+-- | Generate a python notebook document (using json).
 genJSON :: PrintingInformation -> L.Document -> Doc
 genJSON sm doc = build (makeDocument sm doc)
 
@@ -173,6 +174,7 @@ pOps Point    = "."
 pOps Perc     = "%"
 pOps LArrow   = " &larr; "
 pOps RArrow   = " &rarr; "
+pOps ForAll   = " ForAll "
 
 
 -- | Renders HTML table, called by 'printLO'

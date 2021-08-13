@@ -10,7 +10,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
--- ---- Add export parameters in a module
+-- TODO: Add export parameters in a module
 import Drasil.DocLang (mkNb, NBDecl, NbSection(BibSec, IntrodSec, BodySec), 
   IntrodSec(..), BodySec(..), BodySub(..))
 

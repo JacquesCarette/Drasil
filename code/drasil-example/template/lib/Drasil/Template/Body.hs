@@ -1,15 +1,9 @@
 module Drasil.Template.Body where
 
 import Language.Drasil
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, 
-  _quants, _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Utils.Drasil.Sentence as S
-
-import Drasil.DocLang (SRSDecl, mkDoc, fillcdbSRS)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 

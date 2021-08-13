@@ -1,8 +1,8 @@
-{-# LANGUAGE TemplateHaskell, RankNTypes, NoMonomorphismRestriction #-}
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs #-}
+
 module Theory.Drasil.DataDefinition where
 
-import Control.Lens (makeLenses, (^.), view, Lens', lens)
+import Control.Lens ((^.), view, Lens', lens)
 import Language.Drasil
 import Data.Drasil.TheoryConcepts (dataDefn)
 
@@ -55,7 +55,7 @@ instance Express e => HasSpace           (DataDefinition e) where typ = ddQd . t
 -- | Finds the Symbol of the 'QDefinition' used to make the '(DataDefinition e) where'.
 instance Express e => HasSymbol          (DataDefinition e) where symbol e = symbol (e ^. ddQd)
 -- | '(DataDefinition e) where's have a 'Quantity'.
-instance Express e => Quantity           (DataDefinition e) where 
+instance Express e => Quantity           (DataDefinition e) where
 -- | Finds the defining expression of the 'QDefinition' used to make the '(DataDefinition e) where'.
 instance DefiningExpr       DataDefinition where defnExpr = ddQd . defnExpr
 -- | Converts the defining expression of a '(DataDefinition e) where' into the model expression language.
@@ -71,7 +71,7 @@ instance Express e => HasDerivation      (DataDefinition e) where derivations = 
 -- | Finds any additional notes for the '(DataDefinition e) where'.
 instance Express e => HasAdditionalNotes (DataDefinition e) where getNotes = ddNotes
 -- | Finds the units of the 'QDefinition' used to make the '(DataDefinition e) where'.
-instance Express e => MayHaveUnit        (DataDefinition e) where getUnit = getUnit . view ddQd 
+instance Express e => MayHaveUnit        (DataDefinition e) where getUnit = getUnit . view ddQd
 -- | Finds the 'ShortName' of the '(DataDefinition e) where'.
 instance Express e => HasShortName       (DataDefinition e) where shortname = (^. ddShrtNm)
 -- | Finds the reference address of a '(DataDefinition e) where'.

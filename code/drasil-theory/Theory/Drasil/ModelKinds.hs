@@ -117,9 +117,9 @@ instance Express e => Express       (ModelKinds e) where express = elimMk (to ex
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
 -- | Finds the 'UID' of the 'ModelKind'.
-instance Express e => HasUID        (ModelKind e) where uid     = mkUid
+instance HasUID        (ModelKind e) where uid     = mkUid
 -- | Finds the term ('NP') of the 'ModelKind'.
-instance Express e => NamedIdea     (ModelKind e) where term    = mkTerm
+instance NamedIdea     (ModelKind e) where term    = mkTerm
 -- | Finds the idea of the 'ModelKind'.
 instance Express e => Idea          (ModelKind e) where getA    = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
@@ -163,7 +163,7 @@ lensMk lr lcs lq lmd = lens g s
           s mk_ x = setMk mk_ lr lcs lq lmd x
 
 -- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.
-getEqModQds :: Express e => [ModelKind e] -> [QDefinition e]
+getEqModQds :: [ModelKind e] -> [QDefinition e]
 getEqModQds = mapMaybe eqMod
   where
     eqMod (MK (EquationalModel f) _ _) = Just f

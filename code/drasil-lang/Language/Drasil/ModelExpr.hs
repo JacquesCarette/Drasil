@@ -8,7 +8,6 @@ import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 
 import Language.Drasil.ModelExpr.Lang
-import Language.Drasil.UID (UID)
 import Language.Drasil.Expr.Lang (Completeness(..), DerivType(..))
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)

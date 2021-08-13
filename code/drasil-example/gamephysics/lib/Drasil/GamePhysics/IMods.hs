@@ -46,10 +46,6 @@ transMot = imNoRefs (equationalModel' transMotQD)
 
 transMotQD :: QDefinition
 transMotQD = mkQuantDef accj transMotExpr
---transMotQD = mkQuantDef' accj transMotNP transMotExpr
-
---transMotNP :: NP
---transMotNP = nounPhraseSP "force on the translational motion of a set of 2D rigid bodies"
 
 transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses the total",
@@ -96,10 +92,6 @@ rotMot = imNoRefs (equationalModel' rotMotQD)
 
 rotMotQD :: QDefinition
 rotMotQD = mkQuantDef angAccj rotMotExpr
---rotMotQD = mkQuantDef' angAccj rotMotNP rotMotExpr
-
---rotMotNP :: NP
---rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for the total",

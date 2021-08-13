@@ -186,12 +186,14 @@ accj = ucs' (dccWDS "accj" (compoundPhrase' (cn "j-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (eqSymb QP.acceleration) lJ) Real accelU
 
--- FIXME: Titleized version does not render properly. See #2650.
-angAccj = ucs' (dccWDS "angAccj" (compoundPhrase' (cn "j-th body's")
-               (QP.angularAccel ^. term)) (phrase QP.angularAccel))
+-- FIXME: Using the titleized version in the same style as 'accj' above does not render properly.
+--        Oddly, stable breaks differently when trying to use 'nounPhraseSent' or 'combineNPNI'. See #2650.
+angAccj = ucs' (dccWDS "angAccj" (nounPhrase'' (S "j-th body's" +:+
+               phrase QP.angularAccel) (S "j-th body's" +:+
+               phrase QP.angularAccel) CapWords CapWords) (phrase QP.angularAccel))
                (sub (eqSymb QP.angularAccel) lJ) Real angAccelU
 
-velj = ucs' (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term) 
+velj = ucs' (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term)
                (cn "of the j-th body")) (phrase QP.velocity))
                (sub (eqSymb QP.velocity) lJ) Real velU
 

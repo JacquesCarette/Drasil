@@ -179,7 +179,7 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.PDController.IModel.html#imDerivStmts"><span class="hs-identifier hs-var">imDerivStmts</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="Drasil.PDController.IModel.html#imDerivEqns"><span class="hs-identifier hs-var">imDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-54"></span><span>
@@ -210,7 +210,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Output -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -447,7 +447,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#setPoint"><span class="hs-identifier hs-var">setPoint</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Output -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is a step function and a constant&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence

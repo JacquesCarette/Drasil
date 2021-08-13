@@ -172,11 +172,11 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">direction</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is *constant*, i.e.,&quot;</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-47"></span><span>    </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.Projectile.Expressions.html#horMotionEqn1"><span class="hs-identifier hs-var">horMotionEqn1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.Projectile.Expressions.html#horMotionEqn2"><span class="hs-identifier hs-var">horMotionEqn2</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
 </span><span id="line-48"></span><span>
@@ -204,7 +204,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk

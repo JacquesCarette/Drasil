@@ -5,7 +5,7 @@ TheoryModel -> SpaceDefn;
 TheoryModel -> QuantityDict;
 TheoryModel -> ConceptChunk;
 TheoryModel -> QDefinition;
-TheoryModel -> DisplayExpr;
+TheoryModel -> ModelExpr;
 TheoryModel -> DecRef;
 TheoryModel -> ShortName;
 TheoryModel -> String;

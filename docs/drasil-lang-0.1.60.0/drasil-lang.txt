@@ -9,6 +9,232 @@
 @package drasil-lang
 @version 0.1.60.0
 
+module Language.Drasil.ModelExpr.Development
+
+-- | Drasil expressions.
+data ModelExpr
+
+-- | Turns a decimal value (<a>Double</a>) into an expression.
+[Dbl] :: Double -> ModelExpr
+
+-- | Turns an integer into an expression.
+[Int] :: Integer -> ModelExpr
+
+-- | Represents decimal values that are exact as integers.
+[ExactDbl] :: Integer -> ModelExpr
+
+-- | Turns a string into an expression.
+[Str] :: String -> ModelExpr
+
+-- | Introduce Space values into the expression language.
+[Spc] :: Space -> ModelExpr
+
+-- | Turns two integers into a fraction (or percent).
+[Perc] :: Integer -> Integer -> ModelExpr
+
+-- | Takes an associative arithmetic operator with a list of expressions.
+[AssocA] :: AssocArithOper -> [ModelExpr] -> ModelExpr
+
+-- | Takes an associative boolean operator with a list of expressions.
+[AssocB] :: AssocBoolOper -> [ModelExpr] -> ModelExpr
+
+-- | Derivative syntax is: Type (<tt>Part</tt>ial or <tt>Total</tt>) -&gt;
+--   principal part of change -&gt; with respect to For example: Deriv Part
+--   y x1 would be (dy/dx1).
+[Deriv] :: DerivType -> ModelExpr -> UID -> ModelExpr
+
+-- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
+--   Implicitly assumes that the chunk has a symbol.
+[C] :: UID -> ModelExpr
+
+-- | A function call accepts a list of parameters and a list of named
+--   parameters. For example
+--   
+--   <ul>
+--   <li>F(x) is (FCall F [x] []).</li>
+--   <li>F(x,y) would be (FCall F [x,y]).</li>
+--   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
+--   </ul>
+[FCall] :: UID -> [ModelExpr] -> [(UID, ModelExpr)] -> ModelExpr
+
+-- | For multi-case expressions, each pair represents one case.
+[Case] :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
+
+-- | Represents a matrix of expressions.
+[Matrix] :: [[ModelExpr]] -> ModelExpr
+
+-- | Unary operation for most functions (eg. sin, cos, log, etc.).
+[UnaryOp] :: UFunc -> ModelExpr -> ModelExpr
+
+-- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
+[UnaryOpB] :: UFuncB -> ModelExpr -> ModelExpr
+
+-- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
+[UnaryOpVV] :: UFuncVV -> ModelExpr -> ModelExpr
+
+-- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
+[UnaryOpVN] :: UFuncVN -> ModelExpr -> ModelExpr
+
+-- | Binary operator for arithmetic between expressions (fractional, power,
+--   and subtraction).
+[ArithBinaryOp] :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for boolean operators (implies, iff).
+[BoolBinaryOp] :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for equality between expressions.
+[EqBinaryOp] :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for indexing two expressions.
+[LABinaryOp] :: LABinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for ordering expressions (less than, greater than,
+--   etc.).
+[OrdBinaryOp] :: OrdBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Space-related binary operations.
+[SpaceBinaryOp] :: SpaceBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Statement-related binary operations.
+[StatBinaryOp] :: StatBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
+--   (cross product).
+[VVVBinaryOp] :: VVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
+--   (dot product).
+[VVNBinaryOp] :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Operators are generalized arithmetic operators over a
+--   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
+--   Summation is represented via <tt>Add</tt> over a discrete domain.
+[Operator] :: AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> ModelExpr
+
+-- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
+--   interval.
+[RealI] :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
+
+-- | Universal quantification
+[ForAll] :: UID -> Space -> ModelExpr -> ModelExpr
+
+-- | Unary functions (abs, log, ln, sin, etc.).
+data UFunc
+Abs :: UFunc
+Log :: UFunc
+Ln :: UFunc
+Sin :: UFunc
+Cos :: UFunc
+Tan :: UFunc
+Sec :: UFunc
+Csc :: UFunc
+Cot :: UFunc
+Arcsin :: UFunc
+Arccos :: UFunc
+Arctan :: UFunc
+Exp :: UFunc
+Sqrt :: UFunc
+Neg :: UFunc
+
+-- | <tt>Bool -&gt; Bool</tt> operators.
+data UFuncB
+Not :: UFuncB
+
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+NegV :: UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
+Norm :: UFuncVN
+Dim :: UFuncVN
+
+-- | Arithmetic operators (fractional, power, and subtraction).
+data ArithBinOp
+Frac :: ArithBinOp
+Pow :: ArithBinOp
+Subt :: ArithBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
+data BoolBinOp
+Impl :: BoolBinOp
+Iff :: BoolBinOp
+
+-- | Equality operators (equal or not equal).
+data EqBinOp
+Eq :: EqBinOp
+NEq :: EqBinOp
+
+-- | Index operator.
+data LABinOp
+Index :: LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
+data OrdBinOp
+Lt :: OrdBinOp
+Gt :: OrdBinOp
+LEq :: OrdBinOp
+GEq :: OrdBinOp
+
+-- | <tt>Value -&gt; Space -&gt; Bool</tt> operators.
+data SpaceBinOp
+IsIn :: SpaceBinOp
+
+-- | Statements involving 2 arguments.
+data StatBinOp
+Defines :: StatBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product).
+data VVVBinOp
+Cross :: VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
+data VVNBinOp
+Dot :: VVNBinOp
+
+-- | Associative operators (adding and multiplication). Also specifies
+--   whether it is for integers or for real numbers.
+data AssocArithOper
+AddI :: AssocArithOper
+AddRe :: AssocArithOper
+MulI :: AssocArithOper
+MulRe :: AssocArithOper
+
+-- | Associative boolean operators (and, or).
+data AssocBoolOper
+And :: AssocBoolOper
+Or :: AssocBoolOper
+Equivalence :: AssocBoolOper
+
+-- | Determines the type of the derivative (either a partial derivative or
+--   a total derivative).
+data DerivType
+Part :: DerivType
+Total :: DerivType
+
+-- | For case expressions (either complete or incomplete).
+data Completeness
+Complete :: Completeness
+Incomplete :: Completeness
+expr :: Expr -> ModelExpr
+
+-- | Get dependencies from an equation.
+meDep :: ModelExpr -> [String]
+
+-- | eprec - <a>ModelExpr</a> precedence.
+mePrec :: ModelExpr -> Int
+
+-- | precB - precedence for boolean-related Binary-Associative
+--   (Commutative) operators.
+precB :: AssocBoolOper -> Int
+
+-- | precA - precedence for arithmetic-related Binary-Associative
+--   (Commutative) operators.
+precA :: AssocArithOper -> Int
+
 module Language.Drasil.Display
 
 -- | Decorations on symbols/characters such as hats or Vector
@@ -553,26 +779,6 @@ phraseNP :: NounPhrase n => n -> Sentence
 -- | Retrieves plural form of term. Ex. "the quick brown foxes".
 pluralNP :: NounPhrase n => n -> PluralForm
 
--- | A variant of the expression language that allows for extensions of
---   Expr that wouldn't normally type check, or that we only care for
---   displaying.
-data DisplayExpr
-[AlgebraicExpr] :: Expr -> DisplayExpr
-[SpaceExpr] :: Space -> DisplayExpr
-[BinOp] :: DisplayBinOp -> DisplayExpr -> DisplayExpr -> DisplayExpr
-[AssocBinOp] :: DisplayAssocBinOp -> [DisplayExpr] -> DisplayExpr
-[ForAll] :: UID -> Space -> DisplayExpr -> DisplayExpr
-
--- | Binary Display Operations.
-data DisplayBinOp
-Defines :: DisplayBinOp
-IsIn :: DisplayBinOp
-
--- | Associative Binary Display Operations.
-data DisplayAssocBinOp
-DAnd :: DisplayAssocBinOp
-Equivalence :: DisplayAssocBinOp
-
 -- | Drasil expressions.
 data Expr
 
@@ -780,8 +986,8 @@ eNames' :: Expr -> [String]
 --   names (similar to <a>eNames</a>).
 eNamesRI :: RealInterval Expr Expr -> [String]
 
--- | Get dependencies from display expressions.
-deDep :: DisplayExpr -> [String]
+-- | Get dependencies from an equation.
+meDep :: ModelExpr -> [String]
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <tt>Symbol</tt>.
@@ -805,11 +1011,8 @@ precB :: AssocBoolOper -> Int
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
 
--- | dePrec - "Display Expression" precedence.
-dePrec :: DisplayExpr -> Int
-
--- | dePrecAssoc - precedence for associative binary operators.
-dePrecAssoc :: DisplayAssocBinOp -> Int
+-- | eprec - <a>ModelExpr</a> precedence.
+mePrec :: ModelExpr -> Int
 
 module Language.Drasil
 
@@ -1105,23 +1308,21 @@ vec2D :: Expr -> Expr -> Expr
 -- | Matrix helper function.
 dgnl2x2 :: Expr -> Expr -> Expr
 
--- | A variant of the expression language that allows for extensions of
---   Expr that wouldn't normally type check, or that we only care for
---   displaying.
-data DisplayExpr
+-- | Drasil expressions.
+data ModelExpr
 
 -- | One expression is "defined" by another.
-defines :: (Display a, Display b) => a -> b -> DisplayExpr
+defines :: (Express a, Express b) => a -> b -> ModelExpr
 
--- | Bring a Space into the DisplayExpr.
-spaceDE :: Space -> DisplayExpr
-isIn :: Display a => a -> DisplayExpr -> DisplayExpr
+-- | Bring a Space into the ModelExpr.
+space :: Space -> ModelExpr
+isIn :: Express a => a -> ModelExpr -> ModelExpr
 
 -- | Binary associative <a>And</a>.
-andDEs :: Display d => [d] -> DisplayExpr
+andMEs :: Express d => [d] -> ModelExpr
 
 -- | Binary associative <a>Equivalence</a>.
-equivDEs :: Display a => [a] -> DisplayExpr
+equivMEs :: Express a => [a] -> ModelExpr
 
 -- | Special characters include partial derivatives and the degree circle.
 data Special
@@ -1280,9 +1481,9 @@ class DefiningExpr c
 -- | Provides a <tt>Lens</tt> to the expression.
 defnExpr :: DefiningExpr c => Lens' c Expr
 
--- | Data that can convert into a Displayable <a>Expr</a>.
-class Display c
-toDispExpr :: Display c => c -> DisplayExpr
+-- | Data that can be expressed using <a>ModelExpr</a>.
+class Express c
+express :: Express c => c -> ModelExpr
 
 -- | HasUncertainty is just a chunk with some uncertainty associated to it.
 --   This uncertainty is represented as a decimal value between 0 and 1
@@ -1909,7 +2110,7 @@ data Sentence
 [P] :: Symbol -> Sentence
 
 -- | Lifts an expression into a Sentence.
-[E] :: DisplayExpr -> Sentence
+[E] :: ModelExpr -> Sentence
 
 -- | Takes a <a>UID</a> to a reference, a display name (<a>Sentence</a>),
 --   and any additional reference display information (<a>RefInfo</a>).
@@ -1976,7 +2177,7 @@ capSent :: Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
-eS :: Display d => d -> Sentence
+eS :: Express t => t -> Sentence
 
 -- | Helper for concatenating two <a>Sentence</a>s with a comma and space
 --   between them.
@@ -2326,7 +2527,7 @@ Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
 Paragraph :: Sentence -> RawContent
 
 -- | Block of Equations holds an expression.
-EqnBlock :: DisplayExpr -> RawContent
+EqnBlock :: ModelExpr -> RawContent
 
 -- | Grants the ability to label a group of <a>RawContent</a>.
 DerivBlock :: Sentence -> [RawContent] -> RawContent

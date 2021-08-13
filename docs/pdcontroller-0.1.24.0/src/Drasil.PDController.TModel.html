@@ -29,7 +29,7 @@
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -41,7 +41,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -69,9 +69,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-var">qdFxnTDomain</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-26"></span><span>      </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-27"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-28"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Relation -&gt; DisplayExpr
-forall c. Display c =&gt; c -&gt; DisplayExpr
-</span><span class="hs-identifier hs-var">toDispExpr</span></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span id="line-28"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Relation -&gt; ModelExpr
+forall c. Express c =&gt; c -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">Relation
 </span><a href="Drasil.PDController.TModel.html#laplaceRel"><span class="hs-identifier hs-var">laplaceRel</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-29"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-30"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
@@ -164,7 +164,7 @@ r -&gt; Sentence
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -176,7 +176,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -204,9 +204,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-var">qdFxnTDomain</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-58"></span><span>      </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-59"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-60"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Relation -&gt; DisplayExpr
-forall c. Display c =&gt; c -&gt; DisplayExpr
-</span><span class="hs-identifier hs-var">toDispExpr</span></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span id="line-60"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Relation -&gt; ModelExpr
+forall c. Express c =&gt; c -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">Relation
 </span><a href="Drasil.PDController.TModel.html#invLaplaceRel"><span class="hs-identifier hs-var">invLaplaceRel</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-61"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-62"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
@@ -268,7 +268,7 @@ r -&gt; Sentence
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -280,7 +280,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -304,9 +304,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-87"></span><span>      </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-88"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-89"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Relation -&gt; DisplayExpr
-forall c. Display c =&gt; c -&gt; DisplayExpr
-</span><span class="hs-identifier hs-var">toDispExpr</span></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span id="line-89"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Relation -&gt; ModelExpr
+forall c. Express c =&gt; c -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">Relation
 </span><a href="Drasil.PDController.TModel.html#soSystemRel"><span class="hs-identifier hs-var">soSystemRel</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-90"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-91"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef

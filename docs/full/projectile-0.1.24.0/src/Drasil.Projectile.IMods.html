@@ -121,7 +121,7 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.Projectile.IMods.html#timeDerivSents"><span class="hs-identifier hs-var">timeDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="Drasil.Projectile.IMods.html#timeDerivEqns"><span class="hs-identifier hs-var">timeDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-48"></span><span>
@@ -146,7 +146,7 @@ forall d. Display d =&gt; d -&gt; Sentence
 </span><span class="hs-identifier hs-var">List</span></span><span>
 </span><span id="line-55"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; ConceptInstance -&gt; Sentence
 forall e r.
-(Display e, Referable r, HasShortName r) =&gt;
+(Express e, Referable r, HasShortName r) =&gt;
 e -&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">eqnWSource</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -157,7 +157,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><a href="Drasil.Projectile.Assumptions.html#launchOrigin"><span class="hs-identifier hs-var">launchOrigin</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-56"></span><span>     </span><span class="annot"><span class="annottext">Expr -&gt; ConceptInstance -&gt; Sentence
 forall e r.
-(Display e, Referable r, HasShortName r) =&gt;
+(Express e, Referable r, HasShortName r) =&gt;
 e -&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">eqnWSource</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -207,7 +207,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;where&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -257,7 +257,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">constraint</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -288,7 +288,7 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;with&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -397,7 +397,7 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivSents"><span class="hs-identifier hs-var">landPosDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="Drasil.Projectile.IMods.html#landPosDerivEqns"><span class="hs-identifier hs-var">landPosDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-87"></span><span>
@@ -421,7 +421,7 @@ forall d. Display d =&gt; d -&gt; Sentence
 </span><span class="hs-identifier hs-var">List</span></span><span>
 </span><span id="line-94"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; ConceptInstance -&gt; Sentence
 forall e r.
-(Display e, Referable r, HasShortName r) =&gt;
+(Express e, Referable r, HasShortName r) =&gt;
 e -&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">eqnWSource</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -432,7 +432,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><a href="Drasil.Projectile.Assumptions.html#launchOrigin"><span class="hs-identifier hs-var">launchOrigin</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-95"></span><span>     </span><span class="annot"><span class="annottext">Expr -&gt; ConceptInstance -&gt; Sentence
 forall e r.
-(Display e, Referable r, HasShortName r) =&gt;
+(Express e, Referable r, HasShortName r) =&gt;
 e -&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">eqnWSource</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -495,9 +495,9 @@ r -&gt; Sentence
 </span><span id="line-102"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;with&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">DisplayExpr -&gt; Sentence
-</span><span class="hs-identifier hs-var">E</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConstrConcept -&gt; DisplayExpr
-forall a b. (Display a, Display b) =&gt; a -&gt; b -&gt; DisplayExpr
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span class="hs-identifier hs-var">E</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConstrConcept -&gt; ModelExpr
+forall a b. (Express a, Express b) =&gt; a -&gt; b -&gt; ModelExpr
 </span><span class="hs-identifier hs-var">defines</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iSpeed</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -655,7 +655,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-135"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Expr
 forall c. HasUID c =&gt; c -&gt; RealInterval Expr Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">realInterval</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -719,7 +719,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-143"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -727,7 +727,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-operator hs-var">$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -766,7 +766,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -804,7 +804,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -817,7 +817,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-operator hs-var">`S.is`</span></span><span>
 </span><span id="line-153"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from the fact that&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -841,7 +841,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-156"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -866,7 +866,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-159"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept

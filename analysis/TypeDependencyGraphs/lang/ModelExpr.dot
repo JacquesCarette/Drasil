@@ -1,0 +1,28 @@
+digraph modelexpr{
+ModelExpr -> Double;
+ModelExpr -> ModelExpr;
+ModelExpr -> Integer;
+ModelExpr -> String;
+ModelExpr -> Space;
+ModelExpr -> AssocArithOper;
+ModelExpr -> AssocBoolOper;
+ModelExpr -> DerivType;
+ModelExpr -> UID;
+ModelExpr -> Completeness;
+ModelExpr -> UFunc;
+ModelExpr -> UFuncB;
+ModelExpr -> UFuncVV;
+ModelExpr -> UFuncVN;
+ModelExpr -> ArithBinOp;
+ModelExpr -> BoolBinOp;
+ModelExpr -> EqBinOp;
+ModelExpr -> LABinOp;
+ModelExpr -> OrdBinOp;
+ModelExpr -> SpaceBinOp;
+ModelExpr -> StatBinOp;
+ModelExpr -> VVVBinOp;
+ModelExpr -> VVNBinOp;
+ModelExpr -> DomainDesc;
+ModelExpr -> RealInterval;
+ModelExpr	[shape=oval, color=darkviolet, label="ModelExpr"];
+}

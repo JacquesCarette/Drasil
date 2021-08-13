@@ -182,7 +182,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">liquid</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;form&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Expr
 forall c. HasUID c =&gt; c -&gt; RealInterval Expr Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">realInterval</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -204,7 +204,7 @@ forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;where&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-59"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -216,7 +216,7 @@ forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-60"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -267,7 +267,7 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivSentences"><span class="hs-identifier hs-var">eBalanceOnWtrDerivSentences</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivEqns"><span class="hs-identifier hs-var">eBalanceOnWtrDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-69"></span><span>

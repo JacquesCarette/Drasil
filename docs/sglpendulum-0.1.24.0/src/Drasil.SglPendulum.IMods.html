@@ -123,7 +123,7 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementDerivSents"><span class="hs-identifier hs-var">angularDisplacementDerivSents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="Drasil.SglPendulum.Expressions.html#angularDisplacementDerivEqns"><span class="hs-identifier hs-var">angularDisplacementDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-45"></span><span>
@@ -241,7 +241,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
 </span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we can approximate&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -297,7 +297,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-68"></span><span>     </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk

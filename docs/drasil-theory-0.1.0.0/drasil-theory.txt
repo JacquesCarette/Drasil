@@ -209,7 +209,7 @@ spaces :: Theory t => Lens' t [SpaceDefn]
 quantities :: Theory t => Lens' t [QuantityDict]
 operations :: Theory t => Lens' t [ConceptChunk]
 defined_quant :: Theory t => Lens' t [QDefinition]
-invariants :: Theory t => Lens' t [DisplayExpr]
+invariants :: Theory t => Lens' t [ModelExpr]
 defined_fun :: Theory t => Lens' t [QDefinition]
 
 -- | A TheoryModel is a collection of:
@@ -222,7 +222,7 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 --   <li>quan - quantities (<a>QuantityDict</a>s),</li>
 --   <li>ops - operations (<a>ConceptChunk</a>s),</li>
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
---   <li>invs - invariants (<a>DisplayExpr</a>s),</li>
+--   <li>invs - invariants (<tt>DisplayExpr</tt>s),</li>
 --   <li>dfun - defined functions (<a>QDefinition</a>s),</li>
 --   <li>ref - accompanying references (<a>DecRef</a>s),</li>
 --   <li>lb - a label (<a>SpaceDefn</a>),</li>
@@ -236,8 +236,8 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [ModelExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [ModelExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel

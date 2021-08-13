@@ -268,8 +268,6 @@ digraph alltypes {
 		Identifier	[shape=oval, color=red2, label="Identifier"];
 		}
 	}
-	subgraph diplays {
-	}
 	subgraph extract {
 	}
 	subgraph math {
@@ -286,6 +284,16 @@ digraph alltypes {
 		IRefProg -> UID;
 		IRefProg	[shape=oval, color=darkviolet, label="IRefProg"];
 		}
+	}
+	subgraph convert {
+	}
+	subgraph development {
+	}
+	subgraph extract {
+	}
+	subgraph math {
+	}
+	subgraph precedence {
 	}
 	subgraph core {
 		subgraph capitalizationrule{
@@ -405,25 +413,6 @@ digraph alltypes {
 	subgraph development {
 	}
 	subgraph diplays {
-	}
-	subgraph diplayclassess {
-	}
-	subgraph diplayexprs {
-		subgraph displaybinop{
-		DisplayBinOp	[shape=oval, color=darkviolet, label="DisplayBinOp"];
-		}
-		subgraph displayassocbinop{
-		DisplayAssocBinOp	[shape=oval, color=darkviolet, label="DisplayAssocBinOp"];
-		}
-		subgraph displayexpr{
-		DisplayExpr -> Expr;
-		DisplayExpr -> DisplayExpr;
-		DisplayExpr -> Space;
-		DisplayExpr -> DisplayBinOp;
-		DisplayExpr -> DisplayAssocBinOp;
-		DisplayExpr -> UID;
-		DisplayExpr	[shape=oval, color=darkviolet, label="DisplayExpr"];
-		}
 	}
 	subgraph document {
 		subgraph section{
@@ -545,7 +534,88 @@ digraph alltypes {
 		Variable	[shape=oval, color=red2, label="Variable"];
 		}
 	}
+	subgraph exprclasess {
+	}
 	subgraph mics {
+	}
+	subgraph modelexpr {
+		subgraph arithbinop{
+		ArithBinOp	[shape=oval, color=darkviolet, label="ArithBinOp"];
+		}
+		subgraph eqbinop{
+		EqBinOp	[shape=oval, color=darkviolet, label="EqBinOp"];
+		}
+		subgraph boolbinop{
+		BoolBinOp	[shape=oval, color=darkviolet, label="BoolBinOp"];
+		}
+		subgraph labinop{
+		LABinOp	[shape=oval, color=darkviolet, label="LABinOp"];
+		}
+		subgraph ordbinop{
+		OrdBinOp	[shape=oval, color=darkviolet, label="OrdBinOp"];
+		}
+		subgraph vvvbinop{
+		VVVBinOp	[shape=oval, color=darkviolet, label="VVVBinOp"];
+		}
+		subgraph vvnbinop{
+		VVNBinOp	[shape=oval, color=darkviolet, label="VVNBinOp"];
+		}
+		subgraph assocarithoper{
+		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
+		}
+		subgraph assocbooloper{
+		AssocBoolOper	[shape=oval, color=darkviolet, label="AssocBoolOper"];
+		}
+		subgraph ufunc{
+		UFunc	[shape=oval, color=darkviolet, label="UFunc"];
+		}
+		subgraph ufuncb{
+		UFuncB	[shape=oval, color=darkviolet, label="UFuncB"];
+		}
+		subgraph ufuncvv{
+		UFuncVV	[shape=oval, color=darkviolet, label="UFuncVV"];
+		}
+		subgraph ufuncvn{
+		UFuncVN	[shape=oval, color=darkviolet, label="UFuncVN"];
+		}
+		subgraph statbinop{
+		StatBinOp	[shape=oval, color=darkviolet, label="StatBinOp"];
+		}
+		subgraph spacebinop{
+		SpaceBinOp	[shape=oval, color=darkviolet, label="SpaceBinOp"];
+		}
+		subgraph modelexpr{
+		ModelExpr -> Double;
+		ModelExpr -> ModelExpr;
+		ModelExpr -> Integer;
+		ModelExpr -> String;
+		ModelExpr -> Space;
+		ModelExpr -> AssocArithOper;
+		ModelExpr -> AssocBoolOper;
+		ModelExpr -> DerivType;
+		ModelExpr -> UID;
+		ModelExpr -> Completeness;
+		ModelExpr -> UFunc;
+		ModelExpr -> UFuncB;
+		ModelExpr -> UFuncVV;
+		ModelExpr -> UFuncVN;
+		ModelExpr -> ArithBinOp;
+		ModelExpr -> BoolBinOp;
+		ModelExpr -> EqBinOp;
+		ModelExpr -> LABinOp;
+		ModelExpr -> OrdBinOp;
+		ModelExpr -> SpaceBinOp;
+		ModelExpr -> StatBinOp;
+		ModelExpr -> VVVBinOp;
+		ModelExpr -> VVNBinOp;
+		ModelExpr -> DomainDesc;
+		ModelExpr -> RealInterval;
+		ModelExpr	[shape=oval, color=darkviolet, label="ModelExpr"];
+		}
+		subgraph variable{
+		Variable -> String;
+		Variable	[shape=oval, color=red2, label="Variable"];
+		}
 	}
 	subgraph nounpraehs {
 		subgraph capitalization{
@@ -2050,13 +2120,13 @@ digraph alltypes {
 	}
 	subgraph codeexpr {
 	}
-	subgraph diplayexprs {
-	}
 	subgraph document {
 	}
 	subgraph expr {
 	}
 	subgraph helpers {
+	}
+	subgraph modelexpr {
 	}
 	subgraph sentence {
 	}
@@ -2424,7 +2494,7 @@ digraph alltypes {
 		TheoryModel -> QuantityDict;
 		TheoryModel -> ConceptChunk;
 		TheoryModel -> QDefinition;
-		TheoryModel -> DisplayExpr;
+		TheoryModel -> ModelExpr;
 		TheoryModel -> DecRef;
 		TheoryModel -> ShortName;
 		TheoryModel -> String;

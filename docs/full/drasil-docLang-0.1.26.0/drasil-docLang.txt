@@ -1373,7 +1373,7 @@ getDocDesc :: DocDesc -> [Sentence]
 
 -- | Extracts expressions from the document description (<a>DocDesc</a>)
 --   and default <a>DLPlate</a>.
-egetDocDesc :: DocDesc -> [DisplayExpr]
+egetDocDesc :: DocDesc -> [ModelExpr]
 
 -- | Creates a <a>Sentence</a> plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
@@ -2212,7 +2212,7 @@ getDocDesc :: DocDesc -> [Sentence]
 
 -- | Extracts expressions from the document description (<a>DocDesc</a>)
 --   and default <a>DLPlate</a>.
-egetDocDesc :: DocDesc -> [DisplayExpr]
+egetDocDesc :: DocDesc -> [ModelExpr]
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap

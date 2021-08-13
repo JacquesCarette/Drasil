@@ -136,11 +136,11 @@ unitTable :: Lens' ChunkDB UnitMap
 -- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
 --   <a>Sentence</a>s and expressions that are contained in the database
 --   (<a>ChunkDB</a>).
-ccss :: [Sentence] -> [DisplayExpr] -> ChunkDB -> [DefinedQuantityDict]
+ccss :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
 
 -- | Gets a list of quantities (<a>QuantityDict</a>s) from <a>Sentence</a>s
 --   and expressions that are contained in the database (<a>ChunkDB</a>).
-ccss' :: [Sentence] -> [DisplayExpr] -> ChunkDB -> [QuantityDict]
+ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
 
 -- | Combines the functions of <a>vars</a> and <a>concpt</a> to create a
 --   list of <a>DefinedQuantityDict</a>s from a <a>Sentence</a>.
@@ -152,7 +152,7 @@ getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
 
 -- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
 --   order to print.
-vars :: DisplayExpr -> ChunkDB -> [QuantityDict]
+vars :: ModelExpr -> ChunkDB -> [QuantityDict]
 
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a

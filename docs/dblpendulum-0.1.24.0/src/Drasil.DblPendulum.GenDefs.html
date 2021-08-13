@@ -117,7 +117,7 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.DblPendulum.GenDefs.html#velXDerivEqns_1"><span class="hs-identifier hs-var hs-var">velXDerivEqns_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velDerivEqn1"><span class="hs-identifier hs-var">E.velDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velXDerivEqn2_1"><span class="hs-identifier hs-var">E.velXDerivEqn2_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
@@ -125,7 +125,7 @@ forall d. Display d =&gt; d -&gt; Sentence
 </span><a href="Drasil.DblPendulum.Expressions.html#velXDerivEqn4_1"><span class="hs-identifier hs-var">E.velXDerivEqn4_1</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#velXQD_1"><span class="hs-identifier hs-var">velXQD_1</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-51"></span><span class="hs-comment">-- refinement equation after explained words</span><span>
@@ -160,7 +160,7 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Applying this,&quot;</span></span><span>
 </span><span id="line-57"></span><span id="velDerivSent4"><span class="annot"><span class="annottext">velDerivSent4 :: Sentence
 </span><a href="Drasil.DblPendulum.GenDefs.html#velDerivSent4"><span class="hs-identifier hs-var hs-var">velDerivSent4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#lenRod_1"><span class="hs-identifier hs-var">lenRod_1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -244,7 +244,7 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.DblPendulum.GenDefs.html#velYDerivEqns_1"><span class="hs-identifier hs-var hs-var">velYDerivEqns_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velDerivEqn1"><span class="hs-identifier hs-var">E.velDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velYDerivEqn2_1"><span class="hs-identifier hs-var">E.velYDerivEqn2_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
@@ -252,7 +252,7 @@ forall d. Display d =&gt; d -&gt; Sentence
 </span><a href="Drasil.DblPendulum.Expressions.html#velYDerivEqn4_1"><span class="hs-identifier hs-var">E.velYDerivEqn4_1</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#velYQD_1"><span class="hs-identifier hs-var">velYQD_1</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-77"></span><span>
@@ -343,14 +343,14 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.DblPendulum.GenDefs.html#velXDerivEqns_2"><span class="hs-identifier hs-var hs-var">velXDerivEqns_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velDerivEqn1"><span class="hs-identifier hs-var">E.velDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velXDerivEqn2_2"><span class="hs-identifier hs-var">E.velXDerivEqn2_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velXDerivEqn3_2"><span class="hs-identifier hs-var">E.velXDerivEqn3_2</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#velXQD_2"><span class="hs-identifier hs-var">velXQD_2</span></a></span><span class="hs-special">]</span><span> </span><span>
 </span><span id="line-98"></span><span>
@@ -441,14 +441,14 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.DblPendulum.GenDefs.html#velYDerivEqns_2"><span class="hs-identifier hs-var hs-var">velYDerivEqns_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velDerivEqn1"><span class="hs-identifier hs-var">E.velDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velYDerivEqn2_2"><span class="hs-identifier hs-var">E.velYDerivEqn2_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#velYDerivEqn3_2"><span class="hs-identifier hs-var">E.velYDerivEqn3_2</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#velYQD_2"><span class="hs-identifier hs-var">velYQD_2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-119"></span><span>
@@ -538,25 +538,25 @@ forall a. [[a]] -&gt; [a]
 </span><span id="line-138"></span><span class="annot"><a href="Drasil.DblPendulum.GenDefs.html#accelXDerivEqns_1"><span class="hs-identifier hs-type">accelXDerivEqns_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-139"></span><span id="accelXDerivEqns_1"><span class="annot"><span class="annottext">accelXDerivEqns_1 :: [Sentence]
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelXDerivEqns_1"><span class="hs-identifier hs-var hs-var">accelXDerivEqns_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelDerivEqn1"><span class="hs-identifier hs-var">E.accelDerivEqn1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#velXQD_1"><span class="hs-identifier hs-var">velXQD_1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelXDerivEqn3_1"><span class="hs-identifier hs-var">E.accelXDerivEqn3_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelXDerivEqn4_1"><span class="hs-identifier hs-var">E.accelXDerivEqn4_1</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelXQD_1"><span class="hs-identifier hs-var">accelXQD_1</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-140"></span><span>
@@ -667,25 +667,25 @@ forall a. [[a]] -&gt; [a]
 </span><span id="line-164"></span><span class="annot"><a href="Drasil.DblPendulum.GenDefs.html#accelYDerivEqns_1"><span class="hs-identifier hs-type">accelYDerivEqns_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-165"></span><span id="accelYDerivEqns_1"><span class="annot"><span class="annottext">accelYDerivEqns_1 :: [Sentence]
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelYDerivEqns_1"><span class="hs-identifier hs-var hs-var">accelYDerivEqns_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelDerivEqn1"><span class="hs-identifier hs-var">E.accelDerivEqn1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#velYQD_1"><span class="hs-identifier hs-var">velYQD_1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelYDerivEqn3_1"><span class="hs-identifier hs-var">E.accelYDerivEqn3_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelYDerivEqn4_1"><span class="hs-identifier hs-var">E.accelYDerivEqn4_1</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelYQD_1"><span class="hs-identifier hs-var">accelYQD_1</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-166"></span><span>
@@ -772,24 +772,24 @@ forall a. [[a]] -&gt; [a]
 </span><span id="line-185"></span><span class="annot"><a href="Drasil.DblPendulum.GenDefs.html#accelXDerivEqns_2"><span class="hs-identifier hs-type">accelXDerivEqns_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-186"></span><span id="accelXDerivEqns_2"><span class="annot"><span class="annottext">accelXDerivEqns_2 :: [Sentence]
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelXDerivEqns_2"><span class="hs-identifier hs-var hs-var">accelXDerivEqns_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelDerivEqn1"><span class="hs-identifier hs-var">E.accelDerivEqn1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#velXQD_2"><span class="hs-identifier hs-var">velXQD_2</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelXDerivEqn3_2"><span class="hs-identifier hs-var">E.accelXDerivEqn3_2</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelXQD_2"><span class="hs-identifier hs-var">accelXQD_2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-187"></span><span>
@@ -876,24 +876,24 @@ forall a. [[a]] -&gt; [a]
 </span><span id="line-206"></span><span class="annot"><a href="Drasil.DblPendulum.GenDefs.html#accelYDerivEqns_2"><span class="hs-identifier hs-type">accelYDerivEqns_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-207"></span><span id="accelYDerivEqns_2"><span class="annot"><span class="annottext">accelYDerivEqns_2 :: [Sentence]
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelYDerivEqns_2"><span class="hs-identifier hs-var hs-var">accelYDerivEqns_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelDerivEqn1"><span class="hs-identifier hs-var">E.accelDerivEqn1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#velYQD_2"><span class="hs-identifier hs-var">velYQD_2</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.DblPendulum.Expressions.html#accelYDerivEqn3_2"><span class="hs-identifier hs-var">E.accelYDerivEqn3_2</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelYQD_2"><span class="hs-identifier hs-var">accelYQD_2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-208"></span><span>
@@ -940,11 +940,11 @@ forall a. a -&gt; Maybe a
 </span><span id="line-220"></span><span id="xForceMD_1"><span class="annot"><span class="annottext">xForceMD_1 :: MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#xForceMD_1"><span class="hs-identifier hs-var hs-var">xForceMD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679086697"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087590"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679086695"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-221"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086697"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679086697"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679087588"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-221"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087590"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679087590"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -966,8 +966,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-223"></span><span>          </span><span id="local-6989586621679086695"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
-</span><a href="#local-6989586621679086695"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+</span><span id="line-223"></span><span>          </span><span id="local-6989586621679087588"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679087588"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-224"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
@@ -995,7 +995,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Drasil.DblPendulum.Concepts.html#firstObject"><span class="hs-identifier hs-var">firstObject</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MultiDefn -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#xForceMD_1"><span class="hs-identifier hs-var">xForceMD_1</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-231"></span><span>
@@ -1029,11 +1029,11 @@ forall a. a -&gt; Maybe a
 </span><span id="line-240"></span><span id="yForceMD_1"><span class="annot"><span class="annottext">yForceMD_1 :: MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#yForceMD_1"><span class="hs-identifier hs-var hs-var">yForceMD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679086684"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087577"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679086683"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-241"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086684"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679086684"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679087576"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-241"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087577"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679087577"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -1055,8 +1055,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-243"></span><span>          </span><span id="local-6989586621679086683"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
-</span><a href="#local-6989586621679086683"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+</span><span id="line-243"></span><span>          </span><span id="local-6989586621679087576"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679087576"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-244"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
@@ -1084,7 +1084,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Drasil.DblPendulum.Concepts.html#firstObject"><span class="hs-identifier hs-var">firstObject</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MultiDefn -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#yForceMD_1"><span class="hs-identifier hs-var">yForceMD_1</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-251"></span><span>
@@ -1118,11 +1118,11 @@ forall a. a -&gt; Maybe a
 </span><span id="line-260"></span><span id="xForceMD_2"><span class="annot"><span class="annottext">xForceMD_2 :: MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#xForceMD_2"><span class="hs-identifier hs-var hs-var">xForceMD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679086679"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087572"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679086678"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-261"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086679"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679086679"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679087571"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-261"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087572"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679087572"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -1144,8 +1144,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-263"></span><span>          </span><span id="local-6989586621679086678"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
-</span><a href="#local-6989586621679086678"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+</span><span id="line-263"></span><span>          </span><span id="local-6989586621679087571"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679087571"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-264"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
@@ -1173,7 +1173,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Drasil.DblPendulum.Concepts.html#secondObject"><span class="hs-identifier hs-var">secondObject</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MultiDefn -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#xForceMD_2"><span class="hs-identifier hs-var">xForceMD_2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-271"></span><span>
@@ -1207,11 +1207,11 @@ forall a. a -&gt; Maybe a
 </span><span id="line-280"></span><span id="yForceMD_2"><span class="annot"><span class="annottext">yForceMD_2 :: MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#yForceMD_2"><span class="hs-identifier hs-var hs-var">yForceMD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679086674"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087567"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679086673"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-281"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086674"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679086674"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679087566"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-281"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087567"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679087567"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -1233,8 +1233,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-283"></span><span>          </span><span id="local-6989586621679086673"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
-</span><a href="#local-6989586621679086673"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+</span><span id="line-283"></span><span>          </span><span id="local-6989586621679087566"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679087566"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-284"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
@@ -1262,7 +1262,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Drasil.DblPendulum.Concepts.html#secondObject"><span class="hs-identifier hs-var">secondObject</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MultiDefn -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#yForceMD_2"><span class="hs-identifier hs-var">yForceMD_2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-291"></span></pre></body></html>

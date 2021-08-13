@@ -29,7 +29,7 @@
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -40,7 +40,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -151,7 +151,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="Data.Drasil.Theories.Physics.html#weightDerivEqns"><span class="hs-identifier hs-var hs-var">weightDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivAccelEqn"><span class="hs-identifier hs-var">weightDerivAccelEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivNewtonEqn"><span class="hs-identifier hs-var">weightDerivNewtonEqn</span></a></span><span class="hs-special">,</span><span> </span><span>
@@ -428,7 +428,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the magnitude of the vector&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#speedEqn"><span class="hs-identifier hs-var">speedEqn</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.isThe`</span></span><span>
@@ -455,7 +455,7 @@ forall a. Maybe a
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -466,7 +466,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -560,7 +560,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -572,7 +572,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -607,7 +607,7 @@ r -&gt; DecRef
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -619,7 +619,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String

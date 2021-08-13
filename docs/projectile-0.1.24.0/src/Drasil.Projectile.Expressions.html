@@ -232,11 +232,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span id="line-41"></span><span id="message"><span class="annot"><span class="annottext">message :: Expr
 </span><a href="Drasil.Projectile.Expressions.html#message"><span class="hs-identifier hs-var hs-var">message</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(Expr, Expr)] -&gt; Expr
 </span><span class="hs-identifier hs-var">completeCase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Expr, Expr)
-</span><a href="#local-6989586621679090949"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr, Expr)
-</span><a href="#local-6989586621679090948"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr, Expr)
-</span><a href="#local-6989586621679090947"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-42"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679090949"><span class="annot"><span class="annottext">case1 :: (Expr, Expr)
-</span><a href="#local-6989586621679090949"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Expr
+</span><a href="#local-6989586621679091989"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr, Expr)
+</span><a href="#local-6989586621679091988"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr, Expr)
+</span><a href="#local-6989586621679091987"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-42"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679091989"><span class="annot"><span class="annottext">case1 :: (Expr, Expr)
+</span><a href="#local-6989586621679091989"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Expr
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The target was hit.&quot;</span></span><span class="hs-special">,</span><span>        </span><span class="annot"><span class="annottext">Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">abs_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -250,16 +250,16 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-var">tol</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span>        </span><span id="local-6989586621679090948"><span class="annot"><span class="annottext">case2 :: (Expr, Expr)
-</span><a href="#local-6989586621679090948"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Expr
+</span><span id="line-43"></span><span>        </span><span id="local-6989586621679091988"><span class="annot"><span class="annottext">case2 :: (Expr, Expr)
+</span><a href="#local-6989586621679091988"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Expr
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The projectile fell short.&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-44"></span><span>        </span><span id="local-6989586621679090947"><span class="annot"><span class="annottext">case3 :: (Expr, Expr)
-</span><a href="#local-6989586621679090947"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Expr
+</span><span id="line-44"></span><span>        </span><span id="local-6989586621679091987"><span class="annot"><span class="annottext">case3 :: (Expr, Expr)
+</span><a href="#local-6989586621679091987"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Expr
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The projectile went long.&quot;</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -586,7 +586,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span id="line-86"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectVel"><span class="hs-identifier hs-type">lcrectVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectPos"><span class="hs-identifier hs-type">lcrectPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectNoTime"><span class="hs-identifier hs-type">lcrectNoTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
 </span><span id="line-87"></span><span id="lcrectVel"><span class="annot"><span class="annottext">lcrectVel :: LabelledContent
 </span><a href="Drasil.Projectile.Expressions.html#lcrectVel"><span class="hs-identifier hs-var hs-var">lcrectVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Reference -&gt; LabelledContent
-forall c. Display c =&gt; c -&gt; Reference -&gt; LabelledContent
+forall c. Express c =&gt; c -&gt; Reference -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -596,7 +596,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;rectVel&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-88"></span><span id="lcrectPos"><span class="annot"><span class="annottext">lcrectPos :: LabelledContent
 </span><a href="Drasil.Projectile.Expressions.html#lcrectPos"><span class="hs-identifier hs-var hs-var">lcrectPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Reference -&gt; LabelledContent
-forall c. Display c =&gt; c -&gt; Reference -&gt; LabelledContent
+forall c. Express c =&gt; c -&gt; Reference -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -606,7 +606,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;rectPos&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-89"></span><span id="lcrectNoTime"><span class="annot"><span class="annottext">lcrectNoTime :: LabelledContent
 </span><a href="Drasil.Projectile.Expressions.html#lcrectNoTime"><span class="hs-identifier hs-var hs-var">lcrectNoTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Reference -&gt; LabelledContent
-forall c. Display c =&gt; c -&gt; Reference -&gt; LabelledContent
+forall c. Express c =&gt; c -&gt; Reference -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.Projectile.Expressions.html#rectNoTime"><span class="hs-identifier hs-var">rectNoTime</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;rectNoTime&quot;</span></span><span class="hs-special">)</span><span>

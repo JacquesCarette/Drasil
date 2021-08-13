@@ -73,13 +73,13 @@ digraph alltypes {
 	}
 	subgraph codeexpr {
 	}
-	subgraph diplayexprs {
-	}
 	subgraph document {
 	}
 	subgraph expr {
 	}
 	subgraph helpers {
+	}
+	subgraph modelexpr {
 	}
 	subgraph sentence {
 	}

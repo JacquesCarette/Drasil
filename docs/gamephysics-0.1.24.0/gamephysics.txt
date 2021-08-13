@@ -167,9 +167,9 @@ angularGS :: ConceptInstance
 
 module Drasil.GamePhysics.Expressions
 transMotExpr :: Expr
-transMotExprDeriv1 :: DisplayExpr
+transMotExprDeriv1 :: ModelExpr
 rotMotExpr :: Expr
-rotMotExprDeriv1 :: DisplayExpr
+rotMotExprDeriv1 :: ModelExpr
 
 module Drasil.GamePhysics.DataDefs
 dataDefs :: [DataDefinition]

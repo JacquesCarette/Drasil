@@ -247,10 +247,10 @@ enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
 
 -- | Constructs <a>LabelledContent</a> from an expression and a reference.
-lbldExpr :: Display c => c -> Reference -> LabelledContent
+lbldExpr :: Express c => c -> Reference -> LabelledContent
 
 -- | Same as <tt>eqUnR</tt> except content is unlabelled.
-unlbldExpr :: Display c => c -> Contents
+unlbldExpr :: Express c => c -> Contents
 
 -- | Creates a blank document with no text.
 blank :: Doc
@@ -386,7 +386,7 @@ eqN :: Int -> Sentence
 
 -- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
 --   "expression (source)".
-eqnWSource :: (Display e, Referable r, HasShortName r) => e -> r -> Sentence
+eqnWSource :: (Express e, Referable r, HasShortName r) => e -> r -> Sentence
 
 -- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
 --   as a <a>Sentence</a>: "From <tt>source</tt> we can replace

@@ -968,10 +968,60 @@ module Language.Drasil.Printing.Import.Space
 -- | Render a <a>Space</a>.
 space :: PrintingInformation -> Space -> Expr
 
-module Language.Drasil.Printing.Import.DisplayExpr
+module Language.Drasil.Printing.Import.ModelExpr
 
--- | Translate DisplayExprs to printable layout AST.
-dispExpr :: DisplayExpr -> PrintingInformation -> Expr
+-- | Helper that adds parenthesis to a display expression where
+--   appropriate.
+modelExpr' :: PrintingInformation -> Int -> ModelExpr -> Expr
+
+-- | Helper that creates an expression row given printing information, an
+--   operator, and an expression.
+mkCall :: PrintingInformation -> Ops -> ModelExpr -> Expr
+
+-- | Helper that creates a binary expression row given printing
+--   information, an operator, and two expressions.
+mkBOp :: PrintingInformation -> Ops -> ModelExpr -> ModelExpr -> Expr
+
+-- | Helper for properly rendering negation of expressions.
+neg' :: ModelExpr -> Bool
+
+-- | Render negated expressions.
+neg :: PrintingInformation -> ModelExpr -> Expr
+
+-- | For printing indexes.
+indx :: PrintingInformation -> ModelExpr -> ModelExpr -> Expr
+
+-- | For printing expressions that call something.
+call :: PrintingInformation -> UID -> [ModelExpr] -> [(UID, ModelExpr)] -> Expr
+
+-- | Helper function for addition <tt>EOperator</tt>s.
+eopAdds :: PrintingInformation -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> Expr
+
+-- | Helper function for multiplicative <tt>EOperator</tt>s.
+eopMuls :: PrintingInformation -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> Expr
+
+-- | Helper function for translating <tt>EOperator</tt>s.
+eop :: PrintingInformation -> AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> Expr
+
+-- | Translate Exprs to printable layout AST.
+modelExpr :: ModelExpr -> PrintingInformation -> Expr
+
+-- | Common method of converting associative operations into printable
+--   layout AST.
+assocExpr :: Ops -> Int -> [ModelExpr] -> PrintingInformation -> Expr
+
+-- | Helper for rendering printable expressions.
+mulExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [Expr]
+
+-- | Helper that adds parenthesis to the first expression. The second
+--   expression is written as a superscript attached to the first.
+withParens :: PrintingInformation -> ModelExpr -> ModelExpr -> Expr
+
+-- | Helper for properly rendering exponents.
+pow :: PrintingInformation -> ModelExpr -> ModelExpr -> Expr
+
+-- | Print a <a>RealInterval</a>.
+renderRealInt :: PrintingInformation -> Symbol -> RealInterval ModelExpr ModelExpr -> Expr
 
 module Language.Drasil.Printing.Import.Sentence
 
@@ -1044,8 +1094,8 @@ expr :: Expr -> PrintingInformation -> Expr
 -- | Translate Exprs to printable layout AST.
 codeExpr :: CodeExpr -> PrintingInformation -> Expr
 
--- | Translate DisplayExprs to printable layout AST.
-dispExpr :: DisplayExpr -> PrintingInformation -> Expr
+-- | Translate Exprs to printable layout AST.
+modelExpr :: ModelExpr -> PrintingInformation -> Expr
 
 -- | Render a <a>Space</a>.
 space :: PrintingInformation -> Space -> Expr

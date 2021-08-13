@@ -1,0 +1,3 @@
+digraph statbinop{
+StatBinOp	[shape=oval, color=darkviolet, label="StatBinOp"];
+}

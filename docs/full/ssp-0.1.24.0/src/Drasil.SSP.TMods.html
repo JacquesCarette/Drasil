@@ -45,7 +45,7 @@
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -57,7 +57,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -115,7 +115,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -127,7 +127,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -140,11 +140,11 @@ ModelKind
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#fx"><span class="hs-identifier hs-var">fx</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-53"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Expr -&gt; DisplayExpr) -&gt; [Expr] -&gt; [DisplayExpr]
+</span><span id="line-53"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Expr -&gt; ModelExpr) -&gt; [Expr] -&gt; [ModelExpr]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; DisplayExpr
-forall c. Display c =&gt; c -&gt; DisplayExpr
-</span><span class="hs-identifier hs-var">toDispExpr</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; ModelExpr
+forall c. Express c =&gt; c -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="Drasil.SSP.TMods.html#equilibriumRels"><span class="hs-identifier hs-var">equilibriumRels</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
@@ -225,7 +225,7 @@ forall a. Quantity a =&gt; a -&gt; Sentence
 </span><a href="Drasil.SSP.Unitals.html#fy"><span class="hs-identifier hs-var">fy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;will be equal to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;All&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -245,7 +245,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><a href="Drasil.SSP.Unitals.html#genericM"><span class="hs-identifier hs-var">genericM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;equal to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-74"></span><span>
@@ -257,7 +257,7 @@ forall d. Display d =&gt; d -&gt; Sentence
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -269,7 +269,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -372,7 +372,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in the angular form&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
 </span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
-forall d. Display d =&gt; d -&gt; Sentence
+forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">tan</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; Expr -&gt; Expr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -436,7 +436,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String
@@ -448,7 +448,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; [DecRef]
 -&gt; String

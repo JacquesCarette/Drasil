@@ -68,7 +68,7 @@ instance Language.Drasil.Classes.NamedIdea Theory.Drasil.ConstraintSet.Constrain
 instance Language.Drasil.Classes.Idea Theory.Drasil.ConstraintSet.ConstraintSet
 instance Language.Drasil.Classes.Definition Theory.Drasil.ConstraintSet.ConstraintSet
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.ConstraintSet.ConstraintSet
-instance Language.Drasil.DisplayClasses.Display Theory.Drasil.ConstraintSet.ConstraintSet
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.ConstraintSet.ConstraintSet
 
 module Theory.Drasil.DataDefinition
 
@@ -120,7 +120,7 @@ instance Language.Drasil.Classes.HasSpace Theory.Drasil.DataDefinition.DataDefin
 instance Language.Drasil.Classes.Core.HasSymbol Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.Quantity Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.DefiningExpr Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.DisplayClasses.Display Theory.Drasil.DataDefinition.DataDefinition
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasDecRef Theory.Drasil.DataDefinition.DataDefinition
 instance GHC.Classes.Eq Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.DataDefinition.DataDefinition
@@ -169,7 +169,7 @@ instance Language.Drasil.Classes.Quantity Theory.Drasil.MultiDefn.MultiDefn
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.MultiDefn.MultiDefn
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.MultiDefn.MultiDefn
 instance Language.Drasil.Classes.Definition Theory.Drasil.MultiDefn.MultiDefn
-instance Language.Drasil.DisplayClasses.Display Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.MultiDefn.MultiDefn
 instance GHC.Classes.Eq Theory.Drasil.MultiDefn.DefiningExpr
 instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.MultiDefn.DefiningExpr
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.MultiDefn.DefiningExpr
@@ -277,13 +277,13 @@ instance Language.Drasil.Classes.NamedIdea Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.Idea Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.Definition Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.ModelKinds.ModelKinds
-instance Language.Drasil.DisplayClasses.Display Theory.Drasil.ModelKinds.ModelKinds
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.ModelKinds.ModelKind
 instance Language.Drasil.Classes.NamedIdea Theory.Drasil.ModelKinds.ModelKind
 instance Language.Drasil.Classes.Idea Theory.Drasil.ModelKinds.ModelKind
 instance Language.Drasil.Classes.Definition Theory.Drasil.ModelKinds.ModelKind
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.ModelKinds.ModelKind
-instance Language.Drasil.DisplayClasses.Display Theory.Drasil.ModelKinds.ModelKind
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.ModelKinds.ModelKind
 
 module Theory.Drasil.InstanceModel
 
@@ -321,7 +321,7 @@ instance Language.Drasil.Classes.NamedIdea Theory.Drasil.InstanceModel.InstanceM
 instance Language.Drasil.Classes.Idea Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.Definition Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.InstanceModel.InstanceModel
-instance Language.Drasil.DisplayClasses.Display Theory.Drasil.InstanceModel.InstanceModel
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.HasDecRef Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.Core2.HasShortName Theory.Drasil.InstanceModel.InstanceModel
@@ -357,7 +357,7 @@ instance Language.Drasil.Classes.NamedIdea Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Idea Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Definition Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.GenDefn.GenDefn
-instance Language.Drasil.DisplayClasses.Display Theory.Drasil.GenDefn.GenDefn
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.HasDecRef Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Core2.HasShortName Theory.Drasil.GenDefn.GenDefn
@@ -377,7 +377,7 @@ spaces :: Theory t => Lens' t [SpaceDefn]
 quantities :: Theory t => Lens' t [QuantityDict]
 operations :: Theory t => Lens' t [ConceptChunk]
 defined_quant :: Theory t => Lens' t [QDefinition]
-invariants :: Theory t => Lens' t [DisplayExpr]
+invariants :: Theory t => Lens' t [ModelExpr]
 defined_fun :: Theory t => Lens' t [QDefinition]
 
 -- | A TheoryModel is a collection of:
@@ -390,7 +390,7 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 --   <li>quan - quantities (<a>QuantityDict</a>s),</li>
 --   <li>ops - operations (<a>ConceptChunk</a>s),</li>
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
---   <li>invs - invariants (<a>DisplayExpr</a>s),</li>
+--   <li>invs - invariants (<tt>DisplayExpr</tt>s),</li>
 --   <li>dfun - defined functions (<a>QDefinition</a>s),</li>
 --   <li>ref - accompanying references (<a>DecRef</a>s),</li>
 --   <li>lb - a label (<a>SpaceDefn</a>),</li>
@@ -404,11 +404,11 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [ModelExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [ModelExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
 instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.NamedIdea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Idea Theory.Drasil.Theory.TheoryModel
@@ -596,7 +596,7 @@ spaces :: Theory t => Lens' t [SpaceDefn]
 quantities :: Theory t => Lens' t [QuantityDict]
 operations :: Theory t => Lens' t [ConceptChunk]
 defined_quant :: Theory t => Lens' t [QDefinition]
-invariants :: Theory t => Lens' t [DisplayExpr]
+invariants :: Theory t => Lens' t [ModelExpr]
 defined_fun :: Theory t => Lens' t [QDefinition]
 
 -- | A TheoryModel is a collection of:
@@ -609,7 +609,7 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 --   <li>quan - quantities (<a>QuantityDict</a>s),</li>
 --   <li>ops - operations (<a>ConceptChunk</a>s),</li>
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
---   <li>invs - invariants (<a>DisplayExpr</a>s),</li>
+--   <li>invs - invariants (<tt>DisplayExpr</tt>s),</li>
 --   <li>dfun - defined functions (<a>QDefinition</a>s),</li>
 --   <li>ref - accompanying references (<a>DecRef</a>s),</li>
 --   <li>lb - a label (<a>SpaceDefn</a>),</li>
@@ -623,8 +623,8 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [ModelExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [ModelExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel

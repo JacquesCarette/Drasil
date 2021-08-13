@@ -39,7 +39,7 @@
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -50,7 +50,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -196,7 +196,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -207,7 +207,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -237,9 +237,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#distMass"><span class="hs-identifier hs-var">distMass</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-60"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelKind -&gt; DisplayExpr
-forall c. Display c =&gt; c -&gt; DisplayExpr
-</span><span class="hs-identifier hs-var">toDispExpr</span></span><span> </span><span class="annot"><span class="annottext">ModelKind
+</span><span id="line-60"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelKind -&gt; ModelExpr
+forall c. Express c =&gt; c -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">ModelKind
 </span><a href="Drasil.GamePhysics.TMods.html#newtonLUGModel"><span class="hs-identifier hs-var">newtonLUGModel</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;UniversalGravLaw&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.GamePhysics.TMods.html#newtonLUGNotes"><span class="hs-identifier hs-var">newtonLUGNotes</span></a></span><span>
 </span><span id="line-61"></span><span>
@@ -319,7 +319,7 @@ forall a. Quantity a =&gt; a -&gt; Sentence
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]
@@ -330,7 +330,7 @@ ModelKind
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [DisplayExpr]
+-&gt; [ModelExpr]
 -&gt; [QDefinition]
 -&gt; String
 -&gt; [Sentence]

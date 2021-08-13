@@ -1566,32 +1566,32 @@
 <!-- DecRef -->
 <g id="node45" class="node">
 <title>DecRef</title>
-<ellipse fill="none" stroke="#00868b" cx="1175.92" cy="-2191.74" rx="44.39" ry="18"/>
-<text text-anchor="middle" x="1175.92" y="-2188.04" font-family="Times,serif" font-size="14.00">DecRef</text>
+<ellipse fill="none" stroke="#00868b" cx="1215.4" cy="-2472.63" rx="44.39" ry="18"/>
+<text text-anchor="middle" x="1215.4" y="-2468.93" font-family="Times,serif" font-size="14.00">DecRef</text>
 </g>
 <!-- DecRef&#45;&gt;Eq -->
 <g id="edge187" class="edge">
 <title>DecRef&#45;&gt;Eq</title>
-<path fill="none" stroke="black" d="M1196.51,-2207.82C1414.17,-2377.87 3289.35,-3842.93 3531.46,-4032.08"/>
-<polygon fill="black" stroke="black" points="3529.34,-4034.87 3539.38,-4038.27 3533.65,-4029.36 3529.34,-4034.87"/>
+<path fill="none" stroke="black" d="M1238.57,-2488.26C1465.21,-2641.13 3282.78,-3867.09 3529.48,-4033.5"/>
+<polygon fill="black" stroke="black" points="3527.66,-4036.49 3537.91,-4039.18 3531.57,-4030.68 3527.66,-4036.49"/>
 </g>
 <!-- DecRef&#45;&gt;HasUID -->
 <g id="edge188" class="edge">
 <title>DecRef&#45;&gt;HasUID</title>
-<path fill="none" stroke="black" d="M1181.11,-2209.85C1211.29,-2315.09 1364,-2847.66 1400.91,-2976.38"/>
-<polygon fill="black" stroke="black" points="1397.63,-2977.61 1403.75,-2986.26 1404.35,-2975.68 1397.63,-2977.61"/>
+<path fill="none" stroke="black" d="M1221.95,-2490.62C1250.52,-2569.14 1364.38,-2881.95 1398.95,-2976.93"/>
+<polygon fill="black" stroke="black" points="1395.69,-2978.22 1402.4,-2986.42 1402.27,-2975.83 1395.69,-2978.22"/>
 </g>
 <!-- DecRef&#45;&gt;HasShortName -->
 <g id="edge190" class="edge">
 <title>DecRef&#45;&gt;HasShortName</title>
-<path fill="none" stroke="black" d="M1178.49,-2173.47C1193.62,-2065.78 1271.17,-1513.97 1289.63,-1382.62"/>
-<polygon fill="black" stroke="black" points="1293.12,-1382.95 1291.05,-1372.56 1286.19,-1381.97 1293.12,-1382.95"/>
+<path fill="none" stroke="black" d="M1216.66,-2454.61C1225.68,-2325.56 1280.45,-1542.29 1291.6,-1382.85"/>
+<polygon fill="black" stroke="black" points="1295.09,-1383.08 1292.3,-1372.86 1288.11,-1382.59 1295.09,-1383.08"/>
 </g>
 <!-- DecRef&#45;&gt;HasRefAddress -->
 <g id="edge189" class="edge">
 <title>DecRef&#45;&gt;HasRefAddress</title>
-<path fill="none" stroke="black" d="M1175.92,-2173.56C1175.92,-2125.43 1175.92,-1994.39 1175.92,-1936.37"/>
-<polygon fill="black" stroke="black" points="1179.42,-1936.11 1175.92,-1926.11 1172.42,-1936.11 1179.42,-1936.11"/>
+<path fill="none" stroke="black" d="M1214.13,-2454.48C1208.4,-2372.53 1184.91,-2036.58 1177.9,-1936.41"/>
+<polygon fill="black" stroke="black" points="1181.37,-1935.89 1177.18,-1926.16 1174.39,-1936.38 1181.37,-1935.89"/>
 </g>
 <!-- Derivation -->
 <g id="node46" class="node">
@@ -1836,32 +1836,38 @@
 <!-- Reference -->
 <g id="node75" class="node">
 <title>Reference</title>
-<ellipse fill="none" stroke="#00868b" cx="1215.4" cy="-2472.63" rx="57.69" ry="18"/>
-<text text-anchor="middle" x="1215.4" y="-2468.93" font-family="Times,serif" font-size="14.00">Reference</text>
+<ellipse fill="none" stroke="#00868b" cx="1175.92" cy="-2191.74" rx="57.69" ry="18"/>
+<text text-anchor="middle" x="1175.92" y="-2188.04" font-family="Times,serif" font-size="14.00">Reference</text>
 </g>
 <!-- Reference&#45;&gt;Eq -->
 <g id="edge202" class="edge">
 <title>Reference&#45;&gt;Eq</title>
-<path fill="none" stroke="black" d="M1239.72,-2489.03C1471.3,-2645.23 3283.6,-3867.65 3529.57,-4033.55"/>
-<polygon fill="black" stroke="black" points="3527.72,-4036.53 3537.96,-4039.22 3531.63,-4030.72 3527.72,-4036.53"/>
+<path fill="none" stroke="black" d="M1197.6,-2208.68C1420.4,-2382.74 3290.15,-3843.55 3531.54,-4032.15"/>
+<polygon fill="black" stroke="black" points="3529.4,-4034.91 3539.43,-4038.31 3533.71,-4029.4 3529.4,-4034.91"/>
 </g>
 <!-- Reference&#45;&gt;HasUID -->
 <g id="edge203" class="edge">
 <title>Reference&#45;&gt;HasUID</title>
-<path fill="none" stroke="black" d="M1221.95,-2490.62C1250.52,-2569.14 1364.38,-2881.95 1398.95,-2976.93"/>
-<polygon fill="black" stroke="black" points="1395.69,-2978.22 1402.4,-2986.42 1402.27,-2975.83 1395.69,-2978.22"/>
+<path fill="none" stroke="black" d="M1181.11,-2209.85C1211.29,-2315.09 1364,-2847.66 1400.91,-2976.38"/>
+<polygon fill="black" stroke="black" points="1397.63,-2977.61 1403.75,-2986.26 1404.35,-2975.68 1397.63,-2977.61"/>
 </g>
 <!-- Reference&#45;&gt;HasShortName -->
 <g id="edge205" class="edge">
 <title>Reference&#45;&gt;HasShortName</title>
-<path fill="none" stroke="black" d="M1216.66,-2454.61C1225.68,-2325.56 1280.45,-1542.29 1291.6,-1382.85"/>
-<polygon fill="black" stroke="black" points="1295.09,-1383.08 1292.3,-1372.86 1288.11,-1382.59 1295.09,-1383.08"/>
+<path fill="none" stroke="black" d="M1178.49,-2173.47C1193.62,-2065.78 1271.17,-1513.97 1289.63,-1382.62"/>
+<polygon fill="black" stroke="black" points="1293.12,-1382.95 1291.05,-1372.56 1286.19,-1381.97 1293.12,-1382.95"/>
 </g>
 <!-- Reference&#45;&gt;HasRefAddress -->
 <g id="edge204" class="edge">
 <title>Reference&#45;&gt;HasRefAddress</title>
-<path fill="none" stroke="black" d="M1214.13,-2454.48C1208.4,-2372.53 1184.91,-2036.58 1177.9,-1936.41"/>
-<polygon fill="black" stroke="black" points="1181.37,-1935.89 1177.18,-1926.16 1174.39,-1936.38 1181.37,-1935.89"/>
+<path fill="none" stroke="black" d="M1175.92,-2173.56C1175.92,-2125.43 1175.92,-1994.39 1175.92,-1936.37"/>
+<polygon fill="black" stroke="black" points="1179.42,-1936.11 1175.92,-1926.11 1172.42,-1936.11 1179.42,-1936.11"/>
+</g>
+<!-- Reference&#45;&gt;Referable -->
+<g id="edge206" class="edge">
+<title>Reference&#45;&gt;Referable</title>
+<path fill="none" stroke="black" d="M1182.47,-2173.74C1240.15,-2015.27 1661.06,-858.82 1731.58,-665.07"/>
+<polygon fill="black" stroke="black" points="1734.89,-666.2 1735.03,-655.61 1728.32,-663.81 1734.89,-666.2"/>
 </g>
 <!-- SentenceStyle -->
 <g id="node76" class="node">
@@ -1894,7 +1900,7 @@
 <text text-anchor="middle" x="1830.66" y="-1358.21" font-family="Times,serif" font-size="14.00">Semigroup</text>
 </g>
 <!-- Sentence&#45;&gt;Semigroup -->
-<g id="edge206" class="edge">
+<g id="edge207" class="edge">
 <title>Sentence&#45;&gt;Semigroup</title>
 <path fill="none" stroke="black" d="M1937.81,-1254.76C1916.39,-1276.19 1879.74,-1312.83 1855.37,-1337.21"/>
 <polygon fill="black" stroke="black" points="1852.82,-1334.81 1848.22,-1344.35 1857.77,-1339.76 1852.82,-1334.81"/>
@@ -1906,7 +1912,7 @@
 <text text-anchor="middle" x="2079.57" y="-1358.21" font-family="Times,serif" font-size="14.00">Monoid</text>
 </g>
 <!-- Sentence&#45;&gt;Monoid -->
-<g id="edge207" class="edge">
+<g id="edge208" class="edge">
 <title>Sentence&#45;&gt;Monoid</title>
 <path fill="none" stroke="black" d="M1972.42,-1254.76C1994.09,-1276.43 2031.32,-1313.66 2055.69,-1338.03"/>
 <polygon fill="black" stroke="black" points="2053.26,-1340.55 2062.81,-1345.15 2058.21,-1335.6 2053.26,-1340.55"/>
@@ -1954,7 +1960,7 @@
 <text text-anchor="middle" x="2105.46" y="-1112.21" font-family="Times,serif" font-size="14.00">Stage</text>
 </g>
 <!-- Stage&#45;&gt;Show -->
-<g id="edge208" class="edge">
+<g id="edge209" class="edge">
 <title>Stage&#45;&gt;Show</title>
 <path fill="none" stroke="black" d="M2067.46,-1115.91C2048.67,-1115.91 2025.82,-1115.91 2005.98,-1115.91"/>
 <polygon fill="black" stroke="black" points="2005.92,-1112.41 1995.92,-1115.91 2005.92,-1119.41 2005.92,-1112.41"/>
@@ -1972,13 +1978,13 @@
 <text text-anchor="middle" x="1955.12" y="-1482.66" font-family="Times,serif" font-size="14.00">Symbol</text>
 </g>
 <!-- Symbol&#45;&gt;Semigroup -->
-<g id="edge209" class="edge">
+<g id="edge210" class="edge">
 <title>Symbol&#45;&gt;Semigroup</title>
 <path fill="none" stroke="black" d="M1938.33,-1469.58C1916.93,-1448.17 1879.75,-1410.99 1855.17,-1386.42"/>
 <polygon fill="black" stroke="black" points="1857.53,-1383.82 1847.98,-1379.23 1852.58,-1388.77 1857.53,-1383.82"/>
 </g>
 <!-- Symbol&#45;&gt;Monoid -->
-<g id="edge210" class="edge">
+<g id="edge211" class="edge">
 <title>Symbol&#45;&gt;Monoid</title>
 <path fill="none" stroke="black" d="M1971.9,-1469.58C1993.43,-1448.05 2030.9,-1410.58 2055.47,-1386.01"/>
 <polygon fill="black" stroke="black" points="2058.06,-1388.37 2062.65,-1378.83 2053.11,-1383.42 2058.06,-1388.37"/>

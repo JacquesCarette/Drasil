@@ -1009,7 +1009,7 @@ module Drasil.NBSections.Introduction
 
 -- | Constructor for the Notebook introduction section problemIntroduction
 --   - Sentence introducing the specific example problem programDefinition
---   - Sentence definition of the specific example **** programDefinition :
+--   - Sentence definition of the specific example ---- programDefinition :
 --   maybe just topic
 introductionSection :: [Contents] -> [Section] -> Section
 
@@ -1644,7 +1644,7 @@ mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> D
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
---   references and traceability matrix information.
+--   references, traceability matrix information and <a>IdeaDict</a>s.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Fill in the <a>Section</a>s and <a>LabelledContent</a> maps of the
@@ -1872,7 +1872,7 @@ fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
---   references and traceability matrix information.
+--   references, traceability matrix information and <a>IdeaDict</a>s.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Recursively find all references in a section (meant for getting at
@@ -2611,7 +2611,7 @@ mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> D
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
---   references and traceability matrix information.
+--   references, traceability matrix information and <a>IdeaDict</a>s.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Default Reference Material section introduction.

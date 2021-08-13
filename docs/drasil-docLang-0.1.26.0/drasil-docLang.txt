@@ -723,7 +723,7 @@ fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
---   references and traceability matrix information.
+--   references, traceability matrix information and <a>IdeaDict</a>s.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Recursively find all references in a section (meant for getting at
@@ -1462,7 +1462,7 @@ mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> D
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
---   references and traceability matrix information.
+--   references, traceability matrix information and <a>IdeaDict</a>s.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Default Reference Material section introduction.

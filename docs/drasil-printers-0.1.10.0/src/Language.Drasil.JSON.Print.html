@@ -472,9 +472,9 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679144418"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Doc
 </span><a href="Language.Drasil.JSON.Print.html#pExpr"><span class="hs-identifier hs-var">pExpr</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="#local-6989586621679144418"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span>
-</span><span id="line-120"></span><span class="hs-comment">--pExpr (Font Bold e)  = bold $ pExpr e -- **used before</span><span>
-</span><span id="line-121"></span><span class="hs-comment">--pExpr (Font Emph e)  = text &quot;&lt;em&gt;&quot; &lt;&gt; pExpr e &lt;&gt; text &quot;&lt;/em&gt;&quot; -- **HTML used</span><span>
-</span><span id="line-122"></span><span class="hs-comment">--pExpr (Spc Thin)     = text &quot;&amp;#8239;&quot; -- **HTML used</span><span>
+</span><span id="line-120"></span><span class="hs-comment">--pExpr (Font Bold e)  = bold $ pExpr e -- used before</span><span>
+</span><span id="line-121"></span><span class="hs-comment">--pExpr (Font Emph e)  = text &quot;&lt;em&gt;&quot; &lt;&gt; pExpr e &lt;&gt; text &quot;&lt;/em&gt;&quot; -- HTML used</span><span>
+</span><span id="line-122"></span><span class="hs-comment">--pExpr (Spc Thin)     = text &quot;&amp;#8239;&quot; -- HTML used</span><span>
 </span><span id="line-123"></span><span class="hs-comment">-- Uses TeX for Mathjax for all other exprs </span><span>
 </span><span id="line-124"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#pExpr"><span class="hs-identifier hs-var">pExpr</span></a></span><span> </span><span id="local-6989586621679144417"><span class="annot"><span class="annottext">e :: Expr
 </span><a href="#local-6989586621679144417"><span class="hs-identifier hs-var">e</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">D -&gt; Doc
@@ -491,7 +491,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-127"></span><span>  </span><span class="hs-comment">--      mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e</span><span>
 </span><span id="line-128"></span><span>
 </span><span id="line-129"></span><span>
-</span><span id="line-130"></span><span class="hs-comment">-- **TODO: edit all operations in markdown format</span><span>
+</span><span id="line-130"></span><span class="hs-comment">-- TODO: edit all operations in markdown format</span><span>
 </span><span id="line-131"></span><span class="annot"><a href="Language.Drasil.JSON.Print.html#pOps"><span class="hs-identifier hs-type">pOps</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.AST.html#Ops"><span class="hs-identifier hs-type">Ops</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-132"></span><span id="pOps"><span class="annot"><span class="annottext">pOps :: Ops -&gt; String
 </span><a href="Language.Drasil.JSON.Print.html#pOps"><span class="hs-identifier hs-var hs-var">pOps</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Printing.AST.html#IsIn"><span class="hs-identifier hs-type">IsIn</span></a></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&amp;thinsp;&amp;isin;&amp;thinsp;&quot;</span></span><span>

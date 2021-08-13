@@ -221,10 +221,14 @@ defint, defsum, defprod :: Symbol -> ModelExpr -> ModelExpr -> ModelExpr -> Mode
 -- | Smart constructor for the summation, product, and integral functions over all Real numbers.
 intAll, sumAll, prodAll :: Symbol -> ModelExpr -> ModelExpr
 
+-- | Smart constructor for the summation, product, and integral functions over an interval.
 defint v low high = Operator AddRe (BoundedDD v Continuous low high)
+-- | Integrate over some expression (∫).
 intAll v = Operator AddRe (AllDD v Continuous)
 
+-- | Sum over some expression with bounds (∑).
 defsum v low high = Operator AddRe (BoundedDD v Discrete low high)
+-- | Sum over some expression (∑).
 sumAll v = Operator AddRe (AllDD v Discrete)
 
 defprod v low high = Operator MulRe (BoundedDD v Discrete low high)
@@ -248,11 +252,11 @@ sum' = foldr1 (+)
 cross :: ModelExpr -> ModelExpr -> ModelExpr
 cross = VVVBinaryOp Cross
 
--- | Smart constructor for case statement with complete set of cases.
+-- | Smart constructor for case statements with a complete set of cases.
 completeCase :: [(ModelExpr,ModelExpr)] -> ModelExpr
 completeCase = Case Complete
 
--- | Smart constructor for case statement with incomplete set of cases.
+-- | Smart constructor for case statements with an incomplete set of cases.
 incompleteCase :: [(ModelExpr,ModelExpr)] -> ModelExpr
 incompleteCase = Case Incomplete
 
@@ -272,13 +276,23 @@ oneHalf = frac 1 2
 oneThird :: ModelExpr
 oneThird = frac 1 3
 
--- | Matrix helper function.
+-- | Create a two-by-two matrix from four given values. For example:
+--
+-- >>> m2x2 1 2 3 4
+-- [ [1,2],
+--   [3,4] ]
 m2x2 :: ModelExpr -> ModelExpr -> ModelExpr -> ModelExpr -> ModelExpr
 m2x2 a b c d = Matrix [[a,b],[c,d]]
--- | Matrix helper function.
+
+-- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ModelExpr -> ModelExpr -> ModelExpr
 vec2D a b    = Matrix [[a],[b]]
--- | Matrix helper function.
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--
+-- >>> dgnl2x2 1 2
+-- [ [1, 0],
+--   [0, 2] ]
 dgnl2x2 :: ModelExpr -> ModelExpr -> ModelExpr
 dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
 
@@ -306,7 +320,7 @@ applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns)
   (map snd ns))
 
 -- Note how |sy| 'enforces' having a symbol
--- | Get an 'ModelExpr' from a 'Symbol'.
+-- | Create an 'Expr' from a 'Symbol'ic Chunk.
 sy :: (HasUID c, HasSymbol c) => c -> ModelExpr
 sy x = C (x ^. uid)
 

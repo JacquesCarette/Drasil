@@ -26,8 +26,8 @@ import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
-  termTable, conceptinsTable, idMap, termMap, refbyTable, conceptDB,
-  refTable, labelledcontentTable, sectionTable, theoryModelTable, defTable, symbolTable,
+  termTable, conceptinsTable, idMap, refbyTable, conceptDB,
+  refTable, labelledcontentTable, sectionTable, theoryModelTable,
   insmodelTable, gendefTable, dataDefnTable, refdb, sysinfodb, traceTable,
   generateRefbyMap)
 

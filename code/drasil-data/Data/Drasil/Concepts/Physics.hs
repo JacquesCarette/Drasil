@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
-import Language.Drasil
+import Language.Drasil hiding (space)
 import qualified Utils.Drasil.Sentence as S
 import qualified Utils.Drasil.NounPhrase as NP
 import Utils.Drasil

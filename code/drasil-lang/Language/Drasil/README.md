@@ -24,6 +24,9 @@ Last updated: August 12, 2021
 **Label**
   - Defines the Label type, used in References.
 
+**ModelExpr**
+  - Defines an expression language focused on display features.
+
 **NounPhrase**
   - Defines data types for making noun phrases with proper pluralization and capitalization.
 

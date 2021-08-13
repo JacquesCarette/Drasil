@@ -57,7 +57,7 @@ newtonLUG :: TheoryModel
 newtonLUG = tmNoRefs newtonLUGModel
   [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dVect, qw distMass] ([] :: [ConceptChunk])
-  [] [toDispExpr newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
+  [] [express newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
 
 newtonForceQuant :: QuantityDict
 newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gravitation") Nothing Real (symbol force) Nothing

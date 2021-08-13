@@ -31,12 +31,12 @@ import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPendulum.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName)
+import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
-import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
+import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPendulum.References (citations, koothoor2013, smithLai2005)
@@ -142,7 +142,6 @@ refDB = rdb citations concIns
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
-
 
 ------------------------------
 -- Section : INTRODUCTION --
@@ -270,14 +269,15 @@ prob = foldlSent_ [ S "efficiently and correctly to predict the", phraseNP (moti
 terms :: [ConceptChunk]
 terms = [gravity, cartesian]
 
-tMods :: [TheoryModel]
-tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
-
 -----------------------------------
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = map ((!.) . atStartNP) [the rod, the mass]
+physSystParts = map (!.)
+  [atStartNP (the firstRod) +:+ sParen (S "with" +:+ getTandS lenRod_1),
+   atStartNP (the secondRod) +:+ sParen (S "with" +:+ getTandS lenRod_2),
+   atStartNP (the firstObject),
+   atStartNP (the secondObject)]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -296,6 +296,8 @@ physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 -- Theoretical Models defined in TMs
+tMods :: [TheoryModel]
+tMods = [accelerationTM, velocityTM, newtonSL]
 
 ---------------------------------
 -- 4.2.3 : General Definitions --

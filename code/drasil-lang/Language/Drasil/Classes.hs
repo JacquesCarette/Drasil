@@ -25,9 +25,9 @@ module Language.Drasil.Classes (
   , HasReference(getReferences)
   , HasDecRef(getDecRefs)
     -- ** Expr and expressions
+  , Express(express)
   , HasDerivation(derivations)
   , DefiningExpr(defnExpr)
-  , Display(toDispExpr)
   ) where
 
 -- some classes are so 'core' that they are defined elswhere
@@ -37,8 +37,8 @@ import Language.Drasil.Classes.Core
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
-import Language.Drasil.DisplayClasses (Display(toDispExpr))
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.DecoratedReference(DecRef)

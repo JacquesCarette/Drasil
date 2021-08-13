@@ -11,7 +11,7 @@ import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
 import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..),
-  RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Display(..), UID)
+  RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..), UID)
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -106,8 +106,8 @@ instance Idea          ModelKinds where getA       = elimMk (to getA) (to getA) 
 instance Definition    ModelKinds where defn       = lensMk defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
 instance ConceptDomain ModelKinds where cdom       = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
--- | Rewrites the underlying model using DisplayExpr
-instance Display       ModelKinds where toDispExpr = elimMk (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr)
+-- | Rewrites the underlying model using 'ModelExpr'
+instance Express       ModelKinds where express = elimMk (to express) (to express) (to express) (to express)
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
@@ -121,8 +121,8 @@ instance Idea          ModelKind where getA       = getA . (^. mk)
 instance Definition    ModelKind where defn       = mk . defn
 -- | Finds the domain of the 'ModelKind'.
 instance ConceptDomain ModelKind where cdom       = cdom . (^. mk)
--- | Rewrites the underlying model using DisplayExpr
-instance Display       ModelKind where toDispExpr = toDispExpr . (^. mk)
+-- | Rewrites the underlying model using 'ModelExpr'
+instance Express       ModelKind where express = express . (^. mk)
 
 
 -- | Retrieve internal data from ModelKinds

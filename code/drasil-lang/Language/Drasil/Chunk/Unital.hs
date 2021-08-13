@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', tempdqdWr')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
 import Language.Drasil.Expr.Math (sy)
@@ -56,8 +56,8 @@ instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 instance TempHasUnit       UnitalChunk where findUnit = view uni   
 -- | Equal if 'UID's are equal.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Convert the symbol of the 'UnitalChunk' to a 'DisplayExpr'.
-instance Display       UnitalChunk where toDispExpr = toDispExpr . sy
+-- | Convert the symbol of the 'UnitalChunk' to a 'ModelExpr'.
+instance Express       UnitalChunk where express = express . sy
 
 --{BEGIN HELPER FUNCTIONS}--
 

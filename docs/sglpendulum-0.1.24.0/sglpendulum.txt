@@ -142,3 +142,4 @@ scope :: Sentence
 prob :: Sentence
 terms :: [ConceptChunk]
 tMods :: [TheoryModel]
+physSystParts :: [Sentence]

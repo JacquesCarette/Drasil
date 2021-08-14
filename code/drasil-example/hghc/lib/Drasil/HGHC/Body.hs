@@ -35,7 +35,7 @@ si = SI {
   _configFiles = [],
   _inputs      = htInputs,
   _outputs     = htOutputs,
-  _defSequence = [] :: [Block QDefinition],
+  _defSequence = [] :: [Block (QDefinition Expr)],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
   _sysinfodb   = symbMap,
@@ -57,8 +57,9 @@ symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon' ++ map nw mathcon)
   ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  siUnits dataDefs [] [] [] [] [] [] []
+  siUnits dataDefs [] [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+           [] [] [] [] [] [] [] [] ([] :: [Reference])

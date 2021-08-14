@@ -11,10 +11,10 @@ import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 symbols :: [QuantityDict]
 symbols = htOutputs ++ htInputs
 
-dataDefs :: [DataDefinition]
+dataDefs :: [DataDefinition Expr]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 
-qDefs :: [QDefinition]
+qDefs :: [QDefinition Expr]
 qDefs = [htTransCladFuel, htTransCladCool]
 
 htVars :: [QuantityDict]
@@ -34,11 +34,11 @@ gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
 cladCond     = vc "cladCond"     (cnIES "clad conductivity") (sub lK lClad) Real
 
 htTransCladCoolEq, htTransCladFuelEq :: Expr
-htTransCladCool, htTransCladFuel :: QDefinition
+htTransCladCool, htTransCladFuel :: QDefinition Expr
 
 ---
 
-htTransCladCoolDD :: DataDefinition
+htTransCladCoolDD :: DataDefinition Expr
 htTransCladCoolDD = ddNoRefs htTransCladCool Nothing "htTransCladCool"--Label
   []--no additional notes
 
@@ -52,7 +52,7 @@ htTransCladCoolEq =
 
 ---
 
-htTransCladFuelDD :: DataDefinition
+htTransCladFuelDD :: DataDefinition Expr
 htTransCladFuelDD = ddNoRefs htTransCladFuel Nothing "htTransCladFuel"--Label
   []--no additional notes
 

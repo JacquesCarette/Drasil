@@ -27,7 +27,7 @@ tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   (sub (eqSymb temp) lInit) centigrade Real
   [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 40) defaultUncrt
 
-specParamValList :: [QDefinition]
+specParamValList :: [QDefinition Expr]
 specParamValList = [tankLengthMin, tankLengthMax,
   wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
   coilHTCMin, coilHTCMax, timeFinalMax, arMin, arMax]

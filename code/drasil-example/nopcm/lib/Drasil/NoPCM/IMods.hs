@@ -1,6 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
+import qualified Language.Drasil.ModelExpr as M
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -24,6 +25,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
 
 import Drasil.NoPCM.Assumptions (assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
+import Drasil.NoPCM.Derivations (eBalanceOnWtrDerivEqns)
 
 iMods :: [InstanceModel]
 iMods = [eBalanceOnWtr, heatEInWtr]
@@ -46,9 +48,11 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   "water to find the temperature of the water") (tempW ^. defn) balWtrRel
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
-balWtrRel :: Relation
-balWtrRel = deriv (sy tempW) time $= recip_ (sy tauW) `mulRe`
-  (sy tempC $- apply1 tempW time)
+balWtrRel :: ModelExpr
+balWtrRel = M.deriv (M.sy tempW) time M.$= express balWtrExpr
+
+balWtrExpr :: Expr
+balWtrExpr = recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time)
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
@@ -77,24 +81,6 @@ eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", refS htFluxWaterFromCoil `S.f
 
 eBalanceOnWtrDerivDesc4 :: Sentence
 eBalanceOnWtrDerivDesc4 = substitute [balanceDecayRate]
-
-eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
-
-eBalanceOnWtrDerivEqn1 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $=
-  sy htFluxC `mulRe` sy coilSA
-
-eBalanceOnWtrDerivEqn2 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $=
-  sy coilHTC `mulRe` sy coilSA `mulRe`  (sy tempC $- sy tempW)
-
-eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $=
-  (sy coilHTC `mulRe` sy coilSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW)
-
-eBalanceOnWtrDerivEqn4 =
-  deriv (sy tempW) time $= recip_ (sy tauW) `mulRe` (sy tempC $- sy tempW)
-
-eBalanceOnWtrDerivEqns :: [Expr]
-eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]
 
 -----------
 -- Intro --

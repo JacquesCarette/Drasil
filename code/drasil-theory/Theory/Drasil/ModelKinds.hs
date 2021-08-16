@@ -24,11 +24,11 @@ import Theory.Drasil.MultiDefn (MultiDefn)
 --     * 'FunctionalModel's represent quantity-resulting function definitions.
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds e where
-  DEModel               ::              RelationConcept -> ModelKinds e
+  DEModel               ::              RelationConcept -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
   EquationalConstraints ::              ConstraintSet   -> ModelKinds ModelExpr -- TODO: Figure out the 'right' resultant type
   EquationalModel       :: Express e => QDefinition e   -> ModelKinds e
   EquationalRealm       :: Express e => MultiDefn e     -> ModelKinds e
-  OthModel              ::              RelationConcept -> ModelKinds Expr
+  OthModel              ::              RelationConcept -> ModelKinds e -- TODO: Remove.
 
 -- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
 data ModelKind e = MK {
@@ -96,7 +96,7 @@ othModel :: UID -> NP -> RelationConcept -> ModelKind Expr
 othModel u n rc = MK (OthModel rc) u n
 
 -- | Smart constructor for 'OthModel's, deriving UID+Term from the 'RelationConcept'
-othModel' :: RelationConcept -> ModelKind Expr
+othModel' :: RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Finds the 'UID' of the 'ModelKinds'.

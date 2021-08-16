@@ -1,8 +1,14 @@
 {-# Language GADTs #-}
-
-module Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(..),
-  Verbosity(..), ddefn, derivation, gdefn, helperRefs, helpToRefField,
-  instanceModel, tmodel) where
+-- | Defines helper functions for creating subsections within the Solution Characteristics Specification.
+-- Namely, for theory models, general definitions, data definitions, and instance models.
+module Drasil.DocumentLanguage.Definitions (
+  -- * Types
+  Field(..), Fields, InclUnits(..), Verbosity(..),
+  -- * Constructors
+  ddefn, derivation, gdefn,
+  instanceModel, tmodel,
+  -- * Helpers
+  helperRefs, helpToRefField) where
 
 import Data.Map (lookupIndex)
 import Data.List (nub)

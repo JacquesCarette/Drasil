@@ -1,4 +1,6 @@
 {-# LANGUAGE LambdaCase, Rank2Types #-}
+-- | Defines functions to extract certain kinds of information from a document.
+-- Mainly used for 'Sentence's and 'Expr's.
 module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate) where
 
 import Control.Lens((^.))

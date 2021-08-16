@@ -1,5 +1,10 @@
 {-# Language Rank2Types #-}
-module Drasil.DocumentLanguage.RefHelpers (ModelDB, tmRefDB, gdRefDB, ddRefDB,
+-- | Currently unused. Defines functions to create a database for holding definitions and models.
+module Drasil.DocumentLanguage.RefHelpers (
+  -- * Type
+  ModelDB,
+  -- * Functions
+  tmRefDB, gdRefDB, ddRefDB,
   imRefDB, mdb, modelsFromDB) where
 
 import Database.Drasil (RefMap, simpleMap)

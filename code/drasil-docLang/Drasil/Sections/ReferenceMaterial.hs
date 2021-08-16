@@ -1,3 +1,4 @@
+-- | Defines functions used in the Reference Material section.
 module Drasil.Sections.ReferenceMaterial (intro) where
 {-
 Depending where this is used, it might be worth combining it with other module(s),

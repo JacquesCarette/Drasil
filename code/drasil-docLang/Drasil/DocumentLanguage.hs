@@ -67,7 +67,7 @@ import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs)
 import Data.Char (isSpace)
 
------ Gather all information necessary to create a document -----
+-- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
@@ -75,6 +75,8 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   mkSections fullSI l where
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
+
+-- * Functions to Fill 'CunkDB'
 
 -- TODO: Move all of these "filler" functions to a new file?
 -- TODO: Add in 'fillTermMap' once #2775 is complete.
@@ -226,7 +228,7 @@ fillReqs (_:xs) si = fillReqs xs si
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
------ Section creators -----
+-- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
 mkSections :: SystemInformation -> DocDesc -> [Section]
@@ -248,7 +250,7 @@ mkSections si dd = map doit dd
     doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
-{--}
+-- ** Table of Contents
 
 -- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
@@ -256,7 +258,7 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 
-{--}
+-- ** Reference Materials
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
@@ -303,7 +305,7 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
           atStart x else capSent (x ^. defn)
         lf TAD = \tDef -> titleize tDef +: EmptyS +:+. capSent (tDef ^. defn)
 
-{--}
+-- ** Introduction
 
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: SystemInformation -> IntroSec -> Section
@@ -318,7 +320,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IOrgSec i b s t) = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
-{--}
+-- ** Stakeholders
 
 -- | Helper for making the Stakeholders section.
 mkStkhldrSec :: StkhldrSec -> Section
@@ -328,7 +330,7 @@ mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSu
     mkSubs (Client kWrd details) = Stk.tClientF kWrd details
     mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
 
-{--}
+-- ** General System Description
 
 -- | Helper for making the General System Description section.
 mkGSDSec :: GSDSec -> Section
@@ -339,7 +341,7 @@ mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
 
-{--}
+-- ** Specific System Description
 
 -- | Helper for making the Specific System Description section.
 mkSSDSec :: SystemInformation -> SSDSec -> Section
@@ -391,7 +393,7 @@ mkSolChSpec si (SCSProg l) =
     siSys :: SystemInformation -> IdeaDict
     siSys SI {_sys = sys} = nw sys
 
-{--}
+-- ** Requirements
 
 -- | Helper for making the Requirements section.
 mkReqrmntSec :: ReqrmntSec -> Section
@@ -402,7 +404,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
     mkSubs (FReqsSub' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
-{--}
+-- ** Likely Changes
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
@@ -410,7 +412,7 @@ mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
   where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
                 plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
 
-{--}
+-- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
@@ -418,7 +420,7 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
   where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
                 plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
 
-{--}
+-- ** Traceability
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
@@ -429,25 +431,25 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
     u desc rows cols si) progs
 
-{--}
+-- ** Off the Shelf Solutions
 
 -- | Helper for making the Off-the-Shelf Solutions section.
 mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
 mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs [] 
 
-{--}
+-- ** Auxiliary Constants
 
 -- | Helper for making the Values of Auxiliary Constants section.
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
 
-{--}
+-- ** References
 
 -- | Helper for making the References section.
 mkBib :: BibRef -> Section
 mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
 
-{--}
+-- ** Appendix
 
 -- | Helper for making the Appendix section.
 mkAppndxSec :: AppndxSec -> Section

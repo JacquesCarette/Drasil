@@ -1,53 +1,83 @@
+-- | Re-export document language types and functions for easy use in other packages.
 module Drasil.DocLang (
+  -- * Document Language
+  -- ** SRS
+  -- *** Types
+
   -- DocDecl
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
-  -- DocumentLanguage
-  mkDoc, fillTraceSI, fillcdbSRS, findAllRefs,
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
+  -- *** Functions
+
+  -- DocumentLanguage
+  mkDoc, fillTraceSI, fillcdbSRS, findAllRefs,
+  -- ** Notebook
+  -- | For generating lesson plans.
+
+  -- *** Types
+
   -- NBDecl
   NBDecl, NbSection(BibSec, IntrodSec, BodySec),
   -- DocumentLanguage.Notebook.Core
   IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..), ApndxSec(..),
+  -- *** Functions
+
   -- DocumentLanguage.Notebook.DocumentLanguage
   mkNb,
+  -- * Subsection Functions
+  -- ** Definitions and Models
+
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
   -- DocumentLanguage.RefHelpers 
   ModelDB, ddRefDB, mdb,
-  -- DocumentLanguage.TraceabilityMatrix
+  -- ** Traceability
+
   -- DocumentLanguage.TraceabilityGraph
   mkGraphInfo, traceyGraphGetRefs,
+  -- Sections.TraceabilityMandGs
+  traceMatStandard, traceMatOtherReq,
+  -- Tracetable
+  generateTraceMap,
+  -- ** Auxiliary Constants
+
   -- Sections.AuxiliaryConstants
   tableOfConstants,
-  -- Sections.GeneralSystDesc
+  -- ** Introduction
+
   -- Sections.Introduction
   purpDoc,
+  -- ** Reference Material
+
   -- Sections.ReferenceMaterial
   intro,
-  -- Sections.Requirements
-  inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef,
-  -- Sections.SpecificSystemDescription
-  auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl,
-  -- Sections.Stakeholders
   -- Sections.TableOfAbbAndAcronyms
   tableAbbAccRef,
   -- Sections.TableOfSymbols
   symbTableRef, tsymb, tsymb'',
   -- Sections.TableOfUnits
   unitTableRef, tunit, tunit',
-  -- Sections.TraceabilityMandGs
-  traceMatStandard, traceMatOtherReq,
+  -- ** Requirements
+
+  -- Sections.Requirements
+  inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef,
+  -- ** Specific System Description
+
+  -- Sections.SpecificSystemDescription
+  auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl,
+  -- * Document Extraction Function
+
   -- ExtractDocDesc
   getDocDesc, egetDocDesc,
-  -- Tracetable
-  generateTraceMap,
+  -- * References
+
   -- References
   secRefs
 ) where 
@@ -85,5 +115,5 @@ import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit')
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
--- Commented out modules aren't used - uncomment if this changes
 import Drasil.DocLang.References (secRefs)
+-- Commented out modules aren't used - uncomment if this changes

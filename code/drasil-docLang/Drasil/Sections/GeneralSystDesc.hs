@@ -1,3 +1,4 @@
+-- | Defines helper functions used to make the general system description section.
 module Drasil.Sections.GeneralSystDesc where
 
 import Language.Drasil

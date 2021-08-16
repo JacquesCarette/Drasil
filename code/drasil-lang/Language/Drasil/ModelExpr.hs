@@ -19,7 +19,7 @@ module Language.Drasil.ModelExpr (
   sy,
   cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll,
   pderiv, deriv,
-  isIn, defines, andMEs, equivMEs
+  space, isIn, defines, andMEs, equivMEs
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)

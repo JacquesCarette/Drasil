@@ -31,11 +31,11 @@ import Drasil.DblPendulum.Assumptions (assumpSingle)
 import Drasil.DblPendulum.Body (justification, charsOfReader, organizationOfDocumentsIntro,
   sysCtxIntro, sysCtxDesc, sysCtxList, userCharacteristicsIntro)
 import Drasil.DblPendulum.Concepts (concepts, pendMotion, rod)
+import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.Requirements (nonFuncReqs)
 import Drasil.DblPendulum.Unitals (acronyms)
 
 import Drasil.SglPendulum.Figures (figMotion, sysCtxFig1)
-import Drasil.SglPendulum.Goals (goals, goalsInputs)
 import Drasil.SglPendulum.DataDefs (dataDefs)
 import Drasil.SglPendulum.IMods (iMods)
 import Drasil.SglPendulum.GenDefs (genDefns)

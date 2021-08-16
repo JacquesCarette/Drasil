@@ -4,20 +4,20 @@ import Language.Drasil
 import Data.Drasil.Domains (physics)
 import Data.Drasil.Concepts.Documentation (first, second_, object)
 import Data.Drasil.Theories.Physics (newtonSLRQD)
-
---below imports needed compoundNC part to work
-import Utils.Drasil.Concepts
+import Utils.Drasil.Concepts (compoundNC)
 import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force, acceleration)
 
 
 concepts :: [IdeaDict]
-concepts = nw newtonSLRQD : map nw [rod, horizontal, vertical,
+concepts = nw newtonSLRQD : map nw [rod, rodOrRods, massOrMasses, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
   ++ map nw defs
 
-rod, horizontal, vertical :: NamedChunk
+rod, rodOrRods, massOrMasses, horizontal, vertical :: NamedChunk
 rod = nc "rod" (cn' "rod")
+rodOrRods = nc "rod(s)" (cn' "rod(s)")
+massOrMasses = nc "mass(es)" (cn' "mass(es)")
 horizontal = nc "horizontal" (cn "horizontal") 
 vertical = nc "vertical" (cn "vertical") 
 

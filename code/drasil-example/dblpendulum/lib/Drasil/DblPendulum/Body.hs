@@ -11,7 +11,7 @@ import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
-import Data.Drasil.People (olu)
+import Data.Drasil.People (dong)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
@@ -102,7 +102,7 @@ si :: SystemInformation
 si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
-  _authors     = [olu],
+  _authors     = [dong],
   _purpose     = purpDoc progName Verbose,
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],

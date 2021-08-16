@@ -27,7 +27,7 @@ import Data.Drasil.TheoryConcepts (inModel)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
-
+import Drasil.DblPendulum.Assumptions (assumpSingle)
 import Drasil.DblPendulum.Body (justification, charsOfReader, organizationOfDocumentsIntro,
   sysCtxIntro, sysCtxDesc, sysCtxList, userCharacteristicsIntro)
 import Drasil.DblPendulum.Concepts (concepts, pendMotion, rod)
@@ -35,7 +35,6 @@ import Drasil.DblPendulum.Requirements (nonFuncReqs)
 import Drasil.DblPendulum.Unitals (acronyms)
 
 import Drasil.SglPendulum.Figures (figMotion, sysCtxFig1)
-import Drasil.SglPendulum.Assumptions (assumptions)
 import Drasil.SglPendulum.Goals (goals, goalsInputs)
 import Drasil.SglPendulum.DataDefs (dataDefs)
 import Drasil.SglPendulum.IMods (iMods)
@@ -147,7 +146,7 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
+concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
 
 

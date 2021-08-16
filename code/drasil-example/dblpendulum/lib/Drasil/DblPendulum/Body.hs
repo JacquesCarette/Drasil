@@ -30,7 +30,7 @@ import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newto
 import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPendulum.Figures (figMotion, sysCtxFig1)
-import Drasil.DblPendulum.Assumptions (assumptions)
+import Drasil.DblPendulum.Assumptions (assumpDouble)
 import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
@@ -140,7 +140,7 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
+concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------

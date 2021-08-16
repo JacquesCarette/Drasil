@@ -12,8 +12,8 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS, cw)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Express(..), Concept,
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
-import Language.Drasil.Expr.Lang (Relation)
-import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
@@ -21,7 +21,7 @@ import Language.Drasil.UID (UID)
 --
 -- Ex. We can describe a pendulum arm and then apply an associated equation so that we know its behaviour.
 data RelationConcept = RC { _conc :: ConceptChunk
-                          , _rel  :: Relation
+                          , _rel  :: ModelExpr
                           }
 makeLenses ''RelationConcept
 
@@ -38,12 +38,12 @@ instance Definition    RelationConcept where defn = conc . defn
 -- | Finds the domain of the 'ConceptChunk' used to make the 'RelationConcept'.
 instance ConceptDomain RelationConcept where cdom = cdom . view conc
 -- | Convert the 'RelationConcept' into the model expression language.
-instance Express       RelationConcept where express = express . (^. rel)
+instance Express       RelationConcept where express = (^. rel)
 
 -- | Create a 'RelationConcept' from a given 'UID', term ('NP'), definition ('Sentence'), and 'Relation'.
-makeRC :: UID -> NP -> Sentence -> Relation -> RelationConcept
-makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn)
+makeRC :: Express e => UID -> NP -> Sentence -> e -> RelationConcept
+makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn) . express
 
 -- | Create a new 'RelationConcept' from an old 'Concept'. Takes a 'Concept', new 'UID' and relation.
-addRelToCC :: Concept c => c -> UID -> Relation -> RelationConcept
-addRelToCC c rID = RC (set uid rID (cw c))
+addRelToCC :: (Express e, Concept c) => c -> UID -> e -> RelationConcept
+addRelToCC c rID = RC (set uid rID (cw c)) . express

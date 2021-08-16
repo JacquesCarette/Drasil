@@ -24,7 +24,7 @@ import Theory.Drasil.MultiDefn (MultiDefn)
 --     * 'FunctionalModel's represent quantity-resulting function definitions.
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds e where
-  DEModel               ::              RelationConcept -> ModelKinds Expr
+  DEModel               ::              RelationConcept -> ModelKinds e
   EquationalConstraints ::              ConstraintSet   -> ModelKinds ModelExpr -- TODO: Figure out the 'right' resultant type
   EquationalModel       :: Express e => QDefinition e   -> ModelKinds e
   EquationalRealm       :: Express e => MultiDefn e     -> ModelKinds e
@@ -42,11 +42,11 @@ makeLenses ''ModelKind
 -- TODO: RelationConcepts should contain ModelExprs instead of just Exprs
 
 -- | Smart constructor for 'DEModel's
-deModel :: UID -> NP -> RelationConcept -> ModelKind Expr
+deModel :: UID -> NP -> RelationConcept -> ModelKind e
 deModel u n rc = MK (DEModel rc) u n
 
 -- | Smart constructor for 'DEModel's, deriving UID+Term from the 'RelationConcept'
-deModel' :: RelationConcept -> ModelKind Expr
+deModel' :: RelationConcept -> ModelKind e
 deModel' rc = MK (DEModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'

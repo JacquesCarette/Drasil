@@ -2,6 +2,7 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
+import qualified Language.Drasil.ModelExpr as M
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
   equationalModel, ModelKind)
 import Utils.Drasil
@@ -24,6 +25,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (ddHtFusion, ddMeltFrac, balanceDecayRate,
   balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
+import Drasil.SWHS.Derivations
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil, htFluxPCMFromWater, rocTempSimp)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
@@ -41,7 +43,7 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 ---------
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
-  [qwUC wMass ,qwUC htCapW, qwUC coilHTC, qwUC pcmSA, qwUC pcmHTC, qwUC coilSA
+  [qwUC wMass, qwUC htCapW, qwUC coilHTC, qwUC pcmSA, qwUC pcmHTC, qwUC coilSA
   ,qwUC tempPCM, qwUC timeFinal, qwC tempC $ UpFrom (Exc, sy tempInit)
   ,qwUC tempInit]
   -- [sy tempInit $< sy tempC] 
@@ -54,9 +56,12 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   "water to find the temperature of the water") (tempW ^. defn) balWtrRel
   -- eBalanceOnWtrL
 
-balWtrRel :: Relation
-balWtrRel = deriv (sy tempW) time $= recip_ (sy tauW) `mulRe`
-  ((sy tempC $- apply1 tempW time) `addRe`
+-- TODO: Clean this up properly once we have a better way of intermixing Expr & ModelExpr in files
+balWtrRel :: ModelExpr
+balWtrRel = M.deriv (M.sy tempW) time M.$= express balWtrExpr
+
+balWtrExpr :: Expr
+balWtrExpr = recip_ (sy tauW) `mulRe` ((sy tempC $- apply1 tempW time) `addRe`
   (sy eta `mulRe` (apply1 tempPCM time $- apply1 tempW time)))
 
 balWtrDesc :: [Sentence]
@@ -130,6 +135,7 @@ eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Factoring the negative sign out" `S.o
   (S "second term" `S.the_ofThe` short rightSide) `S.of_` eqN 3 `S.and_`
   S "multiplying it by", ch coilHTC, ch coilSA, S "/", ch coilHTC, ch coilSA, S "yields"]
 
+-- TODO: Typo. Not fixing immediately because I want to keep stable diffs empty.
 eBalanceOnWtrDerivDesc5 :: Sentence
 eBalanceOnWtrDerivDesc5 = S "Rearraging this" +:+ phrase equation +: S "gives us"
 
@@ -143,47 +149,6 @@ eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", eS eq22
 eq1, eq2 :: Expr
 eq1 = sy wMass `mulRe` sy htCapW
 eq2 = recip_ $ sy tauW
-
-eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,
- eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5, eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7 :: Expr
-
-eBalanceOnWtrDerivEqn1 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $=
-  sy htFluxC `mulRe` sy coilSA $- (sy htFluxP `mulRe` sy pcmSA)
-
-eBalanceOnWtrDerivEqn2 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $=
-  sy coilHTC `mulRe` sy coilSA `mulRe` (sy tempC $- sy tempW) $-
-  (sy pcmHTC `mulRe` sy pcmSA `mulRe` (sy tempW $- sy tempPCM))
-
-eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $=
-  (sy coilHTC `mulRe` sy coilSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempC $- sy tempW) $-
-  ((sy pcmHTC `mulRe` sy pcmSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempW $- sy tempPCM))
-
-eBalanceOnWtrDerivEqn4 = deriv (sy tempW) time $=
-  (sy coilHTC `mulRe` sy coilSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW) `addRe`
-  ((sy coilHTC `mulRe` sy coilSA $/
-  (sy coilHTC `mulRe` sy coilSA)) `mulRe` (sy pcmHTC `mulRe` sy pcmSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempPCM $- sy tempW))
-
-eBalanceOnWtrDerivEqn5 = deriv (sy tempW) time $=
-  (sy coilHTC `mulRe` sy coilSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW) `addRe`
-  ((sy pcmHTC `mulRe` sy pcmSA $/
-  (sy coilHTC `mulRe` sy coilSA)) `mulRe` (sy coilHTC `mulRe` sy coilSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempPCM $- sy tempW))
-
-eBalanceOnWtrDerivEqn6 = deriv (sy tempW) time $=
-  recip_ (sy tauW) `mulRe` (sy tempC $- sy tempW) `addRe` ((sy eta $/ sy tauW) `mulRe` (sy tempPCM $- sy tempW))
-
-eBalanceOnWtrDerivEqn7 = deriv (sy tempW) time $=
-  recip_ (sy tauW) `mulRe` ((sy tempC $- sy tempW) `addRe` (sy eta `mulRe` (sy tempPCM $- sy tempW)))
-
-eBalanceOnWtrDerivEqnsIM1 :: [Expr]
-eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
- eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5,
- eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7]
 
 ---------
 -- IM2 --
@@ -200,8 +165,11 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
   "Energy Balance on PCM to find temperature of PCM")
   (tempPCM ^. defn) balPCMRel -- eBalanceOnPCML
 
-balPCMRel :: Relation
-balPCMRel = deriv (sy tempPCM) time $= completeCase [case1, case2, case3]
+balPCMRel :: ModelExpr
+balPCMRel = M.deriv (M.sy tempPCM) time M.$= express balPCMExpr
+
+balPCMExpr :: Expr
+balPCMExpr = completeCase [case1, case2, case3]
   where case1 = (recip_ (sy tauSP) `mulRe` (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
         case2 = (recip_ (sy tauLP) `mulRe` (apply1 tempW time $-
@@ -295,24 +263,6 @@ eq6_2 :: Expr
 eq6_2 = (deriv (sy tempPCM) time) $= 0
 -}
 
-eBalanceOnPCMEqn1, eBalanceOnPCMEqn2, eBalanceOnPCMEqn3, eBalanceOnPCMEqn4 :: Expr
-
-eBalanceOnPCMEqn1 = sy pcmMass `mulRe` sy htCapSP `mulRe` deriv (sy tempPCM) time $=
-  sy htFluxP `mulRe` sy pcmSA
-
-eBalanceOnPCMEqn2 = sy pcmMass `mulRe` sy htCapSP `mulRe` deriv (sy tempPCM) time $=
-  sy pcmHTC `mulRe` sy pcmSA `mulRe` (sy tempW $- sy tempPCM)
-
-eBalanceOnPCMEqn3 = deriv (sy tempPCM) time $=
-  ((sy pcmHTC `mulRe` sy pcmSA) $/ (sy pcmMass `mulRe` sy htCapSP)) `mulRe`  (sy tempW $- sy tempPCM)
-
-eBalanceOnPCMEqn4 = deriv (sy tempPCM) time $=
-  recip_ (sy tauSP) `mulRe` (sy tempW $- sy tempPCM)
-
-eBalanceOnPCMDerivEqnsIM2 :: [Expr]
-eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,
- eBalanceOnPCMEqn3, eBalanceOnPCMEqn4]
-
 ---------
 -- IM3 --
 ---------
@@ -322,11 +272,11 @@ heatEInWtr = imNoDeriv heatEInWtrMK
   (qw watE) [] [dRef koothoor2013]
   "heatEInWtr" htWtrNotes
 
-heatEInWtrMK :: ModelKind
+heatEInWtrMK :: ModelKind Expr
 heatEInWtrMK = equationalModel "heatEInWtrIM"
   (nounPhraseSP "Heat energy in the water") heatEInWtrFD
 
-heatEInWtrFD :: QDefinition
+heatEInWtrFD :: QDefinition Expr
 heatEInWtrFD = mkFuncDefByQ watE [time] htWtrExpr
 
 htWtrExpr :: Expr

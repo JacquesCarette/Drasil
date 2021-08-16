@@ -87,7 +87,7 @@ si = SI {
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = map qw outputs,
-  _defSequence = [] :: [Block QDefinition],
+  _defSequence = [] :: [Block (QDefinition Expr)],
   _constraints = constrained,
   _constants   = specParamValList,
   _sysinfodb   = symbMap,
@@ -104,11 +104,11 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] []
+  (units ++ [m_2, m_3]) SWHS.dataDefs [] insModel genDefs tMods concIns section [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

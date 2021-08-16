@@ -1,9 +1,28 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 
 -- | The Drasil Modelling Expression language constructors
-module Language.Drasil.ModelExpr where
+module Language.Drasil.ModelExpr (
+  ModelExpr,
+  ($=), ($!=),
+  ($<), ($>), ($<=), ($>=),
+  ($.),
+  addI, addRe, mulI, mulRe,
+  ($-), ($/), ($^), ($=>), ($<=>), ($&&), ($||),
+  abs_, neg, negVec, log, ln, sin, cos, tan, sqrt, sec, 
+  csc, cot, arcsin, arccos, arctan, exp,
+  dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,
+  square, half, oneHalf, oneThird, recip_,
+  completeCase, incompleteCase,
+  sumAll, defsum, prodAll, defprod,
+  realInterval,
+  apply, apply1, apply2, applyWithNamedArgs,
+  sy,
+  cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll,
+  pderiv, deriv,
+  isIn, defines, andMEs, equivMEs
+) where
 
-import Prelude hiding (sqrt)
+import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 
 import Control.Lens ((^.))
 

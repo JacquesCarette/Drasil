@@ -1,5 +1,6 @@
 -- To generalize the use of dot printers in generating graphs
-module DataPrinters.Dot (digraph, makeEdgesDi, makeEdgesSub, makeNodesDi, makeNodesSub, replaceInvalidChars) where
+module DataPrinters.Dot (digraph, subgraph,
+  makeEdgesDi, makeEdgesSub, makeNodesDi, makeNodesSub, replaceInvalidChars) where
 
 import System.IO
 
@@ -18,6 +19,15 @@ digraph handle nm nds edgs = do
     mapM_ (hPutStrLn handle) $ concatMap (uncurry makeEdgesDi) edgs
     hPutStrLn handle "}"
     hClose handle
+
+-- Similar to digraph, but makes a subgraph and indents each line to look nicer.
+-- Does not close the handle when done.
+subgraph :: Handle -> Name -> [Nodes] -> [Edges] -> IO ()
+subgraph handle nm nds edgs = do
+    hPutStrLn handle $ "\t\tsubgraph " ++ replaceInvalidChars nm ++ "{"
+    mapM_ (hPutStrLn handle) $ concatMap (\ns -> map (makeNodesSub $ fst ns) $ snd ns) nds
+    mapM_ (hPutStrLn handle) $ concatMap (uncurry makeEdgesSub) edgs
+    hPutStrLn handle "\t\t}"
 
 ------------------
 -- Graph-related functions

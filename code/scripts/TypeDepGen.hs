@@ -1,4 +1,4 @@
--- FIXME: use real parser (Low Priority; see line 119)
+-- FIXME: use real parser (Low Priority; see line 189)
 -- | Creates graphs showing the dependency of one type upon another.
 module TypeDepGen (main) where
 
@@ -12,7 +12,8 @@ import qualified Data.Map as Map
 import qualified DirectoryController as DC (createFolder, createFile, finder, 
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
 import SourceCodeReaderT as SCRT (extractEntryData, EntryData(..), 
-  DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..))
+  DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..),
+  DataTypeDeclaration(..))
 import Data.List.Split (splitOn)
 import Data.Char (toLower)
 import DataPrinters.Dot
@@ -102,125 +103,72 @@ closePackageFiles fp lang = do
 -- output function creates all type graphs except for drasil.dot
 output :: FilePath -> Entry -> IO ()
 output fp entry = do
+    -- Makes a dependency graph of all types in the package
     mkFullOutput fp entry
-    mapM_ (mkGraphDROutput (fp ++ "/" ++ drasilPack entry)) $ dataTypeRecords entry
-    mapM_ (mkGraphDCOutput (fp ++ "/" ++ drasilPack entry)) $ dataTypeConstructors entry
-    mapM_ (mkGraphNTOutput (fp ++ "/" ++ drasilPack entry)) $ newtypes entry
-    mapM_ (mkGraphTOutput  (fp ++ "/" ++ drasilPack entry)) $ types entry
+    -- Makes folders for each package and then prints out a dependency graphs of all types in a module
+    let outputFilePath = fp ++ "/" ++ drasilPack entry
+    mapM_ (separateDigraph outputFilePath "cyan3") $ dataTypeRecords entry
+    mapM_ (separateDigraph outputFilePath "darkviolet") $ dataTypeConstructors entry
+    mapM_ (separateDigraph outputFilePath "darkgreen") $ newtypes entry
+    mapM_ (separateDigraph outputFilePath "red2") $ types entry
     return mempty
 
 -------
 --Output sections
 -------
 
--- Helper to create package-wide type graphs
+-- Helper to create package-wide type dependency graphs
 mkFullOutput :: FilePath -> Entry -> IO ()
 mkFullOutput outputFilePath entry = do
     createDirectoryIfMissing False outputFilePath
     setCurrentDirectory outputFilePath
     typeGraph <- openFile (drasilPack entry ++ ".dot") AppendMode
     hPutStrLn typeGraph $ "\tsubgraph " ++ map toLower (fileName entry \\ ".hs") ++ " {"
-    mapM_ (mkGraphDROutputSub typeGraph) $ dataTypeRecords entry
-    mapM_ (mkGraphDCOutputSub typeGraph) $ dataTypeConstructors entry
-    mapM_ (mkGraphNTOutputSub typeGraph) $ newtypes entry
-    mapM_ (mkGraphTOutputSub  typeGraph) $ types entry
+    -- each data type gets recorded in a different colour. Cyan is for record data types,
+    -- dark violet is for types using the 'data' notation (but are not records), dark green
+    -- is for types using the 'newtype' notation, and red is for types that use 'type' notation.
+    -- Types that are not defined in the same package but still have an edge connecting them will
+    -- appear as black, since that is the default node colour. This includes Haskell-native types
+    -- like String and Int since we don't define them anywhere.
+    mapM_ (subgraphDTD typeGraph "cyan3") $ dataTypeRecords entry
+    mapM_ (subgraphDTD typeGraph "darkviolet") $ dataTypeConstructors entry
+    mapM_ (subgraphDTD typeGraph "darkgreen") $ newtypes entry
+    mapM_ (subgraphDTD typeGraph "red2") $ types entry
     hPutStrLn typeGraph "\t}"
     hClose typeGraph
 
-
--- Helper to make a graph from datatypes that use the @data@ syntax and are records
-mkGraphDROutput :: FilePath -> SCRT.DataDeclRecord -> IO ()
-mkGraphDROutput outputFilePath ddr = do
+-- Creates a separate directional graph for every type in a package.
+-- These can be found in the folders labelled with the package name.
+-- The 'digraph' function comes from DataPrinters/Dot.hs.
+separateDigraph :: SCRT.DataTypeDeclaration a => FilePath -> Colour -> a -> IO ()
+separateDigraph outputFilePath col typeDecl = do
     createDirectoryIfMissing False outputFilePath
     setCurrentDirectory outputFilePath
-    typeGraph <- openFile (ddrName ddr ++ ".dot") WriteMode
-    hPutStrLn typeGraph $ "digraph " ++ map toLower (ddrName ddr) ++ "{"
-    mapM_ (hPutStrLn typeGraph) $ makeEdgesDi (ddrName ddr) (ddrContent ddr)
-    hPutStrLn typeGraph $ makeNodesDi "cyan3" $ ddrName ddr
-    hPutStrLn typeGraph "}"
-    hClose typeGraph
-
--- Helper to make a graph from datatypes that use the @data@ syntax and are not records
-mkGraphDCOutput :: FilePath -> SCRT.DataDeclConstruct -> IO ()
-mkGraphDCOutput outputFilePath ddc = do
-    createDirectoryIfMissing False outputFilePath
-    setCurrentDirectory outputFilePath
-    typeGraph <- openFile (ddcName ddc ++ ".dot") WriteMode
-    hPutStrLn typeGraph $ "digraph " ++ map toLower (ddcName ddc) ++ "{"
-    mapM_ (hPutStrLn typeGraph) $ makeEdgesDi (ddcName ddc) (ddcContent ddc) -- (if length (ddcContent ddc) == 1 then True else False)
-    hPutStrLn typeGraph $ makeNodesDi "darkviolet" $ ddcName ddc
-    hPutStrLn typeGraph "}"
-    hClose typeGraph
-
--- Helper to make a graph from datatypes that use the @newtype@ syntax
-mkGraphNTOutput :: FilePath -> SCRT.NewtypeDecl -> IO ()
-mkGraphNTOutput outputFilePath ntd = do
-    createDirectoryIfMissing False outputFilePath
-    setCurrentDirectory outputFilePath
-    typeGraph <- openFile (ntdName ntd ++ ".dot") WriteMode
-    hPutStrLn typeGraph $ "digraph " ++ map toLower (ntdName ntd) ++ "{"
-    mapM_ (hPutStrLn typeGraph) $ makeEdgesDi (ntdName ntd) (ntdContent ntd)
-    hPutStrLn typeGraph $ makeNodesDi "darkgreen" $ ntdName ntd
-    hPutStrLn typeGraph "}"
-    hClose typeGraph
-
--- Helper to make a graph from datatypes that use the @type@ syntax
-mkGraphTOutput :: FilePath -> SCRT.TypeDecl -> IO ()
-mkGraphTOutput outputFilePath td = do
-    createDirectoryIfMissing False outputFilePath
-    setCurrentDirectory outputFilePath
-    typeGraph <- openFile (tdName td ++ ".dot") WriteMode
-    hPutStrLn typeGraph $ "digraph " ++ map toLower (tdName td) ++ "{"
-    mapM_ (hPutStrLn typeGraph) $ makeEdgesDi (tdName td) (tdContent td)
-    hPutStrLn typeGraph $ makeNodesDi "red2" $ tdName td
-    hPutStrLn typeGraph "}"
-    hClose typeGraph
+    typeGraph <- openFile (SCRT.getTypeName typeDecl ++ ".dot") WriteMode
+    digraph typeGraph (map toLower $ SCRT.getTypeName typeDecl)
+      [(col, [SCRT.getTypeName typeDecl])] [(SCRT.getTypeName typeDecl, SCRT.getContents typeDecl)]
 
 ----------
 -- Output for subgraphs
 ---------
 
--- Helper to create the drasil.dot graph file
+-- Helper to create the drasil.dot graph files from an entry of different kinds of datatypes.
 mkFullOutputSub :: Handle -> Entry -> IO ()
 mkFullOutputSub typeGraph entry = do
     hPutStrLn typeGraph $ "\tsubgraph " ++ replaceInvalidChars (map toLower $ fileName entry \\ ".hs") ++ " {"
-    mapM_ (mkGraphDROutputSub typeGraph) $ dataTypeRecords entry
-    mapM_ (mkGraphDCOutputSub typeGraph) $ dataTypeConstructors entry
-    mapM_ (mkGraphNTOutputSub typeGraph) $ newtypes entry
-    mapM_ (mkGraphTOutputSub  typeGraph) $ types entry
+    mapM_ (subgraphDTD typeGraph "cyan3") $ dataTypeRecords entry
+    mapM_ (subgraphDTD typeGraph "darkviolet") $ dataTypeConstructors entry
+    mapM_ (subgraphDTD typeGraph "darkgreen") $ newtypes entry
+    mapM_ (subgraphDTD typeGraph "red2") $ types entry
     hPutStrLn typeGraph "\t}"
 
--- Helper to make a graph from datatypes that use the @data@ syntax and are records (for larger package-wide graphs)
-mkGraphDROutputSub :: Handle -> SCRT.DataDeclRecord -> IO ()
-mkGraphDROutputSub typeGraph ddr = do
-    hPutStrLn typeGraph $ "\t\tsubgraph " ++ map toLower (ddrName ddr) ++ "{"
-    mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (ddrName ddr) (ddrContent ddr)
-    hPutStrLn typeGraph $ makeNodesSub "cyan3" $ ddrName ddr
-    hPutStrLn typeGraph "\t\t}"
-
--- Helper to make a graph from datatypes that use the @data@ syntax and are not records (for larger package-wide graphs)
-mkGraphDCOutputSub :: Handle -> SCRT.DataDeclConstruct -> IO ()
-mkGraphDCOutputSub typeGraph ddc = do
-    hPutStrLn typeGraph $ "\t\tsubgraph " ++ map toLower (ddcName ddc) ++ "{"
-    mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (ddcName ddc) (ddcContent ddc)
-    hPutStrLn typeGraph $ makeNodesSub "darkviolet" $ ddcName ddc
-    hPutStrLn typeGraph "\t\t}"
-
--- Helper to make a graph from datatypes that use the @newtype@ syntax (for larger package-wide graphs)
-mkGraphNTOutputSub :: Handle -> SCRT.NewtypeDecl -> IO ()
-mkGraphNTOutputSub typeGraph ntd = do
-    hPutStrLn typeGraph $ "\t\tsubgraph " ++ map toLower (ntdName ntd) ++ "{"
-    mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (ntdName ntd) (ntdContent ntd)
-    hPutStrLn typeGraph $ makeNodesSub "darkgreen" $ ntdName ntd
-    hPutStrLn typeGraph "\t\t}"
-
--- Helper to make a graph from datatypes that use the @type@ syntax (for larger package-wide graphs)
-mkGraphTOutputSub :: Handle -> SCRT.TypeDecl -> IO ()
-mkGraphTOutputSub typeGraph td = do
-    hPutStrLn typeGraph $ "\t\tsubgraph " ++ map toLower (tdName td) ++ "{"
-    mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (tdName td) (tdContent td)
-    hPutStrLn typeGraph $ makeNodesSub "red2" $ tdName td
-    hPutStrLn typeGraph "\t\t}"
+-- Subgraph creation function tailored for data type declarations.
+-- The title of the subgraph is the name of the type,
+-- and the contents are the dependencies of that type.
+subgraphDTD :: SCRT.DataTypeDeclaration a => Handle -> Colour -> a -> IO ()
+subgraphDTD typeGraph col typeDecl =
+  subgraph typeGraph (map toLower $ SCRT.getTypeName typeDecl)
+    [(col, [SCRT.getTypeName typeDecl])] [(SCRT.getTypeName typeDecl, SCRT.getContents typeDecl)]
 
 ----------
 -- Organizing data functions, getting data from files

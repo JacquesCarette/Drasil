@@ -13,17 +13,17 @@ import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
-dataDefinitions :: [DataDefinition]
+dataDefinitions :: [DataDefinition Expr]
 dataDefinitions = [ddErrSig, ddPropCtrl, ddDerivCtrl, ddCtrlVar]
 
 ----------------------------------------------
 
-ddErrSig :: DataDefinition
+ddErrSig :: DataDefinition Expr
 ddErrSig
   = dd ddErrSigDefn [dRef johnson2008] Nothing "ddProcessError"
       [ddErrSigNote]
 
-ddErrSigDefn :: QDefinition
+ddErrSigDefn :: QDefinition Expr
 ddErrSigDefn = mkQuantDef qdProcessErrorFD ddErrSigEqn
 
 ddErrSigEqn :: Expr
@@ -43,12 +43,12 @@ ddErrSigNote
 
 ----------------------------------------------
 
-ddPropCtrl :: DataDefinition
+ddPropCtrl :: DataDefinition Expr
 ddPropCtrl
   = dd ddPropCtrlDefn [dRef johnson2008] Nothing "ddPropCtrl"
       [ddPropCtrlNote]
 
-ddPropCtrlDefn :: QDefinition
+ddPropCtrlDefn :: QDefinition Expr
 ddPropCtrlDefn = mkQuantDef qdPropControlFD ddPropCtrlEqn
 
 ddPropCtrlEqn :: Expr
@@ -64,12 +64,12 @@ ddPropCtrlNote
 
 ----------------------------------------------
 
-ddDerivCtrl :: DataDefinition
+ddDerivCtrl :: DataDefinition Expr
 ddDerivCtrl
   = dd ddDerivCtrlDefn [dRef johnson2008] Nothing "ddDerivCtrl"
       [ddDerivCtrlNote]
 
-ddDerivCtrlDefn :: QDefinition
+ddDerivCtrlDefn :: QDefinition Expr
 ddDerivCtrlDefn = mkQuantDef qdDerivativeControlFD ddDerivCtrlEqn
 
 ddDerivCtrlEqn :: Expr
@@ -88,11 +88,11 @@ ddDerivCtrlNote
 
 ----------------------------------------------
 
-ddCtrlVar :: DataDefinition
+ddCtrlVar :: DataDefinition Expr
 ddCtrlVar
   = dd ddCtrlVarDefn [dRef johnson2008] Nothing "ddCtrlVar" [ddCtrlNote]
 
-ddCtrlVarDefn :: QDefinition
+ddCtrlVarDefn :: QDefinition Expr
 ddCtrlVarDefn = mkQuantDef qdCtrlVarFD ddCtrlEqn
 
 ddCtrlEqn :: Expr

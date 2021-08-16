@@ -8,7 +8,9 @@ import Drasil.PDController.DataDefs
 import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
-import Language.Drasil
+import Language.Drasil (qw, makeRC, dRef, mkDerivName, phrase, atStartNP, nounPhraseSP, (!.), (+:+), (+:+.), eS, sC, RelationConcept, Derivation, Expr, ModelExpr, Sentence(S, EmptyS), Inclusive(Exc), RealInterval(UpFrom))
+import qualified Language.Drasil.Expr as E
+import Language.Drasil.ModelExpr
 import Theory.Drasil (InstanceModel, im, qwC, deModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -23,10 +25,10 @@ instanceModels = [imPD]
 imPD :: InstanceModel
 imPD
   = im (deModel' imPDRC)
-      [qwC qdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC qdPropGain $ UpFrom (Exc, exactDbl 0),
-       qwC qdDerivGain $ UpFrom (Exc, exactDbl 0)]
+      [qwC qdSetPointTD $ UpFrom (Exc, E.exactDbl 0), qwC qdPropGain $ UpFrom (Exc, E.exactDbl 0),
+       qwC qdDerivGain $ UpFrom (Exc, E.exactDbl 0)]
       (qw qdProcessVariableTD)
-      [UpFrom (Exc, exactDbl 0)]
+      [UpFrom (Exc, E.exactDbl 0)]
       [dRef abbasi2015, dRef johnson2008]
       (Just imDeriv)
       "pdEquationIM"
@@ -40,7 +42,7 @@ imPDRC
       EmptyS
       eqn
 
-eqn :: Expr
+eqn :: ModelExpr
 eqn
   = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
       ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
@@ -55,7 +57,7 @@ imDeriv
 imDerivStmts :: [Sentence]
 imDerivStmts = [derivStmt1, derivStmt2, derivStmt3, derivStmt4]
 
-imDerivEqns :: [Expr]
+imDerivEqns :: [ModelExpr]
 imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 
 derivStmt1 :: Sentence
@@ -66,7 +68,7 @@ derivStmt1
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
 
-derivEqn1 :: Expr
+derivEqn1 :: ModelExpr
 derivEqn1
   = sy qdProcessVariableFD
       $= (sy qdSetPointFD $- sy qdProcessVariableFD)
@@ -76,7 +78,7 @@ derivEqn1
 derivStmt2 :: Sentence
 derivStmt2 = (S "Substituting the values and rearranging the equation" !.)
 
-derivEqn2 :: Expr
+derivEqn2 :: ModelExpr
 derivEqn2
   = square (sy qdFreqDomain) `mulRe` sy qdProcessVariableFD
       `addRe` ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` sy qdProcessVariableFD `mulRe` sy qdFreqDomain)
@@ -89,7 +91,7 @@ derivStmt3
   = S "Computing the" +:+ phrase qdInvLaplaceTransform +:+
      fromSource tmInvLaplace +:+. S "of the equation"
 
-derivEqn3 :: Expr
+derivEqn3 :: ModelExpr
 derivEqn3
   = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
       (((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
@@ -106,7 +108,7 @@ derivStmt4
          S "differential of the set point is zero. Hence the equation",
          S "reduces to"]
 
-derivEqn4 :: Expr
+derivEqn4 :: ModelExpr
 derivEqn4
   = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
       ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)

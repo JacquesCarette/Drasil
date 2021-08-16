@@ -102,7 +102,7 @@ si
        _concepts = [] :: [DefinedQuantityDict],
        _datadefs = dataDefinitions, _instModels = [],
        _configFiles = [], _inputs = inputs, _outputs = outputs,
-       _defSequence = [] :: [Block QDefinition],
+       _defSequence = [] :: [Block (QDefinition Expr)],
        _constraints = map cnstrw inpConstrained, _constants = pidConstants,
        _sysinfodb = symbMap, _usedinfodb = usedDB, refdb = refDB}
 
@@ -132,6 +132,7 @@ symbMap
       (map cw inpConstrained ++ srsDomains)
       (map unitWrapper [second, kilogram])
       dataDefinitions
+      ([] :: [DataDefinition ModelExpr])
       instanceModels
       genDefns
       theoreticalModels
@@ -145,7 +146,8 @@ usedDB
   = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
       ([] :: [ConceptChunk])
       ([] :: [UnitDefn])
-      ([] :: [DataDefinition])
+      ([] :: [DataDefinition Expr])
+      ([] :: [DataDefinition ModelExpr])
       ([] :: [InstanceModel])
       ([] :: [GenDefn])
       ([] :: [TheoryModel])

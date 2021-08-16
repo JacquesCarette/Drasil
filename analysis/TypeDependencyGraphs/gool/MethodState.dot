@@ -1,4 +1,5 @@
 digraph methodstate{
+MethodState	[shape=oval, color=cyan3, label="MethodState"];
 MethodState -> ClassState;
 MethodState -> String;
 MethodState -> Bool;
@@ -6,5 +7,4 @@ MethodState -> ExceptionType;
 MethodState -> QualifiedName;
 MethodState -> ScopeTag;
 MethodState -> Index;
-MethodState	[shape=oval, color=cyan3, label="MethodState"];
 }

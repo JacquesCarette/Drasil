@@ -1,6 +1,6 @@
 digraph constrainedchunk{
+ConstrainedChunk	[shape=oval, color=cyan3, label="ConstrainedChunk"];
 ConstrainedChunk -> QuantityDict;
 ConstrainedChunk -> ConstraintE;
 ConstrainedChunk -> MaybeExpr;
-ConstrainedChunk	[shape=oval, color=cyan3, label="ConstrainedChunk"];
 }

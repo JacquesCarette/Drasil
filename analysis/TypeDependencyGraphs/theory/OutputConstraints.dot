@@ -1,4 +1,4 @@
 digraph outputconstraints{
-OutputConstraints -> RealIntervalExprExpr;
 OutputConstraints	[shape=oval, color=red2, label="OutputConstraints"];
+OutputConstraints -> RealIntervalExprExpr;
 }

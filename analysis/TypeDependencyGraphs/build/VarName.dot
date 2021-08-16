@@ -1,4 +1,4 @@
 digraph varname{
-VarName -> String;
 VarName	[shape=oval, color=red2, label="VarName"];
+VarName -> String;
 }

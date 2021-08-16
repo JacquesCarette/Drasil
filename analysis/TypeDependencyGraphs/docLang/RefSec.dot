@@ -1,5 +1,5 @@
 digraph refsec{
+RefSec	[shape=oval, color=darkviolet, label="RefSec"];
 RefSec -> Contents;
 RefSec -> RefTab;
-RefSec	[shape=oval, color=darkviolet, label="RefSec"];
 }

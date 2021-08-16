@@ -1,6 +1,6 @@
 digraph odeinfo{
+ODEInfo	[shape=oval, color=cyan3, label="ODEInfo"];
 ODEInfo -> CodeVarChunk;
 ODEInfo -> CodeExpr;
 ODEInfo -> ODEOptions;
-ODEInfo	[shape=oval, color=cyan3, label="ODEInfo"];
 }

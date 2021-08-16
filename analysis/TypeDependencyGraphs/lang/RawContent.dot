@@ -1,6 +1,6 @@
 digraph rawcontent{
+RawContent	[shape=oval, color=darkviolet, label="RawContent"];
 RawContent -> Sentence;
 RawContent -> Title;
 RawContent -> Bool;
-RawContent	[shape=oval, color=darkviolet, label="RawContent"];
 }

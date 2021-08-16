@@ -5,32 +5,32 @@ digraph alltypes {
 	}
 	subgraph body {
 		subgraph folderlocation{
+		FolderLocation	[shape=oval, color=cyan3, label="FolderLocation"];
 		FolderLocation -> FilePath;
 		FolderLocation -> String;
-		FolderLocation	[shape=oval, color=cyan3, label="FolderLocation"];
 		}
 	}
 	subgraph caestudys {
 		subgraph casestudy{
+		CaseStudy	[shape=oval, color=cyan3, label="CaseStudy"];
 		CaseStudy -> SystemInformation;
 		CaseStudy -> Sentence;
 		CaseStudy -> Choices;
-		CaseStudy	[shape=oval, color=cyan3, label="CaseStudy"];
 		}
 		subgraph cslegend{
-		CSLegend -> String;
 		CSLegend	[shape=oval, color=cyan3, label="CSLegend"];
+		CSLegend -> String;
 		}
 	}
 	subgraph documentation {
 	}
 	subgraph example {
 		subgraph example{
+		Example	[shape=oval, color=cyan3, label="Example"];
 		Example -> SystemInformation;
 		Example -> Sentence;
 		Example -> Choices;
 		Example -> FilePath;
-		Example	[shape=oval, color=cyan3, label="Example"];
 		}
 	}
 	subgraph introduction {

@@ -1,4 +1,4 @@
 digraph width{
-Width -> Float;
 Width	[shape=oval, color=red2, label="Width"];
+Width -> Float;
 }

@@ -1,9 +1,9 @@
 digraph constrainta{
+Constrainta	[shape=oval, color=darkviolet, label="Constrainta"];
 Constrainta -> ConstraintReason;
 Constrainta -> RealInterval;
 Constrainta -> a;
 Constrainta -> Constraint;
 Constrainta -> Expr;
 Constrainta -> ConstraintE;
-Constrainta	[shape=oval, color=darkviolet, label="Constrainta"];
 }

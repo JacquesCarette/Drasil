@@ -1,7 +1,7 @@
 digraph definedquantitydict{
+DefinedQuantityDict	[shape=oval, color=cyan3, label="DefinedQuantityDict"];
 DefinedQuantityDict -> ConceptChunk;
 DefinedQuantityDict -> StageSymbol;
 DefinedQuantityDict -> Space;
 DefinedQuantityDict -> MaybeUnitDefn;
-DefinedQuantityDict	[shape=oval, color=cyan3, label="DefinedQuantityDict"];
 }

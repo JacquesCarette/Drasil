@@ -1,6 +1,6 @@
 digraph nodefamily{
+NodeFamily	[shape=oval, color=cyan3, label="NodeFamily"];
 NodeFamily -> UID;
 NodeFamily -> Label;
 NodeFamily -> Colour;
-NodeFamily	[shape=oval, color=cyan3, label="NodeFamily"];
 }

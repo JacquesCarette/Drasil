@@ -1,4 +1,4 @@
 digraph auxiliarycppproject{
-AuxiliaryCppProject -> AuxData;
 AuxiliaryCppProject	[shape=oval, color=red2, label="AuxiliaryCppProject"];
+AuxiliaryCppProject -> AuxData;
 }

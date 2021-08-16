@@ -5,13 +5,14 @@ digraph alltypes {
 	}
 	subgraph contraintsets {
 		subgraph constraintset{
+		ConstraintSet	[shape=oval, color=cyan3, label="ConstraintSet"];
 		ConstraintSet -> ConceptChunk;
 		ConstraintSet -> NonEmptyExpr;
-		ConstraintSet	[shape=oval, color=cyan3, label="ConstraintSet"];
 		}
 	}
 	subgraph datadefinition {
 		subgraph datadefinition{
+		DataDefinition	[shape=oval, color=cyan3, label="DataDefinition"];
 		DataDefinition -> QDefinition;
 		DataDefinition -> ScopeType;
 		DataDefinition -> DecRef;
@@ -19,15 +20,15 @@ digraph alltypes {
 		DataDefinition -> ShortName;
 		DataDefinition -> String;
 		DataDefinition -> Sentence;
-		DataDefinition	[shape=oval, color=cyan3, label="DataDefinition"];
 		}
 		subgraph scope{
-		Scope -> UID;
 		Scope	[shape=oval, color=darkgreen, label="Scope"];
+		Scope -> UID;
 		}
 	}
 	subgraph gendefn {
 		subgraph gendefn{
+		GenDefn	[shape=oval, color=cyan3, label="GenDefn"];
 		GenDefn -> ModelKind;
 		GenDefn -> MaybeUnitDefn;
 		GenDefn -> MaybeDerivation;
@@ -35,11 +36,11 @@ digraph alltypes {
 		GenDefn -> ShortName;
 		GenDefn -> String;
 		GenDefn -> Sentence;
-		GenDefn	[shape=oval, color=cyan3, label="GenDefn"];
 		}
 	}
 	subgraph intancemodels {
 		subgraph instancemodel{
+		InstanceModel	[shape=oval, color=cyan3, label="InstanceModel"];
 		InstanceModel -> ModelKind;
 		InstanceModel -> Inputs;
 		InstanceModel -> Output;
@@ -48,57 +49,57 @@ digraph alltypes {
 		InstanceModel -> ShortName;
 		InstanceModel -> String;
 		InstanceModel -> Sentence;
-		InstanceModel	[shape=oval, color=cyan3, label="InstanceModel"];
 		}
 		subgraph input{
-		Input -> QuantityDictMaybeRealIntervalExprExpr;
 		Input	[shape=oval, color=red2, label="Input"];
+		Input -> QuantityDictMaybeRealIntervalExprExpr;
 		}
 		subgraph inputs{
-		Inputs -> Input;
 		Inputs	[shape=oval, color=red2, label="Inputs"];
+		Inputs -> Input;
 		}
 		subgraph output{
-		Output -> QuantityDict;
 		Output	[shape=oval, color=red2, label="Output"];
+		Output -> QuantityDict;
 		}
 		subgraph outputconstraints{
-		OutputConstraints -> RealIntervalExprExpr;
 		OutputConstraints	[shape=oval, color=red2, label="OutputConstraints"];
+		OutputConstraints -> RealIntervalExprExpr;
 		}
 	}
 	subgraph modelkinds {
 		subgraph modelkind{
+		ModelKind	[shape=oval, color=cyan3, label="ModelKind"];
 		ModelKind -> ModelKinds;
 		ModelKind -> UID;
 		ModelKind -> NP;
-		ModelKind	[shape=oval, color=cyan3, label="ModelKind"];
 		}
 		subgraph modelkinds{
+		ModelKinds	[shape=oval, color=darkviolet, label="ModelKinds"];
 		ModelKinds -> RelationConcept;
 		ModelKinds -> ConstraintSet;
 		ModelKinds -> QDefinition;
 		ModelKinds -> MultiDefn;
-		ModelKinds	[shape=oval, color=darkviolet, label="ModelKinds"];
 		}
 	}
 	subgraph multidefn {
 		subgraph definingexpr{
+		DefiningExpr	[shape=oval, color=cyan3, label="DefiningExpr"];
 		DefiningExpr -> UID;
 		DefiningExpr -> Sentence;
 		DefiningExpr -> Expr;
-		DefiningExpr	[shape=oval, color=cyan3, label="DefiningExpr"];
 		}
 		subgraph multidefn{
+		MultiDefn	[shape=oval, color=cyan3, label="MultiDefn"];
 		MultiDefn -> UID;
 		MultiDefn -> QuantityDict;
 		MultiDefn -> Sentence;
 		MultiDefn -> NonEmptyDefiningExpr;
-		MultiDefn	[shape=oval, color=cyan3, label="MultiDefn"];
 		}
 	}
 	subgraph teoryh {
 		subgraph theorymodel{
+		TheoryModel	[shape=oval, color=cyan3, label="TheoryModel"];
 		TheoryModel -> ModelKind;
 		TheoryModel -> TheoryModel;
 		TheoryModel -> SpaceDefn;
@@ -110,7 +111,6 @@ digraph alltypes {
 		TheoryModel -> ShortName;
 		TheoryModel -> String;
 		TheoryModel -> Sentence;
-		TheoryModel	[shape=oval, color=cyan3, label="TheoryModel"];
 		}
 	}
 	subgraph drails {

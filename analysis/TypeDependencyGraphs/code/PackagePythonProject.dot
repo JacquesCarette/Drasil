@@ -1,4 +1,4 @@
 digraph packagepythonproject{
-PackagePythonProject -> PackData;
 PackagePythonProject	[shape=oval, color=red2, label="PackagePythonProject"];
+PackagePythonProject -> PackData;
 }

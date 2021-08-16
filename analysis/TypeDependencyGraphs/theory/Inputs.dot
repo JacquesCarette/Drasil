@@ -1,4 +1,4 @@
 digraph inputs{
-Inputs -> Input;
 Inputs	[shape=oval, color=red2, label="Inputs"];
+Inputs -> Input;
 }

@@ -1,4 +1,4 @@
 digraph bodypythoncode{
-BodyPythonCode -> Doc;
 BodyPythonCode	[shape=oval, color=red2, label="BodyPythonCode"];
+BodyPythonCode -> Doc;
 }

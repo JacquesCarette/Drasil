@@ -1,9 +1,9 @@
 digraph filestate{
+FileState	[shape=oval, color=cyan3, label="FileState"];
 FileState -> GOOLState;
 FileState -> String;
 FileState -> FileType;
 FileState -> Bool;
 FileState -> ClassName;
 FileState -> Doc;
-FileState	[shape=oval, color=cyan3, label="FileState"];
 }

@@ -1,5 +1,5 @@
 digraph secheader{
+SecHeader	[shape=oval, color=darkviolet, label="SecHeader"];
 SecHeader -> Title;
 SecHeader -> Reference;
-SecHeader	[shape=oval, color=darkviolet, label="SecHeader"];
 }

@@ -1,5 +1,5 @@
 digraph cppcodexya{
+CppCodexya	[shape=oval, color=cyan3, label="CppCodexya"];
 CppCodexya -> xa;
 CppCodexya -> ya;
-CppCodexya	[shape=oval, color=cyan3, label="CppCodexya"];
 }

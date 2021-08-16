@@ -1,9 +1,9 @@
 digraph goolstate{
+GOOLState	[shape=oval, color=cyan3, label="GOOLState"];
 GOOLState -> FilePath;
 GOOLState -> MaybeFilePath;
 GOOLState -> MapStringClassName;
 GOOLState -> MapQualifiedNameExceptionType;
 GOOLState -> MapQualifiedNameQualifiedName;
 GOOLState -> Bool;
-GOOLState	[shape=oval, color=cyan3, label="GOOLState"];
 }

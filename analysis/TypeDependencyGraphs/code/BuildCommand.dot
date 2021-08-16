@@ -1,4 +1,4 @@
 digraph buildcommand{
-BuildCommand -> CommandFragment;
 BuildCommand	[shape=oval, color=red2, label="BuildCommand"];
+BuildCommand -> CommandFragment;
 }

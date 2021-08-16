@@ -1,7 +1,7 @@
 digraph modelkinds{
+ModelKinds	[shape=oval, color=darkviolet, label="ModelKinds"];
 ModelKinds -> RelationConcept;
 ModelKinds -> ConstraintSet;
 ModelKinds -> QDefinition;
 ModelKinds -> MultiDefn;
-ModelKinds	[shape=oval, color=darkviolet, label="ModelKinds"];
 }

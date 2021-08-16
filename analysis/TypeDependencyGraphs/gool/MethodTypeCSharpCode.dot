@@ -1,4 +1,4 @@
 digraph methodtypecsharpcode{
-MethodTypeCSharpCode -> TypeData;
 MethodTypeCSharpCode	[shape=oval, color=red2, label="MethodTypeCSharpCode"];
+MethodTypeCSharpCode -> TypeData;
 }

@@ -1,4 +1,4 @@
 digraph classdefinitionmap{
-ClassDefinitionMap -> MapStringString;
 ClassDefinitionMap	[shape=oval, color=red2, label="ClassDefinitionMap"];
+ClassDefinitionMap -> MapStringString;
 }

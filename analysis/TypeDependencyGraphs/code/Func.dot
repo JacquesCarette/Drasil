@@ -1,9 +1,9 @@
 digraph func{
+Func	[shape=oval, color=darkviolet, label="Func"];
 Func -> FuncDef;
 Func -> FuncData;
 Func -> Name;
 Func -> Description;
 Func -> DataDesc;
 Func -> Func;
-Func	[shape=oval, color=darkviolet, label="Func"];
 }

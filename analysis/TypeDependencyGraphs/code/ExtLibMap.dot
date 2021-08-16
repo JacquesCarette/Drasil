@@ -1,4 +1,4 @@
 digraph extlibmap{
-ExtLibMap -> MapStringExtLibState;
 ExtLibMap	[shape=oval, color=red2, label="ExtLibMap"];
+ExtLibMap -> MapStringExtLibState;
 }

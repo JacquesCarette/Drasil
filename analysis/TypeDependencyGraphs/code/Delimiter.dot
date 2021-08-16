@@ -1,4 +1,4 @@
 digraph delimiter{
-Delimiter -> String;
 Delimiter	[shape=oval, color=red2, label="Delimiter"];
+Delimiter -> String;
 }

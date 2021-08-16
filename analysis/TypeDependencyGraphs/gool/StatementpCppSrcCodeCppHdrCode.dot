@@ -1,4 +1,4 @@
 digraph statementpcppsrccodecpphdrcode{
-StatementpCppSrcCodeCppHdrCode -> DocTerminator;
 StatementpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="StatementpCppSrcCodeCppHdrCode"];
+StatementpCppSrcCodeCppHdrCode -> DocTerminator;
 }

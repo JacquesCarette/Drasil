@@ -1,7 +1,7 @@
 digraph expr{
+Expr	[shape=oval, color=darkviolet, label="Expr"];
 Expr -> Double;
 Expr -> Integer;
 Expr -> String;
 Expr -> Expr;
-Expr	[shape=oval, color=darkviolet, label="Expr"];
 }

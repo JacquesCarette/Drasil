@@ -1,4 +1,4 @@
 digraph unaryopjavacode{
-UnaryOpJavaCode -> OpData;
 UnaryOpJavaCode	[shape=oval, color=red2, label="UnaryOpJavaCode"];
+UnaryOpJavaCode -> OpData;
 }

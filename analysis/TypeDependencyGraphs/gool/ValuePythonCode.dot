@@ -1,4 +1,4 @@
 digraph valuepythoncode{
-ValuePythonCode -> ValData;
 ValuePythonCode	[shape=oval, color=red2, label="ValuePythonCode"];
+ValuePythonCode -> ValData;
 }

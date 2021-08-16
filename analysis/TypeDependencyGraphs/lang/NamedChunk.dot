@@ -1,5 +1,5 @@
 digraph namedchunk{
+NamedChunk	[shape=oval, color=cyan3, label="NamedChunk"];
 NamedChunk -> UID;
 NamedChunk -> NP;
-NamedChunk	[shape=oval, color=cyan3, label="NamedChunk"];
 }

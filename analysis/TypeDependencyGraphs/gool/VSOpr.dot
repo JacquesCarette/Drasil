@@ -1,4 +1,4 @@
 digraph vsopr{
-VSOpr -> VSrOpData;
 VSOpr	[shape=oval, color=red2, label="VSOpr"];
+VSOpr -> VSrOpData;
 }

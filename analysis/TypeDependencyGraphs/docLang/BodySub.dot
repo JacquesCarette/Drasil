@@ -1,6 +1,6 @@
 digraph bodysub{
+BodySub	[shape=oval, color=darkviolet, label="BodySub"];
 BodySub -> Contents;
 BodySub -> BodySub;
 BodySub -> Section;
-BodySub	[shape=oval, color=darkviolet, label="BodySub"];
 }

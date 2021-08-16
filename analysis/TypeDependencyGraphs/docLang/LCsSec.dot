@@ -1,4 +1,4 @@
 digraph lcssec{
-LCsSec -> ConceptInstance;
 LCsSec	[shape=oval, color=darkgreen, label="LCsSec"];
+LCsSec -> ConceptInstance;
 }

@@ -1,4 +1,5 @@
 digraph argumentinfo{
+ArgumentInfo	[shape=oval, color=darkviolet, label="ArgumentInfo"];
 ArgumentInfo -> CodeExpr;
 ArgumentInfo -> Space;
 ArgumentInfo -> Maybe;
@@ -10,5 +11,4 @@ ArgumentInfo -> Requires;
 ArgumentInfo -> Description;
 ArgumentInfo -> ClassInfo;
 ArgumentInfo -> NonEmpty;
-ArgumentInfo	[shape=oval, color=darkviolet, label="ArgumentInfo"];
 }

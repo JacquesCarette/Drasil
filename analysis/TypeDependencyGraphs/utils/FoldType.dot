@@ -1,6 +1,6 @@
 digraph foldtype{
+FoldType	[shape=oval, color=darkviolet, label="FoldType"];
 FoldType -> SepType;
 FoldType -> FoldType;
 FoldType -> Sentence;
-FoldType	[shape=oval, color=darkviolet, label="FoldType"];
 }

@@ -1,4 +1,5 @@
 digraph sentence{
+Sentence	[shape=oval, color=darkviolet, label="Sentence"];
 Sentence -> SentenceStyle;
 Sentence -> TermCapitalization;
 Sentence -> UID;
@@ -6,5 +7,4 @@ Sentence -> Sentence;
 Sentence -> USymb;
 Sentence -> String;
 Sentence -> Symbol;
-Sentence	[shape=oval, color=darkviolet, label="Sentence"];
 }

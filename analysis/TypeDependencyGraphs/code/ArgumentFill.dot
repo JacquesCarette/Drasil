@@ -1,6 +1,6 @@
 digraph argumentfill{
+ArgumentFill	[shape=oval, color=darkviolet, label="ArgumentFill"];
 ArgumentFill -> Maybe;
 ArgumentFill -> NamedArgument;
 ArgumentFill -> CodeExpr;
-ArgumentFill	[shape=oval, color=darkviolet, label="ArgumentFill"];
 }

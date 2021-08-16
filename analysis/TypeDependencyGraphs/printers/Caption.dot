@@ -1,4 +1,4 @@
 digraph caption{
-Caption -> Spec;
 Caption	[shape=oval, color=red2, label="Caption"];
+Caption -> Spec;
 }

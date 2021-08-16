@@ -1,4 +1,5 @@
 digraph modelexpr{
+ModelExpr	[shape=oval, color=darkviolet, label="ModelExpr"];
 ModelExpr -> Double;
 ModelExpr -> ModelExpr;
 ModelExpr -> Integer;
@@ -24,5 +25,4 @@ ModelExpr -> VVVBinOp;
 ModelExpr -> VVNBinOp;
 ModelExpr -> DomainDesc;
 ModelExpr -> RealInterval;
-ModelExpr	[shape=oval, color=darkviolet, label="ModelExpr"];
 }

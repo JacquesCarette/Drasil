@@ -1,4 +1,4 @@
 digraph importcpphdrcode{
-ImportCppHdrCode -> Doc;
 ImportCppHdrCode	[shape=oval, color=red2, label="ImportCppHdrCode"];
+ImportCppHdrCode -> Doc;
 }

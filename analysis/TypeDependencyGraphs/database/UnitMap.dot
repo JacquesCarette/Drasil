@@ -1,4 +1,4 @@
 digraph unitmap{
-UnitMap -> UMapUnitDefn;
 UnitMap	[shape=oval, color=red2, label="UnitMap"];
+UnitMap -> UMapUnitDefn;
 }

@@ -1,4 +1,4 @@
 digraph variablecppsrccode{
-VariableCppSrcCode -> VarData;
 VariableCppSrcCode	[shape=oval, color=red2, label="VariableCppSrcCode"];
+VariableCppSrcCode -> VarData;
 }

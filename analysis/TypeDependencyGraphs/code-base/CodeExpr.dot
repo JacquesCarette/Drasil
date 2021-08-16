@@ -1,4 +1,5 @@
 digraph codeexpr{
+CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
 CodeExpr -> Double;
 CodeExpr -> CodeExpr;
 CodeExpr -> Integer;
@@ -20,5 +21,4 @@ CodeExpr -> VVVBinOp;
 CodeExpr -> VVNBinOp;
 CodeExpr -> DomainDesc;
 CodeExpr -> RealInterval;
-CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
 }

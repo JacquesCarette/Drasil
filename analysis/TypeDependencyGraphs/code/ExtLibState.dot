@@ -1,7 +1,7 @@
 digraph extlibstate{
+ExtLibState	[shape=oval, color=cyan3, label="ExtLibState"];
 ExtLibState -> Mod;
 ExtLibState -> FuncStmt;
 ExtLibState -> Name;
 ExtLibState -> String;
-ExtLibState	[shape=oval, color=cyan3, label="ExtLibState"];
 }

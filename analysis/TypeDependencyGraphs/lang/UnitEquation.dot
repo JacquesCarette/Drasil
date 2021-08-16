@@ -1,5 +1,5 @@
 digraph unitequation{
+UnitEquation	[shape=oval, color=cyan3, label="UnitEquation"];
 UnitEquation -> UID;
 UnitEquation -> USymb;
-UnitEquation	[shape=oval, color=cyan3, label="UnitEquation"];
 }

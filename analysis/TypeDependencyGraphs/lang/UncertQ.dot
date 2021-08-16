@@ -1,5 +1,5 @@
 digraph uncertq{
+UncertQ	[shape=oval, color=cyan3, label="UncertQ"];
 UncertQ -> ConstrConcept;
 UncertQ -> Uncertainty;
-UncertQ	[shape=oval, color=cyan3, label="UncertQ"];
 }

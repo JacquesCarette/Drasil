@@ -1,7 +1,7 @@
 digraph funcstmt{
+FuncStmt	[shape=oval, color=darkviolet, label="FuncStmt"];
 FuncStmt -> CodeVarChunk;
 FuncStmt -> CodeExpr;
 FuncStmt -> FuncStmt;
 FuncStmt -> Integer;
-FuncStmt	[shape=oval, color=darkviolet, label="FuncStmt"];
 }

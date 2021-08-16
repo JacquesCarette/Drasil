@@ -1,4 +1,4 @@
 digraph items{
-Items -> LayoutObj;
 Items	[shape=oval, color=red2, label="Items"];
+Items -> LayoutObj;
 }

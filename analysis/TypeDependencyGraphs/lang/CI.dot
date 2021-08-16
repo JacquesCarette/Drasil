@@ -1,6 +1,6 @@
 digraph ci{
+CI	[shape=oval, color=cyan3, label="CI"];
 CI -> NamedChunk;
 CI -> String;
 CI -> UID;
-CI	[shape=oval, color=cyan3, label="CI"];
 }

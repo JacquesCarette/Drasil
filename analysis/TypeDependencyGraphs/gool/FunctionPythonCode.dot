@@ -1,4 +1,4 @@
 digraph functionpythoncode{
-FunctionPythonCode -> FuncData;
 FunctionPythonCode	[shape=oval, color=red2, label="FunctionPythonCode"];
+FunctionPythonCode -> FuncData;
 }

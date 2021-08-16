@@ -1,4 +1,4 @@
 digraph langabbrev{
-LangAbbrev -> String;
 LangAbbrev	[shape=oval, color=red2, label="LangAbbrev"];
+LangAbbrev -> String;
 }

@@ -1,4 +1,5 @@
 digraph theorymodel{
+TheoryModel	[shape=oval, color=cyan3, label="TheoryModel"];
 TheoryModel -> ModelKind;
 TheoryModel -> TheoryModel;
 TheoryModel -> SpaceDefn;
@@ -10,5 +11,4 @@ TheoryModel -> DecRef;
 TheoryModel -> ShortName;
 TheoryModel -> String;
 TheoryModel -> Sentence;
-TheoryModel	[shape=oval, color=cyan3, label="TheoryModel"];
 }

@@ -1,5 +1,5 @@
 digraph docspec{
+DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 DocSpec -> DocChoices;
 DocSpec -> Filename;
-DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 }

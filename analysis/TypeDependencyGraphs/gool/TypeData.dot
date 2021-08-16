@@ -1,6 +1,6 @@
 digraph typedata{
+TypeData	[shape=oval, color=cyan3, label="TypeData"];
 TypeData -> CodeType;
 TypeData -> String;
 TypeData -> Doc;
-TypeData	[shape=oval, color=cyan3, label="TypeData"];
 }

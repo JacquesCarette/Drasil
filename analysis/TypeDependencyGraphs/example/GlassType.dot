@@ -1,4 +1,4 @@
 digraph glasstype{
-GlassType -> IntegerCI;
 GlassType	[shape=oval, color=red2, label="GlassType"];
+GlassType -> IntegerCI;
 }

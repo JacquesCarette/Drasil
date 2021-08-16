@@ -1,4 +1,4 @@
 digraph system{
-System -> Sentence;
 System	[shape=oval, color=red2, label="System"];
+System -> Sentence;
 }

@@ -1,58 +1,58 @@
 digraph alltypes {
 	subgraph print {
 		subgraph nodefamily{
+		NodeFamily	[shape=oval, color=cyan3, label="NodeFamily"];
 		NodeFamily -> UID;
 		NodeFamily -> Label;
 		NodeFamily -> Colour;
-		NodeFamily	[shape=oval, color=cyan3, label="NodeFamily"];
 		}
 		subgraph graphinfo{
+		GraphInfo	[shape=oval, color=cyan3, label="GraphInfo"];
 		GraphInfo -> NodeFamily;
 		GraphInfo -> UID;
-		GraphInfo	[shape=oval, color=cyan3, label="GraphInfo"];
 		}
 		subgraph colour{
-		Colour -> String;
 		Colour	[shape=oval, color=red2, label="Colour"];
+		Colour -> String;
 		}
 		subgraph label{
-		Label -> String;
 		Label	[shape=oval, color=red2, label="Label"];
+		Label -> String;
 		}
 	}
 	subgraph css {
 	}
 	subgraph helpers {
 		subgraph variation{
+		Variation	[shape=oval, color=darkviolet, label="Variation"];
 		Variation -> String;
 		Variation -> Doc;
-		Variation	[shape=oval, color=darkviolet, label="Variation"];
 		}
 	}
 	subgraph monad {
 		subgraph printhtml{
-		PrintHTML -> String;
 		PrintHTML	[shape=oval, color=darkgreen, label="PrintHTML"];
+		PrintHTML -> String;
 		}
 	}
 	subgraph print {
 		subgraph openclose{
+		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
 		OpenClose -> PrintingInformation;
 		OpenClose -> String;
 		OpenClose -> Document;
 		OpenClose -> Doc;
-		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
 		}
 	}
 	subgraph helpers {
 		subgraph variation{
+		Variation	[shape=oval, color=darkviolet, label="Variation"];
 		Variation -> td;
 		Variation -> figure;
 		Variation -> li;
 		Variation -> pa;
 		Variation -> ba;
 		Variation -> Doc;
-		Variation	[shape=oval, color=darkviolet, label="Variation"];
 		}
 	}
 	subgraph print {
@@ -61,14 +61,14 @@ digraph alltypes {
 	}
 	subgraph createmd {
 		subgraph seperator{
-		Seperator -> Doc;
 		Seperator	[shape=oval, color=red2, label="Seperator"];
+		Seperator -> Doc;
 		}
 	}
 	subgraph print {
 		subgraph linearity{
-		Linearity -> PrintingConfiguration;
 		Linearity	[shape=oval, color=darkviolet, label="Linearity"];
+		Linearity -> PrintingConfiguration;
 		}
 	}
 	subgraph codeexpr {
@@ -89,8 +89,8 @@ digraph alltypes {
 	}
 	subgraph ast {
 		subgraph linktype{
-		LinkType -> Spec;
 		LinkType	[shape=oval, color=darkviolet, label="LinkType"];
+		LinkType -> Spec;
 		}
 		subgraph ops{
 		Ops	[shape=oval, color=darkviolet, label="Ops"];
@@ -108,56 +108,56 @@ digraph alltypes {
 		Spacing	[shape=oval, color=darkviolet, label="Spacing"];
 		}
 		subgraph expr{
+		Expr	[shape=oval, color=darkviolet, label="Expr"];
 		Expr -> Double;
 		Expr -> Integer;
 		Expr -> String;
 		Expr -> Expr;
-		Expr	[shape=oval, color=darkviolet, label="Expr"];
 		}
 		subgraph spec{
-		Spec -> Expr;
 		Spec	[shape=oval, color=darkviolet, label="Spec"];
+		Spec -> Expr;
 		}
 		subgraph listtype{
+		ListType	[shape=oval, color=darkviolet, label="ListType"];
 		ListType -> ItemType;
 		ListType -> Maybe;
 		ListType -> Label;
 		ListType -> Title;
-		ListType	[shape=oval, color=darkviolet, label="ListType"];
 		}
 		subgraph itemtype{
+		ItemType	[shape=oval, color=darkviolet, label="ItemType"];
 		ItemType -> Spec;
 		ItemType -> ListType;
-		ItemType	[shape=oval, color=darkviolet, label="ItemType"];
 		}
 		subgraph label{
-		Label -> Spec;
 		Label	[shape=oval, color=red2, label="Label"];
+		Label -> Spec;
 		}
 		subgraph title{
-		Title -> Spec;
 		Title	[shape=oval, color=red2, label="Title"];
+		Title -> Spec;
 		}
 	}
 	subgraph citation {
 		subgraph citation{
+		Citation	[shape=oval, color=darkviolet, label="Citation"];
 		Citation -> EntryID;
 		Citation -> CitationKind;
 		Citation -> CiteField;
-		Citation	[shape=oval, color=darkviolet, label="Citation"];
 		}
 		subgraph citefield{
+		CiteField	[shape=oval, color=darkviolet, label="CiteField"];
 		CiteField -> Spec;
 		CiteField -> People;
-		CiteField	[shape=oval, color=darkviolet, label="CiteField"];
 		}
 		subgraph hp{
-		HP -> Spec;
 		HP	[shape=oval, color=darkviolet, label="HP"];
+		HP -> Spec;
 		}
 		subgraph bibref{
-		BibRef -> Citation;
 		BibRef	[shape=oval, color=red2, label="BibRef"];
+		BibRef -> Citation;
 		}
 	}
 	subgraph helpers {
@@ -166,69 +166,69 @@ digraph alltypes {
 	}
 	subgraph layoutobj {
 		subgraph document{
+		Document	[shape=oval, color=darkviolet, label="Document"];
 		Document -> Title;
 		Document -> Author;
 		Document -> LayoutObj;
-		Document	[shape=oval, color=darkviolet, label="Document"];
 		}
 		subgraph layoutobj{
+		LayoutObj	[shape=oval, color=darkviolet, label="LayoutObj"];
 		LayoutObj -> Tags;
 		LayoutObj -> Spec;
 		LayoutObj -> Label;
 		LayoutObj -> Bool;
 		LayoutObj -> Caption;
-		LayoutObj	[shape=oval, color=darkviolet, label="LayoutObj"];
 		}
 		subgraph author{
-		Author -> Spec;
 		Author	[shape=oval, color=red2, label="Author"];
+		Author -> Spec;
 		}
 		subgraph contents{
-		Contents -> Spec;
 		Contents	[shape=oval, color=red2, label="Contents"];
+		Contents -> Spec;
 		}
 		subgraph items{
-		Items -> LayoutObj;
 		Items	[shape=oval, color=red2, label="Items"];
+		Items -> LayoutObj;
 		}
 		subgraph tags{
-		Tags -> String;
 		Tags	[shape=oval, color=red2, label="Tags"];
+		Tags -> String;
 		}
 		subgraph depth{
-		Depth -> Int;
 		Depth	[shape=oval, color=red2, label="Depth"];
+		Depth -> Int;
 		}
 		subgraph width{
-		Width -> Float;
 		Width	[shape=oval, color=red2, label="Width"];
+		Width -> Float;
 		}
 		subgraph height{
-		Height -> Float;
 		Height	[shape=oval, color=red2, label="Height"];
+		Height -> Float;
 		}
 		subgraph filepath{
-		Filepath -> String;
 		Filepath	[shape=oval, color=red2, label="Filepath"];
+		Filepath -> String;
 		}
 		subgraph caption{
-		Caption -> Spec;
 		Caption	[shape=oval, color=red2, label="Caption"];
+		Caption -> Spec;
 		}
 	}
 	subgraph printinginformation {
 		subgraph printinginformation{
+		PrintingInformation	[shape=oval, color=cyan3, label="PrintingInformation"];
 		PrintingInformation -> ChunkDB;
 		PrintingInformation -> Stage;
 		PrintingInformation -> PrintingConfiguration;
-		PrintingInformation	[shape=oval, color=cyan3, label="PrintingInformation"];
 		}
 		subgraph notation{
 		Notation	[shape=oval, color=darkviolet, label="Notation"];
 		}
 		subgraph printingconfiguration{
-		PrintingConfiguration -> Notation;
 		PrintingConfiguration	[shape=oval, color=darkgreen, label="PrintingConfiguration"];
+		PrintingConfiguration -> Notation;
 		}
 	}
 	subgraph helpers {
@@ -238,12 +238,12 @@ digraph alltypes {
 		MathContext	[shape=oval, color=darkviolet, label="MathContext"];
 		}
 		subgraph latex{
-		Latex -> String;
 		Latex	[shape=oval, color=darkgreen, label="Latex"];
+		Latex -> String;
 		}
 		subgraph d{
-		D -> Doc;
 		D	[shape=oval, color=red2, label="D"];
+		D -> Doc;
 		}
 	}
 	subgraph preamble {
@@ -256,23 +256,23 @@ digraph alltypes {
 	}
 	subgraph print {
 		subgraph openclose{
+		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
 		OpenClose -> Expr;
 		OpenClose -> D;
-		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
 		}
 		subgraph fieldwrap{
+		FieldWrap	[shape=oval, color=darkviolet, label="FieldWrap"];
 		FieldWrap -> String;
 		FieldWrap -> FieldWrap;
 		FieldWrap -> Spec;
 		FieldWrap -> D;
-		FieldWrap	[shape=oval, color=darkviolet, label="FieldWrap"];
 		}
 	}
 	subgraph config {
 		subgraph styleguide{
+		StyleGuide	[shape=oval, color=darkviolet, label="StyleGuide"];
 		StyleGuide -> StyleGuide;
 		StyleGuide -> String;
-		StyleGuide	[shape=oval, color=darkviolet, label="StyleGuide"];
 		}
 	}
 	subgraph format {

@@ -1,4 +1,4 @@
 digraph bibmap{
-BibMap -> RefMapCitation;
 BibMap	[shape=oval, color=red2, label="BibMap"];
+BibMap -> RefMapCitation;
 }

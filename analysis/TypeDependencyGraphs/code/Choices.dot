@@ -1,4 +1,5 @@
 digraph choices{
+Choices	[shape=oval, color=cyan3, label="Choices"];
 Choices -> Lang;
 Choices -> Modularity;
 Choices -> Structure;
@@ -16,5 +17,4 @@ Choices -> Visibility;
 Choices -> Logging;
 Choices -> FilePath;
 Choices -> AuxFile;
-Choices	[shape=oval, color=cyan3, label="Choices"];
 }

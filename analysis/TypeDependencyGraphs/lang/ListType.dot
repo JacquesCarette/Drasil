@@ -1,6 +1,6 @@
 digraph listtype{
+ListType	[shape=oval, color=darkviolet, label="ListType"];
 ListType -> ItemType;
 ListType -> Maybe;
 ListType -> String;
-ListType	[shape=oval, color=darkviolet, label="ListType"];
 }

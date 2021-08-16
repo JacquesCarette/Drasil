@@ -1,4 +1,4 @@
 digraph pythoncodea{
-PythonCodea -> a;
 PythonCodea	[shape=oval, color=darkgreen, label="PythonCodea"];
+PythonCodea -> a;
 }

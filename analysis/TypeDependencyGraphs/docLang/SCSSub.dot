@@ -1,4 +1,5 @@
 digraph scssub{
+SCSSub	[shape=oval, color=darkviolet, label="SCSSub"];
 SCSSub -> SCSSub;
 SCSSub -> Sentence;
 SCSSub -> Fields;
@@ -10,5 +11,4 @@ SCSSub -> Constrained;
 SCSSub -> HasReasVal;
 SCSSub -> MayHaveUnit;
 SCSSub -> Contents;
-SCSSub	[shape=oval, color=darkviolet, label="SCSSub"];
 }

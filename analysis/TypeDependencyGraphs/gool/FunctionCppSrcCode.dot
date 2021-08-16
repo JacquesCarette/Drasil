@@ -1,4 +1,4 @@
 digraph functioncppsrccode{
-FunctionCppSrcCode -> FuncData;
 FunctionCppSrcCode	[shape=oval, color=red2, label="FunctionCppSrcCode"];
+FunctionCppSrcCode -> FuncData;
 }

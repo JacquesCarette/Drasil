@@ -1,4 +1,4 @@
 digraph stkhldrsec{
-StkhldrSec -> StkhldrSub;
 StkhldrSec	[shape=oval, color=darkgreen, label="StkhldrSec"];
+StkhldrSec -> StkhldrSub;
 }

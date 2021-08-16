@@ -1,4 +1,4 @@
 digraph itemtype{
-ItemType -> Sentence;
 ItemType	[shape=oval, color=darkviolet, label="ItemType"];
+ItemType -> Sentence;
 }

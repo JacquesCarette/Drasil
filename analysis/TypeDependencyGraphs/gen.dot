@@ -1,32 +1,32 @@
 digraph alltypes {
 	subgraph formats {
 		subgraph doctype{
+		DocType	[shape=oval, color=cyan3, label="DocType"];
 		DocType -> DocType;
 		DocType -> Format;
-		DocType	[shape=oval, color=cyan3, label="DocType"];
 		}
 		subgraph docspec{
+		DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 		DocSpec -> DocChoices;
 		DocSpec -> Filename;
-		DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
 		}
 		subgraph docclass{
+		DocClass	[shape=oval, color=darkviolet, label="DocClass"];
 		DocClass -> Maybe;
 		DocClass -> String;
-		DocClass	[shape=oval, color=darkviolet, label="DocClass"];
 		}
 		subgraph exdoc{
+		ExDoc	[shape=oval, color=darkviolet, label="ExDoc"];
 		ExDoc -> Maybe;
 		ExDoc -> String;
-		ExDoc	[shape=oval, color=darkviolet, label="ExDoc"];
 		}
 		subgraph usepackages{
-		UsePackages -> String;
 		UsePackages	[shape=oval, color=darkgreen, label="UsePackages"];
+		UsePackages -> String;
 		}
 		subgraph filename{
-		Filename -> String;
 		Filename	[shape=oval, color=red2, label="Filename"];
+		Filename -> String;
 		}
 	}
 	subgraph generate {

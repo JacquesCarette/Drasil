@@ -1,5 +1,5 @@
 digraph exdoc{
+ExDoc	[shape=oval, color=darkviolet, label="ExDoc"];
 ExDoc -> Maybe;
 ExDoc -> String;
-ExDoc	[shape=oval, color=darkviolet, label="ExDoc"];
 }

@@ -1,4 +1,4 @@
 digraph valuejavacode{
-ValueJavaCode -> ValData;
 ValueJavaCode	[shape=oval, color=red2, label="ValueJavaCode"];
+ValueJavaCode -> ValData;
 }

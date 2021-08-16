@@ -1,6 +1,6 @@
 digraph unitsymbol{
+UnitSymbol	[shape=oval, color=darkviolet, label="UnitSymbol"];
 UnitSymbol -> USymb;
 UnitSymbol -> UDefn;
 UnitSymbol -> UnitSymbol;
-UnitSymbol	[shape=oval, color=darkviolet, label="UnitSymbol"];
 }

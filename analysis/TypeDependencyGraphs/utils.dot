@@ -18,10 +18,10 @@ digraph alltypes {
 		SepType	[shape=oval, color=darkviolet, label="SepType"];
 		}
 		subgraph foldtype{
+		FoldType	[shape=oval, color=darkviolet, label="FoldType"];
 		FoldType -> SepType;
 		FoldType -> FoldType;
 		FoldType -> Sentence;
-		FoldType	[shape=oval, color=darkviolet, label="FoldType"];
 		}
 	}
 	subgraph litss {

@@ -1,4 +1,4 @@
 digraph hdrstatesa{
-HdrStatesa -> StatesCppHdrCodea;
 HdrStatesa	[shape=oval, color=red2, label="HdrStatesa"];
+HdrStatesa -> StatesCppHdrCodea;
 }

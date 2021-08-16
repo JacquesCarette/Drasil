@@ -1,4 +1,4 @@
 digraph input{
-Input -> CodeVarChunk;
 Input	[shape=oval, color=red2, label="Input"];
+Input -> CodeVarChunk;
 }

@@ -1,5 +1,5 @@
 digraph binding{
+Binding	[shape=oval, color=darkviolet, label="Binding"];
 Binding -> Binding;
 Binding -> a;
-Binding	[shape=oval, color=darkviolet, label="Binding"];
 }

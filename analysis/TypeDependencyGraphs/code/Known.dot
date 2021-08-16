@@ -1,4 +1,4 @@
 digraph known{
-Known -> CodeVarChunk;
 Known	[shape=oval, color=red2, label="Known"];
+Known -> CodeVarChunk;
 }

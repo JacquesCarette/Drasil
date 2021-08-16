@@ -1,5 +1,5 @@
 digraph classstate{
+ClassState	[shape=oval, color=cyan3, label="ClassState"];
 ClassState -> FileState;
 ClassState -> ClassName;
-ClassState	[shape=oval, color=cyan3, label="ClassState"];
 }

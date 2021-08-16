@@ -1,4 +1,4 @@
 digraph smmrysec{
-SmmrySec -> Contents;
 SmmrySec	[shape=oval, color=darkgreen, label="SmmrySec"];
+SmmrySec -> Contents;
 }

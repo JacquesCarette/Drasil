@@ -1,5 +1,5 @@
 digraph citefield{
+CiteField	[shape=oval, color=darkviolet, label="CiteField"];
 CiteField -> String;
 CiteField -> People;
-CiteField	[shape=oval, color=darkviolet, label="CiteField"];
 }

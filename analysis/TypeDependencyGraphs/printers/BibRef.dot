@@ -1,4 +1,4 @@
 digraph bibref{
-BibRef -> Citation;
 BibRef	[shape=oval, color=red2, label="BibRef"];
+BibRef -> Citation;
 }

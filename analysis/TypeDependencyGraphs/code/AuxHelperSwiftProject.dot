@@ -1,4 +1,4 @@
 digraph auxhelperswiftproject{
-AuxHelperSwiftProject -> Doc;
 AuxHelperSwiftProject	[shape=oval, color=red2, label="AuxHelperSwiftProject"];
+AuxHelperSwiftProject -> Doc;
 }

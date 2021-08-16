@@ -1,4 +1,4 @@
 digraph listtuple{
-ListTuple -> TitleItemTypeMaybeString;
 ListTuple	[shape=oval, color=red2, label="ListTuple"];
+ListTuple -> TitleItemTypeMaybeString;
 }

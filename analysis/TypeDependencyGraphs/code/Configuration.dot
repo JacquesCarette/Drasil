@@ -1,6 +1,6 @@
 digraph configuration{
+Configuration	[shape=oval, color=cyan3, label="Configuration"];
 Configuration -> String;
 Configuration -> MaybeString;
 Configuration -> Options;
-Configuration	[shape=oval, color=cyan3, label="Configuration"];
 }

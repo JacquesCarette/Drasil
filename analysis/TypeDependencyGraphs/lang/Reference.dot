@@ -1,6 +1,6 @@
 digraph reference{
+Reference	[shape=oval, color=cyan3, label="Reference"];
 Reference -> UID;
 Reference -> LblType;
 Reference -> ShortName;
-Reference	[shape=oval, color=cyan3, label="Reference"];
 }

@@ -1,4 +1,4 @@
 digraph tags{
-Tags -> String;
 Tags	[shape=oval, color=red2, label="Tags"];
+Tags -> String;
 }

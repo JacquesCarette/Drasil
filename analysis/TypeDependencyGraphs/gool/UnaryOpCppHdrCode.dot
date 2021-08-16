@@ -1,4 +1,4 @@
 digraph unaryopcpphdrcode{
-UnaryOpCppHdrCode -> OpData;
 UnaryOpCppHdrCode	[shape=oval, color=red2, label="UnaryOpCppHdrCode"];
+UnaryOpCppHdrCode -> OpData;
 }

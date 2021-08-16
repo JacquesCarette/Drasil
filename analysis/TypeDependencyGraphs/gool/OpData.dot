@@ -1,5 +1,5 @@
 digraph opdata{
+OpData	[shape=oval, color=cyan3, label="OpData"];
 OpData -> Int;
 OpData -> Doc;
-OpData	[shape=oval, color=cyan3, label="OpData"];
 }

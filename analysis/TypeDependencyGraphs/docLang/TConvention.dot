@@ -1,4 +1,4 @@
 digraph tconvention{
-TConvention -> Emphasis;
 TConvention	[shape=oval, color=darkviolet, label="TConvention"];
+TConvention -> Emphasis;
 }

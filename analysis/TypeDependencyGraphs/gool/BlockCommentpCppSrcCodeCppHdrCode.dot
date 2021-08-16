@@ -1,4 +1,4 @@
 digraph blockcommentpcppsrccodecpphdrcode{
-BlockCommentpCppSrcCodeCppHdrCode -> Doc;
 BlockCommentpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="BlockCommentpCppSrcCodeCppHdrCode"];
+BlockCommentpCppSrcCodeCppHdrCode -> Doc;
 }

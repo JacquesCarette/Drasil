@@ -1,4 +1,4 @@
 digraph programpythoncode{
-ProgramPythonCode -> ProgData;
 ProgramPythonCode	[shape=oval, color=red2, label="ProgramPythonCode"];
+ProgramPythonCode -> ProgData;
 }

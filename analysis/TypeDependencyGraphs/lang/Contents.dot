@@ -1,5 +1,5 @@
 digraph contents{
+Contents	[shape=oval, color=darkviolet, label="Contents"];
 Contents -> UnlabelledContent;
 Contents -> LabelledContent;
-Contents	[shape=oval, color=darkviolet, label="Contents"];
 }

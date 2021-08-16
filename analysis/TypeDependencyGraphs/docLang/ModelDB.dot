@@ -1,7 +1,7 @@
 digraph modeldb{
+ModelDB	[shape=oval, color=cyan3, label="ModelDB"];
 ModelDB -> RefMapTheoryModel;
 ModelDB -> RefMapGenDefn;
 ModelDB -> RefMapDataDefinition;
 ModelDB -> RefMapInstanceModel;
-ModelDB	[shape=oval, color=cyan3, label="ModelDB"];
 }

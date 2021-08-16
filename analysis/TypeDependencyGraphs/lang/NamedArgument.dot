@@ -1,4 +1,4 @@
 digraph namedargument{
-NamedArgument -> QuantityDict;
 NamedArgument	[shape=oval, color=darkgreen, label="NamedArgument"];
+NamedArgument -> QuantityDict;
 }

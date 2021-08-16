@@ -1,5 +1,5 @@
 digraph styleguide{
+StyleGuide	[shape=oval, color=darkviolet, label="StyleGuide"];
 StyleGuide -> StyleGuide;
 StyleGuide -> String;
-StyleGuide	[shape=oval, color=darkviolet, label="StyleGuide"];
 }

@@ -1,4 +1,4 @@
 digraph linearity{
-Linearity -> PrintingConfiguration;
 Linearity	[shape=oval, color=darkviolet, label="Linearity"];
+Linearity -> PrintingConfiguration;
 }

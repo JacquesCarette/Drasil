@@ -1,6 +1,6 @@
 digraph constrconcept{
+ConstrConcept	[shape=oval, color=cyan3, label="ConstrConcept"];
 ConstrConcept -> DefinedQuantityDict;
 ConstrConcept -> ConstraintE;
 ConstrConcept -> MaybeExpr;
-ConstrConcept	[shape=oval, color=cyan3, label="ConstrConcept"];
 }

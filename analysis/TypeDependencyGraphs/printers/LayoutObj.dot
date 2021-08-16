@@ -1,8 +1,8 @@
 digraph layoutobj{
+LayoutObj	[shape=oval, color=darkviolet, label="LayoutObj"];
 LayoutObj -> Tags;
 LayoutObj -> Spec;
 LayoutObj -> Label;
 LayoutObj -> Bool;
 LayoutObj -> Caption;
-LayoutObj	[shape=oval, color=darkviolet, label="LayoutObj"];
 }

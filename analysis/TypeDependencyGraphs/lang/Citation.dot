@@ -1,7 +1,7 @@
 digraph citation{
+Citation	[shape=oval, color=cyan3, label="Citation"];
 Citation -> CitationKind;
 Citation -> CiteField;
 Citation -> UID;
 Citation -> ShortName;
-Citation	[shape=oval, color=cyan3, label="Citation"];
 }

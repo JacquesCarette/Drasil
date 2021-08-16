@@ -1,5 +1,5 @@
 digraph solchspec{
+SolChSpec	[shape=oval, color=darkviolet, label="SolChSpec"];
 SolChSpec -> SCSSub;
 SolChSpec -> SolChSpec;
-SolChSpec	[shape=oval, color=darkviolet, label="SolChSpec"];
 }

@@ -1,4 +1,4 @@
 digraph colour{
-Colour -> String;
 Colour	[shape=oval, color=red2, label="Colour"];
+Colour -> String;
 }

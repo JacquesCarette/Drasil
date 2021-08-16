@@ -1,5 +1,5 @@
 digraph codevarchunk{
+CodeVarChunk	[shape=oval, color=cyan3, label="CodeVarChunk"];
 CodeVarChunk -> CodeChunk;
 CodeVarChunk -> MaybeCodeChunk;
-CodeVarChunk	[shape=oval, color=cyan3, label="CodeVarChunk"];
 }

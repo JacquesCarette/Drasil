@@ -1,4 +1,4 @@
 digraph cs{
-CS -> StateClassState;
 CS	[shape=oval, color=red2, label="CS"];
+CS -> StateClassState;
 }

@@ -1,7 +1,7 @@
 digraph problemdescription{
+ProblemDescription	[shape=oval, color=darkviolet, label="ProblemDescription"];
 ProblemDescription -> Sentence;
 ProblemDescription -> Section;
 ProblemDescription -> PDSub;
 ProblemDescription -> ProblemDescription;
-ProblemDescription	[shape=oval, color=darkviolet, label="ProblemDescription"];
 }

@@ -1,6 +1,6 @@
 digraph unitdefn{
+UnitDefn	[shape=oval, color=cyan3, label="UnitDefn"];
 UnitDefn -> ConceptChunk;
 UnitDefn -> UnitSymbol;
 UnitDefn -> UID;
-UnitDefn	[shape=oval, color=cyan3, label="UnitDefn"];
 }

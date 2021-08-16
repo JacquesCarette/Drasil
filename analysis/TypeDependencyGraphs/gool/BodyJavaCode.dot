@@ -1,4 +1,4 @@
 digraph bodyjavacode{
-BodyJavaCode -> Doc;
 BodyJavaCode	[shape=oval, color=red2, label="BodyJavaCode"];
+BodyJavaCode -> Doc;
 }

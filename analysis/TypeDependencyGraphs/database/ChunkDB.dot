@@ -1,4 +1,5 @@
 digraph chunkdb{
+ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 ChunkDB -> SymbolMap;
 ChunkDB -> TermMap;
 ChunkDB -> ConceptMap;
@@ -13,5 +14,4 @@ ChunkDB -> ConceptInstanceMap;
 ChunkDB -> SectionMap;
 ChunkDB -> LabelledContentMap;
 ChunkDB -> ReferenceMap;
-ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 }

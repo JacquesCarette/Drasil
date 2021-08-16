@@ -1,4 +1,4 @@
 digraph datadesc{
-DataDesc -> Data;
 DataDesc	[shape=oval, color=red2, label="DataDesc"];
+DataDesc -> Data;
 }

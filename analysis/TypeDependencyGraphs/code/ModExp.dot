@@ -1,4 +1,4 @@
 digraph modexp{
-ModExp -> StringString;
 ModExp	[shape=oval, color=red2, label="ModExp"];
+ModExp -> StringString;
 }

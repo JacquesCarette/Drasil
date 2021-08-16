@@ -1,6 +1,6 @@
 digraph section{
+Section	[shape=oval, color=cyan3, label="Section"];
 Section -> Depth;
 Section -> SecHeader;
 Section -> Content;
-Section	[shape=oval, color=cyan3, label="Section"];
 }

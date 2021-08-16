@@ -1,5 +1,5 @@
 digraph person{
+Person	[shape=oval, color=cyan3, label="Person"];
 Person -> String;
 Person -> Conv;
-Person	[shape=oval, color=cyan3, label="Person"];
 }

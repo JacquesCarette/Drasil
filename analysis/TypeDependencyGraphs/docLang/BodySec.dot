@@ -1,4 +1,4 @@
 digraph bodysec{
-BodySec -> BodySub;
 BodySec	[shape=oval, color=darkgreen, label="BodySec"];
+BodySec -> BodySub;
 }

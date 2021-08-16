@@ -1,4 +1,4 @@
 digraph unaryoppythoncode{
-UnaryOpPythonCode -> OpData;
 UnaryOpPythonCode	[shape=oval, color=red2, label="UnaryOpPythonCode"];
+UnaryOpPythonCode -> OpData;
 }

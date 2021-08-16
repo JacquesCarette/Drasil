@@ -1,4 +1,4 @@
 digraph methodtypepcppsrccodecpphdrcode{
-MethodTypepCppSrcCodeCppHdrCode -> TypeData;
 MethodTypepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="MethodTypepCppSrcCodeCppHdrCode"];
+MethodTypepCppSrcCodeCppHdrCode -> TypeData;
 }

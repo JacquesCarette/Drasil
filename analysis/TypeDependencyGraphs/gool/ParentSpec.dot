@@ -1,4 +1,4 @@
 digraph parentspec{
-ParentSpec -> Doc;
 ParentSpec	[shape=oval, color=red2, label="ParentSpec"];
+ParentSpec -> Doc;
 }

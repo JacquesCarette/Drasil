@@ -1,4 +1,4 @@
 digraph ms{
-MS -> StateMethodState;
 MS	[shape=oval, color=red2, label="MS"];
+MS -> StateMethodState;
 }

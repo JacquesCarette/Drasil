@@ -1,4 +1,4 @@
 digraph methodtypeswiftcode{
-MethodTypeSwiftCode -> TypeData;
 MethodTypeSwiftCode	[shape=oval, color=red2, label="MethodTypeSwiftCode"];
+MethodTypeSwiftCode -> TypeData;
 }

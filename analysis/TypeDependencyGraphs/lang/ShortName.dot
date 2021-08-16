@@ -1,4 +1,4 @@
 digraph shortname{
-ShortName -> Sentence;
 ShortName	[shape=oval, color=darkgreen, label="ShortName"];
+ShortName -> Sentence;
 }

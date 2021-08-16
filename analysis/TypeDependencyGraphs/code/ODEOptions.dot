@@ -1,5 +1,5 @@
 digraph odeoptions{
+ODEOptions	[shape=oval, color=cyan3, label="ODEOptions"];
 ODEOptions -> ODEMethod;
 ODEOptions -> CodeExpr;
-ODEOptions	[shape=oval, color=cyan3, label="ODEOptions"];
 }

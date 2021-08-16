@@ -1,4 +1,4 @@
 digraph blockswiftcode{
-BlockSwiftCode -> Doc;
 BlockSwiftCode	[shape=oval, color=red2, label="BlockSwiftCode"];
+BlockSwiftCode -> Doc;
 }

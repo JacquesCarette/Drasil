@@ -1,4 +1,4 @@
 digraph blockpythoncode{
-BlockPythonCode -> Doc;
 BlockPythonCode	[shape=oval, color=red2, label="BlockPythonCode"];
+BlockPythonCode -> Doc;
 }

@@ -1,4 +1,4 @@
 digraph dataitem{
-DataItem -> CodeVarChunk;
 DataItem	[shape=oval, color=red2, label="DataItem"];
+DataItem -> CodeVarChunk;
 }

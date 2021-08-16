@@ -1,6 +1,6 @@
 digraph document{
+Document	[shape=oval, color=darkviolet, label="Document"];
 Document -> Title;
 Document -> Author;
 Document -> LayoutObj;
-Document	[shape=oval, color=darkviolet, label="Document"];
 }

@@ -1,4 +1,4 @@
 digraph scopecpphdrcode{
-ScopeCppHdrCode -> DocScopeTag;
 ScopeCppHdrCode	[shape=oval, color=red2, label="ScopeCppHdrCode"];
+ScopeCppHdrCode -> DocScopeTag;
 }

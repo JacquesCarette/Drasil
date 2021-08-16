@@ -1,4 +1,4 @@
 digraph permanencepythoncode{
-PermanencePythonCode -> Doc;
 PermanencePythonCode	[shape=oval, color=red2, label="PermanencePythonCode"];
+PermanencePythonCode -> Doc;
 }

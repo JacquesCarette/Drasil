@@ -1,4 +1,4 @@
 digraph traceviewcat{
-TraceViewCat -> UIDChunkDBUID;
 TraceViewCat	[shape=oval, color=red2, label="TraceViewCat"];
+TraceViewCat -> UIDChunkDBUID;
 }

@@ -1,6 +1,6 @@
 digraph citation{
+Citation	[shape=oval, color=darkviolet, label="Citation"];
 Citation -> EntryID;
 Citation -> CitationKind;
 Citation -> CiteField;
-Citation	[shape=oval, color=darkviolet, label="Citation"];
 }

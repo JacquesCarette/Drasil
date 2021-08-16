@@ -1,6 +1,6 @@
 digraph functype{
+FuncType	[shape=oval, color=darkviolet, label="FuncType"];
 FuncType -> CodeVarChunk;
 FuncType -> StepGroup;
 FuncType -> ExternalLibrary;
-FuncType	[shape=oval, color=darkviolet, label="FuncType"];
 }

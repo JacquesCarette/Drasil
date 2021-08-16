@@ -1,4 +1,4 @@
 digraph packageswiftproject{
-PackageSwiftProject -> PackData;
 PackageSwiftProject	[shape=oval, color=red2, label="PackageSwiftProject"];
+PackageSwiftProject -> PackData;
 }

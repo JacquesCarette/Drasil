@@ -1,4 +1,5 @@
 digraph readmeinfo{
+ReadMeInfo	[shape=oval, color=cyan3, label="ReadMeInfo"];
 ReadMeInfo -> LangAbbrev;
 ReadMeInfo -> LangVers;
 ReadMeInfo -> MaybeString;
@@ -7,5 +8,4 @@ ReadMeInfo -> Name;
 ReadMeInfo -> FilePath;
 ReadMeInfo -> Contributor;
 ReadMeInfo -> CaseName;
-ReadMeInfo	[shape=oval, color=cyan3, label="ReadMeInfo"];
 }

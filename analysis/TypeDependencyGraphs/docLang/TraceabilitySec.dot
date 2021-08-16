@@ -1,4 +1,4 @@
 digraph traceabilitysec{
-TraceabilitySec -> TraceConfig;
 TraceabilitySec	[shape=oval, color=darkgreen, label="TraceabilitySec"];
+TraceabilitySec -> TraceConfig;
 }

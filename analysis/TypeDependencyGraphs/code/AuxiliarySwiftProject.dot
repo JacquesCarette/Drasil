@@ -1,4 +1,4 @@
 digraph auxiliaryswiftproject{
-AuxiliarySwiftProject -> AuxData;
 AuxiliarySwiftProject	[shape=oval, color=red2, label="AuxiliarySwiftProject"];
+AuxiliarySwiftProject -> AuxData;
 }

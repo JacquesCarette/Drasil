@@ -1,18 +1,18 @@
 digraph alltypes {
 	subgraph codebaes {
 		subgraph varorfunc{
+		VarOrFunc	[shape=oval, color=cyan3, label="VarOrFunc"];
 		VarOrFunc -> QuantityDict;
 		VarOrFunc -> VarOrFunc;
-		VarOrFunc	[shape=oval, color=cyan3, label="VarOrFunc"];
 		}
 		subgraph codevarchunk{
+		CodeVarChunk	[shape=oval, color=cyan3, label="CodeVarChunk"];
 		CodeVarChunk -> CodeChunk;
 		CodeVarChunk -> MaybeCodeChunk;
-		CodeVarChunk	[shape=oval, color=cyan3, label="CodeVarChunk"];
 		}
 		subgraph codefuncchunk{
-		CodeFuncChunk -> CodeChunk;
 		CodeFuncChunk	[shape=oval, color=darkgreen, label="CodeFuncChunk"];
+		CodeFuncChunk -> CodeChunk;
 		}
 	}
 	subgraph convert {
@@ -64,6 +64,7 @@ digraph alltypes {
 		UFuncVN	[shape=oval, color=darkviolet, label="UFuncVN"];
 		}
 		subgraph codeexpr{
+		CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
 		CodeExpr -> Double;
 		CodeExpr -> CodeExpr;
 		CodeExpr -> Integer;
@@ -85,7 +86,6 @@ digraph alltypes {
 		CodeExpr -> VVNBinOp;
 		CodeExpr -> DomainDesc;
 		CodeExpr -> RealInterval;
-		CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
 		}
 	}
 	subgraph codeexpr {

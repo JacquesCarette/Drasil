@@ -1,4 +1,4 @@
 digraph funcdocrenderer{
-FuncDocRenderer -> StringStringStringStringString;
 FuncDocRenderer	[shape=oval, color=red2, label="FuncDocRenderer"];
+FuncDocRenderer -> StringStringStringStringString;
 }

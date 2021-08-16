@@ -1,5 +1,5 @@
 digraph openclose{
+OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
 OpenClose -> Expr;
 OpenClose -> D;
-OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
 }

@@ -1,5 +1,5 @@
 digraph stepgroupfill{
+StepGroupFill	[shape=oval, color=darkviolet, label="StepGroupFill"];
 StepGroupFill -> Int;
 StepGroupFill -> StepFill;
-StepGroupFill	[shape=oval, color=darkviolet, label="StepGroupFill"];
 }

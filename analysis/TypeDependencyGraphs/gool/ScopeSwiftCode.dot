@@ -1,4 +1,4 @@
 digraph scopeswiftcode{
-ScopeSwiftCode -> Doc;
 ScopeSwiftCode	[shape=oval, color=red2, label="ScopeSwiftCode"];
+ScopeSwiftCode -> Doc;
 }

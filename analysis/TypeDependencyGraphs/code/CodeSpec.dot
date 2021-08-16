@@ -1,4 +1,5 @@
 digraph codespec{
+CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
 CodeSpec -> Name;
 CodeSpec -> a;
 CodeSpec -> Input;
@@ -11,5 +12,4 @@ CodeSpec -> Const;
 CodeSpec -> ConstantMap;
 CodeSpec -> Mod;
 CodeSpec -> ChunkDB;
-CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
 }

@@ -1,4 +1,4 @@
 digraph ssdsec{
-SSDSec -> SSDSub;
 SSDSec	[shape=oval, color=darkgreen, label="SSDSec"];
+SSDSec -> SSDSub;
 }

@@ -1,4 +1,4 @@
 digraph runtype{
-RunType -> CommandFragment;
 RunType	[shape=oval, color=darkviolet, label="RunType"];
+RunType -> CommandFragment;
 }

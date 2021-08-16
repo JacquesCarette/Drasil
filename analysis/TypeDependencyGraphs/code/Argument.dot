@@ -1,6 +1,6 @@
 digraph argument{
+Argument	[shape=oval, color=darkviolet, label="Argument"];
 Argument -> Maybe;
 Argument -> NamedArgument;
 Argument -> ArgumentInfo;
-Argument	[shape=oval, color=darkviolet, label="Argument"];
 }

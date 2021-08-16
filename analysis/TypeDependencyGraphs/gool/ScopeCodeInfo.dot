@@ -1,4 +1,4 @@
 digraph scopecodeinfo{
-ScopeCodeInfo -> ScopeTag;
 ScopeCodeInfo	[shape=oval, color=red2, label="ScopeCodeInfo"];
+ScopeCodeInfo -> ScopeTag;
 }

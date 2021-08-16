@@ -1,5 +1,5 @@
 digraph introdsec{
+IntrodSec	[shape=oval, color=darkviolet, label="IntrodSec"];
 IntrodSec -> Contents;
 IntrodSec -> IntrodSub;
-IntrodSec	[shape=oval, color=darkviolet, label="IntrodSec"];
 }

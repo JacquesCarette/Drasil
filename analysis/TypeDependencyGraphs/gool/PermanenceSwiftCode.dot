@@ -1,4 +1,4 @@
 digraph permanenceswiftcode{
-PermanenceSwiftCode -> Doc;
 PermanenceSwiftCode	[shape=oval, color=red2, label="PermanenceSwiftCode"];
+PermanenceSwiftCode -> Doc;
 }

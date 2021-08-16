@@ -1,4 +1,4 @@
 digraph uid{
-UID -> String;
 UID	[shape=oval, color=red2, label="UID"];
+UID -> String;
 }

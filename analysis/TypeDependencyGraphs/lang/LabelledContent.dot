@@ -1,5 +1,5 @@
 digraph labelledcontent{
+LabelledContent	[shape=oval, color=cyan3, label="LabelledContent"];
 LabelledContent -> Reference;
 LabelledContent -> RawContent;
-LabelledContent	[shape=oval, color=cyan3, label="LabelledContent"];
 }

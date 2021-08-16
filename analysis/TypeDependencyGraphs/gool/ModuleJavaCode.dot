@@ -1,4 +1,4 @@
 digraph modulejavacode{
-ModuleJavaCode -> ModData;
 ModuleJavaCode	[shape=oval, color=red2, label="ModuleJavaCode"];
+ModuleJavaCode -> ModData;
 }

@@ -1,4 +1,4 @@
 digraph scope{
-Scope -> UID;
 Scope	[shape=oval, color=darkgreen, label="Scope"];
+Scope -> UID;
 }

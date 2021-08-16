@@ -1,4 +1,4 @@
 digraph sectionmap{
-SectionMap -> UMapSection;
 SectionMap	[shape=oval, color=red2, label="SectionMap"];
+SectionMap -> UMapSection;
 }

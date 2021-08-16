@@ -1,4 +1,5 @@
 digraph instancemodel{
+InstanceModel	[shape=oval, color=cyan3, label="InstanceModel"];
 InstanceModel -> ModelKind;
 InstanceModel -> Inputs;
 InstanceModel -> Output;
@@ -7,5 +8,4 @@ InstanceModel -> MaybeDerivation;
 InstanceModel -> ShortName;
 InstanceModel -> String;
 InstanceModel -> Sentence;
-InstanceModel	[shape=oval, color=cyan3, label="InstanceModel"];
 }

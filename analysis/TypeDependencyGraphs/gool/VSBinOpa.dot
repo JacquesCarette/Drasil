@@ -1,4 +1,4 @@
 digraph vsbinopa{
-VSBinOpa -> VSaBinaryOpa;
 VSBinOpa	[shape=oval, color=red2, label="VSBinOpa"];
+VSBinOpa -> VSaBinaryOpa;
 }

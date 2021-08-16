@@ -1,8 +1,8 @@
 digraph calctype{
+CalcType	[shape=oval, color=darkviolet, label="CalcType"];
 CalcType -> OOProg;
 CalcType -> r;
 CalcType -> CalcType;
 CalcType -> CodeDefinition;
 CalcType -> CodeExpr;
-CalcType	[shape=oval, color=darkviolet, label="CalcType"];
 }

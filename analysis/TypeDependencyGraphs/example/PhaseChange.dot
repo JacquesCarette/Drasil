@@ -1,6 +1,6 @@
 digraph phasechange{
+PhaseChange	[shape=oval, color=darkviolet, label="PhaseChange"];
 PhaseChange -> PhaseChange;
 PhaseChange -> Sentence;
 PhaseChange -> TheoryModel;
-PhaseChange	[shape=oval, color=darkviolet, label="PhaseChange"];
 }

@@ -1,4 +1,4 @@
 digraph conceptinstancemap{
-ConceptInstanceMap -> UMapConceptInstance;
 ConceptInstanceMap	[shape=oval, color=red2, label="ConceptInstanceMap"];
+ConceptInstanceMap -> UMapConceptInstance;
 }

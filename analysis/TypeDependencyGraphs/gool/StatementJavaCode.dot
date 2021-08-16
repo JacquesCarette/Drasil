@@ -1,4 +1,4 @@
 digraph statementjavacode{
-StatementJavaCode -> DocTerminator;
 StatementJavaCode	[shape=oval, color=red2, label="StatementJavaCode"];
+StatementJavaCode -> DocTerminator;
 }

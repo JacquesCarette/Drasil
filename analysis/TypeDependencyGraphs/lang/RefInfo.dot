@@ -1,5 +1,5 @@
 digraph refinfo{
+RefInfo	[shape=oval, color=darkviolet, label="RefInfo"];
 RefInfo -> Int;
 RefInfo -> String;
-RefInfo	[shape=oval, color=darkviolet, label="RefInfo"];
 }

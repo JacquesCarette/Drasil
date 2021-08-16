@@ -1,5 +1,5 @@
 digraph unitarychunk{
+UnitaryChunk	[shape=oval, color=cyan3, label="UnitaryChunk"];
 UnitaryChunk -> QuantityDict;
 UnitaryChunk -> UnitDefn;
-UnitaryChunk	[shape=oval, color=cyan3, label="UnitaryChunk"];
 }

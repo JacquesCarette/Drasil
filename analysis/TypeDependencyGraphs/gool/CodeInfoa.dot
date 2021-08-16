@@ -1,4 +1,4 @@
 digraph codeinfoa{
-CodeInfoa -> a;
 CodeInfoa	[shape=oval, color=darkgreen, label="CodeInfoa"];
+CodeInfoa -> a;
 }

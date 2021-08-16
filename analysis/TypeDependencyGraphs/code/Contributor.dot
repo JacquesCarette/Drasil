@@ -1,4 +1,4 @@
 digraph contributor{
-Contributor -> String;
 Contributor	[shape=oval, color=red2, label="Contributor"];
+Contributor -> String;
 }

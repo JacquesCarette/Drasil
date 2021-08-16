@@ -1,5 +1,5 @@
 digraph seccons{
+SecCons	[shape=oval, color=darkviolet, label="SecCons"];
 SecCons -> Section;
 SecCons -> Contents;
-SecCons	[shape=oval, color=darkviolet, label="SecCons"];
 }

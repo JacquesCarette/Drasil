@@ -1,6 +1,6 @@
 digraph stkhldrsub{
+StkhldrSub	[shape=oval, color=darkviolet, label="StkhldrSub"];
 StkhldrSub -> CI;
 StkhldrSub -> Sentence;
 StkhldrSub -> StkhldrSub;
-StkhldrSub	[shape=oval, color=darkviolet, label="StkhldrSub"];
 }

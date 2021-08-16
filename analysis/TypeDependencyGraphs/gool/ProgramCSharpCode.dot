@@ -1,4 +1,4 @@
 digraph programcsharpcode{
-ProgramCSharpCode -> ProgData;
 ProgramCSharpCode	[shape=oval, color=red2, label="ProgramCSharpCode"];
+ProgramCSharpCode -> ProgData;
 }

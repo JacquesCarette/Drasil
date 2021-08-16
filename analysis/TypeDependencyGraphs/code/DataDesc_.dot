@@ -1,6 +1,6 @@
 digraph datadesc_{
+DataDesc_	[shape=oval, color=darkviolet, label="DataDesc_"];
 DataDesc_ -> Data_;
 DataDesc_ -> Delimiter;
 DataDesc_ -> DataDesc_;
-DataDesc_	[shape=oval, color=darkviolet, label="DataDesc_"];
 }

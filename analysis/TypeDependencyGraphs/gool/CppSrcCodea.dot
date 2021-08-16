@@ -1,4 +1,4 @@
 digraph cppsrccodea{
-CppSrcCodea -> a;
 CppSrcCodea	[shape=oval, color=darkgreen, label="CppSrcCodea"];
+CppSrcCodea -> a;
 }

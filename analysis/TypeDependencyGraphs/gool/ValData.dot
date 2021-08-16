@@ -1,6 +1,6 @@
 digraph valdata{
+ValData	[shape=oval, color=cyan3, label="ValData"];
 ValData -> MaybeInt;
 ValData -> TypeData;
 ValData -> Doc;
-ValData	[shape=oval, color=cyan3, label="ValData"];
 }

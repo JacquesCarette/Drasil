@@ -12,20 +12,19 @@ import Data.Drasil.Theories.Physics (vecMag)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.Unitals (launAngle)
 
-dataDefs :: [DataDefinition]
+dataDefs :: [DataDefinition Expr]
 dataDefs = [vecMag, speedIX, speedIY]
 
 ----------
-speedIX, speedIY :: DataDefinition
+speedIX, speedIY :: DataDefinition Expr
 speedIX = ddNoRefs speedIXQD Nothing "speedIX" [speedRef, figRef]
 speedIY = ddNoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
 
-speedIXQD, speedIYQD :: QDefinition
+speedIXQD, speedIYQD :: QDefinition Expr
 speedIXQD = mkQuantDef ixVel $ sy iSpeed `mulRe` cos (sy launAngle)
 speedIYQD = mkQuantDef iyVel $ sy iSpeed `mulRe` sin (sy launAngle)
 
 ----------
-
 speedRef :: Sentence
 speedRef = ch iSpeed `S.is` S "from" +:+. refS vecMag
 

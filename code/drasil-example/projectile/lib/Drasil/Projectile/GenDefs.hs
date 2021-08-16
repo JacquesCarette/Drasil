@@ -20,9 +20,8 @@ import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 
 import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.Projectile.Concepts (rectVel)
-import qualified Drasil.Projectile.Expressions as E (speed', rectVelDerivEqn1, rectVelDerivEqn2,
-  scalarPos', rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, velVecExpr, posVecExpr,
-  positionXY, velocityXY, accelerationXY, constAccelXY)
+import qualified Drasil.Projectile.Derivations as D
+import qualified Drasil.Projectile.Expressions as E
 import Data.Drasil.Citations (hibbeler2004)
 import Drasil.Projectile.Unitals (projSpeed)
 
@@ -34,11 +33,11 @@ rectVelGD :: GenDefn
 rectVelGD = gd (equationalModel' rectVelQD) (getUnit projSpeed) (Just rectVelDeriv)
   [dRefInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
-rectVelQD :: QDefinition 
+rectVelQD :: QDefinition ModelExpr
 rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
-            E.speed'
+            (express E.speed')
 
 rectVelDeriv :: Derivation
 rectVelDeriv = mkDerivName (phrase rectVel)
@@ -51,19 +50,18 @@ rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM
                          S "with a", phrase QP.constAccel `sC` S "represented by", eS QP.constAccel]
 
 rectVelDerivEqns :: [Sentence]
-rectVelDerivEqns = map eS [E.rectVelDerivEqn1, E.rectVelDerivEqn2]
-                ++ [eS rectVelQD]
+rectVelDerivEqns = map eS D.rectVelDeriv ++ [eS rectVelQD]
 
 ----------
 rectPosGD :: GenDefn
 rectPosGD = gd (equationalModel' rectPosQD) (getUnit scalarPos) (Just rectPosDeriv)
   [dRefInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
-rectPosQD :: QDefinition
+rectPosQD :: QDefinition ModelExpr
 rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase position,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
-            E.scalarPos'
+            (express E.scalarPos')
 
 rectPosDeriv :: Derivation
 rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
@@ -75,18 +73,18 @@ rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
     where
       motSent = atStartNP (the motion) `S.in_` refS velocityTM `S.is` S "now" +:+. phrase oneD
 
-rectPosDerivEqns :: [Expr]
-rectPosDerivEqns = [E.rectPosDerivEqn1, E.rectPosDerivEqn2, E.rectPosDerivEqn3, sy scalarPos $= E.scalarPos']
+rectPosDerivEqns :: [ModelExpr]
+rectPosDerivEqns = D.rectPosDeriv ++ [express rectPosQD]
 
 ----------
 velVecGD :: GenDefn
 velVecGD = gdNoRefs (equationalModel' velVecQD) (getUnit velocity)
            (Just velVecDeriv) "velVec" [{-Notes-}]
 
-velVecQD :: QDefinition 
+velVecQD :: QDefinition ModelExpr
 velVecQD = mkQuantDef' velocity (nounPhraseSent $ foldlSent_ 
            [atStart velocity, S "vector as a function" `S.of_` phrase time `S.for`
-            getAcc twoD, S "motion under", phrase QP.constAccel]) E.velVecExpr
+            getAcc twoD, S "motion under", phrase QP.constAccel]) $ express E.velVecExpr
 
 velVecDeriv :: Derivation
 velVecDeriv = mkDerivName (phrase velocity +:+ phrase vector) [velVecDerivSent, 
@@ -100,10 +98,11 @@ posVecGD :: GenDefn
 posVecGD = gdNoRefs (equationalModel' posVecQD) (getUnit position) 
            (Just posVecDeriv) "posVec" [{-Notes-}]
 
-posVecQD :: QDefinition
+posVecQD :: QDefinition ModelExpr
 posVecQD = mkQuantDef' position (nounPhraseSent $ foldlSent_ 
-           [atStart position, S "vector as a function" `S.of_` phrase time `S.for`
-            getAcc twoD, S "motion under", phrase QP.constAccel]) E.posVecExpr
+  [atStart position, S "vector as a function" `S.of_` phrase time `S.for`
+   getAcc twoD, S "motion under", phrase QP.constAccel])
+  (express E.posVecExpr)
 
 posVecDeriv :: Derivation
 posVecDeriv = mkDerivName (phrase positionVec) [posVecDerivSent, eS posVecQD]

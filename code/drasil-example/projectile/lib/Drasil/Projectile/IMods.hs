@@ -21,10 +21,8 @@ import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, gravAccelValue,
   launchOrigin, posXDirection, targetXAxis, timeStartZero, yAxisGravity)
 import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
-import qualified Drasil.Projectile.Expressions as E (flightDur', iyPos, yConstAccel,
-  timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, landPosExpr, iSpeed,
-  landPosDerivEqn1, landPosDerivEqn2, landPosDerivEqn3,
-  offset', message)
+import qualified Drasil.Projectile.Derivations as D
+import qualified Drasil.Projectile.Expressions as E
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (posVecGD)
 import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
@@ -40,7 +38,7 @@ timeIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing time")
   (qw flightDur) [UpFrom (Exc, exactDbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
-timeQD :: QDefinition 
+timeQD :: QDefinition Expr 
 timeQD =  mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
@@ -68,8 +66,8 @@ timeDerivSent4 = S "Solving for" +:+ ch flightDur +: S "gives us"
 timeDerivSent5 = foldlSentCol [S "From", refS speedIY,
   sParen (S "with" +:+ eS (sy iSpeed $= E.iSpeed)), S "we can replace", ch iyVel]
 
-timeDerivEqns :: [Expr]
-timeDerivEqns = [E.timeDerivEqn1, E.timeDerivEqn2, E.timeDerivEqn3, E.timeDerivEqn4, sy flightDur $= E.flightDur']
+timeDerivEqns :: [ModelExpr]
+timeDerivEqns = D.timeDeriv ++ [express timeQD]
 
 ---
 landPosIM :: InstanceModel
@@ -79,7 +77,7 @@ landPosIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing pos
   (qw landPos) [UpFrom (Exc, exactDbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
-landPosQD :: QDefinition
+landPosQD :: QDefinition Expr
 landPosQD = mkQuantDef landPos E.landPosExpr
 
 landPosDeriv :: Derivation
@@ -102,8 +100,8 @@ landPosDerivSent3 = foldlSentCol [S "From", refS speedIX,
   sParen (S "with" +:+ E (defines iSpeed launSpeed)), S "we can replace", ch ixVel]
 landPosDerivSent4 = S "Rearranging this gives us the required" +: phrase equation
 
-landPosDerivEqns :: [Expr]
-landPosDerivEqns = [E.landPosDerivEqn1, E.landPosDerivEqn2, E.landPosDerivEqn3, sy landPos $= E.landPosExpr]
+landPosDerivEqns :: [ModelExpr]
+landPosDerivEqns = D.landPosDeriv ++ [express landPosQD]
 
 ---
 offsetIM :: InstanceModel
@@ -112,7 +110,7 @@ offsetIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "offset") offsetQD)
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
-offsetQD :: QDefinition
+offsetQD :: QDefinition Expr
 offsetQD = mkQuantDef offset E.offset'
 ---
 messageIM :: InstanceModel
@@ -122,7 +120,7 @@ messageIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "output message") me
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
-messageQD :: QDefinition 
+messageQD :: QDefinition Expr
 messageQD = mkQuantDef message E.message
 
 --- Notes

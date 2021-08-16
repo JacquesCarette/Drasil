@@ -9,12 +9,13 @@ import Data.Drasil.Concepts.Physics (acceleration, gravity, velocity, position, 
 import qualified Data.Drasil.Quantities.Physics as QP (yVel)
 
 import Drasil.Projectile.Concepts (projectile)
-import Drasil.Projectile.Expressions (horMotionEqn1, horMotionEqn2)
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil
 
 import qualified Utils.Drasil.Sentence as S
+
+import Drasil.Projectile.Derivations (horMotionEqn1, horMotionEqn2)
 
 coorSyst, kinematicEq, horMotionAna, verMotionAna :: Section
 coorSyst = NB.coorSyst [coorSystContext] []

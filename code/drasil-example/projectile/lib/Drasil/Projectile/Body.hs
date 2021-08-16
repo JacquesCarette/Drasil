@@ -115,7 +115,7 @@ si = SI {
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
-  _defSequence = [] :: [Block QDefinition],
+  _defSequence = [] :: [Block (QDefinition Expr)],
   _constraints = map cnstrw constrained,
   _constants   = constants,
   _sysinfodb   = symbMap,
@@ -132,11 +132,11 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
-  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] [] []
+  (map unitWrapper [metre, radian, second]) dataDefs [] iMods genDefns tMods concIns [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] [] [] ([] :: [Reference])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -181,7 +181,7 @@ symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
   iyPos, ixVel, iyVel, position, scalarPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
 
-constants :: [QDefinition]
+constants :: [QDefinition Expr]
 constants = [gravitationalAccelConst, piConst, tol]
 
 inputs :: [QuantityDict]

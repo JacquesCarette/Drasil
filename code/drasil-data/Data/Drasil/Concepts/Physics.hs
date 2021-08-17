@@ -1,3 +1,4 @@
+-- | Defines concepts used in the field of physics.
 module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -15,6 +16,7 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Citations (dampingSource)
 import Data.Drasil.Concepts.Education (mechanics)
 
+-- | Collects all physics-related concepts.
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
@@ -28,8 +30,15 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVe
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, chgMomentum, moment, fOfGravity, positionVec,
   pendulum, body, kinematics, frequency, period, motion, horizontalMotion, verticalMotion]
 
+-- | Collects all physics-related common ideas (like a concept, but with no definition).
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
+
+-- * Physics Concepts
+--
+-- $PhysicCon
+--
+-- In alphabetical order.
 
 acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohesion,
   collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,

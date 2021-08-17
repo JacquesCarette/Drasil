@@ -1,3 +1,4 @@
+-- | Assigns symbols and units (quantities) to physical concepts.
 module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
@@ -19,6 +20,7 @@ import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU,
 restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (label "R")) Real
 
+-- | Collects all physical quantities defined in this file for easy use in Drasil.
 physicscon :: [UnitalChunk]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   chgInVelocity, constAccel, constAccelV, displacement, distance, energy, frequency,
@@ -29,6 +31,8 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   weight, xAccel, xConstAccel, xDist, ixDist, iyDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension,
   angularFrequency, period, frequency, chgMomentum]
+
+-- * Physical Quantities (With Units)
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -123,6 +127,8 @@ constant = label "c"
 final    = label "f"
 initial  = label "i"
 
+-- * Helpers
+
 -- Helpers for common modifiers
 subMax, subMin, subX, subY, subZ, supMax, supMin :: Symbol -> Symbol
 subMax s = sub s (label "max")
@@ -133,7 +139,7 @@ subZ   s = sub s (label "z")
 supMax s = sup s (label "max")
 supMin s = sup s (label "min")
 
----------------Constants-----------------------------
+-- * Constants
 
 gravitationalConstValue :: QDefinition
 gravitationalConstValue = mkQuantDef gravitationalConst (dbl 6.6743E-11)

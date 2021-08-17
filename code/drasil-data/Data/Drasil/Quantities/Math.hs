@@ -1,3 +1,4 @@
+-- | Assigns a symbol and possibly units (quantities) to mathematical quantities.
 module Data.Drasil.Quantities.Math where
 
 import Language.Drasil
@@ -7,6 +8,8 @@ import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient, 
     normalV, orient, perpV, pi_, posInf, negInf, surArea, surface, unitV)
 import Data.Drasil.SI_Units (metre, m_2, radian)
+
+-- * May Not Have Units
 
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
   pi_, posInf, negInf, uNormalVect :: DefinedQuantityDict
@@ -23,6 +26,7 @@ posInf      = dqd'      CM.posInf   (staged lPosInf (variable "posInf")) Real No
 negInf      = dqd'      CM.negInf   (staged lNegInf (variable "posInf")) Real Nothing
 euclidNorm  = dqdNoUnit CM.euclidN  (Atop Magnitude $ vec lD) Real
 
+-- * With Units
 
 area, diameter, surface, surArea, orientation :: UnitalChunk
 
@@ -32,7 +36,7 @@ surface     = ucs' CM.surface  cS   Real    m_2
 surArea     = ucs' CM.surArea  cA   Real    m_2
 orientation = ucs' CM.orient   lPhi Radians radian
 
--- Constants
+-- * Constants
 
 piConst :: QDefinition
 piConst = mkQuantDef pi_ (dbl 3.14159265)

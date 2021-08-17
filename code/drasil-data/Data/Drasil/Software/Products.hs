@@ -1,3 +1,4 @@
+-- | Defines common software products.
 module Data.Drasil.Software.Products where
 
 import Language.Drasil

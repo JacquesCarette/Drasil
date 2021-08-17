@@ -1,3 +1,4 @@
+-- | Defines concepts used to describe physical properties.
 module Data.Drasil.Concepts.PhysicalProperties where
 
 import Language.Drasil
@@ -6,9 +7,12 @@ import Utils.Drasil.Concepts
 import Data.Drasil.Concepts.Documentation (material_, property)
 import Data.Drasil.Concepts.Math (centre)
 
+-- | Collects all physical property-related concepts.
 physicalcon :: [ConceptChunk]
 physicalcon = [gaseous, liquid, solid, ctrOfMass, density, specWeight, mass,
   len, dimension, vol, flexure]
+
+-- * Physical Properties
 
 gaseous, liquid, solid, ctrOfMass, density, specWeight, mass, len, dimension,
   vol, flexure :: ConceptChunk

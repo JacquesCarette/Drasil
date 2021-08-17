@@ -1,3 +1,4 @@
+-- | Defines common constraints for use in Drasil.
 module Data.Drasil.Constraints where
 
 import Language.Drasil

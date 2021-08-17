@@ -1,3 +1,4 @@
+-- | Defines concepts used to create documentation.
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil hiding (organization, year, label, variable)
@@ -10,6 +11,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Control.Lens ((^.))
 
+-- | Collects all documentation-related named chunks (not concept-level yet).
 doccon :: [NamedChunk]
 doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
@@ -37,6 +39,7 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charO
   uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
   validation, value, variable, vav, vavPlan, verification, video, year]
 
+-- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
   likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
@@ -46,6 +49,8 @@ assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requ
 
 softReqSpec :: NP
 softReqSpec = fterms compoundPhraseP1 softwareReq specification
+
+-- * Common Ideas
 
 ------------------------------------------------------------------------------------------------------------------------------
 -- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
@@ -69,6 +74,8 @@ notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                 
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
+-- * Named Chunks
+-- ** Basic Chunks
 
 abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_, client, 
   code, column, company, component, concept, condition, connection, constant,
@@ -249,7 +256,7 @@ vav                 = nc "vav"                (verification `and_` validation)
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
 
--- compounds
+-- ** Compound Chunks
 
 designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
@@ -298,9 +305,9 @@ userCharacteristic           = compoundNC user characteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
 
--- Domains
+-- * Domains
 
---Root SRS Domain
+-- | Root SRS Domain.
 srsDom :: ConceptChunk
 srsDom = dcc "srsDom" (srs ^. term) "srs"
 
@@ -314,7 +321,7 @@ chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                            
 likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")  EmptyS [chgProbDom]
 unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")  EmptyS [chgProbDom]
 
--- | List of SRS-related concepts, including SRS
+-- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom, chgProbDom, likeChgDom, unlikeChgDom]
 

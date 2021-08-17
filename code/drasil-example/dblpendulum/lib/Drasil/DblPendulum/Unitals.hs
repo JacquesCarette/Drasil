@@ -33,7 +33,7 @@ inputs = map qw [lenRod_1, lenRod_2, pendDisAngle_1, pendDisAngle_2, massObj_1, 
 outputs :: [QuantityDict]
 outputs = map qw [angularAccel_1, angularAccel_2]
 
-units :: [UnitaryConceptDict]
+units :: [UnitalChunk]
 units = map ucw unitalChunks
 
 unitalChunks :: [UnitalChunk]

@@ -9,6 +9,8 @@
 @package drasil-metadata
 @version 0.1.1.0
 
+
+-- | Defines domains of knowledge for use in Drasil.
 module Data.Drasil.Domains
 
 -- | For ideas, concepts, or terms related to Computer Science.

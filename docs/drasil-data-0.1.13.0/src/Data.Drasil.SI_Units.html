@@ -1,11 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.SI_Units</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-2"></span><span>
-</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Display</span></span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.ShortHands</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cOmega</span></span><span class="hs-special">)</span><span>
-</span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#fundamentals"><span class="hs-identifier hs-type">fundamentals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span>
-</span><span id="line-8"></span><span id="fundamentals"><span class="annot"><span class="annottext">fundamentals :: [UnitDefn]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines units for use in Drasil. Often used in a unital-related chunk that has an associated symbol.</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.SI_Units</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Display</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.ShortHands</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cOmega</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-comment">-- * Lists of Units</span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#fundamentals"><span class="hs-identifier hs-type">fundamentals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span>
+</span><span id="line-11"></span><span id="fundamentals"><span class="annot"><span class="annottext">fundamentals :: [UnitDefn]
 </span><a href="Data.Drasil.SI_Units.html#fundamentals"><span class="hs-identifier hs-var hs-var">fundamentals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -14,9 +17,9 @@
 </span><a href="Data.Drasil.SI_Units.html#mole"><span class="hs-identifier hs-var">mole</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ampere"><span class="hs-identifier hs-var">ampere</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#candela"><span class="hs-identifier hs-var">candela</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#derived"><span class="hs-identifier hs-type">derived</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span>
-</span><span id="line-11"></span><span id="derived"><span class="annot"><span class="annottext">derived :: [UnitDefn]
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#derived"><span class="hs-identifier hs-type">derived</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span>
+</span><span id="line-14"></span><span id="derived"><span class="annot"><span class="annottext">derived :: [UnitDefn]
 </span><a href="Data.Drasil.SI_Units.html#derived"><span class="hs-identifier hs-var hs-var">derived</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#becquerel"><span class="hs-identifier hs-var">becquerel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#calorie"><span class="hs-identifier hs-var">calorie</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -27,7 +30,7 @@
 </span><a href="Data.Drasil.SI_Units.html#henry"><span class="hs-identifier hs-var">henry</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#hertz"><span class="hs-identifier hs-var">hertz</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-12"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#katal"><span class="hs-identifier hs-var">katal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilopascal"><span class="hs-identifier hs-var">kilopascal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilowatt"><span class="hs-identifier hs-var">kilowatt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -37,7 +40,7 @@
 </span><a href="Data.Drasil.SI_Units.html#millimetre"><span class="hs-identifier hs-var">millimetre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ohm"><span class="hs-identifier hs-var">ohm</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-13"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-var">pascal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#radian"><span class="hs-identifier hs-var">radian</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#siemens"><span class="hs-identifier hs-var">siemens</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -47,9 +50,9 @@
 </span><a href="Data.Drasil.SI_Units.html#volt"><span class="hs-identifier hs-var">volt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#watt"><span class="hs-identifier hs-var">watt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#weber"><span class="hs-identifier hs-var">weber</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#siUnits"><span class="hs-identifier hs-type">siUnits</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span>
-</span><span id="line-16"></span><span id="siUnits"><span class="annot"><span class="annottext">siUnits :: [UnitDefn]
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#siUnits"><span class="hs-identifier hs-type">siUnits</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span>
+</span><span id="line-19"></span><span id="siUnits"><span class="annot"><span class="annottext">siUnits :: [UnitDefn]
 </span><a href="Data.Drasil.SI_Units.html#siUnits"><span class="hs-identifier hs-var hs-var">siUnits</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitDefn -&gt; UnitDefn) -&gt; [UnitDefn] -&gt; [UnitDefn]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn
@@ -63,366 +66,366 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall u. IsUnit u =&gt; u -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">unitWrapper</span></span><span> </span><span class="annot"><span class="annottext">[UnitDefn]
 </span><a href="Data.Drasil.SI_Units.html#derived"><span class="hs-identifier hs-var">derived</span></a></span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-comment">------------- Fundamental SI Units ---------------------------------------------</span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-type">metre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-type">kilogram</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-type">second</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kelvin"><span class="hs-identifier hs-type">kelvin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#mole"><span class="hs-identifier hs-type">mole</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#ampere"><span class="hs-identifier hs-type">ampere</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#candela"><span class="hs-identifier hs-type">candela</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
-</span><span id="line-21"></span><span id="metre"><span class="annot"><span class="annottext">metre :: UnitDefn
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-comment">-- * Fundamental SI Units</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-type">metre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-type">kilogram</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-type">second</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kelvin"><span class="hs-identifier hs-type">kelvin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#mole"><span class="hs-identifier hs-type">mole</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#ampere"><span class="hs-identifier hs-type">ampere</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#candela"><span class="hs-identifier hs-type">candela</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
+</span><span id="line-24"></span><span id="metre"><span class="annot"><span class="annottext">metre :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var hs-var">metre</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">fund</span></span><span> </span><span class="annot"><span class="hs-string">&quot;metre&quot;</span></span><span>    </span><span class="annot"><span class="hs-string">&quot;length&quot;</span></span><span>               </span><span class="annot"><span class="hs-string">&quot;m&quot;</span></span><span>
-</span><span id="line-22"></span><span id="kilogram"><span class="annot"><span class="annottext">kilogram :: UnitDefn
+</span><span id="line-25"></span><span id="kilogram"><span class="annot"><span class="annottext">kilogram :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var hs-var">kilogram</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">fund</span></span><span> </span><span class="annot"><span class="hs-string">&quot;kilogram&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;mass&quot;</span></span><span>                 </span><span class="annot"><span class="hs-string">&quot;kg&quot;</span></span><span>
-</span><span id="line-23"></span><span id="second"><span class="annot"><span class="annottext">second :: UnitDefn
+</span><span id="line-26"></span><span id="second"><span class="annot"><span class="annottext">second :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var hs-var">second</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">fund</span></span><span> </span><span class="annot"><span class="hs-string">&quot;second&quot;</span></span><span>   </span><span class="annot"><span class="hs-string">&quot;time&quot;</span></span><span>                 </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
-</span><span id="line-24"></span><span id="kelvin"><span class="annot"><span class="annottext">kelvin :: UnitDefn
+</span><span id="line-27"></span><span id="kelvin"><span class="annot"><span class="annottext">kelvin :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kelvin"><span class="hs-identifier hs-var hs-var">kelvin</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">fund</span></span><span> </span><span class="annot"><span class="hs-string">&quot;kelvin&quot;</span></span><span>   </span><span class="annot"><span class="hs-string">&quot;temperature&quot;</span></span><span>          </span><span class="annot"><span class="hs-string">&quot;K&quot;</span></span><span>
-</span><span id="line-25"></span><span id="mole"><span class="annot"><span class="annottext">mole :: UnitDefn
+</span><span id="line-28"></span><span id="mole"><span class="annot"><span class="annottext">mole :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#mole"><span class="hs-identifier hs-var hs-var">mole</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">fund</span></span><span> </span><span class="annot"><span class="hs-string">&quot;mole&quot;</span></span><span>     </span><span class="annot"><span class="hs-string">&quot;amount of substance&quot;</span></span><span>  </span><span class="annot"><span class="hs-string">&quot;mol&quot;</span></span><span>
-</span><span id="line-26"></span><span id="ampere"><span class="annot"><span class="annottext">ampere :: UnitDefn
+</span><span id="line-29"></span><span id="ampere"><span class="annot"><span class="annottext">ampere :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ampere"><span class="hs-identifier hs-var hs-var">ampere</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">fund</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ampere&quot;</span></span><span>   </span><span class="annot"><span class="hs-string">&quot;electric current&quot;</span></span><span>     </span><span class="annot"><span class="hs-string">&quot;A&quot;</span></span><span>
-</span><span id="line-27"></span><span id="candela"><span class="annot"><span class="annottext">candela :: UnitDefn
+</span><span id="line-30"></span><span id="candela"><span class="annot"><span class="annottext">candela :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#candela"><span class="hs-identifier hs-var hs-var">candela</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">fund</span></span><span> </span><span class="annot"><span class="hs-string">&quot;candela&quot;</span></span><span>  </span><span class="annot"><span class="hs-string">&quot;luminous intensity&quot;</span></span><span>   </span><span class="annot"><span class="hs-string">&quot;cd&quot;</span></span><span>
-</span><span id="line-28"></span><span>
-</span><span id="line-29"></span><span class="hs-comment">------------- Commonly defined units -------------------------------------------</span><span>
-</span><span id="line-30"></span><span>
-</span><span id="line-31"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#degree"><span class="hs-identifier hs-type">degree</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span> </span><span class="hs-comment">--FIXME: define degree in terms of radians and pi</span><span>
-</span><span id="line-32"></span><span class="hs-comment">-- degree = UD (dcc &quot;degree&quot; (cn' &quot;degree&quot;) &quot;angle&quot;) (BaseSI (US [(Special Circle,1)])) [&quot;degree&quot;]</span><span>
-</span><span id="line-33"></span><span id="degree"><span class="annot"><span class="annottext">degree :: UnitDefn
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="hs-comment">-- * Commonly Defined Units</span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#degree"><span class="hs-identifier hs-type">degree</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span> </span><span class="hs-comment">--FIXME: define degree in terms of radians and pi</span><span>
+</span><span id="line-35"></span><span class="hs-comment">-- degree = UD (dcc &quot;degree&quot; (cn' &quot;degree&quot;) &quot;angle&quot;) (BaseSI (US [(Special Circle,1)])) [&quot;degree&quot;]</span><span>
+</span><span id="line-36"></span><span id="degree"><span class="annot"><span class="annottext">degree :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#degree"><span class="hs-identifier hs-var hs-var">degree</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Symbol -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">fund'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;degree&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;angle&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Special -&gt; Symbol
 </span><span class="hs-identifier hs-var">Special</span></span><span> </span><span class="annot"><span class="annottext">Special
 </span><span class="hs-identifier hs-var">Circle</span></span><span class="hs-special">)</span><span>
-</span><span id="line-34"></span><span>
-</span><span id="line-35"></span><span class="hs-comment">-- Some of these units are easiest to define via others less common names, </span><span>
-</span><span id="line-36"></span><span class="hs-comment">-- which we define first.</span><span>
-</span><span id="line-37"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#s_2"><span class="hs-identifier hs-type">s_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
-</span><span id="line-38"></span><span id="s_2"><span class="annot"><span class="annottext">s_2 :: UnitDefn
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- Some of these units are easiest to define via others less common names, </span><span>
+</span><span id="line-39"></span><span class="hs-comment">-- which we define first.</span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#s_2"><span class="hs-identifier hs-type">s_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
+</span><span id="line-41"></span><span id="s_2"><span class="annot"><span class="annottext">s_2 :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#s_2"><span class="hs-identifier hs-var hs-var">s_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="hs-string">&quot;seconds squared&quot;</span></span><span> </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span>
-</span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-type">m_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#m_3"><span class="hs-identifier hs-type">m_3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
-</span><span id="line-41"></span><span id="m_2"><span class="annot"><span class="annottext">m_2 :: UnitDefn
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-type">m_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#m_3"><span class="hs-identifier hs-type">m_3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
+</span><span id="line-44"></span><span id="m_2"><span class="annot"><span class="annottext">m_2 :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-var hs-var">m_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="hs-string">&quot;square metres&quot;</span></span><span>   </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span>
-</span><span id="line-42"></span><span id="m_3"><span class="annot"><span class="annottext">m_3 :: UnitDefn
+</span><span id="line-45"></span><span id="m_3"><span class="annot"><span class="annottext">m_3 :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_3"><span class="hs-identifier hs-var hs-var">m_3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="hs-string">&quot;cubic metres&quot;</span></span><span>    </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="annot"><span class="hs-number">3</span></span><span>
-</span><span id="line-43"></span><span>
-</span><span id="line-44"></span><span class="hs-comment">-- And now for the ones with 'common' names</span><span>
-</span><span id="line-45"></span><span>
-</span><span id="line-46"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#becquerel"><span class="hs-identifier hs-type">becquerel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#calorie"><span class="hs-identifier hs-type">calorie</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#centigrade"><span class="hs-identifier hs-type">centigrade</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#coulomb"><span class="hs-identifier hs-type">coulomb</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#farad"><span class="hs-identifier hs-type">farad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#gray"><span class="hs-identifier hs-type">gray</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#henry"><span class="hs-identifier hs-type">henry</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#hertz"><span class="hs-identifier hs-type">hertz</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-type">joule</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-47"></span><span>  </span><span class="annot"><a href="Data.Drasil.SI_Units.html#katal"><span class="hs-identifier hs-type">katal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kilopascal"><span class="hs-identifier hs-type">kilopascal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kilowatt"><span class="hs-identifier hs-type">kilowatt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#litre"><span class="hs-identifier hs-type">litre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#lumen"><span class="hs-identifier hs-type">lumen</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#lux"><span class="hs-identifier hs-type">lux</span></a></span><span class="hs-special">,</span><span>  </span><span class="annot"><a href="Data.Drasil.SI_Units.html#millimetre"><span class="hs-identifier hs-type">millimetre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-type">newton</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#ohm"><span class="hs-identifier hs-type">ohm</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-48"></span><span>  </span><span class="annot"><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-type">pascal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#radian"><span class="hs-identifier hs-type">radian</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#siemens"><span class="hs-identifier hs-type">siemens</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#sievert"><span class="hs-identifier hs-type">sievert</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#steradian"><span class="hs-identifier hs-type">steradian</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#tesla"><span class="hs-identifier hs-type">tesla</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#volt"><span class="hs-identifier hs-type">volt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#watt"><span class="hs-identifier hs-type">watt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#weber"><span class="hs-identifier hs-type">weber</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span id="becquerel"><span class="annot"><span class="annottext">becquerel :: UnitDefn
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- And now for the ones with 'common' names</span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#becquerel"><span class="hs-identifier hs-type">becquerel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#calorie"><span class="hs-identifier hs-type">calorie</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#centigrade"><span class="hs-identifier hs-type">centigrade</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#coulomb"><span class="hs-identifier hs-type">coulomb</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#farad"><span class="hs-identifier hs-type">farad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#gray"><span class="hs-identifier hs-type">gray</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#henry"><span class="hs-identifier hs-type">henry</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#hertz"><span class="hs-identifier hs-type">hertz</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-type">joule</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-50"></span><span>  </span><span class="annot"><a href="Data.Drasil.SI_Units.html#katal"><span class="hs-identifier hs-type">katal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kilopascal"><span class="hs-identifier hs-type">kilopascal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kilowatt"><span class="hs-identifier hs-type">kilowatt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#litre"><span class="hs-identifier hs-type">litre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#lumen"><span class="hs-identifier hs-type">lumen</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#lux"><span class="hs-identifier hs-type">lux</span></a></span><span class="hs-special">,</span><span>  </span><span class="annot"><a href="Data.Drasil.SI_Units.html#millimetre"><span class="hs-identifier hs-type">millimetre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-type">newton</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#ohm"><span class="hs-identifier hs-type">ohm</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-type">pascal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#radian"><span class="hs-identifier hs-type">radian</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#siemens"><span class="hs-identifier hs-type">siemens</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#sievert"><span class="hs-identifier hs-type">sievert</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#steradian"><span class="hs-identifier hs-type">steradian</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#tesla"><span class="hs-identifier hs-type">tesla</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#volt"><span class="hs-identifier hs-type">volt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#watt"><span class="hs-identifier hs-type">watt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#weber"><span class="hs-identifier hs-type">weber</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span id="becquerel"><span class="annot"><span class="annottext">becquerel :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#becquerel"><span class="hs-identifier hs-var hs-var">becquerel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;becquerel&quot;</span></span><span> </span><span>
-</span><span id="line-51"></span><span>  </span><span class="annot"><span class="hs-string">&quot;becquerel&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;activity&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-54"></span><span>  </span><span class="annot"><span class="hs-string">&quot;becquerel&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;activity&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Bq&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-comment">--of a Radionuclide</span><span>
-</span><span id="line-52"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-55"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-53"></span><span>  </span><span>
-</span><span id="line-54"></span><span id="calorie"><span class="annot"><span class="annottext">calorie :: UnitDefn
+</span><span id="line-56"></span><span>  </span><span>
+</span><span id="line-57"></span><span id="calorie"><span class="annot"><span class="annottext">calorie :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#calorie"><span class="hs-identifier hs-var hs-var">calorie</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UDefn -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derUC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;calorie&quot;</span></span><span> </span><span>
-</span><span id="line-55"></span><span>  </span><span class="annot"><span class="hs-string">&quot;calorie&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;energy&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="hs-string">&quot;calorie&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;energy&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;cal&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; UnitDefn -&gt; UDefn
 forall s. IsUnit s =&gt; Double -&gt; s -&gt; UDefn
 </span><span class="hs-identifier hs-var">scale</span></span><span> </span><span class="annot"><span class="hs-number">4.184</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-56"></span><span>
-</span><span id="line-57"></span><span id="centigrade"><span class="annot"><span class="annottext">centigrade :: UnitDefn
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span id="centigrade"><span class="annot"><span class="annottext">centigrade :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#centigrade"><span class="hs-identifier hs-var hs-var">centigrade</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UDefn -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derUC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;centigrade&quot;</span></span><span> </span><span>
-</span><span id="line-58"></span><span>  </span><span class="annot"><span class="hs-string">&quot;centigrade&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;temperature&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
+</span><span id="line-61"></span><span>  </span><span class="annot"><span class="hs-string">&quot;centigrade&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;temperature&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Special -&gt; Symbol
 </span><span class="hs-identifier hs-var">Special</span></span><span> </span><span class="annot"><span class="annottext">Special
 </span><span class="hs-identifier hs-var">Circle</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;C&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-59"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; UnitDefn -&gt; UDefn
+</span><span id="line-62"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; UnitDefn -&gt; UDefn
 forall s. IsUnit s =&gt; Double -&gt; s -&gt; UDefn
 </span><span class="hs-identifier hs-var">shift</span></span><span> </span><span class="annot"><span class="hs-number">273.15</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kelvin"><span class="hs-identifier hs-var">kelvin</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-60"></span><span>
-</span><span id="line-61"></span><span id="coulomb"><span class="annot"><span class="annottext">coulomb :: UnitDefn
+</span><span id="line-63"></span><span>
+</span><span id="line-64"></span><span id="coulomb"><span class="annot"><span class="annottext">coulomb :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#coulomb"><span class="hs-identifier hs-var hs-var">coulomb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;coulomb&quot;</span></span><span> </span><span>
-</span><span id="line-62"></span><span>  </span><span class="annot"><span class="hs-string">&quot;coulomb&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;electric charge&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-65"></span><span>  </span><span class="annot"><span class="hs-string">&quot;coulomb&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;electric charge&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;C&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ampere"><span class="hs-identifier hs-var">ampere</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-63"></span><span>
-</span><span id="line-64"></span><span id="farad"><span class="annot"><span class="annottext">farad :: UnitDefn
+</span><span id="line-66"></span><span>
+</span><span id="line-67"></span><span id="farad"><span class="annot"><span class="annottext">farad :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#farad"><span class="hs-identifier hs-var hs-var">farad</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;farad&quot;</span></span><span> </span><span>
-</span><span id="line-65"></span><span>  </span><span class="annot"><span class="hs-string">&quot;farad&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;capacitance&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-68"></span><span>  </span><span class="annot"><span class="hs-string">&quot;farad&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;capacitance&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;F&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#coulomb"><span class="hs-identifier hs-var">coulomb</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#volt"><span class="hs-identifier hs-var">volt</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-66"></span><span>
-</span><span id="line-67"></span><span id="gray"><span class="annot"><span class="annottext">gray :: UnitDefn
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span id="gray"><span class="annot"><span class="annottext">gray :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#gray"><span class="hs-identifier hs-var hs-var">gray</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;gray&quot;</span></span><span> </span><span>
-</span><span id="line-68"></span><span>  </span><span class="annot"><span class="hs-string">&quot;gray&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;absorbed dose&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-71"></span><span>  </span><span class="annot"><span class="hs-string">&quot;gray&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;absorbed dose&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Gy&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-69"></span><span>  </span><span>
-</span><span id="line-70"></span><span id="henry"><span class="annot"><span class="annottext">henry :: UnitDefn
+</span><span id="line-72"></span><span>  </span><span>
+</span><span id="line-73"></span><span id="henry"><span class="annot"><span class="annottext">henry :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#henry"><span class="hs-identifier hs-var hs-var">henry</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC''</span></span><span> </span><span class="annot"><span class="hs-string">&quot;henry&quot;</span></span><span> </span><span>
-</span><span id="line-71"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-74"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span> </span><span class="annot"><span class="hs-string">&quot;henry&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;inductance&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;H&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#weber"><span class="hs-identifier hs-var">weber</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ampere"><span class="hs-identifier hs-var">ampere</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-72"></span><span>  </span><span>
-</span><span id="line-73"></span><span id="hertz"><span class="annot"><span class="annottext">hertz :: UnitDefn
+</span><span id="line-75"></span><span>  </span><span>
+</span><span id="line-76"></span><span id="hertz"><span class="annot"><span class="annottext">hertz :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#hertz"><span class="hs-identifier hs-var hs-var">hertz</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hertz&quot;</span></span><span> </span><span>
-</span><span id="line-74"></span><span>  </span><span class="annot"><span class="hs-string">&quot;hertz&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;frequency&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-77"></span><span>  </span><span class="annot"><span class="hs-string">&quot;hertz&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;frequency&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Hz&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-75"></span><span>
-</span><span id="line-76"></span><span id="joule"><span class="annot"><span class="annottext">joule :: UnitDefn
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span id="joule"><span class="annot"><span class="annottext">joule :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var hs-var">joule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;joule&quot;</span></span><span> </span><span>
-</span><span id="line-77"></span><span>  </span><span class="annot"><span class="hs-string">&quot;joule&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;energy&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="hs-string">&quot;joule&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;energy&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;J&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-78"></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-81"></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitEquation -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-var">m_2</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitEquation -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">2</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-79"></span><span>
-</span><span id="line-80"></span><span id="katal"><span class="annot"><span class="annottext">katal :: UnitDefn
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span id="katal"><span class="annot"><span class="annottext">katal :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#katal"><span class="hs-identifier hs-var hs-var">katal</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;katal&quot;</span></span><span> </span><span>
-</span><span id="line-81"></span><span>  </span><span class="annot"><span class="hs-string">&quot;katal&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;catalytic activity&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="hs-string">&quot;katal&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;catalytic activity&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;kat&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#mole"><span class="hs-identifier hs-var">mole</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-82"></span><span>
-</span><span id="line-83"></span><span id="kilopascal"><span class="annot"><span class="annottext">kilopascal :: UnitDefn
+</span><span id="line-85"></span><span>
+</span><span id="line-86"></span><span id="kilopascal"><span class="annot"><span class="annottext">kilopascal :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilopascal"><span class="hs-identifier hs-var hs-var">kilopascal</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UDefn -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;kilopascal&quot;</span></span><span> </span><span>
-</span><span id="line-84"></span><span>  </span><span class="annot"><span class="hs-string">&quot;kilopascal&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pressure&quot;</span></span><span>
-</span><span id="line-85"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
+</span><span id="line-87"></span><span>  </span><span class="annot"><span class="hs-string">&quot;kilopascal&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pressure&quot;</span></span><span>
+</span><span id="line-88"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;k&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Pa&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; UnitDefn -&gt; UDefn
 forall s. IsUnit s =&gt; Double -&gt; s -&gt; UDefn
 </span><span class="hs-identifier hs-var">scale</span></span><span> </span><span class="annot"><span class="hs-number">1000</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-var">pascal</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-86"></span><span>
-</span><span id="line-87"></span><span id="kilowatt"><span class="annot"><span class="annottext">kilowatt :: UnitDefn
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span id="kilowatt"><span class="annot"><span class="annottext">kilowatt :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilowatt"><span class="hs-identifier hs-var hs-var">kilowatt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UDefn -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;kilowatt&quot;</span></span><span> </span><span>
-</span><span id="line-88"></span><span>  </span><span class="annot"><span class="hs-string">&quot;kilowatt&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;power&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
+</span><span id="line-91"></span><span>  </span><span class="annot"><span class="hs-string">&quot;kilowatt&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;power&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;k&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;W&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; UnitDefn -&gt; UDefn
 forall s. IsUnit s =&gt; Double -&gt; s -&gt; UDefn
 </span><span class="hs-identifier hs-var">scale</span></span><span> </span><span class="annot"><span class="hs-number">1000</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#watt"><span class="hs-identifier hs-var">watt</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-89"></span><span>  </span><span>
-</span><span id="line-90"></span><span id="litre"><span class="annot"><span class="annottext">litre :: UnitDefn
+</span><span id="line-92"></span><span>  </span><span>
+</span><span id="line-93"></span><span id="litre"><span class="annot"><span class="annottext">litre :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#litre"><span class="hs-identifier hs-var hs-var">litre</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UDefn -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;litre&quot;</span></span><span>
-</span><span id="line-91"></span><span>  </span><span class="annot"><span class="hs-string">&quot;litre&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;volume&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-94"></span><span>  </span><span class="annot"><span class="hs-string">&quot;litre&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;volume&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;L&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; UnitDefn -&gt; UDefn
 forall s. IsUnit s =&gt; Double -&gt; s -&gt; UDefn
 </span><span class="hs-identifier hs-var">scale</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">1</span></span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double
 forall a. Fractional a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">/</span></span><span class="annot"><span class="hs-number">1000</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_3"><span class="hs-identifier hs-var">m_3</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-92"></span><span>
-</span><span id="line-93"></span><span id="lumen"><span class="annot"><span class="annottext">lumen :: UnitDefn
+</span><span id="line-95"></span><span>
+</span><span id="line-96"></span><span id="lumen"><span class="annot"><span class="annottext">lumen :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#lumen"><span class="hs-identifier hs-var hs-var">lumen</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lumen&quot;</span></span><span> </span><span>
-</span><span id="line-94"></span><span>  </span><span class="annot"><span class="hs-string">&quot;lumen&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;luminous flux&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-97"></span><span>  </span><span class="annot"><span class="hs-string">&quot;lumen&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;luminous flux&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lm&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#candela"><span class="hs-identifier hs-var">candela</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#steradian"><span class="hs-identifier hs-var">steradian</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-95"></span><span>
-</span><span id="line-96"></span><span id="lux"><span class="annot"><span class="annottext">lux :: UnitDefn
+</span><span id="line-98"></span><span>
+</span><span id="line-99"></span><span id="lux"><span class="annot"><span class="annottext">lux :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#lux"><span class="hs-identifier hs-var hs-var">lux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lux&quot;</span></span><span> </span><span>
-</span><span id="line-97"></span><span>  </span><span class="annot"><span class="hs-string">&quot;lux&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;illuminance&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-100"></span><span>  </span><span class="annot"><span class="hs-string">&quot;lux&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;illuminance&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lx&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#lumen"><span class="hs-identifier hs-var">lumen</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-var">m_2</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-98"></span><span>
-</span><span id="line-99"></span><span id="millimetre"><span class="annot"><span class="annottext">millimetre :: UnitDefn
+</span><span id="line-101"></span><span>
+</span><span id="line-102"></span><span id="millimetre"><span class="annot"><span class="annottext">millimetre :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#millimetre"><span class="hs-identifier hs-var hs-var">millimetre</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UDefn -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;millimetre&quot;</span></span><span>
-</span><span id="line-100"></span><span>  </span><span class="annot"><span class="hs-string">&quot;millimetre&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;length&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-103"></span><span>  </span><span class="annot"><span class="hs-string">&quot;millimetre&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;length&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;mm&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; UnitDefn -&gt; UDefn
 forall s. IsUnit s =&gt; Double -&gt; s -&gt; UDefn
 </span><span class="hs-identifier hs-var">scale</span></span><span> </span><span class="annot"><span class="hs-number">0.0001</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-101"></span><span>
-</span><span id="line-102"></span><span id="newton"><span class="annot"><span class="annottext">newton :: UnitDefn
+</span><span id="line-104"></span><span>
+</span><span id="line-105"></span><span id="newton"><span class="annot"><span class="annottext">newton :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var hs-var">newton</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newton&quot;</span></span><span>
-</span><span id="line-103"></span><span>  </span><span class="annot"><span class="hs-string">&quot;newton&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-106"></span><span>  </span><span class="annot"><span class="hs-string">&quot;newton&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;N&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitEquation -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">2</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-104"></span><span>  </span><span>
-</span><span id="line-105"></span><span id="ohm"><span class="annot"><span class="annottext">ohm :: UnitDefn
+</span><span id="line-107"></span><span>  </span><span>
+</span><span id="line-108"></span><span id="ohm"><span class="annot"><span class="annottext">ohm :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ohm"><span class="hs-identifier hs-var hs-var">ohm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ohm&quot;</span></span><span>
-</span><span id="line-106"></span><span>  </span><span class="annot"><span class="hs-string">&quot;ohm&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;resistance&quot;</span></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-109"></span><span>  </span><span class="annot"><span class="hs-string">&quot;ohm&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;resistance&quot;</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cOmega</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#volt"><span class="hs-identifier hs-var">volt</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ampere"><span class="hs-identifier hs-var">ampere</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-107"></span><span>  </span><span>
-</span><span id="line-108"></span><span id="pascal"><span class="annot"><span class="annottext">pascal :: UnitDefn
+</span><span id="line-110"></span><span>  </span><span>
+</span><span id="line-111"></span><span id="pascal"><span class="annot"><span class="annottext">pascal :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-var hs-var">pascal</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pascal&quot;</span></span><span> </span><span>
-</span><span id="line-109"></span><span>  </span><span class="annot"><span class="hs-string">&quot;pascal&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pressure&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-112"></span><span>  </span><span class="annot"><span class="hs-string">&quot;pascal&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pressure&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Pa&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-110"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-113"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitEquation -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitEquation -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-111"></span><span>  </span><span>
-</span><span id="line-112"></span><span id="radian"><span class="annot"><span class="annottext">radian :: UnitDefn
+</span><span id="line-114"></span><span>  </span><span>
+</span><span id="line-115"></span><span id="radian"><span class="annot"><span class="annottext">radian :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#radian"><span class="hs-identifier hs-var hs-var">radian</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;radian&quot;</span></span><span> </span><span>
-</span><span id="line-113"></span><span>  </span><span class="annot"><span class="hs-string">&quot;radian&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;angle&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-116"></span><span>  </span><span class="annot"><span class="hs-string">&quot;radian&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;angle&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;rad&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-114"></span><span>            </span><span>
-</span><span id="line-115"></span><span id="siemens"><span class="annot"><span class="annottext">siemens :: UnitDefn
+</span><span id="line-117"></span><span>            </span><span>
+</span><span id="line-118"></span><span id="siemens"><span class="annot"><span class="annottext">siemens :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#siemens"><span class="hs-identifier hs-var hs-var">siemens</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;siemens&quot;</span></span><span> </span><span>
-</span><span id="line-116"></span><span>  </span><span class="annot"><span class="hs-string">&quot;siemens&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;conductance&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-119"></span><span>  </span><span class="annot"><span class="hs-string">&quot;siemens&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;conductance&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;S&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ohm"><span class="hs-identifier hs-var">ohm</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-117"></span><span>  </span><span>
-</span><span id="line-118"></span><span id="sievert"><span class="annot"><span class="annottext">sievert :: UnitDefn
+</span><span id="line-120"></span><span>  </span><span>
+</span><span id="line-121"></span><span id="sievert"><span class="annot"><span class="annottext">sievert :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#sievert"><span class="hs-identifier hs-var hs-var">sievert</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;sievert&quot;</span></span><span> </span><span>
-</span><span id="line-119"></span><span>  </span><span class="annot"><span class="hs-string">&quot;sievert&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dose equivalent&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-122"></span><span>  </span><span class="annot"><span class="hs-string">&quot;sievert&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dose equivalent&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Sv&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-120"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-123"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-121"></span><span>            </span><span>
-</span><span id="line-122"></span><span id="steradian"><span class="annot"><span class="annottext">steradian :: UnitDefn
+</span><span id="line-124"></span><span>            </span><span>
+</span><span id="line-125"></span><span id="steradian"><span class="annot"><span class="annottext">steradian :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#steradian"><span class="hs-identifier hs-var hs-var">steradian</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;steradian&quot;</span></span><span> </span><span>
-</span><span id="line-123"></span><span>  </span><span class="annot"><span class="hs-string">&quot;steradian&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;solid angle&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-126"></span><span>  </span><span class="annot"><span class="hs-string">&quot;steradian&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;solid angle&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;sr&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-var">m_2</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-var">m_2</span></a></span><span> </span><span class="hs-special">)</span><span>
-</span><span id="line-124"></span><span>  </span><span>
-</span><span id="line-125"></span><span id="tesla"><span class="annot"><span class="annottext">tesla :: UnitDefn
+</span><span id="line-127"></span><span>  </span><span>
+</span><span id="line-128"></span><span id="tesla"><span class="annot"><span class="annottext">tesla :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#tesla"><span class="hs-identifier hs-var hs-var">tesla</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tesla&quot;</span></span><span>
-</span><span id="line-126"></span><span>  </span><span class="annot"><span class="hs-string">&quot;tesla&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;magnetic flux density&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-129"></span><span>  </span><span class="annot"><span class="hs-string">&quot;tesla&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;magnetic flux density&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;T&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#weber"><span class="hs-identifier hs-var">weber</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-var">m_2</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-127"></span><span>
-</span><span id="line-128"></span><span id="volt"><span class="annot"><span class="annottext">volt :: UnitDefn
+</span><span id="line-130"></span><span>
+</span><span id="line-131"></span><span id="volt"><span class="annot"><span class="annottext">volt :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#volt"><span class="hs-identifier hs-var hs-var">volt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;volt&quot;</span></span><span> </span><span>
-</span><span id="line-129"></span><span>  </span><span class="annot"><span class="hs-string">&quot;volt&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;voltage&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-132"></span><span>  </span><span class="annot"><span class="hs-string">&quot;volt&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;voltage&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;V&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#watt"><span class="hs-identifier hs-var">watt</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#ampere"><span class="hs-identifier hs-var">ampere</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-130"></span><span>
-</span><span id="line-131"></span><span id="watt"><span class="annot"><span class="annottext">watt :: UnitDefn
+</span><span id="line-133"></span><span>
+</span><span id="line-134"></span><span id="watt"><span class="annot"><span class="annottext">watt :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#watt"><span class="hs-identifier hs-var hs-var">watt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;watt&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;watt&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;power&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;W&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-132"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-135"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitEquation -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#m_2"><span class="hs-identifier hs-var">m_2</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitEquation -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">3</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-133"></span><span>          </span><span>
-</span><span id="line-134"></span><span id="weber"><span class="annot"><span class="annottext">weber :: UnitDefn
+</span><span id="line-136"></span><span>          </span><span>
+</span><span id="line-137"></span><span id="weber"><span class="annot"><span class="annottext">weber :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#weber"><span class="hs-identifier hs-var hs-var">weber</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; Symbol -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">derCUC'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;weber&quot;</span></span><span>
-</span><span id="line-135"></span><span>  </span><span class="annot"><span class="hs-string">&quot;weber&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;magnetic flux&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-138"></span><span>  </span><span class="annot"><span class="hs-string">&quot;weber&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;magnetic flux&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Wb&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#volt"><span class="hs-identifier hs-var">volt</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-136"></span><span>  </span><span>
-</span><span id="line-137"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#specificE"><span class="hs-identifier hs-type">specificE</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
-</span><span id="line-138"></span><span id="specificE"><span class="annot"><span class="annottext">specificE :: UnitDefn
+</span><span id="line-139"></span><span>  </span><span>
+</span><span id="line-140"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#specificE"><span class="hs-identifier hs-type">specificE</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
+</span><span id="line-141"></span><span id="specificE"><span class="annot"><span class="annottext">specificE :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#specificE"><span class="hs-identifier hs-var hs-var">specificE</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">makeDerU</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;specificE&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span> </span><span class="annot"><span class="hs-string">&quot;specific energy&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-139"></span><span>  </span><span class="annot"><span class="hs-string">&quot;energy per unit mass&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-142"></span><span>  </span><span class="annot"><span class="hs-string">&quot;energy per unit mass&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-140"></span><span>
-</span><span id="line-141"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#specificWeight"><span class="hs-identifier hs-type">specificWeight</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
-</span><span id="line-142"></span><span id="specificWeight"><span class="annot"><span class="annottext">specificWeight :: UnitDefn
+</span><span id="line-143"></span><span>
+</span><span id="line-144"></span><span class="annot"><a href="Data.Drasil.SI_Units.html#specificWeight"><span class="hs-identifier hs-type">specificWeight</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span>
+</span><span id="line-145"></span><span id="specificWeight"><span class="annot"><span class="annottext">specificWeight :: UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#specificWeight"><span class="hs-identifier hs-var hs-var">specificWeight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">makeDerU</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;specificWeight&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;specific weight&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-143"></span><span>  </span><span class="annot"><span class="hs-string">&quot;weight per unit volume&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-146"></span><span>  </span><span class="annot"><span class="hs-string">&quot;weight per unit volume&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitEquation -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; Integer -&gt; UnitEquation
 </span><span class="hs-operator hs-var">^:</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">3</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-144"></span><span>  </span><span>
-</span><span id="line-145"></span><span class="hs-comment">-- FIXME: Need to add pi </span><span>
-</span><span id="line-146"></span><span class="hs-comment">--degrees = DUC</span><span>
-</span><span id="line-147"></span><span>  </span><span class="hs-comment">--  (UD (dcc &quot;Degrees&quot; &quot;angle&quot;) (UName (Special Circle)))</span><span>
-</span><span id="line-148"></span><span>  </span><span class="hs-comment">--  Equiv to pi/180 rad.</span><span>
-</span><span id="line-149"></span></pre></body></html>
+</span><span id="line-147"></span><span>  </span><span>
+</span><span id="line-148"></span><span class="hs-comment">-- FIXME: Need to add pi </span><span>
+</span><span id="line-149"></span><span class="hs-comment">--degrees = DUC</span><span>
+</span><span id="line-150"></span><span>  </span><span class="hs-comment">--  (UD (dcc &quot;Degrees&quot; &quot;angle&quot;) (UName (Special Circle)))</span><span>
+</span><span id="line-151"></span><span>  </span><span class="hs-comment">--  Equiv to pi/180 rad.</span><span>
+</span><span id="line-152"></span></pre></body></html>

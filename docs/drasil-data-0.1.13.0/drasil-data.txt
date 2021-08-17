@@ -9,10 +9,14 @@
 @package drasil-data
 @version 0.1.13.0
 
+
+-- | Defines common constraints for use in Drasil.
 module Data.Drasil.Constraints
 gtZeroConstr :: ConstraintE
 probConstr :: ConstraintE
 
+
+-- | Define people for use in Drasil. Used often in authors and citations.
 module Data.Drasil.People
 spencerSmith :: Person
 henryFrankis :: Person
@@ -80,6 +84,8 @@ olu :: Person
 rodPierce :: Person
 wikiAuthors :: Person
 
+
+-- | Defines citations used in Drasil.
 module Data.Drasil.Citations
 campidelli :: Citation
 koothoor2013 :: Citation
@@ -98,8 +104,15 @@ laplaceWiki :: Citation
 pidWiki :: Citation
 jnlCGJ :: String
 
+
+-- | Defines concepts used in the field of math.
 module Data.Drasil.Concepts.Math
+
+-- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]
+
+-- | Collects all math-related common ideas (like a concept, but with no
+--   definition).
 mathcon' :: [CI]
 amplitude :: ConceptChunk
 angle :: ConceptChunk
@@ -166,8 +179,16 @@ ode :: CI
 pde :: CI
 rightSide :: CI
 
+
+-- | Defines concepts used to create documentation.
 module Data.Drasil.Concepts.Documentation
+
+-- | Collects all documentation-related named chunks (not concept-level
+--   yet).
 doccon :: [NamedChunk]
+
+-- | Collects all documentation-related common ideas (like a concept, but
+--   with no definition).
 doccon' :: [CI]
 
 -- | CI | | uid | term | abbreviation | ConceptDomain
@@ -375,6 +396,8 @@ physicalProperty :: NamedChunk
 vavPlan :: NamedChunk
 uncertCol :: NamedChunk
 userInput :: NamedChunk
+
+-- | Root SRS Domain.
 srsDom :: ConceptChunk
 goalStmtDom :: ConceptChunk
 assumpDom :: ConceptChunk
@@ -385,10 +408,14 @@ chgProbDom :: ConceptChunk
 likeChgDom :: ConceptChunk
 unlikeChgDom :: ConceptChunk
 
--- | List of SRS-related concepts, including SRS
+-- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
 
+
+-- | Defines concepts used to describe physical properties.
 module Data.Drasil.Concepts.PhysicalProperties
+
+-- | Collects all physical property-related concepts.
 physicalcon :: [ConceptChunk]
 gaseous :: ConceptChunk
 liquid :: ConceptChunk
@@ -403,7 +430,11 @@ vol :: ConceptChunk
 flexure :: ConceptChunk
 materialProprty :: NamedChunk
 
+
+-- | Defines concepts used to describe levels of education.
 module Data.Drasil.Concepts.Education
+
+-- | Collects all education-related concepts.
 educon :: [NamedChunk]
 calculus :: NamedChunk
 civil :: NamedChunk
@@ -427,11 +458,15 @@ highSchoolPhysics :: NamedChunk
 frstYr :: NamedChunk
 physChem :: NamedChunk
 
+
+-- | Defines concepts used in computing.
 module Data.Drasil.Concepts.Computation
 algorithm :: ConceptChunk
 absTolerance :: ConceptChunk
 relTolerance :: ConceptChunk
 modCalcDesc :: Sentence -> ConceptChunk
+
+-- | Collects all computing-related named chunks (not concept-level yet).
 compcon :: [NamedChunk]
 application :: NamedChunk
 computer :: NamedChunk
@@ -450,7 +485,11 @@ inQty :: NamedChunk
 computerLiteracy :: NamedChunk
 computerApp :: NamedChunk
 
+
+-- | Defines concepts used in the field of software.
 module Data.Drasil.Concepts.Software
+
+-- | Collects all software-related concepts.
 softwarecon :: [ConceptChunk]
 c :: ConceptChunk
 errMsg :: ConceptChunk
@@ -486,6 +525,9 @@ modPlotDesc :: ConceptChunk
 modOutputfDescFun :: Sentence -> ConceptChunk
 modOdeDesc :: ConceptChunk
 
+
+-- | Defines units for use in Drasil. Often used in a unital-related chunk
+--   that has an associated symbol.
 module Data.Drasil.SI_Units
 fundamentals :: [UnitDefn]
 derived :: [UnitDefn]
@@ -531,6 +573,9 @@ weber :: UnitDefn
 specificE :: UnitDefn
 specificWeight :: UnitDefn
 
+
+-- | Assigns a symbol and possibly units (quantities) to mathematical
+--   quantities.
 module Data.Drasil.Quantities.Math
 gradient :: DefinedQuantityDict
 normalVect :: DefinedQuantityDict
@@ -549,6 +594,8 @@ surArea :: UnitalChunk
 orientation :: UnitalChunk
 piConst :: QDefinition
 
+
+-- | Defines common software products.
 module Data.Drasil.Software.Products
 prodtcon :: [NamedChunk]
 matlab :: CI
@@ -557,9 +604,13 @@ videoGame :: NamedChunk
 openSource :: NamedChunk
 compPro :: NamedChunk
 
+
+-- | Defines units to describe physical properties.
 module Data.Drasil.Units.PhysicalProperties
 densityU :: UnitDefn
 
+
+-- | Assigns symbols and units (quantities) to common physical properties.
 module Data.Drasil.Quantities.PhysicalProperties
 density :: UnitalChunk
 specWeight :: UnitalChunk
@@ -567,8 +618,15 @@ mass :: UnitalChunk
 len :: UnitalChunk
 vol :: UnitalChunk
 
+
+-- | Defines concepts used in the field of physics.
 module Data.Drasil.Concepts.Physics
+
+-- | Collects all physics-related concepts.
 physicCon :: [ConceptChunk]
+
+-- | Collects all physics-related common ideas (like a concept, but with no
+--   definition).
 physicCon' :: [CI]
 acceleration :: ConceptChunk
 angAccel :: ConceptChunk
@@ -661,7 +719,11 @@ oneD :: CI
 twoD :: CI
 threeD :: CI
 
+
+-- | Defines concepts used in the field of thermodynamics.
 module Data.Drasil.Concepts.Thermodynamics
+
+-- | Collects all thermodynamics-related concepts.
 thermocon :: [ConceptChunk]
 boilPt :: ConceptChunk
 boiling :: ConceptChunk
@@ -685,7 +747,11 @@ thermalConduction :: ConceptChunk
 thermalConductor :: ConceptChunk
 thermalEnergy :: ConceptChunk
 
+
+-- | Defines concepts used in the field of solid mechanics.
 module Data.Drasil.Concepts.SolidMechanics
+
+-- | Collects all solid mechanics-related concepts.
 solidcon :: [ConceptChunk]
 elastMod :: ConceptChunk
 mobShear :: ConceptChunk
@@ -696,6 +762,9 @@ shearForce :: ConceptChunk
 shearRes :: ConceptChunk
 stffness :: ConceptChunk
 
+
+-- | Units related to the field of (classical) physics. Includes
+--   kinematics, forces, etc.
 module Data.Drasil.Units.Physics
 accelU :: UnitDefn
 angVelU :: UnitDefn
@@ -709,8 +778,13 @@ torqueU :: UnitDefn
 velU :: UnitDefn
 gravConstU :: UnitDefn
 
+
+-- | Assigns symbols and units (quantities) to physical concepts.
 module Data.Drasil.Quantities.Physics
 restitutionCoef :: DefinedQuantityDict
+
+-- | Collects all physical quantities defined in this file for easy use in
+--   Drasil.
 physicscon :: [UnitalChunk]
 acceleration :: UnitalChunk
 angularAccel :: UnitalChunk
@@ -787,6 +861,9 @@ supMin :: Symbol -> Symbol
 gravitationalConstValue :: QDefinition
 gravitationalAccelConst :: QDefinition
 
+
+-- | Defines some basic equations of physics and their wrappers as
+--   concepts.
 module Data.Drasil.Equations.Defining.Physics
 newtonSLEqn :: Relation
 weightEqn :: Relation
@@ -803,7 +880,11 @@ velocityQD :: QDefinition
 newtonSLQD :: QDefinition
 newtonSLDesc :: Sentence
 
+
+-- | Defines theories in the field of Physics.
 module Data.Drasil.Theories.Physics
+
+-- | Collects theoretical models defined in this file.
 physicsTMs :: [TheoryModel]
 newtonSL :: TheoryModel
 weightGD :: GenDefn
@@ -834,10 +915,14 @@ newtonSLRNotes :: [Sentence]
 accelerationTM :: TheoryModel
 velocityTM :: TheoryModel
 
+
+-- | Units related to the field of solid mechanics.
 module Data.Drasil.Units.SolidMechanics
 stiffnessU :: UnitDefn
 stiffness3D :: UnitDefn
 
+
+-- | Assigns symbols and units (quantities) to mechanics-related concepts.
 module Data.Drasil.Quantities.SolidMechanics
 elastMod :: UnitalChunk
 mobShear :: UnitalChunk
@@ -846,6 +931,8 @@ shearRes :: UnitalChunk
 stffness :: UnitalChunk
 poissnsR :: DefinedQuantityDict
 
+
+-- | Units related to the field of thermodynamics.
 module Data.Drasil.Units.Thermodynamics
 heatCapacity :: UnitDefn
 heatCapSpec :: UnitDefn
@@ -853,6 +940,9 @@ thermalFlux :: UnitDefn
 heatTransferCoef :: UnitDefn
 volHtGenU :: UnitDefn
 
+
+-- | Assigns symbols and units (quantities) to thermodynamics-related
+--   concepts.
 module Data.Drasil.Quantities.Thermodynamics
 boilPt :: UnitalChunk
 temp :: UnitalChunk

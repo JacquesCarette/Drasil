@@ -1,15 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Citations</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-2"></span><span>
-</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-comment">--(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))</span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.People.html"><span class="hs-identifier">Data.Drasil.People</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.People.html#dParnas"><span class="hs-identifier">dParnas</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#jRalyte"><span class="hs-identifier">jRalyte</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#lLai"><span class="hs-identifier">lLai</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#nKoothoor"><span class="hs-identifier">nKoothoor</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#nKraiem"><span class="hs-identifier">nKraiem</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-5"></span><span>  </span><span class="annot"><a href="Data.Drasil.People.html#pcClements"><span class="hs-identifier">pcClements</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#pjAgerfalk"><span class="hs-identifier">pjAgerfalk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#spencerSmith"><span class="hs-identifier">spencerSmith</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#mCampidelli"><span class="hs-identifier">mCampidelli</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#dmWiess"><span class="hs-identifier">dmWiess</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#rodPierce"><span class="hs-identifier">rodPierce</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-6"></span><span>  </span><span class="annot"><a href="Data.Drasil.People.html#wikiAuthors"><span class="hs-identifier">wikiAuthors</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#rcHibbeler"><span class="hs-identifier">rcHibbeler</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span>
-</span><span id="line-8"></span><span class="hs-comment">---------------</span><span>
-</span><span id="line-9"></span><span class="hs-comment">-- CITATIONS --</span><span>
-</span><span id="line-10"></span><span class="hs-comment">---------------</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-comment">-- Papers</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines citations used in Drasil.</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Citations</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-comment">--(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.People.html"><span class="hs-identifier">Data.Drasil.People</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.People.html#dParnas"><span class="hs-identifier">dParnas</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#jRalyte"><span class="hs-identifier">jRalyte</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#lLai"><span class="hs-identifier">lLai</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#nKoothoor"><span class="hs-identifier">nKoothoor</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#nKraiem"><span class="hs-identifier">nKraiem</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-6"></span><span>  </span><span class="annot"><a href="Data.Drasil.People.html#pcClements"><span class="hs-identifier">pcClements</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#pjAgerfalk"><span class="hs-identifier">pjAgerfalk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#spencerSmith"><span class="hs-identifier">spencerSmith</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#mCampidelli"><span class="hs-identifier">mCampidelli</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#dmWiess"><span class="hs-identifier">dmWiess</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#rodPierce"><span class="hs-identifier">rodPierce</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><a href="Data.Drasil.People.html#wikiAuthors"><span class="hs-identifier">wikiAuthors</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.People.html#rcHibbeler"><span class="hs-identifier">rcHibbeler</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- * Citations</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-comment">-- ** Papers</span><span>
+</span><span id="line-12"></span><span>
 </span><span id="line-13"></span><span class="annot"><a href="Data.Drasil.Citations.html#campidelli"><span class="hs-identifier hs-type">campidelli</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#koothoor2013"><span class="hs-identifier hs-type">koothoor2013</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#parnas1972"><span class="hs-identifier hs-type">parnas1972</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#parnasClements1984"><span class="hs-identifier hs-type">parnasClements1984</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-14"></span><span>  </span><span class="annot"><a href="Data.Drasil.Citations.html#parnasClements1986"><span class="hs-identifier hs-type">parnasClements1986</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#smithLai2005"><span class="hs-identifier hs-type">smithLai2005</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#lineSource"><span class="hs-identifier hs-type">lineSource</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#pointSource"><span class="hs-identifier hs-type">pointSource</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-15"></span><span>  </span><span class="annot"><a href="Data.Drasil.Citations.html#hibbeler2004"><span class="hs-identifier hs-type">hibbeler2004</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
@@ -141,104 +141,103 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-69"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Pearson Prentice Hall&quot;</span></span><span>
 </span><span id="line-70"></span><span>  </span><span class="annot"><span class="hs-number">2004</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;hibbeler2004&quot;</span></span><span>
 </span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span class="hs-comment">-- Wikipedia</span><span>
-</span><span id="line-73"></span><span class="annot"><a href="Data.Drasil.Citations.html#dampingSource"><span class="hs-identifier hs-type">dampingSource</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#accelerationWiki"><span class="hs-identifier hs-type">accelerationWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#velocityWiki"><span class="hs-identifier hs-type">velocityWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#cartesianWiki"><span class="hs-identifier hs-type">cartesianWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#laplaceWiki"><span class="hs-identifier hs-type">laplaceWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#pidWiki"><span class="hs-identifier hs-type">pidWiki</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
-</span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span id="dampingSource"><span class="annot"><span class="annottext">dampingSource :: Citation
+</span><span id="line-72"></span><span class="hs-comment">-- ** Wikipedia</span><span>
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="annot"><a href="Data.Drasil.Citations.html#dampingSource"><span class="hs-identifier hs-type">dampingSource</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#accelerationWiki"><span class="hs-identifier hs-type">accelerationWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#velocityWiki"><span class="hs-identifier hs-type">velocityWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#cartesianWiki"><span class="hs-identifier hs-type">cartesianWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#laplaceWiki"><span class="hs-identifier hs-type">laplaceWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Citations.html#pidWiki"><span class="hs-identifier hs-type">pidWiki</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span id="dampingSource"><span class="annot"><span class="annottext">dampingSource :: Citation
 </span><a href="Data.Drasil.Citations.html#dampingSource"><span class="hs-identifier hs-var hs-var">dampingSource</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cMisc</span></span><span>
-</span><span id="line-76"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span id="line-77"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><a href="Data.Drasil.People.html#wikiAuthors"><span class="hs-identifier hs-var">wikiAuthors</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Damping&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://en.wikipedia.org/wiki/Damping_ratio&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
 </span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
 </span><span class="hs-identifier hs-var">Jul</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2019</span></span><span class="hs-special">]</span><span>
-</span><span id="line-79"></span><span>  </span><span class="annot"><span class="hs-string">&quot;dampingSource&quot;</span></span><span>
-</span><span id="line-80"></span><span>
-</span><span id="line-81"></span><span id="accelerationWiki"><span class="annot"><span class="annottext">accelerationWiki :: Citation
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="hs-string">&quot;dampingSource&quot;</span></span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span id="accelerationWiki"><span class="annot"><span class="annottext">accelerationWiki :: Citation
 </span><a href="Data.Drasil.Citations.html#accelerationWiki"><span class="hs-identifier hs-var hs-var">accelerationWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cMisc</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><a href="Data.Drasil.People.html#wikiAuthors"><span class="hs-identifier hs-var">wikiAuthors</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Acceleration&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://en.wikipedia.org/wiki/Acceleration&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
 </span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
 </span><span class="hs-identifier hs-var">Jun</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2019</span></span><span class="hs-special">]</span><span>
-</span><span id="line-84"></span><span>  </span><span class="annot"><span class="hs-string">&quot;accelerationWiki&quot;</span></span><span>
-</span><span id="line-85"></span><span>
-</span><span id="line-86"></span><span id="velocityWiki"><span class="annot"><span class="annottext">velocityWiki :: Citation
+</span><span id="line-85"></span><span>  </span><span class="annot"><span class="hs-string">&quot;accelerationWiki&quot;</span></span><span>
+</span><span id="line-86"></span><span>
+</span><span id="line-87"></span><span id="velocityWiki"><span class="annot"><span class="annottext">velocityWiki :: Citation
 </span><a href="Data.Drasil.Citations.html#velocityWiki"><span class="hs-identifier hs-var hs-var">velocityWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cMisc</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><a href="Data.Drasil.People.html#wikiAuthors"><span class="hs-identifier hs-var">wikiAuthors</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-87"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span id="line-88"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Velocity&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://en.wikipedia.org/wiki/Velocity&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-88"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
 </span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
 </span><span class="hs-identifier hs-var">Jun</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2019</span></span><span class="hs-special">]</span><span>
-</span><span id="line-89"></span><span>  </span><span class="annot"><span class="hs-string">&quot;velocityWiki&quot;</span></span><span>
-</span><span id="line-90"></span><span>
-</span><span id="line-91"></span><span id="cartesianWiki"><span class="annot"><span class="annottext">cartesianWiki :: Citation
+</span><span id="line-90"></span><span>  </span><span class="annot"><span class="hs-string">&quot;velocityWiki&quot;</span></span><span>
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span id="cartesianWiki"><span class="annot"><span class="annottext">cartesianWiki :: Citation
 </span><a href="Data.Drasil.Citations.html#cartesianWiki"><span class="hs-identifier hs-var hs-var">cartesianWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cMisc</span></span><span>
-</span><span id="line-92"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span id="line-93"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><a href="Data.Drasil.People.html#wikiAuthors"><span class="hs-identifier hs-var">wikiAuthors</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Cartesian coordinate system&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://en.wikipedia.org/wiki/Cartesian_coordinate_system&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
 </span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
 </span><span class="hs-identifier hs-var">Jun</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2019</span></span><span class="hs-special">]</span><span>
-</span><span id="line-95"></span><span>  </span><span class="annot"><span class="hs-string">&quot;cartesianWiki&quot;</span></span><span>
-</span><span id="line-96"></span><span>
-</span><span id="line-97"></span><span id="laplaceWiki"><span class="annot"><span class="annottext">laplaceWiki :: Citation
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="hs-string">&quot;cartesianWiki&quot;</span></span><span>
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span id="laplaceWiki"><span class="annot"><span class="annottext">laplaceWiki :: Citation
 </span><a href="Data.Drasil.Citations.html#laplaceWiki"><span class="hs-identifier hs-var hs-var">laplaceWiki</span></a></span></span><span>
-</span><span id="line-98"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span id="line-99"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cMisc</span></span><span>
-</span><span id="line-99"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span id="line-100"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><a href="Data.Drasil.People.html#wikiAuthors"><span class="hs-identifier hs-var">wikiAuthors</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Laplace transform&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-100"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span id="line-101"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://en.wikipedia.org/wiki/Laplace_transform&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-101"></span><span>       </span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span id="line-102"></span><span>       </span><span class="annot"><span class="annottext">Month -&gt; CiteField
 </span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
 </span><span class="hs-identifier hs-var">Nov</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2020</span></span><span class="hs-special">]</span><span>
-</span><span id="line-102"></span><span>      </span><span class="annot"><span class="hs-string">&quot;laplaceWiki&quot;</span></span><span>
-</span><span id="line-103"></span><span>
-</span><span id="line-104"></span><span id="pidWiki"><span class="annot"><span class="annottext">pidWiki :: Citation
+</span><span id="line-103"></span><span>      </span><span class="annot"><span class="hs-string">&quot;laplaceWiki&quot;</span></span><span>
+</span><span id="line-104"></span><span>
+</span><span id="line-105"></span><span id="pidWiki"><span class="annot"><span class="annottext">pidWiki :: Citation
 </span><a href="Data.Drasil.Citations.html#pidWiki"><span class="hs-identifier hs-var hs-var">pidWiki</span></a></span></span><span>
-</span><span id="line-105"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span id="line-106"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cMisc</span></span><span>
-</span><span id="line-106"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span id="line-107"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><a href="Data.Drasil.People.html#wikiAuthors"><span class="hs-identifier hs-var">wikiAuthors</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;PID controller&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-107"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span id="line-108"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://en.wikipedia.org/wiki/PID_controller&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Month -&gt; CiteField
 </span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
 </span><span class="hs-identifier hs-var">Oct</span></span><span class="hs-special">,</span><span>
-</span><span id="line-108"></span><span>       </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span id="line-109"></span><span>       </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2020</span></span><span class="hs-special">]</span><span>
-</span><span id="line-109"></span><span>      </span><span class="annot"><span class="hs-string">&quot;pidWiki&quot;</span></span><span>
-</span><span id="line-110"></span><span>
-</span><span id="line-111"></span><span class="hs-comment">------------------------</span><span>
-</span><span id="line-112"></span><span class="hs-comment">-- COMMON CITE-FIELDS --</span><span>
-</span><span id="line-113"></span><span class="hs-comment">------------------------</span><span>
-</span><span id="line-114"></span><span>
-</span><span id="line-115"></span><span class="annot"><a href="Data.Drasil.Citations.html#jnlCGJ"><span class="hs-identifier hs-type">jnlCGJ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-116"></span><span id="jnlCGJ"><span class="annot"><span class="annottext">jnlCGJ :: String
+</span><span id="line-110"></span><span>      </span><span class="annot"><span class="hs-string">&quot;pidWiki&quot;</span></span><span>
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="hs-comment">-- * Common Cite Fields</span><span>
+</span><span id="line-113"></span><span>
+</span><span id="line-114"></span><span class="annot"><a href="Data.Drasil.Citations.html#jnlCGJ"><span class="hs-identifier hs-type">jnlCGJ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-115"></span><span id="jnlCGJ"><span class="annot"><span class="annottext">jnlCGJ :: String
 </span><a href="Data.Drasil.Citations.html#jnlCGJ"><span class="hs-identifier hs-var hs-var">jnlCGJ</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Canadian Geotechnical Journal&quot;</span></span><span>
-</span><span id="line-117"></span></pre></body></html>
+</span><span id="line-116"></span></pre></body></html>

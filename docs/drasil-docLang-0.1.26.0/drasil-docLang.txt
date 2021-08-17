@@ -11,119 +11,121 @@
 
 module Drasil.DocLang.Notebook
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 intro :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 prpsOfDoc :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 body :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 review :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 mainIdea :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 motion :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 hormotion :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 vermotion :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 methAndAnls :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 coorSyst :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 kinematic :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 procForAnls :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 summary :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 appendix :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 reference :: [Contents] -> [Section] -> Section
 
--- | Notebook constructor. Create the notebook from given system name,
---   authors, and sections doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt;
---   [Section] -&gt; Document doc sys = Document (Doc.notebook
---   <a>forTPS</a> sys)
+-- | Section constructors for the lesson plan documents/jupyter notebooks.
 example :: [Contents] -> [Section] -> Section
 sectionReferences :: [Reference]
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 introLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 docPurposeLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 methsAndanlsLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 referenceLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 bodyLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 reviewLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 mainIdeaLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 motionLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 hormotionLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 vermotionLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 appendixLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 coorSystLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 kinematicLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 summaryLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 anlsProcLabel :: Reference
+
+-- | Individual section reference labels. Used in creating example sections
+--   for the notebook.
 exampleLabel :: Reference
 
+
+-- | Holds all section constructors and labels for creating SRS documents.
 module Drasil.DocLang.SRS
 
 -- | Table of Contents section.
@@ -481,6 +483,8 @@ terminologyLabel :: Reference
 -- | Collections all <a>Section</a> <a>Reference</a>s.
 sectionReferences :: [Reference]
 
+
+-- | Helpers for dealing with formatting of Units
 module Drasil.DocumentLanguage.Units
 
 -- | Get the units, if they exist, and wrap them as a <a>Sentence</a>.
@@ -490,6 +494,8 @@ toSentence :: MayHaveUnit u => u -> Sentence
 -- | Similar to <a>toSentence</a>, except default value is "Unitless".
 toSentenceUnitless :: MayHaveUnit u => u -> Sentence
 
+
+-- | Defines functions to create traceability graphs in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityGraph
 
 -- | Wrapper for <a>traceMIntro</a> and <a>traceGIntro</a>. Turns
@@ -585,6 +591,9 @@ resourcePath :: String
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]
 
+
+-- | Re-export document language types and functions for easy use in other
+--   packages.
 module Drasil.DocLang
 
 -- | A Software Requirements Specification Declaration is made up of all
@@ -712,23 +721,6 @@ data SCSSub
 --   subsections).
 data SolChSpec
 [SCSProg] :: [SCSSub] -> SolChSpec
-
--- | Creates a document from a document description, a title combinator
---   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
-
--- | Helper for filling in the traceability matrix and graph information
---   into the system.
-fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
-
--- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
---   references, fill in for rest of system information. Currently fills in
---   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
-
--- | Recursively find all references in a section (meant for getting at
---   <a>LabelledContent</a>).
-findAllRefs :: Section -> [Reference]
 
 -- | Appendix section.
 newtype AppndxSec
@@ -893,7 +885,30 @@ Derived :: TUIntro
 
 -- | Purpose of the table of units.
 TUPurpose :: TUIntro
+
+-- | Creates a document from a document description, a title combinator
+--   function, and system information.
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+
+-- | Helper for filling in the traceability matrix and graph information
+--   into the system.
+fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
+
+-- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
+--   references, fill in for rest of system information. Currently fills in
+--   references, traceability matrix information and <a>IdeaDict</a>s.
+fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
+
+-- | Recursively find all references in a section (meant for getting at
+--   <a>LabelledContent</a>).
+findAllRefs :: Section -> [Reference]
+
+-- | A Lesson Plan notebook declaration is made up of all necessary
+--   sections (<a>NbSection</a>s).
 type NBDecl = [NbSection]
+
+-- | Contains all the different sections needed for a notebook lesson plan
+--   (<a>NBDecl</a>).
 data NbSection
 IntrodSec :: IntrodSec -> NbSection
 BodySec :: BodySec -> NbSection
@@ -919,7 +934,7 @@ SmmryProg :: [Contents] -> SmmrySec
 newtype ApndxSec
 ApndxProg :: [Contents] -> ApndxSec
 
--- | Creates a notebook from a document description and system information
+-- | Creates a notebook from a document description and system information.
 mkNb :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 
 -- | Fields that should be displayed in definitions.
@@ -963,6 +978,8 @@ ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
 -- | A database that contains <a>TheoryModel</a>s, <a>GenDefn</a>s,
 --   <a>DataDefinition</a>s, and <a>InstanceModel</a>s.
 data ModelDB
+
+-- | Data Definition reference map.
 ddRefDB :: ModelDB -> RefMap DataDefinition
 
 -- | Constructor for creating a <a>ModelDB</a>.
@@ -976,6 +993,17 @@ mkGraphInfo :: SystemInformation -> GraphInfo
 --   Primarily used for reference database in examples.
 traceyGraphGetRefs :: String -> [Reference]
 
+-- | Contains traceability matrix assumptions, other assumptions,
+--   refinement, and other requirements.
+traceMatStandard :: SystemInformation -> [TraceConfig]
+
+-- | Records other requirements. Converts the <a>SystemInformation</a> into
+--   a <a>TraceConfig</a>.
+traceMatOtherReq :: SystemInformation -> TraceConfig
+
+-- | Creates a traceability map from document sections.
+generateTraceMap :: [DocSection] -> TraceMap
+
 -- | Helper that gets a table of constants from a <a>QDefinition</a>.
 tableOfConstants :: [QDefinition] -> LabelledContent
 
@@ -986,6 +1014,28 @@ purpDoc :: CI -> Verbosity -> [Sentence]
 
 -- | Default Reference Material section introduction.
 intro :: Contents
+
+-- | Default is term and given introduction.
+--   
+--   Table of symbols constructor.
+tsymb :: [TSIntro] -> RefTab
+
+-- | Table of symbols constructor. Takes a custom function and
+--   introduction.
+tsymb'' :: [TSIntro] -> LFunc -> RefTab
+
+-- | Makes a reference to the Table of Units.
+unitTableRef :: Reference
+
+-- | Table of units with an SI Name.
+--   
+--   Table of units constructors.
+tunit :: [TUIntro] -> RefTab
+
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunit' :: [TUIntro] -> RefTab
 
 -- | Creates a <a>ConceptInstance</a> of input values.
 inReq :: Sentence -> ConceptInstance
@@ -1022,51 +1072,12 @@ inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, Ma
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
 
--- | Table of abbreviations and acronyms reference.
-tableAbbAccRef :: Reference
-
--- | Makes a reference to the Table of Symbols.
-symbTableRef :: Reference
-
--- | Default is term and given introduction.
---   
---   Table of symbols constructor.
-tsymb :: [TSIntro] -> RefTab
-
--- | Table of symbols constructor. Takes a custom function and
---   introduction.
-tsymb'' :: [TSIntro] -> LFunc -> RefTab
-
--- | Makes a reference to the Table of Units.
-unitTableRef :: Reference
-
--- | Table of units with an SI Name.
---   
---   Table of units constructors.
-tunit :: [TUIntro] -> RefTab
-
--- | Table of units with SI name in the description column.
---   
---   Table of units constructors.
-tunit' :: [TUIntro] -> RefTab
-
--- | Contains traceability matrix assumptions, other assumptions,
---   refinement, and other requirements.
-traceMatStandard :: SystemInformation -> [TraceConfig]
-
--- | Records other requirements. Converts the <a>SystemInformation</a> into
---   a <a>TraceConfig</a>.
-traceMatOtherReq :: SystemInformation -> TraceConfig
-
 -- | Extracts <a>Sentence</a>s from a document description.
 getDocDesc :: DocDesc -> [Sentence]
 
 -- | Extracts expressions from the document description (<a>DocDesc</a>)
 --   and default <a>DLPlate</a>.
 egetDocDesc :: DocDesc -> [ModelExpr]
-
--- | Creates a traceability map from document sections.
-generateTraceMap :: [DocSection] -> TraceMap
 
 -- | All section references used in creating a Software Requirements
 --   Specification (SRS).

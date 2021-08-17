@@ -1,12 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Concepts.SolidMechanics</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-2"></span><span>
-</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#force"><span class="hs-identifier">force</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#strain"><span class="hs-identifier">strain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#stress"><span class="hs-identifier">stress</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span>
-</span><span id="line-6"></span><span class="hs-comment">--FIXME: add &quot;shear stress&quot; and &quot;shear strain&quot; when we have adjectives</span><span>
-</span><span id="line-7"></span><span class="hs-comment">--       to make a combined &quot;mobilized shear force&quot; for example</span><span>
-</span><span id="line-8"></span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#solidcon"><span class="hs-identifier hs-type">solidcon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-9"></span><span id="solidcon"><span class="annot"><span class="annottext">solidcon :: [ConceptChunk]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines concepts used in the field of solid mechanics.</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Concepts.SolidMechanics</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#force"><span class="hs-identifier">force</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#strain"><span class="hs-identifier">strain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#stress"><span class="hs-identifier">stress</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-comment">--FIXME: add &quot;shear stress&quot; and &quot;shear strain&quot; when we have adjectives</span><span>
+</span><span id="line-8"></span><span class="hs-comment">--       to make a combined &quot;mobilized shear force&quot; for example</span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- | Collects all solid mechanics-related concepts.</span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#solidcon"><span class="hs-identifier hs-type">solidcon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-11"></span><span id="solidcon"><span class="annot"><span class="annottext">solidcon :: [ConceptChunk]
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#solidcon"><span class="hs-identifier hs-var hs-var">solidcon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#elastMod"><span class="hs-identifier hs-var">elastMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#mobShear"><span class="hs-identifier hs-var">mobShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -14,36 +16,36 @@
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-var">nrmStrss</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#poissnsR"><span class="hs-identifier hs-var">poissnsR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#shearForce"><span class="hs-identifier hs-var">shearForce</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-10"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-12"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#shearRes"><span class="hs-identifier hs-var">shearRes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#stffness"><span class="hs-identifier hs-var">stffness</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#elastMod"><span class="hs-identifier hs-type">elastMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#mobShear"><span class="hs-identifier hs-type">mobShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#normForce"><span class="hs-identifier hs-type">normForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-type">nrmStrss</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#poissnsR"><span class="hs-identifier hs-type">poissnsR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#shearForce"><span class="hs-identifier hs-type">shearForce</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-13"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#shearRes"><span class="hs-identifier hs-type">shearRes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#stffness"><span class="hs-identifier hs-type">stffness</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span id="elastMod"><span class="annot"><span class="annottext">elastMod :: ConceptChunk
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#elastMod"><span class="hs-identifier hs-type">elastMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#mobShear"><span class="hs-identifier hs-type">mobShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#normForce"><span class="hs-identifier hs-type">normForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-type">nrmStrss</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#poissnsR"><span class="hs-identifier hs-type">poissnsR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#shearForce"><span class="hs-identifier hs-type">shearForce</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#shearRes"><span class="hs-identifier hs-type">shearRes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.SolidMechanics.html#stffness"><span class="hs-identifier hs-type">stffness</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span id="elastMod"><span class="annot"><span class="annottext">elastMod :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#elastMod"><span class="hs-identifier hs-var hs-var">elastMod</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;elastMod&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;elastic modulus&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-16"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-18"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the ratio of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#stress"><span class="hs-identifier hs-var">stress</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;exerted on a body to the resulting&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#strain"><span class="hs-identifier hs-var">strain</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-18"></span><span>
-</span><span id="line-19"></span><span id="mobShear"><span class="annot"><span class="annottext">mobShear :: ConceptChunk
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span id="mobShear"><span class="annot"><span class="annottext">mobShear :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#mobShear"><span class="hs-identifier hs-var hs-var">mobShear</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;mobShear&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;mobilized shear force&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-20"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-22"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -52,14 +54,14 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in the direction of potential motion&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;thus encouraging motion along the plane&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span id="normForce"><span class="annot"><span class="annottext">normForce :: ConceptChunk
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span id="normForce"><span class="annot"><span class="annottext">normForce :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#normForce"><span class="hs-identifier hs-var hs-var">normForce</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;normForce&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;normal force&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-24"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-26"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -67,12 +69,12 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><a href="Data.Drasil.Concepts.Physics.html#force"><span class="hs-identifier hs-var">force</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;applied perpendicular to the plane of the material&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-25"></span><span>  </span><span>
-</span><span id="line-26"></span><span id="nrmStrss"><span class="annot"><span class="annottext">nrmStrss :: ConceptChunk
+</span><span id="line-27"></span><span>  </span><span>
+</span><span id="line-28"></span><span id="nrmStrss"><span class="annot"><span class="annottext">nrmStrss :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-var hs-var">nrmStrss</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;nrmStrss&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;normal stress&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-27"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-29"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -80,12 +82,12 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><a href="Data.Drasil.Concepts.Physics.html#stress"><span class="hs-identifier hs-var">stress</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;exerted perpendicular to the plane of the object&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-28"></span><span>  </span><span>
-</span><span id="line-29"></span><span id="poissnsR"><span class="annot"><span class="annottext">poissnsR :: ConceptChunk
+</span><span id="line-30"></span><span>  </span><span>
+</span><span id="line-31"></span><span id="poissnsR"><span class="annot"><span class="annottext">poissnsR :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#poissnsR"><span class="hs-identifier hs-var hs-var">poissnsR</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;poissnsR&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Poisson's ratio&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-30"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-32"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the ratio of perpendicular&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -97,12 +99,12 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#strain"><span class="hs-identifier hs-var">strain</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-31"></span><span>  </span><span>
-</span><span id="line-32"></span><span id="shearRes"><span class="annot"><span class="annottext">shearRes :: ConceptChunk
+</span><span id="line-33"></span><span>  </span><span>
+</span><span id="line-34"></span><span id="shearRes"><span class="annot"><span class="annottext">shearRes :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#shearRes"><span class="hs-identifier hs-var hs-var">shearRes</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;shearRes&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;resistive shear force&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-33"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-35"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -111,14 +113,14 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in the direction opposite to the direction&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of potential motion, thus hindering motion along the plane&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-35"></span><span>  </span><span>
-</span><span id="line-36"></span><span id="shearForce"><span class="annot"><span class="annottext">shearForce :: ConceptChunk
+</span><span id="line-37"></span><span>  </span><span>
+</span><span id="line-38"></span><span id="shearForce"><span class="annot"><span class="annottext">shearForce :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#shearForce"><span class="hs-identifier hs-var hs-var">shearForce</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;shearForce&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;shear force&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-37"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-39"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -126,15 +128,15 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><a href="Data.Drasil.Concepts.Physics.html#force"><span class="hs-identifier hs-var">force</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;applied parallel to the plane of the material&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-38"></span><span>  </span><span>
-</span><span id="line-39"></span><span id="stffness"><span class="annot"><span class="annottext">stffness :: ConceptChunk
+</span><span id="line-40"></span><span>  </span><span>
+</span><span id="line-41"></span><span id="stffness"><span class="annot"><span class="annottext">stffness :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.SolidMechanics.html#stffness"><span class="hs-identifier hs-var hs-var">stffness</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;stffness&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;stiffness&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-40"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-42"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the extent a body resists&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#strain"><span class="hs-identifier hs-var">strain</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-41"></span></pre></body></html>
+</span><span id="line-43"></span></pre></body></html>

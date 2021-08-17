@@ -39,8 +39,8 @@ factOfSafety = tm (equationalModelU "factOfSafetyTM" factOfSafetyQD)
   [factOfSafetyQD] [] [] [dRef fredlund1977] "factOfSafety" []
 
 ------------------------------------
-factOfSafetyQD :: QDefinition
-factOfSafetyQD = mkQuantDef' fs factorOfSafety factOfSafetyExpr
+factOfSafetyQD :: QDefinition ModelExpr
+factOfSafetyQD = mkQuantDef' fs factorOfSafety $ express factOfSafetyExpr
 
 factOfSafetyExpr :: Expr
 factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
@@ -54,8 +54,8 @@ equilibrium = tm (equationalConstraints' equilibriumCS)
 
 ------------------------------------  
 
-equilibriumRels :: [Expr]
-equilibriumRels = map (($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
+equilibriumRels :: [ModelExpr]
+equilibriumRels = map (express . ($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
 
 -- FIXME: variable "i" is a hack.  But we need to sum over something!
 equilibriumCS :: ConstraintSet
@@ -81,9 +81,9 @@ mcShrStrgth = tm (equationalModelU "mcShrSrgth" mcShrStrgthQD)
   [mcShrStrgthQD] [] [] [dRef fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
-mcShrStrgthQD :: QDefinition
+mcShrStrgthQD :: QDefinition ModelExpr
 mcShrStrgthQD = fromEqnSt' (shrStress ^. uid) (nounPhraseSP "Mohr-Coulumb shear strength")
- mcShrStrgthDesc (symbol shrStress) Real mcShrStrgthExpr
+ mcShrStrgthDesc (symbol shrStress) Real $ express mcShrStrgthExpr
 
 mcShrStrgthExpr :: Expr
 mcShrStrgthExpr = sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion
@@ -111,9 +111,9 @@ effStress = tm (equationalModelU "effectiveStressTM" effStressQD)
   [effStressQD] [] [] [dRef fredlund1977] "effStress" [effStressDesc]
 
 ------------------------------------
-effStressQD :: QDefinition
+effStressQD :: QDefinition ModelExpr
 effStressQD = fromEqnSt' (effectiveStress ^. uid) (nounPhraseSP "effective stress")
- effStressDesc (symbol effectiveStress) Real effStressExpr
+ effStressDesc (symbol effectiveStress) Real $ express effStressExpr
 
 effStressExpr :: Expr
 effStressExpr = sy totNormStress $- sy porePressure

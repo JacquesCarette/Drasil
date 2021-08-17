@@ -189,12 +189,11 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
 
 -- 
 
-normShrR :: QDefinition 
-normShrR = mkQuantDef intShrForce nmShrRRel
+normShrR :: QDefinition ModelExpr
+normShrR = mkQuantDef intShrForce $ express nmShrRExpr
 
-
-nmShrRRel :: Relation
-nmShrRRel = sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
+nmShrRExpr :: Expr
+nmShrRExpr = sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
 
 nmShrRDesc :: Sentence
 nmShrRDesc = foldlSent [S "Mathematical representation of the primary",
@@ -242,18 +241,18 @@ mobShearWODesc = (foldlList Comma List [slcWght `definedIn'''` sliceWghtGD,
   watrForce `definedIn'''` intersliceWtrF] !.)
 
 --
-
-momentEqlModel :: ModelKind
+momentEqlModel :: ModelKind ModelExpr
 momentEqlModel = equationalConstraints' $
   mkConstraintSet (dccWDS "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
-  NE.fromList [momEqlRel]
+  NE.fromList [express momEqlExpr]
 
+-- TODO: How is this one used? Seems conflicting with the above.
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEqlDesc momEqlRel -- genDef6Label
+  momEqlDesc momEqlExpr -- genDef6Label
 
-momEqlRel :: Relation
-momEqlRel = exactDbl 0 $= momExpr (\ x y -> x `addRe`
+momEqlExpr :: Expr
+momEqlExpr = exactDbl 0 $= momExpr (\ x y -> x `addRe`
   (half (inxi baseWthX) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
 
 momEqlDesc :: Sentence

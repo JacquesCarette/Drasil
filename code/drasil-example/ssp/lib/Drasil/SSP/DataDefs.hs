@@ -27,19 +27,19 @@ import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
 --  Data Definitions  --
 ------------------------
 
-dataDefs :: [DataDefinition]
+dataDefs :: [DataDefinition Expr]
 dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
   slcHeight, normStressDD, tangStressDD, torqueDD, ratioVariation, convertFunc1,
   convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD intersliceWtrF: interslice normal water forces
 
-intersliceWtrF :: DataDefinition
+intersliceWtrF :: DataDefinition Expr
 intersliceWtrF = dd intersliceWtrFQD [dRef fredlund1977] Nothing "intersliceWtrF"
   []--Notes
 --FIXME: fill empty lists in
 
-intersliceWtrFQD :: QDefinition
+intersliceWtrFQD :: QDefinition Expr
 intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
@@ -55,12 +55,12 @@ intersliceWtrFEqn = completeCase [case1,case2,case3]
 
 --DD angleA: base angles
 
-angleA :: DataDefinition
+angleA :: DataDefinition Expr
 angleA = dd angleAQD [dRef fredlund1977] Nothing "angleA"
   [angleANotes]
 --FIXME: fill empty lists in
 
-angleAQD :: QDefinition
+angleAQD :: QDefinition Expr
 angleAQD = mkQuantDef baseAngle angleAEqn
 
 angleAEqn :: Expr
@@ -74,12 +74,12 @@ angleANotes = foldlSent [S "This", phrase equation, S "is based" `S.onThe`
 
 --DD angleB: surface angles
 
-angleB :: DataDefinition
+angleB :: DataDefinition Expr
 angleB = dd angleBQD [dRef fredlund1977] Nothing "angleB"
   [angleBNotes]--Notes
 --FIXME: fill empty lists in
 
-angleBQD :: QDefinition
+angleBQD :: QDefinition Expr
 angleBQD = mkQuantDef surfAngle angleBEqn
 
 angleBEqn :: Expr
@@ -93,11 +93,11 @@ angleBNotes = foldlSent [S "This", phrase equation, S "is based" `S.onThe`
 
 --DD lengthB: base width of slices
 
-lengthB :: DataDefinition
+lengthB :: DataDefinition Expr
 lengthB = dd lengthBQD [dRef fredlund1977] Nothing "lengthB" []--Notes
 --FIXME: fill empty lists in
 
-lengthBQD :: QDefinition
+lengthBQD :: QDefinition Expr
 lengthBQD = mkQuantDef baseWthX lengthBEqn
 
 lengthBEqn :: Expr
@@ -105,12 +105,12 @@ lengthBEqn = inxi slipDist $- inx slipDist (-1)
 
 --DD lengthLb: total base lengths of slices
 
-lengthLb :: DataDefinition
+lengthLb :: DataDefinition Expr
 lengthLb = dd lengthLbQD [dRef fredlund1977] Nothing "lengthLb"
   [lengthLbNotes]--Notes
 --FIXME: fill empty lists in
 
-lengthLbQD :: QDefinition
+lengthLbQD :: QDefinition Expr
 lengthLbQD = mkQuantDef baseLngth lengthLbEqn
 
 lengthLbEqn :: Expr
@@ -122,12 +122,12 @@ lengthLbNotes = foldlSent [baseWthX `definedIn'''`
 
 --DD lengthLs: surface lengths of slices
 
-lengthLs :: DataDefinition
+lengthLs :: DataDefinition Expr
 lengthLs = dd lengthLsQD [dRef fredlund1977] Nothing "lengthLs"
   [lengthLsNotes]--Notes
 --FIXME: fill empty lists in
 
-lengthLsQD :: QDefinition
+lengthLsQD :: QDefinition Expr
 lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
@@ -140,11 +140,11 @@ lengthLsNotes = foldlSent [baseWthX `definedIn'''`
 
 --DD slcHeight: y-direction heights of slices
 
-slcHeight :: DataDefinition
+slcHeight :: DataDefinition Expr
 slcHeight = dd slcHeightQD [dRef fredlund1977] Nothing "slcHeight"
   slcHeightNotes
 
-slcHeightQD :: QDefinition
+slcHeightQD :: QDefinition Expr
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
@@ -160,10 +160,10 @@ slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
 
 --DD normStress: total normal stress
 
-normStressDD :: DataDefinition
+normStressDD :: DataDefinition Expr
 normStressDD = dd normStressQD [dRef huston2008] Nothing "normStress" []
 
-normStressQD :: QDefinition
+normStressQD :: QDefinition Expr
 normStressQD = mkQuantDef totNormStress normStressEqn
 
 normStressEqn :: Expr
@@ -171,10 +171,10 @@ normStressEqn = sy fn $/ sy genericA
 
 --DD tangStress: tangential stress
 
-tangStressDD :: DataDefinition
+tangStressDD :: DataDefinition Expr
 tangStressDD = dd tangStressQD [dRef huston2008] Nothing "tangStress" []
 
-tangStressQD :: QDefinition
+tangStressQD :: QDefinition Expr
 tangStressQD = mkQuantDef tangStress tangStressEqn
 
 tangStressEqn :: Expr
@@ -182,11 +182,11 @@ tangStressEqn = sy ft $/ sy genericA
 
 --DD ratioVariation: interslice normal to shear force ratio variation function
 
-ratioVariation :: DataDefinition
+ratioVariation :: DataDefinition Expr
 ratioVariation = dd ratioVarQD [dRef fredlund1977] Nothing
   "ratioVariation" []
 
-ratioVarQD :: QDefinition
+ratioVarQD :: QDefinition Expr
 ratioVarQD = mkQuantDef scalFunc ratioVarEqn
 
 ratioVarEqn :: Expr
@@ -198,11 +198,11 @@ ratioVarEqn = completeCase [case1, case2]
 
 --DD convertFunc1: first function for incorporating interslice forces into shear force
 
-convertFunc1 :: DataDefinition
+convertFunc1 :: DataDefinition Expr
 convertFunc1 = dd convertFunc1QD (map dRef [chen2005, karchewski2012]) Nothing
   "convertFunc1" [convertFunc1Notes]
 
-convertFunc1QD :: QDefinition
+convertFunc1QD :: QDefinition Expr
 convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
 
 convertFunc1Eqn :: Expr
@@ -216,11 +216,11 @@ convertFunc1Notes = foldlSent [scalFunc `definedIn'''` ratioVariation `S.and_` (
 
 --DD convertFunc2: second function for incorporating interslice forces into shear force
 
-convertFunc2 :: DataDefinition
+convertFunc2 :: DataDefinition Expr
 convertFunc2 = dd convertFunc2QD (map dRef [chen2005, karchewski2012]) Nothing
   "convertFunc2" [convertFunc2Notes]
 
-convertFunc2QD :: QDefinition
+convertFunc2QD :: QDefinition Expr
 convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
 
 convertFunc2Eqn :: Expr
@@ -282,7 +282,7 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -----------------
 
 nrmForceSumDD, watForceSumDD, sliceHghtRightDD,
-  sliceHghtLeftDD :: DataDefinition
+  sliceHghtLeftDD :: DataDefinition Expr
 nrmForceSumDD = dd nrmForceSumQD [dRef fredlund1977] Nothing
   "nrmForceSumDD" []--Notes
 watForceSumDD = dd watForceSumQD [dRef fredlund1977] Nothing
@@ -292,16 +292,16 @@ sliceHghtRightDD = dd sliceHghtRightQD [dRef fredlund1977] Nothing
 sliceHghtLeftDD = dd sliceHghtLeftQD [dRef fredlund1977] Nothing
   "sliceHghtLeftDD" []--Notes
 
-nrmForceSumQD :: QDefinition
+nrmForceSumQD :: QDefinition Expr
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce `addRe` inxiM1 intNormForce)
 
-watForceSumQD :: QDefinition
+watForceSumQD :: QDefinition Expr
 watForceSumQD = ec watForceSum (inxi watrForce `addRe` inxiM1 watrForce)
 
-sliceHghtRightQD :: QDefinition
+sliceHghtRightQD :: QDefinition Expr
 sliceHghtRightQD = ec sliceHghtRight (inxi slopeHght $- inxi slipHght)
 
-sliceHghtLeftQD :: QDefinition
+sliceHghtLeftQD :: QDefinition Expr
 sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght $- inxiM1 slipHght)
 
 --------------------------

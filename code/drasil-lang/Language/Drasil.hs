@@ -118,13 +118,11 @@ module Language.Drasil (
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
-  -- Language.Drasil.Chunk.UnitaryConcept
-  , UnitaryConceptDict, ucw
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
   -- Language.Drasil.Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucStaged, ucs, ucs', ucsWS, ucuc
+  , uc, uc', ucStaged, ucs, ucs', ucsWS, ucuc, ucw
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
@@ -315,9 +313,8 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
-  ucStaged, ucs, ucs', ucsWS, ucuc)
+  ucStaged, ucs, ucs', ucsWS, ucuc, ucw)
 import Language.Drasil.Chunk.Unitary
-import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
   , author, editor
       -- Sentence -> CiteField

@@ -32,7 +32,7 @@ symbolsAll = map qw symbols ++ map qw specParamValList ++
 
 -- Symbols with Units --
 
-units :: [UnitaryConceptDict]
+units :: [UnitalChunk]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   htCapS, htCapV, sensHeat, pcmInitMltE,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,

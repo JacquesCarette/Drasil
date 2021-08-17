@@ -196,7 +196,7 @@ coords = constrainedNRV' (makeUCWDS "(x,y)" (cn "cartesian position coordinates"
 -- START OF UNITALCHUNKS --
 ---------------------------
 
-units :: [UnitaryConceptDict]
+units :: [UnitalChunk]
 units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
   genericW, genericSpWght, gravAccel, dens, genericH, genericP, genericR, 
   genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords, 

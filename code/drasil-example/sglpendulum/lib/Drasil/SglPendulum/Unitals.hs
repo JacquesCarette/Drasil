@@ -34,7 +34,7 @@ inputs = map qw [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initi
 outputs :: [QuantityDict]
 outputs = map qw [pendDisplacementAngle]
 
-units :: [UnitaryConceptDict]
+units :: [UnitalChunk]
 units = map ucw unitalChunks ++ map ucw [lenRod, pendDisplacementAngle, initialPendAngle]
 
 unitalChunks :: [UnitalChunk]

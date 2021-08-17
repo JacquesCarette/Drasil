@@ -49,22 +49,20 @@ velocityIXDeriv :: Derivation
 velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, velocityIXDerivEqns])
 
 velocityIXDerivSents :: [Sentence]
-velocityIXDerivSents = [velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,
-                            velocityIXDerivSent5]
+velocityIXDerivSents = [velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
+                        velocityDerivSent4, velocityDerivSent5]
 
 velocityIXDerivEqns :: [Sentence]
 velocityIXDerivEqns = map eS [E.velocityIDerivEqn1, E.velocityIXDerivEqn2,
     E.velocityIXDerivEqn3, E.velocityIXDerivEqn4] ++ [eS velocityIXQD]
 
-velocityIDerivSent1, velocityIXDerivSent2, velocityIXDerivSent3,
-    velocityIXDerivSent4, velocityIXDerivSent5 :: Sentence
-
-
-velocityIDerivSent1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
+velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
+    velocityDerivSent4, velocityDerivSent5 :: Sentence
+velocityDerivSent1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
 velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontalPos
-velocityIXDerivSent3 = S "Applying this,"
-velocityIXDerivSent4 = eS lenRod `S.is` S "constant" `S.wrt` S  "time, so"
-velocityIXDerivSent5 = S "Therefore, using the chain rule,"
+velocityDerivSent3 = S "Applying this,"
+velocityDerivSent4 = eS lenRod `S.is` S "constant" `S.wrt` S  "time, so"
+velocityDerivSent5 = S "Therefore, using the chain rule,"
 
 ---------------------
 velocityIYGD :: GenDefn
@@ -78,19 +76,15 @@ velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, velocityIYDerivEqns])
 
 velocityIYDerivSents :: [Sentence]
-velocityIYDerivSents = [velocityIDerivSent1, velocityIYDerivSent2,
-                        velocityIYDerivSent3, velocityIYDerivSent4,
-                        velocityIYDerivSent5, velocityIYDerivSent5]
+velocityIYDerivSents = [velocityDerivSent1, velocityIYDerivSent2, velocityDerivSent3,
+                        velocityDerivSent4, velocityDerivSent5]
 
 velocityIYDerivEqns :: [Sentence]
 velocityIYDerivEqns = map eS [E.velocityIDerivEqn1, E.velocityIYDerivEqn2,
     E.velocityIYDerivEqn3, E.velocityIYDerivEqn4] ++ [eS velocityIYQD]
 
-velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSent5 :: Sentence
+velocityIYDerivSent2 :: Sentence
 velocityIYDerivSent2 = S "We also know the" +:+ phrase verticalPos
-velocityIYDerivSent3 = S "Applying this again,"
-velocityIYDerivSent4 = eS lenRod `S.is` S "constant" `S.wrt` S "time, so"
-velocityIYDerivSent5 = S "Therefore, using the chain rule,"
 
 -----------------------
 accelerationIXGD :: GenDefn
@@ -105,21 +99,21 @@ accelerationIXDeriv :: Derivation
 accelerationIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelerationIXDerivSents, accelerationIXDerivEqns])
 
 accelerationIXDerivSents :: [Sentence]
-accelerationIXDerivSents = [accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
-    accelerationIXDerivSent4, accelerationIXDerivSent5]
+accelerationIXDerivSents = [accelerationDerivSent1, accelerationIXDerivSent2, accelerationDerivSent3,
+    accelerationDerivSent4, accelerationDerivSent5]
 
 accelerationIXDerivEqns :: [Sentence]
 accelerationIXDerivEqns = eS E.accelerationIDerivEqn1 : eS velocityIXQD :
     map eS [E.accelerationIXDerivEqn3, E.accelerationIXDerivEqn4] ++ [eS accelerationIXQD]
 
-accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
-     accelerationIXDerivSent4, accelerationIXDerivSent5 :: Sentence
+accelerationDerivSent1, accelerationIXDerivSent2, accelerationDerivSent3,
+     accelerationDerivSent4, accelerationDerivSent5 :: Sentence
 
-accelerationIDerivSent1 = S "Our" +:+ phrase acceleration +: S "is"
+accelerationDerivSent1 = S "Our" +:+ phrase acceleration +: S "is"
 accelerationIXDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"
-accelerationIXDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
-accelerationIXDerivSent4 = S "By the product and chain rules, we find"
-accelerationIXDerivSent5 = S "Simplifying,"
+accelerationDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
+accelerationDerivSent4 = S "By the product and chain rules, we find"
+accelerationDerivSent5 = S "Simplifying,"
 
 -----------------------
 accelerationIYGD :: GenDefn
@@ -133,19 +127,15 @@ accelerationIYDeriv :: Derivation
 accelerationIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelerationIYDerivSents, accelerationIYDerivEqns])
 
 accelerationIYDerivSents :: [Sentence]
-accelerationIYDerivSents = [accelerationIDerivSent1, accelerationIYDerivSent2, accelerationIYDerivSent3,
-    accelerationIYDerivSent4, accelerationIYDerivSent5]
+accelerationIYDerivSents = [accelerationDerivSent1, accelerationIYDerivSent2, accelerationDerivSent3,
+    accelerationDerivSent4, accelerationDerivSent5]
 
 accelerationIYDerivEqns :: [Sentence]
 accelerationIYDerivEqns = eS E.accelerationIDerivEqn1 : eS velocityIYQD :
     map eS [E.accelerationIYDerivEqn3, E.accelerationIYDerivEqn4] ++ [eS accelerationIYQD]
 
-accelerationIYDerivSent2, accelerationIYDerivSent3, accelerationIYDerivSent4,
-    accelerationIYDerivSent5 :: Sentence
+accelerationIYDerivSent2 :: Sentence
 accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
-accelerationIYDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
-accelerationIYDerivSent4 = S "By the product and chain rules, we find"
-accelerationIYDerivSent5 = S "Simplifying,"
 
 -------------------------------------Horizontal force acting on the pendulum 
 hForceOnPendulumGD :: GenDefn
@@ -216,7 +206,7 @@ angFrequencyDerivSent4 = S "Substituting for" +:+ ch momentOfInertia
 angFrequencyDerivSent5 = S "Crossing out" +:+ ch mass `S.and_` ch lenRod +:+ S "we have"
 angFrequencyDerivSent6 = S "For small" +:+ plural angle `sC` S "we approximate" +:+ S "sin" +:+ ch pendDisplacementAngle +:+ S "to" +:+ ch pendDisplacementAngle
 angFrequencyDerivSent7 = S "Because this" +:+ phrase equation `sC` S "has the same form as the" +:+ phraseNP (equation `for` shm) +:+. 
-                        S "the solution is easy to find" +:+ S " The" +:+ phrase angularFrequency
+                         S "the solution is easy to find" +:+ S " The" +:+ phrase angularFrequency
 
 angFrequencyGDNotes :: Sentence
 angFrequencyGDNotes = S "The" +:+ phrase torque `S.is` definedIn'' newtonSLR  `S.and_` phrase frequency `S.is` definedIn frequencyDD

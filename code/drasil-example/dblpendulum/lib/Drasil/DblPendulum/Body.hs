@@ -260,8 +260,7 @@ userCharacteristicsIntro = foldlSP
 -- 4.1 : System Constraints  --
 -------------------------------
 prob :: Sentence
-prob = foldlSent_ [ S "efficiently and correctly to predict the", phraseNP (motion `ofA`  
-                   pendulum)]
+prob = foldlSent_ [S "efficiently and correctly to predict the", phraseNP (motion `ofA` pendulum)]
 
 ---------------------------------
 -- 4.1.1 Terminology and Definitions --

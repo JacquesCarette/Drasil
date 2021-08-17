@@ -51,14 +51,14 @@ c -&gt; DefinedQuantityDict
 -&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">(UnitaryConceptDict -&gt; DefinedQuantityDict)
--&gt; [UnitaryConceptDict] -&gt; [DefinedQuantityDict]
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; DefinedQuantityDict)
+-&gt; [UnitalChunk] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitaryConceptDict -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; DefinedQuantityDict
 forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
 c -&gt; DefinedQuantityDict
-</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">[UnitaryConceptDict]
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
 </span><a href="Drasil.SSP.Unitals.html#units"><span class="hs-identifier hs-var">units</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 -&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -951,15 +951,12 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-196"></span><span class="hs-comment">-- START OF UNITALCHUNKS --</span><span>
 </span><span id="line-197"></span><span class="hs-comment">---------------------------</span><span>
 </span><span id="line-198"></span><span>
-</span><span id="line-199"></span><span class="annot"><a href="Drasil.SSP.Unitals.html#units"><span class="hs-identifier hs-type">units</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitaryConceptDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-200"></span><span id="units"><span class="annot"><span class="annottext">units :: [UnitaryConceptDict]
-</span><a href="Drasil.SSP.Unitals.html#units"><span class="hs-identifier hs-var hs-var">units</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; UnitaryConceptDict)
--&gt; [UnitalChunk] -&gt; [UnitaryConceptDict]
+</span><span id="line-199"></span><span class="annot"><a href="Drasil.SSP.Unitals.html#units"><span class="hs-identifier hs-type">units</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-200"></span><span id="units"><span class="annot"><span class="annottext">units :: [UnitalChunk]
+</span><a href="Drasil.SSP.Unitals.html#units"><span class="hs-identifier hs-var hs-var">units</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; UnitalChunk) -&gt; [UnitalChunk] -&gt; [UnitalChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitaryConceptDict
-forall c.
-(Unitary c, Concept c, MayHaveUnit c) =&gt;
-c -&gt; UnitaryConceptDict
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk
+forall c. (Unitary c, Concept c, MayHaveUnit c) =&gt; c -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#accel"><span class="hs-identifier hs-var">accel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#genericMass"><span class="hs-identifier hs-var">genericMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -2274,75 +2271,75 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span>
 </span><span id="line-497"></span><span>
 </span><span id="line-498"></span><span class="hs-comment">--FIXME: possibly move to Language/Drasil/Expr.hs</span><span>
-</span><span id="line-499"></span><span id="local-6989586621679095299"><span class="annot"><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-type">indx1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679095299"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679095299"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span></span><span>
+</span><span id="line-499"></span><span id="local-6989586621679095200"><span class="annot"><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-type">indx1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679095200"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679095200"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span></span><span>
 </span><span id="line-500"></span><span id="indx1"><span class="annot"><span class="annottext">indx1 :: a -&gt; Expr
-</span><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-var hs-var">indx1</span></a></span></span><span> </span><span id="local-6989586621679095297"><span class="annot"><span class="annottext">a :: a
-</span><a href="#local-6989586621679095297"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-var hs-var">indx1</span></a></span></span><span> </span><span id="local-6989586621679095198"><span class="annot"><span class="annottext">a :: a
+</span><a href="#local-6989586621679095198"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679095297"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><a href="#local-6989586621679095198"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
 </span><span id="line-501"></span><span>
-</span><span id="line-502"></span><span id="local-6989586621679095293"><span class="annot"><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-type">indxn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679095293"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679095293"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span></span><span>
+</span><span id="line-502"></span><span id="local-6989586621679095194"><span class="annot"><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-type">indxn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679095194"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679095194"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span></span><span>
 </span><span id="line-503"></span><span id="indxn"><span class="annot"><span class="annottext">indxn :: a -&gt; Expr
-</span><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-var hs-var">indxn</span></a></span></span><span> </span><span id="local-6989586621679095291"><span class="annot"><span class="annottext">a :: a
-</span><a href="#local-6989586621679095291"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-var hs-var">indxn</span></a></span></span><span> </span><span id="local-6989586621679095192"><span class="annot"><span class="annottext">a :: a
+</span><a href="#local-6989586621679095192"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679095291"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
+</span><a href="#local-6989586621679095192"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#numbSlices"><span class="hs-identifier hs-var">numbSlices</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-504"></span><span>
-</span><span id="line-505"></span><span id="local-6989586621679095290"><span class="annot"><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-type">inxi</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#inxiP1"><span class="hs-identifier hs-type">inxiP1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-type">inxiM1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679095290"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679095290"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span></span><span>
+</span><span id="line-505"></span><span id="local-6989586621679095191"><span class="annot"><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-type">inxi</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#inxiP1"><span class="hs-identifier hs-type">inxiP1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-type">inxiM1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679095191"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679095191"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span></span><span>
 </span><span id="line-506"></span><span id="inxiP1"><span class="annot"><span class="annottext">inxiP1 :: e -&gt; Expr
-</span><a href="Drasil.SSP.Unitals.html#inxiP1"><span class="hs-identifier hs-var hs-var">inxiP1</span></a></span></span><span> </span><span id="local-6989586621679095286"><span class="annot"><span class="annottext">e :: e
-</span><a href="#local-6989586621679095286"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; Expr
+</span><a href="Drasil.SSP.Unitals.html#inxiP1"><span class="hs-identifier hs-var hs-var">inxiP1</span></a></span></span><span> </span><span id="local-6989586621679095187"><span class="annot"><span class="annottext">e :: e
+</span><a href="#local-6989586621679095187"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Integer -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var">inx</span></a></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679095286"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span>
+</span><a href="#local-6989586621679095187"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span>
 </span><span id="line-507"></span><span id="inxi"><span class="annot"><span class="annottext">inxi :: e -&gt; Expr
-</span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var hs-var">inxi</span></a></span></span><span>   </span><span id="local-6989586621679095284"><span class="annot"><span class="annottext">e :: e
-</span><a href="#local-6989586621679095284"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; Expr
+</span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var hs-var">inxi</span></a></span></span><span>   </span><span id="local-6989586621679095185"><span class="annot"><span class="annottext">e :: e
+</span><a href="#local-6989586621679095185"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Integer -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var">inx</span></a></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679095284"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
+</span><a href="#local-6989586621679095185"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
 </span><span id="line-508"></span><span id="inxiM1"><span class="annot"><span class="annottext">inxiM1 :: e -&gt; Expr
-</span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var hs-var">inxiM1</span></a></span></span><span> </span><span id="local-6989586621679095283"><span class="annot"><span class="annottext">e :: e
-</span><a href="#local-6989586621679095283"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; Expr
+</span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var hs-var">inxiM1</span></a></span></span><span> </span><span id="local-6989586621679095184"><span class="annot"><span class="annottext">e :: e
+</span><a href="#local-6989586621679095184"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Integer -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var">inx</span></a></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679095283"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679095184"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
 </span><span id="line-509"></span><span>
-</span><span id="line-510"></span><span id="local-6989586621679095561"><span class="annot"><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-type">inx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679095561"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679095561"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span></span><span>
+</span><span id="line-510"></span><span id="local-6989586621679095462"><span class="annot"><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-type">inx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679095462"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679095462"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span></span><span>
 </span><span id="line-511"></span><span id="inx"><span class="annot"><span class="annottext">inx :: e -&gt; Integer -&gt; Expr
-</span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var hs-var">inx</span></a></span></span><span> </span><span id="local-6989586621679095282"><span class="annot"><span class="annottext">e :: e
-</span><a href="#local-6989586621679095282"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679095281"><span class="annot"><span class="annottext">n :: Integer
-</span><a href="#local-6989586621679095281"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span>
+</span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var hs-var">inx</span></a></span></span><span> </span><span id="local-6989586621679095183"><span class="annot"><span class="annottext">e :: e
+</span><a href="#local-6989586621679095183"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679095182"><span class="annot"><span class="annottext">n :: Integer
+</span><a href="#local-6989586621679095182"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span>
 </span><span id="line-512"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679095281"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679095182"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&lt;</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">e -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679095282"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
+</span><a href="#local-6989586621679095183"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var">index</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679095281"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679095182"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-513"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679095281"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679095182"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">e -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679095282"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
+</span><a href="#local-6989586621679095183"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var">index</span></a></span><span class="hs-special">)</span><span>
@@ -2351,13 +2348,13 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">e -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679095282"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
+</span><a href="#local-6989586621679095183"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var">index</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`addI`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679095281"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679095182"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-515"></span><span>
 </span><span id="line-516"></span><span class="annot"><a href="Drasil.SSP.Unitals.html#sum1toN"><span class="hs-identifier hs-type">sum1toN</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-517"></span><span id="sum1toN"><span class="annot"><span class="annottext">sum1toN :: Expr -&gt; Expr

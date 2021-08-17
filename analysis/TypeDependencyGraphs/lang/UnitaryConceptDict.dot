@@ -1,6 +1,0 @@
-digraph unitaryconceptdict{
-UnitaryConceptDict	[shape=oval, color=cyan3, label="UnitaryConceptDict"];
-UnitaryConceptDict -> UnitaryChunk;
-UnitaryConceptDict -> Sentence;
-UnitaryConceptDict -> UID;
-}

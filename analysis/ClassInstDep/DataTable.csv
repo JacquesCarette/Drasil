@@ -24,7 +24,6 @@ lang,Language/Drasil/Chunk/,UnitDefn.hs,UnitDefn,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,
 lang,Language/Drasil/Chunk/,Unital.hs,UnitalChunk,	,	,YYYY,	,	,	,	,	,	,	,YYYY,YYYY,YYYY,	,YYYY,YYYY,	,	,	,	,	,YYYY,YYYY,YYYY,	,YYYY,YYYY,	,	,	,	,	,	,YYYY,	,	,	,	,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 lang,Language/Drasil/Chunk/,Unitary.hs,UnitaryChunk,	,	,	,	,	,	,	,	,	,	,YYYY,	,YYYY,	,YYYY,YYYY,	,	,	,	,	,YYYY,YYYY,	,	,	,YYYY,	,	,	,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 	,	,	,	,	,Unitary
-lang,Language/Drasil/Chunk/,UnitaryConcept.hs,UnitaryConceptDict,	,	,YYYY,	,	,	,	,	,	,	,YYYY,	,YYYY,	,YYYY,YYYY,	,	,	,	,	,YYYY,YYYY,YYYY,	,YYYY,YYYY,	,	,	,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 lang,Language/Drasil/Classes/,Citations.hs,	,	,HasFields
 lang,Language/Drasil/Classes/,Core.hs,	,	,HasUID
 	,	,	,	,	,HasSymbol

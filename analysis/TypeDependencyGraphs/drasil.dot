@@ -149,14 +149,6 @@ digraph alltypes {
 		UnitaryChunk -> UnitDefn;
 		}
 	}
-	subgraph unitaryconcept {
-		subgraph unitaryconceptdict{
-		UnitaryConceptDict	[shape=oval, color=cyan3, label="UnitaryConceptDict"];
-		UnitaryConceptDict -> UnitaryChunk;
-		UnitaryConceptDict -> Sentence;
-		UnitaryConceptDict -> UID;
-		}
-	}
 	subgraph citations {
 	}
 	subgraph core {

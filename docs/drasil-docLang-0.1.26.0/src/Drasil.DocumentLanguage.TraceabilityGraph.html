@@ -28,18 +28,18 @@
 </span><span id="line-28"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceMGF"><span class="hs-identifier hs-type">traceMGF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
 </span><span id="line-29"></span><span id="traceMGF"><span class="annot"><span class="annottext">traceMGF :: [LabelledContent]
 -&gt; [Sentence] -&gt; [Contents] -&gt; String -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceMGF"><span class="hs-identifier hs-var hs-var">traceMGF</span></a></span></span><span> </span><span id="local-6989586621679128099"><span class="annot"><span class="annottext">refs :: [LabelledContent]
-</span><a href="#local-6989586621679128099"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span id="local-6989586621679128098"><span class="annot"><span class="annottext">trailing :: [Sentence]
-</span><a href="#local-6989586621679128098"><span class="hs-identifier hs-var">trailing</span></a></span></span><span> </span><span id="local-6989586621679128097"><span class="annot"><span class="annottext">otherContents :: [Contents]
-</span><a href="#local-6989586621679128097"><span class="hs-identifier hs-var">otherContents</span></a></span></span><span> </span><span id="local-6989586621679128096"><span class="annot"><span class="annottext">ex :: String
-</span><a href="#local-6989586621679128096"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceMGF"><span class="hs-identifier hs-var hs-var">traceMGF</span></a></span></span><span> </span><span id="local-6989586621679128003"><span class="annot"><span class="annottext">refs :: [LabelledContent]
+</span><a href="#local-6989586621679128003"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span id="local-6989586621679128002"><span class="annot"><span class="annottext">trailing :: [Sentence]
+</span><a href="#local-6989586621679128002"><span class="hs-identifier hs-var">trailing</span></a></span></span><span> </span><span id="local-6989586621679128001"><span class="annot"><span class="annottext">otherContents :: [Contents]
+</span><a href="#local-6989586621679128001"><span class="hs-identifier hs-var">otherContents</span></a></span></span><span> </span><span id="local-6989586621679128000"><span class="annot"><span class="annottext">ex :: String
+</span><a href="#local-6989586621679128000"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><a href="Drasil.DocLang.SRS.html#traceyMandG"><span class="hs-identifier hs-var">SRS.traceyMandG</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[LabelledContent] -&gt; [Sentence] -&gt; Contents
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMIntro"><span class="hs-identifier hs-var">traceMIntro</span></a></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
-</span><a href="#local-6989586621679128099"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679128098"><span class="hs-identifier hs-var">trailing</span></a></span><span> </span><span class="annot"><span class="annottext">Contents -&gt; [Contents] -&gt; [Contents]
+</span><a href="#local-6989586621679128003"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679128002"><span class="hs-identifier hs-var">trailing</span></a></span><span> </span><span class="annot"><span class="annottext">Contents -&gt; [Contents] -&gt; [Contents]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679128097"><span class="hs-identifier hs-var">otherContents</span></a></span><span> </span><span>
+</span><a href="#local-6989586621679128001"><span class="hs-identifier hs-var">otherContents</span></a></span><span> </span><span>
 </span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">[Contents] -&gt; [Contents] -&gt; [Contents]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UnlabelledContent -&gt; Contents)
@@ -49,22 +49,22 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String] -&gt; [Sentence] -&gt; [UnlabelledContent]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGIntro"><span class="hs-identifier hs-var">traceGIntro</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGUIDs"><span class="hs-identifier hs-var">traceGUIDs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679128098"><span class="hs-identifier hs-var">trailing</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+</span><a href="#local-6989586621679128002"><span class="hs-identifier hs-var">trailing</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#allvsallDesc"><span class="hs-identifier hs-var">allvsallDesc</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Contents] -&gt; [Contents]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; [Contents]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGCon"><span class="hs-identifier hs-var">traceGCon</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128096"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679128000"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="hs-comment">-- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form</span><span>
 </span><span id="line-33"></span><span class="hs-comment">-- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.</span><span>
 </span><span id="line-34"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGIntro"><span class="hs-identifier hs-type">traceGIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnlabelledContent</span></span><span class="hs-special">]</span><span>
 </span><span id="line-35"></span><span id="traceGIntro"><span class="annot"><span class="annottext">traceGIntro :: [String] -&gt; [Sentence] -&gt; [UnlabelledContent]
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGIntro"><span class="hs-identifier hs-var hs-var">traceGIntro</span></a></span></span><span> </span><span id="local-6989586621679128088"><span class="annot"><span class="annottext">refs :: [String]
-</span><a href="#local-6989586621679128088"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span id="local-6989586621679128087"><span class="annot"><span class="annottext">trailings :: [Sentence]
-</span><a href="#local-6989586621679128087"><span class="hs-identifier hs-var">trailings</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; UnlabelledContent)
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGIntro"><span class="hs-identifier hs-var hs-var">traceGIntro</span></a></span></span><span> </span><span id="local-6989586621679127992"><span class="annot"><span class="annottext">refs :: [String]
+</span><a href="#local-6989586621679127992"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span id="local-6989586621679127991"><span class="annot"><span class="annottext">trailings :: [Sentence]
+</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">trailings</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; UnlabelledContent)
 -&gt; [RawContent] -&gt; [UnlabelledContent]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">RawContent -&gt; UnlabelledContent
@@ -131,14 +131,14 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Sentence
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#graphShows"><span class="hs-identifier hs-var">graphShows</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679128088"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679128087"><span class="hs-identifier hs-var">trailings</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679127992"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">trailings</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="hs-comment">-- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.</span><span>
 </span><span id="line-46"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphInfo"><span class="hs-identifier hs-type">mkGraphInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GraphInfo</span></span><span>
 </span><span id="line-47"></span><span id="mkGraphInfo"><span class="annot"><span class="annottext">mkGraphInfo :: SystemInformation -&gt; GraphInfo
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphInfo"><span class="hs-identifier hs-var hs-var">mkGraphInfo</span></a></span></span><span> </span><span id="local-6989586621679128073"><span class="annot"><span class="annottext">si :: SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GI :: NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphInfo"><span class="hs-identifier hs-var hs-var">mkGraphInfo</span></a></span></span><span> </span><span id="local-6989586621679127977"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GI :: NodeFamily
 -&gt; NodeFamily
 -&gt; NodeFamily
 -&gt; NodeFamily
@@ -157,42 +157,42 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">assumpNF</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;mistyrose&quot;</span></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;mistyrose&quot;</span></span><span>
 </span><span id="line-49"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ddNF :: NodeFamily
 </span><span class="hs-identifier hs-var">ddNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;paleturquoise1&quot;</span></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;paleturquoise1&quot;</span></span><span>
 </span><span id="line-50"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">gdNF :: NodeFamily
 </span><span class="hs-identifier hs-var">gdNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;palegreen&quot;</span></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;palegreen&quot;</span></span><span>
 </span><span id="line-51"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">tmNF :: NodeFamily
 </span><span class="hs-identifier hs-var">tmNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;pink&quot;</span></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;pink&quot;</span></span><span>
 </span><span id="line-52"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">imNF :: NodeFamily
 </span><span class="hs-identifier hs-var">imNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;khaki1&quot;</span></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;khaki1&quot;</span></span><span>
 </span><span id="line-53"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">reqNF :: NodeFamily
 </span><span class="hs-identifier hs-var">reqNF</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;ivory&quot;</span></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;ivory&quot;</span></span><span>
 </span><span id="line-54"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">gsNF :: NodeFamily
 </span><span class="hs-identifier hs-var">gsNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;darkgoldenrod1&quot;</span></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;darkgoldenrod1&quot;</span></span><span>
 </span><span id="line-55"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">chgNF :: NodeFamily
 </span><span class="hs-identifier hs-var">chgNF</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var">tvChanges</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;lavender&quot;</span></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;lavender&quot;</span></span><span>
 </span><span id="line-56"></span><span>
 </span><span id="line-57"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesAvsA :: [(String, [String])]
 </span><span class="hs-identifier hs-var">edgesAvsA</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
@@ -200,7 +200,7 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var">mkGraphEdges</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-58"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesAvsAll :: [(String, [String])]
 </span><span class="hs-identifier hs-var">edgesAvsAll</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
 -&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(String, [String])]
@@ -212,7 +212,7 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var">tvChanges</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-59"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesRefvsRef :: [(String, [String])]
 </span><span class="hs-identifier hs-var">edgesRefvsRef</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
 -&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(String, [String])]
@@ -225,7 +225,7 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-60"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesAllvsR :: [(String, [String])]
 </span><span class="hs-identifier hs-var">edgesAllvsR</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
 -&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(String, [String])]
@@ -237,7 +237,7 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-61"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesAllvsAll :: [(String, [String])]
 </span><span class="hs-identifier hs-var">edgesAllvsAll</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
 -&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(String, [String])]
@@ -258,7 +258,7 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var">tvChanges</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128073"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><a href="#local-6989586621679127977"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-62"></span><span class="hs-special">}</span><span>
 </span><span id="line-63"></span><span>
 </span><span id="line-64"></span><span class="hs-comment">-- * Helper Functions</span><span>
@@ -267,130 +267,130 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span id="line-67"></span><span class="hs-comment">-- and system information. Also applies a given colour to the node family.</span><span>
 </span><span id="line-68"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-type">mkGraphNodes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NodeFamily</span></span><span>
 </span><span id="line-69"></span><span id="mkGraphNodes"><span class="annot"><span class="annottext">mkGraphNodes :: TraceViewCat -&gt; SystemInformation -&gt; String -&gt; NodeFamily
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var hs-var">mkGraphNodes</span></a></span></span><span> </span><span id="local-6989586621679128055"><span class="annot"><span class="annottext">entry :: TraceViewCat
-</span><a href="#local-6989586621679128055"><span class="hs-identifier hs-var">entry</span></a></span></span><span> </span><span id="local-6989586621679128054"><span class="annot"><span class="annottext">si :: SystemInformation
-</span><a href="#local-6989586621679128054"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679128053"><span class="annot"><span class="annottext">col :: String
-</span><a href="#local-6989586621679128053"><span class="hs-identifier hs-var">col</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NF :: [String] -&gt; [String] -&gt; String -&gt; String -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var hs-var">mkGraphNodes</span></a></span></span><span> </span><span id="local-6989586621679127959"><span class="annot"><span class="annottext">entry :: TraceViewCat
+</span><a href="#local-6989586621679127959"><span class="hs-identifier hs-var">entry</span></a></span></span><span> </span><span id="local-6989586621679127958"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679127958"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679127957"><span class="annot"><span class="annottext">col :: String
+</span><a href="#local-6989586621679127957"><span class="hs-identifier hs-var">col</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NF :: [String] -&gt; [String] -&gt; String -&gt; String -&gt; NodeFamily
 </span><span class="hs-identifier hs-type hs-type">NF</span></span><span> </span><span class="hs-special">{</span><span class="annot"><span class="annottext">nodeUIDs :: [String]
 </span><span class="hs-identifier hs-var">nodeUIDs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679128049"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nodeLabels :: [String]
+</span><a href="#local-6989586621679127953"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nodeLabels :: [String]
 </span><span class="hs-identifier hs-var">nodeLabels</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; [String] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; String -&gt; String
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDRefAdd"><span class="hs-identifier hs-var">checkUIDRefAdd</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128054"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679128049"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfLabel :: String
+</span><a href="#local-6989586621679127958"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679127953"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfLabel :: String
 </span><span class="hs-identifier hs-var">nfLabel</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; String
-</span><a href="#local-6989586621679128045"><span class="hs-identifier hs-var">checkNodeContents</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679128049"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfColour :: String
+</span><a href="#local-6989586621679127949"><span class="hs-identifier hs-var">checkNodeContents</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679127953"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfColour :: String
 </span><span class="hs-identifier hs-var">nfColour</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128053"><span class="hs-identifier hs-var">col</span></a></span><span class="hs-special">}</span><span>
+</span><a href="#local-6989586621679127957"><span class="hs-identifier hs-var">col</span></a></span><span class="hs-special">}</span><span>
 </span><span id="line-70"></span><span>    </span><span class="hs-keyword">where</span><span>
-</span><span id="line-71"></span><span>        </span><span class="annot"><a href="#local-6989586621679128045"><span class="hs-identifier hs-type">checkNodeContents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-72"></span><span>        </span><span id="local-6989586621679128045"><span class="annot"><span class="annottext">checkNodeContents :: [String] -&gt; String
-</span><a href="#local-6989586621679128045"><span class="hs-identifier hs-var hs-var">checkNodeContents</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-73"></span><span>        </span><span class="annot"><a href="#local-6989586621679128045"><span class="hs-identifier hs-var">checkNodeContents</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679128043"><span class="annot"><span class="annottext">x :: String
-</span><a href="#local-6989586621679128043"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; String -&gt; String
+</span><span id="line-71"></span><span>        </span><span class="annot"><a href="#local-6989586621679127949"><span class="hs-identifier hs-type">checkNodeContents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-72"></span><span>        </span><span id="local-6989586621679127949"><span class="annot"><span class="annottext">checkNodeContents :: [String] -&gt; String
+</span><a href="#local-6989586621679127949"><span class="hs-identifier hs-var hs-var">checkNodeContents</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-73"></span><span>        </span><span class="annot"><a href="#local-6989586621679127949"><span class="hs-identifier hs-var">checkNodeContents</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127947"><span class="annot"><span class="annottext">x :: String
+</span><a href="#local-6989586621679127947"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; String -&gt; String
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDAbbrev"><span class="hs-identifier hs-var">checkUIDAbbrev</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128054"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128043"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-74"></span><span>        </span><span id="local-6989586621679128049"><span class="annot"><span class="annottext">nodeContents :: [String]
-</span><a href="#local-6989586621679128049"><span class="hs-identifier hs-var hs-var">nodeContents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; ChunkDB -&gt; [String]
+</span><a href="#local-6989586621679127958"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679127947"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-74"></span><span>        </span><span id="local-6989586621679127953"><span class="annot"><span class="annottext">nodeContents :: [String]
+</span><a href="#local-6989586621679127953"><span class="hs-identifier hs-var hs-var">nodeContents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; ChunkDB -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferees"><span class="hs-identifier hs-var">traceMReferees</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
-</span><a href="#local-6989586621679128041"><span class="hs-identifier hs-var">entryF</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128040"><span class="hs-identifier hs-var">cdb</span></a></span><span>
-</span><span id="line-75"></span><span>        </span><span id="local-6989586621679128040"><span class="annot"><span class="annottext">cdb :: ChunkDB
-</span><a href="#local-6989586621679128040"><span class="hs-identifier hs-var hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><a href="#local-6989586621679127945"><span class="hs-identifier hs-var">entryF</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127944"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><span id="line-75"></span><span>        </span><span id="local-6989586621679127944"><span class="annot"><span class="annottext">cdb :: ChunkDB
+</span><a href="#local-6989586621679127944"><span class="hs-identifier hs-var hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
 </span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128054"><span class="hs-identifier hs-var">si</span></a></span><span>
-</span><span id="line-76"></span><span>        </span><span id="local-6989586621679128041"><span class="annot"><span class="annottext">entryF :: [String] -&gt; [String]
-</span><a href="#local-6989586621679128041"><span class="hs-identifier hs-var hs-var">entryF</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679127958"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-76"></span><span>        </span><span id="local-6989586621679127945"><span class="annot"><span class="annottext">entryF :: [String] -&gt; [String]
+</span><a href="#local-6989586621679127945"><span class="hs-identifier hs-var hs-var">entryF</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [String] -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#layoutUIDs"><span class="hs-identifier hs-var">layoutUIDs</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
-</span><a href="#local-6989586621679128055"><span class="hs-identifier hs-var">entry</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128040"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><a href="#local-6989586621679127959"><span class="hs-identifier hs-var">entry</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127944"><span class="hs-identifier hs-var">cdb</span></a></span><span>
 </span><span id="line-77"></span><span>
 </span><span id="line-78"></span><span class="hs-comment">-- | Creates the graph edges based on the relation of the first list of sections to the second.</span><span>
 </span><span id="line-79"></span><span class="hs-comment">-- Also needs the system information. Return value is of the form (Section, [Dependencies]).</span><span>
 </span><span id="line-80"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-type">mkGraphEdges</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-81"></span><span id="mkGraphEdges"><span class="annot"><span class="annottext">mkGraphEdges :: [TraceViewCat]
 -&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(String, [String])]
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var hs-var">mkGraphEdges</span></a></span></span><span> </span><span id="local-6989586621679128038"><span class="annot"><span class="annottext">cols :: [TraceViewCat]
-</span><a href="#local-6989586621679128038"><span class="hs-identifier hs-var">cols</span></a></span></span><span> </span><span id="local-6989586621679128037"><span class="annot"><span class="annottext">rows :: [TraceViewCat]
-</span><a href="#local-6989586621679128037"><span class="hs-identifier hs-var">rows</span></a></span></span><span> </span><span id="local-6989586621679128036"><span class="annot"><span class="annottext">si :: SystemInformation
-</span><a href="#local-6989586621679128036"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [[String]] -&gt; [String] -&gt; [(String, [String])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var hs-var">mkGraphEdges</span></a></span></span><span> </span><span id="local-6989586621679127942"><span class="annot"><span class="annottext">cols :: [TraceViewCat]
+</span><a href="#local-6989586621679127942"><span class="hs-identifier hs-var">cols</span></a></span></span><span> </span><span id="local-6989586621679127941"><span class="annot"><span class="annottext">rows :: [TraceViewCat]
+</span><a href="#local-6989586621679127941"><span class="hs-identifier hs-var">rows</span></a></span></span><span> </span><span id="local-6989586621679127940"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679127940"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [[String]] -&gt; [String] -&gt; [(String, [String])]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#makeTGraph"><span class="hs-identifier hs-var">makeTGraph</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
 forall a. String -&gt; [a] -&gt; [a]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#ensureItems"><span class="hs-identifier hs-var">ensureItems</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Traceability Graph&quot;</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; [String] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; SystemInformation -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGRowHeader"><span class="hs-identifier hs-var">traceGRowHeader</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
-</span><a href="#local-6989586621679128033"><span class="hs-identifier hs-var">rowf</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128036"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">([String] -&gt; [String])
+</span><a href="#local-6989586621679127937"><span class="hs-identifier hs-var">rowf</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679127940"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">([String] -&gt; [String])
 -&gt; ([String] -&gt; [String]) -&gt; ChunkDB -&gt; [[String]]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMColumns"><span class="hs-identifier hs-var">traceMColumns</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
-</span><a href="#local-6989586621679128032"><span class="hs-identifier hs-var">colf</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
-</span><a href="#local-6989586621679128033"><span class="hs-identifier hs-var">rowf</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128031"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [(String, [String])])
+</span><a href="#local-6989586621679127936"><span class="hs-identifier hs-var">colf</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
+</span><a href="#local-6989586621679127937"><span class="hs-identifier hs-var">rowf</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127935"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [(String, [String])])
 -&gt; [String] -&gt; [(String, [String])]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; ChunkDB -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferees"><span class="hs-identifier hs-var">traceMReferees</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
-</span><a href="#local-6989586621679128032"><span class="hs-identifier hs-var">colf</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128031"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><a href="#local-6989586621679127936"><span class="hs-identifier hs-var">colf</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127935"><span class="hs-identifier hs-var">cdb</span></a></span><span>
 </span><span id="line-82"></span><span>    </span><span class="hs-keyword">where</span><span>
-</span><span id="line-83"></span><span>        </span><span id="local-6989586621679128031"><span class="annot"><span class="annottext">cdb :: ChunkDB
-</span><a href="#local-6989586621679128031"><span class="hs-identifier hs-var hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span id="line-83"></span><span>        </span><span id="local-6989586621679127935"><span class="annot"><span class="annottext">cdb :: ChunkDB
+</span><a href="#local-6989586621679127935"><span class="hs-identifier hs-var hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
 </span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128036"><span class="hs-identifier hs-var">si</span></a></span><span>
-</span><span id="line-84"></span><span>        </span><span id="local-6989586621679128032"><span class="annot"><span class="annottext">colf :: [String] -&gt; [String]
-</span><a href="#local-6989586621679128032"><span class="hs-identifier hs-var hs-var">colf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679127940"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-84"></span><span>        </span><span id="local-6989586621679127936"><span class="annot"><span class="annottext">colf :: [String] -&gt; [String]
+</span><a href="#local-6989586621679127936"><span class="hs-identifier hs-var hs-var">colf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [String] -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#layoutUIDs"><span class="hs-identifier hs-var">layoutUIDs</span></a></span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
-</span><a href="#local-6989586621679128038"><span class="hs-identifier hs-var">cols</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128031"><span class="hs-identifier hs-var">cdb</span></a></span><span>
-</span><span id="line-85"></span><span>        </span><span id="local-6989586621679128033"><span class="annot"><span class="annottext">rowf :: [String] -&gt; [String]
-</span><a href="#local-6989586621679128033"><span class="hs-identifier hs-var hs-var">rowf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679127942"><span class="hs-identifier hs-var">cols</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127935"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><span id="line-85"></span><span>        </span><span id="local-6989586621679127937"><span class="annot"><span class="annottext">rowf :: [String] -&gt; [String]
+</span><a href="#local-6989586621679127937"><span class="hs-identifier hs-var hs-var">rowf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [String] -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#layoutUIDs"><span class="hs-identifier hs-var">layoutUIDs</span></a></span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
-</span><a href="#local-6989586621679128037"><span class="hs-identifier hs-var">rows</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128031"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><a href="#local-6989586621679127941"><span class="hs-identifier hs-var">rows</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127935"><span class="hs-identifier hs-var">cdb</span></a></span><span>
 </span><span id="line-86"></span><span>
 </span><span id="line-87"></span><span class="hs-comment">-- | Helper for making graph edges. Taken from Utils.Drasil's traceability matrix relation finder.</span><span>
 </span><span id="line-88"></span><span class="hs-comment">-- But, instead of marking &quot;X&quot; on two related ideas, it makes them an edge.</span><span>
 </span><span id="line-89"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#makeTGraph"><span class="hs-identifier hs-type">makeTGraph</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-90"></span><span id="makeTGraph"><span class="annot"><span class="annottext">makeTGraph :: [String] -&gt; [[String]] -&gt; [String] -&gt; [(String, [String])]
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#makeTGraph"><span class="hs-identifier hs-var hs-var">makeTGraph</span></a></span></span><span> </span><span id="local-6989586621679128030"><span class="annot"><span class="annottext">rowName :: [String]
-</span><a href="#local-6989586621679128030"><span class="hs-identifier hs-var">rowName</span></a></span></span><span> </span><span id="local-6989586621679128029"><span class="annot"><span class="annottext">rows :: [[String]]
-</span><a href="#local-6989586621679128029"><span class="hs-identifier hs-var">rows</span></a></span></span><span> </span><span id="local-6989586621679128028"><span class="annot"><span class="annottext">cols :: [String]
-</span><a href="#local-6989586621679128028"><span class="hs-identifier hs-var">cols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [[String]] -&gt; [(String, [String])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#makeTGraph"><span class="hs-identifier hs-var hs-var">makeTGraph</span></a></span></span><span> </span><span id="local-6989586621679127934"><span class="annot"><span class="annottext">rowName :: [String]
+</span><a href="#local-6989586621679127934"><span class="hs-identifier hs-var">rowName</span></a></span></span><span> </span><span id="local-6989586621679127933"><span class="annot"><span class="annottext">rows :: [[String]]
+</span><a href="#local-6989586621679127933"><span class="hs-identifier hs-var">rows</span></a></span></span><span> </span><span id="local-6989586621679127932"><span class="annot"><span class="annottext">cols :: [String]
+</span><a href="#local-6989586621679127932"><span class="hs-identifier hs-var">cols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [[String]] -&gt; [(String, [String])]
 forall a b. [a] -&gt; [b] -&gt; [(a, b)]
 </span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679128030"><span class="hs-identifier hs-var">rowName</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679127934"><span class="hs-identifier hs-var">rowName</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; t a -&gt; [a] -&gt; [a]
-</span><a href="#local-6989586621679128027"><span class="hs-identifier hs-var">zipFTable'</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679128026"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679128028"><span class="hs-identifier hs-var">cols</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679128026"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679128026"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[String]]
-</span><a href="#local-6989586621679128029"><span class="hs-identifier hs-var">rows</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679127931"><span class="hs-identifier hs-var">zipFTable'</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679127930"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679127932"><span class="hs-identifier hs-var">cols</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679127930"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679127930"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[String]]
+</span><a href="#local-6989586621679127933"><span class="hs-identifier hs-var">rows</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-91"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-92"></span><span>    </span><span id="local-6989586621679128027"><span class="annot"><span class="annottext">zipFTable' :: t a -&gt; [a] -&gt; [a]
-</span><a href="#local-6989586621679128027"><span class="hs-identifier hs-var hs-var">zipFTable'</span></a></span></span><span> </span><span id="local-6989586621679128025"><span class="annot"><span class="annottext">content :: t a
-</span><a href="#local-6989586621679128025"><span class="hs-identifier hs-var">content</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span id="line-92"></span><span>    </span><span id="local-6989586621679127931"><span class="annot"><span class="annottext">zipFTable' :: t a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679127931"><span class="hs-identifier hs-var hs-var">zipFTable'</span></a></span></span><span> </span><span id="local-6989586621679127929"><span class="annot"><span class="annottext">content :: t a
+</span><a href="#local-6989586621679127929"><span class="hs-identifier hs-var">content</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(a -&gt; Bool) -&gt; [a] -&gt; [a]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; t a -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">t a
-</span><a href="#local-6989586621679128025"><span class="hs-identifier hs-var">content</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679127929"><span class="hs-identifier hs-var">content</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-93"></span><span>
 </span><span id="line-94"></span><span class="hs-comment">-- | Checker for uids by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.</span><span>
 </span><span id="line-95"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUID"><span class="hs-identifier hs-type">checkUID</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span>
 </span><span id="line-96"></span><span id="checkUID"><span class="annot"><span class="annottext">checkUID :: String -&gt; SystemInformation -&gt; String
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUID"><span class="hs-identifier hs-var hs-var">checkUID</span></a></span></span><span> </span><span id="local-6989586621679128022"><span class="annot"><span class="annottext">t :: String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679128021"><span class="annot"><span class="annottext">si :: SystemInformation
-</span><a href="#local-6989586621679128021"><span class="hs-identifier hs-var">si</span></a></span></span><span>
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUID"><span class="hs-identifier hs-var hs-var">checkUID</span></a></span></span><span> </span><span id="local-6989586621679127926"><span class="annot"><span class="annottext">t :: String
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679127925"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679127925"><span class="hs-identifier hs-var">si</span></a></span></span><span>
 </span><span id="line-97"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (DataDefinition, Int) -&gt; Maybe Int
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
 </span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128019"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127923"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (DataDefinition, Int))
      ChunkDB
@@ -403,12 +403,12 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (DataDefinition, Int))
 Lens' ChunkDB (Map String (DataDefinition, Int))
 </span><span class="hs-identifier hs-var">dataDefnTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-98"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (InstanceModel, Int) -&gt; Maybe Int
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
 </span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128019"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127923"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (InstanceModel, Int))
      ChunkDB
@@ -421,12 +421,12 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (InstanceModel, Int))
 Lens' ChunkDB (Map String (InstanceModel, Int))
 </span><span class="hs-identifier hs-var">insmodelTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-99"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (GenDefn, Int) -&gt; Maybe Int
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
 </span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128019"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127923"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (GenDefn, Int)) ChunkDB (Map String (GenDefn, Int))
 -&gt; Map String (GenDefn, Int)
@@ -435,12 +435,12 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (GenDefn, Int)) ChunkDB (Map String (GenDefn, Int))
 Lens' ChunkDB (Map String (GenDefn, Int))
 </span><span class="hs-identifier hs-var">gendefTable</span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-100"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (TheoryModel, Int) -&gt; Maybe Int
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
 </span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128019"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127923"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (TheoryModel, Int))
      ChunkDB
@@ -453,12 +453,12 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (TheoryModel, Int))
 Lens' ChunkDB (Map String (TheoryModel, Int))
 </span><span class="hs-identifier hs-var">theoryModelTable</span></span><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-101"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (ConceptInstance, Int) -&gt; Maybe Int
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
 </span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128019"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127923"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (ConceptInstance, Int))
      ChunkDB
@@ -471,12 +471,12 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (ConceptInstance, Int))
 Lens' ChunkDB (Map String (ConceptInstance, Int))
 </span><span class="hs-identifier hs-var">conceptinsTable</span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-102"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (Section, Int) -&gt; Maybe Int
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
 </span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128019"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127923"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (Section, Int)) ChunkDB (Map String (Section, Int))
 -&gt; Map String (Section, Int)
@@ -485,12 +485,12 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (Section, Int)) ChunkDB (Map String (Section, Int))
 Lens' ChunkDB (Map String (Section, Int))
 </span><span class="hs-identifier hs-var">sectionTable</span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-103"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (LabelledContent, Int) -&gt; Maybe Int
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
 </span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128019"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127923"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (LabelledContent, Int))
      ChunkDB
@@ -503,9 +503,9 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (LabelledContent, Int))
 Lens' ChunkDB (Map String (LabelledContent, Int))
 </span><span class="hs-identifier hs-var">labelledcontentTable</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-104"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Bool
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; String) -&gt; [Citation] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -515,34 +515,34 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; [Citation]
 </span><span class="hs-identifier hs-var">citeDB</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128021"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><a href="#local-6989586621679127925"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
 </span><span id="line-105"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; String -&gt; String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128022"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127926"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Caught.&quot;</span></span><span>
-</span><span id="line-106"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679128019"><span class="annot"><span class="annottext">s :: ChunkDB
-</span><a href="#local-6989586621679128019"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span id="line-106"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679127923"><span class="annot"><span class="annottext">s :: ChunkDB
+</span><a href="#local-6989586621679127923"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
 </span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128021"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><a href="#local-6989586621679127925"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-107"></span><span>
 </span><span id="line-108"></span><span class="hs-comment">-- | Similar to 'checkUID' but prepends domain for labelling.</span><span>
 </span><span id="line-109"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDAbbrev"><span class="hs-identifier hs-type">checkUIDAbbrev</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-110"></span><span id="checkUIDAbbrev"><span class="annot"><span class="annottext">checkUIDAbbrev :: SystemInformation -&gt; String -&gt; String
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDAbbrev"><span class="hs-identifier hs-var hs-var">checkUIDAbbrev</span></a></span></span><span> </span><span id="local-6989586621679128008"><span class="annot"><span class="annottext">si :: SystemInformation
-</span><a href="#local-6989586621679128008"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679128007"><span class="annot"><span class="annottext">t :: String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span></span><span>
-</span><span id="line-111"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679128006"><span class="annot"><span class="annottext">x :: DataDefinition
-</span><a href="#local-6989586621679128006"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDAbbrev"><span class="hs-identifier hs-var hs-var">checkUIDAbbrev</span></a></span></span><span> </span><span id="local-6989586621679127912"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679127912"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679127911"><span class="annot"><span class="annottext">t :: String
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span></span><span>
+</span><span id="line-111"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127910"><span class="annot"><span class="annottext">x :: DataDefinition
+</span><a href="#local-6989586621679127910"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; Map String (DataDefinition, Int) -&gt; Maybe (DataDefinition, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (DataDefinition, Int))
      ChunkDB
@@ -557,14 +557,14 @@ Lens' ChunkDB (Map String (DataDefinition, Int))
 </span><span class="hs-identifier hs-var">dataDefnTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679128006"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-112"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679128002"><span class="annot"><span class="annottext">x :: InstanceModel
-</span><a href="#local-6989586621679128002"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679127910"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-112"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127906"><span class="annot"><span class="annottext">x :: InstanceModel
+</span><a href="#local-6989586621679127906"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; Map String (InstanceModel, Int) -&gt; Maybe (InstanceModel, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (InstanceModel, Int))
      ChunkDB
@@ -579,13 +579,13 @@ Lens' ChunkDB (Map String (InstanceModel, Int))
 </span><span class="hs-identifier hs-var">insmodelTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
-</span><a href="#local-6989586621679128002"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-113"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679128001"><span class="annot"><span class="annottext">x :: GenDefn
-</span><a href="#local-6989586621679128001"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (GenDefn, Int) -&gt; Maybe (GenDefn, Int)
+</span><a href="#local-6989586621679127906"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-113"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127905"><span class="annot"><span class="annottext">x :: GenDefn
+</span><a href="#local-6989586621679127905"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (GenDefn, Int) -&gt; Maybe (GenDefn, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (GenDefn, Int)) ChunkDB (Map String (GenDefn, Int))
 -&gt; Map String (GenDefn, Int)
@@ -596,13 +596,13 @@ Lens' ChunkDB (Map String (GenDefn, Int))
 </span><span class="hs-identifier hs-var">gendefTable</span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679128001"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-114"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679128000"><span class="annot"><span class="annottext">x :: TheoryModel
-</span><a href="#local-6989586621679128000"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (TheoryModel, Int) -&gt; Maybe (TheoryModel, Int)
+</span><a href="#local-6989586621679127905"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-114"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127904"><span class="annot"><span class="annottext">x :: TheoryModel
+</span><a href="#local-6989586621679127904"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (TheoryModel, Int) -&gt; Maybe (TheoryModel, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (TheoryModel, Int))
      ChunkDB
@@ -617,15 +617,15 @@ Lens' ChunkDB (Map String (TheoryModel, Int))
 </span><span class="hs-identifier hs-var">theoryModelTable</span></span><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679128000"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-115"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127999"><span class="annot"><span class="annottext">x :: ConceptInstance
-</span><a href="#local-6989586621679127999"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679127904"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-115"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127903"><span class="annot"><span class="annottext">x :: ConceptInstance
+</span><a href="#local-6989586621679127903"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; Map String (ConceptInstance, Int)
 -&gt; Maybe (ConceptInstance, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (ConceptInstance, Int))
      ChunkDB
@@ -647,7 +647,7 @@ forall c. Idea c =&gt; c -&gt; Maybe String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">defResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; String
 </span><span class="hs-identifier hs-var">sDom</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; String) -&gt; [String] -&gt; String
@@ -655,12 +655,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; [String]
 forall c. ConceptDomain c =&gt; c -&gt; [String]
 </span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="#local-6989586621679127999"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><a href="#local-6989586621679127903"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-116"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (Section, Int) -&gt; Maybe (Section, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (Section, Int)) ChunkDB (Map String (Section, Int))
 -&gt; Map String (Section, Int)
@@ -669,14 +669,14 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (Section, Int)) ChunkDB (Map String (Section, Int))
 Lens' ChunkDB (Map String (Section, Int))
 </span><span class="hs-identifier hs-var">sectionTable</span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-comment">-- shouldn't really reach these cases</span><span>
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-comment">-- shouldn't really reach these cases</span><span>
 </span><span id="line-117"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; Map String (LabelledContent, Int)
 -&gt; Maybe (LabelledContent, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (LabelledContent, Int))
      ChunkDB
@@ -689,9 +689,9 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (LabelledContent, Int))
 Lens' ChunkDB (Map String (LabelledContent, Int))
 </span><span class="hs-identifier hs-var">labelledcontentTable</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-118"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Bool
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; String) -&gt; [Citation] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -701,34 +701,34 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; [Citation]
 </span><span class="hs-identifier hs-var">citeDB</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128008"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><a href="#local-6989586621679127912"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
 </span><span id="line-119"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; String -&gt; String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128007"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127911"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Caught.&quot;</span></span><span>
-</span><span id="line-120"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679128004"><span class="annot"><span class="annottext">s :: ChunkDB
-</span><a href="#local-6989586621679128004"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span id="line-120"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679127908"><span class="annot"><span class="annottext">s :: ChunkDB
+</span><a href="#local-6989586621679127908"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
 </span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128008"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><a href="#local-6989586621679127912"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-121"></span><span>
 </span><span id="line-122"></span><span class="hs-comment">-- | Similar to 'checkUID' but gets reference addresses for display.</span><span>
 </span><span id="line-123"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDRefAdd"><span class="hs-identifier hs-type">checkUIDRefAdd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-124"></span><span id="checkUIDRefAdd"><span class="annot"><span class="annottext">checkUIDRefAdd :: SystemInformation -&gt; String -&gt; String
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDRefAdd"><span class="hs-identifier hs-var hs-var">checkUIDRefAdd</span></a></span></span><span> </span><span id="local-6989586621679127994"><span class="annot"><span class="annottext">si :: SystemInformation
-</span><a href="#local-6989586621679127994"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679127993"><span class="annot"><span class="annottext">t :: String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span></span><span>
-</span><span id="line-125"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127992"><span class="annot"><span class="annottext">x :: DataDefinition
-</span><a href="#local-6989586621679127992"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDRefAdd"><span class="hs-identifier hs-var hs-var">checkUIDRefAdd</span></a></span></span><span> </span><span id="local-6989586621679127898"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679127898"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679127897"><span class="annot"><span class="annottext">t :: String
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span></span><span>
+</span><span id="line-125"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127896"><span class="annot"><span class="annottext">x :: DataDefinition
+</span><a href="#local-6989586621679127896"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; Map String (DataDefinition, Int) -&gt; Maybe (DataDefinition, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (DataDefinition, Int))
      ChunkDB
@@ -746,14 +746,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; LblType
 forall b. HasRefAddress b =&gt; b -&gt; LblType
 </span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679127992"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-126"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127988"><span class="annot"><span class="annottext">x :: InstanceModel
-</span><a href="#local-6989586621679127988"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679127896"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-126"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127892"><span class="annot"><span class="annottext">x :: InstanceModel
+</span><a href="#local-6989586621679127892"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; Map String (InstanceModel, Int) -&gt; Maybe (InstanceModel, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (InstanceModel, Int))
      ChunkDB
@@ -771,13 +771,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; LblType
 forall b. HasRefAddress b =&gt; b -&gt; LblType
 </span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
-</span><a href="#local-6989586621679127988"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-127"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127987"><span class="annot"><span class="annottext">x :: GenDefn
-</span><a href="#local-6989586621679127987"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (GenDefn, Int) -&gt; Maybe (GenDefn, Int)
+</span><a href="#local-6989586621679127892"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-127"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127891"><span class="annot"><span class="annottext">x :: GenDefn
+</span><a href="#local-6989586621679127891"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (GenDefn, Int) -&gt; Maybe (GenDefn, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (GenDefn, Int)) ChunkDB (Map String (GenDefn, Int))
 -&gt; Map String (GenDefn, Int)
@@ -791,13 +791,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; LblType
 forall b. HasRefAddress b =&gt; b -&gt; LblType
 </span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679127987"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-128"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127986"><span class="annot"><span class="annottext">x :: TheoryModel
-</span><a href="#local-6989586621679127986"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (TheoryModel, Int) -&gt; Maybe (TheoryModel, Int)
+</span><a href="#local-6989586621679127891"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-128"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127890"><span class="annot"><span class="annottext">x :: TheoryModel
+</span><a href="#local-6989586621679127890"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (TheoryModel, Int) -&gt; Maybe (TheoryModel, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (TheoryModel, Int))
      ChunkDB
@@ -815,16 +815,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; LblType
 forall b. HasRefAddress b =&gt; b -&gt; LblType
 </span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679127986"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><a href="#local-6989586621679127890"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-129"></span><span>  </span><span class="hs-comment">-- Concept instances can range from likely changes to non-functional requirements, so use domain abbreviations for labelling in addition to the reference address.</span><span>
-</span><span id="line-130"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127985"><span class="annot"><span class="annottext">x :: ConceptInstance
-</span><a href="#local-6989586621679127985"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-130"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127889"><span class="annot"><span class="annottext">x :: ConceptInstance
+</span><a href="#local-6989586621679127889"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; Map String (ConceptInstance, Int)
 -&gt; Maybe (ConceptInstance, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (ConceptInstance, Int))
      ChunkDB
@@ -844,7 +844,7 @@ forall c. Idea c =&gt; c -&gt; Maybe String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">defResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; ConceptChunk) -&gt; String -&gt; ConceptChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; String
 </span><span class="hs-identifier hs-var">sDom</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; String) -&gt; [String] -&gt; String
@@ -852,7 +852,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; [String]
 forall c. ConceptDomain c =&gt; c -&gt; [String]
 </span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="#local-6989586621679127985"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127889"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;:&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -860,12 +860,12 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">getAdd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptInstance -&gt; LblType
 forall b. HasRefAddress b =&gt; b -&gt; LblType
 </span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="#local-6989586621679127985"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679127889"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-131"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String -&gt; Map String (Section, Int) -&gt; Maybe (Section, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (Section, Int)) ChunkDB (Map String (Section, Int))
 -&gt; Map String (Section, Int)
@@ -874,14 +874,14 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (Section, Int)) ChunkDB (Map String (Section, Int))
 Lens' ChunkDB (Map String (Section, Int))
 </span><span class="hs-identifier hs-var">sectionTable</span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-comment">-- shouldn't really reach these cases</span><span>
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-comment">-- shouldn't really reach these cases</span><span>
 </span><span id="line-132"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; Map String (LabelledContent, Int)
 -&gt; Maybe (LabelledContent, Int)
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting
      (Map String (LabelledContent, Int))
      ChunkDB
@@ -894,9 +894,9 @@ forall s a. s -&gt; Getting a s a -&gt; a
   (Map String (LabelledContent, Int))
 Lens' ChunkDB (Map String (LabelledContent, Int))
 </span><span class="hs-identifier hs-var">labelledcontentTable</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span>
 </span><span id="line-133"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Bool
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; String) -&gt; [Citation] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -906,64 +906,64 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; [Citation]
 </span><span class="hs-identifier hs-var">citeDB</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679127994"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><a href="#local-6989586621679127898"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
 </span><span id="line-134"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; String -&gt; String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127993"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127897"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Caught.&quot;</span></span><span>
-</span><span id="line-135"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679127991"><span class="annot"><span class="annottext">s :: ChunkDB
-</span><a href="#local-6989586621679127991"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span id="line-135"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679127895"><span class="annot"><span class="annottext">s :: ChunkDB
+</span><a href="#local-6989586621679127895"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
 </span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679127994"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><a href="#local-6989586621679127898"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-136"></span><span>
 </span><span id="line-137"></span><span class="hs-comment">-- | Helper that finds the header of a traceability matrix.</span><span>
 </span><span id="line-138"></span><span class="hs-comment">-- However, here we use this to get a list of 'UID's for a traceability graph instead.</span><span>
 </span><span id="line-139"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGHeader"><span class="hs-identifier hs-type">traceGHeader</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
 </span><span id="line-140"></span><span id="traceGHeader"><span class="annot"><span class="annottext">traceGHeader :: (ChunkDB -&gt; [String]) -&gt; SystemInformation -&gt; [String]
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGHeader"><span class="hs-identifier hs-var hs-var">traceGHeader</span></a></span></span><span> </span><span id="local-6989586621679127983"><span class="annot"><span class="annottext">f :: ChunkDB -&gt; [String]
-</span><a href="#local-6989586621679127983"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679127982"><span class="annot"><span class="annottext">c :: SystemInformation
-</span><a href="#local-6989586621679127982"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; [String] -&gt; [String]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGHeader"><span class="hs-identifier hs-var hs-var">traceGHeader</span></a></span></span><span> </span><span id="local-6989586621679127887"><span class="annot"><span class="annottext">f :: ChunkDB -&gt; [String]
+</span><a href="#local-6989586621679127887"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679127886"><span class="annot"><span class="annottext">c :: SystemInformation
+</span><a href="#local-6989586621679127886"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; [String] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; SystemInformation -&gt; String
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUID"><span class="hs-operator hs-var">`checkUID`</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679127982"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679127886"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; [String] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; [String]
-</span><a href="#local-6989586621679127983"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [String]) -&gt; ChunkDB -&gt; [String]
+</span><a href="#local-6989586621679127887"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [String]) -&gt; ChunkDB -&gt; [String]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
 </span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679127982"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679127886"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-141"></span><span>
 </span><span id="line-142"></span><span class="hs-comment">-- | Helper that finds the headers of the traceability matrix rows.</span><span>
 </span><span id="line-143"></span><span class="hs-comment">-- However, here we use this to get a list of 'UID's for a traceability graph instead.</span><span>
 </span><span id="line-144"></span><span class="hs-comment">-- This is then used to create the graph edges.</span><span>
 </span><span id="line-145"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGRowHeader"><span class="hs-identifier hs-type">traceGRowHeader</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
 </span><span id="line-146"></span><span id="traceGRowHeader"><span class="annot"><span class="annottext">traceGRowHeader :: ([String] -&gt; [String]) -&gt; SystemInformation -&gt; [String]
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGRowHeader"><span class="hs-identifier hs-var hs-var">traceGRowHeader</span></a></span></span><span> </span><span id="local-6989586621679127981"><span class="annot"><span class="annottext">f :: [String] -&gt; [String]
-</span><a href="#local-6989586621679127981"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [String]) -&gt; SystemInformation -&gt; [String]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGRowHeader"><span class="hs-identifier hs-var hs-var">traceGRowHeader</span></a></span></span><span> </span><span id="local-6989586621679127885"><span class="annot"><span class="annottext">f :: [String] -&gt; [String]
+</span><a href="#local-6989586621679127885"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [String]) -&gt; SystemInformation -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGHeader"><span class="hs-identifier hs-var">traceGHeader</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; ChunkDB -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferrers"><span class="hs-identifier hs-var">traceMReferrers</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
-</span><a href="#local-6989586621679127981"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679127885"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-147"></span><span>
 </span><span id="line-148"></span><span class="hs-comment">-- FIXME: Should take a Reference instead of just a Reference UID</span><span>
 </span><span id="line-149"></span><span class="hs-comment">-- | Helper that makes references of the form &quot;@reference@ shows the dependencies of @something@&quot;. Only takes a reference `UID` instead of a `Reference`.</span><span>
 </span><span id="line-150"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#graphShows"><span class="hs-identifier hs-type">graphShows</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-151"></span><span id="graphShows"><span class="annot"><span class="annottext">graphShows :: String -&gt; Sentence -&gt; Sentence
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#graphShows"><span class="hs-identifier hs-var hs-var">graphShows</span></a></span></span><span> </span><span id="local-6989586621679127980"><span class="annot"><span class="annottext">r :: String
-</span><a href="#local-6989586621679127980"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679127979"><span class="annot"><span class="annottext">end :: Sentence
-</span><a href="#local-6989586621679127979"><span class="hs-identifier hs-var">end</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#graphShows"><span class="hs-identifier hs-var hs-var">graphShows</span></a></span></span><span> </span><span id="local-6989586621679127884"><span class="annot"><span class="annottext">r :: String
+</span><a href="#local-6989586621679127884"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679127883"><span class="annot"><span class="annottext">end :: Sentence
+</span><a href="#local-6989586621679127883"><span class="hs-identifier hs-var">end</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127980"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679127884"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;shows the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
@@ -971,7 +971,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-keyword hs-var">dependency</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679127979"><span class="hs-identifier hs-var">end</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679127883"><span class="hs-identifier hs-var">end</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span>
 </span><span id="line-152"></span><span>
 </span><span id="line-153"></span><span class="hs-comment">-- * Functions to Create a Traceability Graphs</span><span>
@@ -1018,8 +1018,8 @@ forall a. Maybe a
 </span><span id="line-167"></span><span class="hs-comment">-- | The Traceability Graph contents.</span><span>
 </span><span id="line-168"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGCon"><span class="hs-identifier hs-type">traceGCon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span>
 </span><span id="line-169"></span><span id="traceGCon"><span class="annot"><span class="annottext">traceGCon :: String -&gt; [Contents]
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGCon"><span class="hs-identifier hs-var hs-var">traceGCon</span></a></span></span><span> </span><span id="local-6989586621679127969"><span class="annot"><span class="annottext">ex :: String
-</span><a href="#local-6989586621679127969"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; [LabelledContent] -&gt; [Contents]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGCon"><span class="hs-identifier hs-var hs-var">traceGCon</span></a></span></span><span> </span><span id="local-6989586621679127873"><span class="annot"><span class="annottext">ex :: String
+</span><a href="#local-6989586621679127873"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; [LabelledContent] -&gt; [Contents]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(String -&gt; String -&gt; LabelledContent)
@@ -1027,7 +1027,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; LabelledContent
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGraphLC"><span class="hs-identifier hs-var">traceGraphLC</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127969"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679127873"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGFiles"><span class="hs-identifier hs-var">traceGFiles</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGUIDs"><span class="hs-identifier hs-var">traceGUIDs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Contents] -&gt; [Contents]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -1041,23 +1041,23 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-171"></span><span class="hs-comment">-- | Generates traceability graphs as figures on an SRS document.</span><span>
 </span><span id="line-172"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGraphLC"><span class="hs-identifier hs-type">traceGraphLC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
 </span><span id="line-173"></span><span id="traceGraphLC"><span class="annot"><span class="annottext">traceGraphLC :: String -&gt; String -&gt; String -&gt; LabelledContent
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGraphLC"><span class="hs-identifier hs-var hs-var">traceGraphLC</span></a></span></span><span> </span><span id="local-6989586621679127963"><span class="annot"><span class="annottext">ex :: String
-</span><a href="#local-6989586621679127963"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span id="local-6989586621679127962"><span class="annot"><span class="annottext">fp :: String
-</span><a href="#local-6989586621679127962"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span id="local-6989586621679127961"><span class="annot"><span class="annottext">u :: String
-</span><a href="#local-6989586621679127961"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGraphLC"><span class="hs-identifier hs-var hs-var">traceGraphLC</span></a></span></span><span> </span><span id="local-6989586621679127867"><span class="annot"><span class="annottext">ex :: String
+</span><a href="#local-6989586621679127867"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span id="local-6989586621679127866"><span class="annot"><span class="annottext">fp :: String
+</span><a href="#local-6989586621679127866"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span id="local-6989586621679127865"><span class="annot"><span class="annottext">u :: String
+</span><a href="#local-6989586621679127865"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127961"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+</span><a href="#local-6989586621679127865"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; String -&gt; RawContent
 </span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127961"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(String -&gt; RawContent) -&gt; String -&gt; RawContent
+</span><a href="#local-6989586621679127865"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(String -&gt; RawContent) -&gt; String -&gt; RawContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceyGraphPath"><span class="hs-identifier hs-var">traceyGraphPath</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127963"><span class="hs-identifier hs-var">ex</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127962"><span class="hs-identifier hs-var">fp</span></a></span><span>
+</span><a href="#local-6989586621679127867"><span class="hs-identifier hs-var">ex</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679127866"><span class="hs-identifier hs-var">fp</span></a></span><span>
 </span><span id="line-174"></span><span>
 </span><span id="line-175"></span><span class="hs-comment">-- | Traceability graph file names.</span><span>
 </span><span id="line-176"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGFiles"><span class="hs-identifier hs-type">traceGFiles</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
@@ -1075,11 +1075,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-187"></span><span id="traceGUIDs"><span class="annot"><span class="annottext">traceGUIDs :: [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGUIDs"><span class="hs-identifier hs-var hs-var">traceGUIDs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;TraceGraphAvsA&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-string">&quot;TraceGraphAvsAll&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-string">&quot;TraceGraphRefvsRef&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-string">&quot;TraceGraphAllvsR&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-string">&quot;TraceGraphAllvsAll&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-188"></span><span id="traceyGraphPaths"><span class="annot"><span class="annottext">traceyGraphPaths :: String -&gt; [String]
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceyGraphPaths"><span class="hs-identifier hs-var hs-var">traceyGraphPaths</span></a></span></span><span> </span><span id="local-6989586621679127955"><span class="annot"><span class="annottext">ex :: String
-</span><a href="#local-6989586621679127955"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; [String] -&gt; [String]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceyGraphPaths"><span class="hs-identifier hs-var hs-var">traceyGraphPaths</span></a></span></span><span> </span><span id="local-6989586621679127859"><span class="annot"><span class="annottext">ex :: String
+</span><a href="#local-6989586621679127859"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; [String] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679127954"><span class="annot"><span class="annottext">x :: String
-</span><a href="#local-6989586621679127954"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679127858"><span class="annot"><span class="annottext">x :: String
+</span><a href="#local-6989586621679127858"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Char) -&gt; String -&gt; String
@@ -1092,18 +1092,18 @@ forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">Char -&gt; Bool
 </span><span class="hs-identifier hs-var">isSpace</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127955"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127859"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;/&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127954"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127858"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.svg&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGFiles"><span class="hs-identifier hs-var">traceGFiles</span></a></span><span>
 </span><span id="line-189"></span><span id="traceyGraphGetRefs"><span class="annot"><span class="annottext">traceyGraphGetRefs :: String -&gt; [Reference]
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceyGraphGetRefs"><span class="hs-identifier hs-var hs-var">traceyGraphGetRefs</span></a></span></span><span> </span><span id="local-6989586621679127950"><span class="annot"><span class="annottext">ex :: String
-</span><a href="#local-6989586621679127950"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Reference) -&gt; [String] -&gt; [Reference]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceyGraphGetRefs"><span class="hs-identifier hs-var hs-var">traceyGraphGetRefs</span></a></span></span><span> </span><span id="local-6989586621679127854"><span class="annot"><span class="annottext">ex :: String
+</span><a href="#local-6989586621679127854"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Reference) -&gt; [String] -&gt; [Reference]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">[String]
@@ -1112,20 +1112,20 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; String -&gt; Reference)
 -&gt; [String] -&gt; [String] -&gt; [Reference]
 forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
-</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679127949"><span class="annot"><span class="annottext">x :: String
-</span><a href="#local-6989586621679127949"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679127948"><span class="annot"><span class="annottext">y :: String
-</span><a href="#local-6989586621679127948"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; LblType -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679127853"><span class="annot"><span class="annottext">x :: String
+</span><a href="#local-6989586621679127853"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679127852"><span class="annot"><span class="annottext">y :: String
+</span><a href="#local-6989586621679127852"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; LblType -&gt; ShortName -&gt; Reference
 </span><span class="hs-identifier hs-var">Reference</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127949"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127853"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Link&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; LblType
 </span><span class="hs-identifier hs-var">URI</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127948"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679127852"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127949"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679127853"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGUIDs"><span class="hs-identifier hs-var">traceGUIDs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; [String]
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceyGraphPaths"><span class="hs-identifier hs-var">traceyGraphPaths</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; [String]) -&gt; String -&gt; [String]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1141,12 +1141,12 @@ forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">Char -&gt; Bool
 </span><span class="hs-identifier hs-var">isSpace</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127950"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679127854"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-190"></span><span class="hs-comment">-- for actual use in creating the graph figures</span><span>
 </span><span id="line-191"></span><span id="traceyGraphPath"><span class="annot"><span class="annottext">traceyGraphPath :: String -&gt; String -&gt; String
-</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceyGraphPath"><span class="hs-identifier hs-var hs-var">traceyGraphPath</span></a></span></span><span> </span><span id="local-6989586621679127944"><span class="annot"><span class="annottext">ex :: String
-</span><a href="#local-6989586621679127944"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span id="local-6989586621679127943"><span class="annot"><span class="annottext">f :: String
-</span><a href="#local-6989586621679127943"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceyGraphPath"><span class="hs-identifier hs-var hs-var">traceyGraphPath</span></a></span></span><span> </span><span id="local-6989586621679127848"><span class="annot"><span class="annottext">ex :: String
+</span><a href="#local-6989586621679127848"><span class="hs-identifier hs-var">ex</span></a></span></span><span> </span><span id="local-6989586621679127847"><span class="annot"><span class="annottext">f :: String
+</span><a href="#local-6989586621679127847"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Char) -&gt; String -&gt; String
@@ -1159,12 +1159,12 @@ forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">Char -&gt; Bool
 </span><span class="hs-identifier hs-var">isSpace</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127944"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127848"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;/&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127943"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127847"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.svg&quot;</span></span><span>
 </span><span id="line-192"></span><span>
@@ -1182,10 +1182,10 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">Flat</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ItemType)
 -&gt; (String -&gt; Sentence) -&gt; String -&gt; ItemType
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679127941"><span class="annot"><span class="annottext">x :: String
-</span><a href="#local-6989586621679127941"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; RefInfo -&gt; Sentence
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679127845"><span class="annot"><span class="annottext">x :: String
+</span><a href="#local-6989586621679127845"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; RefInfo -&gt; Sentence
 </span><span class="hs-identifier hs-var">Ref</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679127941"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679127845"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Link&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">RefInfo

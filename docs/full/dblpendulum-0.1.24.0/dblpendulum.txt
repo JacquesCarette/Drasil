@@ -59,7 +59,7 @@ symbols :: [QuantityDict]
 acronyms :: [CI]
 inputs :: [QuantityDict]
 outputs :: [QuantityDict]
-units :: [UnitaryConceptDict]
+units :: [UnitalChunk]
 unitalChunks :: [UnitalChunk]
 lenRod_1 :: UnitalChunk
 lenRod_2 :: UnitalChunk

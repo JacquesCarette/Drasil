@@ -28,7 +28,7 @@
 </span><span id="line-21"></span><span id="sn"><span id="rf"><span id="ra"><span id="notes"><span id="mk"><span id="deri"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">GenDefn</span></span></span></span></span></span></span><span>
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="hs-comment">-- | Finds the 'UID' of a 'GenDefn'.</span><span>
-</span><span id="line-24"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141151"><span class="annot"><span class="annottext">uid :: (String -&gt; f String) -&gt; GenDefn -&gt; f GenDefn
+</span><span id="line-24"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141055"><span class="annot"><span class="annottext">uid :: (String -&gt; f String) -&gt; GenDefn -&gt; f GenDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind -&gt; f ModelKind) -&gt; GenDefn -&gt; f GenDefn
 Lens' GenDefn ModelKind
 </span><a href="Theory.Drasil.GenDefn.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span> </span><span class="annot"><span class="annottext">((ModelKind -&gt; f ModelKind) -&gt; GenDefn -&gt; f GenDefn)
@@ -41,7 +41,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span>
 </span><span id="line-25"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'GenDefn'.</span><span>
-</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141145"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; GenDefn -&gt; f GenDefn
+</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141049"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; GenDefn -&gt; f GenDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind -&gt; f ModelKind) -&gt; GenDefn -&gt; f GenDefn
 Lens' GenDefn ModelKind
 </span><a href="Theory.Drasil.GenDefn.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span> </span><span class="annot"><span class="annottext">((ModelKind -&gt; f ModelKind) -&gt; GenDefn -&gt; f GenDefn)
@@ -54,7 +54,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. NamedIdea c =&gt; Lens' c NP
 </span><span class="hs-identifier hs-var">term</span></span><span>
 </span><span id="line-27"></span><span class="hs-comment">-- | Finds the idea contained in the 'GenDefn'.</span><span>
-</span><span id="line-28"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141140"><span class="annot"><span class="annottext">getA :: GenDefn -&gt; Maybe String
+</span><span id="line-28"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141044"><span class="annot"><span class="annottext">getA :: GenDefn -&gt; Maybe String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind -&gt; Maybe String
 forall c. Idea c =&gt; c -&gt; Maybe String
 </span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(ModelKind -&gt; Maybe String)
@@ -66,7 +66,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 Lens' GenDefn ModelKind
 </span><a href="Theory.Drasil.GenDefn.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-29"></span><span class="hs-comment">-- | Finds the definition of the 'GenDefn'.</span><span>
-</span><span id="line-30"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141136"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; GenDefn -&gt; f GenDefn
+</span><span id="line-30"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141040"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; GenDefn -&gt; f GenDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind -&gt; f ModelKind) -&gt; GenDefn -&gt; f GenDefn
 Lens' GenDefn ModelKind
 </span><a href="Theory.Drasil.GenDefn.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span> </span><span class="annot"><span class="annottext">((ModelKind -&gt; f ModelKind) -&gt; GenDefn -&gt; f GenDefn)
@@ -79,7 +79,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. Definition c =&gt; Lens' c Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span>
 </span><span id="line-31"></span><span class="hs-comment">-- | Finds the domain of the 'GenDefn'.</span><span>
-</span><span id="line-32"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141132"><span class="annot"><span class="annottext">cdom :: GenDefn -&gt; [String]
+</span><span id="line-32"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141036"><span class="annot"><span class="annottext">cdom :: GenDefn -&gt; [String]
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind -&gt; [String]
 forall c. ConceptDomain c =&gt; c -&gt; [String]
 </span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">(ModelKind -&gt; [String])
@@ -91,7 +91,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 Lens' GenDefn ModelKind
 </span><a href="Theory.Drasil.GenDefn.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-33"></span><span class="hs-comment">-- | Converts the 'GenDefn's related expression into a 'ModelExpr'.</span><span>
-</span><span id="line-34"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Express</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141128"><span class="annot"><span class="annottext">express :: GenDefn -&gt; ModelExpr
+</span><span id="line-34"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Express</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141032"><span class="annot"><span class="annottext">express :: GenDefn -&gt; ModelExpr
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">express</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind -&gt; ModelExpr
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">(ModelKind -&gt; ModelExpr)
@@ -103,79 +103,79 @@ forall s a. s -&gt; Getting a s a -&gt; a
 Lens' GenDefn ModelKind
 </span><a href="Theory.Drasil.GenDefn.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-35"></span><span class="hs-comment">-- | Finds the derivation of the 'GenDefn'. May contain Nothing.</span><span>
-</span><span id="line-36"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDerivation</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141124"><span class="annot"><span class="annottext">derivations :: (Maybe Derivation -&gt; f (Maybe Derivation)) -&gt; GenDefn -&gt; f GenDefn
+</span><span id="line-36"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDerivation</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141028"><span class="annot"><span class="annottext">derivations :: (Maybe Derivation -&gt; f (Maybe Derivation)) -&gt; GenDefn -&gt; f GenDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">derivations</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Maybe Derivation -&gt; f (Maybe Derivation)) -&gt; GenDefn -&gt; f GenDefn
 Lens' GenDefn (Maybe Derivation)
 </span><a href="Theory.Drasil.GenDefn.html#deri"><span class="hs-identifier hs-var">deri</span></a></span><span>
 </span><span id="line-37"></span><span class="hs-comment">{-- | Finds 'Reference's contained in the 'GenDefn'.
 instance HasReference       GenDefn where getReferences = rf-}</span><span>
 </span><span id="line-39"></span><span class="hs-comment">-- | Finds 'DecRef's contained in the 'GenDefn'.</span><span>
-</span><span id="line-40"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDecRef</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141120"><span class="annot"><span class="annottext">getDecRefs :: ([DecRef] -&gt; f [DecRef]) -&gt; GenDefn -&gt; f GenDefn
+</span><span id="line-40"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDecRef</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141024"><span class="annot"><span class="annottext">getDecRefs :: ([DecRef] -&gt; f [DecRef]) -&gt; GenDefn -&gt; f GenDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getDecRefs</span></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([DecRef] -&gt; f [DecRef]) -&gt; GenDefn -&gt; f GenDefn
 Lens' GenDefn [DecRef]
 </span><a href="Theory.Drasil.GenDefn.html#rf"><span class="hs-identifier hs-var">rf</span></a></span><span>
 </span><span id="line-41"></span><span class="hs-comment">-- | Finds the 'ShortName' of the 'GenDefn'.</span><span>
-</span><span id="line-42"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141116"><span class="annot"><span class="annottext">shortname :: GenDefn -&gt; ShortName
+</span><span id="line-42"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141020"><span class="annot"><span class="annottext">shortname :: GenDefn -&gt; ShortName
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">shortname</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getting ShortName GenDefn ShortName -&gt; GenDefn -&gt; ShortName
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting ShortName GenDefn ShortName
 Lens' GenDefn ShortName
 </span><a href="Theory.Drasil.GenDefn.html#sn"><span class="hs-identifier hs-var">sn</span></a></span><span>
 </span><span id="line-43"></span><span class="hs-comment">-- | Finds the reference address of the 'GenDefn'.</span><span>
-</span><span id="line-44"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasRefAddress</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141112"><span class="annot"><span class="annottext">getRefAdd :: GenDefn -&gt; LblType
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getRefAdd</span></span></span><span> </span><span id="local-6989586621679141110"><span class="annot"><span class="annottext">l :: GenDefn
-</span><a href="#local-6989586621679141110"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
+</span><span id="line-44"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasRefAddress</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141016"><span class="annot"><span class="annottext">getRefAdd :: GenDefn -&gt; LblType
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getRefAdd</span></span></span><span> </span><span id="local-6989586621679141014"><span class="annot"><span class="annottext">l :: GenDefn
+</span><a href="#local-6989586621679141014"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
 </span><span class="hs-identifier hs-var">RP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; IRefProg
 </span><span class="hs-identifier hs-var">prepend</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IRefProg) -&gt; String -&gt; IRefProg
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679141110"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting String GenDefn String -&gt; GenDefn -&gt; String
+</span><a href="#local-6989586621679141014"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting String GenDefn String -&gt; GenDefn -&gt; String
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting String GenDefn String
 Lens' GenDefn String
 </span><a href="Theory.Drasil.GenDefn.html#ra"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679141110"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679141014"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-45"></span><span class="hs-comment">-- | Finds the units of the 'GenDefn'.</span><span>
-</span><span id="line-46"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasAdditionalNotes</span></span><span> </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141104"><span class="annot"><span class="annottext">getNotes :: ([Sentence] -&gt; f [Sentence]) -&gt; GenDefn -&gt; f GenDefn
+</span><span id="line-46"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasAdditionalNotes</span></span><span> </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141008"><span class="annot"><span class="annottext">getNotes :: ([Sentence] -&gt; f [Sentence]) -&gt; GenDefn -&gt; f GenDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getNotes</span></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; f [Sentence]) -&gt; GenDefn -&gt; f GenDefn
 Lens' GenDefn [Sentence]
 </span><a href="Theory.Drasil.GenDefn.html#notes"><span class="hs-identifier hs-var">notes</span></a></span><span>
 </span><span id="line-47"></span><span class="hs-comment">-- | Finds the units of the 'GenDefn'.</span><span>
-</span><span id="line-48"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141100"><span class="annot"><span class="annottext">getUnit :: GenDefn -&gt; Maybe UnitDefn
+</span><span id="line-48"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141004"><span class="annot"><span class="annottext">getUnit :: GenDefn -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getUnit</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; Maybe UnitDefn
 </span><a href="Theory.Drasil.GenDefn.html#gdUnit"><span class="hs-identifier hs-var hs-var">gdUnit</span></a></span><span>
 </span><span id="line-49"></span><span class="hs-comment">-- | Finds the idea of a 'GenDefn' (abbreviation).</span><span>
-</span><span id="line-50"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679141095"><span class="annot"><span class="annottext">abrv :: GenDefn -&gt; String
-</span><a href="#local-6989586621679141095"><span class="hs-identifier hs-var hs-var hs-var hs-var">abrv</span></a></span></span><span> </span><span class="hs-identifier">_</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; String
+</span><span id="line-50"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679140999"><span class="annot"><span class="annottext">abrv :: GenDefn -&gt; String
+</span><a href="#local-6989586621679140999"><span class="hs-identifier hs-var hs-var hs-var hs-var">abrv</span></a></span></span><span> </span><span class="hs-identifier">_</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#genDefn"><span class="hs-identifier hs-var">genDefn</span></a></span><span>
 </span><span id="line-51"></span><span class="hs-comment">-- | Finds the reference address of a 'GenDefn'.</span><span>
 </span><span id="line-52"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Referable</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-53"></span><span>  </span><span id="local-6989586621679141089"><span class="annot"><span class="annottext">refAdd :: GenDefn -&gt; String
+</span><span id="line-53"></span><span>  </span><span id="local-6989586621679140993"><span class="annot"><span class="annottext">refAdd :: GenDefn -&gt; String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">refAdd</span></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getting String GenDefn String -&gt; GenDefn -&gt; String
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting String GenDefn String
 Lens' GenDefn String
 </span><a href="Theory.Drasil.GenDefn.html#ra"><span class="hs-identifier hs-var">ra</span></a></span><span>
-</span><span id="line-54"></span><span>  </span><span id="local-6989586621679141087"><span class="annot"><span class="annottext">renderRef :: GenDefn -&gt; LblType
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></span></span><span> </span><span id="local-6989586621679141085"><span class="annot"><span class="annottext">l :: GenDefn
-</span><a href="#local-6989586621679141085"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
+</span><span id="line-54"></span><span>  </span><span id="local-6989586621679140991"><span class="annot"><span class="annottext">renderRef :: GenDefn -&gt; LblType
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></span></span><span> </span><span id="local-6989586621679140989"><span class="annot"><span class="annottext">l :: GenDefn
+</span><a href="#local-6989586621679140989"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
 </span><span class="hs-identifier hs-var">RP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; IRefProg
 </span><span class="hs-identifier hs-var">prepend</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IRefProg) -&gt; String -&gt; IRefProg
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679141085"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GenDefn -&gt; String
+</span><a href="#local-6989586621679140989"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GenDefn -&gt; String
 forall s. Referable s =&gt; s -&gt; String
 </span><span class="hs-identifier hs-var">refAdd</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679141085"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679140989"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-55"></span><span>
 </span><span id="line-56"></span><span class="hs-comment">-- | Smart constructor for general definitions.</span><span>
-</span><span id="line-57"></span><span id="local-6989586621679141084"><span class="annot"><a href="Theory.Drasil.GenDefn.html#gd"><span class="hs-identifier hs-type">gd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679141084"><span class="hs-identifier hs-type">u</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKind"><span class="hs-identifier hs-type">ModelKind</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="#local-6989586621679141084"><span class="hs-identifier hs-type">u</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-57"></span><span id="local-6989586621679140988"><span class="annot"><a href="Theory.Drasil.GenDefn.html#gd"><span class="hs-identifier hs-type">gd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679140988"><span class="hs-identifier hs-type">u</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKind"><span class="hs-identifier hs-type">ModelKind</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="#local-6989586621679140988"><span class="hs-identifier hs-type">u</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-58"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DecRef</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span></span><span>
 </span><span id="line-59"></span><span id="gd"><span class="annot"><span class="annottext">gd :: ModelKind
 -&gt; Maybe u
@@ -184,8 +184,8 @@ forall s. Referable s =&gt; s -&gt; String
 -&gt; String
 -&gt; [Sentence]
 -&gt; GenDefn
-</span><a href="Theory.Drasil.GenDefn.html#gd"><span class="hs-identifier hs-var hs-var">gd</span></a></span></span><span> </span><span id="local-6989586621679141083"><span class="annot"><span class="annottext">mkind :: ModelKind
-</span><a href="#local-6989586621679141083"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-identifier">_</span><span>   </span><span class="hs-identifier">_</span><span>     </span><span class="hs-special">[</span><span class="hs-special">]</span><span>   </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [Sentence] -&gt; GenDefn
+</span><a href="Theory.Drasil.GenDefn.html#gd"><span class="hs-identifier hs-var hs-var">gd</span></a></span></span><span> </span><span id="local-6989586621679140987"><span class="annot"><span class="annottext">mkind :: ModelKind
+</span><a href="#local-6989586621679140987"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-identifier">_</span><span>   </span><span class="hs-identifier">_</span><span>     </span><span class="hs-special">[</span><span class="hs-special">]</span><span>   </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [Sentence] -&gt; GenDefn
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; [Sentence] -&gt; GenDefn)
 -&gt; String -&gt; [Sentence] -&gt; GenDefn
@@ -193,19 +193,19 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Source field of &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKind
-</span><a href="#local-6989586621679141083"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKind -&gt; Getting String ModelKind String -&gt; String
+</span><a href="#local-6989586621679140987"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKind -&gt; Getting String ModelKind String -&gt; String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String ModelKind String
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; is empty&quot;</span></span><span>
-</span><span id="line-60"></span><span class="annot"><a href="Theory.Drasil.GenDefn.html#gd"><span class="hs-identifier hs-var">gd</span></a></span><span> </span><span id="local-6989586621679141081"><span class="annot"><span class="annottext">mkind :: ModelKind
-</span><a href="#local-6989586621679141081"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679141080"><span class="annot"><span class="annottext">u :: Maybe u
-</span><a href="#local-6989586621679141080"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679141079"><span class="annot"><span class="annottext">derivs :: Maybe Derivation
-</span><a href="#local-6989586621679141079"><span class="hs-identifier hs-var">derivs</span></a></span></span><span> </span><span id="local-6989586621679141078"><span class="annot"><span class="annottext">refs :: [DecRef]
-</span><a href="#local-6989586621679141078"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span id="local-6989586621679141077"><span class="annot"><span class="annottext">sn_ :: String
-</span><a href="#local-6989586621679141077"><span class="hs-identifier hs-var">sn_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-60"></span><span class="annot"><a href="Theory.Drasil.GenDefn.html#gd"><span class="hs-identifier hs-var">gd</span></a></span><span> </span><span id="local-6989586621679140985"><span class="annot"><span class="annottext">mkind :: ModelKind
+</span><a href="#local-6989586621679140985"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679140984"><span class="annot"><span class="annottext">u :: Maybe u
+</span><a href="#local-6989586621679140984"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679140983"><span class="annot"><span class="annottext">derivs :: Maybe Derivation
+</span><a href="#local-6989586621679140983"><span class="hs-identifier hs-var">derivs</span></a></span></span><span> </span><span id="local-6989586621679140982"><span class="annot"><span class="annottext">refs :: [DecRef]
+</span><a href="#local-6989586621679140982"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span id="local-6989586621679140981"><span class="annot"><span class="annottext">sn_ :: String
+</span><a href="#local-6989586621679140981"><span class="hs-identifier hs-var">sn_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
 </span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">ModelKind
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
@@ -215,34 +215,34 @@ forall a. [a] -&gt; [a] -&gt; [a]
 -&gt; [Sentence]
 -&gt; GenDefn
 </span><a href="Theory.Drasil.GenDefn.html#GD"><span class="hs-identifier hs-var">GD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKind
-</span><a href="#local-6989586621679141081"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(u -&gt; UnitDefn) -&gt; Maybe u -&gt; Maybe UnitDefn
+</span><a href="#local-6989586621679140985"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(u -&gt; UnitDefn) -&gt; Maybe u -&gt; Maybe UnitDefn
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-identifier hs-var">fmap</span></span><span> </span><span class="annot"><span class="annottext">u -&gt; UnitDefn
 forall u. IsUnit u =&gt; u -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">unitWrapper</span></span><span> </span><span class="annot"><span class="annottext">Maybe u
-</span><a href="#local-6989586621679141080"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
-</span><a href="#local-6989586621679141079"><span class="hs-identifier hs-var">derivs</span></a></span><span> </span><span class="annot"><span class="annottext">[DecRef]
-</span><a href="#local-6989586621679141078"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679140984"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><a href="#local-6989586621679140983"><span class="hs-identifier hs-var">derivs</span></a></span><span> </span><span class="annot"><span class="annottext">[DecRef]
+</span><a href="#local-6989586621679140982"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679141077"><span class="hs-identifier hs-var">sn_</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
+</span><a href="#local-6989586621679140981"><span class="hs-identifier hs-var">sn_</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#genDefn"><span class="hs-identifier hs-var">genDefn</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679141077"><span class="hs-identifier hs-var">sn_</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679140981"><span class="hs-identifier hs-var">sn_</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-62"></span><span>
 </span><span id="line-63"></span><span class="hs-comment">-- | Smart constructor for general definitions with no references.</span><span>
-</span><span id="line-64"></span><span id="local-6989586621679141072"><span class="annot"><a href="Theory.Drasil.GenDefn.html#gdNoRefs"><span class="hs-identifier hs-type">gdNoRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679141072"><span class="hs-identifier hs-type">u</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKind"><span class="hs-identifier hs-type">ModelKind</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="#local-6989586621679141072"><span class="hs-identifier hs-type">u</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-64"></span><span id="local-6989586621679140976"><span class="annot"><a href="Theory.Drasil.GenDefn.html#gdNoRefs"><span class="hs-identifier hs-type">gdNoRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679140976"><span class="hs-identifier hs-type">u</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKind"><span class="hs-identifier hs-type">ModelKind</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="#local-6989586621679140976"><span class="hs-identifier hs-type">u</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-65"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span></span><span>
 </span><span id="line-66"></span><span id="gdNoRefs"><span class="annot"><span class="annottext">gdNoRefs :: ModelKind
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
-</span><a href="Theory.Drasil.GenDefn.html#gdNoRefs"><span class="hs-identifier hs-var hs-var">gdNoRefs</span></a></span></span><span> </span><span id="local-6989586621679141071"><span class="annot"><span class="annottext">mkind :: ModelKind
-</span><a href="#local-6989586621679141071"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679141070"><span class="annot"><span class="annottext">u :: Maybe u
-</span><a href="#local-6989586621679141070"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679141069"><span class="annot"><span class="annottext">derivs :: Maybe Derivation
-</span><a href="#local-6989586621679141069"><span class="hs-identifier hs-var">derivs</span></a></span></span><span> </span><span id="local-6989586621679141068"><span class="annot"><span class="annottext">sn_ :: String
-</span><a href="#local-6989586621679141068"><span class="hs-identifier hs-var">sn_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><a href="Theory.Drasil.GenDefn.html#gdNoRefs"><span class="hs-identifier hs-var hs-var">gdNoRefs</span></a></span></span><span> </span><span id="local-6989586621679140975"><span class="annot"><span class="annottext">mkind :: ModelKind
+</span><a href="#local-6989586621679140975"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679140974"><span class="annot"><span class="annottext">u :: Maybe u
+</span><a href="#local-6989586621679140974"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679140973"><span class="annot"><span class="annottext">derivs :: Maybe Derivation
+</span><a href="#local-6989586621679140973"><span class="hs-identifier hs-var">derivs</span></a></span></span><span> </span><span id="local-6989586621679140972"><span class="annot"><span class="annottext">sn_ :: String
+</span><a href="#local-6989586621679140972"><span class="hs-identifier hs-var">sn_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
 </span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">ModelKind
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
@@ -252,22 +252,22 @@ forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 -&gt; [Sentence]
 -&gt; GenDefn
 </span><a href="Theory.Drasil.GenDefn.html#GD"><span class="hs-identifier hs-var">GD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKind
-</span><a href="#local-6989586621679141071"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(u -&gt; UnitDefn) -&gt; Maybe u -&gt; Maybe UnitDefn
+</span><a href="#local-6989586621679140975"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(u -&gt; UnitDefn) -&gt; Maybe u -&gt; Maybe UnitDefn
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-identifier hs-var">fmap</span></span><span> </span><span class="annot"><span class="annottext">u -&gt; UnitDefn
 forall u. IsUnit u =&gt; u -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">unitWrapper</span></span><span> </span><span class="annot"><span class="annottext">Maybe u
-</span><a href="#local-6989586621679141070"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
-</span><a href="#local-6989586621679141069"><span class="hs-identifier hs-var">derivs</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679140974"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><a href="#local-6989586621679140973"><span class="hs-identifier hs-var">derivs</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679141068"><span class="hs-identifier hs-var">sn_</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
+</span><a href="#local-6989586621679140972"><span class="hs-identifier hs-var">sn_</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#genDefn"><span class="hs-identifier hs-var">genDefn</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679141068"><span class="hs-identifier hs-var">sn_</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679140972"><span class="hs-identifier hs-var">sn_</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-68"></span><span>
 </span><span id="line-69"></span><span class="hs-comment">-- | Grab all related 'QDefinitions' from a list of general definitions.</span><span>
 </span><span id="line-70"></span><span class="annot"><a href="Theory.Drasil.GenDefn.html#getEqModQdsFromGd"><span class="hs-identifier hs-type">getEqModQdsFromGd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Theory.Drasil.GenDefn.html#GenDefn"><span class="hs-identifier hs-type">GenDefn</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>

@@ -77,15 +77,12 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.DblPendulum.Unitals.html#angularAccel_1"><span class="hs-identifier hs-var">angularAccel_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#angularAccel_2"><span class="hs-identifier hs-var">angularAccel_2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#units"><span class="hs-identifier hs-type">units</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitaryConceptDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-37"></span><span id="units"><span class="annot"><span class="annottext">units :: [UnitaryConceptDict]
-</span><a href="Drasil.DblPendulum.Unitals.html#units"><span class="hs-identifier hs-var hs-var">units</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; UnitaryConceptDict)
--&gt; [UnitalChunk] -&gt; [UnitaryConceptDict]
+</span><span id="line-36"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#units"><span class="hs-identifier hs-type">units</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-37"></span><span id="units"><span class="annot"><span class="annottext">units :: [UnitalChunk]
+</span><a href="Drasil.DblPendulum.Unitals.html#units"><span class="hs-identifier hs-var hs-var">units</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; UnitalChunk) -&gt; [UnitalChunk] -&gt; [UnitalChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitaryConceptDict
-forall c.
-(Unitary c, Concept c, MayHaveUnit c) =&gt;
-c -&gt; UnitaryConceptDict
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk
+forall c. (Unitary c, Concept c, MayHaveUnit c) =&gt; c -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucw</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
 </span><a href="Drasil.DblPendulum.Unitals.html#unitalChunks"><span class="hs-identifier hs-var">unitalChunks</span></a></span><span>
 </span><span id="line-38"></span><span>

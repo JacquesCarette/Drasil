@@ -4483,32 +4483,6 @@ instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unitary.Uni
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unitary.UnitaryChunk
 
 
--- | Adds concepts to a quantitative idea with units.
-module Language.Drasil.Chunk.UnitaryConcept
-
--- | Contains a <a>UnitaryChunk</a>, a definition, and a list of related
---   <a>UID</a>s.
---   
---   Ex. A pendulum arm is an idea associated with a symbol (l) and units
---   (cm, m, etc.).
-data UnitaryConceptDict
-
--- | Constructs a UnitaryConceptDict from a <a>Concept</a> with
---   <tt>Units</tt>.
-ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitaryConceptDict
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance GHC.Classes.Eq Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.UnitaryConcept.UnitaryConceptDict
-
-
 -- | Named arguments used in generating code.
 module Language.Drasil.Chunk.NamedArgument
 
@@ -4625,6 +4599,9 @@ ucsWS :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalC
 
 -- | Attach units to a chunk that has a symbol and definition.
 ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
+
+-- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
+ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Unital.UnitalChunk
@@ -5663,17 +5640,6 @@ mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk
 --   to the symbols of the chunk itself.
 unit_symb :: Unitary c => c -> USymb
 
--- | Contains a <a>UnitaryChunk</a>, a definition, and a list of related
---   <a>UID</a>s.
---   
---   Ex. A pendulum arm is an idea associated with a symbol (l) and units
---   (cm, m, etc.).
-data UnitaryConceptDict
-
--- | Constructs a UnitaryConceptDict from a <a>Concept</a> with
---   <tt>Units</tt>.
-ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitaryConceptDict
-
 -- | DefinedQuantityDict is the combination of a <a>Concept</a> and a
 --   <a>Quantity</a>. Contains a <a>ConceptChunk</a>, a <a>Symbol</a>
 --   dependent on <a>Stage</a>, a <a>Space</a>, and maybe a
@@ -5743,6 +5709,9 @@ ucsWS :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalC
 
 -- | Attach units to a chunk that has a symbol and definition.
 ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
+
+-- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
+ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
 
 -- | For defining units. It has a <a>ConceptChunk</a> (that defines what
 --   kind of unit it is), a unit symbol, maybe another (when it is a

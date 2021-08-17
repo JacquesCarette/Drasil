@@ -44,7 +44,7 @@ smithLai2005 :: Citation
 module Drasil.SWHS.Unitals
 symbols :: [DefinedQuantityDict]
 symbolsAll :: [QuantityDict]
-units :: [UnitaryConceptDict]
+units :: [UnitalChunk]
 unitalChuncks :: [UnitalChunk]
 inSA :: UnitalChunk
 outSA :: UnitalChunk

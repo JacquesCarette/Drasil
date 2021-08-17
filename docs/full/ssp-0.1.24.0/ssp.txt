@@ -82,7 +82,7 @@ constF :: DefinedQuantityDict
 fs :: ConstrConcept
 coords :: ConstrConcept
 fsMin :: DefinedQuantityDict
-units :: [UnitaryConceptDict]
+units :: [UnitalChunk]
 accel :: UnitalChunk
 genericMass :: UnitalChunk
 genericF :: UnitalChunk

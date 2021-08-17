@@ -55,7 +55,7 @@ nonfuncReqs :: [ConceptInstance]
 
 module Drasil.GamePhysics.Unitals
 defSymbols :: [DefinedQuantityDict]
-unitSymbs :: [UnitaryConceptDict]
+unitSymbs :: [UnitalChunk]
 symbols :: [QuantityDict]
 symbolsAll :: [QuantityDict]
 inputSymbols :: [QuantityDict]

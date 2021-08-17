@@ -35,7 +35,7 @@ symbols :: [QuantityDict]
 acronyms :: [CI]
 inputs :: [QuantityDict]
 outputs :: [QuantityDict]
-units :: [UnitaryConceptDict]
+units :: [UnitalChunk]
 unitalChunks :: [UnitalChunk]
 lenRod :: UnitalChunk
 pendDisplacementAngle :: UnitalChunk

@@ -50,5 +50,5 @@ instance Unitary       UnitaryConceptDict where unit x = unit (x ^. unitary)
 
 
 -- | Constructs a UnitaryConceptDict from a 'Concept' with 'Units'.
-ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitaryConceptDict
-ucw c = UCC (mkUnitary c) (c ^. defn) (cdom c)
+--ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitaryConceptDict
+--ucw c = UCC (mkUnitary c) (c ^. defn) (cdom c)

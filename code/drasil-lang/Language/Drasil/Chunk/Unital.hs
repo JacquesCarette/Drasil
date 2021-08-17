@@ -105,4 +105,8 @@ makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
 
 -- | Attach units to a chunk that has a symbol and definition.
 ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
-ucuc c = UC (tempdqdWr' c) 
+ucuc c = UC (tempdqdWr' c)
+
+-- | Constructs a UnitalChunk from a 'Concept' with 'Units'.
+ucw :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitalChunk
+ucw c = UC (ucuc c) (unit c)

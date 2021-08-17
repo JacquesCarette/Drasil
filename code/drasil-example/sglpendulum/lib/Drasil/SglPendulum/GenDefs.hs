@@ -35,7 +35,6 @@ genDefns :: [GenDefn]
 genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
        hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD, periodPend]
 
-
 ---------------------
 velocityIXGD :: GenDefn
 velocityIXGD = gdNoRefs (equationalModel' velocityIXQD) (getUnit velocity)

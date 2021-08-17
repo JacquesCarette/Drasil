@@ -34,15 +34,14 @@ import Drasil.DblPendulum.Concepts (concepts, pendMotion, rod)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.Requirements (nonFuncReqs)
 import Drasil.DblPendulum.Unitals (acronyms)
+import Drasil.DblPendulum.References (citations)
 
 import Drasil.SglPendulum.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPendulum.DataDefs (dataDefs)
 import Drasil.SglPendulum.IMods (iMods)
 import Drasil.SglPendulum.GenDefs (genDefns)
-import Drasil.SglPendulum.Unitals (inputs, outputs,
-  inConstraints, outConstraints, symbols)
+import Drasil.SglPendulum.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPendulum.Requirements (funcReqs)
-import Drasil.SglPendulum.References (citations)
 
 
 srs :: Document

@@ -9,11 +9,13 @@ authors:
     orcid: "https://orcid.org/0000-0001-8993-9804"
     website: "https://www.cas.mcmaster.ca/~carette/"
     affiliation: "McMaster University, Computing and Software Department"
+    email: "carette@mcmaster.ca"
   - family-names: Smith
     given-names: Spencer
     orcid: "https://orcid.org/0000-0002-0760-0987"
     website: "https://www.cas.mcmaster.ca/~smiths/"
     affiliation: "McMaster University, Computing and Software Department"
+    email: "smiths@mcmaster.ca"
 identifiers:
   - description: "All archived snapshots of Drasil."
     type: doi

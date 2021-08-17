@@ -52,7 +52,6 @@ module Language.Drasil (
   -- | Contains many of the classes used in Drasil, along with their methods.
 
   -- *** Chunk-related
-
   -- Language.Drasil.Classes.Core
   , HasUID(uid)
   , HasSymbol(symbol)
@@ -75,7 +74,6 @@ module Language.Drasil (
   , DefiningExpr(defnExpr)
   , Express(express)
   -- *** References
-
   -- Language.Drasil.Classes.Core
   , HasRefAddress(getRefAdd)
   , Referable(..)
@@ -102,7 +100,6 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdea, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
   -- *** Concepts
-
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, CommonConcept, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
@@ -110,7 +107,6 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC, addRelToCC
   -- *** Quantities and Units
-
   -- Language.Drasil.Chunk.Quantity
   , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar'
   , vc, vc'', vcSt, vcUnit
@@ -138,7 +134,6 @@ module Language.Drasil (
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
   -- *** Constrained and Uncertain Values
-
   -- Language.Drasil.Constraint
   , ConstraintReason(..), Constraint(..), ConstraintE
   , physc, sfwrc, isPhysC, isSfwrC
@@ -154,7 +149,6 @@ module Language.Drasil (
   -- Language.Drasil.Uncertainty
   , defaultUncrt, uncVal, uncPrec, exact
   -- ** Referencing
-
   -- Language.Drasil.Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -163,7 +157,6 @@ module Language.Drasil (
   -- Language.Drasil.Decorated Reference
   , DecRef(refInfo), dRefInfo, dRef
   -- *** Citations
-
   -- Language.Drasil.Chunk.Citation
   , EntryID, Citation, BibRef
   -- accessors

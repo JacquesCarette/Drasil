@@ -1,3 +1,4 @@
+-- | Defines concepts used in the field of software.
 module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
@@ -10,6 +11,9 @@ import Data.Drasil.Concepts.Documentation (input_, physical, physicalConstraint,
 import Data.Drasil.Concepts.Math (equation)
 import Control.Lens ((^.))
 
+-- * Common Software Concepts
+
+-- | Collects all software-related concepts.
 softwarecon :: [ConceptChunk]
 softwarecon = [correctness, verifiability, physLib,
   understandability, reusability, maintainability, portability,
@@ -26,7 +30,7 @@ program = dcc "program" (cn' "program")
 errMsg  = dcc "errMsg" (cn' "error message") 
   "a message that indicates an incorrect instruction has been given, or that there is an error resulting from faulty software"
 
--- Non-functional requirements  
+-- * Non-functional Requirements 
 
 accuracy, correctness, maintainability, performance, performanceSpd, portability,
   reliability, reusability, understandability, verifiability :: ConceptChunk
@@ -64,7 +68,9 @@ understandability = dcc "understandability" (nounPhraseSP "understandability")
 
 verifiability     = dcc "verifiability"     (nounPhraseSP "verifiability")
   $ qualOfBeing "capable of being verified, confirmed, or substantiated"
-  
+
+-- * Module Concepts
+
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
 
 --FIXME: "hiding" is not a noun.

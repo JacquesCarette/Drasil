@@ -1,7 +1,6 @@
+-- | Defines some basic equations of physics and their wrappers as concepts.
 module Data.Drasil.Equations.Defining.Physics where
 
--- We define both some basic equations of physics, and their wrappers as concepts
---
 import Language.Drasil
 import Utils.Drasil (foldlSent, getTandS)
 import qualified Utils.Drasil.Sentence as S (is, of_, the_ofThe)
@@ -14,7 +13,7 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
 import Data.Drasil.Concepts.Documentation (body, constant)
 
 ------------------------------------------------------------------------------------------------------
--- The equations
+-- * Equations
 
 newtonSLEqn, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
@@ -36,7 +35,7 @@ velocityEqn               = deriv (sy QP.position) QP.time
 accelerationEqn           = deriv (sy QP.velocity) QP.time
 
 ------------------------------------------------------------------------------------------------------
--- The concepts
+-- * Concepts
 
 accelerationQD :: QDefinition
 accelerationQD = mkQuantDef QP.acceleration accelerationEqn

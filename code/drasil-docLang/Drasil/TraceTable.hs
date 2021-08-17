@@ -1,4 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
+-- | Defines a DLPlate for tracability between pieces of information.
 module Drasil.TraceTable where
 
 import Drasil.DocumentLanguage.Core

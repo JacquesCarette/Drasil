@@ -1,3 +1,4 @@
+-- | Defines concepts used in the field of thermodynamics.
 module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
@@ -7,7 +8,7 @@ import Utils.Drasil.Concepts
 import Data.Drasil.Concepts.Documentation (source, theory)
 import Data.Drasil.Concepts.Physics (energy)
 
-
+-- | Collects all thermodynamics-related concepts.
 thermocon :: [ConceptChunk]
 thermocon = [boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans,
   htFlux, htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt,

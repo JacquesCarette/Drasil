@@ -1,3 +1,4 @@
+-- | Units related to the field of thermodynamics.
 module Data.Drasil.Units.Thermodynamics where
 
 import Language.Drasil (dccWDS, cnIES, cn, cn', cn'', dcc, Sentence(S),

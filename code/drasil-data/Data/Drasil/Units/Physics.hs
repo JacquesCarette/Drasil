@@ -1,3 +1,4 @@
+-- | Units related to the field of (classical) physics. Includes kinematics, forces, etc.
 module Data.Drasil.Units.Physics where
 
 import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,

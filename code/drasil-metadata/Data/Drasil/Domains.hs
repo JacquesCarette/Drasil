@@ -1,3 +1,4 @@
+-- | Defines domains of knowledge for use in Drasil.
 module Data.Drasil.Domains where
 
 import Language.Drasil (IdeaDict, mkIdea, cn')

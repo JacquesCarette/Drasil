@@ -1,5 +1,5 @@
 {-# Language TupleSections #-}
--- Standard code to make a table of contents.
+-- | Standard code to make a table of contents.
 module Drasil.Sections.TableOfContents (toToC, findToC) where
 
 import Language.Drasil
@@ -9,7 +9,7 @@ import qualified Drasil.DocLang.SRS as SRS
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
 
-{- Layout for Table of Contents
+{- Layout for Table of Contents in SRS documents:
 Table of Contents
 Reference Material
   Table of Units

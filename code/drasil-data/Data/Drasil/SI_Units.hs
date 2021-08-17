@@ -1,8 +1,11 @@
+-- | Defines units for use in Drasil. Often used in a unital-related chunk that has an associated symbol.
 module Data.Drasil.SI_Units where
 
 import Language.Drasil
 import Language.Drasil.Display
 import Language.Drasil.ShortHands (cOmega)
+
+-- * Lists of Units
 
 fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
@@ -15,7 +18,7 @@ derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, j
 siUnits :: [UnitDefn]
 siUnits = map unitWrapper fundamentals ++ map unitWrapper derived
 
-------------- Fundamental SI Units ---------------------------------------------
+-- * Fundamental SI Units
 
 metre, kilogram, second, kelvin, mole, ampere, candela :: UnitDefn
 metre    = fund "metre"    "length"               "m"
@@ -26,7 +29,7 @@ mole     = fund "mole"     "amount of substance"  "mol"
 ampere   = fund "ampere"   "electric current"     "A"
 candela  = fund "candela"  "luminous intensity"   "cd"
 
-------------- Commonly defined units -------------------------------------------
+-- * Commonly Defined Units
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
 -- degree = UD (dcc "degree" (cn' "degree") "angle") (BaseSI (US [(Special Circle,1)])) ["degree"]

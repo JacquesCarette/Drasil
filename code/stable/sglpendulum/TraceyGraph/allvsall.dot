@@ -13,15 +13,15 @@ digraph allvsall {
 	outputValues -> angularDisplacementIM;
 
 
-	pend2DMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pend2DMotion"];
-	cartCoord	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartCoord"];
-	cartCoordRight	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartCoordRight"];
+	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
+	cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
+	cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
 	yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
 	startOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin"];
 
 	subgraph A {
 	rank="same"
-	{pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin}
+	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin}
 	}
 
 	ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];

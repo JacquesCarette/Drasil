@@ -1,3 +1,4 @@
+-- | Units related to the field of solid mechanics.
 module Data.Drasil.Units.SolidMechanics where
 
 import Data.Drasil.SI_Units (metre, newton, pascal) 

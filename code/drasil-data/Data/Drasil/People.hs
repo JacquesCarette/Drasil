@@ -1,3 +1,4 @@
+-- | Define people for use in Drasil. Used often in authors and citations.
 module Data.Drasil.People where
 
 import Language.Drasil (Person, person, person', personWM, personWM', mononym)

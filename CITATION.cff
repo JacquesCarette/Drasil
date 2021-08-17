@@ -3,7 +3,7 @@ title: "Drasil"
 abstract: "Generate All The Things! Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain."
 type: software
 message: "If you use this software, please cite it using these metadata."
-authors:
+contact:
   - family-names: Carette
     given-names: Jacques
     orcid: "https://orcid.org/0000-0001-8993-9804"
@@ -39,3 +39,16 @@ repository: "https://github.com/JacquesCarette/Drasil"
 repository-code: "https://github.com/JacquesCarette/Drasil/tree/v0.1-alpha"
 version: "v0.1-alpha"
 date-released: "2021-02-09"
+authors:
+  - family-names: Carette
+    given-names: Jacques
+    orcid: "https://orcid.org/0000-0001-8993-9804"
+    website: "https://www.cas.mcmaster.ca/~carette/"
+    affiliation: "McMaster University, Computing and Software Department"
+    email: "carette@mcmaster.ca"
+  - family-names: Smith
+    given-names: Spencer
+    orcid: "https://orcid.org/0000-0002-0760-0987"
+    website: "https://www.cas.mcmaster.ca/~smiths/"
+    affiliation: "McMaster University, Computing and Software Department"
+    email: "smiths@mcmaster.ca"

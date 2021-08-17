@@ -1,4 +1,4 @@
--- | Standard code to make a table of symbols.
+-- | Standard code to make a table of abbreviations and acronyms.
 module Drasil.Sections.TableOfAbbAndAcronyms
   (tableAbbAccGen, tableAbbAccRef) where
 

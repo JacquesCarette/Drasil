@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+-- | Document declaration types and functions for generating Software Requirement Specifications.
 module Drasil.DocDecl where
 
 import Drasil.DocumentLanguage.Core (DocDesc)
@@ -19,6 +20,8 @@ import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
 import Control.Lens((^.), Getting)
+
+-- * Types
 
 -- | A Software Requirements Specification Declaration is made up of all necessary sections ('DocSection's).
 type SRSDecl = [DocSection]
@@ -94,6 +97,8 @@ data ReqsSub where
   FReqsSub'   :: [LabelledContent] -> ReqsSub
   -- | Non-Functional requirements.
   NonFReqsSub :: ReqsSub
+
+-- * Functions
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc

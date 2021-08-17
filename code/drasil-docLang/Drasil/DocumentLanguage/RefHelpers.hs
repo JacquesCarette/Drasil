@@ -24,9 +24,13 @@ modelsFromDB db = dropNums $ sortBy (compare `on` snd) elemPairs
 -- the SmithEtAl Template recipe.
 -- | A database that contains 'TheoryModel's, 'GenDefn's, 'DataDefinition's, and 'InstanceModel's.
 data ModelDB = MDB
-             { tmRefDB :: RefMap TheoryModel
+             { -- | Theory Model reference map.
+               tmRefDB :: RefMap TheoryModel
+               -- | General Definition reference map.
              , gdRefDB :: RefMap GenDefn
+               -- | Data Definition reference map.
              , ddRefDB :: RefMap DataDefinition
+               -- | Instance Model reference map.
              , imRefDB :: RefMap InstanceModel
              }
 

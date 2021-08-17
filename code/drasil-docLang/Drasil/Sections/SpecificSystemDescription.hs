@@ -139,7 +139,7 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase section_,
   S "that will be used to build the", plural inModel]
 
                        
--- Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if ending 'Sentence' is not needed rather than an empty list.
+-- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.
 dataDefnF :: Sentence -> [Contents] -> Section
 dataDefnF endingSent otherContents = SRS.dataDefn
   (dataDefinitionIntro endingSent : otherContents) []

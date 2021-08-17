@@ -2,83 +2,70 @@
 module Drasil.DocLang (
   -- * Document Language
   -- ** SRS
-  -- *** Types
+  -- | For generating Software Requirements Specifications.
 
-  -- DocDecl
+  -- *** Types
+  -- Drasil.DocDecl
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
-  -- DocumentLanguage.Core
+  -- Drasil.DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- *** Functions
-
-  -- DocumentLanguage
+  -- Drasil.DocumentLanguage
   mkDoc, fillTraceSI, fillcdbSRS, findAllRefs,
   -- ** Notebook
-  -- | For generating lesson plans.
+  -- | For generating Jupyter notebook lesson plans.
 
   -- *** Types
-
-  -- NBDecl
+  -- Drasil.DocumentLanguage.Notebook.NBDecl
   NBDecl, NbSection(BibSec, IntrodSec, BodySec),
-  -- DocumentLanguage.Notebook.Core
+  -- Drasil.DocumentLanguage.Notebook.Core
   IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..), ApndxSec(..),
   -- *** Functions
-
-  -- DocumentLanguage.Notebook.DocumentLanguage
+  -- Drasil.DocumentLanguage.Notebook.DocumentLanguage
   mkNb,
   -- * Subsection Functions
   -- ** Definitions and Models
-
-  -- DocumentLanguage.Definitions
+  -- Drasil.DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
-  -- DocumentLanguage.RefHelpers 
+  -- Drasil.DocumentLanguage.RefHelpers 
   ModelDB, ddRefDB, mdb,
   -- ** Traceability
-
-  -- DocumentLanguage.TraceabilityGraph
+  -- Drasil.DocumentLanguage.TraceabilityGraph
   mkGraphInfo, traceyGraphGetRefs,
-  -- Sections.TraceabilityMandGs
+  -- Drasil.Sections.TraceabilityMandGs
   traceMatStandard, traceMatOtherReq,
-  -- Tracetable
+  -- Drasil.Tracetable
   generateTraceMap,
   -- ** Auxiliary Constants
-
-  -- Sections.AuxiliaryConstants
+  -- Drasil.Sections.AuxiliaryConstants
   tableOfConstants,
   -- ** Introduction
-
-  -- Sections.Introduction
+  -- Drasil.Sections.Introduction
   purpDoc,
   -- ** Reference Material
-
-  -- Sections.ReferenceMaterial
+  -- Drasil.Sections.ReferenceMaterial
   intro,
-  -- Sections.TableOfAbbAndAcronyms
-  tableAbbAccRef,
-  -- Sections.TableOfSymbols
-  symbTableRef, tsymb, tsymb'',
-  -- Sections.TableOfUnits
+  -- Drasil.Sections.TableOfSymbols
+  tsymb, tsymb'',
+  -- Drasil.Sections.TableOfUnits
   unitTableRef, tunit, tunit',
   -- ** Requirements
-
-  -- Sections.Requirements
+  -- Drasil.Sections.Requirements
   inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef,
   -- ** Specific System Description
-
-  -- Sections.SpecificSystemDescription
+  -- Drasil.Sections.SpecificSystemDescription
   auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl,
   -- * Document Extraction Function
-
-  -- ExtractDocDesc
+  -- Drasil.ExtractDocDesc
   getDocDesc, egetDocDesc,
   -- * References
-
-  -- References
+  -- Drasil.SRS.References
   secRefs
 ) where 
 
@@ -109,8 +96,8 @@ import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef)
 import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 --import Drasil.Sections.Stakeholders
-import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccRef)
-import Drasil.Sections.TableOfSymbols (symbTableRef, tsymb, tsymb'')
+--import Drasil.Sections.TableOfAbbAndAcronyms
+import Drasil.Sections.TableOfSymbols (tsymb, tsymb'')
 import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit')
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)

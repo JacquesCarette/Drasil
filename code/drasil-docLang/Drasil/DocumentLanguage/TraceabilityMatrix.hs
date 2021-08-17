@@ -86,7 +86,7 @@ ensureItems _ l = l
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
 layoutUIDs a c e = filter (`elem` (Map.keys $ c ^. traceTable)) $ concatMap (\x -> x e c) a
 
--- | Helper that filters a traceability matrix given a function.
+-- | Helper that filters a traceability matrix given a predicate and a 'ChunkDB' lens field.
 traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
 traceViewFilt f table _ = map (^. uid) . filter f . asOrderedList . (^. table)
 

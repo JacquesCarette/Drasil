@@ -9,14 +9,6 @@
 @package sglpendulum
 @version 0.1.24.0
 
-module Drasil.SglPendulum.Assumptions
-pend2DMotion :: ConceptInstance
-cartCoord :: ConceptInstance
-cartCoordRight :: ConceptInstance
-yAxisDir :: ConceptInstance
-startOrigin :: ConceptInstance
-assumptions :: [ConceptInstance]
-
 module Drasil.SglPendulum.Figures
 figMotion :: LabelledContent
 sysCtxFig1 :: LabelledContent
@@ -25,14 +17,8 @@ module Drasil.SglPendulum.Goals
 goals :: [ConceptInstance]
 goalsInputs :: [Sentence]
 
-module Drasil.SglPendulum.References
-citations :: BibRef
-koothoor2013 :: Citation
-smithLai2005 :: Citation
-
 module Drasil.SglPendulum.Unitals
 symbols :: [QuantityDict]
-acronyms :: [CI]
 inputs :: [QuantityDict]
 outputs :: [QuantityDict]
 units :: [UnitalChunk]
@@ -41,7 +27,6 @@ lenRod :: UnitalChunk
 pendDisplacementAngle :: UnitalChunk
 initialPendAngle :: UnitalChunk
 unitless :: [DefinedQuantityDict]
-lRod :: Symbol
 lenRodCons :: ConstrConcept
 pendDisplacementAngleOutCons :: ConstrConcept
 angAccelOutCons :: ConstrConcept
@@ -119,12 +104,8 @@ funcReqs :: [ConceptInstance]
 verifyInptVals :: ConceptInstance
 calcAngPos :: ConceptInstance
 outputValues :: ConceptInstance
-verifyInptValsDesc :: Sentence
 calcAngPosDesc :: Sentence
 outputValuesDesc :: Sentence
-nonFuncReqs :: [ConceptInstance]
-correct :: ConceptInstance
-portable :: ConceptInstance
 
 module Drasil.SglPendulum.Body
 srs :: Document
@@ -135,11 +116,7 @@ progName :: CI
 si :: SystemInformation
 symbMap :: ChunkDB
 usedDB :: ChunkDB
-stdFields :: Fields
 refDB :: ReferenceDB
 concIns :: [ConceptInstance]
-scope :: Sentence
-prob :: Sentence
-terms :: [ConceptChunk]
-tMods :: [TheoryModel]
 physSystParts :: [Sentence]
+tMods :: [TheoryModel]

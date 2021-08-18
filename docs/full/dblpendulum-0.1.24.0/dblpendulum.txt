@@ -36,10 +36,12 @@ twoDMotion :: ConceptInstance
 cartSys :: ConceptInstance
 cartSysR :: ConceptInstance
 yAxisDir :: ConceptInstance
-startOrigin :: ConceptInstance
+startOriginSingle :: ConceptInstance
+startOriginDouble :: ConceptInstance
 firstPend :: ConceptInstance
 secondPend :: ConceptInstance
-assumptions :: [ConceptInstance]
+assumpSingle :: [ConceptInstance]
+assumpDouble :: [ConceptInstance]
 
 module Drasil.DblPendulum.Figures
 figMotion :: LabelledContent

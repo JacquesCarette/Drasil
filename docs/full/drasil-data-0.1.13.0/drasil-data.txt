@@ -82,6 +82,7 @@ samCrawford :: Person
 rcHibbeler :: Person
 olu :: Person
 rodPierce :: Person
+dong :: Person
 wikiAuthors :: Person
 
 

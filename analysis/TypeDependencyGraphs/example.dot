@@ -215,8 +215,6 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
-	subgraph asumptionss {
-	}
 	subgraph body {
 	}
 	subgraph datadefs {
@@ -230,8 +228,6 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
-	}
-	subgraph references {
 	}
 	subgraph requirements {
 	}

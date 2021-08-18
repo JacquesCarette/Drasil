@@ -11,7 +11,7 @@
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.NounPhrase</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NP</span></span><span>
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
 </span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">olu</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dong</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">metre</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">second</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">newton</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">kilogram</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">degree</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">radian</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">hertz</span></span><span class="hs-special">)</span><span>
 </span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Computation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">inDatum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">compcon</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">inValue</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">algorithm</span></span><span class="hs-special">)</span><span>
 </span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Doc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physics</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">variable</span></span><span class="hs-special">)</span><span>
@@ -30,7 +30,7 @@
 </span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.TheoryConcepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Figures.html"><span class="hs-identifier">Drasil.DblPendulum.Figures</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPendulum.Figures.html#figMotion"><span class="hs-identifier">figMotion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Figures.html#sysCtxFig1"><span class="hs-identifier">sysCtxFig1</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Assumptions.html"><span class="hs-identifier">Drasil.DblPendulum.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPendulum.Assumptions.html#assumptions"><span class="hs-identifier">assumptions</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Assumptions.html"><span class="hs-identifier">Drasil.DblPendulum.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPendulum.Assumptions.html#assumpDouble"><span class="hs-identifier">assumpDouble</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-34"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html"><span class="hs-identifier">Drasil.DblPendulum.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#rod"><span class="hs-identifier">rod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#concepts"><span class="hs-identifier">concepts</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#pendMotion"><span class="hs-identifier">pendMotion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#progName"><span class="hs-identifier">progName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#firstRod"><span class="hs-identifier">firstRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#secondRod"><span class="hs-identifier">secondRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#firstObject"><span class="hs-identifier">firstObject</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Concepts.html#secondObject"><span class="hs-identifier">secondObject</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-35"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Goals.html"><span class="hs-identifier">Drasil.DblPendulum.Goals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPendulum.Goals.html#goals"><span class="hs-identifier">goals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.Goals.html#goalsInputs"><span class="hs-identifier">goalsInputs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-36"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html"><span class="hs-identifier">Drasil.DblPendulum.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#dataDefs"><span class="hs-identifier">dataDefs</span></a></span><span class="hs-special">)</span><span>
@@ -301,7 +301,7 @@ a
 </span><span class="hs-identifier hs-var">Doc.srs</span></span><span class="hs-special">,</span><span>
 </span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">_authors :: [Person]
 </span><span class="hs-identifier hs-var">_authors</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
-</span><span class="hs-identifier hs-var">olu</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">dong</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">_purpose :: [Sentence]
 </span><span class="hs-identifier hs-var">_purpose</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Verbosity -&gt; [Sentence]
 </span><span class="hs-identifier hs-var">purpDoc</span></span><span> </span><span class="annot"><span class="annottext">CI
@@ -662,7 +662,7 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span id="line-142"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#concIns"><span class="hs-identifier hs-type">concIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
 </span><span id="line-143"></span><span id="concIns"><span class="annot"><span class="annottext">concIns :: [ConceptInstance]
 </span><a href="Drasil.DblPendulum.Body.html#concIns"><span class="hs-identifier hs-var hs-var">concIns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="Drasil.DblPendulum.Assumptions.html#assumptions"><span class="hs-identifier hs-var">assumptions</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance] -&gt; [ConceptInstance] -&gt; [ConceptInstance]
+</span><a href="Drasil.DblPendulum.Assumptions.html#assumpDouble"><span class="hs-identifier hs-var">assumpDouble</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance] -&gt; [ConceptInstance] -&gt; [ConceptInstance]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="Drasil.DblPendulum.Goals.html#goals"><span class="hs-identifier hs-var">goals</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance] -&gt; [ConceptInstance] -&gt; [ConceptInstance]
@@ -1130,35 +1130,34 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-262"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#prob"><span class="hs-identifier hs-type">prob</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-263"></span><span id="prob"><span class="annot"><span class="annottext">prob :: Sentence
 </span><a href="Drasil.DblPendulum.Body.html#prob"><span class="hs-identifier hs-var hs-var">prob</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;efficiently and correctly to predict the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`ofA`</span></span><span>  </span><span>
-</span><span id="line-264"></span><span>                   </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-operator hs-var">`ofA`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-265"></span><span>
-</span><span id="line-266"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-267"></span><span class="hs-comment">-- 4.1.1 Terminology and Definitions --</span><span>
-</span><span id="line-268"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-269"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#terms"><span class="hs-identifier hs-type">terms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-270"></span><span id="terms"><span class="annot"><span class="annottext">terms :: [ConceptChunk]
+</span><span id="line-264"></span><span>
+</span><span id="line-265"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-266"></span><span class="hs-comment">-- 4.1.1 Terminology and Definitions --</span><span>
+</span><span id="line-267"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-268"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#terms"><span class="hs-identifier hs-type">terms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-269"></span><span id="terms"><span class="annot"><span class="annottext">terms :: [ConceptChunk]
 </span><a href="Drasil.DblPendulum.Body.html#terms"><span class="hs-identifier hs-var hs-var">terms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">gravity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">cartesian</span></span><span class="hs-special">]</span><span>
-</span><span id="line-271"></span><span>
-</span><span id="line-272"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-273"></span><span class="hs-comment">-- 4.1.2 Physical System Description --</span><span>
-</span><span id="line-274"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-275"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#physSystParts"><span class="hs-identifier hs-type">physSystParts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-276"></span><span id="physSystParts"><span class="annot"><span class="annottext">physSystParts :: [Sentence]
+</span><span id="line-270"></span><span>
+</span><span id="line-271"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-272"></span><span class="hs-comment">-- 4.1.2 Physical System Description --</span><span>
+</span><span id="line-273"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-274"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#physSystParts"><span class="hs-identifier hs-type">physSystParts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-275"></span><span id="physSystParts"><span class="annot"><span class="annottext">physSystParts :: [Sentence]
 </span><a href="Drasil.DblPendulum.Body.html#physSystParts"><span class="hs-identifier hs-var hs-var">physSystParts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; [Sentence] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">(!.)</span></span><span>
-</span><span id="line-277"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-276"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
@@ -1171,7 +1170,7 @@ forall c. NamedIdea c =&gt; c -&gt; NP
 forall a. Quantity a =&gt; a -&gt; Sentence
 </span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#lenRod_1"><span class="hs-identifier hs-var">lenRod_1</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-278"></span><span>   </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-277"></span><span>   </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
@@ -1184,98 +1183,98 @@ forall c. NamedIdea c =&gt; c -&gt; NP
 forall a. Quantity a =&gt; a -&gt; Sentence
 </span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#lenRod_2"><span class="hs-identifier hs-var">lenRod_2</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-279"></span><span>   </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-278"></span><span>   </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Drasil.DblPendulum.Concepts.html#firstObject"><span class="hs-identifier hs-var">firstObject</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-280"></span><span>   </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-279"></span><span>   </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Drasil.DblPendulum.Concepts.html#secondObject"><span class="hs-identifier hs-var">secondObject</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-281"></span><span>
-</span><span id="line-282"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-283"></span><span class="hs-comment">-- 4.1.3 : Goal Statements --</span><span>
-</span><span id="line-284"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-285"></span><span>
-</span><span id="line-286"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-287"></span><span class="hs-comment">-- 4.2 : Solution Characteristics Specification --</span><span>
-</span><span id="line-288"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-289"></span><span>
-</span><span id="line-290"></span><span class="hs-comment">-------------------------</span><span>
-</span><span id="line-291"></span><span class="hs-comment">-- 4.2.1 : Assumptions --</span><span>
-</span><span id="line-292"></span><span class="hs-comment">-------------------------</span><span>
-</span><span id="line-293"></span><span class="hs-comment">-- Assumptions defined in Assumptions</span><span>
-</span><span id="line-294"></span><span>
-</span><span id="line-295"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-296"></span><span class="hs-comment">-- 4.2.2 : Theoretical Models --</span><span>
-</span><span id="line-297"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-298"></span><span class="hs-comment">-- Theoretical Models defined in TMs</span><span>
-</span><span id="line-299"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-300"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
+</span><span id="line-280"></span><span>
+</span><span id="line-281"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-282"></span><span class="hs-comment">-- 4.1.3 : Goal Statements --</span><span>
+</span><span id="line-283"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-284"></span><span>
+</span><span id="line-285"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-286"></span><span class="hs-comment">-- 4.2 : Solution Characteristics Specification --</span><span>
+</span><span id="line-287"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-288"></span><span>
+</span><span id="line-289"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-290"></span><span class="hs-comment">-- 4.2.1 : Assumptions --</span><span>
+</span><span id="line-291"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-292"></span><span class="hs-comment">-- Assumptions defined in Assumptions</span><span>
+</span><span id="line-293"></span><span>
+</span><span id="line-294"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-295"></span><span class="hs-comment">-- 4.2.2 : Theoretical Models --</span><span>
+</span><span id="line-296"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-297"></span><span class="hs-comment">-- Theoretical Models defined in TMs</span><span>
+</span><span id="line-298"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-299"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
 </span><a href="Drasil.DblPendulum.Body.html#tMods"><span class="hs-identifier hs-var hs-var">tMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">accelerationTM</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">velocityTM</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">newtonSL</span></span><span class="hs-special">]</span><span>
-</span><span id="line-301"></span><span>
-</span><span id="line-302"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-303"></span><span class="hs-comment">-- 4.2.3 : General Definitions --</span><span>
-</span><span id="line-304"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-305"></span><span class="hs-comment">-- General Definitions defined in GDs</span><span>
-</span><span id="line-306"></span><span>
-</span><span id="line-307"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-308"></span><span class="hs-comment">-- 4.2.4 : Data Definitions --</span><span>
-</span><span id="line-309"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-310"></span><span class="hs-comment">-- Data Definitions defined in DDs</span><span>
-</span><span id="line-311"></span><span>
-</span><span id="line-312"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-313"></span><span class="hs-comment">-- 4.2.5 : Instance Models --</span><span>
-</span><span id="line-314"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-315"></span><span class="hs-comment">-- Instance Models defined in IMs</span><span>
-</span><span id="line-316"></span><span>
-</span><span id="line-317"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-318"></span><span class="hs-comment">-- 4.2.6 : Data Constraints --</span><span>
-</span><span id="line-319"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-320"></span><span class="hs-comment">-- Data Constraints defined in Constraints</span><span>
-</span><span id="line-321"></span><span>
-</span><span id="line-322"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-323"></span><span class="hs-comment">-- 4.2.7 : Properties of a Correct Solution --</span><span>
-</span><span id="line-324"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-325"></span><span class="hs-comment">-- Properties of a Correct Solution defined in CorrSolnPpties</span><span>
-</span><span id="line-326"></span><span>
-</span><span id="line-327"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-328"></span><span class="hs-comment">-- SECTION 5 : REQUIREMENTS --</span><span>
-</span><span id="line-329"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-330"></span><span class="hs-comment">-- in Requirements.hs</span><span>
-</span><span id="line-331"></span><span>
-</span><span id="line-332"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-333"></span><span class="hs-comment">-- 5.1 : Functional Requirements --</span><span>
-</span><span id="line-334"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-335"></span><span>
-</span><span id="line-336"></span><span class="hs-comment">--------------------------------------</span><span>
-</span><span id="line-337"></span><span class="hs-comment">-- 5.2 : Nonfunctional Requirements --</span><span>
-</span><span id="line-338"></span><span class="hs-comment">--------------------------------------</span><span>
-</span><span id="line-339"></span><span>
-</span><span id="line-340"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-341"></span><span class="hs-comment">-- SECTION 6 : LIKELY CHANGES --</span><span>
-</span><span id="line-342"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-343"></span><span>
-</span><span id="line-344"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-345"></span><span class="hs-comment">-- SECTION 6b : UNLIKELY CHANGES --</span><span>
-</span><span id="line-346"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-347"></span><span>
-</span><span id="line-348"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-349"></span><span class="hs-comment">-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --</span><span>
-</span><span id="line-350"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-351"></span><span>
-</span><span id="line-352"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-353"></span><span class="hs-comment">-- Section 8 :  Specification Parameter Values --</span><span>
-</span><span id="line-354"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-355"></span><span>
-</span><span id="line-356"></span><span class="hs-comment">----------------------------</span><span>
-</span><span id="line-357"></span><span class="hs-comment">-- Section 9 : References --</span><span>
-</span><span id="line-358"></span><span class="hs-comment">----------------------------</span><span>
-</span><span id="line-359"></span></pre></body></html>
+</span><span id="line-300"></span><span>
+</span><span id="line-301"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-302"></span><span class="hs-comment">-- 4.2.3 : General Definitions --</span><span>
+</span><span id="line-303"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-304"></span><span class="hs-comment">-- General Definitions defined in GDs</span><span>
+</span><span id="line-305"></span><span>
+</span><span id="line-306"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-307"></span><span class="hs-comment">-- 4.2.4 : Data Definitions --</span><span>
+</span><span id="line-308"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-309"></span><span class="hs-comment">-- Data Definitions defined in DDs</span><span>
+</span><span id="line-310"></span><span>
+</span><span id="line-311"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-312"></span><span class="hs-comment">-- 4.2.5 : Instance Models --</span><span>
+</span><span id="line-313"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-314"></span><span class="hs-comment">-- Instance Models defined in IMs</span><span>
+</span><span id="line-315"></span><span>
+</span><span id="line-316"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-317"></span><span class="hs-comment">-- 4.2.6 : Data Constraints --</span><span>
+</span><span id="line-318"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-319"></span><span class="hs-comment">-- Data Constraints defined in Constraints</span><span>
+</span><span id="line-320"></span><span>
+</span><span id="line-321"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-322"></span><span class="hs-comment">-- 4.2.7 : Properties of a Correct Solution --</span><span>
+</span><span id="line-323"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-324"></span><span class="hs-comment">-- Properties of a Correct Solution defined in CorrSolnPpties</span><span>
+</span><span id="line-325"></span><span>
+</span><span id="line-326"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-327"></span><span class="hs-comment">-- SECTION 5 : REQUIREMENTS --</span><span>
+</span><span id="line-328"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-329"></span><span class="hs-comment">-- in Requirements.hs</span><span>
+</span><span id="line-330"></span><span>
+</span><span id="line-331"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-332"></span><span class="hs-comment">-- 5.1 : Functional Requirements --</span><span>
+</span><span id="line-333"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-334"></span><span>
+</span><span id="line-335"></span><span class="hs-comment">--------------------------------------</span><span>
+</span><span id="line-336"></span><span class="hs-comment">-- 5.2 : Nonfunctional Requirements --</span><span>
+</span><span id="line-337"></span><span class="hs-comment">--------------------------------------</span><span>
+</span><span id="line-338"></span><span>
+</span><span id="line-339"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-340"></span><span class="hs-comment">-- SECTION 6 : LIKELY CHANGES --</span><span>
+</span><span id="line-341"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-342"></span><span>
+</span><span id="line-343"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-344"></span><span class="hs-comment">-- SECTION 6b : UNLIKELY CHANGES --</span><span>
+</span><span id="line-345"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-346"></span><span>
+</span><span id="line-347"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-348"></span><span class="hs-comment">-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --</span><span>
+</span><span id="line-349"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-350"></span><span>
+</span><span id="line-351"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-352"></span><span class="hs-comment">-- Section 8 :  Specification Parameter Values --</span><span>
+</span><span id="line-353"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-354"></span><span>
+</span><span id="line-355"></span><span class="hs-comment">----------------------------</span><span>
+</span><span id="line-356"></span><span class="hs-comment">-- Section 9 : References --</span><span>
+</span><span id="line-357"></span><span class="hs-comment">----------------------------</span><span>
+</span><span id="line-358"></span></pre></body></html>

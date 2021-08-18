@@ -44,7 +44,7 @@ transMot = imNoRefs (equationalModel' transMotQD)
   (qw accj) [] (Just transMotDeriv)
   "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
-transMotQD :: QDefinition
+transMotQD :: QDefinition Expr
 transMotQD = mkQuantDef accj transMotExpr
 
 transMotDesc, transMotOutputs :: Sentence
@@ -90,7 +90,7 @@ rotMot = imNoRefs (equationalModel' rotMotQD)
   (Just rotMotDeriv) "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
-rotMotQD :: QDefinition
+rotMotQD :: QDefinition Expr
 rotMotQD = mkQuantDef angAccj rotMotExpr
 
 rotMotDesc :: Sentence
@@ -129,7 +129,7 @@ col2D = imNoDerivNoRefs (equationalModel "col2DIM" col2DNP col2DFD)
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 
-col2DFD :: QDefinition
+col2DFD :: QDefinition Expr
 col2DFD = mkFuncDefByQ velA [timeC] col2DExpr
 
 col2DNP :: NP

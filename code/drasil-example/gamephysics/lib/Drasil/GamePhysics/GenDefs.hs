@@ -65,8 +65,8 @@ accelGravityGD :: GenDefn
 accelGravityGD = gd (equationalModel' accelGravityQD) (getUnit QP.acceleration) (Just accelGravityDeriv)
    [dRef accelGravitySrc] "accelGravity" [accelGravityDesc]
 
-accelGravityQD :: QDefinition
-accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") accelGravityExpr
+accelGravityQD :: QDefinition ModelExpr
+accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") $ express accelGravityExpr
 
 accelGravityDesc :: Sentence
 accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other" `sC`
@@ -149,8 +149,8 @@ impulseGD :: GenDefn
 impulseGD = gd (equationalModel' impulseQD) (getUnit QP.impulseS) Nothing
   [dRef impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
-impulseQD :: QDefinition
-impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impulseExpr
+impulseQD :: QDefinition ModelExpr
+impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") $ express impulseExpr
 
 impulseExpr :: Expr
 impulseExpr = (neg (exactDbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRelVel $.

@@ -26,7 +26,7 @@ import Data.Char (isSpace, toLower)
 -- trailing notes ('Sentence's), and any other needed contents to create a Traceability 'Section'.
 -- Traceability graphs generate as both a link and a figure for convenience.
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
-traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents 
+traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents
   ++ map UlC (traceGIntro traceGUIDs (trailing ++ [allvsallDesc])) ++ traceGCon ex)
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
@@ -35,7 +35,7 @@ traceGIntro :: [UID] -> [Sentence] -> [UnlabelledContent]
 traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
-        S "additionally modified if a certain", phrase component +:+. S "is changed", 
+        S "additionally modified if a certain", phrase component +:+. S "is changed",
         S "The arrows in the", plural graph, S "represent" +:+. plural dependency,
         S "The", phrase component, S "at the tail of an arrow is depended on by the",
         phrase component, S "at the head of that arrow. Therefore, if a", phrase component,
@@ -184,9 +184,9 @@ traceyGraphGetRefs :: String -> [Reference]
 traceyGraphPath :: String -> String -> String
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
-traceGUIDs = ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
+traceGUIDs = map UID ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
 traceyGraphPaths ex = map (\x -> resourcePath ++ map toLower (filter (not.isSpace) ex) ++ "/" ++ x ++ ".svg") traceGFiles
-traceyGraphGetRefs ex = map makeFigRef traceGUIDs ++ zipWith (\x y -> Reference (x ++ "Link") (URI y) (shortname' $ S x)) traceGUIDs (traceyGraphPaths $ map toLower $ filter (not.isSpace) ex)
+traceyGraphGetRefs ex = map makeFigRef traceGUIDs ++ zipWith (\x y -> Reference (uidToStr x ++ "Link") (URI y) (shortname' $ S x)) traceGUIDs (traceyGraphPaths $ map toLower $ filter (not.isSpace) ex)
 -- for actual use in creating the graph figures
 traceyGraphPath ex f = resourcePath ++ map toLower (filter (not.isSpace) ex) ++ "/" ++ f ++ ".svg"
 
@@ -196,4 +196,4 @@ resourcePath = "../../../../traceygraphs/"
 
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]
-folderList' = map (Flat . (\x -> Ref (x ++ "Link") EmptyS None)) traceGUIDs
+folderList' = map (Flat . (\x -> Ref (uidToStr x ++ "Link") EmptyS None)) traceGUIDs

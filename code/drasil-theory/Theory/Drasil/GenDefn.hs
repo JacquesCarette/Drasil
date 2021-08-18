@@ -56,7 +56,7 @@ instance Referable          GenDefn where
 -- | Smart constructor for general definitions.
 gd :: IsUnit u => ModelKind -> Maybe u ->
   Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
-gd mkind _   _     []   _  = error $ "Source field of " ++ (mkind ^. uid) ++ " is empty"
+gd mkind _   _     []   _  = error $ "Source field of " ++ uidToStr (mkind ^. uid) ++ " is empty"
 gd mkind u derivs refs sn_ = 
   GD mkind (fmap unitWrapper u) derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 

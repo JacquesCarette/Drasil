@@ -60,8 +60,8 @@ instance Referable    Citation where
 instance HasRefAddress Citation where getRefAdd = Citation . uidToStr . view citeID
 
 -- | Smart constructor which implicitly uses EntryID as chunk id.
-cite :: CitationKind -> [CiteField] -> String -> Citation
-cite x y z = let s = noSpaces z in Cite x y (UID s) (shortname' (S s))
+cite :: CitationKind -> [CiteField] -> UID -> Citation
+cite x y z = let s = noSpaces z in Cite x y s (shortname' (S s))
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

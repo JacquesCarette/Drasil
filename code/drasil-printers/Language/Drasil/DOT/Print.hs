@@ -4,6 +4,7 @@ import Language.Drasil
 import Data.List (intercalate)
 import System.IO
 import System.Directory
+import Data.Coerce (coerce)
 
 -- | Type synonym for clarity.
 type Colour = String
@@ -110,7 +111,7 @@ mkOutput gi ttl getDirections getLabels = do
     handle <- openFile (ttl ++ ".dot") WriteMode
     hPutStrLn handle $ "digraph " ++ ttl ++ " {"
     let labels = filterAndGI gi getLabels
-    outputSub handle (getDirections gi) labels
+    outputSub handle (coerce getDirections gi) labels
     hPutStrLn handle "}"
     hClose handle
 
@@ -134,7 +135,7 @@ mkDirections handle ls = do
 -- | Prints graph nodes (labels) onto a given file handle.
 mkNodes :: Handle -> NodeFamily -> IO ()
 mkNodes handle NF{nodeUIDs = u, nodeLabels = ls, nfLabel = lbl, nfColour = col} = do
-    mapM_ (hPutStrLn handle . uncurry (makeNodesSub col)) $ zip ls u
+    mapM_ (hPutStrLn handle . uncurry (makeNodesSub col)) $ zip ls $ coerce u
     mkSubgraph handle lbl u 
     where
         -- Creates a node based on the kind of datatype (indented for subgraphs)
@@ -148,14 +149,14 @@ mkSubgraph handle l u
     | otherwise = do 
              hPutStrLn handle $ "\n\tsubgraph " ++ l ++ " {"
              hPutStrLn handle "\trank=\"same\""
-             hPutStrLn handle $ "\t{" ++ intercalate ", " u ++ "}"
+             hPutStrLn handle $ "\t{" ++ intercalate ", " (coerce u) ++ "}"
              hPutStrLn handle "\t}\n"
 
 -- | Gets graph labels and removes any invalid characters.
 filterAndGI :: GraphInfo -> [GraphInfo -> NodeFamily] -> [NodeFamily]
 filterAndGI gi toNodes = map filterUIDs labels
     where
-        filterUIDs NF{nodeUIDs = u, nodeLabels = ls, nfLabel = l, nfColour = c} = NF{nodeUIDs = map filterInvalidChars u, nodeLabels = ls, nfLabel = l, nfColour = c}
+        filterUIDs NF{nodeUIDs = u, nodeLabels = ls, nfLabel = l, nfColour = c} = NF{nodeUIDs = coerce $ map filterInvalidChars $ coerce u, nodeLabels = ls, nfLabel = l, nfColour = c}
         labels = map ($ gi) toNodes
 
 -- | Helper to remove invalid characters.

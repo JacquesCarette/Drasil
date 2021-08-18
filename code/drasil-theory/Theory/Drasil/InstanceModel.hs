@@ -80,14 +80,14 @@ instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 -- | Smart constructor for instance models with everything defined.
 im :: ModelKind -> Inputs -> Output -> 
   OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-im mkind _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+im mkind _  _ _  [] _  _  = error $ "Source field of " ++ uidToStr (mkind ^. uid) ++ " is empty"
 im mkind i o oc r der sn = 
   IM mkind i (o, oc) r der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivation.
 imNoDeriv :: ModelKind -> Inputs -> Output -> 
   OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
-imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ uidToStr (mkind ^. uid) ++ " is empty"
 imNoDeriv mkind i o oc r  sn =
   IM mkind i (o, oc) r Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 

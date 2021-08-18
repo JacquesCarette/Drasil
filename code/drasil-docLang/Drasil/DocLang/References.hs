@@ -18,5 +18,5 @@ import Drasil.Sections.SpecificSystemDescription (tInDataCstRef, tOutDataCstRef)
 secRefs :: [Reference]
 secRefs = sectionReferences ++ [tableAbbAccRef, reqInputsRef, symbTableRef,
   unitTableRef, tableOfConstantsRef, tInDataCstRef, tOutDataCstRef]
-  ++ map (ref.makeTabRef.getTraceConfigUID) [traceMatAssumpAssump,
+  ++ map (ref.makeTabRef.uidToStr.getTraceConfigUID) [traceMatAssumpAssump,
   traceMatAssumpOther, traceMatRefinement]

@@ -52,30 +52,30 @@ instance Definition    MultiDefn where defn     = rDesc
 instance Express       MultiDefn where
   express q = equivMEs $ sy q : NE.toList (NE.map (^. expr) (q ^. rvs))
 
--- | Smart constructor for MultiDefns, does nothing special at the moment
-mkMultiDefn :: UID -> QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn
+-- | Smart constructor for MultiDefns, does nothing special at the moment. First argument is the 'String' to become a 'UID'.
+mkMultiDefn :: String -> QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn
 mkMultiDefn u q s des
-  | length des == dupsRemovedLen = MultiDefn u q s des
+  | length des == dupsRemovedLen = MultiDefn (UID u) q s des
   | otherwise                    = error $
     "MultiDefn '" ++ u ++ "' created with non-unique list of expressions"
   where dupsRemovedLen = length $ NE.nub des
 
--- | Smart constructor for MultiDefns defining UIDs using that of the QuantityDict
+-- | Smart constructor for MultiDefns defining UIDs using that of the QuantityDict.
 mkMultiDefnForQuant :: QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn
-mkMultiDefnForQuant q = mkMultiDefn (q ^. uid) q
+mkMultiDefnForQuant q = mkMultiDefn (uidToStr $ q ^. uid) q
 
 -- | Smart constructor for DefiningExprs
 mkDefiningExpr :: UID -> [UID] -> Sentence -> Expr -> DefiningExpr
 mkDefiningExpr = DefiningExpr
 
--- | Convert MultiDefns into QDefinitions via a specific DefiningExpr 
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr.
 multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
-multiDefnGenQD md de = mkQDefSt (md ^. qd . uid) (md ^. term) (md ^. defn)
+multiDefnGenQD md de = mkQDefSt (uidToStr $ md ^. qd . uid) (md ^. term) (md ^. defn)
                                 (symbol md) (md ^. typ) (getUnit md) (de ^. expr)
 
--- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by UID)
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by UID).
 multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
 multiDefnGenQDByUID md u | length matches == 1 = multiDefnGenQD md matched
-                         | otherwise           = error $ "Invalid UID for multiDefn QD generation; " ++ u
+                         | otherwise           = error $ "Invalid UID for multiDefn QD generation; " ++ uidToStr u
   where matches = NE.filter (\x -> x ^. uid == u) (md ^. rvs)
         matched = head matches

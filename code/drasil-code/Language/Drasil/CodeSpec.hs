@@ -20,7 +20,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import Utils.Drasil (subsetOf)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), view)
 import Data.List (intercalate, nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
@@ -171,11 +171,11 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               nNew = n \\ cnew
           in  if null new
               then error ("The following outputs cannot be computed: " ++
-                       intercalate ", " (map (^. uid) n) ++ "\n"
+                       intercalate ", " (map (uidToStr . view uid) n) ++ "\n"
                      ++ "Unused definitions are: "
-                       ++ intercalate ", " (map (^. uid) defs') ++ "\n"
+                       ++ intercalate ", " (map (uidToStr . view uid) defs') ++ "\n"
                      ++ "Known values are: "
-                       ++ intercalate ", " (map (^. uid) k))
+                       ++ intercalate ", " (map (uidToStr . view uid) k))
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
 
 

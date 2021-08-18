@@ -126,7 +126,7 @@ helpToRefField t si
   | Just _ <- lookupIndex t (s ^. sectionTable)         = refS $ sectionLookup     t (s ^. sectionTable)
   | Just _ <- lookupIndex t (s ^. labelledcontentTable) = refS $ labelledconLookup t (s ^. labelledcontentTable)
   | t `elem` map  (^. uid) (citeDB si) = EmptyS
-  | otherwise = error $ t ++ "Caught."
+  | otherwise = error $ uidToStr t ++ "Caught."
   where s = _sysinfodb si
 
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.

@@ -101,7 +101,7 @@ layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation
-layCite c = P.Cite (c ^. citeID) (c ^. citeKind) (map layField (c ^. getFields))
+layCite c = P.Cite (uidToStr $ c ^. citeID) (c ^. citeKind) (map layField (c ^. getFields))
 
 -- | Helper for translating 'Citefield's into a printable representation of 'P.CiteField's
 layField :: CiteField -> P.CiteField

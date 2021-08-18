@@ -135,7 +135,7 @@ funcResolve m x = quantfunc $ symbResolve m x
 -- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
 listToArray :: CodeVarChunk -> CodeVarChunk
 listToArray c = newSpc (c ^. typ) 
-  where newSpc (Vect t) = CodeVC (CodeC (implVar' (c ^. uid ++ "_array") 
+  where newSpc (Vect t) = CodeVC (CodeC (implVar' (uidToStr (c ^. uid) ++ "_array") 
           (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 
           Var) (c ^. obv)
         newSpc _ = c

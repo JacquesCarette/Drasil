@@ -30,12 +30,12 @@ import Drasil.DblPendulum.Body (justification, charsOfReader, prob, organization
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms, userCharacteristicsIntro)
 import qualified Drasil.DblPendulum.Body as DPD (tMods)
 import Drasil.DblPendulum.Concepts (concepts, rod)
-import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.Requirements (nonFuncReqs)
 import Drasil.DblPendulum.Unitals (acronyms)
 import Drasil.DblPendulum.References (citations)
 
 import Drasil.SglPendulum.Figures (figMotion, sysCtxFig1)
+import Drasil.SglPendulum.Goals (goals, goalsInputs)
 import Drasil.SglPendulum.DataDefs (dataDefs)
 import Drasil.SglPendulum.IMods (iMods)
 import Drasil.SglPendulum.GenDefs (genDefns)

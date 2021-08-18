@@ -1,5 +1,5 @@
--- Standard code to make a table of units
--- First true example of a (small!) recipe.
+-- | Standard code to make a table of units.
+-- First true example of a (small) recipe.
 module Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef, tunit, tunit', tuIntro, defaultTUI) where
 
 import Control.Lens ((^.))

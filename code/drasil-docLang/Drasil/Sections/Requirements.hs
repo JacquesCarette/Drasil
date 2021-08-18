@@ -1,5 +1,15 @@
-module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, inReq, inTable,
-  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, nfReqF, reqF, reqInputsRef) where
+-- | Defines functions used in the Requirements section.
+module Drasil.Sections.Requirements (
+  -- * Requirements
+  reqF, reqInputsRef,
+  -- * Functional Requirements
+  fReqF,
+  -- ** Input Requirements
+  fullReqs, fullTables, inReq, inTable,
+  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
+  -- * Non-functional Requirements
+  nfReqF
+  ) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -23,6 +33,7 @@ reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
 -- | Prepends a 'ConceptInstance' referencing an input-value table to a list of other 'ConceptInstance's.
+-- For listing input requirements.
 fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
 fullReqs i d r = nub $ inReq (inReqDesc (inTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
 

@@ -1,3 +1,4 @@
+-- | Defines concepts used in the field of solid mechanics.
 module Data.Drasil.Concepts.SolidMechanics where
 
 import Language.Drasil
@@ -5,6 +6,7 @@ import Data.Drasil.Concepts.Physics (force, strain, stress)
 
 --FIXME: add "shear stress" and "shear strain" when we have adjectives
 --       to make a combined "mobilized shear force" for example
+-- | Collects all solid mechanics-related concepts.
 solidcon :: [ConceptChunk]
 solidcon = [elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
   shearRes, stffness]

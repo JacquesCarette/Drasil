@@ -1,6 +1,6 @@
 -- | Source code reader for type dependency graphs of all Drasil types.
 module SourceCodeReaderT (extractEntryData, EntryData(..), DataDeclRecord(..),
- DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..)) where
+ DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..), DataTypeDeclaration(..)) where
 
 import Data.List
 import System.IO
@@ -30,6 +30,24 @@ data NewtypeDecl = NTD { ntdName :: NewtypeName
                           , ntdContent :: [NewtypeName]} deriving (Show)
 data TypeDecl = TD { tdName :: TypeName
                     , tdContent :: [TypeName]} deriving (Show)
+
+-- The above types all have a name and other types they build upon (contents).
+class DataTypeDeclaration a where
+  getTypeName :: a -> String
+  getContents :: a -> [String]
+
+instance DataTypeDeclaration DataDeclRecord where
+  getTypeName = ddrName
+  getContents = ddrContent
+instance DataTypeDeclaration DataDeclConstruct where
+  getTypeName = ddcName
+  getContents = ddcContent
+instance DataTypeDeclaration NewtypeDecl where
+  getTypeName = ntdName
+  getContents = ntdContent
+instance DataTypeDeclaration TypeDecl where
+  getTypeName = tdName
+  getContents = tdContent
 
 
 -- new EntryData data type with strict fields to enforce strict file reading

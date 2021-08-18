@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 29, 2019
+Last updated: August 16, 2021
 --------------------------------------------------
 
 AuxiliaryConstants.hs
@@ -21,9 +21,6 @@ ReferenceMaterial.hs
 Requirements.hs
   - Contains the functions to generate the Requirements section
 
-ScopeOfTheProject.hs
-  - Contains the functions to generate the Scope of the Project section
-
 SpecificSystemDescription.hs
   - Contains the functions to generate the Specific System Description section
 
@@ -32,6 +29,9 @@ Stakeholders.hs
 
 TableOfAbbAndAcronyms.hs
   - Contains the functions to generate the Table of Abbreviations and Acronyms
+
+TableOfContents.hs
+  - Contains the functions to generate the Table of Contents
 
 TableOfSymbols.hs
   - Contains the functions to generate the Table of Symbols

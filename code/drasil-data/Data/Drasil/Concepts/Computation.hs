@@ -1,3 +1,4 @@
+-- | Defines concepts used in computing.
 module Data.Drasil.Concepts.Computation where
 
 import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
@@ -18,15 +19,16 @@ relTolerance = dcc "relTolerance"   (cn' "Relative tolerance") " maximum amount 
 modCalcDesc :: Sentence -> ConceptChunk
 modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
+-- | Collects all computing-related named chunks (not concept-level yet).
 compcon :: [NamedChunk]
 compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 
   inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy, computerApp]
 
 application, computer, structure :: NamedChunk
 os :: CI
--------------------------------------------------------------------------------
---  NC      |     |      id       |       term               |  abbreviation
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+--  NC      |     |      id       |       term             |  abbreviation | domain
+-------------------------------------------------------------------------------------s
 application = nc   "application"      (cn' "application") 
 computer    = nc   "computer"         (cn' "computer") 
 structure   = nc   "structure"        (cn' "structure")         

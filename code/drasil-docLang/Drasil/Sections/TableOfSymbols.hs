@@ -1,4 +1,4 @@
--- Standard code to make a table of symbols.
+-- | Standard code to make a table of symbols.
 module Drasil.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsIntro) where
 
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace

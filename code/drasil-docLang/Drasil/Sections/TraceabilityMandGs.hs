@@ -1,8 +1,13 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.Sections.TraceabilityMandGs (generateTraceTable,tvAssumps,
-  tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
-  tvChanges, traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement, traceMatOtherReq,
-  traceMatStandard) where
+-- | Defines functions used to create the Traceability Matrices and Graphs section.
+module Drasil.Sections.TraceabilityMandGs (
+  -- * Main Functions
+  generateTraceTable, traceMatAssumpAssump, traceMatAssumpOther,
+  traceMatRefinement, traceMatOtherReq, traceMatStandard,
+  -- * Helpers
+  tvAssumps, tvDataDefns, tvGenDefns, tvTheoryModels,
+  tvInsModels, tvGoals, tvReqs, tvChanges
+  ) where
 
 import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
 import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,

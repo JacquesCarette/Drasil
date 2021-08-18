@@ -1,8 +1,11 @@
 {-# LANGUAGE GADTs #-}
+-- | Lesson plan notebook section types.
 module Drasil.DocumentLanguage.Notebook.Core where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 import Language.Drasil
+
+-- * Section Types
 
 type NBDesc = [DocSection]
 
@@ -14,7 +17,7 @@ data DocSection = IntrodSec IntrodSec
 
 -- TODO: Work on detail structure of notebooks
 
-{--}
+-- ** Introduction Section
 
 -- | Introduction section. Contents are top level followed by a list of subsections.
 data IntrodSec = IntrodProg [Contents] [IntrodSub]
@@ -23,7 +26,7 @@ data IntrodSec = IntrodProg [Contents] [IntrodSub]
 data IntrodSub where
   InPurpose :: [Sentence] -> IntrodSub -- TODO: maybe change to [Contents]  
 
-{--}
+-- ** Body Section
 
 newtype BodySec = BodyProg [BodySub]
 
@@ -33,15 +36,15 @@ data BodySub where
   MethsAndAnls :: [Contents] -> [Section] -> BodySub
   Example      :: [Contents] -> [Section] -> BodySub
   
-{--}
+-- ** Summary Section
 
 newtype SmmrySec = SmmryProg [Contents]
 
-{--}
+-- ** Appendix Section
 
 newtype ApndxSec = ApndxProg [Contents]
 
-{--}
+-- * Multiplate Definition and Type
 
 data DLPlate f = DLPlate {
   docSec :: DocSection -> f DocSection,

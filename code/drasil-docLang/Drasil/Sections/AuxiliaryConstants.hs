@@ -1,3 +1,4 @@
+-- | Defines helper functions for making the Table of Auxiliary Constants section.
 module Drasil.Sections.AuxiliaryConstants 
   (valsOfAuxConstantsF, tableOfConstants, tableOfConstantsRef) where
 
@@ -31,5 +32,6 @@ tableOfConstants f = llcc tableOfConstantsRef $ Table
   (titleize' tAuxConsts)
   True
 
+-- | Table of constants reference label.
 tableOfConstantsRef :: Reference
 tableOfConstantsRef = makeTabRef (tAuxConsts ^. uid)

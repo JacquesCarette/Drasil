@@ -14,7 +14,6 @@ import Drasil.DblPendulum.Concepts (rod)
 goals :: [ConceptInstance]
 goals = [motionMass]
 
-
 goalsInputs :: [Sentence]
 goalsInputs = [phraseNP (theGen plural CPP.mass) `sC` 
                pluralNP (CPP.len `ofThe` rod) `sC` 
@@ -23,5 +22,4 @@ goalsInputs = [phraseNP (theGen plural CPP.mass) `sC`
 
 motionMass :: ConceptInstance
 motionMass = cic "motionMass" 
-  (S "Calculate" +:+ pluralNP (motion `the_ofThe` CPP.mass) !.)
-  "motionMass" goalStmtDom
+  (S "Calculate" +:+ pluralNP (motion `the_ofThe` CPP.mass) !.) "motionMass" goalStmtDom

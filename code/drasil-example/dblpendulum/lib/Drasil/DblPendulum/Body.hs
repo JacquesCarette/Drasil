@@ -11,7 +11,7 @@ import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
-import Data.Drasil.People (olu)
+import Data.Drasil.People (dong)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
@@ -30,7 +30,7 @@ import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newto
 import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPendulum.Figures (figMotion, sysCtxFig1)
-import Drasil.DblPendulum.Assumptions (assumptions)
+import Drasil.DblPendulum.Assumptions (assumpDouble)
 import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
@@ -102,7 +102,7 @@ si :: SystemInformation
 si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
-  _authors     = [olu],
+  _authors     = [dong],
   _purpose     = purpDoc progName Verbose,
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -140,7 +140,7 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
+concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------
@@ -260,8 +260,7 @@ userCharacteristicsIntro = foldlSP
 -- 4.1 : System Constraints  --
 -------------------------------
 prob :: Sentence
-prob = foldlSent_ [ S "efficiently and correctly to predict the", phraseNP (motion `ofA`  
-                   pendulum)]
+prob = foldlSent_ [S "efficiently and correctly to predict the", phraseNP (motion `ofA` pendulum)]
 
 ---------------------------------
 -- 4.1.1 Terminology and Definitions --

@@ -1,4 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
+-- | Defines functions to create traceability graphs in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
@@ -18,6 +19,8 @@ import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, r
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 import Data.Char (isSpace, toLower)
+
+-- * Main Functions
 
 -- | Wrapper for 'traceMIntro' and 'traceGIntro'. Turns references ('LabelledContent's),
 -- trailing notes ('Sentence's), and any other needed contents to create a Traceability 'Section'.
@@ -57,6 +60,8 @@ mkGraphInfo si = GI {
     , edgesAllvsR   = mkGraphEdges [tvDataDefns, tvTheoryModels,tvGenDefns, tvInsModels, tvReqs] [tvGoals, tvReqs] si
     , edgesAllvsAll = mkGraphEdges [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] si
 }
+
+-- * Helper Functions
 
 -- | Gets the node family of a graph based on the given section
 -- and system information. Also applies a given colour to the node family.
@@ -148,7 +153,11 @@ traceGRowHeader f = traceGHeader (traceMReferrers f)
 graphShows :: UID -> Sentence -> Sentence
 graphShows r end = refS (makeFigRef r) +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
--------- Creating the Tracey Graph Contents to display ------------
+-- * Functions to Create a Traceability Graphs
+--
+-- $createTraceyGraphs
+--
+-- Functions related to setting up the structure and contents of the traceability graphs section.
 
 -- | Description of the @AllvsAll@ traceability graph.
 allvsallDesc :: Sentence

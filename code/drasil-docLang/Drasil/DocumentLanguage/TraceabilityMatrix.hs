@@ -1,4 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
+-- | Defines functions to create traceability matrices in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
@@ -16,8 +17,12 @@ import Control.Lens ((^.), Getting)
 import Data.List (nub)
 import qualified Data.Map as Map
 
+-- * Types
+
 -- | Helper type that takes two sets of 'UID's and a 'ChunkDB'.
 type TraceViewCat = [UID] -> ChunkDB -> [UID]
+
+-- * Main Functions
 
 -- | Generalized traceability matrix introduction: appends references to the traceability matrices in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the four tables generally found in this section (in order of being mentioned).
@@ -29,6 +34,20 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
         S "is changed, the", plural item, S "in the column of that", 
         phrase component, S "that are marked with an", Quote (S "X"), 
         S "should be modified as well"] +:+ foldlSent_ (zipWith tableShows refs trailings)
+
+-- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.
+generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent
+generateTraceTableView u _ [] _ _ = error $ "Expected non-empty list of column-view categories for traceability matrix " ++ u
+generateTraceTableView u _ _ [] _ = error $ "Expected non-empty list of row-view categories for traceability matrix " ++ u
+generateTraceTableView u desc cols rows c = llcc (makeTabRef u) $ Table
+  (EmptyS : ensureItems u (traceMColHeader colf c))
+  (makeTMatrix (ensureItems u $ traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
+  (showingCxnBw traceyMatrix desc) True where
+    cdb = _sysinfodb c
+    colf = layoutUIDs cols cdb
+    rowf = layoutUIDs rows cdb
+
+-- * Helper Functions
 
 -- | Helper that finds the traceability matrix references (things being referenced).
 traceMReferees :: ([UID] -> [UID]) -> ChunkDB -> [UID]
@@ -58,18 +77,6 @@ traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
 tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
--- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.
-generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent
-generateTraceTableView u _ [] _ _ = error $ "Expected non-empty list of column-view categories for traceability matrix " ++ u
-generateTraceTableView u _ _ [] _ = error $ "Expected non-empty list of row-view categories for traceability matrix " ++ u
-generateTraceTableView u desc cols rows c = llcc (makeTabRef u) $ Table
-  (EmptyS : ensureItems u (traceMColHeader colf c))
-  (makeTMatrix (ensureItems u $ traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
-  (showingCxnBw traceyMatrix desc) True where
-    cdb = _sysinfodb c
-    colf = layoutUIDs cols cdb
-    rowf = layoutUIDs rows cdb
-
 -- | Helper that makes sure the rows and columns of a traceability matrix have substance.
 ensureItems :: UID -> [a] -> [a]
 ensureItems u [] = error $ "Expected non-empty matrix dimension for traceability matrix " ++ u
@@ -79,7 +86,7 @@ ensureItems _ l = l
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
 layoutUIDs a c e = filter (`elem` (Map.keys $ c ^. traceTable)) $ concatMap (\x -> x e c) a
 
--- | Helper that filters a traceability matrix given a function.
+-- | Helper that filters a traceability matrix given a predicate and a 'ChunkDB' lens field.
 traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
 traceViewFilt f table _ = map (^. uid) . filter f . asOrderedList . (^. table)
 

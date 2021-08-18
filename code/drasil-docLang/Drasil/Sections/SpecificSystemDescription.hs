@@ -1,20 +1,25 @@
-module Drasil.Sections.SpecificSystemDescription 
-  ( specSysDescr
-  , probDescF
-  , termDefnF, termDefnF'
-  , physSystDesc
-  , goalStmtF
-  , solutionCharSpecIntro 
-  , assumpF
-  , thModF
-  , genDefnF
-  , dataDefnF
-  , inModelF
-  , datConF
-  , inDataConstTbl, outDataConstTbl, propCorSolF, auxSpecSent
-  , tInDataCstRef, tOutDataCstRef
-  , helperCI
-  , tmStub, ddStub, imStub, pdStub
+-- | Defines functions used to create the Specific System Description section.
+module Drasil.Sections.SpecificSystemDescription (
+  -- * Specific System Description
+  specSysDescr,
+  -- ** Problem Description
+  probDescF,
+  termDefnF, termDefnF',
+  physSystDesc,
+  goalStmtF,
+  -- ** Solution Characteristics Specification
+  solutionCharSpecIntro,
+  assumpF,
+  thModF,
+  genDefnF,
+  dataDefnF,
+  inModelF,
+  datConF,
+  inDataConstTbl, outDataConstTbl, propCorSolF, auxSpecSent,
+  tInDataCstRef, tOutDataCstRef,
+  helperCI,
+  -- * Subsection Stubs
+  tmStub, ddStub, imStub, pdStub
   ) where
 
 import Language.Drasil hiding (variable)
@@ -134,7 +139,7 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase section_,
   S "that will be used to build the", plural inModel]
 
                        
--- Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if ending 'Sentence' is not needed rather than an empty list.
+-- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.
 dataDefnF :: Sentence -> [Contents] -> Section
 dataDefnF endingSent otherContents = SRS.dataDefn
   (dataDefinitionIntro endingSent : otherContents) []

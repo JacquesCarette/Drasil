@@ -1,3 +1,4 @@
+-- | Defines helper functions for the Stakeholders section.
 module Drasil.Sections.Stakeholders (stakeholderIntro, tClientF, tCustomerF) where
 
 import Language.Drasil

@@ -1,4 +1,4 @@
--- Helpers for dealing with formatting of Units
+-- | Helpers for dealing with formatting of Units
 module Drasil.DocumentLanguage.Units where
 
 import Language.Drasil (Sentence(S, Sy), usymb, MayHaveUnit(getUnit))

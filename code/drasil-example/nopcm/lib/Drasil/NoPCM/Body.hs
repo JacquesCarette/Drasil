@@ -97,7 +97,7 @@ symbolsAll = map qw symbols ++ map qw specParamValList ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 
-concepts :: [UnitaryConceptDict]
+concepts :: [UnitalChunk]
 concepts = map ucw [density, tau, inSA, outSA,
   htCapL, QT.htFlux, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, mass, tankVol, QT.temp, QT.heatCapSpec,

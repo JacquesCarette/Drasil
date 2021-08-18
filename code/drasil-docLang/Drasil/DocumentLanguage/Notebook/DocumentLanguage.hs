@@ -1,3 +1,4 @@
+-- | Document language for lesson plan notebooks.
 module Drasil.DocumentLanguage.Notebook.DocumentLanguage(mkNb) where
 
 import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, mkNBDesc)
@@ -14,15 +15,15 @@ import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summa
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)
 import qualified Drasil.NBSections.Body as Body (reviewSec, mainIdeaSec, mthdAndanls, exampleSec)
 
--- | Creates a notebook from a document description and system information
+-- | Creates a notebook from a document description and system information.
 mkNb :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkNb dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Notebook (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
   mkSections si l where
     l = mkNBDesc si dd
 
--- | Helper for creating the notebook sections
--- Add NBDesc for references
+-- | Helper for creating the notebook sections.
+-- Add NBDesc for references.
 mkSections :: SystemInformation -> NBDesc -> [Section]
 mkSections si = map doit  
   where
@@ -34,7 +35,7 @@ mkSections si = map doit
     doit (ApndxSec a)        = mkAppndxSec a
 
 -- Add more intro subsections
--- | Helper for making the 'Introduction' section
+-- | Helper for making the 'Introduction' section.
 mkIntroSec :: SystemInformation -> IntrodSec -> Section
 mkIntroSec si (IntrodProg probIntro l) =
   Intro.introductionSection probIntro $ map (mkSubIntro si) l
@@ -42,7 +43,7 @@ mkIntroSec si (IntrodProg probIntro l) =
     mkSubIntro :: SystemInformation -> IntrodSub -> Section
     mkSubIntro _ (InPurpose intro) = Intro.purposeOfDoc intro
 
--- | Helper for making the 'Body' section
+-- | Helper for making the 'Body' section.
 mkBodySec :: BodySec -> Section
 mkBodySec (BodyProg l) = NB.body [] $ map mkSubs l
   where
@@ -52,15 +53,15 @@ mkBodySec (BodyProg l) = NB.body [] $ map mkSubs l
     mkSubs (MethsAndAnls cntnts subsec) = Body.mthdAndanls cntnts subsec
     mkSubs (Example cntnts subsec)      = Body.exampleSec cntnts subsec
 
--- | Helper for making the 'Summary' section
+-- | Helper for making the 'Summary' section.
 mkSmmrySec :: SmmrySec -> Section
 mkSmmrySec (SmmryProg cs) = NB.summary cs []
 
--- | Helper for making the 'Bibliography' section
+-- | Helper for making the 'Bibliography' section.
 mkBib :: BibRef -> Section
 mkBib bib = NB.reference [UlC $ ulcc (Bib bib)] []
 
--- | Helper for making the 'Appendix' section
+-- | Helper for making the 'Appendix' section.
 mkAppndxSec :: ApndxSec -> Section
 mkAppndxSec (ApndxProg cs) = NB.appendix cs []
 

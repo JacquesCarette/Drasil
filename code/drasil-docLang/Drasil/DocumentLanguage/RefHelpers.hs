@@ -1,5 +1,10 @@
 {-# Language Rank2Types #-}
-module Drasil.DocumentLanguage.RefHelpers (ModelDB, tmRefDB, gdRefDB, ddRefDB,
+-- | Currently unused. Defines functions to create a database for holding definitions and models.
+module Drasil.DocumentLanguage.RefHelpers (
+  -- * Type
+  ModelDB,
+  -- * Functions
+  tmRefDB, gdRefDB, ddRefDB,
   imRefDB, mdb, modelsFromDB) where
 
 import Language.Drasil (Expr)
@@ -24,9 +29,13 @@ modelsFromDB db = dropNums $ sortBy (compare `on` snd) elemPairs
 -- the SmithEtAl Template recipe.
 -- | A database that contains 'TheoryModel's, 'GenDefn's, 'DataDefinition's, and 'InstanceModel's.
 data ModelDB = MDB
-             { tmRefDB :: RefMap TheoryModel
+             { -- | Theory Model reference map.
+               tmRefDB :: RefMap TheoryModel
+               -- | General Definition reference map.
              , gdRefDB :: RefMap GenDefn
+               -- | Data Definition reference map.
              , ddRefDB :: RefMap (DataDefinition Expr)
+               -- | Instance Model reference map.
              , imRefDB :: RefMap InstanceModel
              }
 

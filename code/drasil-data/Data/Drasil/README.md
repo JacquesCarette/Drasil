@@ -1,16 +1,22 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: June 11, 2019
+Last updated: August 17, 2021
 --------------------------------------------------
 
 **Concepts**
   - Contains common-knowledge concepts
+
+**Equations**
+  - Contains common-knowledge equations
   
 **Quantities**
   - Contains common-knowledge quantities
 
 **Software**
   - Contains common-knowledge software
+
+**Theories**
+  - Contains common-knowledge theories
   
 **Units**
   - Contains common-knowledge units

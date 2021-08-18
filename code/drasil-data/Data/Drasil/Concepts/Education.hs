@@ -1,3 +1,4 @@
+-- | Defines concepts used to describe levels of education.
 module Data.Drasil.Concepts.Education where
 
 import Language.Drasil hiding (year)
@@ -6,12 +7,15 @@ import Utils.Drasil.Concepts
 import Data.Drasil.Concepts.Documentation (first, physics, second_, year)
 import Data.Drasil.Concepts.PhysicalProperties (solid)
 
+-- | Collects all education-related concepts.
 educon :: [NamedChunk]
 educon = [calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, physical_, chemistry, undergradDegree,
   scndYrCalculus, solidMechanics, secondYear, structuralEng,
   structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,
   frstYr, physChem]
+
+-- * Educational Concepts
 
 calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, physical_, chemistry :: NamedChunk

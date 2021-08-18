@@ -1,3 +1,4 @@
+-- | Defines theories in the field of Physics.
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
@@ -18,15 +19,18 @@ import Data.Drasil.Equations.Defining.Physics (newtonSLQD, newtonSLDesc, weightE
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
   hsPressureEqn, accelerationQD, velocityQD, speedEqn)
 
+-- | Collects theoretical models defined in this file.
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
+
+-- * Newton's Second Law of Motion
 
 newtonSL :: TheoryModel
 newtonSL = tmNoRefs (equationalModelU "newtonSL" newtonSLQD)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
   [newtonSLQD] [] [] "NewtonSecLawMot" [newtonSLDesc]
 
---
+-- * Weight
 
 weightGD :: GenDefn
 weightGD = gd (equationalModel' weightQD) (getUnit QP.weight) (Just weightDeriv) [dRef weightSrc] 
@@ -70,7 +74,7 @@ weightDerivSpecWeightSentence = [S "Substituting", phrase QPP.specWeight,
   S "as the product" `S.of_` phrase QPP.density `S.and_` phrase QP.gravitationalAccel,
   S "yields"]
 
---
+-- * Pressure
 
 hsPressureGD :: GenDefn
 hsPressureGD = gd (equationalModel' hsPressureQD) (getUnit QP.pressure) Nothing
@@ -88,7 +92,7 @@ hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
   S "Bernoulli's" +:+ phrase equation +:+ S "for a slow moving fluid" +:+
   S "through a porous" +:+. phrase material_
 
---
+-- * Torque
 
 torqueDD :: DataDefinition Expr
 torqueDD = ddNoRefs torque Nothing "torque" [torqueDesc] 
@@ -104,7 +108,7 @@ torqueDesc = foldlSent [S "The", phrase torque,
   S "on a body measures the", S "tendency" `S.of_` S "a", phrase QP.force, 
   S "to rotate the body around an axis or pivot"]
 
---
+-- * Vector Magnitude
 
 vecMagQD :: QDefinition Expr
 vecMagQD = mkQuantDef QP.speed speedEqn
@@ -117,7 +121,8 @@ magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velo
 vecMag :: DataDefinition Expr
 vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
 
---
+-- * Newton's Second Law of Rotational Motion
+
 newtonSLR :: TheoryModel
 newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
@@ -135,14 +140,15 @@ newtonSLRNotes = map foldlSent [
    S "proportional to its", getTandS QP.angularAccel `sC` S "where",
    ch QP.momentOfInertia, S "denotes", phrase QP.momentOfInertia `S.the_ofThe`
    phrase rigidBody, S "as the", phrase constant `S.of_` S "proportionality"]]
---
+
+-- * Acceleration
 
 accelerationTM :: TheoryModel
 accelerationTM = tm (equationalModelU "accelerationTM" accelerationQD)
   [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [accelerationQD] [] []
   [dRef accelerationWiki] "acceleration" []
 
-----------
+-- * Velocity
 
 velocityTM :: TheoryModel
 velocityTM = tm (equationalModelU "velocityTM" velocityQD)

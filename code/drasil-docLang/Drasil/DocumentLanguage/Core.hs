@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+-- | Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
 module Drasil.DocumentLanguage.Core where
 
 import Drasil.DocumentLanguage.Definitions (Fields)
@@ -14,7 +15,8 @@ type System = Sentence
 -- | Type synonym for clarity.
 type DocKind = Sentence
 
-{--}
+-- * Document Types
+
 -- | A document description is made up of document sections.
 type DocDesc = [DocSection]
 
@@ -35,7 +37,7 @@ data DocSection = TableOfContents
                 | AppndxSec AppndxSec
                 | OffShelfSolnsSec OffShelfSolnsSec
 
-{--}
+-- ** Reference Material Section
 
 -- | Reference section. Contents are top level followed by a list of subsections.
 data RefSec = RefProg Contents [RefTab]
@@ -95,7 +97,7 @@ data LFunc where
   DefnExcept :: [DefinedQuantityDict] -> LFunc
   TAD :: LFunc -- ^ Term and Definition.
 
-{--}
+-- ** Introduction Section
 
 -- | Introduction section. Contents are top level followed by a list of
 -- subsections.
@@ -113,7 +115,7 @@ data IntroSub where
   -- | Organises the section.
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
-{--}
+-- ** Stakeholders Section
 
 -- | Stakeholders section (wraps stakeholders subsections 'StkhldrSub').
 newtype StkhldrSec = StkhldrProg [StkhldrSub]
@@ -125,7 +127,7 @@ data StkhldrSub where
   -- | May have a customer.
   Cstmr  :: CI -> StkhldrSub 
 
-{--}
+-- ** General System Description Section
 
 -- | General System Description section (wraps 'GSDSub' subsections).
 newtype GSDSec = GSDProg [GSDSub]
@@ -139,7 +141,7 @@ data GSDSub where
   -- | System constraints.
   SystCons   :: [Contents] -> [Section] -> GSDSub 
 
-{--}
+-- ** Specific System Description Section
 
 -- | Specific System Description section. Contains a list of subsections ('SSDSub').
 newtype SSDSec = SSDProg [SSDSub]
@@ -191,7 +193,8 @@ data SCSSub where
 -- | Choose whether to show or hide the derivation of an expression.
 data DerivationDisplay = ShowDerivation
                        | HideDerivation
-{--}
+
+-- ** Requirements Section
 
 -- | Requirements section. Contains a list of subsections ('ReqsSub').
 newtype ReqrmntSec = ReqsProg [ReqsSub]
@@ -205,17 +208,17 @@ data ReqsSub where
   -- | Non-functional requirements.
   NonFReqsSub :: [ConceptInstance] -> ReqsSub
 
-{--}
+-- ** Likely Changes Section
 
 -- | Likely Changes section.
 newtype LCsSec = LCsProg [ConceptInstance]
 
-{--}
+-- ** Unlikely Changes Section
 
 -- | Unlikely Changes section.
 newtype UCsSec = UCsProg [ConceptInstance]
 
-{--}
+-- ** Traceability Section
 
 -- | Traceability Matices and Graphs section. Contains configurations ('TraceConfig').
 newtype TraceabilitySec = TraceabilityProg [TraceConfig]
@@ -226,22 +229,22 @@ data TraceConfig = TraceConfig UID [Sentence] Sentence [TraceViewCat] [TraceView
 getTraceConfigUID :: TraceConfig -> UID
 getTraceConfigUID (TraceConfig a _ _ _ _) = a
 
-{--}
+-- ** Off-The-Shelf Solutions Section
 
 -- | Off-The-Shelf Solutions section.
 newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 
-{--}
+-- ** Values of Auxiliary Constants Section
 
 -- | Values of Auxiliary Constants section.
 data AuxConstntSec = AuxConsProg CI [QDefinition Expr]
 
-{--}
+-- ** Appendix Section
 
 -- | Appendix section.
 newtype AppndxSec = AppndxProg [Contents]
 
-{--}
+-- * Multiplate Definition and Type
 
 -- | Holds all of the different kinds of sections. Defines as a plate with an applicative functor.
 data DLPlate f = DLPlate {

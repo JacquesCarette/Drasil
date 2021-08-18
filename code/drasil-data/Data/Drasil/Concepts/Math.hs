@@ -1,3 +1,4 @@
+-- | Defines concepts used in the field of math.
 module Data.Drasil.Concepts.Math where
 
 import Language.Drasil hiding (number, norm)
@@ -8,16 +9,19 @@ import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 import Utils.Drasil.Concepts
 
+-- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]
-
 mathcon = [amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
   constraint, diameter, direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix,
   norm, normal, normalV, number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative,
   point, probability, rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, 
   xAxis, xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
+-- | Collects all math-related common ideas (like a concept, but with no definition).
 mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
+
+-- * Mathematical Concepts
 
 amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, diameter,
   direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix, norm, normal, normalV, 

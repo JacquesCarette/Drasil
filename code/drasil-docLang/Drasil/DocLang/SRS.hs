@@ -1,11 +1,17 @@
+-- | Holds all section constructors and labels for creating SRS documents.
 module Drasil.DocLang.SRS (
+  -- * Section Constructors
+  -- | For use in an SRS document. Ordered by appearance in a SRS.
   tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, genSysDes, sysCont,
   userChar, sysCon, specSysDes, probDesc, termAndDefn, physSyst, goalStmt,
   solCharSpec, assumpt, thModel, genDefn, dataDefn, inModel, datCon, propCorSol,
   require, nonfuncReq, funcReq, likeChg, unlikeChg, traceyMandG, valsOfAuxCons,
   reference, appendix, offShelfSol, scpOfTheProj, prodUCTable, indPRCase,
-  termogy,tOfContLabel, refMatLabel, tOfUnitLabel, tOfSymbLabel, tOfAbbAccLabel,
+  termogy,
+  -- * Section Labels
+  -- | Labels linked to the associated section constructor. Ordered by appearance in a SRS.
+  tOfContLabel, refMatLabel, tOfUnitLabel, tOfSymbLabel, tOfAbbAccLabel,
   introLabel, docPurposeLabel, reqsScopeLabel, readerCharsLabel, docOrgLabel,
   stakeholderLabel, clientLabel, customerLabel, genSysDescLabel, sysContextLabel,
   userCharsLabel, sysConstraintsLabel, specSystDescLabel, physSystLabel, probDescLabel,
@@ -13,7 +19,9 @@ module Drasil.DocLang.SRS (
   genDefnLabel, dataDefnLabel, inModelLabel, datConLabel, corSolPropsLabel, requirementsLabel,
   funcReqLabel, nonfuncReqLabel, likeChgLabel, unlikeChgLabel, traceMatricesLabel,
   valsOfAuxConsLabel, referenceLabel, appendixLabel, offShelfSolnsLabel, indPRCaseLabel,
-  projScopeLabel, useCaseTableLabel, terminologyLabel, sectionReferences) where
+  projScopeLabel, useCaseTableLabel, terminologyLabel,
+  -- * All Section References
+  sectionReferences) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 

@@ -1,3 +1,4 @@
+-- | Assigns symbols and units (quantities) to common physical properties.
 module Data.Drasil.Quantities.PhysicalProperties where
 
 import Language.Drasil

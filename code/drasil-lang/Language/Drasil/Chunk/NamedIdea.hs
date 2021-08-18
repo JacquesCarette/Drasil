@@ -4,9 +4,10 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Chunk Types
   NamedChunk, IdeaDict,
   -- * Constructors
-  nc, nw, mkIdea, derivUID) where
+  nc, nw, mkIdea) where
 
-import Language.Drasil.UID (UID(UID))
+import Language.Drasil.UID (UID)
+import qualified Language.Drasil.UID.Core as UID (uid)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses)
@@ -37,7 +38,7 @@ instance Idea      NamedChunk where getA _ = Nothing
 -- the UID may be checked by the first TODO.
 -- | 'NamedChunk' constructor, takes a 'String' for its 'UID' and a term.
 nc :: String -> NP -> NamedChunk
-nc s = NC (toUID s)
+nc s = NC (UID.uid s)
 
 -- Don't export the record accessors.
 -- | 'IdeaDict' is the canonical dictionary associated to an 'Idea'.
@@ -68,11 +69,3 @@ mkIdea s np' = IdeaDict (nc s np')
 -- 'Nothing' for an abbreviation.
 nw :: Idea c => c -> IdeaDict
 nw c = IdeaDict (NC (c^.uid) (c^.term)) (getA c)
-
--- | For when we need to modify a UID. We first take the base chunk's UID and then append a suffix to it.
-derivUID :: HasUID a => a -> String -> UID
-derivUID a suff
-  -- | '►' `elem` suff = error "► not allowed in UID" -- want to allow for more than one sufx to be appended.
-  | null suff       = error "Suffix must be non-zero length"
-  | otherwise       = UID $ s ++ '►':suff
-    where UID s = a ^. uid

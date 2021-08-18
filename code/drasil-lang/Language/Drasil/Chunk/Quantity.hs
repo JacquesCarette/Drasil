@@ -96,7 +96,8 @@ vcUnit i des sym space u = QD (nw $ nc i des) space (const sym) (Just u)
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 vcSt i des sym space = QD (nw $ nc i des) space sym Nothing
 
--- | Makes a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'. 'Symbol' is implementation-only.
+-- | Makes a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'.
+-- 'Symbol' is implementation-only.
 codeVC :: Idea c => c -> Symbol -> Space -> QuantityDict
 codeVC n s t = QD (nw n) t f Nothing
   where
@@ -106,4 +107,4 @@ codeVC n s t = QD (nw n) t f Nothing
 
 -- | Creates a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'.
 vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
-vc'' n = vc (n ^. uid) (n ^. term)
+vc'' n sym space = QD (nw n) space (const sym) Nothing

@@ -93,7 +93,7 @@ module Language.Drasil (
   -- Similar types are grouped together.
   
   -- *** Basic types
-  , UID
+  , UID(..)
   -- Language.Drasil.Chunk.NamedIdea
   , NamedChunk, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
@@ -270,7 +270,7 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
   HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))

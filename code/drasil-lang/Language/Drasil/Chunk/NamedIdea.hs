@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Constructors
   nc, nw, mkIdea) where
 
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID(UID))
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses)
@@ -31,10 +31,13 @@ instance HasUID    NamedChunk where uid = uu
 instance NamedIdea NamedChunk where term = np
 -- | Finds the idea of a 'NamedChunk' (always 'Nothing').
 instance Idea      NamedChunk where getA _ = Nothing
-  
--- | 'NamedChunk' constructor, takes a 'UID' and a term.
-nc :: UID -> NP -> NamedChunk
-nc = NC
+
+-- TODO: Add in function to check UIDs (see #2788).
+-- TODO: Any contructor that takes in a UID should be built off of this one so that
+-- the UID may be checked by the first TODO.
+-- | 'NamedChunk' constructor, takes a 'String' for its 'UID' and a term.
+nc :: String -> NP -> NamedChunk
+nc s = NC (UID s)
 
 -- Don't export the record accessors.
 -- | 'IdeaDict' is the canonical dictionary associated to an 'Idea'.
@@ -55,7 +58,7 @@ instance Idea      IdeaDict where getA = mabbr
   
 -- | 'IdeaDict' constructor, takes a 'UID', 'NP', and 
 -- an abbreviation in the form of 'Maybe' 'String'
-mkIdea :: UID -> NP -> Maybe String -> IdeaDict
+mkIdea :: String -> NP -> Maybe String -> IdeaDict
 mkIdea s np' = IdeaDict (nc s np')
 
 -- | Historical name: nw comes from 'named wrapped' from when

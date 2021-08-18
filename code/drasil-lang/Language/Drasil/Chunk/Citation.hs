@@ -23,9 +23,9 @@ import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Label.Type (LblType(Citation))
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.ShortName (ShortName, shortname')
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID(..))
 
-import Control.Lens (makeLenses, (^.))
+import Control.Lens (makeLenses, view)
 
 -- | A list of 'Citation's.
 type BibRef = [Citation]
@@ -54,14 +54,14 @@ instance HasShortName Citation where shortname = sn
 instance HasFields    Citation where getFields = fields
 -- | Gets the reference information of a 'Citation'.
 instance Referable    Citation where
-  refAdd    c = c ^. citeID -- Citation UID should be unique as a reference address.
-  renderRef   = Citation . refAdd -- Get the alternate form of reference address.
+  refAdd    = uidToStr . view citeID -- Citation UID should be unique as a reference address.
+  renderRef = Citation . refAdd -- Get the alternate form of reference address.
 -- | Gets the reference address of a 'Citation'.
-instance HasRefAddress Citation where getRefAdd c = Citation $ c ^. citeID
+instance HasRefAddress Citation where getRefAdd = Citation . uidToStr . view citeID
 
 -- | Smart constructor which implicitly uses EntryID as chunk id.
 cite :: CitationKind -> [CiteField] -> String -> Citation
-cite x y z = let s = noSpaces z in Cite x y s (shortname' (S s))
+cite x y z = let s = noSpaces z in Cite x y (UID s) (shortname' (S s))
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

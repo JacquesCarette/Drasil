@@ -39,14 +39,14 @@ instance CommonIdea    CI where abrv = view ab
 -- | Finds the domain of a 'CI'.
 instance ConceptDomain CI where cdom = cdom'
   
--- | The commonIdea smart constructor requires a chunk id ('UID'), a
+-- | The commonIdea smart constructor requires a chunk id ('String'), a
 -- term ('NP'), an abbreviation ('String'), and a domain (['UID']).
-commonIdea :: UID -> NP -> String -> [UID] -> CI
+commonIdea :: String -> NP -> String -> [UID] -> CI
 commonIdea s np = CI (nc s np)
 
 -- | Similar to 'commonIdea', but takes a list of 'IdeaDict' (often a domain).
-commonIdeaWithDict :: UID -> NP -> String -> [IdeaDict] -> CI
-commonIdeaWithDict x y z = CI (nc x y) z . map (^.uid)
+commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
+commonIdeaWithDict x y z = commonIdea x y z . map (^.uid)
 
 -- | Get abbreviation in 'Sentence' form from a 'CI'.
 getAcc :: CI -> Sentence

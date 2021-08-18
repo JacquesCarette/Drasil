@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.Assumptions (twoDMotion, cartSys, cartSysR,
-  yAxisDir, startOrigin, firstPend, secondPend, assumptions) where
+  yAxisDir, startOriginSingle, startOriginDouble, firstPend, secondPend, assumpSingle, assumpDouble) where
     
 import Language.Drasil
 import Utils.Drasil (foldlSent)
@@ -9,22 +9,29 @@ import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)
-import Data.Drasil.Concepts.Physics (gravity, twoD)
+import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum)
 import Drasil.DblPendulum.Concepts (pendMotion, firstRod, secondRod, firstObject, secondObject)
 
+assumpBasic :: [ConceptInstance]
+assumpBasic = [twoDMotion, cartSys, cartSysR, yAxisDir]
 
-assumptions :: [ConceptInstance]
-assumptions = [twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin, firstPend, secondPend]
+assumpSingle :: [ConceptInstance]
+assumpSingle = assumpBasic ++ [startOriginSingle]
 
-twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin, firstPend, secondPend:: ConceptInstance 
+assumpDouble :: [ConceptInstance]
+assumpDouble = assumpSingle ++ [startOriginDouble, firstPend, secondPend]
 
-twoDMotion  = cic "twoDMotion"    twoDMotionDesc    "twoDMotion"    assumpDom
-cartSys     = cic "cartSys"       cartSysDesc       "cartSys"       assumpDom
-cartSysR    = cic "cartSysR"      cartSysRDesc      "cartSysR"      assumpDom
-yAxisDir    = cic "yAxisDir"      yAxisDirDesc      "yAxisDir"      assumpDom
-startOrigin = cic "startOrigin"   startOriginDesc   "startOrigin"   assumpDom
-firstPend   = cic "firstPend"     firstPendDesc     "firstPend"     assumpDom
-secondPend  = cic "secondPend"    secondPendDesc    "secondPend"    assumpDom
+twoDMotion, cartSys, cartSysR, yAxisDir, startOriginSingle, startOriginDouble,
+  firstPend, secondPend:: ConceptInstance 
+
+twoDMotion        = cic "twoDMotion"    twoDMotionDesc          "twoDMotion"    assumpDom
+cartSys           = cic "cartSys"       cartSysDesc             "cartSys"       assumpDom
+cartSysR          = cic "cartSysR"      cartSysRDesc            "cartSysR"      assumpDom
+yAxisDir          = cic "yAxisDir"      yAxisDirDesc            "yAxisDir"      assumpDom
+startOriginSingle = cic "startOrigin"   startOriginDescSingle   "startOrigin"   assumpDom
+startOriginDouble = cic "startOrigin"   startOriginDescDouble   "startOrigin"   assumpDom
+firstPend         = cic "firstPend"     firstPendDesc           "firstPend"     assumpDom
+secondPend        = cic "secondPend"    secondPendDesc          "secondPend"    assumpDom
 
 twoDMotionDesc :: Sentence
 twoDMotionDesc = atStartNP (the pendMotion) `S.is` phrase twoD +:+. sParen (getAcc twoD)
@@ -39,8 +46,11 @@ cartSysRDesc = atStartNP (the cartesian) `S.is` S "right-handed where" +:+
 yAxisDirDesc :: Sentence
 yAxisDirDesc = atStartNP (direction `the_ofThe` yAxis) `S.is` S "directed opposite to" +:+. phrase gravity
 
-startOriginDesc :: Sentence
-startOriginDesc = atStartNP (the firstRod) `S.is` S "attached" `S.toThe` (phrase origin !.)
+startOriginDescDouble :: Sentence
+startOriginDescDouble = atStartNP (the firstRod) `S.is` S "attached" `S.toThe` (phrase origin !.)
+
+startOriginDescSingle :: Sentence
+startOriginDescSingle = atStartNP (the pendulum) `S.is` S "attached" `S.toThe` (phrase origin !.)
 
 firstPendDesc:: Sentence
 firstPendDesc = foldlSent[

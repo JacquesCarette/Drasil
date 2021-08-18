@@ -11,7 +11,8 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
   mCampidelli,   dmWiess, sPalmer, scottSmith, bKarchewski, rHuston, 
-  hJosephs, nrMorgenstern, vePrice, samCrawford, rcHibbeler, olu, rodPierce :: Person
+  hJosephs, nrMorgenstern, vePrice, samCrawford, rcHibbeler, olu, rodPierce,
+  dong :: Person
   
 pjAgerfalk    = person    "PJ"                        "Agerfalk"
 daAruliah     = personWM  "D"         ["A"]           "Aruliah"
@@ -79,6 +80,7 @@ dyZhu         = personWM' "D"         ["Y"]           "Zhu"
 dmWiess       = personWM  ""          []              "Wiess"
 olu           = person    "Olu"                       "Owojaiye"
 rodPierce     = person    "Rod"                       "Pierce"
+dong          = person    "Dong"                      "Chen"
 
 -- Right now, we have to say this is a 'Person', even though it clearly isn't
 wikiAuthors :: Person

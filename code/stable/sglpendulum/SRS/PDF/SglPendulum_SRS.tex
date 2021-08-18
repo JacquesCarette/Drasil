@@ -281,9 +281,9 @@ The instance models that govern SglPendulum are presented in the \hyperref[Sec:I
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[pend2DMotion:\phantomsection\label{pend2DMotion}]{The pendulum motion is two-dimensional (2D).}
-\item[cartCoord:\phantomsection\label{cartCoord}]{A Cartesian coordinate system is used.}
-\item[cartCoordRight:\phantomsection\label{cartCoordRight}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
+\item[twoDMotion:\phantomsection\label{twoDMotion}]{The pendulum motion is two-dimensional (2D).}
+\item[cartSys:\phantomsection\label{cartSys}]{A Cartesian coordinate system is used.}
+\item[cartSysR:\phantomsection\label{cartSysR}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
 \item[yAxisDir:\phantomsection\label{yAxisDir}]{The direction of the $y$-axis is directed opposite to gravity.}
 \item[startOrigin:\phantomsection\label{startOrigin}]{The pendulum is attached to the origin.}
 \end{itemize}
@@ -517,7 +517,7 @@ We also know the vertical position
 \begin{displaymath}
 {p_{\text{y}}}=-{L_{\text{rod}}} \cos\left({θ_{p}}\right)
 \end{displaymath}
-Applying this again,
+Applying this,
 
 \begin{displaymath}
 {v_{\text{y}}}=-\left(\frac{\,d{L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}\right)
@@ -532,8 +532,6 @@ Therefore, using the chain rule,
 \begin{displaymath}
 {v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
 \end{displaymath}
-Therefore, using the chain rule,
-
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1217,15 +1215,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 \begin{longtable}{l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[pend2DMotion]{A:pend2DMotion}} & \textbf{\hyperref[cartCoord]{A:cartCoord}} & \textbf{\hyperref[cartCoordRight]{A:cartCoordRight}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}}
 \\
 \midrule
 \endhead
-\hyperref[pend2DMotion]{A:pend2DMotion} &  &  &  &  & 
+\hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  & 
 \\
-\hyperref[cartCoord]{A:cartCoord} &  &  &  &  & 
+\hyperref[cartSys]{A:cartSys} &  &  &  &  & 
 \\
-\hyperref[cartCoordRight]{A:cartCoordRight} &  &  &  &  & 
+\hyperref[cartSysR]{A:cartSysR} &  &  &  &  & 
 \\
 \hyperref[yAxisDir]{A:yAxisDir} &  &  &  &  & 
 \\
@@ -1237,7 +1235,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[pend2DMotion]{A:pend2DMotion}} & \textbf{\hyperref[cartCoord]{A:cartCoord}} & \textbf{\hyperref[cartCoordRight]{A:cartCoordRight}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}}
 \\
 \midrule
 \endhead

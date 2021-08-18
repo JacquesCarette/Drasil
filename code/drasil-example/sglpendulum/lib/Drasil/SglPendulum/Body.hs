@@ -5,46 +5,42 @@ import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
+import Utils.Drasil.Concepts (the)
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
-import Data.Drasil.Concepts.Documentation (problem, srsDomains, doccon, doccon', analysis)
+import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, cartesian, mathcon')
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
+import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Domains (physics)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
+import Data.Drasil.Theories.Physics (newtonSLR)
 import Data.Drasil.TheoryConcepts (inModel)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
-
-import Drasil.DblPendulum.Body (justification, charsOfReader, organizationOfDocumentsIntro,
-  sysCtxIntro, sysCtxDesc, sysCtxList, userCharacteristicsIntro)
-import Drasil.DblPendulum.Concepts (concepts, pendMotion, rod)
+import Drasil.DblPendulum.Assumptions (assumpSingle)
+import Drasil.DblPendulum.Body (justification, charsOfReader, prob, organizationOfDocumentsIntro,
+  sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms, userCharacteristicsIntro)
+import qualified Drasil.DblPendulum.Body as DPD (tMods)
+import Drasil.DblPendulum.Concepts (concepts, rod)
 import Drasil.DblPendulum.Requirements (nonFuncReqs)
 import Drasil.DblPendulum.Unitals (acronyms)
+import Drasil.DblPendulum.References (citations)
 
 import Drasil.SglPendulum.Figures (figMotion, sysCtxFig1)
-import Drasil.SglPendulum.Assumptions (assumptions)
 import Drasil.SglPendulum.Goals (goals, goalsInputs)
 import Drasil.SglPendulum.DataDefs (dataDefs)
 import Drasil.SglPendulum.IMods (iMods)
 import Drasil.SglPendulum.GenDefs (genDefns)
-import Drasil.SglPendulum.Unitals (inputs, outputs,
-  inConstraints, outConstraints, symbols)
+import Drasil.SglPendulum.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPendulum.Requirements (funcReqs)
-import Drasil.SglPendulum.References (citations)
-
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -140,16 +136,11 @@ usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
-stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
 refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
--- ++ likelyChgs ++ unlikelyChgs
-
+concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 
 ------------------------------
 -- Section : INTRODUCTION --
@@ -163,10 +154,6 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ---------------------------------
 -- 2.2 : Scope of Requirements --
 ---------------------------------
-scope :: Sentence
-scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
-  sParen (getAcc twoD), phrase pendMotion, phrase problem,
-                   S "with various initial conditions"]
 
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
@@ -203,18 +190,10 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
 -------------------------------
 -- 4.1 : System Constraints  --
 -------------------------------
-prob :: Sentence
-prob = foldlSent_ [ S "efficiently and correctly to predict the", phraseNP (motion `ofA`  
-                   pendulum)]
 
 ---------------------------------
 -- 4.1.1 Terminology and Definitions --
 ---------------------------------
-terms :: [ConceptChunk]
-terms = [gravity, cartesian]
-
-tMods :: [TheoryModel]
-tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 -----------------------------------
 -- 4.1.2 Physical System Description --
@@ -239,6 +218,8 @@ physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 -- Theoretical Models defined in TMs
+tMods :: [TheoryModel]
+tMods = DPD.tMods ++ [newtonSLR]
 
 ---------------------------------
 -- 4.2.3 : General Definitions --

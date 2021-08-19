@@ -49,7 +49,7 @@ maintainability   = dcc "maintainability"   (nounPhraseSP "maintainability")
 performance       = dcc "performance"       (nounPhraseSP "performance")
   "the action or process of carrying out or accomplishing an action, task, or function"
 
-performanceSpd    = dcc "performanceSpd" (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
+performanceSpd    = dcc "performanceSpd"    (cn' "performance speed")
   "the action or process of carrying out or accomplishing an action, task, or function quickly"
  
 portability       = dcc "portability"       (nounPhraseSP "portability")

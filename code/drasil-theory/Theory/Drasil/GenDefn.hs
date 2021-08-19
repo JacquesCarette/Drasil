@@ -3,6 +3,7 @@ module Theory.Drasil.GenDefn (GenDefn,
   gd, gdNoRefs, getEqModQdsFromGd) where
 
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (genDefn)
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 

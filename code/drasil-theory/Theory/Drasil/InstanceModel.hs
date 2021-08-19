@@ -7,6 +7,7 @@ module Theory.Drasil.InstanceModel
   ) where
 
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Data.Drasil.TheoryConcepts (inModel)
 

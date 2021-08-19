@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Chunk Types
   NamedChunk, IdeaDict,
   -- * Constructors
-  nc, ncUID, nw, mkIdea) where
+  nc, ncUID, nw, mkIdea, mkIdeaUID) where
 
 import Language.Drasil.UID (UID)
 import qualified Language.Drasil.UID.Core as UID (uid)
@@ -65,6 +65,10 @@ instance Idea      IdeaDict where getA = mabbr
 -- an abbreviation in the form of 'Maybe' 'String'.
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
 mkIdea s np' = IdeaDict (nc s np')
+
+-- | Same as 'mkIdea' but takes a 'UID' rather than a 'String'.
+mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
+mkIdeaUID s np' = IdeaDict (ncUID s np')
 
 -- | Historical name: nw comes from 'named wrapped' from when
 -- 'NamedIdea' exported 'getA' (now in 'Idea'). But there are

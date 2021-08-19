@@ -11,9 +11,10 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space(..), narg, implVar, implVar', qw,
+  QuantityDict, HasSpace(typ), Space(..), narg, implVar, implVar', implVarUID, implVarUID', qw,
   compoundPhrase, nounPhrase, nounPhraseSP, label, sub, NamedArgument,
-  Idea(getA), NamedIdea(term), Stage(..), (+++.), showUID)
+  Idea(getA), NamedIdea(term), Stage(..), (+++.), (+++))
+import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -293,7 +294,7 @@ solveFromToStep = quantfunc $ implVar "SolveFromToStep_oslo" (nounPhrase
   solT (label "SolveFromToStep")
 
 vecDepVar :: ODEInfo -> CodeVarChunk
-vecDepVar info = quantvar $ implVar (showUID dv) (dv ^. term) vecT
+vecDepVar info = quantvar $ implVarUID (dv ^. uid) (dv ^. term) vecT
   (sub (symbol dv Implementation) (label "vec"))
   where dv = depVar info
 
@@ -301,7 +302,7 @@ vecDepVar info = quantvar $ implVar (showUID dv) (dv ^. term) vecT
 -- | Oslo's Vector type behaves like an array, so needs to
 -- be represented as one or else will hit type errors in GOOL.
 arrayVecDepVar :: ODEInfo -> CodeVarChunk
-arrayVecDepVar info = quantvar $ implVar (showUID dv ++ "vec") (dv ^. term)
+arrayVecDepVar info = quantvar $ implVarUID (dv +++ "vec") (dv ^. term)
   (dv ^. typ) (sub (symbol dv Implementation) (label "vec"))
   where dv = listToArray $ depVar info
 
@@ -605,7 +606,7 @@ odeMethodUnavailable = "Chosen ODE solving method is not available" ++
 
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
-diffCodeChunk c = quantvar $ implVar' ("d" ++ showUID c )
+diffCodeChunk c = quantvar $ implVarUID' (c +++ "d" )
   (compoundPhrase (nounPhraseSP "change in") (c ^. term)) (getA c) (c ^. typ)
   (Concat [label "d", symbol c Implementation]) (getUnit c)
 
@@ -616,7 +617,7 @@ diffCodeChunk c = quantvar $ implVar' ("d" ++ showUID c )
 modifiedODESyst :: String -> ODEInfo -> [CodeExpr]
 modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
   where
-    replaceDepVar cc@(C c) | c == depVar info ^. uid = C $ c +++. ("_" ++ sufx)
+    replaceDepVar cc@(C c) | c == depVar info ^. uid = C $ depVar info +++ ("_" ++ sufx)
                            | otherwise               = cc
     replaceDepVar (AssocA a es)           = AssocA a (map replaceDepVar es)
     replaceDepVar (AssocB b es)           = AssocB b (map replaceDepVar es)

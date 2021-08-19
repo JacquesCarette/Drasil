@@ -9,6 +9,7 @@ import Data.List (union)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil hiding (DefiningExpr)
+import Language.Drasil.Development (showUID)
 import qualified Language.Drasil.Development as D (uid)
 
 -- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
@@ -72,7 +73,7 @@ mkDefiningExpr u = DefiningExpr (D.uid u)
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr'.
 multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
-multiDefnGenQD md de = mkQDefSt (showUID $ md ^. qd) (md ^. term) (md ^. defn)
+multiDefnGenQD md de = mkQDefSt (md ^. qd . uid) (md ^. term) (md ^. defn)
                                 (symbol md) (md ^. typ) (getUnit md) (de ^. expr)
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr' (by 'UID').

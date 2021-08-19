@@ -23,6 +23,7 @@ module Drasil.Sections.SpecificSystemDescription (
   ) where
 
 import Language.Drasil hiding (variable)
+import Language.Drasil.Development (showUID)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP

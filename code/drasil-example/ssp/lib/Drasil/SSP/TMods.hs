@@ -2,6 +2,7 @@
 module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress) 
   where
 
+import Control.Lens ((^.))
 import Prelude hiding (tan)
 import qualified Data.List.NonEmpty as NE
 
@@ -81,7 +82,7 @@ mcShrStrgth = tm (equationalModelU "mcShrSrgth" mcShrStrgthQD)
 
 ------------------------------------
 mcShrStrgthQD :: QDefinition
-mcShrStrgthQD = fromEqnSt' (showUID shrStress) (nounPhraseSP "Mohr-Coulumb shear strength")
+mcShrStrgthQD = fromEqnSt' (shrStress ^. uid) (nounPhraseSP "Mohr-Coulumb shear strength")
  mcShrStrgthDesc (symbol shrStress) Real mcShrStrgthExpr
 
 mcShrStrgthExpr :: Expr
@@ -111,7 +112,7 @@ effStress = tm (equationalModelU "effectiveStressTM" effStressQD)
 
 ------------------------------------
 effStressQD :: QDefinition
-effStressQD = fromEqnSt' (showUID effectiveStress) (nounPhraseSP "effective stress")
+effStressQD = fromEqnSt' (effectiveStress ^. uid) (nounPhraseSP "effective stress")
  effStressDesc (symbol effectiveStress) Real effStressExpr
 
 effStressExpr :: Expr

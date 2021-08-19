@@ -4,6 +4,7 @@ module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs) where
 import Control.Lens (Lens', view, makeLenses)
 
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (thModel)
 
 import Theory.Drasil.ModelKinds

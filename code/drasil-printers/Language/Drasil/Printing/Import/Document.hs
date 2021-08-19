@@ -1,6 +1,7 @@
 module Language.Drasil.Printing.Import.Document where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil.Development (showUID)
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P

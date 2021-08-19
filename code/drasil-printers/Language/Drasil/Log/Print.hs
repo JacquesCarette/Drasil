@@ -1,6 +1,7 @@
 module Language.Drasil.Log.Print where
 
 import Language.Drasil hiding (symbol)
+import Language.Drasil.Development (showUID)
 import qualified Language.Drasil as L (symbol)
 import Database.Drasil
 import Utils.Drasil (stringList)

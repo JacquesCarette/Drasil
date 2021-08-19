@@ -93,9 +93,9 @@ module Language.Drasil (
   -- Similar types are grouped together.
   
   -- *** Basic types
-  , UID, showUID
+  , UID
   -- Language.Drasil.Chunk.NamedIdea
-  , (+++), (+++.)
+  , (+++), (+++.), (+++!)
   , NamedChunk, nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
   -- Language.Drasil.Chunk.CommonIdea
@@ -109,12 +109,12 @@ module Language.Drasil (
   , RelationConcept, makeRC, addRelToCC
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Quantity
-  , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar'
+  , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar', implVarUID, implVarUID'
   , vc, vc'', vcSt, vcUnit
   -- Language.Drasil.Chunk.NamedArgument
   , NamedArgument, narg
   -- Language.Drasil.Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt'
+  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.Unitary
@@ -274,7 +274,7 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UID (UID)
-import Language.Drasil.UID.Core ((+++), (+++.), showUID)
+import Language.Drasil.UID.Core ((+++), (+++.), (+++!))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
   HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
@@ -309,7 +309,7 @@ import Language.Drasil.Constraint (physc, sfwrc, isPhysC, isSfwrC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
-  fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea

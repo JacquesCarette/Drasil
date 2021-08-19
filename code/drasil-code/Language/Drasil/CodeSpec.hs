@@ -3,6 +3,7 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil (ChunkDB, SystemInformation(SI),
   _authors, _constants, _constraints, _datadefs, _instModels,

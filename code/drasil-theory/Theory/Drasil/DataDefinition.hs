@@ -3,6 +3,7 @@ module Theory.Drasil.DataDefinition where
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (dataDefn)
 
 -- | A scope is an indirect reference to a 'UID'.

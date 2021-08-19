@@ -216,7 +216,7 @@ auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxili
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent
-mkDataConstraintTable col rf lab = llcc (makeTabRef $ uidToStr rf) $ uncurry Table 
+mkDataConstraintTable col rf lab = llcc (makeTabRef' rf) $ uncurry Table
   (mkTableFromColumns col) lab True
 
 -- | Creates the input Data Constraints Table.
@@ -229,7 +229,7 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (short typUnc, map typUncr $ sortBySymbol qlst)] (inDatumConstraint ^. uid) $
             titleize' inDatumConstraint
   where
-    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ uidToStr (c ^. uid)) (c ^. reasVal)
+    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ showUID c) (c ^. reasVal)
 
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
@@ -241,8 +241,8 @@ outDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch qlst),
 --Not actually used here, for exporting references
 -- | Input/Output Data Constraint Table references.
 tInDataCstRef, tOutDataCstRef :: Reference
-tInDataCstRef = makeTabRef $ uidToStr (inDatumConstraint ^. uid)
-tOutDataCstRef = makeTabRef $ uidToStr (outDatumConstraint ^. uid)
+tInDataCstRef  = makeTabRef' (inDatumConstraint ^. uid)
+tOutDataCstRef = makeTabRef' (outDatumConstraint ^. uid)
 
 -- | Formats Physical Constraints into a 'Sentence'.
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence

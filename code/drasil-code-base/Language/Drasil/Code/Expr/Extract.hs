@@ -3,7 +3,7 @@ module Language.Drasil.Code.Expr.Extract (
     eNamesRI, eNamesRI'
 ) where
 
-import Language.Drasil (RealInterval(..), UID(..))
+import Language.Drasil (RealInterval(..), UID)
 
 import Language.Drasil.Code.Expr (CodeExpr(..))
 

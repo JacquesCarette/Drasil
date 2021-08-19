@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs) where
 
-import Control.Lens (Lens', view, makeLenses, (^.))
+import Control.Lens (Lens', view, makeLenses)
 
 import Language.Drasil
 import Data.Drasil.TheoryConcepts (thModel)
@@ -108,7 +108,7 @@ tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ->
     [q] -> [c] -> [QDefinition] ->
     [ModelExpr] -> [QDefinition] -> [DecRef] ->
     String -> [Sentence] -> TheoryModel
-tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ uidToStr (mkind ^. uid) ++ " is empty"
+tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
 tm mkind q c dq inv dfn r  lbe = 
   TM mkind [] [] (map qw q) (map cw c) dq inv dfn r (shortname' $ S lbe)
       (prependAbrv thModel lbe)

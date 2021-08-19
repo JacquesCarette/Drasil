@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Chunk Types
   NamedChunk, IdeaDict,
   -- * Constructors
-  nc, nw, mkIdea) where
+  nc, ncUID, nw, mkIdea) where
 
 import Language.Drasil.UID (UID)
 import qualified Language.Drasil.UID.Core as UID (uid)
@@ -40,6 +40,10 @@ instance Idea      NamedChunk where getA _ = Nothing
 nc :: String -> NP -> NamedChunk
 nc s = NC (UID.uid s)
 
+-- | Similar to 'nc', but takes in the 'UID' in the form of a 'UID' rather than a 'String'.
+ncUID :: UID -> NP -> NamedChunk
+ncUID = NC
+
 -- Don't export the record accessors.
 -- | 'IdeaDict' is the canonical dictionary associated to an 'Idea'.
 -- Contains a 'NamedChunk' that could have an abbreviation ('Maybe' 'String').
@@ -58,7 +62,7 @@ instance NamedIdea IdeaDict where term = nc' . term
 instance Idea      IdeaDict where getA = mabbr
   
 -- | 'IdeaDict' constructor, takes a 'UID', 'NP', and 
--- an abbreviation in the form of 'Maybe' 'String'
+-- an abbreviation in the form of 'Maybe' 'String'.
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
 mkIdea s np' = IdeaDict (nc s np')
 

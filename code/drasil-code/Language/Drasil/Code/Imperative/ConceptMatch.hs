@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.ConceptMatch (
   chooseConcept, conceptToGOOL
 ) where
 
-import Language.Drasil (UID(..), Sentence(S), (+:+), (+:+.))
+import Language.Drasil (UID, Sentence(S), (+:+), (+:+.))
 
 import Language.Drasil.Choices (Choices(..), CodeConcept(..), 
     MatchedConceptMap, showChs)
@@ -25,7 +25,7 @@ chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch chs)
         chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " ++ 
           "ConceptMatchMap"
         chooseConcept' uid (c:_) = do 
-            modify (++ [S "Code Concept" +:+ S (uidToStr uid) +:+ S "selected as" +:+. showChs c])
+            modify (++ [S "Code Concept" +:+ S (show uid) +:+ S "selected as" +:+. showChs c])
             return c
 
 -- | Translates a 'CodeConcept' into GOOL.

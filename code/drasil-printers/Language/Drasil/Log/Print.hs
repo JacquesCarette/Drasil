@@ -16,7 +16,6 @@ import Text.PrettyPrint.HughesPJ
 import Language.Drasil.Plain.Print
 import Language.Drasil.Printing.PrintingInformation
 import Prelude hiding ((<>))
-import Data.Coerce (coerce)
 
 -- | Gathers all printing functions and creates the debugging tables from them.
 printAllDebugInfo :: PrintingInformation -> [Doc]
@@ -36,9 +35,9 @@ header d = text (replicate 100 '-') $$ d $$ text (replicate 100 '-')
 -- | Creates a table of all UIDs and their "highest" recorded level of information. See 'mkListShowUsedUIDs'
 -- for more details.
 renderUsedUIDs :: [(UID, String)] -> Doc
-renderUsedUIDs chs = header (text "UIDs" $$ nest 40 (text "Associated Chunks")) $$ vcat (map renderUsedUID $ coerce chs)
+renderUsedUIDs chs = header (text "UIDs" $$ nest 40 (text "Associated Chunks")) $$ vcat (map renderUsedUID chs)
   where
-    renderUsedUID (u, chks) = text u $$ nest 40 (text chks)
+    renderUsedUID (u, chks) = text (show u) $$ nest 40 (text chks)
 
 -- | For the last section of the log output. Shows which chunk UID is being used at which stage.
 -- Note that chunks used at a "higher stage" (like 'Concept's and 'QuantityDict's) will still be built off of the
@@ -80,7 +79,7 @@ mkTableFromLenses PI{_ckdb = db} tableLens ttle h1 h2 h3 l1 l2 l3 =
 mkTableSymb :: PrintingInformation -> Doc
 mkTableSymb pinfo = mkTableFromLenses pinfo symbolTable
   "Symbol Chunks" "UID" "Term" "Symbol"
-      (text . coerce . view uid)
+      (text . showUID)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
           (symbolDoc . flip L.symbol (pinfo ^. stg))
 
@@ -88,7 +87,7 @@ mkTableSymb pinfo = mkTableFromLenses pinfo symbolTable
 mkTableOfTerms :: PrintingInformation -> Doc
 mkTableOfTerms pinfo = mkTableFromLenses pinfo termTable
   "Term Chunks" "UID" "Term" "Abbreviation"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (text . fromMaybe "" . getA)
 
@@ -96,7 +95,7 @@ mkTableOfTerms pinfo = mkTableFromLenses pinfo termTable
 mkTableConcepts :: PrintingInformation -> Doc
 mkTableConcepts pinfo = mkTableFromLenses pinfo defTable
   "Concepts" "UID" "Term" "Definition"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
 
@@ -104,7 +103,7 @@ mkTableConcepts pinfo = mkTableFromLenses pinfo defTable
 mkTableUnitDefn :: PrintingInformation -> Doc
 mkTableUnitDefn pinfo = mkTableFromLenses pinfo (view unitTable)
   "Unit Definitions" "UID" "Term" "Unit Symbol"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . Sy . usymb)
 
@@ -112,7 +111,7 @@ mkTableUnitDefn pinfo = mkTableFromLenses pinfo (view unitTable)
 mkTableDataDef :: PrintingInformation -> Doc
 mkTableDataDef pinfo = mkTableFromLenses pinfo (view dataDefnTable)
   "Data Definitions" "UID" "Term" "Symbol"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (symbolDoc . flip L.symbol (pinfo ^. stg))
 
@@ -120,7 +119,7 @@ mkTableDataDef pinfo = mkTableFromLenses pinfo (view dataDefnTable)
 mkTableGenDef :: PrintingInformation -> Doc
 mkTableGenDef pinfo = mkTableFromLenses pinfo (view gendefTable)
   "General Definitions" "UID" "Term" "Definition"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
 
@@ -128,7 +127,7 @@ mkTableGenDef pinfo = mkTableFromLenses pinfo (view gendefTable)
 mkTableTMod :: PrintingInformation -> Doc
 mkTableTMod pinfo = mkTableFromLenses pinfo (view theoryModelTable)
   "Theory Models" "UID" "Term" "Definition"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
 
@@ -136,7 +135,7 @@ mkTableTMod pinfo = mkTableFromLenses pinfo (view theoryModelTable)
 mkTableIMod :: PrintingInformation -> Doc
 mkTableIMod pinfo = mkTableFromLenses pinfo (view insmodelTable)
   "Instance Models" "UID" "Term" "Definition"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
 
@@ -144,7 +143,7 @@ mkTableIMod pinfo = mkTableFromLenses pinfo (view insmodelTable)
 mkTableCI :: PrintingInformation -> Doc
 mkTableCI pinfo = mkTableFromLenses pinfo (view conceptinsTable)
   "ConceptInstance" "UID" "Term" "ShortName"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
 
@@ -152,7 +151,7 @@ mkTableCI pinfo = mkTableFromLenses pinfo (view conceptinsTable)
 mkTableSec :: PrintingInformation -> Doc
 mkTableSec pinfo = mkTableFromLenses pinfo (view sectionTable)
   "Sections" "UID" "Title" "ShortName"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . tle)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
 
@@ -160,7 +159,7 @@ mkTableSec pinfo = mkTableFromLenses pinfo (view sectionTable)
 mkTableLC :: PrintingInformation -> Doc
 mkTableLC pinfo = mkTableFromLenses pinfo (view labelledcontentTable)
   "LabelledContent" "UID" "ShortName" "Type of Content"
-    (text . coerce . view uid)
+    (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
         (text . getContConst . view accessContents)
   where
@@ -179,7 +178,7 @@ mkTableLC pinfo = mkTableFromLenses pinfo (view labelledcontentTable)
 mkTableRef :: PrintingInformation -> Doc
 mkTableRef pinfo = mkTableFromLenses pinfo (view refTable)
   "Reference" "UID" "Reference Address" "ShortName"
-    (text . coerce . view uid)
+    (text . showUID)
       (text . getAdd . getRefAdd)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
 
@@ -187,10 +186,10 @@ mkTableRef pinfo = mkTableFromLenses pinfo (view refTable)
 mkTableDepChunks :: PrintingInformation -> Doc
 mkTableDepChunks PI{_ckdb = db} = text "Dependent Chunks (the chunks on the left use the chunks on the right in some capacity)" <> colon
   $$ header (text "UID" $$ nest nestNum (text "Dependent UIDs"))
-  $$ vcat (map (testIndepLayout . coerce) traceMapUIDs)
+  $$ vcat (map testIndepLayout traceMapUIDs)
   where
-    testIndepLayout :: (String, [String]) -> Doc
-    testIndepLayout (x, ys) = text x $$ nest nestNum (text $ show ys)
+    testIndepLayout :: (UID, [UID]) -> Doc
+    testIndepLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
     traceMapUIDs :: [(UID, [UID])]
     traceMapUIDs = Map.assocs $ db ^. traceTable
     nestNum = 30
@@ -200,10 +199,10 @@ mkTableDepChunks PI{_ckdb = db} = text "Dependent Chunks (the chunks on the left
 mkTableReferencedChunks :: PrintingInformation -> Doc
 mkTableReferencedChunks PI{_ckdb = db} = text "Referenced Chunks (other chunks build from these)" <> colon
   $$ header (text "UID" $$ nest nestNum (text "UIDs that use the left UID"))
-  $$ vcat (map (testIsolateLayout . coerce) refbyUIDs)
+  $$ vcat (map testIsolateLayout refbyUIDs)
   where
-    testIsolateLayout :: (String, [String]) -> Doc
-    testIsolateLayout (x, ys) = text x $$ nest nestNum (text $ show ys)
+    testIsolateLayout :: (UID, [UID]) -> Doc
+    testIsolateLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
     refbyUIDs :: [(UID, [UID])]
     refbyUIDs = Map.assocs $ db ^. refbyTable
     nestNum = 30
@@ -212,10 +211,10 @@ mkTableReferencedChunks PI{_ckdb = db} = text "Referenced Chunks (other chunks b
 mkTableDepReffedChunks :: PrintingInformation -> Doc
 mkTableDepReffedChunks PI{_ckdb = db} = text "Dependent and Referenced Chunks (chunks dependent on middle UIDs and used in the chunks on the right)" <> colon
   $$ header (text "UID" $$ nest nestNum (text "Dependent Chunk") $$ nest (nestNum*3) (text "Used-in Chunk"))
-  $$ vcat (map (traceRefLayout . coerce) $ Map.assocs combinedMaps)
+  $$ vcat (map traceRefLayout $ Map.assocs combinedMaps)
   where
-    traceRefLayout :: (String, ([String], [String])) -> Doc
-    traceRefLayout x = text (fst x) $$ nest nestNum (text $ show $ fst $ snd x)
+    traceRefLayout :: (UID, ([UID], [UID])) -> Doc
+    traceRefLayout x = text (show $ fst x) $$ nest nestNum (text $ show $ fst $ snd x)
       $$ nest (nestNum*3) (text $ show $ snd $ snd x)
     combinedMaps = Map.unionWith (\x y -> (fst x, snd y)) traceMapUIDs refByUIDs
     traceMapUIDs = Map.fromList $ map (\(x, y) -> (x, (y, []))) $ Map.assocs $ db ^. traceTable

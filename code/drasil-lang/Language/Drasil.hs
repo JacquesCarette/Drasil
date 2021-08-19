@@ -96,7 +96,7 @@ module Language.Drasil (
   , UID, showUID
   -- Language.Drasil.Chunk.NamedIdea
   , (+++), (+++.)
-  , NamedChunk, nc, IdeaDict , mkIdea
+  , NamedChunk, nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdea, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
@@ -223,6 +223,7 @@ module Language.Drasil (
   , RawContent(..)
   , mkFig
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
+  , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
   -- * Symbols, Stages, Spaces
   -- | Used for rendering mathematical symbols in Drasil.
 
@@ -265,7 +266,8 @@ import Language.Drasil.ModelExpr.Math (defines, space, isIn, andMEs, equivMEs)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
-  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI)
+  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
+  , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI')
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)

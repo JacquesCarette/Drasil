@@ -9,7 +9,6 @@ import Data.Drasil.Concepts.Computation (algorithm, dataStruct, inParam)
 import Data.Drasil.Concepts.Documentation (input_, physical, physicalConstraint,
   srs, softwareConstraint, quantity)
 import Data.Drasil.Concepts.Math (equation)
-import Control.Lens ((^.))
 
 -- * Common Software Concepts
 
@@ -50,7 +49,7 @@ maintainability   = dcc "maintainability"   (nounPhraseSP "maintainability")
 performance       = dcc "performance"       (nounPhraseSP "performance")
   "the action or process of carrying out or accomplishing an action, task, or function"
 
-performanceSpd    = dcc (uidToStr $ performance ^. uid) (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
+performanceSpd    = dcc "performanceSpd" (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
   "the action or process of carrying out or accomplishing an action, task, or function quickly"
  
 portability       = dcc "portability"       (nounPhraseSP "portability")

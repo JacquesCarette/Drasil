@@ -99,12 +99,11 @@ mkQDefSt :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space ->
 mkQDefSt u n s symb sp (Just ud) e = fromEqnSt u n s symb sp ud e
 mkQDefSt u n s symb sp Nothing   e = fromEqnSt' u n s symb sp e
 
--- FIXME: uidToStr shouldn't be used here.
 -- | Used to help make 'QDefinition's when 'UID', term, and 'Symbol' come from the same source.
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 mkQuantDef c = mkQDefSt (uidToStr $ c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) (getUnit c)
 
--- FIXME: uidToStr shouldn't be used here. See #2788.
+-- FIXME: See #2788.
 -- | Used to help make 'QDefinition's when 'UID' and 'Symbol' come from the same source, with the term separate.
 mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
 mkQuantDef' c t = mkQDefSt (uidToStr $ c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)

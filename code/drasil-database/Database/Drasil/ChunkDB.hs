@@ -93,7 +93,7 @@ getUnitLup m c = getUnit $ symbResolve m (c ^. uid)
 -- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
 uMapLookup :: String -> String -> UID -> UMap a -> a
 uMapLookup tys ms u t = getFM $ Map.lookup u t
-  where getFM = maybe (error $ tys ++ ": " ++ uidToStr u ++ " not found in " ++ ms) fst
+  where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
 
 -- | Looks up a 'UID' in the symbol table from the 'ChunkDB'. If nothing is found, an error is thrown.
 symbResolve :: ChunkDB -> UID -> QuantityDict

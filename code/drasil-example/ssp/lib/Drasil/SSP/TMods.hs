@@ -2,7 +2,6 @@
 module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress) 
   where
 
-import Control.Lens ((^.))
 import Prelude hiding (tan)
 import qualified Data.List.NonEmpty as NE
 

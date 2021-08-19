@@ -2,7 +2,11 @@ Drasil [![Build Status](https://github.com/JacquesCarette/Drasil/actions/workflo
 [![DOI](https://zenodo.org/badge/23760783.svg)](https://zenodo.org/badge/latestdoi/23760783)
 ====================================================
 
-Generate all the Things! See the [currently generated artifacts](https://jacquescarette.github.io/Drasil/)
+Generate all the Things! Visit [our website](https://jacquescarette.github.io/Drasil/) to see all of the currently generated artifacts.
+
+<p align="center">
+<img src="code/drasil-website/WebInfo/images/Icon.png" alt="Drasil Tree" width="200" />
+</p>
 
 ## Table of Contents
 
@@ -28,11 +32,11 @@ Drasil is based on a combination of the following ideas:
 
 To better understand the requirements for Drasil, we follow an example-driven approach, based on a set of [case studies](https://github.com/smiths/caseStudies). This is akin to test-driven engineering, but at the system level.  The [currently generated examples](https://jacquescarette.github.io/Drasil/) serve as a good introduction to what we mean.
 
-We wrote a [our position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
+We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf). For more information on the details of Drasil, please see the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki). A collection of Drasil-related papers can be found [here](https://github.com/JacquesCarette/Drasil/wiki/Drasil-Papers-and-Documents) To contribute to this project, visit the [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
 
 ## Quick Start
 
-If you are on Windows, we recommend you use [cygwin](https://cygwin.com/install.html) (MinGW probably works too, but we have not tested it).  `make` is required as well and can be installed following [these steps](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows) ; on MacOS, you may need to install XCode to get that. Most linux installs have it by default. You may also need to install [git](https://git-scm.com/downloads).
+If you are on Windows, we recommend you use [cygwin](https://cygwin.com/install.html) (MinGW probably works too, but we have not tested it).  `make` is required as well and can be installed following [these steps](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows); on MacOS, you may need to install [XCode](https://developer.apple.com/xcode/) to get that. Most linux installs have it by default. You may also need to install [git](https://git-scm.com/downloads).
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
 	- Also ensure that your stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](https://docs.haskellstack.org/en/stable/install_and_upgrade/)
@@ -42,29 +46,34 @@ If you are on Windows, we recommend you use [cygwin](https://cygwin.com/install.
 	- Refer to [File Directory](https://swcarpentry.github.io/shell-novice/02-filedir/index.html) for further help regarding file directory commands
 	- e.g. **./Users/.../GitHub/Drasil/code** (on MacOS)
 3. Use the `make` command to build the current version of Drasil. Note that this will build and run **all** of the examples as well.
+  - Run `make help` for a list of available commands.
 	- **Warning**: this entire process takes around 10-15 minutes to complete (MacOS estimate)
 4. You can find the generated output in the build folder that appears in the **./code/** folder. Each example will have its own subdirectory.
 
+For more information, please visit the [New Workspace Setup Wiki](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup).
+
 ## Building Specific Examples
 
-Simply run: `make argument` to build the corresponding example, where argument is detailed below:
+Simply run: `make argument` to build and run the corresponding example, where `argument` is detailed below:
 
 Argument | Example
 -------- | -------
 gamephysics_diff | 2D Rigid Body Physics Library
-swhs_diff | Solar Water Heating System with PCM
+swhs_diff | Solar Water Heating System with Phase Change Material
 glassbr_diff | Glass-BR
-hghc_diff | HGHC toy example
+hghc_diff | HGHC Toy Example
 ssp_diff | Slope Stability Analysis
-nopcm_diff | minimal SWHS example, with PCM removed
-projectile_diff | Projectile motion analysis
-pdcontroller_diff | Proportional Derivative controller
+nopcm_diff | Minimal SWHS Example, with PCM Removed
+projectile_diff | Projectile Motion Analysis
+pdcontroller_diff | Proportional Derivative Controller
 dblpendulum_diff | Double Pendulum
 sglpendulum_diff | Single Pendulum
 
+For more commands related to Drasil, use `make help` or check out the [Makefile documentation](https://github.com/JacquesCarette/Drasil/wiki/Makefile).
+
 ## Running the Example(s)
 
-Please note that if `make` has been used, docs are already generated automatically and can be found in build.
+Please note that if `make` has been used, the Software Requirements Specification (SRS) documents are already generated automatically and can be found in `build`.
 Automated testing can be done on these examples.
 
 After building, you can run the examples by using `stack exec NAME` where NAME is detailed below:
@@ -83,7 +92,7 @@ dblpendulum | Double Pendulum
 sglpendulum | Single Pendulum
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
-appear in this folder (i.e. in the SRS and Website folders). Due to this placement, these generated
+appear in this folder (i.e. in the SRS folders). Due to this placement, these generated
 versions will not be subject to automated tests. The tex files are generated,
 but they are not automatically compiled.  To compile the tex files, use the
 generated Makefile (in the same folder as the tex file).
@@ -105,7 +114,7 @@ See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#build
   - Contains contributions specific to some contributors (not necessarily to be implemented in Drasil)
   
 **Presentations**
-  - Presentations on LSS/Drasil
+  - Presentations on Literate Scientific Software and Drasil
   
 **WindowsFix**
   - Contains registry files for adding and removing the autorun of the command 

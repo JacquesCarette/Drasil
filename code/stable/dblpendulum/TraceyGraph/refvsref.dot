@@ -1,11 +1,7 @@
 digraph refvsref {
-	v_x1 -> velocity;
 	v_x1 -> p_x1;
-	v_y1 -> velocity;
 	v_y1 -> p_y1;
-	v_x2 -> velocity;
 	v_x2 -> p_x2;
-	v_y2 -> velocity;
 	v_y2 -> p_y2;
 	angularAccelerationIM2 -> a_x1;
 	angularAccelerationIM2 -> a_y1;
@@ -19,17 +15,15 @@ digraph refvsref {
 	angularAccelerationIM2 -> angularAccelerationIM2;
 
 
-	velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];
 	p_x1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD1"];
 	p_y1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD1"];
 	p_x2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD2"];
 	p_y2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD2"];
-	acceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:accelerationGDD"];
 	force	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
 
 	subgraph DD {
 	rank="same"
-	{velocity, p_x1, p_y1, p_x2, p_y2, acceleration, force}
+	{p_x1, p_y1, p_x2, p_y2, force}
 	}
 
 	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

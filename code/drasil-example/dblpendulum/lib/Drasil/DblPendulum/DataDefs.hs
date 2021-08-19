@@ -1,5 +1,6 @@
-module Drasil.DblPendulum.DataDefs (dataDefs, positionGDD, positionYDD_1, positionXDD_1, positionXDD_2, positionYDD_2, 
-      accelGDD, forceGDD) where
+module Drasil.DblPendulum.DataDefs (eDataDefs, meDataDefs,
+  positionGDD, positionYDD_1, positionXDD_1, positionXDD_2, positionYDD_2,
+  accelGDD, forceGDD) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
@@ -12,29 +13,31 @@ import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, f
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 
-dataDefs :: [DataDefinition]
-dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, 
-  accelGDD, forceGDD]
+eDataDefs :: [DataDefinition Expr]
+eDataDefs = [positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, forceGDD]
+
+meDataDefs :: [DataDefinition ModelExpr]
+meDataDefs = [positionGDD, accelGDD]
 
 ------------------------
 -- Position in General--
 ------------------------
-positionGDD :: DataDefinition
+positionGDD :: DataDefinition ModelExpr
 positionGDD = ddNoRefs positionGQD Nothing "positionGDD" []
 
-positionGQD :: QDefinition
+positionGQD :: QDefinition ModelExpr
 positionGQD = mkQuantDef velocity positionGEqn
 
-positionGEqn :: Expr
+positionGEqn :: ModelExpr
 positionGEqn = deriv (sy position) time
 
------------------------------------------------
--- Position in X Dirction in the First Object--
------------------------------------------------
-positionXDD_1 :: DataDefinition
+-------------------------------------------------
+-- Position in X Direction in the First Object --
+-------------------------------------------------
+positionXDD_1 :: DataDefinition Expr
 positionXDD_1 = ddNoRefs positionXQD_1 Nothing "positionXDD1" [positionXRef_1, positionXFigRef_1]
 
-positionXQD_1 :: QDefinition
+positionXQD_1 :: QDefinition Expr
 positionXQD_1 = mkQuantDef xPos_1 positionXEqn_1
 
 positionXEqn_1 :: Expr
@@ -46,13 +49,13 @@ positionXFigRef_1 = ch xPos_1 `S.is` S "shown in" +:+. refS figMotion
 positionXRef_1 :: Sentence
 positionXRef_1 = ch xPos_1 `S.isThe` phrase horizontalPos
 
------------------------------------------------
--- Position in Y Dirction in the First Object--
------------------------------------------------
-positionYDD_1 :: DataDefinition
+------------------------------------------------
+-- Position in Y Dirction in the First Object --
+------------------------------------------------
+positionYDD_1 :: DataDefinition Expr
 positionYDD_1 = ddNoRefs positionYQD_1 Nothing "positionYDD1" [positionYRef_1, positionYFigRef_1]
 
-positionYQD_1 :: QDefinition
+positionYQD_1 :: QDefinition Expr
 positionYQD_1 = mkQuantDef yPos_1 positionYEqn_1
 
 positionYEqn_1 :: Expr
@@ -67,10 +70,10 @@ positionYRef_1 = ch yPos_1 `S.isThe` phrase verticalPos
 -----------------------------------------------
 -- Position in X Dirction in the Second Object--
 -----------------------------------------------
-positionXDD_2 :: DataDefinition
+positionXDD_2 :: DataDefinition Expr
 positionXDD_2 = ddNoRefs positionXQD_2 Nothing "positionXDD2" [positionXRef_2, positionXFigRef_2]
 
-positionXQD_2 :: QDefinition
+positionXQD_2 :: QDefinition Expr
 positionXQD_2 = mkQuantDef xPos_2 positionXEqn_2
 
 positionXEqn_2 :: Expr
@@ -85,10 +88,10 @@ positionXRef_2 = ch xPos_2 `S.isThe` phrase horizontalPos
 -----------------------------------------------
 -- Position in Y Dirction in the Second Object--
 -----------------------------------------------
-positionYDD_2 :: DataDefinition
+positionYDD_2 :: DataDefinition Expr
 positionYDD_2 = ddNoRefs positionYQD_2 Nothing "positionYDD2" [positionYRef_2, positionYFigRef_2]
 
-positionYQD_2 :: QDefinition
+positionYQD_2 :: QDefinition Expr
 positionYQD_2 = mkQuantDef yPos_2 positionYEqn_2
 
 positionYEqn_2 :: Expr
@@ -103,22 +106,22 @@ positionYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
 ---------------------------
 -- Accleartion in General--
 ---------------------------
-accelGDD :: DataDefinition
+accelGDD :: DataDefinition ModelExpr
 accelGDD = ddNoRefs accelGQD Nothing "accelerationGDD" []
 
-accelGQD :: QDefinition
+accelGQD :: QDefinition ModelExpr
 accelGQD = mkQuantDef acceleration accelGEqn
 
-accelGEqn :: Expr
+accelGEqn :: ModelExpr
 accelGEqn = deriv (sy velocity) time 
 
 ---------------------------
 -- Force in General--
 ---------------------------
-forceGDD :: DataDefinition
+forceGDD :: DataDefinition Expr
 forceGDD = ddNoRefs forceGQD Nothing "forceGDD" []
 
-forceGQD :: QDefinition
+forceGQD :: QDefinition Expr
 forceGQD = mkQuantDef force forceGEqn
 
 forceGEqn :: Expr

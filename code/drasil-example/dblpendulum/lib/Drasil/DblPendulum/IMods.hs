@@ -7,9 +7,10 @@ import Language.Drasil
 import Theory.Drasil
 import Utils.Drasil (foldlSentCol, weave)
 import qualified Utils.Drasil.Sentence as S
-import Drasil.DblPendulum.Expressions (
-  angularAccelExpr_1, angularAccelExpr_2, angularAccelDerivEqns, forceDerivExpr1, forceDerivExpr2,
+import Drasil.DblPendulum.Expressions (angularAccelExpr_1, angularAccelExpr_2,
+  forceDerivExpr1, forceDerivExpr2,
   cosAngleExpr1, sinAngleExpr1, cosAngleExpr2, sinAngleExpr2)
+import Drasil.DblPendulum.Derivations (angularAccelDerivEqns)
 import Drasil.DblPendulum.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2,
   massObj_1, massObj_2, angularAccel_1, angularAccel_2, angularVel_1, angularVel_2)
 import Drasil.DblPendulum.GenDefs (xForceGD_2, yForceGD_2, xForceGD_1, yForceGD_1, accelXGD_1, accelXGD_2, accelYGD_1, accelYGD_2)
@@ -50,11 +51,11 @@ angularAccelIM_1 = imNoRefs angularAccelMK_1
   (qw angularAccel_1) [UpFrom (Exc, exactDbl 0)]
   Nothing "calOfAngularAcceleration1" []
 
-angularAccelMK_1 :: ModelKind 
+angularAccelMK_1 :: ModelKind Expr
 angularAccelMK_1 = equationalModel "angularAccelerationIM1"
   (nounPhraseSP "calculation of angular acceleration") angularAccelFD_1
 
-angularAccelFD_1 :: QDefinition
+angularAccelFD_1 :: QDefinition Expr
 angularAccelFD_1 = mkFuncDefByQ angularAccel_1
   [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularAccelExpr_1
 
@@ -69,11 +70,11 @@ angularAccelIM_2 = imNoRefs angularAccelMK_2
   (qw angularAccel_2) [UpFrom (Exc, exactDbl 0)]
   (Just angularAccelDeriv_2) "calOfAngularAcceleration2" [{-Notes-}]
 
-angularAccelMK_2 :: ModelKind 
+angularAccelMK_2 :: ModelKind Expr
 angularAccelMK_2 = equationalModel "angularAccelerationIM2"
   (nounPhraseSP "calculation of angular acceleration") angularAccelFD_2
 
-angularAccelFD_2 :: QDefinition
+angularAccelFD_2 :: QDefinition Expr
 angularAccelFD_2 = mkFuncDefByQ angularAccel_2
   [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularAccelExpr_2
 

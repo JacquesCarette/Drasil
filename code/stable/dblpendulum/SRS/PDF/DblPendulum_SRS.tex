@@ -1030,42 +1030,6 @@ This section collects and defines all the data needed to build the instance mode
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:positionGDD}
-\phantomsection 
-\label{DD:positionGDD}
-\\ \midrule \\
-Label & Velocity
-        
-\\ \midrule \\
-Symbol & $\symbf{v}$
-         
-\\ \midrule \\
-Units & $\frac{\text{m}}{\text{s}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[GD:velocityY2]{GD:velocityY2}, \hyperref[GD:velocityY1]{GD:velocityY1}, \hyperref[GD:velocityX2]{GD:velocityX2}, and \hyperref[GD:velocityX1]{GD:velocityX1}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:positionXDD1}
 \phantomsection 
 \label{DD:positionXDD1}
@@ -1224,41 +1188,6 @@ Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:velocityY2]{GD:velocityY2}
         
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:accelerationGDD}
-\phantomsection 
-\label{DD:accelerationGDD}
-\\ \midrule \\
-Label & Acceleration
-        
-\\ \midrule \\
-Symbol & $\symbf{a}$
-         
-\\ \midrule \\
-Units & $\frac{\text{m}}{\text{s}^{2}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -1584,8 +1513,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \midrule
 \endhead
-\hyperref[DD:positionGDD]{DD:positionGDD} &  &  &  &  &  &  & 
-\\
 \hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  &  &  &  & 
 \\
 \hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  &  &  &  & 
@@ -1593,8 +1520,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  &  &  &  & 
 \\
 \hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  &  &  &  & 
-\\
-\hyperref[DD:accelerationGDD]{DD:accelerationGDD} &  &  &  &  &  &  & 
 \\
 \hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  &  &  &  & 
 \\
@@ -1648,83 +1573,79 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}} & \textbf{\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}}
+\textbf{} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}} & \textbf{\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}}
 \\
 \midrule
 \endhead
-\hyperref[DD:positionGDD]{DD:positionGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:accelerationGDD]{DD:accelerationGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityX1]{GD:velocityX1} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityY1]{GD:velocityY1} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityX1]{GD:velocityX1} & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityX2]{GD:velocityX2} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityY1]{GD:velocityY1} & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityY2]{GD:velocityY2} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityX2]{GD:velocityX2} & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationX1]{GD:accelerationX1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityY2]{GD:velocityY2} & X &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationY1]{GD:accelerationY1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationX1]{GD:accelerationX1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationX2]{GD:accelerationX2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationY1]{GD:accelerationY1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationY2]{GD:accelerationY2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationX2]{GD:accelerationX2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:xForce1]{GD:xForce1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationY2]{GD:accelerationY2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:yForce1]{GD:yForce1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:xForce1]{GD:xForce1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:xForce2]{GD:xForce2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:yForce1]{GD:yForce1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:yForce2]{GD:yForce2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:xForce2]{GD:xForce2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:yForce2]{GD:yForce2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X & X & X & X & X & X
+\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X & X & X & X & X & X
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}} & \textbf{\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}} & \textbf{\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
 \midrule
 \endhead
-\hyperref[motionMass]{GS:motionMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[motionMass]{GS:motionMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}

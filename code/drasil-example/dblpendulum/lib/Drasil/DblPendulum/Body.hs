@@ -33,7 +33,7 @@ import Drasil.DblPendulum.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPendulum.Assumptions (assumpDouble)
 import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
-import Drasil.DblPendulum.DataDefs (dataDefs)
+import Drasil.DblPendulum.DataDefs
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
@@ -107,13 +107,13 @@ si = SI {
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
-  _datadefs    = dataDefs,
+  _datadefs    = eDataDefs,
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
-  _defSequence = [] :: [Block QDefinition],
+  _defSequence = [] :: [Block (QDefinition Expr)],
   _constraints = inConstraints,
-  _constants   = [] :: [QDefinition],
+  _constants   = [] :: [QDefinition Expr],
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
    refdb       = refDB
@@ -126,12 +126,12 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
    [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
-  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] [] ([] :: [Reference])
+  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
+  eDataDefs meDataDefs iMods genDefns tMods concIns [] [] ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+  ([] :: [UnitDefn]) [] [] [] [] [] [] [] [] ([] :: [Reference])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

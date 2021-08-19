@@ -17,7 +17,8 @@ import Data.Drasil.Concepts.Physics (pendulum, motion, shm)
 import Data.Drasil.Theories.Physics (newtonSLR)
 import Drasil.SglPendulum.GenDefs (angFrequencyGD)
 
-import Drasil.SglPendulum.Expressions (angularDisplacementExpr, angularDisplacementDerivEqns)
+import Drasil.SglPendulum.Derivations
+import Drasil.SglPendulum.Expressions (angularDisplacementExpr)
 import Drasil.SglPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)
 
 iMods :: [InstanceModel]
@@ -32,11 +33,11 @@ angularDisplacementIM = imNoRefs angularDisplacementMK
   (qw pendDisplacementAngle) [UpFrom (Exc, exactDbl 0)]
   (Just angularDisplacementDeriv) "calOfAngularDisplacement" [angularDispConstraintNote]
 
-angularDisplacementMK :: ModelKind 
+angularDisplacementMK :: ModelKind Expr
 angularDisplacementMK = equationalModel "angularDisplacementIM"
   (nounPhraseSP "calculation of angular displacement") angularDisplacementFD
 
-angularDisplacementFD :: QDefinition
+angularDisplacementFD :: QDefinition Expr
 angularDisplacementFD = mkFuncDefByQ pendDisplacementAngle
   [time] angularDisplacementExpr
 

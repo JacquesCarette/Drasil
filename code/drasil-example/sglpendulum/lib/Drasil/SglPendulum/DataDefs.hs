@@ -15,15 +15,15 @@ import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
 
 
-dataDefs :: [DataDefinition]
+dataDefs :: [DataDefinition Expr]
 dataDefs = [positionIX, positionIY, frequencyDD, angFrequencyDD, periodSHMDD]
 
 
 ------------------------------------------------------
-positionIX :: DataDefinition
+positionIX :: DataDefinition Expr
 positionIX = ddNoRefs positionIXQD Nothing "positionIX" [positionRef, figRef]
 
-positionIXQD :: QDefinition
+positionIXQD :: QDefinition Expr
 positionIXQD = mkQuantDef QP.ixPos positionIXEqn
 
 positionIXEqn :: Expr
@@ -36,10 +36,10 @@ positionRef :: Sentence
 positionRef = ch QP.ixPos `S.isThe` phrase horizontalPos
 
 ------------------------------------------------------
-positionIY :: DataDefinition
+positionIY :: DataDefinition Expr
 positionIY = ddNoRefs positionIYQD Nothing "positionIY" [positionReff, figReff]
 
-positionIYQD :: QDefinition
+positionIYQD :: QDefinition Expr
 positionIYQD = mkQuantDef QP.iyPos positionIYEqn
 
 positionIYEqn :: Expr
@@ -53,10 +53,10 @@ positionReff = ch QP.iyPos `S.isThe` phrase verticalPos
 
 ------------------------------------------------------
 
-frequencyDD :: DataDefinition
+frequencyDD :: DataDefinition Expr
 frequencyDD = ddNoRefs frequencyDDQD Nothing "frequencyDD" [frequencyRef]
 
-frequencyDDQD :: QDefinition
+frequencyDDQD :: QDefinition Expr
 frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
 
 frequencyDDEqn :: Expr
@@ -68,10 +68,10 @@ frequencyRef = ch QP.frequency `S.isThe` S "number of back and forth swings in o
 
 ------------------------------------------------------
 
-angFrequencyDD :: DataDefinition
+angFrequencyDD :: DataDefinition Expr
 angFrequencyDD = ddNoRefs angFrequencyDDQD Nothing "angFrequencyDD" [angFrequencyRef]
 
-angFrequencyDDQD :: QDefinition
+angFrequencyDDQD :: QDefinition Expr
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
@@ -82,10 +82,10 @@ angFrequencyRef = ch QP.period `S.is` S "from" +:+ refS periodSHMDD
 
 ------------------------------------------------------
 
-periodSHMDD :: DataDefinition
+periodSHMDD :: DataDefinition Expr
 periodSHMDD = ddNoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
 
-periodSHMDDQD :: QDefinition
+periodSHMDDQD :: QDefinition Expr
 periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn
 
 periodSHMDDEqn :: Expr

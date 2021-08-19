@@ -8,16 +8,16 @@ import Control.Lens (view, (^.))
 -- | Smart constructor for making a 'UID' from a 'String'.
 uid :: String -> UID
 uid = UID
-  -- | '►' `elem` s = error $ "► not allowed in UID " ++ show s -- FIXME: Need to implement other constructors before we can use this.
-  -- | null s       = error "UID must be non-zero length" -- FIXME: See Drasil.DocumentLanguage.TraceabilityGraph (uses an empty UID)
-  -- | otherwise    = UID s
+  -- '►' `elem` s = error $ "► not allowed in UID " ++ show s -- FIXME: Need to implement other constructors before we can use this.
+  -- null s       = error "UID must be non-zero length" -- FIXME: See Drasil.DocumentLanguage.TraceabilityGraph (uses an empty UID)
+  -- otherwise    = UID s
 
 -- | For when we need to modify a UID. We first take the base chunk's UID and then append a suffix to it.
 (+++) :: C.HasUID a => a -> String -> UID
 a +++ suff
   | null suff       = error "Suffix must be non-zero length"
   | otherwise       = UID $ s ++ suff
-  -- | otherwise       = UID $ s ++ '►':suff --FIXME: Implement this properly.
+  -- otherwise       = UID $ s ++ '►':suff --FIXME: Implement this properly.
     where UID s = a ^. C.uid
 
 -- | For when we need to append something to a UID.

@@ -1,8 +1,9 @@
 If you are looking for **build instructions**, find them in the [top level README](https://github.com/JacquesCarette/Drasil).
 
 --------------------------------------------------
-### Drasil Coding Style Guide
-Last updated: August 19, 2021
+## Drasil Coding Style Guide
+Last updated: August 20, 2021
+
 --------------------------------------------------
 
 1. Use spaces instead of tabs. Preferably 2 spaces per indent level. Ex:
@@ -29,6 +30,7 @@ top level
   S "is the"
   ...
 ```
+For more information, please see the [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
 
 -------------------------------------------------
 ### Quick Start Legend
@@ -52,10 +54,10 @@ top level
 
 **Note: See Language.Drasil for more information on the Sentence type**
 
-Also take a look at the Documentation section of the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki) for more information.
+Also take a look at the Documentation section of the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki) for more information, as well as the [Haddock documentation](https://jacquescarette.github.io/Drasil/docs/full/index.html) for more functions.
 
 -------------------------------------------------
-### Data types and class instances
+### Data Types and Class Instances
 -------------------------------------------------
 
 See the 

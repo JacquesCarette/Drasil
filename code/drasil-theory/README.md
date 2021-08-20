@@ -3,14 +3,17 @@
 Last updated: May 13, 2019
 --------------------------------------------------
 
+**Data**
+  - Contains the `CommonIdeas` for definitions and models used in Drasil
+
 **Theory**
   - Contains the theory for the Drasil language
- 
+
+package.yaml
+  - Used by Hpack 
+
 README.md
   - This file
-
-drasil-theory.cabal
-  - Cabal file, used by stack to build drasil-theory
 
 stack.yaml
   - Used by Stack

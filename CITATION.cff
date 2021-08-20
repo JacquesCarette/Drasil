@@ -52,3 +52,7 @@ authors:
     website: "https://www.cas.mcmaster.ca/~smiths/"
     affiliation: "McMaster University, Computing and Software Department"
     email: "smiths@mcmaster.ca"
+  - family-names: Chen
+     given-names: Dong
+     email: chend79@mcmaster.ca
+     website: "https://github.com/cd155"

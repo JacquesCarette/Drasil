@@ -1,7 +1,11 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
-module Theory.Drasil.InstanceModel
-  ( InstanceModel
+-- | Defines types and functions for Instance Models.
+module Theory.Drasil.InstanceModel(
+  -- * Type
+  InstanceModel
+  -- * Constructors
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  -- * Functions
   , getEqModQdsFromIm
   , qwUC, qwC
   ) where

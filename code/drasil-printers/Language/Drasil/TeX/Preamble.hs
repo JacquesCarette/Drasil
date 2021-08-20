@@ -1,3 +1,4 @@
+-- | Defines types and functions to help generate common LaTeX preamble.
 module Language.Drasil.TeX.Preamble (genPreamble) where
 
 import Data.List (nub)

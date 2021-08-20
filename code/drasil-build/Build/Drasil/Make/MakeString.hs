@@ -1,4 +1,7 @@
+-- | Defines types and functions for generating Makefiles.
 module Build.Drasil.Make.MakeString where
+
+-- * Types
 
 -- | Type synonym for variable names.
 type VarName = String
@@ -15,17 +18,19 @@ instance Semigroup MakeString where
 instance Monoid MakeString where
   mempty = Mr ""
 
--- | Concatenates two 'MakeString's with a space in between.
-(+:+) :: MakeString -> MakeString -> MakeString
-a +:+ (Mr "") = a
-(Mr "") +:+ b = b
-a +:+ b = a <> Mr " " <> b
-
 -- | For creating Makefile variables.
 data MVar = Os VarName VarVal VarVal VarVal -- ^ Operating System specific variable. Holds information for Windows, Mac, and Linux systems.
           | Implicit VarName -- ^ Implicit OS.
           | Free VarName -- ^ Independent of OS.
           deriving Eq
+
+-- * Functions
+
+-- | Concatenates two 'MakeString's with a space in between.
+(+:+) :: MakeString -> MakeString -> MakeString
+a +:+ (Mr "") = a
+(Mr "") +:+ b = b
+a +:+ b = a <> Mr " " <> b
 
 -- | Renders a 'MakeString'. Variables have the form \"$(@var@)\".
 renderMS :: MakeString -> String

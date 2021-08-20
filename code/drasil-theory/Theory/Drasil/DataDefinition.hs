@@ -1,9 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
+-- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition where
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil
 import Data.Drasil.TheoryConcepts (dataDefn)
+
+-- * Types
 
 -- | A scope is an indirect reference to a 'UID'.
 newtype Scope = Scp { _spec :: UID }
@@ -65,6 +68,8 @@ instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
 instance Referable          DataDefinition where
   refAdd      = ra
   renderRef l = RP (prepend $ abrv l) (refAdd l)
+
+-- * Constructors
 
 -- | Smart constructor for data definitions.
 dd :: QDefinition -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition

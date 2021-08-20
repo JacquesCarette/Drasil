@@ -1,3 +1,4 @@
+-- | Defines functions to create accompanying .css files for HTML generators.
 module Language.Drasil.HTML.CSS where
 
 import Text.PrettyPrint (Doc, text, vcat)

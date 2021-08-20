@@ -1,3 +1,4 @@
+-- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
 
 import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..), RTopology(..), Special(..))

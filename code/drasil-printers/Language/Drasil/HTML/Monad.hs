@@ -1,3 +1,4 @@
+-- | Defines types needed for HTML printers.
 module Language.Drasil.HTML.Monad where
 
 import Language.Drasil

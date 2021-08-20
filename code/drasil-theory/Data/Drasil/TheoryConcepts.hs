@@ -1,3 +1,4 @@
+-- | Theory related Drasil concepts, used across Drasil.
 module Data.Drasil.TheoryConcepts where
 
 import Language.Drasil (cn', CI, commonIdeaWithDict)

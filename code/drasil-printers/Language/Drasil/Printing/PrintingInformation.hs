@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-
+-- | Defines types and functions to gather all the information needed for printing.
 module Language.Drasil.Printing.PrintingInformation where
 
 import Control.Lens (makeLenses, Lens', (^.))

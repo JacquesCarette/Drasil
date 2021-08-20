@@ -1,29 +1,34 @@
 module Language.Drasil.Printers (
-  -- Format 
-    Format(TeX, HTML, JSON)
-  -- DOT
-  , outputDot, GraphInfo(..), NodeFamily(..)
-  -- HTML
-    -- Helpers
-  , makeCSS
-    -- Print 
+  -- * Formats
+  Format(TeX, HTML, JSON)
+  -- * DOT
+  -- ** Types
+  , GraphInfo(..), NodeFamily(..)
+  -- ** Functions
+  , outputDot
+  -- * HTML
+  -- ** Printer 
   , genHTML
-  -- Markdown
-    --createMd
-  , makeMd, introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote
-  -- Plain
-  -- Print
+  -- ** Helpers
+  , makeCSS
+  -- * Markdown
+  -- ** Printer
+  , makeMd
+  -- ** Section Printers
+  , introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote
+  -- * Plain
+  -- ** Types
   , Linearity(..)
+  -- ** Functions
   , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc
-  -- TeX
-  -- Print
+  -- * TeX
   , genTeX
-  -- Jupyter
-    -- Print 
+  -- * Jupyter
   , genJSON
-  -- Log
+  -- * Log
   , printAllDebugInfo
-  , PrintingInformation(..) , piSys
+  -- * Printing Information and Options
+  , PrintingInformation(..), piSys
   , HasPrintingOptions (..)
   , Notation(..)
   , defaultConfiguration

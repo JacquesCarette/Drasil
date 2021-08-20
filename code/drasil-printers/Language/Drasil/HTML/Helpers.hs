@@ -1,3 +1,4 @@
+-- | Helper functions for creating HTML printers (specifically, HTML tag wrappers).
 module Language.Drasil.HTML.Helpers where
 
 import Prelude hiding ((<>))

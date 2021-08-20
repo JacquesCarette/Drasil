@@ -1,5 +1,9 @@
+-- | Markdown file creator for generated GOOL code.
 module Language.Drasil.Markdown.CreateMd (
-    makeMd, introInfo, verInfo, unsupOS, extLibSec, regularSec, instDoc, endNote) 
+    -- * Main Function
+    makeMd,
+    -- * Section Creators
+    introInfo, verInfo, unsupOS, extLibSec, regularSec, instDoc, endNote) 
     where
 
 import Prelude hiding ((<>))

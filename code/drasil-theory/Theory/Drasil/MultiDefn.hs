@@ -1,8 +1,12 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
-
-module Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr,
-    mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr,
-    multiDefnGenQD, multiDefnGenQDByUID) where
+-- | Defines types and functions for creating mult-definitions.
+module Theory.Drasil.MultiDefn (
+  -- * Types
+  MultiDefn, DefiningExpr,
+  -- * Constructors
+  mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr,
+  -- * Functions
+  multiDefnGenQD, multiDefnGenQDByUID) where
 
 import Control.Lens ((^.), view, makeLenses)
 import Data.List (union)

@@ -21,7 +21,7 @@ Generate all the Things! Visit [our website](https://jacquescarette.github.io/Dr
 
 For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is being able to teach the domain language to a computer.  Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain.
 
-We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation **F = m a** will *look* different when rendered in documentation and in Java or Python, although it will mean the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
+We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation *`F = ma`* will *look* different when rendered in documentation and in Java or Python, although it will mean the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
 
 Drasil is based on a combination of the following ideas:
 1. domain knowledge changes very slowly
@@ -32,7 +32,7 @@ Drasil is based on a combination of the following ideas:
 
 To better understand the requirements for Drasil, we follow an example-driven approach, based on a set of [case studies](https://github.com/smiths/caseStudies). This is akin to test-driven engineering, but at the system level.  The [currently generated examples](https://jacquescarette.github.io/Drasil/) serve as a good introduction to what we mean.
 
-We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf). For more information on the details of Drasil, please see the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki). A collection of Drasil-related papers can be found [here](https://github.com/JacquesCarette/Drasil/wiki/Drasil-Papers-and-Documents) To contribute to this project, visit the [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
+We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf). For more information on the details of Drasil, please see the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki). A collection of Drasil-related papers can be found [here](https://github.com/JacquesCarette/Drasil/wiki/Drasil-Papers-and-Documents). To contribute to this project, visit the [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
 
 ## Quick Start
 
@@ -99,13 +99,22 @@ generated Makefile (in the same folder as the tex file).
 
 ## Finding / Building the Haddock Documentation
 
-You can run `make docs` from the ./code/ folder to build the documentation. **Note**: this process can take about 10-12 minutes (MacOS estimate).
+You can run `make docs` from the **./code/** folder to build the documentation. **Note**: this process can take about 10-12 minutes (MacOS estimate).
 
-See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#building-up-to-date-documentation) in ./code/ for more information.
+See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#building-up-to-date-documentation) in **./code/** for more information.
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
+
+**code**
+  - The main folder for Drasil source code and example implementations
+
+**doc**
+  - Documents related to Drasil (contains the Contributor's Test)
+  
+**notes**
+  - Assorted general/administrative notes
 
 **Papers**
   - Subdirectory for papers related to Drasil framework, GOOL
@@ -119,21 +128,15 @@ See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#build
 **WindowsFix**
   - Contains registry files for adding and removing the autorun of the command 
   `chcp 65001`. This is to fix an issue with unicode characters. **ONLY** affects Windows machines.
-  
-**code**
-  - The main folder for Drasil source code and example implementations
-  
-**doc**
-  - Documentation related to Drasil
-  
-**notes**
-  - Assorted general/administrative notes
 
 .gitattributes
   - Used by git (set language attributes so GitHub Linguist calculates code statistics as desired)
   
 .gitignore
   - Used by git (specifies which file(type)s to ignore when committing)
+
+CITATION.cff
+  - Used to cite Drasil
   
 LICENSE
   - License information

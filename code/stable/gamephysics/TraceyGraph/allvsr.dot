@@ -23,10 +23,16 @@ digraph allvsr {
 	impulseV	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:impulseV"];
 	potEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:potEnergy"];
 	momentOfInertia	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:momentOfInertia"];
+	linearDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linDisp"];
+	linearVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linVel"];
+	linearAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linAcc"];
+	angularDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angDisp"];
+	angularVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angVel"];
+	angularAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angAccel"];
 
 	subgraph DD {
 	rank="same"
-	{p_CM, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
+	{p_CM, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration}
 	}
 
 	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];

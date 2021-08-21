@@ -108,8 +108,6 @@ mkTableUnitDefn pinfo = mkTableFromLenses pinfo (view unitTable)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . Sy . usymb)
 
--- TODO: meDataDefnTable?
-
 -- | Makes a table with all data definitions in the SRS.
 mkTableDataDef :: PrintingInformation -> Doc
 mkTableDataDef pinfo = mkTableFromLenses pinfo (view eDataDefnTable)

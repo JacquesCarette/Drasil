@@ -35,10 +35,9 @@ tvEverything = flip (const id)
 tvAssumps :: TraceViewCat
 tvAssumps = traceViewCC assumpDom
 
--- TODO: What about ModelExprs?
 -- | Traceabiliy viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvDataDefns :: TraceViewCat
-tvDataDefns = traceView eDataDefnTable
+tvDataDefns a b = traceView eDataDefnTable a b ++ traceView meDataDefnTable a b
 
 -- | Traceabiliy viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGenDefns :: TraceViewCat

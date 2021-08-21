@@ -19,10 +19,12 @@ digraph avsall {
 	p_x2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD2"];
 	p_y2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD2"];
 	force	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
+	velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];
+	acceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:accelerationGDD"];
 
 	subgraph DD {
 	rank="same"
-	{p_x1, p_y1, p_x2, p_y2, force}
+	{p_x1, p_y1, p_x2, p_y2, force, velocity, acceleration}
 	}
 
 	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

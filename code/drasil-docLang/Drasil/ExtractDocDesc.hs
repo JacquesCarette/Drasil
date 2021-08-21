@@ -49,10 +49,10 @@ exprPlate :: DLPlate (Constant [ModelExpr])
 exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon')
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
-    (TMs _ _ t)   -> goTM t
-    (DDs _ _ d _) -> go d
-    (GDs _ _ g _) -> go g
-    (IMs _ _ i _) -> go i
+    (TMs _ _ t)          -> goTM t
+    (DDs _ _ des dmes _) -> go des ++ go dmes
+    (GDs _ _ g _)        -> go g
+    (IMs _ _ i _)        -> go i
     _ -> [],
   auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
   }) where
@@ -122,7 +122,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (TMs s _ t) -> let r = mappend s . concatMap (\x -> def (x ^. operations) ++
                              def (x ^. defined_quant) ++ notes [x] ++
                              r (x ^. valid_context)) in r t
-      (DDs s _ d _) -> s ++ der d ++ notes d
+      (DDs s _ des dmes _) -> s ++ der des ++ der dmes ++ notes des ++ notes dmes
       (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
       (Constraints s _) -> [s]

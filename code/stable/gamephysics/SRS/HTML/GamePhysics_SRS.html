@@ -180,6 +180,11 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
+                  <td><em><b>a</b>(t)</em></td>
+                  <td>Linear acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
                   <td><em><b>a</b><sub>j</sub></em></td>
                   <td>J-Th Body's Acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
@@ -381,6 +386,16 @@
                   <td><em>s</em></td>
                 </tr>
                 <tr>
+                  <td><em><b>u</b></em></td>
+                  <td>Displacement</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>u</b>(t)</em></td>
+                  <td>Linear displacement</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
                   <td><em>||<b>u</b><sub>AP</sub>*<b>n</b>||</em></td>
                   <td>
                     Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A
@@ -402,6 +417,11 @@
                 <tr>
                   <td><em><b>v</b></em></td>
                   <td>Velocity</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>v</b>(t)</em></td>
+                  <td>Linear velocity</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -468,6 +488,11 @@
                   <td><em>α<sub>j</sub></em></td>
                   <td>J-Th Body's Angular Acceleration</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>θ</em></td>
+                  <td>Angular displacement</td>
+                  <td><em>rad</em></td>
                 </tr>
                 <tr>
                   <td><em><b>τ</b></em></td>
@@ -775,12 +800,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:transMot>IM:transMot</a>.)
+                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. (RefBy: <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:transMot>IM:transMot</a>.)
+                      objectDimension: All objects are 2D. (RefBy: <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
@@ -1780,6 +1805,348 @@
                     <tr>
                       <th>RefBy</th>
                       <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:linDisp">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:linDisp</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Linear displacement</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em><b>u</b>(t)</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>m</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\symbf{u}\text{(}t\text{)}=\frac{\,d\symbf{p}\left(t\right)}{\,dt}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>u</b>(t)</em> is the linear displacement (<em>m</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A:objectTy</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:transMot>IM:transMot</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:linVel">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:linVel</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Linear velocity</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em><b>v</b>(t)</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{u}\left(t\right)}{\,dt}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>v</b>(t)</em> is the linear velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em><b>u</b></em> is the displacement (<em>m</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A:objectTy</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:transMot>IM:transMot</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:linAcc">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:linAcc</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Linear acceleration</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em><b>a</b>(t)</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\left(t\right)}{\,dt}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>a</b>(t)</em> is the linear acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A:objectTy</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:transMot>IM:transMot</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:angDisp">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:angDisp</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Angular displacement</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>θ</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>rad</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[θ=\frac{\,dϕ\left(t\right)}{\,dt}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>θ</em> is the angular displacement (<em>rad</em>)</li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em>ϕ</em> is the orientation (<em>rad</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A:objectTy</a>) and two-dimensional (from <a href=#assumpOD>A:objectDimension</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"><a href=#IM:rotMot>IM:rotMot</a></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:angVel">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:angVel</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Angular velocity</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>ω</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{rad}}{\text{s}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[ω=\frac{\,dθ\left(t\right)}{\,dt}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>ω</em> is the angular velocity (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em>θ</em> is the angular displacement (<em>rad</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A:objectTy</a>) and two-dimensional (from <a href=#assumpOD>A:objectDimension</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"><a href=#IM:rotMot>IM:rotMot</a></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:angAccel">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:angAccel</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Angular acceleration</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>α</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[α=\frac{\,dω\left(t\right)}{\,dt}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>α</em> is the angular acceleration (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em>ω</em> is the angular velocity (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A:objectTy</a>) and two-dimensional (from <a href=#assumpOD>A:objectDimension</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"><a href=#IM:rotMot>IM:rotMot</a></p></td>
                     </tr>
                   </table>
                 </div>

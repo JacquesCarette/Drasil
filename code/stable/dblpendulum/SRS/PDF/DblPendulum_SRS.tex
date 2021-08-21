@@ -1227,6 +1227,77 @@ RefBy &
 \end{tabular}
 \end{minipage}
 
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:positionGDD}
+\phantomsection 
+\label{DD:positionGDD}
+\\ \midrule \\
+Label & Velocity
+        
+\\ \midrule \\
+Symbol & $\symbf{v}$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:velocityY2]{GD:velocityY2}, \hyperref[GD:velocityY1]{GD:velocityY1}, \hyperref[GD:velocityX2]{GD:velocityX2}, and \hyperref[GD:velocityX1]{GD:velocityX1}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:accelerationGDD}
+\phantomsection 
+\label{DD:accelerationGDD}
+\\ \midrule \\
+Label & Acceleration
+        
+\\ \midrule \\
+Symbol & $\symbf{a}$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.

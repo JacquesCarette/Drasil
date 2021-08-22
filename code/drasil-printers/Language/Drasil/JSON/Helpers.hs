@@ -7,6 +7,7 @@ import Data.List.Split (splitOn)
 import qualified Text.JSON as J (encode)
 
 import Language.Drasil (MaxWidthPercent)
+import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.HTML.Helpers (img)
 
 data Variation = Class | Id
@@ -101,6 +102,13 @@ formatter [] = []
 jf :: String -> Doc
 jf s = text $ replace "`" "\'" (formatter s)
 -}
+
+br :: Doc -> Doc
+-- | Curly braces.
+br x = text "{" <> x <> text"}"
+
+mkDiv :: String -> Doc -> Doc -> Doc
+mkDiv s a0 a1 = (H.bslash <> text s) <> br a0 <> br a1
 
 stripnewLine :: String -> Doc
 stripnewLine s = hcat (map text (splitOn "\n" s))

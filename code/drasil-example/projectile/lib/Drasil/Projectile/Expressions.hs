@@ -10,11 +10,11 @@ import Language.Drasil
 import Utils.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst, gravitationalAccel, 
+import Data.Drasil.Quantities.Physics (gravitationalAccelConst, 
   ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
   constAccelV, speed)
 
-import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, flightDur, offset)
+import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)
 
 flightDur', iyPos, yConstAccel, iSpeed :: Expr
 flightDur' = exactDbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst

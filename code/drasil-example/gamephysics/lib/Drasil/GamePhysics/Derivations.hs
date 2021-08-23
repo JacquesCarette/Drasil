@@ -3,21 +3,10 @@ module Drasil.GamePhysics.Derivations where
 import Language.Drasil (eqSymb)
 import Language.Drasil.ModelExpr
 
-import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
-import Drasil.GamePhysics.References (chaslesWiki)
-import Drasil.GamePhysics.Unitals (initRelVel, massj, mTot, normalVect,
-  posCM, posj, velB, velO, rOB, finRelVel,
-  velAP, velBP, rRot, velo_1, velo_2, timeT, time_1, time_2, massj,
-   mTot, normalVect, velo_1, velo_2)
+import Drasil.GamePhysics.Unitals (timeT, time_1, time_2, velo_1, velo_2)
 
-import Data.Drasil.Concepts.Math (rightHand)
-import Data.Drasil.Concepts.Physics (rigidBody, twoD)
-
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, angularDisplacement, angularVelocity,
-  displacement, linearAccel, linearDisplacement, linearVelocity, position,
-  restitutionCoef, time, velocity,force, torque, kEnergy, energy, impulseV, chgInVelocity,
-  acceleration, potEnergy, height, gravitationalAccel, momentOfInertia)
+import qualified Data.Drasil.Quantities.Physics as QP (force, time, velocity,
+  acceleration, chgInVelocity)
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 

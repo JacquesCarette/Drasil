@@ -4,9 +4,9 @@ module Drasil.NoPCM.Derivations (
 
 import Language.Drasil.ModelExpr
 
-import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Physics (time)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
-  tempInit, tempW, timeFinal, wMass)
+  tempW, wMass)
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --

@@ -4,10 +4,9 @@ import Prelude hiding (sin, cos, tan, sqrt)
 
 import Language.Drasil.ModelExpr
 
-import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity, xVel, yVel,
-    angularAccel, xAccel, yAccel, acceleration, tension, gravitationalAccel,
-    angularFrequency, torque, momentOfInertia, time,
-    momentOfInertia, period, position)
+import Data.Drasil.Quantities.Physics (acceleration, angularAccel, angularFrequency,
+  angularVelocity, gravitationalAccel, momentOfInertia, period, position, time,
+  torque, velocity, xAccel, xPos, xVel, yAccel, yPos, yVel)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.SglPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)

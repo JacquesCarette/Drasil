@@ -8,7 +8,9 @@ import Drasil.PDController.DataDefs
 import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
-import Language.Drasil (qw, makeRC, dRef, mkDerivName, phrase, atStartNP, nounPhraseSP, (!.), (+:+), (+:+.), eS, sC, RelationConcept, Derivation, Expr, ModelExpr, Sentence(S, EmptyS), Inclusive(Exc), RealInterval(UpFrom))
+import Language.Drasil (qw, makeRC, dRef, mkDerivName, phrase, atStartNP, nounPhraseSP,
+  (!.), (+:+), (+:+.), eS, sC, RelationConcept, Derivation, Sentence(..), Inclusive(..),
+  RealInterval(UpFrom))
 import qualified Language.Drasil.Expr as E
 import Language.Drasil.ModelExpr
 import Theory.Drasil (InstanceModel, im, qwC, deModel')

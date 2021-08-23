@@ -12,12 +12,11 @@ import Prelude hiding (cos, sin)
 import Language.Drasil (eqSymb)
 import Language.Drasil.ModelExpr
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
-  constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst, gravitationalAccel, 
-  ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
-  constAccelV, speed)
+  constAccel, ixPos, iyPos)
+import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelConst,
+  iPos, ixVel, iyVel, scalarPos, speed, time, xPos, xVel, yPos, yVel)
 
-import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, flightDur, offset)
+import Drasil.Projectile.Unitals (launAngle, launSpeed, landPos, flightDur)
 
 --
 timeDeriv :: [ModelExpr]

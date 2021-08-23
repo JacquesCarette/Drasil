@@ -3,10 +3,8 @@ module Drasil.SglPendulum.Expressions where
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 
-import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity, xVel, yVel,
-    angularAccel, xAccel, yAccel, acceleration, tension, gravitationalAccel,
-    angularFrequency, torque, momentOfInertia, time,
-    momentOfInertia, period, position)
+import Data.Drasil.Quantities.Physics (angularAccel, angularFrequency, angularVelocity,
+    gravitationalAccel, tension, time, xAccel, yAccel)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.SglPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)

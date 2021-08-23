@@ -12,21 +12,16 @@ import qualified Utils.Drasil.Sentence as S
 import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
-import Drasil.GamePhysics.Derivations
+import Drasil.GamePhysics.Derivations (impulseVDerivEqns)
 import Drasil.GamePhysics.References (chaslesWiki)
-import Drasil.GamePhysics.Unitals (initRelVel, massj, mTot, normalVect,
-  posCM, posj, velB, velO, rOB, finRelVel,
-  velAP, velBP, rRot, velo_1, velo_2, timeT, time_1, time_2, massj,
-   mTot, normalVect, velo_1, velo_2)
+import Drasil.GamePhysics.Unitals (finRelVel, initRelVel, mTot, massj,
+  normalVect, posCM, posj, rOB, rRot, velAP, velB, velBP, velO)
 
 import Data.Drasil.Concepts.Math (rightHand)
 import Data.Drasil.Concepts.Physics (rigidBody, twoD)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, angularDisplacement, angularVelocity,
-  displacement, linearAccel, linearDisplacement, linearVelocity, position,
-  restitutionCoef, time, velocity,force, torque, kEnergy, energy, impulseV, chgInVelocity,
-  acceleration, potEnergy, height, gravitationalAccel, momentOfInertia)
+import qualified Data.Drasil.Quantities.Physics as QP
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 

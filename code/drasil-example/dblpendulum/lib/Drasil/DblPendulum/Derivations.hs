@@ -7,12 +7,11 @@ import Language.Drasil.ModelExpr
 
 import Data.Drasil.Quantities.Physics(velocity, acceleration, gravitationalAccel, time)
 import Drasil.DblPendulum.DataDefs (positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, 
-    positionGDD, accelGDD)
-import Drasil.DblPendulum.Expressions
-import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, angularVel_1, angularVel_2,
-    pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1,
-    yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2, pendDisAngle_1, angularAccel_1,
-    angularAccel_2, tension_1, tension_2, massObj_1, massObj_2)
+  positionGDD, accelGDD)
+import Drasil.DblPendulum.Expressions (velXExpr_2, velYExpr_2)
+import Drasil.DblPendulum.Unitals (lenRod_1, massObj_1, massObj_2,
+  xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, xVel_2, yVel_1, yVel_2, xAccel_1, xAccel_2,
+  yAccel_1, yAccel_2, tension_1, tension_2, angularVel_1, pendDisAngle_1, pendDisAngle_2)
 import Control.Lens ((^.))
 
 

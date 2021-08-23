@@ -4,8 +4,8 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
 import Language.Drasil (ConceptChunk, mkQuantDef, makeRC, dRef, mkDerivName,
   phrase, plural, titleize, atStartNP, nounPhraseSP, refS, (+:+), (+:+.), ch,
   eS, sC, sParen, eqSymb, ConceptInstance, QDefinition, RelationConcept,
-  MayHaveUnit(..), UnitDefn, UnitalChunk, Derivation, Expr, Relation,
-  ModelExpr, NounPhrase(..), Sentence(S, EmptyS, (:+:)))
+  MayHaveUnit(..), UnitDefn, UnitalChunk, Derivation,
+  NounPhrase(..), Sentence(S, EmptyS, (:+:)))
 import Language.Drasil.ModelExpr
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
 import Utils.Drasil

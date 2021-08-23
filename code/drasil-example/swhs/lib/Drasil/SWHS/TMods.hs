@@ -7,7 +7,7 @@ import qualified Data.List.NonEmpty as NE
 import Language.Drasil (ConceptChunk, dccWDS, fromEqnSt', mkFuncDefByQ, qw, dRef,
   dRefInfo, atStart, phrase, plural, makeURI, atStartNP, nounPhraseSP, refS,
   (!.), (+:), (+:+), (+:+.), ch, eS, sC, sParen, shortname', eqSymb, QDefinition,
-  Definition(..), HasSpace(..), HasSymbol(..), Express(..), ModelExpr,
+  Definition(..), HasSpace(..), HasSymbol(..), Express(..),
   Reference, RefInfo(Page), Sentence(S, (:+:), E))
 import Language.Drasil.ModelExpr
 import Control.Lens ((^.))

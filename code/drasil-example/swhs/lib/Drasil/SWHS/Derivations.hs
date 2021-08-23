@@ -1,27 +1,8 @@
 module Drasil.SWHS.Derivations where
 
-import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
-  goal, input_, solution, output_)
-import Data.Drasil.Concepts.Math (change, equation, ode, rightSide, rOfChng, surArea)
-import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
-import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec,
-  heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp)
-import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Physics (time)
 
-import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
-  assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
-  assumpCWTAT, assumpTPCAV)
-import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
-import Drasil.SWHS.DataDefs (ddHtFusion, ddMeltFrac, balanceDecayRate,
-  balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
-import Drasil.SWHS.GenDefs (htFluxWaterFromCoil, htFluxPCMFromWater, rocTempSimp)
-import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
-import Drasil.SWHS.References (koothoor2013)
-import Drasil.SWHS.TMods (sensHtE, latentHtE)
-import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP,
-  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmE, pcmHTC, pcmInitMltE,
-  pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit,
-  tempMeltP, tempPCM, tempW, timeFinal, volHtGen, watE, wMass, wVol)
+import Drasil.SWHS.Unitals
 
 import Language.Drasil.ModelExpr
 

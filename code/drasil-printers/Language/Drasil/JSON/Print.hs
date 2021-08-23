@@ -15,7 +15,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.Helpers (sqbrac)
+import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
@@ -112,8 +112,8 @@ pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
-pExpr (Sub e)        = text "_" <> pExpr e
-pExpr (Sup e)        = text "^" <> pExpr e
+pExpr (Sub e)        = unders <> pExpr e
+pExpr (Sup e)        = hat <> pExpr e
 pExpr (Over Hat s)   = pExpr s <> text "&#770;"
 pExpr (MO o)         = text $ pOps o
 pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)

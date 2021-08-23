@@ -52,7 +52,7 @@ instance Definition    (MultiDefn e) where defn     = rDesc
 -- | The complete Relation of a MultiDefn is defined as the quantity and the related expressions being equal
 --   e.g., `q $= a $= b $= ... $= z`
 instance Express e => Express       (MultiDefn e) where
-  express q = equivMEs $ (express $ sy q) : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
+  express q = equivMEs $ express (sy q) : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment
 mkMultiDefn :: Express e => UID -> QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e

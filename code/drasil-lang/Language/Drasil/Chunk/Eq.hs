@@ -1,11 +1,5 @@
-{-# LANGUAGE TemplateHaskell #-}
-{-# OPTIONS_GHC -Wno-redundant-constraints -fprint-potential-instances #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE RankNTypes, FlexibleInstances, GADTs, InstanceSigs #-}
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 
 -- | Contains chunks related to adding an expression to a quantitative concept. 
 module Language.Drasil.Chunk.Eq (
@@ -57,7 +51,7 @@ instance Express e => HasSpace      (QDefinition e) where typ = qdQua . typ
 instance Express e => HasSymbol     (QDefinition e) where symbol = symbol . (^. qdQua)
 instance Express e => Definition    (QDefinition e) where defn = qdQua . defn
 instance Express e => Quantity      (QDefinition e) where
-instance Express e => Eq            (QDefinition e) where a == b = (a ^. uid) == (b ^. uid)
+instance Express e => Eq            (QDefinition e) where a == b = a ^. uid == b ^. uid
 instance Express e => MayHaveUnit   (QDefinition e) where getUnit = getUnit . view qdQua
 instance DefiningExpr  QDefinition where
   defnExpr = qdExpr
@@ -103,7 +97,7 @@ instance Express e => ConceptDomain (QDefinition e) where cdom = cdom . view qdQ
 --     , _qdExpr = d
 --     , _qdCD = e
 --     } = _ -- QD a b c (f d) e -- QD a b c d e
-  
+
 
 -- instance HasUID (QDefinition e) where uid = qdQua . uid
 -- instance NamedIdea     (QDefinition e) where term = qdQua . term

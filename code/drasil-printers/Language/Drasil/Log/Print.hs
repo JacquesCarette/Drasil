@@ -40,13 +40,6 @@ header :: Doc -> Doc
 header d = text (replicate 100 '-') $$ d $$ text (replicate 100 '-')
 
 -- ** Table Generators
--- | Creates a table of all UIDs and their "highest" recorded level of information. See 'mkListShowUsedUIDs'
--- for more details.
-renderUsedUIDs :: [(UID, String)] -> Doc
-renderUsedUIDs chs = header (text "UIDs" $$ nest 40 (text "Associated Chunks")) $$ vcat (map renderUsedUID chs)
-  where
-    renderUsedUID (u, chks) = text (show u) $$ nest 40 (text chks)
-
 -- | For the last section of the log output. Shows which chunk UID is being used at which stage.
 -- Note that chunks used at a "higher stage" (like 'Concept's and 'QuantityDict's) will still be built off of the
 -- more basic types (like 'IdeaDict's), they are just not explicitly used in that manner.
@@ -229,14 +222,14 @@ mkTableDepReffedChunks PI{_ckdb = db} = text "Dependent and Referenced Chunks (c
     refByUIDs = Map.fromList $ map (\(x, y) -> (x, ([], y))) $ Map.assocs $ db ^. refbyTable
     nestNum = 30
 
+-- ** 'UID' Manipulation
 -- | Creates a table of all UIDs and their "highest" recorded level of information. See 'mkListShowUsedUIDs'
 -- for more details.
 renderUsedUIDs :: [(UID, String)] -> Doc
 renderUsedUIDs chs = header (text "UIDs" $$ nest 40 (text "Associated Chunks")) $$ vcat (map renderUsedUID chs)
   where
-    renderUsedUID (u, chks) = text u $$ nest 40 (text chks)
+    renderUsedUID (u, chks) = text (show u) $$ nest 40 (text chks)
 
--- ** 'UID' Manipulation
 
 -- | For the last section of the log output. Shows which chunk UID is being used at which stage.
 -- Note that chunks used at a "higher stage" (like 'Concept's and 'QuantityDict's) will still be built off of the

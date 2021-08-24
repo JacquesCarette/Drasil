@@ -28,6 +28,6 @@ tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
 
 -- | Table of abbreviations and acronyms reference.
 tableAbbAccRef :: Reference
-tableAbbAccRef = makeTabRef (abbAcc ^. uid)
+tableAbbAccRef = makeTabRef' $ abbAcc ^. uid
 
 

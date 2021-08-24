@@ -1,6 +1,7 @@
 module Language.Drasil.Printing.Import.Document where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil.Development (showUID)
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
@@ -101,7 +102,7 @@ layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation
-layCite c = P.Cite (c ^. citeID) (c ^. citeKind) (map layField (c ^. getFields))
+layCite c = P.Cite (showUID c) (c ^. citeKind) (map layField (c ^. getFields))
 
 -- | Helper for translating 'Citefield's into a printable representation of 'P.CiteField's
 layField :: CiteField -> P.CiteField

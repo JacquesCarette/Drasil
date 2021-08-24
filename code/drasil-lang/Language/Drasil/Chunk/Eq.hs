@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Eq (
   QDefinition,
   -- * Constructor
   fromEqn, fromEqn', fromEqnSt,
-  fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -18,7 +18,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
-import Language.Drasil.Chunk.NamedIdea (mkIdea, nw)
+import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
 import Language.Drasil.ModelExpr.Math (defines)
 import Language.Drasil.Expr (Expr(FCall, C))
@@ -70,9 +70,9 @@ instance Express       QDefinition where
 -- | Finds the domain of a 'QDefinition'.
 instance ConceptDomain QDefinition where cdom = cdom . view qua
 
--- | Create a 'QDefinition' with a 'UID', term ('NP'), definition ('Sentence'), 'Symbol',
+-- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
-fromEqn :: IsUnit u => UID -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
+fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
 fromEqn nm desc def symb sp un =
   EC (dqd (cc' (mkIdea nm desc Nothing) def) symb sp un) []
 
@@ -82,15 +82,21 @@ fromEqn' nm desc def symb sp =
   EC (dqd' (cc' (mkIdea nm desc Nothing) def) (const symb) sp Nothing) []
 
 -- | Same as 'fromEqn', but symbol depends on stage.
-fromEqnSt :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) ->
+fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> Expr -> QDefinition
 fromEqnSt nm desc def symb sp un =
-  EC (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp (Just $ unitWrapper un)) []
+  EC (dqd' (cc' (nw $ ncUID nm desc) def) symb sp (Just $ unitWrapper un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
-fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr ->
+fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr ->
   QDefinition
 fromEqnSt' nm desc def symb sp =
+  EC (dqd' (cc' (nw $ ncUID nm desc) def) symb sp Nothing) []
+
+-- | Same as 'fromEqnSt'', but takes a 'String' instead of a 'UID'.
+fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr ->
+  QDefinition
+fromEqnSt'' nm desc def symb sp =
   EC (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp Nothing) []
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
@@ -103,6 +109,7 @@ mkQDefSt u n s symb sp Nothing   e = fromEqnSt' u n s symb sp e
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) (getUnit c)
 
+-- FIXME: See #2788.
 -- | Used to help make 'QDefinition's when 'UID' and 'Symbol' come from the same source, with the term separate.
 mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
 mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
@@ -113,12 +120,12 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 ec c = EC (dqd' (cc' (nw c) EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 
--- | Factored version of 'QDefinition' functions
+-- | Factored version of 'QDefinition' functions.
 mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
                 HasUID i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> Expr -> QDefinition
 mkFuncDef0 f n s u is =
-  EC (dqd' (cc' (mkIdea (f ^. uid) n Nothing) s) (symbol f)
+  EC (dqd' (cc' (nw (ncUID (f ^. uid) n)) s) (symbol f)
     (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, resultant units, and a defining Expr

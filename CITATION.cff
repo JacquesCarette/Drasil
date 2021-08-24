@@ -52,6 +52,24 @@ authors:
     website: "https://www.cas.mcmaster.ca/~smiths/"
     affiliation: "McMaster University, Computing and Software Department"
     email: "smiths@mcmaster.ca"
+  - family-names: Balaci
+    given-names: Jason
+    email: "balacij@mcmaster.ca"
+    website: "https://github.com/balacij"
+  - family-names: Hunt
+    given-names: Anthony
+    email: hunta12@mcmaster.ca
+    website: "https://github.com/Ant13731"
+  - family-names: Wu
+    given-names: Ting-Yu
+    email: wut99@mcmaster.ca
+    website: "https://github.com/tingyuw"
+  - family-names: Crawford
+    given-names: Samuel
+    alias: samm82
+    country: "CA"
+    email: "sam.crawford82@gmail.com"
+    website: "https://github.com/samm82"
   - family-names: Chen
      given-names: Dong
      email: chend79@mcmaster.ca

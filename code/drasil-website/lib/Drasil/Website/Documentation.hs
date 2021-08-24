@@ -27,8 +27,8 @@ haddockDocsDesc path = S "Drasil's framework is primariliy written in Haskell, \
 
 -- | Creates references to the haddock documentation (both normal and full variations).
 docsRef, fullDocsRef :: FilePath -> Reference
-docsRef path = Reference "haddockDocs" (URI $ path ++ "index.html") $ shortname' $ S "HaddockDocs"
-fullDocsRef path = Reference "fullHaddockDocs" (URI $ path ++ "full/index.html") $ shortname' $ S "fullHaddockDocs"
+docsRef path     = makeURI "haddockDocs" (path ++ "index.html") $ shortname' $ S "HaddockDocs"
+fullDocsRef path = makeURI "fullHaddockDocs" (path ++ "full/index.html") $ shortname' $ S "fullHaddockDocs"
 
 -- | Gathers all references used in this file.
 docRefs :: FilePath -> [Reference]

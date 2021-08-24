@@ -26,6 +26,9 @@ This folder contains our working examples (implementations in Drasil of the prev
 **projectile**
   - Contains the current work on implementing the projectile example in Drasil
 
+**sglpendulum**
+  - Contains the current state of the Single Pendulum case study implemented in Drasil
+
 **ssp**
   - Contains the current state of the slope stability analysis case study implemented in Drasil
   

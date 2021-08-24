@@ -1,7 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: Dec 20, 2020
+Last updated: August 20, 2021
 --------------------------------------------------
+
+**dblpendulum**
+  - Contains the (currently) expected output for the DblPendulum example
 
 **gamephysics**
   - Contains the (currently) expected output for the GamePhysics example
@@ -15,11 +18,14 @@ Last updated: Dec 20, 2020
 **nopcm**
   - Contains the (currently) expected output for the NoPCM example
   
-**pdController**
+**pdcontroller**
   - Contains the (currently) expected output for the PD Controller example
 
 **projectile**
   - Contains the (currently) expected output for the Projectile example
+
+**sglpendulum**
+  - Contains the (currently) expected output for the SglPendulum example
 
 **ssp**
   - Contains the (currently) expected output for the SSP example

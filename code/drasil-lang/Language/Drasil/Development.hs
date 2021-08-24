@@ -19,6 +19,8 @@ module Language.Drasil.Development (
   , meDep
   -- Sentence.Extract
   , sdep, lnames, lnames'
+  -- * UID
+  , uid, showUID
   ) where
 
 import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))
@@ -33,3 +35,4 @@ import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.ModelExpr.Extract (meDep)
 import Language.Drasil.ModelExpr.Precedence (mePrec)
 import Language.Drasil.Sentence.Extract (sdep, lnames, lnames')
+import Language.Drasil.UID.Core (uid, showUID)

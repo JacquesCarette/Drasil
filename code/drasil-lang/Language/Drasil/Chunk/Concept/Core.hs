@@ -41,7 +41,7 @@ makeLenses ''ConceptChunk
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid) 
 -- | Finds 'UID' of the 'IdeaDict' used to make the 'ConceptChunk'.
-instance HasUID        ConceptChunk where uid = idea . uid 
+instance HasUID        ConceptChunk where uid = idea . uid
 -- | Finds term ('NP') of the 'IdeaDict' used to make the 'ConceptChunk'.
 instance NamedIdea     ConceptChunk where term = idea . term 
 -- | Finds the idea contained in the 'IdeaDict' used to make the 'ConceptChunk'.
@@ -59,7 +59,7 @@ makeLenses ''CommonConcept
 -- | Equal if 'UID's are equal.
 instance Eq            CommonConcept where c1 == c2 = (c1 ^. uid) == (c2 ^. uid) 
 -- | Finds 'UID' of the 'CI' used to make the 'CommonConcept'.
-instance HasUID        CommonConcept where uid = comm . uid 
+instance HasUID        CommonConcept where uid = comm . uid
 -- | Finds term ('NP') of the 'CI' used to make the 'CommonConcept'.
 instance NamedIdea     CommonConcept where term = comm . term 
 -- | Finds the idea contained in the 'CI' used to make the 'CommonConcept'.
@@ -84,7 +84,7 @@ makeLenses ''ConceptInstance
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid) 
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'ConceptInstance'.
-instance HasUID        ConceptInstance where uid = cc . idea . uid 
+instance HasUID        ConceptInstance where uid = cc . idea . uid
 -- | Finds term ('NP') of the 'ConceptChunk' used to make the 'ConceptInstance'.
 instance NamedIdea     ConceptInstance where term = cc . idea . term 
 -- | Finds the idea contained in the 'ConceptChunk' used to make the 'ConceptInstance'.

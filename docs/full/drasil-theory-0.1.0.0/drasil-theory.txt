@@ -144,21 +144,23 @@ data MultiDefn
 --   definitions for a single concept.
 data DefiningExpr
 
--- | Smart constructor for MultiDefns, does nothing special at the moment
-mkMultiDefn :: UID -> QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
+-- | Smart constructor for MultiDefns, does nothing special at the moment.
+--   First argument is the <a>String</a> to become a <a>UID</a>.
+mkMultiDefn :: String -> QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
 
 -- | Smart constructor for MultiDefns defining UIDs using that of the
---   QuantityDict
+--   QuantityDict.
 mkMultiDefnForQuant :: QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
 
--- | Smart constructor for DefiningExprs
-mkDefiningExpr :: UID -> [UID] -> Sentence -> Expr -> DefiningExpr
+-- | Smart constructor for <a>DefiningExpr</a>s.
+mkDefiningExpr :: String -> [UID] -> Sentence -> Expr -> DefiningExpr
 
--- | Convert MultiDefns into QDefinitions via a specific DefiningExpr
+-- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
+--   <a>DefiningExpr</a>.
 multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
 
--- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by
---   UID)
+-- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
+--   <a>DefiningExpr</a> (by <a>UID</a>).
 multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
 instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.MultiDefn.MultiDefn
 instance Language.Drasil.Classes.Core.HasSymbol Theory.Drasil.MultiDefn.MultiDefn
@@ -211,19 +213,19 @@ EquationalRealm :: MultiDefn -> ModelKinds
 OthModel :: RelationConcept -> ModelKinds
 
 -- | Smart constructor for <a>DEModel</a>s
-deModel :: UID -> NP -> RelationConcept -> ModelKind
+deModel :: String -> NP -> RelationConcept -> ModelKind
 
 -- | Smart constructor for <a>EquationalConstraints</a>
-equationalConstraints :: UID -> NP -> ConstraintSet -> ModelKind
+equationalConstraints :: String -> NP -> ConstraintSet -> ModelKind
 
 -- | Smart constructor for <a>EquationalModel</a>s
-equationalModel :: UID -> NP -> QDefinition -> ModelKind
+equationalModel :: String -> NP -> QDefinition -> ModelKind
 
 -- | Smart constructor for <a>EquationalRealm</a>s
-equationalRealm :: UID -> NP -> MultiDefn -> ModelKind
+equationalRealm :: String -> NP -> MultiDefn -> ModelKind
 
 -- | Smart constructor for <a>OthModel</a>s
-othModel :: UID -> NP -> RelationConcept -> ModelKind
+othModel :: String -> NP -> RelationConcept -> ModelKind
 
 -- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>
@@ -247,14 +249,14 @@ othModel' :: RelationConcept -> ModelKind
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving Term from the
 --   <a>QDefinition</a>
-equationalModelU :: UID -> QDefinition -> ModelKind
+equationalModelU :: String -> QDefinition -> ModelKind
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving UID from the
 --   <a>QDefinition</a>
 equationalModelN :: NP -> QDefinition -> ModelKind
 
 -- | Smart constructor for <a>EquationalRealm</a>s
-equationalRealmU :: UID -> MultiDefn -> ModelKind
+equationalRealmU :: String -> MultiDefn -> ModelKind
 
 -- | Smart constructor for <a>EquationalRealm</a>s, deriving UID from the
 --   <a>MultiDefn</a>
@@ -487,21 +489,23 @@ data MultiDefn
 --   definitions for a single concept.
 data DefiningExpr
 
--- | Smart constructor for MultiDefns, does nothing special at the moment
-mkMultiDefn :: UID -> QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
+-- | Smart constructor for MultiDefns, does nothing special at the moment.
+--   First argument is the <a>String</a> to become a <a>UID</a>.
+mkMultiDefn :: String -> QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
 
 -- | Smart constructor for MultiDefns defining UIDs using that of the
---   QuantityDict
+--   QuantityDict.
 mkMultiDefnForQuant :: QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
 
--- | Smart constructor for DefiningExprs
-mkDefiningExpr :: UID -> [UID] -> Sentence -> Expr -> DefiningExpr
+-- | Smart constructor for <a>DefiningExpr</a>s.
+mkDefiningExpr :: String -> [UID] -> Sentence -> Expr -> DefiningExpr
 
--- | Convert MultiDefns into QDefinitions via a specific DefiningExpr
+-- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
+--   <a>DefiningExpr</a>.
 multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
 
--- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by
---   UID)
+-- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
+--   <a>DefiningExpr</a> (by <a>UID</a>).
 multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
 
 -- | <a>ModelKinds</a> carrier, used to carry commonly overwritten
@@ -509,19 +513,19 @@ multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
 data ModelKind
 
 -- | Smart constructor for <a>DEModel</a>s
-deModel :: UID -> NP -> RelationConcept -> ModelKind
+deModel :: String -> NP -> RelationConcept -> ModelKind
 
 -- | Smart constructor for <a>EquationalConstraints</a>
-equationalConstraints :: UID -> NP -> ConstraintSet -> ModelKind
+equationalConstraints :: String -> NP -> ConstraintSet -> ModelKind
 
 -- | Smart constructor for <a>EquationalModel</a>s
-equationalModel :: UID -> NP -> QDefinition -> ModelKind
+equationalModel :: String -> NP -> QDefinition -> ModelKind
 
 -- | Smart constructor for <a>EquationalRealm</a>s
-equationalRealm :: UID -> NP -> MultiDefn -> ModelKind
+equationalRealm :: String -> NP -> MultiDefn -> ModelKind
 
 -- | Smart constructor for <a>OthModel</a>s
-othModel :: UID -> NP -> RelationConcept -> ModelKind
+othModel :: String -> NP -> RelationConcept -> ModelKind
 
 -- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>
@@ -545,14 +549,14 @@ othModel' :: RelationConcept -> ModelKind
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving Term from the
 --   <a>QDefinition</a>
-equationalModelU :: UID -> QDefinition -> ModelKind
+equationalModelU :: String -> QDefinition -> ModelKind
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving UID from the
 --   <a>QDefinition</a>
 equationalModelN :: NP -> QDefinition -> ModelKind
 
 -- | Smart constructor for <a>EquationalRealm</a>s
-equationalRealmU :: UID -> MultiDefn -> ModelKind
+equationalRealmU :: String -> MultiDefn -> ModelKind
 
 -- | Smart constructor for <a>EquationalRealm</a>s, deriving UID from the
 --   <a>MultiDefn</a>

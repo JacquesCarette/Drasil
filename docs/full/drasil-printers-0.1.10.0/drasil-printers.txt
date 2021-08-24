@@ -161,10 +161,10 @@ mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -
 
 -- | Graph output helper. Takes in the file handle, edges, and node
 --   families.
-outputSub :: Handle -> [(String, [String])] -> [NodeFamily] -> IO ()
+outputSub :: Handle -> [(UID, [UID])] -> [NodeFamily] -> IO ()
 
 -- | Prints graph edges (directions) onto a given file handle.
-mkDirections :: Handle -> (String, [String]) -> IO ()
+mkDirections :: Handle -> (UID, [UID]) -> IO ()
 
 -- | Prints graph nodes (labels) onto a given file handle.
 mkNodes :: Handle -> NodeFamily -> IO ()
@@ -173,7 +173,7 @@ mkNodes :: Handle -> NodeFamily -> IO ()
 --   subgraph. Otherwise, it returns nothing.
 mkSubgraph :: Handle -> Label -> [UID] -> IO ()
 
--- | Gets graph labels and removes any invalid characters.
+-- | Gets graph labels.
 filterAndGI :: GraphInfo -> [GraphInfo -> NodeFamily] -> [NodeFamily]
 
 -- | Helper to remove invalid characters.

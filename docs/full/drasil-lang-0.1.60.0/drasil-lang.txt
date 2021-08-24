@@ -292,8 +292,14 @@ instance GHC.Show.Show Language.Drasil.Stages.Stage
 module Language.Drasil.UID
 
 -- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
---   into our database of information.
-type UID = String
+--   into our database of information. We use a newtype wrapper to make
+--   sure we are only using <a>UID</a>s where desired.
+newtype UID
+UID :: String -> UID
+[uidToStr] :: UID -> String
+instance GHC.Classes.Ord Language.Drasil.UID.UID
+instance GHC.Classes.Eq Language.Drasil.UID.UID
+instance GHC.Show.Show Language.Drasil.UID.UID
 
 
 -- | Even though we do not have <tt>Label</tt>s per se, here we define the
@@ -1208,24 +1214,24 @@ mePrec :: ModelExpr -> Int
 module Language.Drasil.ModelExpr.Extract
 
 -- | Generic traverse of all expressions that could lead to names.
-meNames :: ModelExpr -> [String]
+meNames :: ModelExpr -> [UID]
 
 -- | Generic traversal of everything that could come from an interval to
 --   names (similar to <a>meNames</a>).
-meNamesRI :: RealInterval ModelExpr ModelExpr -> [String]
+meNamesRI :: RealInterval ModelExpr ModelExpr -> [UID]
 
 -- | Generic traverse of all positions that could lead to <a>meNames</a>
 --   without functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
-meNames' :: ModelExpr -> [String]
+meNames' :: ModelExpr -> [UID]
 
 -- | Generic traversal of everything that could come from an interval to
 --   names without functions (similar to <a>meNames'</a>).
-meNamesRI' :: RealInterval ModelExpr ModelExpr -> [String]
+meNamesRI' :: RealInterval ModelExpr ModelExpr -> [UID]
 
 -- | Get dependencies from an equation.
-meDep :: ModelExpr -> [String]
+meDep :: ModelExpr -> [UID]
 
 
 -- | Defines functions to convert from the base expression language to
@@ -1463,7 +1469,7 @@ Incomplete :: Completeness
 expr :: Expr -> ModelExpr
 
 -- | Get dependencies from an equation.
-meDep :: ModelExpr -> [String]
+meDep :: ModelExpr -> [UID]
 
 -- | eprec - <a>ModelExpr</a> precedence.
 mePrec :: ModelExpr -> Int
@@ -1542,24 +1548,24 @@ eprec :: Expr -> Int
 module Language.Drasil.Expr.Extract
 
 -- | Generic traverse of all expressions that could lead to names.
-eNames :: Expr -> [String]
+eNames :: Expr -> [UID]
 
 -- | Generic traversal of everything that could come from an interval to
 --   names (similar to <a>eNames</a>).
-eNamesRI :: RealInterval Expr Expr -> [String]
+eNamesRI :: RealInterval Expr Expr -> [UID]
 
 -- | Generic traverse of all positions that could lead to <a>eNames</a>
 --   without functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
-eNames' :: Expr -> [String]
+eNames' :: Expr -> [UID]
 
 -- | Generic traversal of everything that could come from an interval to
 --   names without functions (similar to <a>eNames'</a>).
-eNamesRI' :: RealInterval Expr Expr -> [String]
+eNamesRI' :: RealInterval Expr Expr -> [UID]
 
 -- | Get dependencies from an equation.
-eDep :: Expr -> [String]
+eDep :: Expr -> [UID]
 
 
 -- | Defines types and functions for constrained values.
@@ -1731,6 +1737,23 @@ refAdd :: Referable s => s -> String
 
 -- | Alternate form of reference.
 renderRef :: Referable s => s -> LblType
+
+module Language.Drasil.UID.Core
+
+-- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
+uid :: String -> UID
+
+-- | For when we need to modify a UID. We first take the base chunk's UID
+--   and then append a suffix to it.
+(+++) :: HasUID a => a -> String -> UID
+
+-- | For when we need to append something to a UID.
+(+++.) :: UID -> String -> UID
+(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
+
+-- | Grabs the UID from something that has a UID and displays it as a
+--   String.
+showUID :: HasUID a => a -> String
 
 
 -- | Routines to help with Symbols and Stages.
@@ -2959,23 +2982,23 @@ eprec :: Expr -> Int
 mePrec :: ModelExpr -> Int
 
 -- | Get dependencies from an equation.
-eDep :: Expr -> [String]
+eDep :: Expr -> [UID]
 
 -- | Generic traverse of all expressions that could lead to names.
-eNames :: Expr -> [String]
+eNames :: Expr -> [UID]
 
 -- | Generic traverse of all positions that could lead to <a>eNames</a>
 --   without functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
-eNames' :: Expr -> [String]
+eNames' :: Expr -> [UID]
 
 -- | Generic traversal of everything that could come from an interval to
 --   names (similar to <a>eNames</a>).
-eNamesRI :: RealInterval Expr Expr -> [String]
+eNamesRI :: RealInterval Expr Expr -> [UID]
 
 -- | Get dependencies from an equation.
-meDep :: ModelExpr -> [String]
+meDep :: ModelExpr -> [UID]
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <tt>Symbol</tt>.
@@ -2987,6 +3010,13 @@ lnames :: Sentence -> [UID]
 
 -- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
+
+-- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
+uid :: String -> UID
+
+-- | Grabs the UID from something that has a UID and displays it as a
+--   String.
+showUID :: HasUID a => a -> String
 
 
 -- | For deriving equations in examples.
@@ -3390,8 +3420,29 @@ makeSecRef :: String -> Sentence -> Reference
 --   (which will also be used for its shortname).
 makeEqnRef :: String -> Reference
 
--- | Create a reference for a <a>URI</a>.
-makeURI :: UID -> String -> ShortName -> Reference
+-- | Create a reference for a <a>URI</a>. Takes in a <a>UID</a> (as a
+--   <a>String</a>), a reference address, and a shortname.
+makeURI :: String -> String -> ShortName -> Reference
+
+-- | Variants of <a>makeTabRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeTabRef' :: UID -> Reference
+
+-- | Variants of <a>makeFigRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeFigRef' :: UID -> Reference
+
+-- | Variants of <a>makeSecRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeSecRef' :: UID -> Sentence -> Reference
+
+-- | Variants of <a>makeEqnRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeEqnRef' :: UID -> Reference
+
+-- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeURI' :: UID -> String -> ShortName -> Reference
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Section
 instance GHC.Classes.Eq Language.Drasil.Document.Section
 instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Document.Section
@@ -4042,8 +4093,13 @@ data NamedChunk
 --   <a>DblPendulum</a>.
 data IdeaDict
 
--- | <a>NamedChunk</a> constructor, takes a <a>UID</a> and a term.
-nc :: UID -> NP -> NamedChunk
+-- | <a>NamedChunk</a> constructor, takes a <a>String</a> for its
+--   <a>UID</a> and a term.
+nc :: String -> NP -> NamedChunk
+
+-- | Similar to <a>nc</a>, but takes in the <a>UID</a> in the form of a
+--   <a>UID</a> rather than a <a>String</a>.
+ncUID :: UID -> NP -> NamedChunk
 
 -- | Historical name: nw comes from 'named wrapped' from when
 --   <a>NamedIdea</a> exported <a>getA</a> (now in <a>Idea</a>). But there
@@ -4053,8 +4109,12 @@ nc :: UID -> NP -> NamedChunk
 nw :: Idea c => c -> IdeaDict
 
 -- | <a>IdeaDict</a> constructor, takes a <a>UID</a>, <a>NP</a>, and an
---   abbreviation in the form of <a>Maybe</a> <a>String</a>
-mkIdea :: UID -> NP -> Maybe String -> IdeaDict
+--   abbreviation in the form of <a>Maybe</a> <a>String</a>.
+mkIdea :: String -> NP -> Maybe String -> IdeaDict
+
+-- | Same as <a>mkIdea</a> but takes a <a>UID</a> rather than a
+--   <a>String</a>.
+mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.NamedIdea.IdeaDict
@@ -4079,14 +4139,14 @@ module Language.Drasil.Chunk.CommonIdea
 --   comes from the domain of computer science.
 data CI
 
--- | The commonIdea smart constructor requires a chunk id (<a>UID</a>), a
---   term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
+-- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
+--   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
 --   ([<a>UID</a>]).
-commonIdea :: UID -> NP -> String -> [UID] -> CI
+commonIdea :: String -> NP -> String -> [UID] -> CI
 
 -- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
 --   (often a domain).
-commonIdeaWithDict :: UID -> NP -> String -> [IdeaDict] -> CI
+commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 
 -- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
 getAcc :: CI -> Sentence
@@ -4223,7 +4283,7 @@ data ConceptInstance
 
 -- | Constructor for a <a>ConceptInstance</a>. Takes in the Reference
 --   Address (<a>String</a>), a definition (<a>Sentence</a>), a short name
---   (<a>String</a>), and a domain (or explicit tagging).
+--   (<a>String</a>), and a domain (for explicit tagging).
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 
 
@@ -4237,13 +4297,14 @@ module Language.Drasil.Chunk.Relation
 --   equation so that we know its behaviour.
 data RelationConcept
 
--- | Create a <a>RelationConcept</a> from a given <a>UID</a>, term
---   (<a>NP</a>), definition (<a>Sentence</a>), and <a>Relation</a>.
-makeRC :: UID -> NP -> Sentence -> Relation -> RelationConcept
+-- | Create a <a>RelationConcept</a> from a given <a>UID</a> (as a
+--   <a>String</a>), term (<a>NP</a>), definition (<a>Sentence</a>), and
+--   <a>Relation</a>.
+makeRC :: String -> NP -> Sentence -> Relation -> RelationConcept
 
 -- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
---   a <a>Concept</a>, new <a>UID</a> and relation.
-addRelToCC :: Concept c => c -> UID -> Relation -> RelationConcept
+--   a <a>Concept</a>, new <a>UID</a> (as a <a>String</a>) and relation.
+addRelToCC :: Concept c => c -> String -> Relation -> RelationConcept
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Relation.RelationConcept
 instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
@@ -4403,7 +4464,15 @@ implVar :: String -> NP -> Space -> Symbol -> QuantityDict
 --   unit.
 implVar' :: String -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
 
--- | Make a <a>QuantityDict</a> from a <tt>UID</tt>, <a>NP</a>,
+-- | Similar to <a>implVar</a> but takes in a <a>UID</a> rather than a
+--   <a>String</a>.
+implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
+
+-- | Similar to <a>implVar'</a> but takes in a <a>UID</a> rather than a
+--   <a>String</a>.
+implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
+
+-- | Make a <a>QuantityDict</a> from a <a>UID</a>, <a>NP</a>,
 --   <a>Symbol</a>, <a>Space</a>, <a>Maybe</a> <a>UnitDefn</a>, and an
 --   abbreviation (<a>Maybe</a> <a>String</a>).
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
@@ -4417,7 +4486,7 @@ mkQuant' :: String -> NP -> Maybe String -> Space -> (Stage -> Symbol) -> Maybe 
 --   <a>Quantity</a> with units.
 qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
 
--- | Creates a <a>QuantityDict</a> from a <tt>UID</tt>, term (<a>NP</a>),
+-- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
 --   <a>Symbol</a>, and <a>Space</a>.
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
 
@@ -4429,7 +4498,7 @@ vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
 --   that knows about <a>Stage</a>s.
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 
--- | Creates a <a>QuantityDict</a> from a <tt>UID</tt>, term (<a>NP</a>),
+-- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
 --   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
@@ -4628,19 +4697,23 @@ module Language.Drasil.Chunk.Eq
 --   with equations and inputs.
 data QDefinition
 
--- | Create a <a>QDefinition</a> with a <a>UID</a>, term (<a>NP</a>),
---   definition (<a>Sentence</a>), <a>Symbol</a>, <a>Space</a>, unit, and
---   defining expression.
-fromEqn :: IsUnit u => UID -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
+-- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>String</a>),
+--   term (<a>NP</a>), definition (<a>Sentence</a>), <a>Symbol</a>,
+--   <a>Space</a>, unit, and defining expression.
+fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
 
 -- | Same as <a>fromEqn</a>, but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> Expr -> QDefinition
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage.
-fromEqnSt :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> Expr -> QDefinition
+fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> Expr -> QDefinition
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage and has no units.
-fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
+fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
+
+-- | Same as <a>fromEqnSt'</a>, but takes a <a>String</a> instead of a
+--   <a>UID</a>.
+fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Expr -> QDefinition
@@ -5363,8 +5436,17 @@ class (HasSymbol c) => Callable c
 class (HasSymbol c) => IsArgumentName c
 
 -- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
---   into our database of information.
-type UID = String
+--   into our database of information. We use a newtype wrapper to make
+--   sure we are only using <a>UID</a>s where desired.
+data UID
+
+-- | For when we need to modify a UID. We first take the base chunk's UID
+--   and then append a suffix to it.
+(+++) :: HasUID a => a -> String -> UID
+
+-- | For when we need to append something to a UID.
+(+++.) :: UID -> String -> UID
+(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
 
 -- | Used for anything worth naming. Note that a <a>NamedChunk</a> does not
 --   have an acronym/abbreviation as that's a <tt>CommonIdea</tt>, which
@@ -5376,8 +5458,13 @@ type UID = String
 --   pendulum, we must first give it a name.
 data NamedChunk
 
--- | <a>NamedChunk</a> constructor, takes a <a>UID</a> and a term.
-nc :: UID -> NP -> NamedChunk
+-- | <a>NamedChunk</a> constructor, takes a <a>String</a> for its
+--   <a>UID</a> and a term.
+nc :: String -> NP -> NamedChunk
+
+-- | Similar to <a>nc</a>, but takes in the <a>UID</a> in the form of a
+--   <a>UID</a> rather than a <a>String</a>.
+ncUID :: UID -> NP -> NamedChunk
 
 -- | <a>IdeaDict</a> is the canonical dictionary associated to an
 --   <a>Idea</a>. Contains a <a>NamedChunk</a> that could have an
@@ -5388,8 +5475,8 @@ nc :: UID -> NP -> NamedChunk
 data IdeaDict
 
 -- | <a>IdeaDict</a> constructor, takes a <a>UID</a>, <a>NP</a>, and an
---   abbreviation in the form of <a>Maybe</a> <a>String</a>
-mkIdea :: UID -> NP -> Maybe String -> IdeaDict
+--   abbreviation in the form of <a>Maybe</a> <a>String</a>.
+mkIdea :: String -> NP -> Maybe String -> IdeaDict
 
 -- | Historical name: nw comes from 'named wrapped' from when
 --   <a>NamedIdea</a> exported <a>getA</a> (now in <a>Idea</a>). But there
@@ -5409,10 +5496,10 @@ nw :: Idea c => c -> IdeaDict
 --   comes from the domain of computer science.
 data CI
 
--- | The commonIdea smart constructor requires a chunk id (<a>UID</a>), a
---   term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
+-- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
+--   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
 --   ([<a>UID</a>]).
-commonIdea :: UID -> NP -> String -> [UID] -> CI
+commonIdea :: String -> NP -> String -> [UID] -> CI
 
 -- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
 getAcc :: CI -> Sentence
@@ -5422,7 +5509,7 @@ getAccStr :: CI -> String
 
 -- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
 --   (often a domain).
-commonIdeaWithDict :: UID -> NP -> String -> [IdeaDict] -> CI
+commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
 prependAbrv :: CommonIdea c => c -> String -> String
@@ -5489,7 +5576,7 @@ cw :: Concept c => c -> ConceptChunk
 
 -- | Constructor for a <a>ConceptInstance</a>. Takes in the Reference
 --   Address (<a>String</a>), a definition (<a>Sentence</a>), a short name
---   (<a>String</a>), and a domain (or explicit tagging).
+--   (<a>String</a>), and a domain (for explicit tagging).
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 
 -- | For a concept (<a>ConceptChunk</a>) that also has a <a>Relation</a>
@@ -5499,13 +5586,14 @@ cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 --   equation so that we know its behaviour.
 data RelationConcept
 
--- | Create a <a>RelationConcept</a> from a given <a>UID</a>, term
---   (<a>NP</a>), definition (<a>Sentence</a>), and <a>Relation</a>.
-makeRC :: UID -> NP -> Sentence -> Relation -> RelationConcept
+-- | Create a <a>RelationConcept</a> from a given <a>UID</a> (as a
+--   <a>String</a>), term (<a>NP</a>), definition (<a>Sentence</a>), and
+--   <a>Relation</a>.
+makeRC :: String -> NP -> Sentence -> Relation -> RelationConcept
 
 -- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
---   a <a>Concept</a>, new <a>UID</a> and relation.
-addRelToCC :: Concept c => c -> UID -> Relation -> RelationConcept
+--   a <a>Concept</a>, new <a>UID</a> (as a <a>String</a>) and relation.
+addRelToCC :: Concept c => c -> String -> Relation -> RelationConcept
 
 -- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
 --   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from
@@ -5520,7 +5608,7 @@ data QuantityDict
 --   <a>Quantity</a> with units.
 qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
 
--- | Make a <a>QuantityDict</a> from a <tt>UID</tt>, <a>NP</a>,
+-- | Make a <a>QuantityDict</a> from a <a>UID</a>, <a>NP</a>,
 --   <a>Symbol</a>, <a>Space</a>, <a>Maybe</a> <a>UnitDefn</a>, and an
 --   abbreviation (<a>Maybe</a> <a>String</a>).
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
@@ -5541,7 +5629,15 @@ implVar :: String -> NP -> Space -> Symbol -> QuantityDict
 --   unit.
 implVar' :: String -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
 
--- | Creates a <a>QuantityDict</a> from a <tt>UID</tt>, term (<a>NP</a>),
+-- | Similar to <a>implVar</a> but takes in a <a>UID</a> rather than a
+--   <a>String</a>.
+implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
+
+-- | Similar to <a>implVar'</a> but takes in a <a>UID</a> rather than a
+--   <a>String</a>.
+implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
+
+-- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
 --   <a>Symbol</a>, and <a>Space</a>.
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
 
@@ -5553,7 +5649,7 @@ vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
 --   that knows about <a>Stage</a>s.
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 
--- | Creates a <a>QuantityDict</a> from a <tt>UID</tt>, term (<a>NP</a>),
+-- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
 --   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
 
@@ -5572,19 +5668,23 @@ narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 --   with equations and inputs.
 data QDefinition
 
--- | Create a <a>QDefinition</a> with a <a>UID</a>, term (<a>NP</a>),
---   definition (<a>Sentence</a>), <a>Symbol</a>, <a>Space</a>, unit, and
---   defining expression.
-fromEqn :: IsUnit u => UID -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
+-- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>String</a>),
+--   term (<a>NP</a>), definition (<a>Sentence</a>), <a>Symbol</a>,
+--   <a>Space</a>, unit, and defining expression.
+fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
 
 -- | Same as <a>fromEqn</a>, but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> Expr -> QDefinition
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage.
-fromEqnSt :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> Expr -> QDefinition
+fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> Expr -> QDefinition
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage and has no units.
-fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
+fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
+
+-- | Same as <a>fromEqnSt'</a>, but takes a <a>String</a> instead of a
+--   <a>UID</a>.
+fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Expr -> QDefinition
@@ -6919,8 +7019,29 @@ makeSecRef :: String -> Sentence -> Reference
 --   (which will also be used for its shortname).
 makeEqnRef :: String -> Reference
 
--- | Create a reference for a <a>URI</a>.
-makeURI :: UID -> String -> ShortName -> Reference
+-- | Create a reference for a <a>URI</a>. Takes in a <a>UID</a> (as a
+--   <a>String</a>), a reference address, and a shortname.
+makeURI :: String -> String -> ShortName -> Reference
+
+-- | Variants of <a>makeTabRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeTabRef' :: UID -> Reference
+
+-- | Variants of <a>makeFigRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeFigRef' :: UID -> Reference
+
+-- | Variants of <a>makeSecRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeSecRef' :: UID -> Sentence -> Reference
+
+-- | Variants of <a>makeEqnRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeEqnRef' :: UID -> Reference
+
+-- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeURI' :: UID -> String -> ShortName -> Reference
 
 -- | The difference kinds of spaces that may exist. This type holds
 --   numerical spaces (such as the set of integers, rationals, etc.), a

@@ -1,7 +1,59 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Unique Identifier used across Drasil.</span><span>
-</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.UID</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier">UID</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.UID</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier">UID</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-comment">-- | A @UID@ is a 'unique identifier' for things that we will put into our database</span><span>
-</span><span id="line-5"></span><span class="hs-comment">-- of information. </span><span>
-</span><span id="line-6"></span><span class="hs-keyword">type</span><span> </span><span id="UID"><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-var">UID</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-7"></span></pre></body></html>
+</span><span id="line-5"></span><span class="hs-comment">-- of information. We use a newtype wrapper to make sure we are only using</span><span>
+</span><span id="line-6"></span><span class="hs-comment">-- 'UID's where desired.</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">newtype</span><span> </span><span id="UID"><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-var">UID</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="UID"><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-var">UID</span></a></span></span><span> </span><span class="hs-special">{</span><span id="uidToStr"><span class="annot"><span class="annottext">UID -&gt; String
+</span><a href="Language.Drasil.UID.html#uidToStr"><span class="hs-identifier hs-var hs-var">uidToStr</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679394692"><span id="local-6989586621679394694"><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
+(UID -&gt; UID -&gt; Bool) -&gt; (UID -&gt; UID -&gt; Bool) -&gt; Eq UID
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+/= :: UID -&gt; UID -&gt; Bool
+$c/= :: UID -&gt; UID -&gt; Bool
+== :: UID -&gt; UID -&gt; Bool
+$c== :: UID -&gt; UID -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679394676"><span id="local-6989586621679394678"><span id="local-6989586621679394680"><span id="local-6989586621679394682"><span id="local-6989586621679394684"><span id="local-6989586621679394686"><span id="local-6989586621679394688"><span class="annot"><span class="annottext">Eq UID
+Eq UID =&gt;
+(UID -&gt; UID -&gt; Ordering)
+-&gt; (UID -&gt; UID -&gt; Bool)
+-&gt; (UID -&gt; UID -&gt; Bool)
+-&gt; (UID -&gt; UID -&gt; Bool)
+-&gt; (UID -&gt; UID -&gt; Bool)
+-&gt; (UID -&gt; UID -&gt; UID)
+-&gt; (UID -&gt; UID -&gt; UID)
+-&gt; Ord UID
+UID -&gt; UID -&gt; Bool
+UID -&gt; UID -&gt; Ordering
+UID -&gt; UID -&gt; UID
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+min :: UID -&gt; UID -&gt; UID
+$cmin :: UID -&gt; UID -&gt; UID
+max :: UID -&gt; UID -&gt; UID
+$cmax :: UID -&gt; UID -&gt; UID
+&gt;= :: UID -&gt; UID -&gt; Bool
+$c&gt;= :: UID -&gt; UID -&gt; Bool
+&gt; :: UID -&gt; UID -&gt; Bool
+$c&gt; :: UID -&gt; UID -&gt; Bool
+&lt;= :: UID -&gt; UID -&gt; Bool
+$c&lt;= :: UID -&gt; UID -&gt; Bool
+&lt; :: UID -&gt; UID -&gt; Bool
+$c&lt; :: UID -&gt; UID -&gt; Bool
+compare :: UID -&gt; UID -&gt; Ordering
+$ccompare :: UID -&gt; UID -&gt; Ordering
+$cp1Ord :: Eq UID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679394670"><span id="local-6989586621679394673"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-10"></span><span>  </span><span id="local-6989586621679394668"><span class="annot"><span class="annottext">show :: UID -&gt; String
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span id="local-6989586621679394666"><span class="annot"><span class="annottext">u :: String
+</span><a href="#local-6989586621679394666"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679394666"><span class="hs-identifier hs-var">u</span></a></span></pre></body></html>

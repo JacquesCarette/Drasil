@@ -308,6 +308,8 @@ digraph alltypes {
 	}
 	subgraph helpers {
 	}
+	subgraph core {
+	}
 	subgraph ast {
 		subgraph uri{
 		URI	[shape=oval, color=darkviolet, label="URI"];
@@ -718,7 +720,7 @@ digraph alltypes {
 	}
 	subgraph uid {
 		subgraph uid{
-		UID	[shape=oval, color=red2, label="UID"];
+		UID	[shape=oval, color=darkgreen, label="UID"];
 		UID -> String;
 		}
 	}

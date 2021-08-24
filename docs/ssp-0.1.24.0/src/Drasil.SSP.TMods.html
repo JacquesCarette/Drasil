@@ -304,7 +304,7 @@ r -&gt; DecRef
 </span><span id="line-83"></span><span class="hs-comment">------------------------------------</span><span>
 </span><span id="line-84"></span><span class="annot"><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-type">mcShrStrgthQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-85"></span><span id="mcShrStrgthQD"><span class="annot"><span class="annottext">mcShrStrgthQD :: QDefinition
-</span><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-var hs-var">mcShrStrgthQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.SSP.TMods.html#mcShrStrgthQD"><span class="hs-identifier hs-var hs-var">mcShrStrgthQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
 -&gt; NP
 -&gt; Sentence
 -&gt; (Stage -&gt; Symbol)
@@ -312,10 +312,10 @@ r -&gt; DecRef
 -&gt; Expr
 -&gt; QDefinition
 </span><span class="hs-identifier hs-var">fromEqnSt'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting String UnitalChunk String -&gt; String
+</span><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier hs-var">shrStress</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting UID UnitalChunk UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String UnitalChunk String
-forall c. HasUID c =&gt; Lens' c String
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID UnitalChunk UID
+forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Mohr-Coulumb shear strength&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-86"></span><span> </span><span class="annot"><span class="annottext">Sentence
@@ -480,7 +480,7 @@ r -&gt; DecRef
 </span><span id="line-113"></span><span class="hs-comment">------------------------------------</span><span>
 </span><span id="line-114"></span><span class="annot"><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-type">effStressQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-115"></span><span id="effStressQD"><span class="annot"><span class="annottext">effStressQD :: QDefinition
-</span><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-var hs-var">effStressQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.SSP.TMods.html#effStressQD"><span class="hs-identifier hs-var hs-var">effStressQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
 -&gt; NP
 -&gt; Sentence
 -&gt; (Stage -&gt; Symbol)
@@ -488,10 +488,10 @@ r -&gt; DecRef
 -&gt; Expr
 -&gt; QDefinition
 </span><span class="hs-identifier hs-var">fromEqnSt'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#effectiveStress"><span class="hs-identifier hs-var">effectiveStress</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting String UnitalChunk String -&gt; String
+</span><a href="Drasil.SSP.Unitals.html#effectiveStress"><span class="hs-identifier hs-var">effectiveStress</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting UID UnitalChunk UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String UnitalChunk String
-forall c. HasUID c =&gt; Lens' c String
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID UnitalChunk UID
+forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;effective stress&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-116"></span><span> </span><span class="annot"><span class="annottext">Sentence

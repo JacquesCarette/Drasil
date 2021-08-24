@@ -702,7 +702,7 @@ tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
 
 -- | Helper that makes sure the rows and columns of a traceability matrix
 --   have substance.
-ensureItems :: UID -> [a] -> [a]
+ensureItems :: String -> [a] -> [a]
 
 -- | Helper that finds the layout <a>UID</a>s of a traceability matrix.
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
@@ -1648,7 +1648,7 @@ mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> [(UID, 
 -- | Helper for making graph edges. Taken from Utils.Drasil's traceability
 --   matrix relation finder. But, instead of marking <a>X</a> on two
 --   related ideas, it makes them an edge.
-makeTGraph :: [String] -> [[String]] -> [String] -> [(String, [String])]
+makeTGraph :: [UID] -> [[UID]] -> [UID] -> [(UID, [UID])]
 
 -- | Checker for uids by finding if the <a>UID</a> is in one of the
 --   possible data sets contained in the <a>SystemInformation</a> database.

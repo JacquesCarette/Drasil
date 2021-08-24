@@ -304,18 +304,18 @@ Norm :: UFuncVN
 Dim :: UFuncVN
 
 -- | Get dependencies from an equation.
-eDep :: CodeExpr -> [String]
+eDep :: CodeExpr -> [UID]
 
 -- | Get dependencies from an equation, without functions.
-eDep' :: CodeExpr -> [String]
+eDep' :: CodeExpr -> [UID]
 
 -- | Generic traversal of everything that could come from an interval to
 --   names (similar to <a>eNames</a>).
-eNamesRI :: RealInterval CodeExpr CodeExpr -> [String]
+eNamesRI :: RealInterval CodeExpr CodeExpr -> [UID]
 
 -- | Generic traversal of everything that could come from an interval to
 --   names without functions (similar to <a>eNames'</a>).
-eNamesRI' :: RealInterval CodeExpr CodeExpr -> [String]
+eNamesRI' :: RealInterval CodeExpr CodeExpr -> [UID]
 
 -- | eprec - <a>Expression</a> precedence.
 eprec :: CodeExpr -> Int

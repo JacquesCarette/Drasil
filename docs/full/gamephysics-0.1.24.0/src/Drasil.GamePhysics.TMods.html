@@ -138,7 +138,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
+</span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonLUGviaDeriv&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
@@ -161,7 +161,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#dVect"><span class="hs-identifier hs-var">dVect</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
+</span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonLUGviaForm&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr

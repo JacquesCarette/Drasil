@@ -40,13 +40,13 @@ r -&gt; Reference
 </span><span class="hs-identifier hs-var">ref</span></span><span class="annot"><span class="annottext">(Reference -&gt; Reference)
 -&gt; (TraceConfig -&gt; Reference) -&gt; TraceConfig -&gt; Reference
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">String -&gt; Reference
-</span><span class="hs-identifier hs-var">makeTabRef</span></span><span class="annot"><span class="annottext">(String -&gt; Reference)
--&gt; (TraceConfig -&gt; String) -&gt; TraceConfig -&gt; Reference
+</span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">UID -&gt; Reference
+</span><span class="hs-identifier hs-var">makeTabRef'</span></span><span class="annot"><span class="annottext">(UID -&gt; Reference)
+-&gt; (TraceConfig -&gt; UID) -&gt; TraceConfig -&gt; Reference
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">TraceConfig -&gt; String
+</span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">TraceConfig -&gt; UID
 </span><a href="Drasil.DocumentLanguage.Core.html#getTraceConfigUID"><span class="hs-identifier hs-var">getTraceConfigUID</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceConfig
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatAssumpAssump"><span class="hs-identifier hs-var">traceMatAssumpAssump</span></a></span><span class="hs-special">,</span><span>
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatAssumpAssump"><span class="hs-identifier hs-var">traceMatAssumpAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- can this be deleted?</span><span>
 </span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">TraceConfig
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatAssumpOther"><span class="hs-identifier hs-var">traceMatAssumpOther</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceConfig
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatRefinement"><span class="hs-identifier hs-var">traceMatRefinement</span></a></span><span class="hs-special">]</span><span>

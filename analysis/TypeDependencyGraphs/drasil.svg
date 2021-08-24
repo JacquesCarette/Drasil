@@ -42,7 +42,7 @@
 <!-- UID -->
 <g id="node4" class="node">
 <title>UID</title>
-<ellipse fill="none" stroke="#ee0000" cx="3324.56" cy="-306" rx="29.5" ry="18"/>
+<ellipse fill="none" stroke="darkgreen" cx="3324.56" cy="-306" rx="29.5" ry="18"/>
 <text text-anchor="middle" x="3324.56" y="-302.3" font-family="Times,serif" font-size="14.00">UID</text>
 </g>
 <!-- ConceptChunk&#45;&gt;UID -->

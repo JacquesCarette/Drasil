@@ -25,7 +25,7 @@ module Utils.Drasil (
   foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- * List-type Utilities.
   -- | From "Utils.Drasil.Lists". General functions involving lists.
-  replaceAll, subsetOf,
+  replaceAll, subsetOf, nubSort,
   -- * Misc. Uitlities
   -- | From "Utils.Drasil.Misc". General sorting functions, useful combinators,
   -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.

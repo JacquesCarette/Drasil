@@ -1,10 +1,13 @@
 {-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs #-}
-
+-- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition where
 
 import Control.Lens ((^.), view, Lens', lens)
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (dataDefn)
+
+-- * Types
 
 -- | A scope is an indirect reference to a 'UID'.
 newtype Scope = Scp { _spec :: UID }
@@ -85,9 +88,11 @@ instance Express e => Referable          (DataDefinition e) where
   refAdd      = (^. ddRA)
   renderRef l = RP (prepend $ abrv l) (refAdd l)
 
+-- * Constructors
+
 -- | Smart constructor for data definitions.
 dd :: Express e => QDefinition e -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition e
-dd q []   _   _  = error $ "Source field of " ++ q ^. uid ++ " is empty"
+dd q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
 dd q refs der sn = DD q Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.

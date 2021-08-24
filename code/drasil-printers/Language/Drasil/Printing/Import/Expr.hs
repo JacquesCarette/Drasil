@@ -1,3 +1,4 @@
+-- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)

@@ -11,6 +11,8 @@ import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
+import qualified Language.Drasil.UID.Core as UID (uid)
+import Language.Drasil.UID.Core ((+++.))
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -143,24 +145,46 @@ figWithWidth = Figure
 -- * Reference Constructors
 
 -- FIXME: horrible hacks.
+-- FIXME: May need UID checker function here.
 -- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).
 makeTabRef :: String -> Reference
-makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
+makeTabRef rs = Reference (UID.uid rs) (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a figure. Takes in the name of a figure (which will also be used for its shortname).
 makeFigRef :: String -> Reference
-makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
+makeFigRef rs = Reference (UID.uid rs) (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a section. Takes in the name of a section and a shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
-makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
+makeSecRef r s = Reference (UID.uid $ r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
   (shortname' s)
 
 -- | Create a reference for a equation. Takes in the name of the equation (which will also be used for its shortname).
 makeEqnRef :: String -> Reference
-makeEqnRef rs = Reference rs (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs))
+makeEqnRef rs = Reference (UID.uid rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs))
 
--- | Create a reference for a 'URI'.
-makeURI :: UID -> String -> ShortName -> Reference
-makeURI u r = Reference u (URI r)
+-- | Create a reference for a 'URI'. Takes in a 'UID' (as a 'String'), a reference address, and a shortname.
+makeURI :: String -> String -> ShortName -> Reference
+makeURI u r = Reference (UID.uid u) (URI r)
+
+-- | Variants of 'makeTabRef' that takes a 'UID' instead of a 'String'.
+makeTabRef' :: UID -> Reference
+makeTabRef' rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+
+-- | Variants of 'makeFigRef' that takes a 'UID' instead of a 'String'.
+makeFigRef' :: UID -> Reference
+makeFigRef' rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+
+-- | Variants of 'makeSecRef' that takes a 'UID' instead of a 'String'.
+makeSecRef' :: UID -> Sentence -> Reference
+makeSecRef' r s = Reference (r +++. "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd (show r)))
+  (shortname' s)
+
+-- | Variants of 'makeEqnRef' that takes a 'UID' instead of a 'String'.
+makeEqnRef' :: UID -> Reference
+makeEqnRef' rs = Reference rs (RP (prepend "Eqn") ("Equation:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+
+-- | Variants of 'makeURI' that takes a 'UID' instead of a 'String'.
+makeURI' :: UID -> String -> ShortName -> Reference
+makeURI' u r = Reference u (URI r)

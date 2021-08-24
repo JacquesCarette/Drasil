@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.Eq (
   QDefinition,
   -- * Constructor
   fromEqn, fromEqn', fromEqnSt,
-  fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ) where
 
 import Control.Lens ((^.), view, lens, Lens')
@@ -19,7 +19,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
-import Language.Drasil.Chunk.NamedIdea (mkIdea, nw)
+import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
 import Language.Drasil.ModelExpr (defines)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -117,7 +117,7 @@ instance Express e => ConceptDomain (QDefinition e) where cdom = cdom . view qdQ
 -- instance ConceptDomain (QDefinition e) where cdom = (^. qdCD)
 
 
--- | Create a 'QDefinition' with a 'UID', term ('NP'), definition ('Sentence'), 'Symbol',
+-- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
 fromEqn :: (Express e, IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
 fromEqn nm desc def symb sp un =
@@ -129,15 +129,21 @@ fromEqn' nm desc def symb sp =
   QD (dqd' (cc' (mkIdea nm desc Nothing) def) (const symb) sp Nothing) []
 
 -- | Same as 'fromEqn', but symbol depends on stage.
-fromEqnSt :: (Express e, IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) ->
+fromEqnSt :: (Express e, IsUnit u) => UID -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> e -> QDefinition e
 fromEqnSt nm desc def symb sp un =
-  QD (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp (Just $ unitWrapper un)) []
+  QD (dqd' (cc' (nw $ ncUID nm desc) def) symb sp (Just $ unitWrapper un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
-fromEqnSt' :: Express e => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
+fromEqnSt' :: Express e => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
   QDefinition e
 fromEqnSt' nm desc def symb sp =
+  QD (dqd' (cc' (nw $ ncUID nm desc) def) symb sp Nothing) []
+
+-- | Same as 'fromEqnSt'', but takes a 'String' instead of a 'UID'.
+fromEqnSt'' :: Express e => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
+  QDefinition e
+fromEqnSt'' nm desc def symb sp =
   QD (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp Nothing) []
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
@@ -150,6 +156,7 @@ mkQDefSt u n s symb sp Nothing   e = fromEqnSt' u n s symb sp e
 mkQuantDef :: (Quantity c, MayHaveUnit c, Express e) => c -> e -> QDefinition e
 mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) (getUnit c)
 
+-- FIXME: See #2788.
 -- | Used to help make 'QDefinition's when 'UID' and 'Symbol' come from the same source, with the term separate.
 mkQuantDef' :: (Quantity c, MayHaveUnit c, Express e) => c -> NP -> e -> QDefinition e
 mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
@@ -160,13 +167,13 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 ec :: (Quantity c, MayHaveUnit c, Express e) => c -> e -> QDefinition e
 ec c = QD (dqd' (cc' (nw c) EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 
--- | Factored version of 'QDefinition' functions
+-- | Factored version of 'QDefinition' functions.
 mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
                HasUID i, HasSymbol i, HasSpace i,
                Express e) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
-  (dqd' (cc' (mkIdea (f ^. uid) n Nothing) s) (symbol f)
+  (dqd' (cc' (nw (ncUID (f ^. uid) n)) s) (symbol f)
     (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, resultant units, and a defining Expr

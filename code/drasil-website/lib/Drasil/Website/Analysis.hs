@@ -83,9 +83,9 @@ dataTableDesc path = S "This" +:+ namedRef (dataTableHTMLRef path) (S "Data Tabl
 -- | Data table references.
 dataTableHTMLRef, dataTableCSVRef :: FilePath -> Reference
 -- | HTML table.
-dataTableHTMLRef path = Reference "dataTableHTML" (URI $ path ++ "ClassInstDep/DataTable.html") (shortname' $ S "dataTableHTML")
+dataTableHTMLRef path = makeURI "dataTableHTML" (path ++ "ClassInstDep/DataTable.html") (shortname' $ S "dataTableHTML")
 -- | Downloadable .csv file.
-dataTableCSVRef path = Reference "dataTableCSV" (URI $ path ++ "ClassInstDep/DataTable.csv") (shortname' $ S "dataTableCSV")
+dataTableCSVRef path = makeURI "dataTableCSV" (path ++ "ClassInstDep/DataTable.csv") (shortname' $ S "dataTableCSV")
 
 -- * Table of Graphs Subsection
 --
@@ -121,7 +121,7 @@ graphTableEntry knd path pkg = [S pkg, namedRef (getGraphsInTableRef knd "" path
 -- (either "datatype" or "classInst"), prefix (either an empty string or "circo_"), file path
 -- to the graph folder, and package name.
 getGraphsInTableRef :: String -> String -> FilePath -> String -> Reference
-getGraphsInTableRef knd prfx path pkg = Reference (knd ++ pkg ++ prfx ++ "graph") (URI $ path ++ prfx ++ pkg ++ ".svg") $ shortname' $ S $ pkg ++ prfx ++ "graph"
+getGraphsInTableRef knd prfx path pkg = makeURI (knd ++ pkg ++ prfx ++ "graph") (path ++ prfx ++ pkg ++ ".svg") $ shortname' $ S $ pkg ++ prfx ++ "graph"
 
 -- ** Table of Type Graphs
 
@@ -217,7 +217,7 @@ drasilDepGraphPathsPDF path = map (\x -> path ++ x ++ ".pdf")
 
 -- | Create References to display as links for the dependency graph pdfs.
 drasilDepGraphRefs :: FilePath -> [String] -> [Reference]
-drasilDepGraphRefs path pkgs = zipWith (\x y -> Reference x (URI y) $ shortname' $ S x) pkgs $ drasilDepGraphPathsPDF path pkgs
+drasilDepGraphRefs path pkgs = zipWith (\x y -> makeURI x y $ shortname' $ S x) pkgs $ drasilDepGraphPathsPDF path pkgs
 
 -- | Create the list of folders with the links to dependency graph pdfs.
 folderList :: FilePath -> [String] -> RawContent

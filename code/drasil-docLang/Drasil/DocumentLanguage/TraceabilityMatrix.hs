@@ -37,11 +37,11 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
 
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent
-generateTraceTableView u _ [] _ _ = error $ "Expected non-empty list of column-view categories for traceability matrix " ++ u
-generateTraceTableView u _ _ [] _ = error $ "Expected non-empty list of row-view categories for traceability matrix " ++ u
-generateTraceTableView u desc cols rows c = llcc (makeTabRef u) $ Table
-  (EmptyS : ensureItems u (traceMColHeader colf c))
-  (makeTMatrix (ensureItems u $ traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
+generateTraceTableView u _ [] _ _ = error $ "Expected non-empty list of column-view categories for traceability matrix " ++ show u
+generateTraceTableView u _ _ [] _ = error $ "Expected non-empty list of row-view categories for traceability matrix " ++ show u
+generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table
+  (EmptyS : ensureItems (show u) (traceMColHeader colf c))
+  (makeTMatrix (ensureItems (show u) $ traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
   (showingCxnBw traceyMatrix desc) True where
     cdb = _sysinfodb c
     colf = layoutUIDs cols cdb
@@ -78,7 +78,7 @@ tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
 tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
 -- | Helper that makes sure the rows and columns of a traceability matrix have substance.
-ensureItems :: UID -> [a] -> [a]
+ensureItems :: String -> [a] -> [a]
 ensureItems u [] = error $ "Expected non-empty matrix dimension for traceability matrix " ++ u
 ensureItems _ l = l
 

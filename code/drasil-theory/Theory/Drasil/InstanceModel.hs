@@ -1,12 +1,17 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
-module Theory.Drasil.InstanceModel
-  ( InstanceModel
+-- | Defines types and functions for Instance Models.
+module Theory.Drasil.InstanceModel(
+  -- * Type
+  InstanceModel
+  -- * Constructors
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  -- * Functions
   , getEqModQdsFromIm
   , qwUC, qwC
   ) where
 
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Data.Drasil.TheoryConcepts (inModel)
 
@@ -80,14 +85,14 @@ instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 -- | Smart constructor for instance models with everything defined.
 im :: ModelKind Expr -> Inputs -> Output -> 
   OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-im mkind _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+im mkind _  _ _  [] _  _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
 im mkind i o oc r der sn = 
   IM mkind i (o, oc) r der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivation.
 imNoDeriv :: ModelKind Expr -> Inputs -> Output -> 
   OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
-imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
 imNoDeriv mkind i o oc r  sn =
   IM mkind i (o, oc) r Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 

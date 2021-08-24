@@ -132,10 +132,11 @@ varResolve  m x = quantvar $ symbResolve m x
 funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 funcResolve m x = quantfunc $ symbResolve m x
 
+-- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
 -- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
 listToArray :: CodeVarChunk -> CodeVarChunk
 listToArray c = newSpc (c ^. typ) 
-  where newSpc (Vect t) = CodeVC (CodeC (implVar' (c ^. uid ++ "_array") 
+  where newSpc (Vect t) = CodeVC (CodeC (implVar' (show $ c +++ "_array")
           (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 
           Var) (c ^. obv)
         newSpc _ = c

@@ -1,5 +1,9 @@
+-- | Defines functions to print on plain files (for .txt, .log, etc.).
 module Language.Drasil.Plain.Print (
-  Linearity(..), exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc
+  -- * Types
+  Linearity(..),
+  -- * Functions
+  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc
 ) where
 
 import Database.Drasil (ChunkDB)

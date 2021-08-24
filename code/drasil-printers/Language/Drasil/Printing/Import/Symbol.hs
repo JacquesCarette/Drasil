@@ -1,3 +1,4 @@
+-- | Defines functions for printing symbols and units.
 module Language.Drasil.Printing.Import.Symbol (symbol, pUnit) where
 
 import Language.Drasil (USymb(..))

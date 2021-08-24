@@ -1,9 +1,12 @@
+-- | Defines printer types and functions for generating traceability graphs (as .dot files).
 module Language.Drasil.DOT.Print where
 
 import Language.Drasil
 import Data.List (intercalate)
 import System.IO
 import System.Directory
+
+-- * Types
 
 -- | Type synonym for clarity.
 type Colour = String
@@ -46,7 +49,7 @@ data GraphInfo = GI {
 
     -------------- graph edges  ---------------------------
     -- | Assumptions dependent on assumptions.
-    , edgesAvsA     :: [(UID, [UID])] 
+    , edgesAvsA     :: [(UID, [UID])]
     -- | Definitions, models, requirements, and changes dependent on assumptions.
     , edgesAvsAll   :: [(UID, [UID])]
     -- | Definitions and models that are dependent on other definitions and models.
@@ -55,9 +58,12 @@ data GraphInfo = GI {
     , edgesAllvsR   :: [(UID, [UID])]
     -- | Definitions, models, requirements, goals, and changes that are dependent on one another.
     , edgesAllvsAll :: [(UID, [UID])]
-    
+
     -- may need more information regarding ranking & ordering, but for now I'm just keeping it simple
 }
+
+-- * Functions
+-- ** Main Outputs
 
 -- | Creates the directory for output, gathers all individual graph output functions and calls them.
 outputDot :: FilePath -> GraphInfo -> IO ()
@@ -100,9 +106,7 @@ mkOutputAllvsAll gi = do
     let labels = [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF, chgNF]
     mkOutput gi "allvsall" edgesAllvsAll labels
 
--------------
--- General helper functions
--------------
+-- ** Helpers
 
 -- | General output function for making a traceability graph. Takes in the graph information, title, edge generator functions, and node family functions.
 mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> IO ()
@@ -115,16 +119,16 @@ mkOutput gi ttl getDirections getLabels = do
     hClose handle
 
 -- | Graph output helper. Takes in the file handle, edges, and node families.
-outputSub :: Handle -> [(String, [String])] -> [NodeFamily] -> IO ()
+outputSub :: Handle -> [(UID, [UID])] -> [NodeFamily] -> IO ()
 outputSub handle edges nodes = do
     mapM_ (mkDirections handle) edges
     hPutStrLn handle "\n"
     mapM_ (mkNodes handle) nodes
 
 -- | Prints graph edges (directions) onto a given file handle.
-mkDirections :: Handle -> (String, [String]) -> IO ()
+mkDirections :: Handle -> (UID, [UID]) -> IO ()
 mkDirections handle ls = do
-    mapM_ (hPutStrLn handle) $ makeEdgesSub (fst ls) (filter (not . null) $ snd ls)
+    mapM_ (hPutStrLn handle) $ makeEdgesSub (show $ fst ls) (filter (not . null) $ map show $ snd ls)
     where
        -- Creates an edge between a type and its dependency (indented for subgraphs)
         makeEdgesSub :: String -> [String] -> [String]
@@ -134,28 +138,27 @@ mkDirections handle ls = do
 -- | Prints graph nodes (labels) onto a given file handle.
 mkNodes :: Handle -> NodeFamily -> IO ()
 mkNodes handle NF{nodeUIDs = u, nodeLabels = ls, nfLabel = lbl, nfColour = col} = do
-    mapM_ (hPutStrLn handle . uncurry (makeNodesSub col)) $ zip ls u
-    mkSubgraph handle lbl u 
+    mapM_ (hPutStrLn handle . uncurry (makeNodesSub col)) $ zip ls $ map show u
+    mkSubgraph handle lbl u
     where
         -- Creates a node based on the kind of datatype (indented for subgraphs)
         makeNodesSub :: Colour -> String -> String -> String
-        makeNodesSub c l nm  = "\t" ++ nm ++ "\t[shape=box, color=black, style=filled, fillcolor=" ++ c ++ ", label=\"" ++ l ++ "\"];"
+        makeNodesSub c l nm  = "\t" ++ filterInvalidChars nm ++ "\t[shape=box, color=black, style=filled, fillcolor=" ++ c ++ ", label=\"" ++ l ++ "\"];"
 
 -- | Helper that only makes a subgraph if there are elements in the subgraph. Otherwise, it returns nothing.
 mkSubgraph :: Handle -> Label -> [UID] -> IO ()
-mkSubgraph handle l u 
+mkSubgraph handle l u
     | null l = return mempty
-    | otherwise = do 
+    | otherwise = do
              hPutStrLn handle $ "\n\tsubgraph " ++ l ++ " {"
              hPutStrLn handle "\trank=\"same\""
-             hPutStrLn handle $ "\t{" ++ intercalate ", " u ++ "}"
+             hPutStrLn handle $ "\t{" ++ intercalate ", " (map (filterInvalidChars . show) u) ++ "}"
              hPutStrLn handle "\t}\n"
 
--- | Gets graph labels and removes any invalid characters.
+-- | Gets graph labels.
 filterAndGI :: GraphInfo -> [GraphInfo -> NodeFamily] -> [NodeFamily]
-filterAndGI gi toNodes = map filterUIDs labels
+filterAndGI gi toNodes = labels
     where
-        filterUIDs NF{nodeUIDs = u, nodeLabels = ls, nfLabel = l, nfColour = c} = NF{nodeUIDs = map filterInvalidChars u, nodeLabels = ls, nfLabel = l, nfColour = c}
         labels = map ($ gi) toNodes
 
 -- | Helper to remove invalid characters.

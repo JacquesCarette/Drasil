@@ -1,9 +1,21 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
-module Database.Drasil.SystemInformation(SystemInformation(..), Block(..),
-  citeDB, ReferenceDB, citationsFromBibMap, citationDB, rdb, RefMap, simpleMap,
-  conceptDB,
+-- | Define types and functions related to creating a system information database.
+module Database.Drasil.SystemInformation(
+  -- * System Information
+  -- ** Types
+  SystemInformation(..), Block(..),
+  -- ** Lenses
   instModels, datadefs, configFiles, inputs,
-  defSequence, constraints, constants, sysinfodb, usedinfodb
+  defSequence, constraints, constants, sysinfodb, usedinfodb,
+  -- ** Lookup Functions
+  citeDB, citationsFromBibMap,
+  -- * Reference Database
+  -- ** Types
+  ReferenceDB, RefMap,
+  -- ** Constructors
+  rdb, simpleMap,
+  -- ** Lenses
+  citationDB, conceptDB,
   ) where
 
 import Language.Drasil

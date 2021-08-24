@@ -1,15 +1,21 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
-
-module Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr,
-    mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr,
-    multiDefnGenQD, multiDefnGenQDByUID) where
+-- | Defines types and functions for creating mult-definitions.
+module Theory.Drasil.MultiDefn (
+  -- * Types
+  MultiDefn, DefiningExpr,
+  -- * Constructors
+  mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr,
+  -- * Functions
+  multiDefnGenQD, multiDefnGenQDByUID) where
 
 import Control.Lens ((^.), view, makeLenses)
 import Data.List (union)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil hiding (DefiningExpr)
+import Language.Drasil.Development (showUID)
+import qualified Language.Drasil.Development as D (uid)
 
 -- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
 --   the description, the defining (rhs) expression and the context domain(s).
@@ -54,30 +60,31 @@ instance Definition    (MultiDefn e) where defn     = rDesc
 instance Express e => Express       (MultiDefn e) where
   express q = equivMEs $ express (sy q) : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
 
--- | Smart constructor for MultiDefns, does nothing special at the moment
-mkMultiDefn :: Express e => UID -> QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
+-- | Smart constructor for MultiDefns, does nothing special at the moment. First argument is the 'String' to become a 'UID'.
+mkMultiDefn :: Express e => String -> QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefn u q s des
-  | length des == dupsRemovedLen = MultiDefn u q s des
+  | length des == dupsRemovedLen = MultiDefn (D.uid u) q s des
   | otherwise                    = error $
     "MultiDefn '" ++ u ++ "' created with non-unique list of expressions"
   where dupsRemovedLen = length $ NE.nub des
 
--- | Smart constructor for MultiDefns defining UIDs using that of the QuantityDict
+-- Should showUID be used here?
+-- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'QuantityDict'.
 mkMultiDefnForQuant :: Express e => QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
-mkMultiDefnForQuant q = mkMultiDefn (q ^. uid) q
+mkMultiDefnForQuant q = mkMultiDefn (showUID q) q
 
--- | Smart constructor for DefiningExprs
-mkDefiningExpr :: Express e => UID -> [UID] -> Sentence -> e -> DefiningExpr e
-mkDefiningExpr = DefiningExpr
+-- | Smart constructor for 'DefiningExpr's.
+mkDefiningExpr :: Express e => String -> [UID] -> Sentence -> e -> DefiningExpr e
+mkDefiningExpr u = DefiningExpr (D.uid u)
 
--- | Convert MultiDefns into QDefinitions via a specific DefiningExpr 
+-- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr'.
 multiDefnGenQD :: Express e => MultiDefn e -> DefiningExpr e -> QDefinition e
 multiDefnGenQD md de = mkQDefSt (md ^. qd . uid) (md ^. term) (md ^. defn)
                                 (symbol md) (md ^. typ) (getUnit md) (de ^. expr)
 
--- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by UID)
+-- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr' (by 'UID').
 multiDefnGenQDByUID :: Express e => MultiDefn e -> UID -> QDefinition e
 multiDefnGenQDByUID md u | length matches == 1 = multiDefnGenQD md matched
-                         | otherwise           = error $ "Invalid UID for multiDefn QD generation; " ++ u
+                         | otherwise           = error $ "Invalid UID for multiDefn QD generation; " ++ show u
   where matches = NE.filter (\x -> x ^. uid == u) (md ^. rvs)
         matched = head matches

@@ -1,3 +1,4 @@
+-- | Defines helper functions for creating jupyter notebooks.
 module Language.Drasil.JSON.Helpers where
 
 import Prelude hiding ((<>))

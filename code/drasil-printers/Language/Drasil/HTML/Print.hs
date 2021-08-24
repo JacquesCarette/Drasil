@@ -1,4 +1,12 @@
-module Language.Drasil.HTML.Print(genHTML, renderCite, OpenClose(Open, Close), fence) where
+-- | Defines all functions needed to print HTML files. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.HTML.Print.html).
+module Language.Drasil.HTML.Print(
+  -- * Main Function
+  genHTML,
+  -- * Citation Renderer
+  renderCite,
+  -- * Term Fencing Helpers
+  OpenClose(Open, Close), 
+  fence) where
 
 import Prelude hiding (print, (<>))
 import Data.List (sortBy)

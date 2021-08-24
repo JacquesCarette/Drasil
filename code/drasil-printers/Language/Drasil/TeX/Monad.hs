@@ -13,8 +13,7 @@ import Control.Applicative hiding (empty)
 import qualified Language.Drasil.Printing.Helpers as H
 
 -----------------------------------------------------------------------------
--- Printing monad
---
+-- * Printing Monad
 
 -- first, start with a specific data type
 -- note that this is just the Reader Monad for now, but we might need

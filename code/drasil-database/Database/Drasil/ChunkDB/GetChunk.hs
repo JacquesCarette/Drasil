@@ -1,4 +1,4 @@
--- | Utilities to get grab certain chunks (from Expr, Sentence, etc) by UID and
+-- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by 'UID' and
 -- dereference the chunk it refers to.
 module Database.Drasil.ChunkDB.GetChunk (ccss, ccss', combine, getIdeaDict, vars) where
 

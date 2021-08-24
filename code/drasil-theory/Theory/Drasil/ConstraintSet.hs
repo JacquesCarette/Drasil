@@ -1,6 +1,10 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
-
-module Theory.Drasil.ConstraintSet (ConstraintSet, mkConstraintSet) where
+-- | Defines types used in models and theories.
+module Theory.Drasil.ConstraintSet (
+  -- * Type
+  ConstraintSet,
+  -- * Constructor
+  mkConstraintSet) where
 
 import Control.Lens ((^.), makeLenses)
 

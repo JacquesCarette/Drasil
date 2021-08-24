@@ -4,7 +4,7 @@ module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
 
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil (ConceptChunk, dccWDS, fromEqnSt', mkFuncDefByQ, qw, dRef,
+import Language.Drasil (ConceptChunk, dccWDS, fromEqnSt'', mkFuncDefByQ, qw, dRef,
   dRefInfo, atStart, phrase, plural, makeURI, atStartNP, nounPhraseSP, refS,
   (!.), (+:), (+:+), (+:+.), ch, eS, sC, sParen, shortname', eqSymb, QDefinition,
   Definition(..), HasSpace(..), HasSymbol(..), Express(..),
@@ -93,7 +93,7 @@ sensHtETemplate pc desc = tm (equationalModel' qd)
 
 
 sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> QDefinition ModelExpr
-sensHtEQD pc eqn desc = fromEqnSt' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
+sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
   where np = nounPhraseSP ("Sensible heat energy" ++ case pc of
                                                        Liquid -> " (no state change)"
                                                        AllPhases -> "")

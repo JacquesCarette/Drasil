@@ -1,6 +1,8 @@
--- | Makefile abstract syntax tree
+-- | Defines a Makefile abstract syntax tree.
 module Build.Drasil.Make.AST where
 import Build.Drasil.Make.MakeString (MakeString)
+
+-- * Types
 
 -- | A Makefile is made up of Makefile rules.
 newtype Makefile = M [Rule]
@@ -23,6 +25,8 @@ data Type = Abstract
 type Target = MakeString
 -- | Dependencies are made up of 0 or more 'Target's.
 type Dependencies = [Target]
+
+-- * Constructors
 
 -- | Creates a Rule which results in a file being created.
 mkFile :: Target -> Dependencies -> [Command] -> Rule

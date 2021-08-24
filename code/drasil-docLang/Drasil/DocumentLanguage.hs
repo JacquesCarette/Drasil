@@ -181,7 +181,7 @@ fillReferences dd si@SI{_sys = sys} = si2
     refs    = map (fst.snd) $ Map.assocs $ chkdb ^. refTable
     -- set new reference table in the chunk database
     chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
-      ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
+      ++ map (ref.makeTabRef'.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (filter (not.isSpace) $ abrv sys) ++ map ref cites
       ++ map ref conins ++ map ref eDdefs ++ map ref meDdefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon

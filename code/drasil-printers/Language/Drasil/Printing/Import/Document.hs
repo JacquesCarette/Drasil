@@ -1,6 +1,8 @@
+-- | Defines functions to transform Drasil-based documents into a printable version.
 module Language.Drasil.Printing.Import.Document where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil.Development (showUID)
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
@@ -14,6 +16,8 @@ import Language.Drasil.Printing.Import.Sentence (spec)
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 
+-- * Main Function
+
 -- | Translates from 'Document' to a printable representation of 'T.Document'.
 makeDocument :: PrintingInformation -> Document -> T.Document
 makeDocument sm (Document titleLb authorName _ sections) =
@@ -21,10 +25,7 @@ makeDocument sm (Document titleLb authorName _ sections) =
 makeDocument sm (Notebook titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout' sm sections)
 
--- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').
-layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
-layout sm currDepth (Sub s) = sec sm (currDepth+1) s
-layout sm _         (Con c) = lay sm c
+-- * Helpers
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
@@ -46,6 +47,11 @@ cel sm depth x@(Section titleLb contents _) =
   let refr = P.S (refAdd x) in
   T.Cell (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) 
+
+-- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').
+layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
+layout sm currDepth (Sub s) = sec sm (currDepth+1) s
+layout sm _         (Con c) = lay sm c
 
 -- | Helper that translates 'Contents' to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'layout'.
@@ -101,7 +107,7 @@ layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation
-layCite c = P.Cite (c ^. citeID) (c ^. citeKind) (map layField (c ^. getFields))
+layCite c = P.Cite (showUID c) (c ^. citeKind) (map layField (c ^. getFields))
 
 -- | Helper for translating 'Citefield's into a printable representation of 'P.CiteField's
 layField :: CiteField -> P.CiteField

@@ -1,12 +1,15 @@
+-- | Re-export all contents in drasil-build for external use.
 module Build.Drasil (
-  -- Make
-    -- AST
-    Command, Dependencies, mkCheckedCommand, mkCommand, mkFile, mkRule, Rule
+  -- * Makefiles
+  -- ** Classes
     -- Import
-  , RuleTransformer(makeRule)
+    RuleTransformer(makeRule)
+  -- ** Types and Functions
+  -- AST
+  ,  Command, mkCheckedCommand, mkCommand, Dependencies, Rule, mkFile, mkRule
     -- MakeString
-  , (+:+), makeS, MakeString, mkFreeVar, mkImplicitVar, mkWindowsVar, mkOSVar
-    -- Print
+  , MakeString, (+:+), makeS, mkFreeVar, mkImplicitVar, mkWindowsVar, mkOSVar
+    -- ** Printers
   , genMake
   )
   where

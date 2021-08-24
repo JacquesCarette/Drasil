@@ -15,7 +15,7 @@ import Language.Drasil.Classes (Express(..), Concept,
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID(..))
 
 -- | For a concept ('ConceptChunk') that also has a 'Relation' attached.
 --
@@ -41,9 +41,10 @@ instance ConceptDomain RelationConcept where cdom = cdom . view conc
 instance Express       RelationConcept where express = (^. rel)
 
 -- | Create a 'RelationConcept' from a given 'UID', term ('NP'), definition ('Sentence'), and 'Relation'.
-makeRC :: Express e => UID -> NP -> Sentence -> e -> RelationConcept
+makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn) . express
 
+-- FIXME: Doesn't check UIDs. See TODOs in NamedIdea.hs
 -- | Create a new 'RelationConcept' from an old 'Concept'. Takes a 'Concept', new 'UID' and relation.
-addRelToCC :: (Express e, Concept c) => c -> UID -> e -> RelationConcept
-addRelToCC c rID = RC (set uid rID (cw c)) . express
+addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
+addRelToCC c rID = RC (set uid (UID rID) (cw c)) . express

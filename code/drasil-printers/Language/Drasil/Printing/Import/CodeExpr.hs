@@ -1,3 +1,4 @@
+-- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
 import Language.Drasil (DomainDesc(..), Inclusive(..),
@@ -103,7 +104,7 @@ eop sm AddRe = eopAdds sm
 eop sm MulI = eopMuls sm
 eop sm MulRe = eopMuls sm
 
--- | Translate Exprs to printable layout AST.
+-- | Translate 'CodeExpr's to printable layout AST 'Expr's.
 codeExpr :: CodeExpr -> PrintingInformation -> P.Expr
 codeExpr (Dbl d)                  sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)

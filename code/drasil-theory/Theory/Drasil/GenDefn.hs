@@ -1,8 +1,15 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
-module Theory.Drasil.GenDefn (GenDefn,
-  gd, gdNoRefs, getEqModQdsFromGd) where
+-- | Defines types and functions for General Definitions.
+module Theory.Drasil.GenDefn (
+  -- * Type
+  GenDefn,
+  -- * Constructors
+  gd, gdNoRefs,
+  -- * Functions
+  getEqModQdsFromGd) where
 
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (genDefn)
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
@@ -56,7 +63,7 @@ instance Referable          GenDefn where
 -- | Smart constructor for general definitions.
 gd :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
   Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
-gd mkind _   _     []   _  = error $ "Source field of " ++ (mkind ^. uid) ++ " is empty"
+gd mkind _   _     []   _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
 gd mkind u derivs refs sn_ = 
   GD mkind (fmap unitWrapper u) derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 

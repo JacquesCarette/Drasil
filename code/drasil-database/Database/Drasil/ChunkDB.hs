@@ -1,12 +1,27 @@
 {-# LANGUAGE TemplateHaskell #-}
+-- | Defines types and functions to create a chunk database within Drasil.
 module Database.Drasil.ChunkDB (
-  ChunkDB(symbolTable, termTable, defTable, CDB), RefbyMap, TraceMap, UMap,
-  asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
-  conceptinsTable, eDataDefnTable, meDataDefnTable, datadefnLookup, defResolve, gendefLookup,
-  gendefTable, generateRefbyMap, idMap, termMap, insmodelLookup, insmodelTable, -- idMap, termMap for docLang
-  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable, refResolve, refTable,
-  sectionLookup, sectionTable, symbResolve, termResolve, unitTable,
-  theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
+  -- * Types
+  -- ** 'ChunkDB'
+  -- | Main database type
+  ChunkDB(CDB, symbolTable, termTable, defTable),
+  -- ** Maps
+  -- | Exported for external use.
+  RefbyMap, TraceMap, UMap,
+  -- * Functions
+  -- ** Constructors
+  cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
+  -- ** Lookup Functions
+  asOrderedList, collectUnits,
+  termResolve, defResolve, symbResolve,
+  traceLookup, refbyLookup,
+  datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
+  conceptinsLookup, sectionLookup, labelledconLookup, refResolve,
+  -- ** Lenses
+  unitTable, traceTable, refbyTable,
+  eDataDefnTable, meDataDefnTable, insmodelTable, gendefTable, theoryModelTable,
+  conceptinsTable, sectionTable, labelledcontentTable, refTable
+  ) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -93,7 +108,7 @@ getUnitLup m c = getUnit $ symbResolve m (c ^. uid)
 -- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
 uMapLookup :: String -> String -> UID -> UMap a -> a
 uMapLookup tys ms u t = getFM $ Map.lookup u t
-  where getFM = maybe (error $ tys ++ ": " ++ u ++ " not found in " ++ ms) fst
+  where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
 
 -- | Looks up a 'UID' in the symbol table from the 'ChunkDB'. If nothing is found, an error is thrown.
 symbResolve :: ChunkDB -> UID -> QuantityDict

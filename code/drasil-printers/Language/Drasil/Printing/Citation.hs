@@ -1,3 +1,4 @@
+-- | Defines types used for printing citations.
 module Language.Drasil.Printing.Citation where
 
 import Language.Drasil hiding (CiteField, HP, Citation)

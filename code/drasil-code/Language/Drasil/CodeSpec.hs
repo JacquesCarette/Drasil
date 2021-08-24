@@ -3,6 +3,7 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
+import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil (ChunkDB, SystemInformation(SI),
   _authors, _constants, _constraints, _datadefs, _instModels,
@@ -171,11 +172,11 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               nNew = n \\ cnew
           in  if null new
               then error ("The following outputs cannot be computed: " ++
-                       intercalate ", " (map (^. uid) n) ++ "\n"
+                       intercalate ", " (map showUID n) ++ "\n"
                      ++ "Unused definitions are: "
-                       ++ intercalate ", " (map (^. uid) defs') ++ "\n"
+                       ++ intercalate ", " (map showUID defs') ++ "\n"
                      ++ "Known values are: "
-                       ++ intercalate ", " (map (^. uid) k))
+                       ++ intercalate ", " (map showUID k))
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
 
 

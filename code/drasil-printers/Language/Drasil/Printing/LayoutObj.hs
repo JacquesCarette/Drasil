@@ -1,3 +1,4 @@
+-- | Defines types similar to content types in "Language.Drasil" but better suited for printing.
 module Language.Drasil.Printing.LayoutObj where
 
 import Language.Drasil hiding (ListType, Contents, BibRef)

@@ -1,3 +1,4 @@
+-- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
 module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec) where
 
 import Prelude hiding (print)

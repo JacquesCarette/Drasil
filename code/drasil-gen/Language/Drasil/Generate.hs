@@ -1,4 +1,11 @@
-module Language.Drasil.Generate (gen, genDot, genCode, genLog, DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC), docChoices) where
+-- | Defines Drasil generator functions.
+module Language.Drasil.Generate (
+  -- * Generator Functions
+  gen, genDot, genCode, genLog,
+  -- * Types (Printing Options)
+  DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC),
+  -- * Constructor
+  docChoices) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)

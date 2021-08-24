@@ -1,3 +1,4 @@
+-- | Defines functions to render 'Space's into printable 'P.Expr's.
 module Language.Drasil.Printing.Import.Space where
 
 import Language.Drasil (dbl, Space(..))

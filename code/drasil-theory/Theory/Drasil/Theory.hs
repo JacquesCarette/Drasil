@@ -1,5 +1,12 @@
 {-# Language TemplateHaskell #-}
-module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs) where
+-- | Defines types and functions for Theoretical Models.
+module Theory.Drasil.Theory (
+  -- * Class
+  Theory(..),
+  -- * Type
+  TheoryModel,
+  -- * Constructors
+  tm, tmNoRefs) where
 
 import Control.Lens (Lens', view, makeLenses)
 

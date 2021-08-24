@@ -1,3 +1,4 @@
+-- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
 module Language.Drasil.JSON.Print(genJSON) where
 
 import Prelude hiding (print, (<>))

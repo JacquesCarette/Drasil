@@ -1,3 +1,4 @@
+-- | Helper functions for creating Makefiles.
 module Build.Drasil.Make.Helpers where
 
 import Build.Drasil.Make.AST (Command(C), Rule(R))

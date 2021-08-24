@@ -1,9 +1,12 @@
+-- | Defines printer types and functions for generating traceability graphs (as .dot files).
 module Language.Drasil.DOT.Print where
 
 import Language.Drasil
 import Data.List (intercalate)
 import System.IO
 import System.Directory
+
+-- * Types
 
 -- | Type synonym for clarity.
 type Colour = String
@@ -59,6 +62,9 @@ data GraphInfo = GI {
     -- may need more information regarding ranking & ordering, but for now I'm just keeping it simple
 }
 
+-- * Functions
+-- ** Main Outputs
+
 -- | Creates the directory for output, gathers all individual graph output functions and calls them.
 outputDot :: FilePath -> GraphInfo -> IO ()
 outputDot outputFilePath gi = do
@@ -100,9 +106,7 @@ mkOutputAllvsAll gi = do
     let labels = [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF, chgNF]
     mkOutput gi "allvsall" edgesAllvsAll labels
 
--------------
--- General helper functions
--------------
+-- ** Helpers
 
 -- | General output function for making a traceability graph. Takes in the graph information, title, edge generator functions, and node family functions.
 mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> IO ()

@@ -1,3 +1,4 @@
+-- | Defines printers for generating Makefiles.
 module Build.Drasil.Make.Print where
 
 import Prelude hiding ((<>))

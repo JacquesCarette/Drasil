@@ -1,10 +1,16 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
+-- | Defines types and functions for creating models.
 module Theory.Drasil.ModelKinds (
-    ModelKind(..), ModelKinds(..),
-    deModel, equationalConstraints, equationalModel, equationalRealm, othModel,
-    deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
-    equationalModelU, equationalModelN, equationalRealmU, equationalRealmN,
-    setMk, elimMk, lensMk, getEqModQds
+  -- * Types
+  ModelKind(..), ModelKinds(..),
+  -- * Constructors
+  deModel, equationalConstraints, equationalModel, equationalRealm, othModel,
+  deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
+  equationalModelU, equationalModelN, equationalRealmU, equationalRealmN,
+  -- * Lenses
+  setMk, elimMk, lensMk,
+  -- * Functions
+  getEqModQds
   ) where
 
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')

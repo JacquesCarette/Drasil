@@ -1,3 +1,4 @@
+-- | Defines helpers for printing 'Sentence's.
 module Language.Drasil.Printing.Import.Sentence where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
@@ -16,6 +17,7 @@ import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
 import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
+-- * Main Function
 
 -- | Translates 'Sentence' to the printable representation of a 'Sentence' ('Spec').
 spec :: PrintingInformation -> Sentence -> P.Spec
@@ -53,6 +55,8 @@ spec sm (Ref u dName notes) =
 spec sm (Quote q)          = P.Quote $ spec sm q
 spec _  EmptyS             = P.EmptyS
 spec sm (E e)              = P.E $ modelExpr e sm
+
+-- * Helpers
 
 -- | Renders the shortname of a reference/domain.
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence

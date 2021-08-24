@@ -1,12 +1,27 @@
 {-# LANGUAGE TemplateHaskell #-}
+-- | Defines types and functions to create a chunk database within Drasil.
 module Database.Drasil.ChunkDB (
-  ChunkDB(symbolTable, termTable, defTable, CDB), RefbyMap, TraceMap, UMap,
-  asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
-  conceptinsTable, dataDefnTable, datadefnLookup, defResolve, gendefLookup,
-  gendefTable, generateRefbyMap, idMap, termMap, insmodelLookup, insmodelTable, -- idMap, termMap for docLang
-  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable, refResolve, refTable,
-  sectionLookup, sectionTable, symbResolve, termResolve, unitTable,
-  theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
+  -- * Types
+  -- ** 'ChunkDB'
+  -- | Main database type
+  ChunkDB(CDB, symbolTable, termTable, defTable),
+  -- ** Maps
+  -- | Exported for external use.
+  RefbyMap, TraceMap, UMap,
+  -- * Functions
+  -- ** Constructors
+  cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
+  -- ** Lookup Functions
+  asOrderedList, collectUnits,
+  termResolve, defResolve, symbResolve,
+  traceLookup, refbyLookup,
+  datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
+  conceptinsLookup, sectionLookup, labelledconLookup, refResolve,
+  -- ** Lenses
+  unitTable, traceTable, refbyTable,
+  dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
+  conceptinsTable, sectionTable, labelledcontentTable, refTable
+  ) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)

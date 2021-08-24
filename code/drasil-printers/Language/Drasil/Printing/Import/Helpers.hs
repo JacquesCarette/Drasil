@@ -1,3 +1,4 @@
+-- | Printing helpers.
 module Language.Drasil.Printing.Import.Helpers where
 
 import Language.Drasil (Stage(..), codeSymb, eqSymb, Idea(..),
@@ -9,6 +10,8 @@ import qualified Language.Drasil.Printing.AST as P
 
 import Control.Lens ((^.))
 import Data.Char (toUpper)
+
+-- * Expr-related
 
 -- | Helper for inserting parentheses.
 parens :: P.Expr -> P.Expr
@@ -46,6 +49,8 @@ processExpo a
   | mod (a-1) 3 == 1 = (2, a-2)
   | mod (a-1) 3 == 2 = (3, a-3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
+
+-- * Lookup/Term Resolution Functions
 
 -- | Given the stage of the symbol, looks up a character/symbol
 -- inside a chunk database that matches the given 'UID'. 

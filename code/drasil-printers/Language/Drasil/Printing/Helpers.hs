@@ -1,4 +1,4 @@
--- | Helper functions for printing
+-- | General helper functions for printing Drasil documents.
 module Language.Drasil.Printing.Helpers where
 
 import Prelude hiding ((<>))

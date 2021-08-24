@@ -1,6 +1,12 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
-module Theory.Drasil.GenDefn (GenDefn,
-  gd, gdNoRefs, getEqModQdsFromGd) where
+-- | Defines types and functions for General Definitions.
+module Theory.Drasil.GenDefn (
+  -- * Type
+  GenDefn,
+  -- * Constructors
+  gd, gdNoRefs,
+  -- * Functions
+  getEqModQdsFromGd) where
 
 import Language.Drasil
 import Language.Drasil.Development (showUID)

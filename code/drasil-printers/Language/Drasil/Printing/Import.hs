@@ -1,3 +1,4 @@
+-- | Re-export top-level functions for easy use across drasil-printers.
 module Language.Drasil.Printing.Import (
   expr, codeExpr, modelExpr,
   space, spec, symbol,

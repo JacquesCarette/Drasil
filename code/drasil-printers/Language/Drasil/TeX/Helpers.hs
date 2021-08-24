@@ -1,3 +1,4 @@
+-- | Defines helper functions used in printing LaTeX documents.
 module Language.Drasil.TeX.Helpers where
 
 import Text.PrettyPrint (text)
@@ -14,8 +15,12 @@ import Data.List (isSuffixOf)
 --import Language.Drasil.Document (MaxWidthPercent)
 
 -----------------------------------------------------------------------------
+-- * LaTeX Commands
+--
+-- $latexCmd
+--
 -- Infrastructre for defining commands, environments, etc.
---   (calls to TP should only occur in this section)
+-- Calls to TP should only occur in this section.
 
 -- | Helper for adding fencing symbols.
 br, sq, parens, quote :: D -> D
@@ -152,7 +157,7 @@ cite :: String -> Maybe D -> D
 cite c n = command1oD "cite" n (pure $ text c) --may need to be changed to allow for shortnames?
 
 -----------------------------------------------------------------------------
--- Now create standard LaTeX stuff
+-- * Define Common LaTeX Commands
 
 count, mathbb, usepackage :: String -> D
 -- | Newcounter command.
@@ -263,6 +268,8 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
   command "usetikzlibrary" "graphs" $+$ command "usetikzlibrary" "graphdrawing" $+$
   command "usegdlibrary" "layered"
   
+-- * Helpers
+
 -----------------------------------------------------------------------------
 -- This 'belongs' in Monad, but it would make Monad depend on Helpers, which depends
 -- on Monad...

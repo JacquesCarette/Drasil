@@ -9,6 +9,8 @@
 @package drasil-theory
 @version 0.1.0.0
 
+
+-- | Theory related Drasil concepts, used across Drasil.
 module Data.Drasil.TheoryConcepts
 
 -- | Data definition.
@@ -55,6 +57,8 @@ output :: HasOutput c => Lens' c QuantityDict
 -- | Provides a <tt>Lens</tt> that holds constraints on the output.
 out_constraints :: HasOutput c => Lens' c [RealInterval Expr Expr]
 
+
+-- | Defines types used in models and theories.
 module Theory.Drasil.ConstraintSet
 
 -- | <a>ConstraintSet</a>s are sets of invariants that always hold for
@@ -70,6 +74,8 @@ instance Language.Drasil.Classes.Definition Theory.Drasil.ConstraintSet.Constrai
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.ConstraintSet.ConstraintSet
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.ConstraintSet.ConstraintSet
 
+
+-- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition
 
 -- | A scope is an indirect reference to a <a>UID</a>.
@@ -132,6 +138,8 @@ instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.DataDefinition.Data
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.Core.Referable Theory.Drasil.DataDefinition.DataDefinition
 
+
+-- | Defines types and functions for creating mult-definitions.
 module Theory.Drasil.MultiDefn
 
 -- | <a>MultiDefn</a>s are QDefinition factories, used for showing one or
@@ -177,6 +185,8 @@ instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.MultiDefn.DefiningExp
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.MultiDefn.DefiningExpr
 instance Language.Drasil.Classes.Definition Theory.Drasil.MultiDefn.DefiningExpr
 
+
+-- | Defines types and functions for creating models.
 module Theory.Drasil.ModelKinds
 
 -- | <a>ModelKinds</a> carrier, used to carry commonly overwritten
@@ -287,6 +297,8 @@ instance Language.Drasil.Classes.Definition Theory.Drasil.ModelKinds.ModelKind
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.ModelKinds.ModelKind
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.ModelKinds.ModelKind
 
+
+-- | Defines types and functions for Instance Models.
 module Theory.Drasil.InstanceModel
 
 -- | An instance model is a ModelKind that may have specific inputs,
@@ -338,6 +350,8 @@ instance Language.Drasil.Classes.Core.HasSymbol Theory.Drasil.InstanceModel.Inst
 instance Language.Drasil.Classes.HasSpace Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.InstanceModel.InstanceModel
 
+
+-- | Defines types and functions for General Definitions.
 module Theory.Drasil.GenDefn
 
 -- | A general definition is a <a>ModelKind</a> that may have units, a
@@ -369,6 +383,8 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.GenDefn.GenDef
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Core.Referable Theory.Drasil.GenDefn.GenDefn
 
+
+-- | Defines types and functions for Theoretical Models.
 module Theory.Drasil.Theory
 
 -- | Theories are the basis for building models with context, spaces,
@@ -424,6 +440,8 @@ instance Language.Drasil.Classes.Core.HasRefAddress Theory.Drasil.Theory.TheoryM
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Core.Referable Theory.Drasil.Theory.TheoryModel
 
+
+-- | Re-export many things to simplify external use.
 module Theory.Drasil
 
 -- | Members of this class may have inputs.

@@ -9,13 +9,16 @@
 @package drasil-build
 @version 0.1.1.0
 
+
+-- | Re-export all contents in drasil-build for external use.
 module Build.Drasil
+
+-- | Members can be transformed into a make rule.
+class RuleTransformer c
+makeRule :: RuleTransformer c => c -> [Rule]
 
 -- | A command is made up of <a>MakeString</a>s and command operators.
 data Command
-
--- | Dependencies are made up of 0 or more <a>Target</a>s.
-type Dependencies = [Target]
 
 -- | Creates a Command which fails the make process if it does not return
 --   zero.
@@ -24,25 +27,24 @@ mkCheckedCommand :: MakeString -> Command
 -- | Creates a command which executes and ignores the return code.
 mkCommand :: MakeString -> Command
 
+-- | Dependencies are made up of 0 or more <a>Target</a>s.
+type Dependencies = [Target]
+
+-- | A Makefile Rule needs a target, dependencies, type, and commands.
+data Rule
+
 -- | Creates a Rule which results in a file being created.
 mkFile :: Target -> Dependencies -> [Command] -> Rule
 
 -- | Creates an abstract Rule not associated to a specific file.
 mkRule :: Target -> Dependencies -> [Command] -> Rule
-
--- | A Makefile Rule needs a target, dependencies, type, and commands.
-data Rule
-
--- | Members can be transformed into a make rule.
-class RuleTransformer c
-makeRule :: RuleTransformer c => c -> [Rule]
+data MakeString
 
 -- | Concatenates two <a>MakeString</a>s with a space in between.
 (+:+) :: MakeString -> MakeString -> MakeString
 
 -- | Constructor for converting a <a>String</a> into a <a>MakeString</a>.
 makeS :: String -> MakeString
-data MakeString
 
 -- | Constructor for <a>Free</a> variables.
 mkFreeVar :: VarName -> MakeString

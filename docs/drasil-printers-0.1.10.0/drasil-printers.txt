@@ -11,15 +11,11 @@
 
 module Language.Drasil.Printers
 
--- | Possible formats for output
+-- | Possible formats for printer output.
 data Format
 TeX :: Format
 HTML :: Format
 JSON :: Format
-
--- | Creates the directory for output, gathers all individual graph output
---   functions and calls them.
-outputDot :: FilePath -> GraphInfo -> IO ()
 
 -- | Holds all important and relevant information for generating a
 --   traceability graph. Includes nodes, graph edges, and node family
@@ -89,11 +85,15 @@ NF :: [UID] -> [Label] -> Label -> Colour -> NodeFamily
 -- | Gives the ability to change colours of bubbles within the graph.
 [nfColour] :: NodeFamily -> Colour
 
--- | Generates the CSS selectors necessary for a document.
-makeCSS :: Document -> Doc
+-- | Creates the directory for output, gathers all individual graph output
+--   functions and calls them.
+outputDot :: FilePath -> GraphInfo -> IO ()
 
 -- | Generate an HTML document from a Drasil <a>Document</a>.
 genHTML :: PrintingInformation -> String -> Document -> Doc
+
+-- | Generates the CSS selectors necessary for a document.
+makeCSS :: Document -> Doc
 
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc

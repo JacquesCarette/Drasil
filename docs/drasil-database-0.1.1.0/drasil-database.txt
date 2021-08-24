@@ -9,6 +9,8 @@
 @package drasil-database
 @version 0.1.1.0
 
+
+-- | Re-export database types and functions to simplify external use.
 module Database.Drasil
 
 -- | Our chunk databases. Must contain all maps needed in an example. In
@@ -32,10 +34,6 @@ type TraceMap = Map UID [UID]
 --   they state.
 type UMap a = Map UID (a, Int)
 
--- | Gets an ordered list of <tt>a</tt> from any <tt>a</tt> that is of type
---   <a>UMap</a>.
-asOrderedList :: UMap a -> [a]
-
 -- | Smart constructor for chunk databases. Takes in the following:
 --   
 --   <ul>
@@ -53,39 +51,6 @@ asOrderedList :: UMap a -> [a]
 --   </ul>
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) => [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] -> [LabelledContent] -> [Reference] -> ChunkDB
 
--- | Gets the units of a <a>Quantity</a> as <a>UnitDefn</a>s.
-collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-
--- | Smart constructor for a <a>ConceptMap</a>.
-conceptMap :: Concept c => [c] -> ConceptMap
-
--- | Looks up a <a>UID</a> in the concept instance table. If nothing is
---   found, an error is thrown.
-conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
-conceptinsTable :: Lens' ChunkDB ConceptInstanceMap
-dataDefnTable :: Lens' ChunkDB DatadefnMap
-
--- | Looks up a <a>UID</a> in the datadefinition table. If nothing is
---   found, an error is thrown.
-datadefnLookup :: UID -> DatadefnMap -> DataDefinition
-
--- | Looks up a <a>UID</a> in the definition table from the <a>ChunkDB</a>.
---   If nothing is found, an error is thrown.
-defResolve :: ChunkDB -> UID -> ConceptChunk
-
--- | Looks up a <a>UID</a> in the general definition table. If nothing is
---   found, an error is thrown.
-gendefLookup :: UID -> GendefMap -> GenDefn
-gendefTable :: Lens' ChunkDB GendefMap
-
--- | Translates a traceability map into a reference map.
-generateRefbyMap :: TraceMap -> RefbyMap
-
--- | Looks up a <a>UID</a> in the reference table from the <a>ChunkDB</a>.
---   If nothing is found, an error is thrown.
-refResolve :: UID -> ReferenceMap -> Reference
-refTable :: Lens' ChunkDB ReferenceMap
-
 -- | General smart constructor for making a <a>UMap</a> out of anything
 --   that has a <a>UID</a>.
 idMap :: HasUID a => [a] -> Map UID (a, Int)
@@ -93,45 +58,82 @@ idMap :: HasUID a => [a] -> Map UID (a, Int)
 -- | Smart constructor for a <a>TermMap</a>.
 termMap :: Idea c => [c] -> TermMap
 
--- | Looks up a <a>UID</a> in the instance model table. If nothing is
---   found, an error is thrown.
-insmodelLookup :: UID -> InsModelMap -> InstanceModel
-insmodelTable :: Lens' ChunkDB InsModelMap
+-- | Smart constructor for a <a>ConceptMap</a>.
+conceptMap :: Concept c => [c] -> ConceptMap
 
--- | Looks up a <a>UID</a> in the labelled content table. If nothing is
---   found, an error is thrown.
-labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
-labelledcontentTable :: Lens' ChunkDB LabelledContentMap
+-- | Smart constructor for a <a>TraceMap</a> given a traceability matrix.
+traceMap :: [(UID, [UID])] -> TraceMap
 
--- | Trace a <a>UID</a> to referenced <a>UID</a>s.
-refbyLookup :: UID -> RefbyMap -> [UID]
-refbyTable :: Lens' ChunkDB RefbyMap
+-- | Translates a traceability map into a reference map.
+generateRefbyMap :: TraceMap -> RefbyMap
 
--- | Looks up a <a>UID</a> in the section table. If nothing is found, an
---   error is thrown.
-sectionLookup :: UID -> SectionMap -> Section
-sectionTable :: Lens' ChunkDB SectionMap
+-- | Gets an ordered list of <tt>a</tt> from any <tt>a</tt> that is of type
+--   <a>UMap</a>.
+asOrderedList :: UMap a -> [a]
 
--- | Looks up a <a>UID</a> in the symbol table from the <a>ChunkDB</a>. If
---   nothing is found, an error is thrown.
-symbResolve :: ChunkDB -> UID -> QuantityDict
+-- | Gets the units of a <a>Quantity</a> as <a>UnitDefn</a>s.
+collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 
 -- | Looks up a <a>UID</a> in the term table from the <a>ChunkDB</a>. If
 --   nothing is found, an error is thrown.
 termResolve :: ChunkDB -> UID -> IdeaDict
 
--- | Looks up a <a>UID</a> in the theory model table. If nothing is found,
---   an error is thrown.
-theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
-theoryModelTable :: Lens' ChunkDB TheoryModelMap
+-- | Looks up a <a>UID</a> in the definition table from the <a>ChunkDB</a>.
+--   If nothing is found, an error is thrown.
+defResolve :: ChunkDB -> UID -> ConceptChunk
+
+-- | Looks up a <a>UID</a> in the symbol table from the <a>ChunkDB</a>. If
+--   nothing is found, an error is thrown.
+symbResolve :: ChunkDB -> UID -> QuantityDict
 
 -- | Trace a <a>UID</a> to related <a>UID</a>s.
 traceLookup :: UID -> TraceMap -> [UID]
 
--- | Smart constructor for a <a>TraceMap</a> given a traceability matrix.
-traceMap :: [(UID, [UID])] -> TraceMap
-traceTable :: Lens' ChunkDB TraceMap
+-- | Trace a <a>UID</a> to referenced <a>UID</a>s.
+refbyLookup :: UID -> RefbyMap -> [UID]
+
+-- | Looks up a <a>UID</a> in the datadefinition table. If nothing is
+--   found, an error is thrown.
+datadefnLookup :: UID -> DatadefnMap -> DataDefinition
+
+-- | Looks up a <a>UID</a> in the instance model table. If nothing is
+--   found, an error is thrown.
+insmodelLookup :: UID -> InsModelMap -> InstanceModel
+
+-- | Looks up a <a>UID</a> in the general definition table. If nothing is
+--   found, an error is thrown.
+gendefLookup :: UID -> GendefMap -> GenDefn
+
+-- | Looks up a <a>UID</a> in the theory model table. If nothing is found,
+--   an error is thrown.
+theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
+
+-- | Looks up a <a>UID</a> in the concept instance table. If nothing is
+--   found, an error is thrown.
+conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
+
+-- | Looks up a <a>UID</a> in the section table. If nothing is found, an
+--   error is thrown.
+sectionLookup :: UID -> SectionMap -> Section
+
+-- | Looks up a <a>UID</a> in the labelled content table. If nothing is
+--   found, an error is thrown.
+labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
+
+-- | Looks up a <a>UID</a> in the reference table from the <a>ChunkDB</a>.
+--   If nothing is found, an error is thrown.
+refResolve :: UID -> ReferenceMap -> Reference
 unitTable :: Lens' ChunkDB UnitMap
+traceTable :: Lens' ChunkDB TraceMap
+refbyTable :: Lens' ChunkDB RefbyMap
+dataDefnTable :: Lens' ChunkDB DatadefnMap
+insmodelTable :: Lens' ChunkDB InsModelMap
+gendefTable :: Lens' ChunkDB GendefMap
+theoryModelTable :: Lens' ChunkDB TheoryModelMap
+conceptinsTable :: Lens' ChunkDB ConceptInstanceMap
+sectionTable :: Lens' ChunkDB SectionMap
+labelledcontentTable :: Lens' ChunkDB LabelledContentMap
+refTable :: Lens' ChunkDB ReferenceMap
 
 -- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
 --   <a>Sentence</a>s and expressions that are contained in the database
@@ -154,24 +156,25 @@ getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
 --   order to print.
 vars :: ModelExpr -> ChunkDB -> [QuantityDict]
 
+-- | Data structure for holding all of the requisite information about a
+--   system to be used in artifact generation.
+data SystemInformation
+[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => {_sys :: a, _kind :: b, _authors :: [c], _purpose :: d, _quants :: [e], _concepts :: [f], _instModels :: [InstanceModel], _datadefs :: [DataDefinition], _configFiles :: [String], _inputs :: [h], _outputs :: [i], _defSequence :: [Block QDefinition], _constraints :: [j], _constants :: [QDefinition], _sysinfodb :: ChunkDB, _usedinfodb :: ChunkDB, refdb :: ReferenceDB} -> SystemInformation
+
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a
 Parallel :: a -> [a] -> Block a
+sysinfodb :: Lens' SystemInformation ChunkDB
+
+-- | Database for internal references. Contains citations and referrable
+--   concepts.
+data ReferenceDB
 
 -- | Database for maintaining references. The Int is that reference's
 --   number. Maintains access to both num and chunk for easy reference
 --   swapping between number and shortname/refname when necessary (or use
 --   of number if no shortname exists).
 type RefMap a = Map UID (a, Int)
-
--- | Database for internal references. Contains citations and referrable
---   concepts.
-data ReferenceDB
-
--- | Data structure for holding all of the requisite information about a
---   system to be used in artifact generation.
-data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => {_sys :: a, _kind :: b, _authors :: [c], _purpose :: d, _quants :: [e], _concepts :: [f], _instModels :: [InstanceModel], _datadefs :: [DataDefinition], _configFiles :: [String], _inputs :: [h], _outputs :: [i], _defSequence :: [Block QDefinition], _constraints :: [j], _constants :: [QDefinition], _sysinfodb :: ChunkDB, _usedinfodb :: ChunkDB, refdb :: ReferenceDB} -> SystemInformation
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
@@ -185,4 +188,3 @@ rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
 simpleMap :: HasUID a => [a] -> RefMap a
 citationDB :: Lens' ReferenceDB BibMap
 conceptDB :: Lens' ReferenceDB ConceptMap
-sysinfodb :: Lens' SystemInformation ChunkDB

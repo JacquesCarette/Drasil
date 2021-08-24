@@ -52,6 +52,8 @@ ExDoc :: Maybe String -> String -> ExDoc
 instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Output.Formats.DocSpec
 instance GHC.Show.Show Language.Drasil.Output.Formats.DocType
 
+
+-- | Defines Drasil generator functions.
 module Language.Drasil.Generate
 
 -- | Generate a number of artifacts based on a list of recipes.
@@ -81,7 +83,7 @@ Jupyter :: DocType
 data DocSpec
 DocSpec :: DocChoices -> Filename -> DocSpec
 
--- | Possible formats for output
+-- | Possible formats for printer output.
 data Format
 TeX :: Format
 HTML :: Format

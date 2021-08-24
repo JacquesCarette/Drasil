@@ -10,8 +10,8 @@
 @version 0.1.10.0
 
 
--- | Global configuration for output (This should be deprecated in the
---   future as Recipes evolve)
+-- | Global configuration for output. This should be deprecated in the
+--   future as Recipes evolve.
 module Language.Drasil.Config
 
 -- | TeX Only - Numbered sections?
@@ -26,7 +26,7 @@ fontSize :: Int
 -- | Used to name the BibTeX file
 bibFname :: String
 
--- | Print verbose data definition descriptions?
+-- | (Currently Unused) Print verbose data definition descriptions?
 verboseDDDescription :: Bool
 
 -- | The bibliography format.
@@ -49,12 +49,15 @@ colAwidth :: Double
 --   textwidth).
 colBwidth :: Double
 
--- | TeX Only - Number Data Definition equations?
+-- | (Currently Unused) TeX Only - Number Data Definition equations?
 numberedDDEquations :: Bool
 
--- | TeX Only - Number Theoretical Model equations?
+-- | (Currently Unused) TeX Only - Number Theoretical Model equations?
 numberedTMEquations :: Bool
 
+
+-- | Defines printer types and functions for generating traceability graphs
+--   (as .dot files).
 module Language.Drasil.DOT.Print
 
 -- | Type synonym for clarity.
@@ -179,15 +182,20 @@ filterAndGI :: GraphInfo -> [GraphInfo -> NodeFamily] -> [NodeFamily]
 -- | Helper to remove invalid characters.
 filterInvalidChars :: String -> String
 
+
+-- | Possible formats for printer output.
 module Language.Drasil.Format
 
--- | Possible formats for output
+-- | Possible formats for printer output.
 data Format
 TeX :: Format
 Plain :: Format
 HTML :: Format
 JSON :: Format
 
+
+-- | Defines functions to create accompanying .css files for HTML
+--   generators.
 module Language.Drasil.HTML.CSS
 
 -- | Generates the CSS selectors necessary for a document.
@@ -196,6 +204,8 @@ makeCSS :: Document -> Doc
 -- | Create the link to the necessary CSS file.
 linkCSS :: String -> Doc
 
+
+-- | Defines types needed for HTML printers.
 module Language.Drasil.HTML.Monad
 
 -- | Printing "monad". Doesn't need context, so Identity (under another
@@ -205,6 +215,8 @@ PH :: String -> PrintHTML
 [unPH] :: PrintHTML -> String
 instance Language.Drasil.Unicode.RenderSpecial Language.Drasil.HTML.Monad.PrintHTML
 
+
+-- | Markdown file creator for generated GOOL code.
 module Language.Drasil.Markdown.CreateMd
 
 -- | Combines a list of sentences into a final Doc, also appends end note.
@@ -236,6 +248,9 @@ instDoc :: [String] -> Doc
 -- | End section.
 endNote :: [String] -> Doc
 
+
+-- | Defines types similar to those in <a>Drasil.Language</a>, but better
+--   suited to printing.
 module Language.Drasil.Printing.AST
 
 -- | Different types of links for referencing. May be internal, a citation,
@@ -409,6 +424,9 @@ data ItemType
 Flat :: Spec -> ItemType
 Nested :: Spec -> ListType -> ItemType
 
+
+-- | Helper functions for creating HTML printers (specifically, HTML tag
+--   wrappers).
 module Language.Drasil.HTML.Helpers
 
 -- | HTML tag wrapper.
@@ -549,6 +567,8 @@ indent :: Doc -> Doc
 --   Build case expressions.
 makeCases :: [(Expr, Expr)] -> (Expr -> Doc) -> Doc
 
+
+-- | Defines helper functions for creating jupyter notebooks.
 module Language.Drasil.JSON.Helpers
 data Variation
 Class :: Variation
@@ -597,6 +617,8 @@ h :: Int -> Doc
 stripnewLine :: String -> Doc
 makeMetadata :: Doc
 
+
+-- | Defines types used for printing citations.
 module Language.Drasil.Printing.Citation
 
 -- | A collection of citations.
@@ -643,7 +665,7 @@ URL :: Spec -> HP
 Verb :: Spec -> HP
 
 
--- | Helper functions for printing
+-- | General helper functions for printing Drasil documents.
 module Language.Drasil.Printing.Helpers
 
 -- | Single backslash.
@@ -792,6 +814,8 @@ sufx :: Int -> String
 -- | Similar to <a>sufx</a> but used on any sized <a>Int</a>.
 sufxer :: Int -> String
 
+
+-- | Printing helpers.
 module Language.Drasil.Printing.Import.Helpers
 
 -- | Helper for inserting parentheses.
@@ -845,6 +869,8 @@ resolveCapP :: TermCapitalization -> NP -> Sentence
 --   <a>TermCapitalization</a>. For sentence and title cases.
 capHelper :: TermCapitalization -> String -> Maybe String
 
+
+-- | Defines functions for printing symbols and units.
 module Language.Drasil.Printing.Import.Symbol
 
 -- | Converts a symbol into an expression.
@@ -853,6 +879,9 @@ symbol :: Symbol -> Expr
 -- | Renders a unit symbol as a printable expression.
 pUnit :: USymb -> Expr
 
+
+-- | Defines types similar to content types in <a>Language.Drasil</a> but
+--   better suited for printing.
 module Language.Drasil.Printing.LayoutObj
 
 -- | A document must contain a title, author, and contents (as
@@ -919,6 +948,9 @@ Cell :: [LayoutObj] -> LayoutObj
 -- | Bibliography section.
 Bib :: BibRef -> LayoutObj
 
+
+-- | Defines types and functions to gather all the information needed for
+--   printing.
 module Language.Drasil.Printing.PrintingInformation
 
 -- | Notation can be scientific or for engineering.
@@ -958,16 +990,23 @@ defaultConfiguration :: PrintingConfiguration
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingInformation
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingConfiguration
 
+
+-- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr
 
 -- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> Expr
 
+
+-- | Defines functions to render <a>Space</a>s into printable <a>Expr</a>s.
 module Language.Drasil.Printing.Import.Space
 
 -- | Render a <a>Space</a>.
 space :: PrintingInformation -> Space -> Expr
 
+
+-- | Defines functions to render <tt>CodeExpr</tt>s as printable
+--   <a>Expr</a>s.
 module Language.Drasil.Printing.Import.ModelExpr
 
 -- | Helper that adds parenthesis to a display expression where
@@ -1023,6 +1062,8 @@ pow :: PrintingInformation -> ModelExpr -> ModelExpr -> Expr
 -- | Print a <a>RealInterval</a>.
 renderRealInt :: PrintingInformation -> Symbol -> RealInterval ModelExpr ModelExpr -> Expr
 
+
+-- | Defines helpers for printing <a>Sentence</a>s.
 module Language.Drasil.Printing.Import.Sentence
 
 -- | Translates <a>Sentence</a> to the printable representation of a
@@ -1038,15 +1079,14 @@ renderURI :: ctx -> ShortName -> Sentence
 -- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence
 
+
+-- | Defines functions to transform Drasil-based documents into a printable
+--   version.
 module Language.Drasil.Printing.Import.Document
 
 -- | Translates from <a>Document</a> to a printable representation of
 --   <a>Document</a>.
 makeDocument :: PrintingInformation -> Document -> Document
-
--- | Helper for translating sections into a printable representation of
---   layout objects (<a>LayoutObj</a>).
-layout :: PrintingInformation -> Int -> SecCons -> LayoutObj
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [LayoutObj]
@@ -1055,6 +1095,10 @@ createLayout' :: PrintingInformation -> [Section] -> [LayoutObj]
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> LayoutObj
 cel :: PrintingInformation -> Int -> Section -> LayoutObj
+
+-- | Helper for translating sections into a printable representation of
+--   layout objects (<a>LayoutObj</a>).
+layout :: PrintingInformation -> Int -> SecCons -> LayoutObj
 
 -- | Helper that translates <a>Contents</a> to a printable representation
 --   of <a>LayoutObj</a>. Called internally by <a>layout</a>.
@@ -1081,17 +1125,22 @@ makeL :: PrintingInformation -> ListType -> ListType
 -- | Helper for translating list items to be printable.
 item :: PrintingInformation -> ItemType -> ItemType
 
+
+-- | Defines functions to render <a>CodeExpr</a>s as printable
+--   <a>Expr</a>s.
 module Language.Drasil.Printing.Import.CodeExpr
 
--- | Translate Exprs to printable layout AST.
+-- | Translate <a>CodeExpr</a>s to printable layout AST <tt>Expr</tt>s.
 codeExpr :: CodeExpr -> PrintingInformation -> Expr
 
+
+-- | Re-export top-level functions for easy use across drasil-printers.
 module Language.Drasil.Printing.Import
 
 -- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> Expr
 
--- | Translate Exprs to printable layout AST.
+-- | Translate <a>CodeExpr</a>s to printable layout AST <tt>Expr</tt>s.
 codeExpr :: CodeExpr -> PrintingInformation -> Expr
 
 -- | Translate Exprs to printable layout AST.
@@ -1111,6 +1160,8 @@ symbol :: Symbol -> Expr
 --   <a>Document</a>.
 makeDocument :: PrintingInformation -> Document -> Document
 
+
+-- | Defines functions to print on plain files (for .txt, .log, etc.).
 module Language.Drasil.Plain.Print
 
 -- | Data is either linear or not.
@@ -1133,6 +1184,9 @@ symbolDoc :: Symbol -> Doc
 -- | Helper for printing units in <a>Doc</a> format.
 unitDoc :: Linearity -> USymb -> Doc
 
+
+-- | Defines functions to help debug examples. Generated files appear in
+--   .<i>code</i>debug.
 module Language.Drasil.Log.Print
 
 -- | Gathers all printing functions and creates the debugging tables from
@@ -1144,20 +1198,6 @@ cdbSection :: Doc -> Doc
 
 -- | Header for debugging tables.
 header :: Doc -> Doc
-
--- | Creates a table of all UIDs and their "highest" recorded level of
---   information. See <a>mkListShowUsedUIDs</a> for more details.
-renderUsedUIDs :: [(UID, String)] -> Doc
-
--- | For the last section of the log output. Shows which chunk UID is being
---   used at which stage. Note that chunks used at a "higher stage" (like
---   <a>Concept</a>s and <a>QuantityDict</a>s) will still be built off of
---   the more basic types (like <a>IdeaDict</a>s), they are just not
---   explicitly used in that manner. Also, some chunks may have been
---   "downgraded" when put into the database (for example, mapping a
---   <a>QuantityDict</a> wrapper onto things like Constrained and Unital
---   chunks happens often).
-mkListShowUsedUIDs :: PrintingInformation -> [(UID, String)]
 
 -- | General function to make the debugging tables. Takes in printing
 --   information, a function that extracts a certain field from the
@@ -1213,6 +1253,20 @@ mkTableReferencedChunks :: PrintingInformation -> Doc
 
 -- | Chunks that use and are used by other chunks.
 mkTableDepReffedChunks :: PrintingInformation -> Doc
+
+-- | Creates a table of all UIDs and their "highest" recorded level of
+--   information. See <a>mkListShowUsedUIDs</a> for more details.
+renderUsedUIDs :: [(UID, String)] -> Doc
+
+-- | For the last section of the log output. Shows which chunk UID is being
+--   used at which stage. Note that chunks used at a "higher stage" (like
+--   <a>Concept</a>s and <a>QuantityDict</a>s) will still be built off of
+--   the more basic types (like <a>IdeaDict</a>s), they are just not
+--   explicitly used in that manner. Also, some chunks may have been
+--   "downgraded" when put into the database (for example, mapping a
+--   <a>QuantityDict</a> wrapper onto things like Constrained and Unital
+--   chunks happens often).
+mkListShowUsedUIDs :: PrintingInformation -> [(UID, String)]
 
 -- | Get all <a>UID</a>s from a database (<a>ChunkDB</a>).
 mkListAll :: ChunkDB -> [UID]
@@ -1285,6 +1339,8 @@ instance GHC.Base.Monad Language.Drasil.TeX.Monad.PrintLaTeX
 instance GHC.Base.Semigroup (Language.Drasil.TeX.Monad.PrintLaTeX Text.PrettyPrint.HughesPJ.Doc)
 instance GHC.Base.Monoid (Language.Drasil.TeX.Monad.PrintLaTeX Text.PrettyPrint.HughesPJ.Doc)
 
+
+-- | Defines helper functions used in printing LaTeX documents.
 module Language.Drasil.TeX.Helpers
 
 -- | Curly braces.
@@ -1526,6 +1582,8 @@ paren :: String -> String
 --   HTML/Plaintext.
 sqbrac :: String -> String
 
+
+-- | Defines types and functions to help generate common LaTeX preamble.
 module Language.Drasil.TeX.Preamble
 
 -- | Generates LaTeX document preamble.
@@ -1533,6 +1591,9 @@ genPreamble :: [LayoutObj] -> D
 instance GHC.Classes.Eq Language.Drasil.TeX.Preamble.Def
 instance GHC.Classes.Eq Language.Drasil.TeX.Preamble.Package
 
+
+-- | Defines main LaTeX printer functions. For more information on each of
+--   the helper functions, please view the <a>source files</a>.
 module Language.Drasil.TeX.Print
 
 -- | Generates a LaTeX document.
@@ -1547,6 +1608,9 @@ pUnit :: USymb -> D
 -- | Prints all <a>Spec</a>s.
 spec :: Spec -> D
 
+
+-- | Defines all functions needed to print HTML files. For more information
+--   on each of the helper functions, please view the <a>source files</a>.
 module Language.Drasil.HTML.Print
 
 -- | Generate an HTML document from a Drasil <a>Document</a>.
@@ -1565,6 +1629,10 @@ Close :: OpenClose
 --   absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String
 
+
+-- | Defines .json printers to generate jupyter notebooks. For more
+--   information on each of the helper functions, please view the <a>source
+--   files</a>.
 module Language.Drasil.JSON.Print
 
 -- | Generate a python notebook document (using json).
@@ -1572,15 +1640,11 @@ genJSON :: PrintingInformation -> Document -> Doc
 
 module Language.Drasil.Printers
 
--- | Possible formats for output
+-- | Possible formats for printer output.
 data Format
 TeX :: Format
 HTML :: Format
 JSON :: Format
-
--- | Creates the directory for output, gathers all individual graph output
---   functions and calls them.
-outputDot :: FilePath -> GraphInfo -> IO ()
 
 -- | Holds all important and relevant information for generating a
 --   traceability graph. Includes nodes, graph edges, and node family
@@ -1650,11 +1714,15 @@ NF :: [UID] -> [Label] -> Label -> Colour -> NodeFamily
 -- | Gives the ability to change colours of bubbles within the graph.
 [nfColour] :: NodeFamily -> Colour
 
--- | Generates the CSS selectors necessary for a document.
-makeCSS :: Document -> Doc
+-- | Creates the directory for output, gathers all individual graph output
+--   functions and calls them.
+outputDot :: FilePath -> GraphInfo -> IO ()
 
 -- | Generate an HTML document from a Drasil <a>Document</a>.
 genHTML :: PrintingInformation -> String -> Document -> Doc
+
+-- | Generates the CSS selectors necessary for a document.
+makeCSS :: Document -> Doc
 
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc

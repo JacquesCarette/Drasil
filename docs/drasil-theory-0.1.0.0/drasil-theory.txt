@@ -9,6 +9,8 @@
 @package drasil-theory
 @version 0.1.0.0
 
+
+-- | Theory related Drasil concepts, used across Drasil.
 module Data.Drasil.TheoryConcepts
 
 -- | Data definition.
@@ -35,6 +37,8 @@ inModel :: CI
 --   the same time as theories.
 thModel :: CI
 
+
+-- | Re-export many things to simplify external use.
 module Theory.Drasil
 
 -- | Members of this class may have inputs.

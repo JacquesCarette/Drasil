@@ -9,6 +9,8 @@
 @package drasil-gen
 @version 0.1.3.0
 
+
+-- | Defines Drasil generator functions.
 module Language.Drasil.Generate
 
 -- | Generate a number of artifacts based on a list of recipes.
@@ -38,7 +40,7 @@ Jupyter :: DocType
 data DocSpec
 DocSpec :: DocChoices -> Filename -> DocSpec
 
--- | Possible formats for output
+-- | Possible formats for printer output.
 data Format
 TeX :: Format
 HTML :: Format

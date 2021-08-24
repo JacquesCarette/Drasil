@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Quantity (
   -- * Chunk Type
   QuantityDict,
   -- * Constructors
-  codeVC, implVar, implVar', 
+  codeVC, implVar, implVar', implVarUID, implVarUID', 
   mkQuant, mkQuant', qw, vc, vc'', vcSt, vcUnit) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -12,13 +12,14 @@ import Control.Lens ((^.),makeLenses,view)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasSpace(typ), Quantity, Express(..))
-import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea,nc)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, mkIdea, nc, ncUID, mkIdeaUID)
 import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Symbol (Symbol(Empty))
+import Language.Drasil.UID (UID)
 
 -- | QuantityDict is a combination of an 'IdeaDict' with a quantity.
 -- Contains an 'IdeaDict', 'Space', a function from 
@@ -84,6 +85,22 @@ implVar' s np a t sym = mkQuant' s np a t f
         f Implementation = sym
         f Equational = Empty
 
+-- | Similar to 'implVar' but takes in a 'UID' rather than a 'String'.
+implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
+implVarUID i des sp sym = QD (nw $ ncUID i des) sp f Nothing
+  where
+    f :: Stage -> Symbol
+    f Implementation = sym
+    f Equational = Empty
+
+-- | Similar to 'implVar'' but takes in a 'UID' rather than a 'String'.
+implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> 
+  Maybe UnitDefn -> QuantityDict
+implVarUID' s np a t sym = QD (mkIdeaUID s np a) t f
+  where f :: Stage -> Symbol
+        f Implementation = sym
+        f Equational = Empty
+
 -- | Creates a 'QuantityDict' from a 'UID', term ('NP'), 'Symbol', and 'Space'.
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
 vc i des sym space = QD (nw $ nc i des) space (const sym) Nothing
@@ -96,7 +113,8 @@ vcUnit i des sym space u = QD (nw $ nc i des) space (const sym) (Just u)
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 vcSt i des sym space = QD (nw $ nc i des) space sym Nothing
 
--- | Makes a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'. 'Symbol' is implementation-only.
+-- | Makes a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'.
+-- 'Symbol' is implementation-only.
 codeVC :: Idea c => c -> Symbol -> Space -> QuantityDict
 codeVC n s t = QD (nw n) t f Nothing
   where
@@ -106,4 +124,4 @@ codeVC n s t = QD (nw n) t f Nothing
 
 -- | Creates a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'.
 vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
-vc'' n = vc (n ^. uid) (n ^. term)
+vc'' n sym space = QD (nw n) space (const sym) Nothing

@@ -8,7 +8,7 @@ module Language.Drasil.DecoratedReference (
 
 import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Reference (Reference, ref)
-import Language.Drasil.Classes.Core (HasUID(..), HasRefAddress(..))
+import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(..))
 import Language.Drasil.Classes.Core2 (HasShortName(..))
 import Control.Lens ((^.), makeLenses)
 

@@ -123,9 +123,9 @@ imageContent = llcc (makeFigRef "Drasil") $ figWithWidth EmptyS imagePath 50
 
 -- | Used for the repository link.
 gitHubRef :: Reference
-gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' $ S "gitHubRepo")
+gitHubRef = makeURI "gitHubRepo" gitHubInfoURL (shortname' $ S "gitHubRepo")
 wikiRef :: Reference
-wikiRef = Reference "gitHubWiki" (URI $ gitHubInfoURL ++ "/wiki") (shortname' $ S "gitHubWiki")
+wikiRef = makeURI "gitHubWiki" (gitHubInfoURL ++ "/wiki") (shortname' $ S "gitHubWiki")
 
 -- | Hardcoded info for the title, URL, and image path.
 websiteTitle :: String

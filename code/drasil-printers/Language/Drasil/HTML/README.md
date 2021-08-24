@@ -3,6 +3,9 @@
 Last updated: July 20, 2018
 ----------------------------------------------------------
 
+CSS.hs
+  - Defines default CSS setting function printer
+
 Helpers.hs
   - Defines helper functions for pretty printing HTML
 

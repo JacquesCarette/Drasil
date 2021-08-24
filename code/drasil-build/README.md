@@ -5,12 +5,12 @@ Last updated: April 17, 2019
 
 **Build**
   - Contains the code for Drasil
- 
+
+package.yaml
+  - Used by Hpack
+
 README.md
   - This file
-
-drasil-build.cabal
-  - Cabal file, used by stack to build drasil-build
 
 stack.yaml
   - Used by Stack

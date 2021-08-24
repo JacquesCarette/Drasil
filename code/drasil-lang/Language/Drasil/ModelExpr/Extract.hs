@@ -3,11 +3,12 @@ module Language.Drasil.ModelExpr.Extract where
 
 import Data.List (nub)
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.ModelExpr (ModelExpr(..))
 import Language.Drasil.Space (RealInterval(..))
 
 -- | Generic traverse of all expressions that could lead to names.
-meNames :: ModelExpr -> [String]
+meNames :: ModelExpr -> [UID]
 meNames (AssocA _ l)          = concatMap meNames l
 meNames (AssocB _ l)          = concatMap meNames l
 meNames (Deriv _ a b)         = b : meNames a
@@ -40,7 +41,7 @@ meNames (RealI c b)           = c : meNamesRI b
 meNames (ForAll _ _ de)       = meNames de
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'meNames').
-meNamesRI :: RealInterval ModelExpr ModelExpr -> [String]
+meNamesRI :: RealInterval ModelExpr ModelExpr -> [UID]
 meNamesRI (Bounded (_, il) (_, iu)) = meNames il ++ meNames iu
 meNamesRI (UpTo (_, iu))            = meNames iu
 meNamesRI (UpFrom (_, il))          = meNames il
@@ -48,7 +49,7 @@ meNamesRI (UpFrom (_, il))          = meNames il
 -- | Generic traverse of all positions that could lead to 'meNames' without
 -- functions.  FIXME : this should really be done via post-facto filtering, but
 -- right now the information needed to do this is not available!
-meNames' :: ModelExpr -> [String]
+meNames' :: ModelExpr -> [UID]
 meNames' (AssocA _ l)          = concatMap meNames' l
 meNames' (AssocB _ l)          = concatMap meNames' l
 meNames' (Deriv _ a b)         = b : meNames' a
@@ -82,7 +83,7 @@ meNames' (RealI c b)           = c : meNamesRI' b
 meNames' (ForAll _ _ de)       = meNames' de
 
 -- | Generic traversal of everything that could come from an interval to names without functions (similar to 'meNames'').
-meNamesRI' :: RealInterval ModelExpr ModelExpr -> [String]
+meNamesRI' :: RealInterval ModelExpr ModelExpr -> [UID]
 meNamesRI' (Bounded il iu) = meNames' (snd il) ++ meNames' (snd iu)
 meNamesRI' (UpTo iu)       = meNames' (snd iu)
 meNamesRI' (UpFrom il)     = meNames' (snd il)
@@ -91,5 +92,5 @@ meNamesRI' (UpFrom il)     = meNames' (snd il)
 -- And now implement the exported traversals all in terms of the above
 
 -- | Get dependencies from an equation.  
-meDep :: ModelExpr -> [String]
+meDep :: ModelExpr -> [UID]
 meDep = nub . meNames

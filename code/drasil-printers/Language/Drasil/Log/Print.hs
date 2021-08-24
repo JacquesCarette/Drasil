@@ -40,26 +40,6 @@ header :: Doc -> Doc
 header d = text (replicate 100 '-') $$ d $$ text (replicate 100 '-')
 
 -- ** Table Generators
--- | For the last section of the log output. Shows which chunk UID is being used at which stage.
--- Note that chunks used at a "higher stage" (like 'Concept's and 'QuantityDict's) will still be built off of the
--- more basic types (like 'IdeaDict's), they are just not explicitly used in that manner.
--- Also, some chunks may have been "downgraded" when put into the database (for example, mapping a
--- 'QuantityDict' wrapper onto things like Constrained and Unital chunks happens often).
-mkListShowUsedUIDs :: PrintingInformation -> [(UID, String)]
-mkListShowUsedUIDs PI{_ckdb = db} = sortBy (compare `on` fst) $ map (second stringList) $ Map.toList $ Map.fromListWith (++) $
-  map (\x -> (fst x, ["QuantityDict"])) (Map.assocs $ symbolTable db) ++
-  map (\x -> (fst x, ["IdeaDict"])) (Map.assocs $ termTable db) ++
-  map (\x -> (fst x, ["ConceptChunk"])) (Map.assocs $ defTable db) ++
-  map (\x -> (fst x, ["UnitDefn"])) (Map.assocs $ db ^. unitTable) ++
-  map (\x -> (fst x, ["DataDefinition"])) (Map.assocs $ db ^. dataDefnTable) ++
-  map (\x -> (fst x, ["InstanceModel"])) (Map.assocs $ db ^. insmodelTable) ++
-  map (\x -> (fst x, ["GeneralDefinition"])) (Map.assocs $ db ^. gendefTable) ++
-  map (\x -> (fst x, ["TheoryModel"])) (Map.assocs $ db ^. theoryModelTable) ++
-  map (\x -> (fst x, ["ConceptInstance"])) (Map.assocs $ db ^. conceptinsTable) ++
-  map (\x -> (fst x, ["Section"])) (Map.assocs $ db ^. sectionTable) ++
-  map (\x -> (fst x, ["LabelledContent"])) (Map.assocs $ db ^. labelledcontentTable) ++
-  map (\x -> (fst x, ["Reference"])) (Map.assocs $ db ^. refTable)
-
 -- | General function to make the debugging tables. Takes in printing information, a function
 -- that extracts a certain field from the printing information, a title, three column headers,
 -- and three functions that sort the data from the printing information field into the 

@@ -5,12 +5,12 @@ Last updated: July 20, 2018
 
 **Language**
   - Contains the printers for the Drasil language
+
+package.yaml
+  - Used by Hpack
  
 README.md
   - This file
-
-drasil-printers.cabal
-  - Cabal file, used by Stack to build drasil-printers
 
 stack.yaml
   - Used by Stack

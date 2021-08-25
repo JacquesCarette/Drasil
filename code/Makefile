@@ -411,8 +411,11 @@ deploy: analysis graphs docs tex doxygen website ##@Deploy Generates all artifac
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 	- rm -rf "./$*/"
 
-clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders.
+clean_artifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders. (alt.: cleanArtifacts)
 	- rm -f "$(CACHED_MSV_FILE)"
+
+# TODO: Help function's pattern match ignores targets with aliases, this is a temporary thing until we fix it.
+cleanArtifacts: clean_artifacts
 
 clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, & folders.
 	- stack clean

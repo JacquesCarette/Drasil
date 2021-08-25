@@ -184,6 +184,9 @@ graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 #--- Targets for building, running, or testing examples ---#
 #----------------------------------------------------------#
 
+deps: check_stack ##@Dependencies Build only dependencies.
+	- stack build $(stackArgs) --only-dependencies
+
 #--- Targets that affect all packages/examples ---#
 #-------------------------------------------------#
 
@@ -464,4 +467,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

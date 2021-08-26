@@ -52,6 +52,7 @@ genHTML :: PrintingInformation -> String -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 --         ^^ -- should really be of type Filename, but that's not in scope
 
+-- TODO: Use our JSON printer here to create this code snippet.
 -- | Variable to include MathJax in our HTML files so we can render equations in LaTeX.
 mathJaxScript :: Doc
 mathJaxScript =

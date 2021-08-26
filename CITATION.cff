@@ -74,3 +74,10 @@ authors:
      given-names: Dong
      email: chend79@mcmaster.ca
      website: "https://github.com/cd155"
+  - family-names: Szymczak
+    given-names: Dan
+    alias: szymczdm
+    city: "Hamilton"
+    country: "CA"
+    email: szymczdm@mcmaster.ca
+    website: "https://www.dszymczak.com"

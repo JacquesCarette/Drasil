@@ -56,7 +56,7 @@ jobs:
       - name: "HLint"
         run: make hot_hlint
       - name: "Install dependencies"
-        run: stack --no-terminal test --bench --only-dependencies
+        run: make stackArgs="--no-terminal" deps
       - name: "Build"
         run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
       - name: "Stable"

@@ -184,6 +184,9 @@ graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 #--- Targets for building, running, or testing examples ---#
 #----------------------------------------------------------#
 
+deps: check_stack ##@Dependencies Build only dependencies.
+	- stack build $(stackArgs) --only-dependencies
+
 #--- Targets that affect all packages/examples ---#
 #-------------------------------------------------#
 
@@ -261,7 +264,7 @@ $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX
 # to those in the stable folder. Targets will have the form exampleName_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
+	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)"
 
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.
@@ -292,9 +295,7 @@ graphs: $(GRAPH_PACKAGES) ##@Analysis Generate all module dependency graphs.
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
 	@mkdir -p "$(GRAPH_FOLDER)"
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*.pdf"
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tsvg > "$(GRAPH_FOLDER)drasil-$*.svg"
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpng > "$(GRAPH_FOLDER)drasil-$*.png"
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | tee >(dot -Tpdf -o "$(GRAPH_FOLDER)drasil-$*.pdf") >(dot -Tsvg -o "$(GRAPH_FOLDER)drasil-$*.svg") | dot -Tpng -o "$(GRAPH_FOLDER)drasil-$*.png"
 
 # Dot graphs are currently generated for datatypes and class instance structures.
 # They are made using the default dot algorithm and the circo algorithm for options
@@ -413,8 +414,11 @@ deploy: analysis graphs docs tex doxygen website ##@Deploy Generates all artifac
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 	- rm -rf "./$*/"
 
-clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders.
+clean_artifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders. (alt.: cleanArtifacts)
 	- rm -f "$(CACHED_MSV_FILE)"
+
+# TODO: Help function's pattern match ignores targets with aliases, this is a temporary thing until we fix it.
+cleanArtifacts: clean_artifacts
 
 clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, & folders.
 	- stack clean
@@ -463,4 +467,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

@@ -38,7 +38,7 @@ data SpaceDefn -- FIXME: This should be defined.
 --      * quan - quantities ('QuantityDict's),
 --      * ops - operations ('ConceptChunk's),
 --      * defq - definitions ('QDefinition's),
---      * invs - invariants ('DisplayExpr's),
+--      * invs - invariants ('ModelExpr's),
 --      * dfun - defined functions ('QDefinition's),
 --      * ref - accompanying references ('DecRef's),
 --      * lb - a label ('SpaceDefn'),

@@ -645,16 +645,16 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">watE</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>     </span><span class="hs-comment">--outputs</span><span>
 </span><span id="line-189"></span><span>  </span><span class="annot"><span class="annottext">_defSequence :: [Block QDefinition]
-</span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679106840"><span class="annot"><span class="annottext">x :: [QDefinition]
-</span><a href="#local-6989586621679106840"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; [QDefinition] -&gt; Block QDefinition
+</span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679106841"><span class="annot"><span class="annottext">x :: [QDefinition]
+</span><a href="#local-6989586621679106841"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; [QDefinition] -&gt; Block QDefinition
 forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-identifier hs-var">Parallel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[QDefinition] -&gt; QDefinition
 forall a. [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[QDefinition]
-</span><a href="#local-6989586621679106840"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[QDefinition] -&gt; [QDefinition]
+</span><a href="#local-6989586621679106841"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[QDefinition] -&gt; [QDefinition]
 forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">tail</span></span><span> </span><span class="annot"><span class="annottext">[QDefinition]
-</span><a href="#local-6989586621679106840"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[QDefinition]
+</span><a href="#local-6989586621679106841"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[QDefinition]
 </span><a href="Drasil.NoPCM.DataDefs.html#qDefs"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-190"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; ConstrainedChunk) -&gt; [UncertQ] -&gt; [ConstrainedChunk]

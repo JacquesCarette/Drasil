@@ -44,6 +44,9 @@ replaceAll :: Eq a => [a] -> a -> [a] -> [a]
 -- | Checks if the first set is a subset of the second.
 subsetOf :: Eq a => [a] -> [a] -> Bool
 
+-- | Sort a list, removing all duplicates
+nubSort :: Ord a => [a] -> [a]
+
 
 -- | Defines various sentence level combinators that may be based in
 --   English and not necessarily have a conceptual link. See the
@@ -728,6 +731,9 @@ replaceAll :: Eq a => [a] -> a -> [a] -> [a]
 
 -- | Checks if the first set is a subset of the second.
 subsetOf :: Eq a => [a] -> [a] -> Bool
+
+-- | Sort a list, removing all duplicates
+nubSort :: Ord a => [a] -> [a]
 
 -- | Output is of the form "<tt>reference - sentence</tt>".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

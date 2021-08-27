@@ -21,7 +21,7 @@ if [ -f "$CACHED_MSV_FILE" ]; then
   fi
 fi
 
-BIN=stack DOWNLOAD_LOCATION=https://www.haskellstack.org/ "$SHELL" scripts/check_binary.sh
+BIN=stack DOWNLOAD_LOCATION="https://www.haskellstack.org/" "$SHELL" scripts/check_binary.sh
 RET=$?
 if [ $RET -ne 0 ]; then
   exit 1

@@ -26,7 +26,7 @@ fi
 
 try_deploy() {
   # Cleanup the deploy folder if it already exists.
-  rm -rf "$DEPLOY_FOLDER" >/dev/null 2>&1
+  rm -rf "$DEPLOY_FOLDER"
   git clone --quiet --branch="$DEPLOY_BRANCH" --depth=5 "https://github.com/$GITHUB_REPOSITORY.git" "$DEPLOY_FOLDER"
   if [ $? = 1 ]; then
     echo "Clone failed. Bailing."

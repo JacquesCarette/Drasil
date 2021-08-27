@@ -166,16 +166,9 @@ class UnitEq u where
 
 -----------------------------------------------------
 
--- TODO: I think that this DefiningExpr is missing a "what it defines" component...
---       It's also only used for CodeDefinitions, QDefinitions, and DataDefinitions (food for thought on naming if we want to add ^)
--- | A better version of 'ExprRelat' that holds an 'Expr'.
--- class DefiningExpr c where
---   -- | Provides a 'Lens' to the expression.
---   defnExpr :: Express e => Lens' c e
-
 class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
-  defnExpr :: (Express e {-, Contravariant c-}) => Lens' (c e) e
+  defnExpr :: Express e => Lens' (c e) e
 
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

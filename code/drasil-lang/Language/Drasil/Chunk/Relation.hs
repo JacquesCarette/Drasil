@@ -17,7 +17,7 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID(..))
 
--- | For a concept ('ConceptChunk') that also has a 'Relation' attached.
+-- | For a concept ('ConceptChunk') that also has a 'Relation' ('ModelExpr') attached.
 --
 -- Ex. We can describe a pendulum arm and then apply an associated equation so that we know its behaviour.
 data RelationConcept = RC { _conc :: ConceptChunk

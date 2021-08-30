@@ -3,7 +3,7 @@ module Language.Drasil.Expr.Development (
     Expr(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..), VVVBinOp(..), VVNBinOp(..)
   , AssocArithOper(..), AssocBoolOper(..)
-  , DerivType(..), Completeness(..), Relation
+  , Completeness(..), Relation
   -- Expr.Extract
   , eDep, eNames, eNames', eNamesRI
   -- Expr.Precedence

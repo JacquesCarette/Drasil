@@ -52,10 +52,8 @@ velocityIXDerivSents :: [Sentence]
 velocityIXDerivSents = [velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
                         velocityDerivSent4, velocityDerivSent5]
 
--- TODO: clean this up, and the related, up a bit
 velocityIXDerivEqns :: [Sentence]
-velocityIXDerivEqns = map eS [D.velocityIDerivEqn1, D.velocityIXDerivEqn2,
-    D.velocityIXDerivEqn3, D.velocityIXDerivEqn4] ++ [eS velocityIXQD]
+velocityIXDerivEqns = map eS D.velocityIXDerivEqns ++ [eS velocityIXQD]
 
 velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
     velocityDerivSent4, velocityDerivSent5 :: Sentence
@@ -81,8 +79,7 @@ velocityIYDerivSents = [velocityDerivSent1, velocityIYDerivSent2, velocityDerivS
                         velocityDerivSent4, velocityDerivSent5]
 
 velocityIYDerivEqns :: [Sentence]
-velocityIYDerivEqns = map eS [D.velocityIDerivEqn1, D.velocityIYDerivEqn2,
-    D.velocityIYDerivEqn3, D.velocityIYDerivEqn4] ++ [eS velocityIYQD]
+velocityIYDerivEqns = map eS D.velocityIYDerivEqns ++ [eS velocityIYQD]
 
 velocityIYDerivSent2 :: Sentence
 velocityIYDerivSent2 = S "We also know the" +:+ phrase verticalPos

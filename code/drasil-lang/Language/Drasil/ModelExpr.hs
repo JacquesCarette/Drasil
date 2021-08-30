@@ -27,7 +27,7 @@ import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 import Control.Lens ((^.))
 
 import Language.Drasil.ModelExpr.Lang
-import Language.Drasil.Expr.Lang (Completeness(..), DerivType(..))
+import Language.Drasil.Expr.Lang (Completeness(..))
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Symbol (Symbol)

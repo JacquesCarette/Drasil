@@ -14,10 +14,6 @@ type Relation = Expr
 -- | The variable type is just a renamed 'String'.
 type Variable = String
 
--- | Determines the type of the derivative (either a partial derivative or a total derivative).
-data DerivType = Part | Total
-  deriving Eq
-
 -- Binary functions
 
 -- | Arithmetic operators (fractional, power, and subtraction).

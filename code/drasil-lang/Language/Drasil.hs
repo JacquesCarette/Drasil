@@ -13,7 +13,7 @@ module Language.Drasil (
   , UFunc, UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
   , AssocArithOper, AssocBoolOper
-  , DerivType, Completeness, Relation
+  , Completeness, Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
   -- ** Math Functions
@@ -36,6 +36,7 @@ module Language.Drasil (
 
   -- Language.Drasil.Expr.ModelExpr
   , ModelExpr
+  , DerivType
   , defines, space, isIn, andMEs, equivMEs
   , deriv, pderiv
   -- ** Unicode symbols
@@ -250,7 +251,7 @@ import Language.Drasil.Expr.Lang
 import Language.Drasil.ModelExpr (space, isIn, defines
   , andMEs, equivMEs
   , deriv, pderiv)
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection

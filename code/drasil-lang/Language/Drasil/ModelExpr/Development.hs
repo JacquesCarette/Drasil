@@ -18,8 +18,7 @@ module Language.Drasil.ModelExpr.Development (
   , mePrec, precB, precA
 ) where
 
--- TODO: Move DerivType
-import Language.Drasil.Expr.Lang (DerivType(..), Completeness(..))
+import Language.Drasil.Expr.Lang (Completeness(..))
 import Language.Drasil.ModelExpr.Convert (expr)
 import Language.Drasil.ModelExpr.Extract (meDep)
 import Language.Drasil.ModelExpr.Lang

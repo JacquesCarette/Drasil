@@ -18,10 +18,16 @@ velocityIXDerivEqn2 = sy xPos $= sy lenRod `mulRe` sin (sy pendDisplacementAngle
 velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod `mulRe` sin (sy pendDisplacementAngle)) time
 velocityIXDerivEqn4 = sy xVel $= sy lenRod `mulRe` deriv (sin (sy pendDisplacementAngle)) time
 
+velocityIXDerivEqns :: [ModelExpr]
+velocityIXDerivEqns = [velocityIDerivEqn1, velocityIXDerivEqn2, velocityIXDerivEqn3, velocityIXDerivEqn4]
+
 velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: ModelExpr
 velocityIYDerivEqn2 = sy yPos $= neg (sy lenRod `mulRe` cos (sy pendDisplacementAngle))
 velocityIYDerivEqn3 = sy yVel $= neg (deriv (sy lenRod `mulRe` cos (sy pendDisplacementAngle)) time)
 velocityIYDerivEqn4 = sy yVel $= neg (sy lenRod `mulRe` deriv (cos (sy pendDisplacementAngle)) time)
+
+velocityIYDerivEqns :: [ModelExpr]
+velocityIYDerivEqns = [velocityIDerivEqn1, velocityIYDerivEqn2, velocityIYDerivEqn3, velocityIYDerivEqn4]
 
 -- Acceleration IX/IY
 accelerationIDerivEqn1, accelerationIXDerivEqn3, accelerationIXDerivEqn4 :: ModelExpr

@@ -5,7 +5,7 @@ module Language.Drasil.ModelExpr.Lang where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Expr.Lang (Completeness, DerivType)
+import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 
@@ -71,6 +71,10 @@ data StatBinOp = Defines
 
 -- | @Value -> Space -> Bool@ operators.
 data SpaceBinOp = IsIn
+  deriving Eq
+
+-- | Determines the type of the derivative (either a partial derivative or a total derivative).
+data DerivType = Part | Total
   deriving Eq
 
 -- | Drasil expressions.

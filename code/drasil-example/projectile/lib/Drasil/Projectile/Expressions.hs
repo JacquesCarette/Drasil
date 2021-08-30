@@ -62,7 +62,6 @@ velocityXY     = sy velocity     $= vec2D (sy xVel)           (sy yVel)
 accelerationXY = sy acceleration $= vec2D (sy xAccel)         (sy yAccel)
 constAccelXY   = sy constAccelV  $= vec2D (sy QP.xConstAccel) (sy QP.yConstAccel)
 
--- TODO: These look like they should be somewhere else? They should also end up using `express` to express the QDef's/etc as the equations instead of rewriting them here.
 -- Expressions for lesson
 lcrectVel, lcrectPos, lcrectNoTime :: LabelledContent
 lcrectVel = lbldExpr (sy speed $= speed') (makeEqnRef "rectVel")
@@ -70,5 +69,5 @@ lcrectPos = lbldExpr (sy scalarPos $= scalarPos') (makeEqnRef "rectPos")
 lcrectNoTime = lbldExpr rectNoTime (makeEqnRef "rectNoTime")
 
 -- References --
-eqnRefs :: [Reference] -- TODO: These look like they should be somewhere else?
-eqnRefs = [ref lcrectVel, ref lcrectPos, ref lcrectNoTime]
+eqnRefs :: [Reference]
+eqnRefs = map ref [lcrectVel, lcrectPos, lcrectNoTime]

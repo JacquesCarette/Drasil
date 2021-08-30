@@ -135,7 +135,7 @@ eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Factoring the negative sign out" `S.o
   (S "second term" `S.the_ofThe` short rightSide) `S.of_` eqN 3 `S.and_`
   S "multiplying it by", ch coilHTC, ch coilSA, S "/", ch coilHTC, ch coilSA, S "yields"]
 
--- TODO: Typo. Not fixing immediately because I want to keep stable diffs empty.
+-- TODO: Typo. Not fixing immediately because I want to keep stable diffs empty for this PR.
 eBalanceOnWtrDerivDesc5 :: Sentence
 eBalanceOnWtrDerivDesc5 = S "Rearraging this" +:+ phrase equation +: S "gives us"
 

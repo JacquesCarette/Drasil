@@ -21,10 +21,6 @@ modelsFromDB db = dropNums $ sortBy (compare `on` snd) elemPairs
   where elemPairs = Map.elems db
         dropNums = map fst
 
-
--- TODO: This below ModelDB seems to only be instantiated in SWHS, but then goes unused in SWHS?
---       Should we remove this?
-
 -- Trying not to add to RefDB since these are recipe-specific content-types for
 -- the SmithEtAl Template recipe.
 -- | A database that contains 'TheoryModel's, 'GenDefn's, 'DataDefinition's, and 'InstanceModel's.

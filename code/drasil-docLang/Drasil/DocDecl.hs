@@ -133,7 +133,7 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   scsSub Assumptions = DL.Assumptions $ fromConcInsDB assumpDom
   scsSub (TMs s f) = DL.TMs s f $ allInDB theoryModelTable
   scsSub (GDs s f dd) = DL.GDs s f (allInDB gendefTable) dd
-  scsSub (DDs s f dd) = DL.DDs s f (allInDB eDataDefnTable) (allInDB meDataDefnTable) dd -- TODO: What about the ModelExpr ones?
+  scsSub (DDs s f dd) = DL.DDs s f (allInDB eDataDefnTable) (allInDB meDataDefnTable) dd
   scsSub (IMs s f dd) = DL.IMs s f (allInDB insmodelTable) dd
   scsSub (Constraints s c) = DL.Constraints s c
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs

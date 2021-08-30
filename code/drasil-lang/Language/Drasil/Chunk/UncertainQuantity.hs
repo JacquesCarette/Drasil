@@ -103,7 +103,7 @@ instance Definition     UncertQ where defn = coco . defn
 instance ConceptDomain  UncertQ where cdom = cdom . view coco
 -- | Finds the units of the 'ConstrConcept' used to make the 'UncertQ'.
 instance MayHaveUnit    UncertQ where getUnit = getUnit . view coco
--- | Convert the symbol of the 'UncertQ' to a 'DisplayExpr'.
+-- | Convert the symbol of the 'UncertQ' to a 'ModelExpr'.
 instance Express        UncertQ where express = express . sy
 
 {-- Constructors --}

@@ -35,10 +35,11 @@ import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
 import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import GOOL.Drasil.CodeType (ClassName)
 
+import Utils.Drasil (nubSort)
+
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2)
 import Control.Monad.State (State, modify, gets)
 import Data.List (nub, delete)
-import Data.List.Ordered (nubSort)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, insert, union, findWithDefault, mapWithKey)
 import qualified Data.Map as Map (empty, map)

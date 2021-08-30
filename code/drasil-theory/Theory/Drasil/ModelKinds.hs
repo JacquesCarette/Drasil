@@ -46,8 +46,6 @@ data ModelKind e = MK {
 
 makeLenses ''ModelKind
 
--- TODO: RelationConcepts should contain ModelExprs instead of just Exprs
-
 -- | Smart constructor for 'DEModel's
 deModel :: String -> NP -> RelationConcept -> ModelKind e
 deModel u n rc = MK (DEModel rc) (D.uid u) n

@@ -171,7 +171,6 @@ data ChunkDB = CDB { symbolTable           :: SymbolMap
                    , _unitTable            :: UnitMap
                    , _traceTable           :: TraceMap
                    , _refbyTable           :: RefbyMap
-                   -- TODO: 2 DataDefinition maps?
                    , _eDataDefnTable       :: DatadefnMap Expr
                    , _meDataDefnTable      :: DatadefnMap ModelExpr
                    , _insmodelTable        :: InsModelMap
@@ -181,7 +180,7 @@ data ChunkDB = CDB { symbolTable           :: SymbolMap
                    , _sectionTable         :: SectionMap
                    , _labelledcontentTable :: LabelledContentMap
                    , _refTable             :: ReferenceMap
-                   } --TODO: Expand and add more databases
+                   } -- TODO: Expand and add more databases
 makeLenses ''ChunkDB
 
 -- | Smart constructor for chunk databases. Takes in the following:

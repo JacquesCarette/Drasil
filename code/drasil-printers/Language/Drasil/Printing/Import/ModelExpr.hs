@@ -23,16 +23,6 @@ modelExpr' :: PrintingInformation -> Int -> ModelExpr -> P.Expr
 modelExpr' s p e = fence $ modelExpr e s
   where fence = if mePrec e < p then parens else id
 
--- -- | Translate DisplayExprs to printable layout AST.
--- modelExpr :: DisplayExpr -> PrintingInformation -> P.Expr
--- modelExpr (AlgebraicExpr e)  sm = modelExpr e sm
--- modelExpr (SpaceExpr s)      sm = space sm s
--- modelExpr (BinOp b l r)      sm = P.Row [modelExpr l sm, P.MO $ deBinOp b, modelExpr r sm]
--- modelExpr (AssocBinOp b des) sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm prec) des
---   where prec = dePrecAssoc b
---         op   = deAssocBinOp b
-
-
 -- | Helper that creates an expression row given printing information, an operator, and an expression.
 mkCall :: PrintingInformation -> P.Ops -> ModelExpr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ modelExpr e s]

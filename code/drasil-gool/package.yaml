@@ -15,7 +15,6 @@ dependencies:
 - containers
 - pretty
 - mtl
-- data-ordlist
 - composition
 - drasil-utils
 

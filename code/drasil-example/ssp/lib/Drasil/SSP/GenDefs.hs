@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, generalDefinitions,
+  normShrR, generalDefinitions,
   normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD,
   mobShearWOGD, resShearWOGD, srfWtrFGD) where
 
@@ -245,11 +245,6 @@ momentEqlModel :: ModelKind ModelExpr
 momentEqlModel = equationalConstraints' $
   mkConstraintSet (dccWDS "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
   NE.fromList [express momEqlExpr]
-
--- TODO: How is this one used? Seems conflicting with the above.
-momentEql :: RelationConcept
-momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEqlDesc momEqlExpr -- genDef6Label
 
 momEqlExpr :: Expr
 momEqlExpr = exactDbl 0 $= momExpr (\ x y -> x `addRe`

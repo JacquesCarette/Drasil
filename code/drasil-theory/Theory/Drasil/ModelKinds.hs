@@ -160,9 +160,9 @@ lensMk :: forall a.
   -> Lens' ModelKinds a
 lensMk lr lcs lq lmd = lens g s
     where g :: ModelKinds -> a
-          g mk_ = elimMk lr lcs lq lmd mk_
+          g = elimMk lr lcs lq lmd
           s :: ModelKinds -> a -> ModelKinds
-          s mk_ x = setMk mk_ lr lcs lq lmd x
+          s mk_ = setMk mk_ lr lcs lq lmd
 
 -- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.
 getEqModQds :: [ModelKind] -> [QDefinition]

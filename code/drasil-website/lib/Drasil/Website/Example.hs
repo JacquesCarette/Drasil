@@ -249,10 +249,10 @@ exampleRefs codePth srsDoxPth = concatMap getCodeRefDB (examples codePth srsDoxP
 getCodeRefDB, getDoxRefDB :: Example -> [Reference]
 getCodeRefDB ex = concatMap (\x -> map (\y -> getCodeRef ex y $ verName x) $ lang x) $ choicesE ex
   where
-    verName z = Projectile.codedDirName (getAbrv ex) z
+    verName = Projectile.codedDirName (getAbrv ex)
 getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang x) $ choicesE ex
   where
-    verName z = Projectile.codedDirName (getAbrv ex) z
+    verName = Projectile.codedDirName (getAbrv ex)
 
 -- | Helper to pull the system name (abbreviation) from an 'Example'.
 getAbrv :: Example -> String

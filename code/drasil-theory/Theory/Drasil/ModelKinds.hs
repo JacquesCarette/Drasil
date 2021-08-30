@@ -94,8 +94,6 @@ equationalRealmU u md = MK (EquationalRealm md) (D.uid u) (md ^. term)
 equationalRealmN :: Express e => NP -> MultiDefn e -> ModelKind e
 equationalRealmN n md = MK (EquationalRealm md) (md ^. uid) n
 
--- TODO: RelationConcepts should contain ModelExprs instead of just Exprs
-
 -- | Smart constructor for 'OthModel's
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
 othModel u n rc = MK (OthModel rc) (D.uid u) n

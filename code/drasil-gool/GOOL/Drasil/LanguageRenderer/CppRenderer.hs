@@ -151,8 +151,7 @@ instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   
   commentedMod = pair2 commentedMod commentedMod
 
-  fileFromData fp m' = pair1 (fileFromData fp) 
-    (fileFromData fp) m'
+  fileFromData fp = pair1 (fileFromData fp) (fileFromData fp)
 
 instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
   type Import (p CppSrcCode CppHdrCode) = Doc
@@ -502,8 +501,8 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
     (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
   constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
-  funcDecDef v ps b = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
-    (map (zoom lensMStoVS) ps) b
+  funcDecDef v ps = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
+    (map (zoom lensMStoVS) ps)
 
 instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) where
   print = pair1 print print . zoom lensMStoVS
@@ -1254,10 +1253,8 @@ instance RenderValue CppSrcCode where
   inputFunc = addIOStreamImport $ mkStateVal string (text cin)
   printFunc = addIOStreamImport $ mkStateVal void (text cout)
   printLnFunc = addIOStreamImport $ mkStateVal void (text cout)
-  printFileFunc w' = on2StateWrapped (\vt w -> mkVal vt (RC.value w))
-    void w'
-  printFileLnFunc w' = on2StateWrapped (\vt w -> mkVal vt (RC.value w))
-    void w'
+  printFileFunc = on2StateWrapped (\vt w -> mkVal vt (RC.value w)) void
+  printFileLnFunc = on2StateWrapped (\vt w -> mkVal vt (RC.value w)) void
 
   cast = cppCast
 

@@ -49,7 +49,7 @@ consThermE = tm (equationalConstraints' consThermECS)
     qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [express consThermERel] [] [dRef consThemESrc] "consThermE" consThermENotes
 
-consThermECS :: ConstraintSet
+consThermECS :: ConstraintSet ModelExpr
 consThermECS = mkConstraintSet consCC rels
   where consCC = dccWDS "consThermECS"
           (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn)

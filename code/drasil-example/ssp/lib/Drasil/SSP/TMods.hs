@@ -58,7 +58,7 @@ equilibriumRels :: [ModelExpr]
 equilibriumRels = map (express . ($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
 
 -- FIXME: variable "i" is a hack.  But we need to sum over something!
-equilibriumCS :: ConstraintSet
+equilibriumCS :: ConstraintSet ModelExpr
 equilibriumCS = mkConstraintSet
   (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $
   NE.fromList equilibriumRels

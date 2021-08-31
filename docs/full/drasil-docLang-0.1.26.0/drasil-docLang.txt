@@ -546,33 +546,6 @@ ApndxSec :: ApndxSec -> NbSection
 mkNBDesc :: SystemInformation -> NBDecl -> NBDesc
 
 
--- | Currently unused. Defines functions to create a database for holding
---   definitions and models.
-module Drasil.DocumentLanguage.RefHelpers
-
--- | A database that contains <a>TheoryModel</a>s, <a>GenDefn</a>s,
---   <a>DataDefinition</a>s, and <a>InstanceModel</a>s.
-data ModelDB
-
--- | Theory Model reference map.
-tmRefDB :: ModelDB -> RefMap TheoryModel
-
--- | General Definition reference map.
-gdRefDB :: ModelDB -> RefMap GenDefn
-
--- | Data Definition reference map.
-ddRefDB :: ModelDB -> RefMap DataDefinition
-
--- | Instance Model reference map.
-imRefDB :: ModelDB -> RefMap InstanceModel
-
--- | Constructor for creating a <a>ModelDB</a>.
-mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
-
--- | Get all the models out of a database.
-modelsFromDB :: RefMap a -> [a]
-
-
 -- | Helpers for dealing with formatting of Units
 module Drasil.DocumentLanguage.Units
 
@@ -2217,16 +2190,6 @@ Succinct :: Verbosity
 --   symbols, and a <a>QDefinition</a> (called automatically by
 --   <tt>SCSSub</tt> program).
 ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
-
--- | A database that contains <a>TheoryModel</a>s, <a>GenDefn</a>s,
---   <a>DataDefinition</a>s, and <a>InstanceModel</a>s.
-data ModelDB
-
--- | Data Definition reference map.
-ddRefDB :: ModelDB -> RefMap DataDefinition
-
--- | Constructor for creating a <a>ModelDB</a>.
-mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
 
 -- | Extracts traceability graph inforomation from filled-in
 --   <a>SystemInformation</a>.

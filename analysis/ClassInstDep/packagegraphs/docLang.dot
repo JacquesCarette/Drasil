@@ -43,7 +43,6 @@ AppndxSec	[shape=oval, color=turquoise4, label="AppndxSec"];
 Field	[shape=oval, color=turquoise4, label="Field"];
 Verbosity	[shape=oval, color=turquoise4, label="Verbosity"];
 InclUnits	[shape=oval, color=turquoise4, label="InclUnits"];
-ModelDB	[shape=oval, color=turquoise4, label="ModelDB"];
 DocSection	[shape=oval, color=turquoise4, label="DocSection"];
 SSDSub	[shape=oval, color=turquoise4, label="SSDSub"];
 ProblemDescription	[shape=oval, color=turquoise4, label="ProblemDescription"];

@@ -275,15 +275,6 @@ digraph alltypes {
 		ModRow -> StringContents;
 		}
 	}
-	subgraph refhelpers {
-		subgraph modeldb{
-		ModelDB	[shape=oval, color=cyan3, label="ModelDB"];
-		ModelDB -> RefMapTheoryModel;
-		ModelDB -> RefMapGenDefn;
-		ModelDB -> RefMapDataDefinition;
-		ModelDB -> RefMapInstanceModel;
-		}
-	}
 	subgraph traceabilitygraph {
 	}
 	subgraph traceabilitymatrix {

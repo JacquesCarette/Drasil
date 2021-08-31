@@ -546,13 +546,3 @@ footer :: FolderLocation -> Section
 
 -- | <a>footer</a> contents.
 copyrightInfo :: Sentence
-
-module Paths_drasil_website
-version :: Version
-getBinDir :: IO FilePath
-getLibDir :: IO FilePath
-getDynLibDir :: IO FilePath
-getDataDir :: IO FilePath
-getLibexecDir :: IO FilePath
-getDataFileName :: FilePath -> IO FilePath
-getSysconfDir :: IO FilePath

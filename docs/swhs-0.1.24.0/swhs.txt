@@ -203,7 +203,6 @@ assumpS20 :: Sentence
 assumpS14 :: Sentence -> Sentence
 
 module Drasil.SWHS.DataDefs
-refMDB :: ModelDB
 qDefs :: [QDefinition]
 dataDefs :: [DataDefinition]
 waterMassQD :: QDefinition

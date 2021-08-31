@@ -366,8 +366,8 @@ compileEntryData ordClassInsts entry filename = do
       tEnt _ (x:_) _ (_:xs) = fstl x ++ "\n" ++ sbE xs
       tEnt _ _ (x:_) (_:xs) = fstl x ++ "\n" ++ sbE xs
       tEnt _ _ _ (_:xs)     = entry ++ "\n" ++ sbE xs
-      fstl x = join' entry x
-      sbE xs = intercalate "\n" xs
+      fstl = join' entry
+      sbE  = intercalate "\n"
 
   -- mapM_ print (lines output)
   return output

@@ -376,9 +376,9 @@ instance RenderValue PythonCode where
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
   
-  cast t' v' = on2StateWrapped (\t v-> mkVal t . R.castObj (RC.type' t) 
-    $ RC.value v) t' v' 
-
+  cast = on2StateWrapped (\t v-> mkVal t . R.castObj (RC.type' t) 
+    $ RC.value v)
+  
   call = G.call pyNamedArgSep
 
   valFromData p t' d = do 
@@ -402,8 +402,8 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize v' = on2StateWrapped(\f v-> mkVal (functionType f) 
-    (pyListSize (RC.value v) (RC.function f))) listSizeFunc  v'
+  listSize = on2StateWrapped(\f v-> mkVal (functionType f) 
+    (pyListSize (RC.value v) (RC.function f))) listSizeFunc
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess

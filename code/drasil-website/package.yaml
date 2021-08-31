@@ -39,7 +39,7 @@ library:
   source-dirs: lib
   when:
   - condition: false
-    other-modules: Paths_website
+    other-modules: Paths_drasil_website
 
 executables:
   website:
@@ -54,4 +54,4 @@ executables:
     - drasil-website
     when:
     - condition: false
-      other-modules: Paths_website
+      other-modules: Paths_drasil_website

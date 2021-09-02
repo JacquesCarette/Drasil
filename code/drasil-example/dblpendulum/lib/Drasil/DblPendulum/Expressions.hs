@@ -4,7 +4,7 @@ import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 
 import Data.Drasil.Quantities.Physics (gravitationalAccel)
-import Drasil.DblPendulum.DataDefs (positionXDD_1)
+import Drasil.DblPendulum.DataDefs (positionXQD_1)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   xVel_1, yVel_1, xAccel_1, yAccel_1, angularAccel_1, angularAccel_2,
   tension_1, tension_2, angularVel_1, angularVel_2,
@@ -14,7 +14,7 @@ import Control.Lens ((^.))
 -- Velocity X/Y First Object
 velXExpr_1, velYExpr_1 :: Expr
 velXExpr_1 = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
-velYExpr_1 = sy angularVel_1 `mulRe` (positionXDD_1 ^. defnExpr)
+velYExpr_1 = sy angularVel_1 `mulRe` (positionXQD_1 ^. defnExpr)
 
 -- Velocity X/Y Second Object
 velXExpr_2, velYExpr_2 :: Expr

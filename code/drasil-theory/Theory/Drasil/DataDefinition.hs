@@ -1,8 +1,8 @@
-{-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs #-}
+{-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs, TemplateHaskell #-}
 -- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition where
 
-import Control.Lens ((^.), view, Lens', lens)
+import Control.Lens
 import Language.Drasil
 import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (dataDefn)
@@ -17,88 +17,103 @@ data ScopeType =
     Local Scope -- ^ Only visible within a limited scope.
   | Global      -- ^ Visible everywhere.
 
--- TODO: Alternative -- use ModelKinds and constrain via that?
+data DDPkt = DDPkt {
+  _pktST :: ScopeType,
+  _pktDR :: [DecRef],
+  _pktMD :: Maybe Derivation,
+  _pktSN :: ShortName,
+  _pktS  :: String,
+  _pktSS :: [Sentence]
+}
+makeLenses ''DDPkt
 
 -- | A data definition is a 'QDefinition' that may have additional notes: 
 -- the scope, any references (as 'DecRef's), maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
-data DataDefinition e where
-  DD :: Express e => QDefinition e -> ScopeType -> [DecRef] -> Maybe Derivation -> ShortName -> String -> [Sentence] -> DataDefinition e
+data DataDefinition where
+  DDE  :: QDefinition Expr -> DDPkt -> DataDefinition
+  DDME :: QDefinition ModelExpr -> DDPkt -> DataDefinition
 
-ddQd :: Express e => Lens' (DataDefinition e) (QDefinition e)
-ddQd = lens (\(DD qd _ _ _ _ _ _) -> qd) (\(DD _ st dr md sn s ss) qd -> DD qd st dr md sn s ss)
+ddQD :: Lens' (QDefinition Expr) a -> Lens' (QDefinition ModelExpr) a -> Lens' DataDefinition a
+ddQD lqde lqdme = lens g s
+  where
+    g (DDE  qd _) = qd ^. lqde
+    g (DDME qd _) = qd ^. lqdme
+    s (DDE  qd pkt) u = DDE  (qd & lqde .~ u)  pkt
+    s (DDME qd pkt) u = DDME (qd & lqdme .~ u) pkt
 
-ddScopeType :: Express e => Lens' (DataDefinition e) ScopeType
-ddScopeType = lens (\(DD _ st _ _ _ _ _) -> st) (\(DD qd _ dr md sn s ss) st' -> DD qd st' dr md sn s ss)
+ddPkt :: Lens' DDPkt a -> Lens' DataDefinition a
+ddPkt lpkt = lens g s
+  where
+    g (DDE  _ pkt) = pkt ^. lpkt
+    g (DDME _ pkt) = pkt ^. lpkt
+    s (DDE  qd pkt) a' = DDE  qd (pkt & lpkt .~ a')
+    s (DDME qd pkt) a' = DDME qd (pkt & lpkt .~ a')
 
-ddRFs :: Express e => Lens' (DataDefinition e) [DecRef]
-ddRFs = lens (\(DD _ _ rfs _ _ _ _) -> rfs) (\(DD qd st _ md sn s ss) dr' -> DD qd st dr' md sn s ss)
-
-ddMbDeriv :: Express e => Lens' (DataDefinition e) (Maybe Derivation)
-ddMbDeriv = lens (\(DD _ _ _ mbD _ _ _) -> mbD) (\(DD qd st dr _ sn s ss) md' -> DD qd st dr md' sn s ss)
-
-ddShrtNm :: Express e => Lens' (DataDefinition e) ShortName
-ddShrtNm = lens (\(DD _ _ _ _ sn _ _) -> sn) (\(DD qd st dr md _ s ss) sn' -> DD qd st dr md sn' s ss)
-
-ddRA :: Express e => Lens' (DataDefinition e) String
-ddRA = lens (\(DD _ _ _ _ _ s _) -> s) (\(DD qd st dr md sn _ ss) s' -> DD qd st dr md sn s' ss)
-
-ddNotes :: Express e => Lens' (DataDefinition e) [Sentence]
-ddNotes = lens (\(DD _ _ _ _ _ _ ss) -> ss) (\(DD qd st dr md sn s _) ss' -> DD qd st dr md sn s ss')
-
-
-
--- | Finds the 'UID' of a '(DataDefinition e) where'.
-instance Express e => HasUID             (DataDefinition e) where uid = ddQd . uid
--- | Finds the term ('NP') of the 'QDefinition' used to make the '(DataDefinition e) where'.
-instance Express e => NamedIdea          (DataDefinition e) where term = ddQd . term
--- | Finds the idea contained in the 'QDefinition' used to make the '(DataDefinition e) where'.
-instance Express e => Idea               (DataDefinition e) where getA c = getA $ c ^. ddQd
--- | Finds the Space of the 'QDefinition' used to make the '(DataDefinition e) where'.
-instance Express e => HasSpace           (DataDefinition e) where typ = ddQd . typ
--- | Finds the Symbol of the 'QDefinition' used to make the '(DataDefinition e) where'.
-instance Express e => HasSymbol          (DataDefinition e) where symbol e = symbol (e ^. ddQd)
--- | '(DataDefinition e) where's have a 'Quantity'.
-instance Express e => Quantity           (DataDefinition e) where
--- | Finds the defining expression of the 'QDefinition' used to make the '(DataDefinition e) where'.
-instance DefiningExpr       DataDefinition where defnExpr = ddQd . defnExpr
--- | Converts the defining expression of a '(DataDefinition e) where' into the model expression language.
-instance Express e => Express            (DataDefinition e) where express d = defines (sy d) (d ^. defnExpr)
-{-- Finds 'Reference's contained in the '(DataDefinition e) where'.
-instance HasReference       (DataDefinition e) where getReferences = rf-}
--- | Finds 'DecRef's contained in the '(DataDefinition e) where'.
-instance Express e => HasDecRef          (DataDefinition e) where getDecRefs = ddRFs
+-- | Finds the 'UID' of a 'DataDefinition where'.
+instance HasUID             DataDefinition where uid = ddQD uid uid
+-- | Finds the term ('NP') of the 'QDefinition' used to make the 'DataDefinition where'.
+instance NamedIdea          DataDefinition where term = ddQD term term
+-- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition where'.
+instance Idea               DataDefinition where getA = either getA getA . qdFromDD
+-- | Finds the Space of the 'QDefinition' used to make the 'DataDefinition where'.
+instance HasSpace           DataDefinition where typ = ddQD typ typ
+-- | Finds the Symbol of the 'QDefinition' used to make the 'DataDefinition where'.
+instance HasSymbol          DataDefinition where symbol = either symbol symbol . qdFromDD
+-- | 'DataDefinition where's have a 'Quantity'.
+instance Quantity           DataDefinition where
+-- | Converts the defining expression of a 'DataDefinition where' into the model expression language.
+instance Express            DataDefinition where
+  express d = defines (sy d) (either (express . (^. defnExpr)) (^. defnExpr) (qdFromDD d))
+{-- Finds 'Reference's contained in the 'DataDefinition where'.
+instance HasReference       DataDefinition where getReferences = rf-}
+-- | Finds 'DecRef's contained in the 'DataDefinition where'.
+instance HasDecRef          DataDefinition where getDecRefs = ddPkt pktDR
 -- | Equal if 'UID's are equal.
-instance Express e => Eq                 (DataDefinition e) where a == b = (a ^. uid) == (b ^. uid)
--- | Finds the derivation of the '(DataDefinition e) where'. May contain Nothing.
-instance Express e => HasDerivation      (DataDefinition e) where derivations = ddMbDeriv
--- | Finds any additional notes for the '(DataDefinition e) where'.
-instance Express e => HasAdditionalNotes (DataDefinition e) where getNotes = ddNotes
--- | Finds the units of the 'QDefinition' used to make the '(DataDefinition e) where'.
-instance Express e => MayHaveUnit        (DataDefinition e) where getUnit = getUnit . view ddQd
--- | Finds the 'ShortName' of the '(DataDefinition e) where'.
-instance Express e => HasShortName       (DataDefinition e) where shortname = (^. ddShrtNm)
--- | Finds the reference address of a '(DataDefinition e) where'.
-instance Express e => HasRefAddress      (DataDefinition e) where getRefAdd l = RP (prepend $ abrv l) (l ^. ddRA)
--- | Finds the domain of the 'QDefinition' used to make the '(DataDefinition e) where'.
-instance ConceptDomain      (DataDefinition e) where cdom _ = cdom dataDefn
--- | Finds the idea of a '(DataDefinition e) where' (abbreviation).
-instance Express e => CommonIdea         (DataDefinition e) where abrv _ = abrv dataDefn
--- | Finds the reference address of a '(DataDefinition e) where'.
-instance Express e => Referable          (DataDefinition e) where
-  refAdd      = (^. ddRA)
+instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
+-- | Finds the derivation of the 'DataDefinition where'. May contain Nothing.
+instance HasDerivation      DataDefinition where derivations = ddPkt pktMD
+-- | Finds any additional notes for the 'DataDefinition where'.
+instance HasAdditionalNotes DataDefinition where getNotes = ddPkt pktSS
+-- | Finds the units of the 'QDefinition' used to make the 'DataDefinition where'.
+instance MayHaveUnit        DataDefinition where getUnit = either getUnit getUnit . qdFromDD
+-- | Finds the 'ShortName' of the 'DataDefinition where'.
+instance HasShortName       DataDefinition where shortname = (^. ddPkt pktSN)
+-- | Finds the reference address of a 'DataDefinition where'.
+instance HasRefAddress      DataDefinition where getRefAdd l = RP (prepend $ abrv l) (l ^. ddPkt pktS)
+-- | Finds the domain of the 'QDefinition' used to make the 'DataDefinition where'.
+instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
+-- | Finds the idea of a 'DataDefinition where' (abbreviation).
+instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
+-- | Finds the reference address of a 'DataDefinition where'.
+instance Referable          DataDefinition where
+  refAdd      = (^. ddPkt pktS)
   renderRef l = RP (prepend $ abrv l) (refAdd l)
 
 -- * Constructors
 
 -- | Smart constructor for data definitions.
-dd :: Express e => QDefinition e -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition e
-dd q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
-dd q refs der sn = DD q Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddE :: QDefinition Expr -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+ddE q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
+ddE q refs der sn = DDE q . DDPkt Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
-ddNoRefs :: Express e => QDefinition e -> Maybe Derivation -> String -> [Sentence] -> DataDefinition e
-ddNoRefs q der sn = DD q Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddENoRefs :: QDefinition Expr -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+ddENoRefs q der sn = DDE q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
--- | Extracts the 'QDefinition' from a '(DataDefinition e) where'.
-qdFromDD :: Express e => DataDefinition e -> QDefinition e
-qdFromDD = (^. ddQd)
+-- | Smart constructor for data definitions.
+ddME :: QDefinition ModelExpr -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+ddME q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
+ddME q refs der sn = DDME q . DDPkt Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
+
+-- | Smart constructor for data definitions with no references.
+ddMENoRefs :: QDefinition ModelExpr -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+ddMENoRefs q der sn = DDME q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
+
+-- | Extracts the 'QDefinition e' from a 'DataDefinition'.
+qdFromDD :: DataDefinition -> Either (QDefinition Expr) (QDefinition ModelExpr)
+qdFromDD (DDE  qd _) = Left qd
+qdFromDD (DDME qd _) = Right qd
+
+qdEFromDD :: DataDefinition -> Maybe (QDefinition Expr)
+qdEFromDD (DDE qd _) = Just qd
+qdEFromDD _          = Nothing

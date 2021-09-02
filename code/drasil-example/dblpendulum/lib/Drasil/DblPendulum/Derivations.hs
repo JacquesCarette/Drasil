@@ -6,8 +6,7 @@ import Language.Drasil (defnExpr, express)
 import Language.Drasil.ModelExpr
 
 import Data.Drasil.Quantities.Physics(velocity, acceleration, gravitationalAccel, time)
-import Drasil.DblPendulum.DataDefs (positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, 
-  positionGDD, accelGDD)
+import Drasil.DblPendulum.DataDefs
 import Drasil.DblPendulum.Expressions (velXExpr_2, velYExpr_2)
 import Drasil.DblPendulum.Unitals (lenRod_1, massObj_1, massObj_2,
   xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, xVel_2, yVel_1, yVel_2, xAccel_1, xAccel_2,
@@ -17,29 +16,29 @@ import Control.Lens ((^.))
 
 -- Velocity X/Y First Object
 velDerivEqn1, velXDerivEqn2_1, velXDerivEqn3_1, velXDerivEqn4_1 :: ModelExpr
-velDerivEqn1    = sy velocity $= positionGDD ^. defnExpr
-velXDerivEqn2_1 = sy xPos_1 $= express (positionXDD_1 ^. defnExpr)
-velXDerivEqn3_1 = sy xVel_1 $= deriv (positionXDD_1 ^. defnExpr) time
+velDerivEqn1    = sy velocity $= positionGQD ^. defnExpr
+velXDerivEqn2_1 = sy xPos_1 $= express (positionXQD_1 ^. defnExpr)
+velXDerivEqn3_1 = sy xVel_1 $= deriv (positionXQD_1 ^. defnExpr) time
 velXDerivEqn4_1 = sy xVel_1 $= sy lenRod_1 `mulRe` deriv (sin (sy pendDisAngle_1)) time
 
 velYDerivEqn2_1,velYDerivEqn3_1,velYDerivEqn4_1 :: ModelExpr
-velYDerivEqn2_1 = sy yPos_1 $= express (positionYDD_1 ^. defnExpr)
+velYDerivEqn2_1 = sy yPos_1 $= express (positionYQD_1 ^. defnExpr)
 velYDerivEqn3_1 = sy yVel_1 $= neg (deriv (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time)
 velYDerivEqn4_1 = sy yVel_1 $= neg (sy lenRod_1 `mulRe` deriv (cos (sy pendDisAngle_1)) time)
 
 -- Velocity X/Y Second Object
 velXDerivEqn2_2, velXDerivEqn3_2 :: ModelExpr
-velXDerivEqn2_2 = sy xPos_2 $= express (positionXDD_2 ^. defnExpr)
-velXDerivEqn3_2 = sy xVel_2 $= deriv (positionXDD_2 ^. defnExpr) time
+velXDerivEqn2_2 = sy xPos_2 $= express (positionXQD_2 ^. defnExpr)
+velXDerivEqn3_2 = sy xVel_2 $= deriv (positionXQD_2 ^. defnExpr) time
 
 velYDerivEqn2_2,velYDerivEqn3_2 :: ModelExpr
-velYDerivEqn2_2 = sy yPos_2 $= express (positionYDD_2 ^. defnExpr)
-velYDerivEqn3_2 = sy yVel_2 $= neg (deriv (positionYDD_2 ^. defnExpr) time)
+velYDerivEqn2_2 = sy yPos_2 $= express (positionYQD_2 ^. defnExpr)
+velYDerivEqn3_2 = sy yVel_2 $= neg (deriv (positionYQD_2 ^. defnExpr) time)
 
 -- Acceleration X/Y First Object
 
 accelDerivEqn1, accelXDerivEqn3_1, accelXDerivEqn4_1 :: ModelExpr
-accelDerivEqn1    = sy acceleration $= accelGDD ^. defnExpr
+accelDerivEqn1    = sy acceleration $= accelGQD ^. defnExpr
 accelXDerivEqn3_1 = sy xAccel_1 $= deriv (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time
 accelXDerivEqn4_1 = sy xAccel_1 $= deriv (sy angularVel_1) time `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
                     $- (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` deriv (sy pendDisAngle_1) time)

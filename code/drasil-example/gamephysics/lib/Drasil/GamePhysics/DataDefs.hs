@@ -1,11 +1,11 @@
-module Drasil.GamePhysics.DataDefs (eDataDefs, meDataDefs, ctrOfMassDD,
+module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD,
   linDispDD, linVelDD, linAccDD, angDispDD, angVelDD, angAccelDD, torqueDD,
   kEnergyDD, coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD,
   collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD,) where
 
 import Language.Drasil
 
-import Theory.Drasil (DataDefinition, dd, ddNoRefs)
+import Theory.Drasil
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -28,18 +28,15 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Theories.Physics (torqueDD)
 ----- Data Definitions -----
 
-eDataDefs :: [DataDefinition Expr]
-eDataDefs = [ctrOfMassDD, chaslesDD, torqueDD, kEnergyDD,
- coeffRestitutionDD, reVelInCollDD, impulseVDD, potEnergyDD, momentOfInertiaDD]
-
-meDataDefs :: [DataDefinition ModelExpr]
-meDataDefs = [linDispDD, linVelDD, linAccDD, angDispDD,
- angVelDD, angAccelDD]
+dataDefs :: [DataDefinition]
+dataDefs = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
+ angVelDD, angAccelDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD,
+ reVelInCollDD, impulseVDD, potEnergyDD, momentOfInertiaDD]
 
 -- DD1 : Centre of mass --
 
-ctrOfMassDD :: DataDefinition Expr
-ctrOfMassDD = ddNoRefs ctrOfMass Nothing "ctrOfMass" [rigidBodyAssump]
+ctrOfMassDD :: DataDefinition
+ctrOfMassDD = ddENoRefs ctrOfMass Nothing "ctrOfMass" [rigidBodyAssump]
 
 ctrOfMass :: QDefinition Expr
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
@@ -66,8 +63,8 @@ linDispQDef = foldl (+:+) (EmptyS) def
               phrase $ QP.time ^. term, ch QP.time]
 -}
 
-linDispDD :: DataDefinition ModelExpr
-linDispDD = ddNoRefs linDisp Nothing "linDisp" [rigidBodyAssump]
+linDispDD :: DataDefinition
+linDispDD = ddMENoRefs linDisp Nothing "linDisp" [rigidBodyAssump]
 
 linDisp :: QDefinition ModelExpr
 linDisp = mkQuantDef QP.linearDisplacement dispEqn
@@ -95,8 +92,8 @@ linVelQDef = foldl (+:+) (EmptyS) def
               phrase $ QP.time ^. term, ch QP.time]
 -}
 
-linVelDD :: DataDefinition ModelExpr
-linVelDD = ddNoRefs linVel Nothing "linVel" [rigidBodyAssump]
+linVelDD :: DataDefinition
+linVelDD = ddMENoRefs linVel Nothing "linVel" [rigidBodyAssump]
 
 linVel :: QDefinition ModelExpr
 linVel = mkQuantDef QP.linearVelocity velEqn
@@ -113,8 +110,8 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 -}
 -- DD4 : Linear acceleration --
 
-linAccDD :: DataDefinition ModelExpr
-linAccDD = ddNoRefs linAcc Nothing "linAcc" [rigidBodyAssump]
+linAccDD :: DataDefinition
+linAccDD = ddMENoRefs linAcc Nothing "linAcc" [rigidBodyAssump]
 
 linAcc :: QDefinition ModelExpr
 linAcc = mkQuantDef QP.linearAccel accelEqn
@@ -131,8 +128,8 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -}
 -- DD5 : Angular displacement --
 
-angDispDD :: DataDefinition ModelExpr
-angDispDD = ddNoRefs angDisp Nothing "angDisp" [rigidTwoDAssump]
+angDispDD :: DataDefinition
+angDispDD = ddMENoRefs angDisp Nothing "angDisp" [rigidTwoDAssump]
 
 angDisp :: QDefinition ModelExpr
 angDisp = mkQuantDef QP.angularDisplacement angDispEqn
@@ -149,8 +146,8 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 -}
 -- DD6 : Angular velocity --
 
-angVelDD :: DataDefinition ModelExpr
-angVelDD = ddNoRefs angVel Nothing "angVel" [rigidTwoDAssump]
+angVelDD :: DataDefinition
+angVelDD = ddMENoRefs angVel Nothing "angVel" [rigidTwoDAssump]
 
 angVel :: QDefinition ModelExpr
 angVel = mkQuantDef QP.angularVelocity angVelEqn
@@ -167,8 +164,8 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 -}
 -- DD7 : Angular acceleration --
 -----------------------------------DD8 Angular Acceleration-------------------
-angAccelDD :: DataDefinition ModelExpr
-angAccelDD = ddNoRefs angAccel Nothing "angAccel" [rigidTwoDAssump]
+angAccelDD :: DataDefinition
+angAccelDD = ddMENoRefs angAccel Nothing "angAccel" [rigidTwoDAssump]
 
 angAccel :: QDefinition ModelExpr
 angAccel = mkQuantDef QP.angularAccel angAccelEqn
@@ -193,8 +190,8 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 --moved to GenDefs.hs
 
 ------------------------DD9 Chasles Theorem----------------------------------
-chaslesDD :: DataDefinition Expr
-chaslesDD = dd chasles [dRef chaslesWiki] Nothing "chaslesThm" 
+chaslesDD :: DataDefinition
+chaslesDD = ddE chasles [dRef chaslesWiki] Nothing "chaslesThm" 
   [chaslesThmNote, rigidBodyAssump]
 
 chasles :: QDefinition Expr
@@ -213,8 +210,8 @@ chaslesThmNote = foldlSent [atStartNP (the QP.linearVelocity),
   getTandS QP.angularVelocity `S.andThe` getTandS rOB]
 
 ---------------DD10 Impulse(Vector)-----------------------------------------------------------------------
-impulseVDD :: DataDefinition Expr
-impulseVDD = ddNoRefs impulseV (Just impulseVDeriv) "impulseV"
+impulseVDD :: DataDefinition
+impulseVDD = ddENoRefs impulseV (Just impulseVDeriv) "impulseV"
   [impulseVDesc, rigidBodyAssump]
 
 impulseV :: QDefinition Expr
@@ -244,8 +241,8 @@ impulseVDerivSentence3 :: [Sentence]
 impulseVDerivSentence3 = [S "Integrating the right hand side"]
 
 -----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
-reVelInCollDD :: DataDefinition Expr
-reVelInCollDD = ddNoRefs reVelInColl Nothing "reVeInColl"
+reVelInCollDD :: DataDefinition
+reVelInCollDD = ddENoRefs reVelInColl Nothing "reVeInColl"
   [reVelInCollDesc, rigidBodyAssump]
 
 reVelInColl :: QDefinition Expr
@@ -264,8 +261,8 @@ reVelInCollDesc = foldlSent [S "In a collision, the", phraseNP (QP.velocity
 -- Imported from Theories.Physics
 
 ----------------------DD14 Coefficient of Restitution--------------------------
-coeffRestitutionDD :: DataDefinition Expr
-coeffRestitutionDD = ddNoRefs coeffRestitution Nothing "coeffRestitution"
+coeffRestitutionDD :: DataDefinition
+coeffRestitutionDD = ddENoRefs coeffRestitution Nothing "coeffRestitution"
  [coeffRestitutionDesc]
 
 coeffRestitution :: QDefinition Expr
@@ -284,8 +281,8 @@ coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
   eS (sy QP.restitutionCoef $< exactDbl 1) +:+ S "results in an inelastic collision",
   eS (sy QP.restitutionCoef $= exactDbl 0) +:+ S "results in a totally inelastic collision"]]
 -----------------------DD15 Kinetic Energy--------------------------------  
-kEnergyDD :: DataDefinition Expr
-kEnergyDD = ddNoRefs kEnergy Nothing "kEnergy"
+kEnergyDD :: DataDefinition
+kEnergyDD = ddENoRefs kEnergy Nothing "kEnergy"
  [kEnergyDesc, rigidTwoDAssump, noDampingAssump] 
 
 kEnergy :: QDefinition Expr
@@ -298,8 +295,8 @@ kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [atStart QP.kEnergy `S.is` (QP.kEnergy ^. defn)]
 -----------------------DD16 Moment Of Inertia--------------------------------------------------------
 
-momentOfInertiaDD :: DataDefinition Expr
-momentOfInertiaDD = ddNoRefs momentOfInertia Nothing "momentOfInertia"
+momentOfInertiaDD :: DataDefinition
+momentOfInertiaDD = ddENoRefs momentOfInertia Nothing "momentOfInertia"
  [momentOfInertiaDesc, rigidBodyAssump] 
 
 momentOfInertia :: QDefinition Expr
@@ -315,8 +312,8 @@ momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,
 
 ---------------------------DD17 Potential Energy-------------------------------------------
 
-potEnergyDD :: DataDefinition Expr
-potEnergyDD = ddNoRefs potEnergy Nothing "potEnergy"
+potEnergyDD :: DataDefinition
+potEnergyDD = ddENoRefs potEnergy Nothing "potEnergy"
  [potEnergyDesc, rigidTwoDAssump, noDampingAssump] 
 
 potEnergy :: QDefinition Expr

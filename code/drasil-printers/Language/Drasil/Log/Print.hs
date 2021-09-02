@@ -90,7 +90,7 @@ mkTableUnitDefn pinfo = mkTableFromLenses pinfo (view unitTable)
 
 -- | Makes a table with all data definitions in the SRS.
 mkTableDataDef :: PrintingInformation -> Doc
-mkTableDataDef pinfo = mkTableFromLenses pinfo (view eDataDefnTable)
+mkTableDataDef pinfo = mkTableFromLenses pinfo (view dataDefnTable)
   "Data Definitions" "UID" "Term" "Symbol"
     (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
@@ -222,8 +222,7 @@ mkListShowUsedUIDs PI{_ckdb = db} = sortBy (compare `on` fst) $ map (second stri
   map (\x -> (fst x, ["IdeaDict"])) (Map.assocs $ termTable db) ++
   map (\x -> (fst x, ["ConceptChunk"])) (Map.assocs $ defTable db) ++
   map (\x -> (fst x, ["UnitDefn"])) (Map.assocs $ db ^. unitTable) ++
-  map (\x -> (fst x, ["DataDefinition"])) (Map.assocs $ db ^. eDataDefnTable) ++
-  map (\x -> (fst x, ["DataDefinition"])) (Map.assocs $ db ^. meDataDefnTable) ++
+  map (\x -> (fst x, ["DataDefinition"])) (Map.assocs $ db ^. dataDefnTable) ++
   map (\x -> (fst x, ["InstanceModel"])) (Map.assocs $ db ^. insmodelTable) ++
   map (\x -> (fst x, ["GeneralDefinition"])) (Map.assocs $ db ^. gendefTable) ++
   map (\x -> (fst x, ["TheoryModel"])) (Map.assocs $ db ^. theoryModelTable) ++
@@ -242,8 +241,7 @@ mkListAll db = nub $ sort $
   map fst (Map.assocs $ db ^. unitTable) ++
   map fst (Map.assocs $ db ^. traceTable) ++
   map fst (Map.assocs $ db ^. refbyTable) ++
-  map fst (Map.assocs $ db ^. eDataDefnTable) ++
-  map fst (Map.assocs $ db ^. meDataDefnTable) ++
+  map fst (Map.assocs $ db ^. dataDefnTable) ++
   map fst (Map.assocs $ db ^. insmodelTable) ++
   map fst (Map.assocs $ db ^. gendefTable) ++
   map fst (Map.assocs $ db ^. theoryModelTable) ++

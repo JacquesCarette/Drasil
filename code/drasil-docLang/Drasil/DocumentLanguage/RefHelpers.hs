@@ -7,7 +7,6 @@ module Drasil.DocumentLanguage.RefHelpers (
   tmRefDB, gdRefDB, ddRefDB,
   imRefDB, mdb, modelsFromDB) where
 
-import Language.Drasil (Expr)
 import Database.Drasil (RefMap, simpleMap)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
@@ -30,12 +29,12 @@ data ModelDB = MDB
                -- | General Definition reference map.
              , gdRefDB :: RefMap GenDefn
                -- | Data Definition reference map.
-             , ddRefDB :: RefMap (DataDefinition Expr)
+             , ddRefDB :: RefMap DataDefinition
                -- | Instance Model reference map.
              , imRefDB :: RefMap InstanceModel
              }
 
 -- | Constructor for creating a 'ModelDB'.
-mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition Expr] -> [InstanceModel] -> ModelDB
+mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
 mdb tms gds dds ims = MDB
   (simpleMap tms) (simpleMap gds) (simpleMap dds) (simpleMap ims)

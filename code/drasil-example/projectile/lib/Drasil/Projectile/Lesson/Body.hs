@@ -73,11 +73,11 @@ si = SI {
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon) (nw projectileMotion : map nw doccon ++ 
   map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] [] allRefs
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] ([] :: [ConceptInstance])
+  ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
 
 refDB :: ReferenceDB

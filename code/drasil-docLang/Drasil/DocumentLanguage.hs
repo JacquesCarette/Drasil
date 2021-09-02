@@ -28,7 +28,7 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
   termTable, conceptinsTable, idMap, refbyTable, conceptDB,
   refTable, labelledcontentTable, sectionTable, theoryModelTable,
-  insmodelTable, gendefTable, eDataDefnTable, meDataDefnTable, refdb, sysinfodb, traceTable,
+  insmodelTable, gendefTable, dataDefnTable, refdb, sysinfodb, traceTable,
   generateRefbyMap)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -166,9 +166,8 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    inRefs = concatMap dRefToRef eDdefs ++ concatMap dRefToRef meDdefs ++ concatMap dRefToRef gdefs ++ concatMap dRefToRef imods ++ concatMap dRefToRef tmods
-    eDdefs  = map (fst.snd) $ Map.assocs $ chkdb ^. eDataDefnTable
-    meDdefs = map (fst.snd) $ Map.assocs $ chkdb ^. meDataDefnTable
+    inRefs = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++ concatMap dRefToRef imods ++ concatMap dRefToRef tmods
+    ddefs  = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
     gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
     imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
     tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
@@ -183,7 +182,7 @@ fillReferences dd si@SI{_sys = sys} = si2
     chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
       ++ map (ref.makeTabRef'.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (filter (not.isSpace) $ abrv sys) ++ map ref cites
-      ++ map ref conins ++ map ref eDdefs ++ map ref meDdefs ++ map ref gdefs ++ map ref imods
+      ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon
       ++ refs) chkdb
     -- set new chunk database into system information
@@ -369,18 +368,16 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS :: SystemInformation -> SCSSub -> Section
     mkSubSCS _ (TMs _ _ [])      = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ _ [] _)    = SSD.genDefnF []
-    mkSubSCS _ (DDs _ _ [] [] _) = error "There are no Data Definitions"
+    mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ _ [] _)    = error "There are no Instance Models"
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
-    mkSubSCS si' (DDs intro fields ddes ddmes ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f ddes ++ concatMap f ddmes
-      where
-        f e = [LlC $ ddefn fields si' e, derivation e]
-    mkSubSCS si' (DDs intro fields ddes ddmes _) =
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map f ddes ++ map f ddmes
-      where 
-        f e = LlC $ ddefn fields si' e
+    mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
+      where f e = [LlC $ ddefn fields si' e, derivation e]
+    mkSubSCS si' (DDs intro fields dds _) =
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map f dds
+      where f e = LlC $ ddefn fields si' e
     mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
       SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
     mkSubSCS si' (GDs intro fields gs' _) =

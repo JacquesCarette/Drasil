@@ -95,8 +95,7 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
 -- | Checker for uids by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.
 checkUID :: UID -> SystemInformation -> UID
 checkUID t si
-  | Just _ <- Map.lookupIndex t (s ^. eDataDefnTable)       = t
-  | Just _ <- Map.lookupIndex t (s ^. meDataDefnTable)      = t
+  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        = t
   | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        = t
   | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = t
   | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = t
@@ -110,8 +109,7 @@ checkUID t si
 -- | Similar to 'checkUID' but prepends domain for labelling.
 checkUIDAbbrev :: SystemInformation -> UID -> String
 checkUIDAbbrev si t
-  | Just (x, _) <- Map.lookup t (s ^. eDataDefnTable)       = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. meDataDefnTable)      = abrv x
+  | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = abrv x
   | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = abrv x
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = abrv x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = abrv x
@@ -125,8 +123,7 @@ checkUIDAbbrev si t
 -- | Similar to 'checkUID' but gets reference addresses for display.
 checkUIDRefAdd :: SystemInformation -> UID -> String
 checkUIDRefAdd si t
-  | Just (x, _) <- Map.lookup t (s ^. eDataDefnTable)       = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. meDataDefnTable)      = getAdd $ getRefAdd x
+  | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = getAdd $ getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = getAdd $ getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = getAdd $ getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = getAdd $ getRefAdd x

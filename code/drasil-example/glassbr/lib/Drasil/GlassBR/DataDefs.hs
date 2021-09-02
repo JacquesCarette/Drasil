@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Language.Drasil.Code (asVC')
 import Prelude hiding (log, exp, sqrt)
-import Theory.Drasil (DataDefinition, dd)
+import Theory.Drasil (DataDefinition, ddE)
 import Database.Drasil (Block(Parallel))
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
@@ -34,7 +34,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 -- DATA DEFINITIONS --
 ----------------------
 
-dataDefs :: [DataDefinition Expr]
+dataDefs :: [DataDefinition]
 dataDefs = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac,
   dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, eqTNTWDD, probOfBreak,
   calofCapacity, calofDemand]
@@ -55,8 +55,8 @@ riskEq = (sy sflawParamK $/
 riskQD :: QDefinition Expr
 riskQD = mkQuantDef riskFun riskEq
 
-risk :: DataDefinition Expr
-risk = dd riskQD
+risk :: DataDefinition
+risk = ddE riskQD
   [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
   dRefInfo campidelli $ Equation [14]]
   Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
@@ -73,8 +73,8 @@ hFromtHelper result condition = (dbl result, sy nomThick $= dbl condition)
 hFromtQD :: QDefinition Expr
 hFromtQD = mkQuantDef minThick hFromtEq
 
-hFromt :: DataDefinition Expr
-hFromt = dd hFromtQD [dRef astm2009] Nothing "minThick" [hMin]
+hFromt :: DataDefinition
+hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick" [hMin]
 
 --DD3-- (#749)
 
@@ -84,8 +84,8 @@ loadDFEq = (sy loadDur $/ exactDbl 60) $^ (sy sflawParamM $/ exactDbl 16)
 loadDFQD :: QDefinition Expr
 loadDFQD = mkQuantDef lDurFac loadDFEq
 
-loadDF :: DataDefinition Expr
-loadDF = dd loadDFQD [dRef astm2009] Nothing "loadDurFactor"
+loadDF :: DataDefinition
+loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
 
 --DD4--
@@ -98,8 +98,8 @@ strDisFacEq = apply (asVC' interpZ) [str "SDF.txt", sy aspectRatio, sy dimlessLo
 strDisFacQD :: QDefinition Expr
 strDisFacQD = mkQuantDef stressDistFac strDisFacEq
 
-strDisFac :: DataDefinition Expr
-strDisFac = dd strDisFacQD [dRef astm2009] Nothing "stressDistFac"
+strDisFac :: DataDefinition
+strDisFac = ddE strDisFacQD [dRef astm2009] Nothing "stressDistFac"
   [interpolating stressDistFac dimlessloadVsARFig, arRef, qHtRef]
 
 --DD5--
@@ -111,8 +111,8 @@ nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
 nonFLQD :: QDefinition Expr
 nonFLQD = mkQuantDef nonFactorL nonFLEq
 
-nonFL :: DataDefinition Expr
-nonFL = dd nonFLQD [dRef astm2009] Nothing "nFL"
+nonFL :: DataDefinition
+nonFL = ddE nonFLQD [dRef astm2009] Nothing "nFL"
   [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
 
 --DD6--
@@ -126,8 +126,8 @@ glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)
 glaTyFacQD :: QDefinition Expr
 glaTyFacQD = mkQuantDef gTF glaTyFacEq
 
-glaTyFac :: DataDefinition Expr
-glaTyFac = dd glaTyFacQD [dRef astm2009] Nothing "gTF"
+glaTyFac :: DataDefinition
+glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
   [anGlass, ftGlass, hsGlass]
 
 --DD7--
@@ -139,8 +139,8 @@ dimLLEq = mulRe (sy demand) (square (mulRe (sy plateLen) (sy plateWidth)))
 dimLLQD :: QDefinition Expr
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
-dimLL :: DataDefinition Expr
-dimLL = dd dimLLQD [dRef astm2009, dRefInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
+dimLL :: DataDefinition
+dimLL = ddE dimLLQD [dRef astm2009, dRefInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
   [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 
 --DD8--
@@ -152,8 +152,8 @@ tolPreEq = apply (asVC' interpY) [str "SDF.txt", sy aspectRatio, sy sdfTol]
 tolPreQD :: QDefinition Expr
 tolPreQD = mkQuantDef tolLoad tolPreEq
 
-tolPre :: DataDefinition Expr
-tolPre = dd tolPreQD [dRef astm2009] Nothing "tolLoad"
+tolPre :: DataDefinition
+tolPre = ddE tolPreQD [dRef astm2009] Nothing "tolLoad"
   [interpolating tolLoad dimlessloadVsARFig, arRef, jtolRef]
 
 --DD9--
@@ -167,8 +167,8 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 tolStrDisFacQD :: QDefinition Expr
 tolStrDisFacQD = mkQuantDef sdfTol tolStrDisFacEq
 
-tolStrDisFac :: DataDefinition Expr
-tolStrDisFac = dd tolStrDisFacQD [dRef astm2009] Nothing "sdfTol"
+tolStrDisFac :: DataDefinition
+tolStrDisFac = ddE tolStrDisFacQD [dRef astm2009] Nothing "sdfTol"
   [pbTolUsr, aGrtrThanB, stdVals [sflawParamM, sflawParamK, mkUnitary modElas],
    hRef, ldfRef]
 
@@ -180,8 +180,8 @@ standOffDisEq = sqrt (square (sy sdx) `addRe` square (sy sdy) `addRe` square (sy
 standOffDisQD :: QDefinition Expr
 standOffDisQD = mkQuantDef standOffDist standOffDisEq
 
-standOffDis :: DataDefinition Expr
-standOffDis = dd standOffDisQD [dRef astm2009] Nothing "standOffDist" []
+standOffDis :: DataDefinition
+standOffDis = ddE standOffDisQD [dRef astm2009] Nothing "standOffDist" []
 
 --DD11--
 
@@ -191,8 +191,8 @@ aspRatEq = sy plateLen $/ sy plateWidth
 aspRatQD :: QDefinition Expr
 aspRatQD = mkQuantDef aspectRatio aspRatEq
 
-aspRat :: DataDefinition Expr
-aspRat = dd aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
+aspRat :: DataDefinition
+aspRat = ddE aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
 
 --DD12--
 eqTNTWEq :: Expr
@@ -201,8 +201,8 @@ eqTNTWEq = mulRe (sy charWeight) (sy tNT)
 eqTNTWQD :: QDefinition Expr
 eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 
-eqTNTWDD :: DataDefinition Expr
-eqTNTWDD = dd eqTNTWQD [dRef astm2009] Nothing "eqTNTW" []
+eqTNTWDD :: DataDefinition
+eqTNTWDD = ddE eqTNTWQD [dRef astm2009] Nothing "eqTNTW" []
 
 --DD13--
 probOfBreakEq :: Expr
@@ -211,8 +211,8 @@ probOfBreakEq = exactDbl 1 $- exp (neg (sy risk))
 probOfBreakQD :: QDefinition Expr
 probOfBreakQD = mkQuantDef probBr probOfBreakEq
 
-probOfBreak :: DataDefinition Expr
-probOfBreak = dd probOfBreakQD (map dRef [astm2009, beasonEtAl1998]) Nothing "probOfBreak" [riskRef]
+probOfBreak :: DataDefinition
+probOfBreak = ddE probOfBreakQD (map dRef [astm2009, beasonEtAl1998]) Nothing "probOfBreak" [riskRef]
 
 --DD14--
 calofCapacityEq :: Expr
@@ -221,8 +221,8 @@ calofCapacityEq = sy nonFL `mulRe` sy glaTyFac `mulRe` sy loadSF
 calofCapacityQD :: QDefinition Expr
 calofCapacityQD = mkQuantDef lRe calofCapacityEq
 
-calofCapacity :: DataDefinition Expr
-calofCapacity = dd calofCapacityQD [dRef astm2009] Nothing "calofCapacity"
+calofCapacity :: DataDefinition
+calofCapacity = ddE calofCapacityQD [dRef astm2009] Nothing "calofCapacity"
   [lrCap, nonFLRef, gtfRef]
 
 --DD15--
@@ -232,8 +232,8 @@ calofDemandEq = apply (asVC' interpY) [str "TSD.txt", sy standOffDist, sy eqTNTW
 calofDemandQD :: QDefinition Expr
 calofDemandQD = mkQuantDef demand calofDemandEq
 
-calofDemand :: DataDefinition Expr
-calofDemand = dd calofDemandQD [dRef astm2009] Nothing "calofDemand" [calofDemandDesc]
+calofDemand :: DataDefinition
+calofDemand = ddE calofDemandQD [dRef astm2009] Nothing "calofDemand" [calofDemandDesc]
 
 
 --Additional Notes--

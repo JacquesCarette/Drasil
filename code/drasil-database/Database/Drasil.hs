@@ -13,7 +13,7 @@ module Database.Drasil (
   , conceptinsLookup, sectionLookup, labelledconLookup, refResolve
   -- ** Lenses
   , unitTable, traceTable, refbyTable
-  , eDataDefnTable, meDataDefnTable, insmodelTable, gendefTable, theoryModelTable
+  , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
   , conceptinsTable, sectionTable, labelledcontentTable, refTable
   -- ** Utility Helper Functions
   -- ChunkDB.GetChunk

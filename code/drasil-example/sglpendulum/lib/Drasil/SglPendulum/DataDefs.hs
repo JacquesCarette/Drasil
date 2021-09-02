@@ -5,7 +5,7 @@ import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.SI_Units (second)
-import Theory.Drasil (DataDefinition, ddNoRefs)
+import Theory.Drasil (DataDefinition, ddENoRefs)
 import Drasil.SglPendulum.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos,
       frequency, period, angularFrequency)
@@ -15,13 +15,13 @@ import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
 
 
-dataDefs :: [DataDefinition Expr]
+dataDefs :: [DataDefinition]
 dataDefs = [positionIX, positionIY, frequencyDD, angFrequencyDD, periodSHMDD]
 
 
 ------------------------------------------------------
-positionIX :: DataDefinition Expr
-positionIX = ddNoRefs positionIXQD Nothing "positionIX" [positionRef, figRef]
+positionIX :: DataDefinition
+positionIX = ddENoRefs positionIXQD Nothing "positionIX" [positionRef, figRef]
 
 positionIXQD :: QDefinition Expr
 positionIXQD = mkQuantDef QP.ixPos positionIXEqn
@@ -36,8 +36,8 @@ positionRef :: Sentence
 positionRef = ch QP.ixPos `S.isThe` phrase horizontalPos
 
 ------------------------------------------------------
-positionIY :: DataDefinition Expr
-positionIY = ddNoRefs positionIYQD Nothing "positionIY" [positionReff, figReff]
+positionIY :: DataDefinition
+positionIY = ddENoRefs positionIYQD Nothing "positionIY" [positionReff, figReff]
 
 positionIYQD :: QDefinition Expr
 positionIYQD = mkQuantDef QP.iyPos positionIYEqn
@@ -53,8 +53,8 @@ positionReff = ch QP.iyPos `S.isThe` phrase verticalPos
 
 ------------------------------------------------------
 
-frequencyDD :: DataDefinition Expr
-frequencyDD = ddNoRefs frequencyDDQD Nothing "frequencyDD" [frequencyRef]
+frequencyDD :: DataDefinition
+frequencyDD = ddENoRefs frequencyDDQD Nothing "frequencyDD" [frequencyRef]
 
 frequencyDDQD :: QDefinition Expr
 frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
@@ -68,8 +68,8 @@ frequencyRef = ch QP.frequency `S.isThe` S "number of back and forth swings in o
 
 ------------------------------------------------------
 
-angFrequencyDD :: DataDefinition Expr
-angFrequencyDD = ddNoRefs angFrequencyDDQD Nothing "angFrequencyDD" [angFrequencyRef]
+angFrequencyDD :: DataDefinition
+angFrequencyDD = ddENoRefs angFrequencyDDQD Nothing "angFrequencyDD" [angFrequencyRef]
 
 angFrequencyDDQD :: QDefinition Expr
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
@@ -82,8 +82,8 @@ angFrequencyRef = ch QP.period `S.is` S "from" +:+ refS periodSHMDD
 
 ------------------------------------------------------
 
-periodSHMDD :: DataDefinition Expr
-periodSHMDD = ddNoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
+periodSHMDD :: DataDefinition
+periodSHMDD = ddENoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
 
 periodSHMDDQD :: QDefinition Expr
 periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn

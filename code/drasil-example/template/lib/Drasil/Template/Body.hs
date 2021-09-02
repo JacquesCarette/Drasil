@@ -28,7 +28,7 @@ si = SI {
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = [] :: [InstanceModel],
-  _datadefs   = [] :: [DataDefinition Expr],
+  _datadefs    = [] :: [DataDefinition],
   _configFiles = [],
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
@@ -42,17 +42,15 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition Expr]) ([] :: [DataDefinition ModelExpr]) 
-  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
-  ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
-  ([] :: [Reference])
+  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
+  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition Expr]) ([] :: [DataDefinition ModelExpr]) 
-  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
-  ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
-  ([] :: [Reference])
+  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
+  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb [] []

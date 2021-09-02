@@ -134,7 +134,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) GB.dataDefs [] iMods [] tMods concIns section
+  ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
   labCon []
 
 concIns :: [ConceptInstance]
@@ -145,7 +145,7 @@ labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

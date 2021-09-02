@@ -14,8 +14,7 @@ import qualified Utils.Drasil.Sentence as S
 import qualified Utils.Drasil.NounPhrase as NP
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
-import Drasil.DblPendulum.DataDefs (positionGDD,
-    positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, forceGDD)
+import Drasil.DblPendulum.DataDefs
 import qualified Drasil.DblPendulum.Expressions as E
 import qualified Drasil.DblPendulum.Derivations as D
 import Drasil.DblPendulum.Unitals (lenRod_1, xVel_1, xVel_2,
@@ -223,7 +222,7 @@ xForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
-                      [] EmptyS $ express $ forceGDD ^. defnExpr,
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "xForceWithAngle1"
                       [] EmptyS $ express E.xForceWithAngle_1]
 
@@ -243,7 +242,7 @@ yForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
-                      [] EmptyS $ express $ forceGDD ^. defnExpr,
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "yForceWithAngle1"
                       [] EmptyS $ express E.yForceWithAngle_1]
 
@@ -263,7 +262,7 @@ xForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
-                      [] EmptyS $ express $ forceGDD ^. defnExpr,
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "xForceWithAngle2"
                       [] EmptyS $ express E.xForceWithAngle_2]
 
@@ -283,7 +282,7 @@ yForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"
-                      [] EmptyS $ express $ forceGDD ^. defnExpr,
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "yForceWithAngle2"
                       [] EmptyS $ express E.yForceWithAngle_2]
 

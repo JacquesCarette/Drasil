@@ -2,7 +2,7 @@ module Drasil.HGHC.HeatTransfer where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Theory.Drasil (DataDefinition, ddNoRefs)
+import Theory.Drasil (DataDefinition, ddENoRefs)
 
 import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 
@@ -11,7 +11,7 @@ import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 symbols :: [QuantityDict]
 symbols = htOutputs ++ htInputs
 
-dataDefs :: [DataDefinition Expr]
+dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 
 qDefs :: [QDefinition Expr]
@@ -38,8 +38,8 @@ htTransCladCool, htTransCladFuel :: QDefinition Expr
 
 ---
 
-htTransCladCoolDD :: DataDefinition Expr
-htTransCladCoolDD = ddNoRefs htTransCladCool Nothing "htTransCladCool"--Label
+htTransCladCoolDD :: DataDefinition
+htTransCladCoolDD = ddENoRefs htTransCladCool Nothing "htTransCladCool"--Label
   []--no additional notes
 
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
@@ -52,8 +52,8 @@ htTransCladCoolEq =
 
 ---
 
-htTransCladFuelDD :: DataDefinition Expr
-htTransCladFuelDD = ddNoRefs htTransCladFuel Nothing "htTransCladFuel"--Label
+htTransCladFuelDD :: DataDefinition
+htTransCladFuelDD = ddENoRefs htTransCladFuel Nothing "htTransCladFuel"--Label
   []--no additional notes
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP

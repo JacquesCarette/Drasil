@@ -180,7 +180,7 @@ data SCSSub where
   -- | General Definitions.
   GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   -- | Data Definitions.
-  DDs            :: [Sentence] -> Fields  -> [DataDefinition Expr] -> [DataDefinition ModelExpr] -> DerivationDisplay -> SCSSub -- (FIXME: Need DD intro).
+  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub -- (FIXME: Need DD intro).
   -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   -- | Constraints.
@@ -314,7 +314,7 @@ instance Multiplate DLPlate where
     sc (Assumptions c) = pure (Assumptions c)
     sc (TMs s f t) = pure $ TMs s f t
     sc (GDs s f g d) = pure $ GDs s f g d
-    sc (DDs s f ddes ddmes d) = pure $ DDs s f ddes ddmes d
+    sc (DDs s f dd d) = pure $ DDs s f dd d
     sc (IMs s f i d) = pure $ IMs s f i d 
     sc (Constraints s c) = pure $ Constraints s c
     sc (CorrSolnPpties c cs) = pure $ CorrSolnPpties c cs

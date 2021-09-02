@@ -2,7 +2,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
 import Drasil.DocLang (ModelDB, mdb)
-import Theory.Drasil (DataDefinition, dd, ddNoRefs)
+import Theory.Drasil (DataDefinition, ddE, ddENoRefs)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -29,7 +29,7 @@ qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD,
   balanceDecayTimeQD, balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD, 
   ddMeltFracQD, aspRatQD]
 
-dataDefs :: [DataDefinition Expr] 
+dataDefs :: [DataDefinition] 
 dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate, 
   balanceDecayTime, balanceSolidPCM, balanceLiquidPCM, ddHtFusion, ddMeltFrac, 
   aspRat]
@@ -47,8 +47,8 @@ waterMassEqn = sy wVol `mulRe` sy wDensity
 waterMassNotes :: Sentence
 waterMassNotes = foldlSent [ch wVol, S "is defined in", refS waterVolume]
 
-waterMass :: DataDefinition Expr
-waterMass = ddNoRefs waterMassQD Nothing "waterMass" []
+waterMass :: DataDefinition
+waterMass = ddENoRefs waterMassQD Nothing "waterMass" []
 
 ----
 
@@ -62,8 +62,8 @@ waterVolumeNotes :: Sentence
 waterVolumeNotes = foldlSent [S "Based on" +:+. refS assumpVCN, 
   ch tankVol, S "is defined in", refS tankVolume]
 
-waterVolume :: DataDefinition Expr
-waterVolume = ddNoRefs waterVolumeQD Nothing "waterVolume_pcm" 
+waterVolume :: DataDefinition
+waterVolume = ddENoRefs waterVolumeQD Nothing "waterVolume_pcm" 
   [waterVolumeNotes]
 
 ----
@@ -74,8 +74,8 @@ tankVolumeQD = mkQuantDef tankVol tankVolumeEqn
 tankVolumeEqn :: Expr
 tankVolumeEqn = sy pi_ `mulRe` square (half $ sy diam) `mulRe` sy tankLength
 
-tankVolume :: DataDefinition Expr
-tankVolume = ddNoRefs tankVolumeQD Nothing "tankVolume" []
+tankVolume :: DataDefinition
+tankVolume = ddENoRefs tankVolumeQD Nothing "tankVolume" []
 
 ----
 
@@ -89,8 +89,8 @@ balanceDecayRateNotes :: Sentence
 balanceDecayRateNotes = foldlSent [ch wMass, S "is defined in", 
   refS waterMass]
 
-balanceDecayRate :: DataDefinition Expr
-balanceDecayRate = dd balanceDecayRateQD [dRef koothoor2013]
+balanceDecayRate :: DataDefinition
+balanceDecayRate = ddE balanceDecayRateQD [dRef koothoor2013]
   Nothing "balanceDecayRate" []
 
 ----
@@ -101,8 +101,8 @@ balanceDecayTimeQD = mkQuantDef eta balanceDecayTimeEqn
 balanceDecayTimeEqn :: Expr
 balanceDecayTimeEqn = sy pcmHTC `mulRe` sy pcmSA $/ (sy coilHTC `mulRe` sy coilSA)
 
-balanceDecayTime :: DataDefinition Expr
-balanceDecayTime = dd balanceDecayTimeQD [dRef koothoor2013]
+balanceDecayTime :: DataDefinition
+balanceDecayTime = ddE balanceDecayTimeQD [dRef koothoor2013]
   Nothing "balanceDecayTime" []
 
 ----
@@ -114,8 +114,8 @@ balanceSolidPCMEqn :: Expr
 balanceSolidPCMEqn = (sy pcmMass `mulRe` sy htCapSP) $/
   (sy pcmHTC `mulRe` sy pcmSA)
 
-balanceSolidPCM :: DataDefinition Expr
-balanceSolidPCM = dd balanceSolidPCMQD [dRef lightstone2012]
+balanceSolidPCM :: DataDefinition
+balanceSolidPCM = ddE balanceSolidPCMQD [dRef lightstone2012]
   Nothing "balanceSolidPCM" []
 
 ----
@@ -127,8 +127,8 @@ balanceLiquidPCMEqn :: Expr
 balanceLiquidPCMEqn = (sy pcmMass `mulRe` sy htCapLP) $/
   (sy pcmHTC `mulRe` sy pcmSA)
 
-balanceLiquidPCM :: DataDefinition Expr
-balanceLiquidPCM = dd balanceLiquidPCMQD [dRef lightstone2012]
+balanceLiquidPCM :: DataDefinition
+balanceLiquidPCM = ddE balanceLiquidPCMQD [dRef lightstone2012]
   Nothing "balanceLiquidPCM" []
 
 ----
@@ -139,8 +139,8 @@ ddHtFusionQD = mkQuantDef htFusion htFusionEqn
 htFusionEqn :: Expr
 htFusionEqn = sy latentHeat $/ sy mass
 
-ddHtFusion :: DataDefinition Expr
-ddHtFusion = dd ddHtFusionQD [dRefInfo bueche1986 $ Page [282]]
+ddHtFusion :: DataDefinition
+ddHtFusion = ddE ddHtFusionQD [dRefInfo bueche1986 $ Page [282]]
   Nothing "htFusion" [htFusionNote]
 
 htFusionNote :: Sentence
@@ -162,8 +162,8 @@ ddMeltFracQD = mkQuantDef meltFrac meltFracEqn
 meltFracEqn :: Expr
 meltFracEqn = sy latentEP $/ (sy htFusion `mulRe` sy pcmMass)
 
-ddMeltFrac :: DataDefinition Expr
-ddMeltFrac = dd ddMeltFracQD [dRef koothoor2013]
+ddMeltFrac :: DataDefinition
+ddMeltFrac = ddE ddMeltFracQD [dRef koothoor2013]
   Nothing "meltFrac" [meltFracConst, refS ddHtFusion]
   where meltFracConst = atStartNP (the value) `S.of_` eS meltFrac `S.is`
                         S "constrained to" +:+. eS (realInterval meltFrac (Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)))
@@ -176,8 +176,8 @@ aspRatQD = mkQuantDef aspectRatio aspRatEq
 aspRatEq :: Expr
 aspRatEq = sy diam $/ sy tankLength
 
-aspRat :: DataDefinition Expr
-aspRat = ddNoRefs aspRatQD Nothing "aspectRatio" []
+aspRat :: DataDefinition
+aspRat = ddENoRefs aspRatQD Nothing "aspectRatio" []
 
 --Need to add units to data definition descriptions
 

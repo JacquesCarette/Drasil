@@ -8,7 +8,7 @@ import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil (ChunkDB, SystemInformation(SI),
   _authors, _constants, _constraints, _datadefs, _instModels,
   _configFiles, _inputs, _outputs, _sys, _sysinfodb)
-import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
+import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
   programName, quantvar, codevars, codevars', varResolve, DefiningCodeExpr(..))
@@ -97,7 +97,7 @@ codeSpec SI {_sys         = sys
       const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid))
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
-      rels = (map qtoc (getEqModQdsFromIm ims ++ map qdFromDD ddefs) \\ derived)
+      rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)
         ++ map odeDef (odes chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
@@ -148,10 +148,10 @@ asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 -- | Determines the derived inputs, which can be immediately calculated from the 
 -- knowns (inputs and constants). If there are DDs, the derived inputs will 
 -- come from those. If there are none, then the 'QDefinition's are used instead.
-getDerivedInputs :: [DataDefinition Expr] -> [Input] -> [Const] ->
+getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition Expr]
 getDerivedInputs ddefs ins cnsts sm =
-  filter ((`subsetOf` refSet) . flip codevars sm . expr . (^. defnExpr)) (map qdFromDD ddefs)
+  filter ((`subsetOf` refSet) . flip codevars sm . expr . (^. defnExpr)) (mapMaybe qdEFromDD ddefs)
   where refSet = ins ++ map quantvar cnsts
 
 -- | Known values.

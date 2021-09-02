@@ -17,8 +17,8 @@ import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
   unlikelyChg)
 import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, thModel)
-import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, eDataDefnTable,
-  meDataDefnTable, insmodelTable, theoryModelTable)
+import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, dataDefnTable,
+  insmodelTable, theoryModelTable)
 import Language.Drasil
 import qualified Language.Drasil.Development as D (uid)
 import Utils.Drasil.Concepts
@@ -38,7 +38,7 @@ tvAssumps = traceViewCC assumpDom
 
 -- | Traceabiliy viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvDataDefns :: TraceViewCat
-tvDataDefns a b = traceView eDataDefnTable a b ++ traceView meDataDefnTable a b
+tvDataDefns = traceView dataDefnTable
 
 -- | Traceabiliy viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGenDefns :: TraceViewCat

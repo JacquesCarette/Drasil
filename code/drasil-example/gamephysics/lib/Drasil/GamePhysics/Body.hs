@@ -1,9 +1,11 @@
 module Drasil.GamePhysics.Body where
 
+import Data.Maybe (mapMaybe)
+
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
-import Theory.Drasil (qdFromDD)
+import Theory.Drasil (qdEFromDD)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -35,7 +37,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
-import Drasil.GamePhysics.DataDefs (eDataDefs, meDataDefs)
+import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
 import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005)
@@ -109,7 +111,7 @@ si = SI {
   _quants      =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
-  _datadefs    = eDataDefs,
+  _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = inputSymbols,
   _outputs     = outputSymbols, 
@@ -120,7 +122,7 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
-  where qDefs = map qdFromDD eDataDefs
+  where qDefs = mapMaybe qdEFromDD dataDefs
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -147,12 +149,12 @@ symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon') 
-  (map cw defSymbols ++ srsDomains ++ map cw iMods) units eDataDefs meDataDefs
+  (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
   iMods generalDefns tMods concIns section [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] [] ([] :: [Reference])
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

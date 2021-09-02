@@ -45,7 +45,7 @@ data SystemInformation where
   , _quants      :: [e]
   , _concepts    :: [f]
   , _instModels  :: [InstanceModel]
-  , _datadefs    :: [DataDefinition Expr]
+  , _datadefs    :: [DataDefinition]
   , _configFiles :: [String]
   , _inputs      :: [h]
   , _outputs     :: [i]

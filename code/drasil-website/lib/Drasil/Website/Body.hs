@@ -84,7 +84,7 @@ sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
 symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web] ++ map getSysName allExampleSI)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] [] $ allRefs fl
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] $ allRefs fl
 
 -- | Helper to get the system name as an 'IdeaDict' from 'SystemInformation'.
 getSysName :: SystemInformation -> IdeaDict
@@ -93,7 +93,7 @@ getSysName SI{_sys = nm} = nw nm
 -- | Empty database needed for 'si' to work.
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] [] ([] :: [Reference])
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]

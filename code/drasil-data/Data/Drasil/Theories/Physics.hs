@@ -94,8 +94,8 @@ hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
 
 -- * Torque
 
-torqueDD :: DataDefinition Expr
-torqueDD = ddNoRefs torque Nothing "torque" [torqueDesc] 
+torqueDD :: DataDefinition
+torqueDD = ddENoRefs torque Nothing "torque" [torqueDesc] 
 
 torque :: QDefinition Expr
 torque = mkQuantDef QP.torque torqueEqn
@@ -118,8 +118,8 @@ magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velo
   S "the magnitude of the vector", sParen (eS speedEqn) `S.isThe`
   S "scalar called", phrase QP.speed]
 
-vecMag :: DataDefinition Expr
-vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
+vecMag :: DataDefinition
+vecMag = ddENoRefs vecMagQD Nothing "vecMag" [magNote]
 
 -- * Newton's Second Law of Rotational Motion
 

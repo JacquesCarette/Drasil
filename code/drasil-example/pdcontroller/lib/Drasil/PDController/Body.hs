@@ -132,7 +132,6 @@ symbMap
       (map cw inpConstrained ++ srsDomains)
       (map unitWrapper [second, kilogram])
       dataDefinitions
-      ([] :: [DataDefinition ModelExpr])
       instanceModels
       genDefns
       theoreticalModels
@@ -146,8 +145,7 @@ usedDB
   = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
       ([] :: [ConceptChunk])
       ([] :: [UnitDefn])
-      ([] :: [DataDefinition Expr])
-      ([] :: [DataDefinition ModelExpr])
+      ([] :: [DataDefinition])
       ([] :: [InstanceModel])
       ([] :: [GenDefn])
       ([] :: [TheoryModel])

@@ -1,5 +1,14 @@
 digraph avsall {
 	p_CM -> assumpOT;
+	linearDisplacement -> assumpOT;
+	linearVelocity -> assumpOT;
+	linearAcceleration -> assumpOT;
+	angularDisplacement -> assumpOT;
+	angularDisplacement -> assumpOD;
+	angularVelocity -> assumpOT;
+	angularVelocity -> assumpOD;
+	angularAcceleration -> assumpOT;
+	angularAcceleration -> assumpOD;
 	velocityB -> assumpOT;
 	kEnergy -> assumpOT;
 	kEnergy -> assumpOD;
@@ -10,15 +19,6 @@ digraph avsall {
 	potEnergy -> assumpOD;
 	potEnergy -> assumpDI;
 	momentOfInertia -> assumpOT;
-	linearDisplacement -> assumpOT;
-	linearVelocity -> assumpOT;
-	linearAcceleration -> assumpOT;
-	angularDisplacement -> assumpOT;
-	angularDisplacement -> assumpOD;
-	angularVelocity -> assumpOT;
-	angularVelocity -> assumpOD;
-	angularAcceleration -> assumpOT;
-	angularAcceleration -> assumpOD;
 	newtonSLR -> assumpOD;
 	impulseS -> assumpOT;
 	impulseS -> assumpOD;
@@ -56,6 +56,12 @@ digraph avsall {
 	}
 
 	p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ctrOfMass"];
+	linearDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linDisp"];
+	linearVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linVel"];
+	linearAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linAcc"];
+	angularDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angDisp"];
+	angularVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angVel"];
+	angularAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angAccel"];
 	velocityB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:chaslesThm"];
 	torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:torque"];
 	kEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:kEnergy"];
@@ -64,16 +70,10 @@ digraph avsall {
 	impulseV	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:impulseV"];
 	potEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:potEnergy"];
 	momentOfInertia	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:momentOfInertia"];
-	linearDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linDisp"];
-	linearVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linVel"];
-	linearAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linAcc"];
-	angularDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angDisp"];
-	angularVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angVel"];
-	angularAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angAccel"];
 
 	subgraph DD {
 	rank="same"
-	{p_CM, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration}
+	{p_CM, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
 	}
 
 	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];

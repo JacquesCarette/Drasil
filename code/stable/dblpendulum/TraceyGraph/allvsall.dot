@@ -1,12 +1,12 @@
 digraph allvsall {
-	v_x1 -> p_x1;
 	v_x1 -> velocity;
-	v_y1 -> p_y1;
+	v_x1 -> p_x1;
 	v_y1 -> velocity;
-	v_x2 -> p_x2;
+	v_y1 -> p_y1;
 	v_x2 -> velocity;
-	v_y2 -> p_y2;
+	v_x2 -> p_x2;
 	v_y2 -> velocity;
+	v_y2 -> p_y2;
 	angularAccelerationIM2 -> a_x1;
 	angularAccelerationIM2 -> a_y1;
 	angularAccelerationIM2 -> a_x2;
@@ -36,17 +36,17 @@ digraph allvsall {
 	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin, firstPend, secondPend}
 	}
 
+	velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];
 	p_x1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD1"];
 	p_y1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD1"];
 	p_x2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD2"];
 	p_y2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD2"];
-	force	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
-	velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];
 	acceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:accelerationGDD"];
+	force	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
 
 	subgraph DD {
 	rank="same"
-	{p_x1, p_y1, p_x2, p_y2, force, velocity, acceleration}
+	{velocity, p_x1, p_y1, p_x2, p_y2, acceleration, force}
 	}
 
 	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

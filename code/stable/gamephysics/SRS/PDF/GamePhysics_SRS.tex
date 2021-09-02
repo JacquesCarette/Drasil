@@ -662,6 +662,240 @@ RefBy & \hyperref[IM:col2D]{IM:col2D} and \hyperref[IM:transMot]{IM:transMot}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:linDisp}
+\phantomsection 
+\label{DD:linDisp}
+\\ \midrule \\
+Label & Linear displacement
+        
+\\ \midrule \\
+Symbol & $\symbf{u}\text{(}t\text{)}$
+         
+\\ \midrule \\
+Units & ${\text{m}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{u}\text{(}t\text{)}=\frac{\,d\symbf{p}\left(t\right)}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{u}\text{(}t\text{)}$ is the linear displacement (${\text{m}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:transMot]{IM:transMot}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:linVel}
+\phantomsection 
+\label{DD:linVel}
+\\ \midrule \\
+Label & Linear velocity
+        
+\\ \midrule \\
+Symbol & $\symbf{v}\text{(}t\text{)}$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{u}\left(t\right)}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{u}$ is the displacement (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:transMot]{IM:transMot}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:linAcc}
+\phantomsection 
+\label{DD:linAcc}
+\\ \midrule \\
+Label & Linear acceleration
+        
+\\ \midrule \\
+Symbol & $\symbf{a}\text{(}t\text{)}$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\left(t\right)}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:transMot]{IM:transMot}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:angDisp}
+\phantomsection 
+\label{DD:angDisp}
+\\ \midrule \\
+Label & Angular displacement
+        
+\\ \midrule \\
+Symbol & $θ$
+         
+\\ \midrule \\
+Units & ${\text{rad}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           θ=\frac{\,dϕ\left(t\right)}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$θ$ is the angular displacement (${\text{rad}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$ϕ$ is the orientation (${\text{rad}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:rotMot]{IM:rotMot}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:angVel}
+\phantomsection 
+\label{DD:angVel}
+\\ \midrule \\
+Label & Angular velocity
+        
+\\ \midrule \\
+Symbol & $ω$
+         
+\\ \midrule \\
+Units & $\frac{\text{rad}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           ω=\frac{\,dθ\left(t\right)}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$θ$ is the angular displacement (${\text{rad}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:rotMot]{IM:rotMot}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:angAccel}
+\phantomsection 
+\label{DD:angAccel}
+\\ \midrule \\
+Label & Angular acceleration
+        
+\\ \midrule \\
+Symbol & $α$
+         
+\\ \midrule \\
+Units & $\frac{\text{rad}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           α=\frac{\,dω\left(t\right)}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:rotMot]{IM:rotMot}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:chaslesThm}
 \phantomsection 
 \label{DD:chaslesThm}
@@ -993,240 +1227,6 @@ Source & --
          
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linDisp}
-\phantomsection 
-\label{DD:linDisp}
-\\ \midrule \\
-Label & Linear displacement
-        
-\\ \midrule \\
-Symbol & $\symbf{u}\text{(}t\text{)}$
-         
-\\ \midrule \\
-Units & ${\text{m}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           \symbf{u}\text{(}t\text{)}=\frac{\,d\symbf{p}\left(t\right)}{\,dt}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\symbf{u}\text{(}t\text{)}$ is the linear displacement (${\text{m}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[IM:transMot]{IM:transMot}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linVel}
-\phantomsection 
-\label{DD:linVel}
-\\ \midrule \\
-Label & Linear velocity
-        
-\\ \midrule \\
-Symbol & $\symbf{v}\text{(}t\text{)}$
-         
-\\ \midrule \\
-Units & $\frac{\text{m}}{\text{s}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{u}\left(t\right)}{\,dt}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\symbf{v}\text{(}t\text{)}$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{u}$ is the displacement (${\text{m}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[IM:transMot]{IM:transMot}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linAcc}
-\phantomsection 
-\label{DD:linAcc}
-\\ \midrule \\
-Label & Linear acceleration
-        
-\\ \midrule \\
-Symbol & $\symbf{a}\text{(}t\text{)}$
-         
-\\ \midrule \\
-Units & $\frac{\text{m}}{\text{s}^{2}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\left(t\right)}{\,dt}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\symbf{a}\text{(}t\text{)}$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[IM:transMot]{IM:transMot}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angDisp}
-\phantomsection 
-\label{DD:angDisp}
-\\ \midrule \\
-Label & Angular displacement
-        
-\\ \midrule \\
-Symbol & $θ$
-         
-\\ \midrule \\
-Units & ${\text{rad}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           θ=\frac{\,dϕ\left(t\right)}{\,dt}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$θ$ is the angular displacement (${\text{rad}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{$ϕ$ is the orientation (${\text{rad}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[IM:rotMot]{IM:rotMot}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angVel}
-\phantomsection 
-\label{DD:angVel}
-\\ \midrule \\
-Label & Angular velocity
-        
-\\ \midrule \\
-Symbol & $ω$
-         
-\\ \midrule \\
-Units & $\frac{\text{rad}}{\text{s}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           ω=\frac{\,dθ\left(t\right)}{\,dt}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{$θ$ is the angular displacement (${\text{rad}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[IM:rotMot]{IM:rotMot}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angAccel}
-\phantomsection 
-\label{DD:angAccel}
-\\ \midrule \\
-Label & Angular acceleration
-        
-\\ \midrule \\
-Symbol & $α$
-         
-\\ \midrule \\
-Units & $\frac{\text{rad}}{\text{s}^{2}}$
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           α=\frac{\,dω\left(t\right)}{\,dt}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (${\text{s}}$)}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & \hyperref[IM:rotMot]{IM:rotMot}
-        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -1609,6 +1609,18 @@ The purpose of the traceability matrices is to provide easy references on what h
 \endhead
 \hyperref[DD:ctrOfMass]{DD:ctrOfMass} & X &  &  &  &  &  & 
 \\
+\hyperref[DD:linDisp]{DD:linDisp} & X &  &  &  &  &  & 
+\\
+\hyperref[DD:linVel]{DD:linVel} & X &  &  &  &  &  & 
+\\
+\hyperref[DD:linAcc]{DD:linAcc} & X &  &  &  &  &  & 
+\\
+\hyperref[DD:angDisp]{DD:angDisp} & X & X &  &  &  &  & 
+\\
+\hyperref[DD:angVel]{DD:angVel} & X & X &  &  &  &  & 
+\\
+\hyperref[DD:angAccel]{DD:angAccel} & X & X &  &  &  &  & 
+\\
 \hyperref[DD:chaslesThm]{DD:chaslesThm} & X &  &  &  &  &  & 
 \\
 \hyperref[DD:torque]{DD:torque} &  &  &  &  &  &  & 
@@ -1624,18 +1636,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[DD:potEnergy]{DD:potEnergy} & X & X &  &  &  & X & 
 \\
 \hyperref[DD:momentOfInertia]{DD:momentOfInertia} & X &  &  &  &  &  & 
-\\
-\hyperref[DD:linDisp]{DD:linDisp} & X &  &  &  &  &  & 
-\\
-\hyperref[DD:linVel]{DD:linVel} & X &  &  &  &  &  & 
-\\
-\hyperref[DD:linAcc]{DD:linAcc} & X &  &  &  &  &  & 
-\\
-\hyperref[DD:angDisp]{DD:angDisp} & X & X &  &  &  &  & 
-\\
-\hyperref[DD:angVel]{DD:angVel} & X & X &  &  &  &  & 
-\\
-\hyperref[DD:angAccel]{DD:angAccel} & X & X &  &  &  &  & 
 \\
 \hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  & 
 \\
@@ -1703,11 +1703,23 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD:ctrOfMass}} & \textbf{\hyperref[DD:chaslesThm]{DD:chaslesThm}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:kEnergy]{DD:kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD:coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD:reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD:impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD:potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD:momentOfInertia}} & \textbf{\hyperref[DD:linDisp]{DD:linDisp}} & \textbf{\hyperref[DD:linVel]{DD:linVel}} & \textbf{\hyperref[DD:linAcc]{DD:linAcc}} & \textbf{\hyperref[DD:angDisp]{DD:angDisp}} & \textbf{\hyperref[DD:angVel]{DD:angVel}} & \textbf{\hyperref[DD:angAccel]{DD:angAccel}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD:accelGravity}} & \textbf{\hyperref[GD:impulse]{GD:impulse}} & \textbf{\hyperref[IM:transMot]{IM:transMot}} & \textbf{\hyperref[IM:rotMot]{IM:rotMot}} & \textbf{\hyperref[IM:col2D]{IM:col2D}}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD:ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD:linDisp}} & \textbf{\hyperref[DD:linVel]{DD:linVel}} & \textbf{\hyperref[DD:linAcc]{DD:linAcc}} & \textbf{\hyperref[DD:angDisp]{DD:angDisp}} & \textbf{\hyperref[DD:angVel]{DD:angVel}} & \textbf{\hyperref[DD:angAccel]{DD:angAccel}} & \textbf{\hyperref[DD:chaslesThm]{DD:chaslesThm}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:kEnergy]{DD:kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD:coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD:reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD:impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD:potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD:momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD:accelGravity}} & \textbf{\hyperref[GD:impulse]{GD:impulse}} & \textbf{\hyperref[IM:transMot]{IM:transMot}} & \textbf{\hyperref[IM:rotMot]{IM:rotMot}} & \textbf{\hyperref[IM:col2D]{IM:col2D}}
 \\
 \midrule
 \endhead
 \hyperref[DD:ctrOfMass]{DD:ctrOfMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:linDisp]{DD:linDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:linVel]{DD:linVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:linAcc]{DD:linAcc} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:angDisp]{DD:angDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:angVel]{DD:angVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:angAccel]{DD:angAccel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:chaslesThm]{DD:chaslesThm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1725,18 +1737,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:momentOfInertia]{DD:momentOfInertia} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linDisp]{DD:linDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:linVel]{DD:linVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:linAcc]{DD:linAcc} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angDisp]{DD:angDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angVel]{DD:angVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angAccel]{DD:angAccel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
 \hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1749,9 +1749,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[GD:impulse]{GD:impulse} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:transMot]{IM:transMot} & X &  &  &  &  &  &  &  &  & X & X & X &  &  &  & X &  &  &  & X &  &  &  & 
+\hyperref[IM:transMot]{IM:transMot} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  & 
 \\
-\hyperref[IM:rotMot]{IM:rotMot} &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X &  &  &  & X &  &  &  &  & 
+\hyperref[IM:rotMot]{IM:rotMot} &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
 \hyperref[IM:col2D]{IM:col2D} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
@@ -1761,7 +1761,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD:ctrOfMass}} & \textbf{\hyperref[DD:chaslesThm]{DD:chaslesThm}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:kEnergy]{DD:kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD:coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD:reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD:impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD:potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD:momentOfInertia}} & \textbf{\hyperref[DD:linDisp]{DD:linDisp}} & \textbf{\hyperref[DD:linVel]{DD:linVel}} & \textbf{\hyperref[DD:linAcc]{DD:linAcc}} & \textbf{\hyperref[DD:angDisp]{DD:angDisp}} & \textbf{\hyperref[DD:angVel]{DD:angVel}} & \textbf{\hyperref[DD:angAccel]{DD:angAccel}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD:accelGravity}} & \textbf{\hyperref[GD:impulse]{GD:impulse}} & \textbf{\hyperref[IM:transMot]{IM:transMot}} & \textbf{\hyperref[IM:rotMot]{IM:rotMot}} & \textbf{\hyperref[IM:col2D]{IM:col2D}} & \textbf{\hyperref[simSpace]{FR:Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR:Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR:Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR:Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR:Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR:Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR:Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR:Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[performance]{NFR:Performance}} & \textbf{\hyperref[correctness]{NFR:Correctness}} & \textbf{\hyperref[usability]{NFR:Usability}} & \textbf{\hyperref[understandability]{NFR:Understandability}} & \textbf{\hyperref[maintainability]{NFR:Maintainability}}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD:ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD:linDisp}} & \textbf{\hyperref[DD:linVel]{DD:linVel}} & \textbf{\hyperref[DD:linAcc]{DD:linAcc}} & \textbf{\hyperref[DD:angDisp]{DD:angDisp}} & \textbf{\hyperref[DD:angVel]{DD:angVel}} & \textbf{\hyperref[DD:angAccel]{DD:angAccel}} & \textbf{\hyperref[DD:chaslesThm]{DD:chaslesThm}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:kEnergy]{DD:kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD:coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD:reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD:impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD:potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD:momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD:accelGravity}} & \textbf{\hyperref[GD:impulse]{GD:impulse}} & \textbf{\hyperref[IM:transMot]{IM:transMot}} & \textbf{\hyperref[IM:rotMot]{IM:rotMot}} & \textbf{\hyperref[IM:col2D]{IM:col2D}} & \textbf{\hyperref[simSpace]{FR:Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR:Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR:Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR:Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR:Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR:Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR:Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR:Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[performance]{NFR:Performance}} & \textbf{\hyperref[correctness]{NFR:Correctness}} & \textbf{\hyperref[usability]{NFR:Usability}} & \textbf{\hyperref[understandability]{NFR:Understandability}} & \textbf{\hyperref[maintainability]{NFR:Maintainability}}
 \\
 \midrule
 \endhead

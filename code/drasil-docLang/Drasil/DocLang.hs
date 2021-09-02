@@ -33,8 +33,6 @@ module Drasil.DocLang (
   -- ** Definitions and Models
   -- Drasil.DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
-  -- Drasil.DocumentLanguage.RefHelpers 
-  ModelDB, ddRefDB, mdb,
   -- ** Traceability
   -- Drasil.DocumentLanguage.TraceabilityGraph
   mkGraphInfo, traceyGraphGetRefs,
@@ -85,7 +83,6 @@ import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)
 import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(BibSec, IntrodSec, BodySec))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
-import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
 import Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)
 import Drasil.Sections.AuxiliaryConstants (tableOfConstants)

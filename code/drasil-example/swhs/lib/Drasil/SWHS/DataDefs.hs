@@ -1,7 +1,6 @@
 module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
-import Drasil.DocLang (ModelDB, mdb)
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -20,9 +19,6 @@ import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmHTC, pcmMass, pcmSA, pcmVol,
   tankLength, tankVol, tauLP, tauSP, tauW, wDensity, wMass, wVol)
-
-refMDB :: ModelDB
-refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition Expr]
 qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD, 

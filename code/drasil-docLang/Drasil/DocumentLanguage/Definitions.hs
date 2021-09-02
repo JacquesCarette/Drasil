@@ -22,7 +22,7 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
-  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints))
+  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
 import Utils.Drasil
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -161,7 +161,8 @@ buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformat
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
 buildDDescription' Verbose  u d m = [UlC . ulcc . Enumeration $ Definitions $
-  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ express d)]
+  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $
+  either (express . (^. defnExpr)) (^. defnExpr) (qdFromDD d))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow

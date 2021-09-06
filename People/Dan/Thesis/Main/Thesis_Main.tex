@@ -1,0 +1,75 @@
+\documentclass[12pt]{report}                  % Times New Roman, 12pt
+%\usepackage{gscale_thesis_singlespace} % Single spaced thesis
+\usepackage{gscale_thesis_doublespace} % Double spaced thesis
+\usepackage{fancyheadings}                   % Header and footer styling
+\usepackage{natbib}                               % Bibliography formatting
+\usepackage{setspace}                           % Allows double spacing but skips headers/footers
+\include{definitions}                                % LaTeX variables for preface pages/headers
+\setcounter{tocdepth}{1}                        % Limits the TOC to chapter and section names
+
+% Additional packages
+\usepackage{graphicx}                                   % Allows the inclusion of figures
+\usepackage{subcaption}                               % Allows captions to be added to subfigures
+\usepackage[justification=centering]{caption} % Centres caption text
+\usepackage[hidelinks]{hyperref}                    % Linking to LaTeX labels and external URLs
+\usepackage{array}                                        % Used for table formatting
+\newcolumntype{P}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{booktabs}                                 % Fancy-style tables
+\usepackage{longtable}                                 % Allows for tables that are more than one page long
+\usepackage{float}                                         % Better figure placement control
+\usepackage{enumerate}   
+\usepackage[shortlabels]{enumitem}                            % Numbered lists 
+\usepackage[shortcuts]{extdash}                  % Allows manual hyphenation of hypenated words
+\usepackage{amsmath}                                % Non-standard math symbols
+\usepackage{amsfonts}                                % Extended fonts for 
+%mathematics
+\usepackage{xcolor}
+\numberwithin{equation}{section}                 % Numbers equations based on their section
+
+% ********************************
+\begin{document}
+\beforepreface                                         % Half title page, title page, declaration page   
+  \include{layabstr}                                  % Lay Abstract
+  \include{abstr}                                      % Abstract
+  \include{dedic}                                      % Dedication
+  \include{acknowledgements}                 % Acknowledgements
+  \referencepageswithnotations{notation} % Table of Contents, List of Figures, List of Tables, Notations
+  %\referencepages                                 % No notations version (choose one)
+\afterpreface                      
+  
+  
+  \include{introduction}                  
+        \setcounter{figure}{0}
+        \setcounter{equation}{0}
+        \setcounter{table}{0}
+        
+  \include{sample_chapter}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{conclusion}
+        \setcounter{figure}{0}
+        \setcounter{equation}{0}
+        \setcounter{table}{0}
+
+\begin{appendix}
+	\include{appendixA}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+		
+	\include{appendixB}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+\end{appendix}
+
+% The bibliography is set up to allow for multiple bib files
+\bibliographystyle{natbib}
+\bibliography{references,references_another}
+
+\label{NumDocumentPages}
+
+\end{document}
+% ********************************

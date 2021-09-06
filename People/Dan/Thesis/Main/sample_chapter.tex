@@ -1,0 +1,65 @@
+\chapter{Your Chapter Title}
+
+This is a sample chapter
+
+\section{Referencing}
+These are some sample references to GAMYGDALA~\citep{popescu2014gamygdala} from the ``refernces.bib" file and state effects of cognition~\citep{hudlicka2002time} from the ``reference\_another.bib" file. These references are not in the same .bib file.
+
+\section{Figures}
+This is a single image figure (Figure~\ref{fig_singleenv}:
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/Sample/tumblr_static_eaceks0rfxsss8o4swscw40wo.jpg}
+	\caption[Single Figure Environment Listed Title]{This is a single figure environment}
+	\label{fig_singleenv}
+\end{figure}
+
+This is a multi-image figure with a top (Figure~\ref{fig_multienv_1}) and bottom (Figure~\ref{fig_multienv_2}) aligned subfigures:
+
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/Sample/tumblr_static_eaceks0rfxsss8o4swscw40wo.jpg}
+		\caption{Figure 1}
+		\label{fig_multienv_1}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/Sample/tumblr_static_eaceks0rfxsss8o4swscw40wo.jpg}
+		\caption{Figure 2}
+		\label{fig_multienv_2}
+	\end{subfigure}
+	
+	\caption{A Multi-Figure Environment}
+	\label{fig_multienv}
+\end{figure}
+
+\section{Tables}
+
+Here is a sample table (Table~\ref{tab_sample}):
+
+	\begin{table}[ht]
+	\centering
+	\begin{tabular}{ m{0.2\textwidth} m {0.1\textwidth} m{0.15\textwidth} }
+		\toprule
+		A & $\longleftrightarrow$ & B \\
+		C & $\longleftrightarrow$ & D \\
+		\bottomrule	
+	\end{tabular}	
+	\caption{A sample table}	
+	\label{tab_sample}
+\end{table}
+
+\subsection{Long Tables}
+A sample long table is shown in Appendix~\ref{appendix_b}.
+
+\section{Equations}
+
+Here is a sample equation (Equation~\ref{eq_lineslope}):
+
+\begin{equation} \label{eq_lineslope}
+	y = mx + b
+\end{equation}

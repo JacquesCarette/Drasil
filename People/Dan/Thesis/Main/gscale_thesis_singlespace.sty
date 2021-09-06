@@ -1,0 +1,231 @@
+\makeatletter
+\oddsidemargin 0.5in \evensidemargin 0.5in
+\marginparwidth 40pt \marginparsep 10pt
+\topmargin 0pt \headsep .5in
+%\textheight 8.1in \textwidth 6in
+\textheight 8.5in \textwidth 5.5in
+\brokenpenalty=10000
+\setlength{\headheight}{14.5pt}
+\renewcommand{\baselinestretch}{1}
+% 1.5 is double space
+
+\def\cl@chapter{\@elt{section}\@elt{footnote}}
+%\def\thefigure{\@arabic\c@figure}
+%\def\thetable{\@arabic\c@table}
+%\def\theequation{\arabic{equation}}
+
+\def\@xxfloat#1[#2]{\ifhmode \@bsphack\@floatpenalty -\@Mii\else
+   \@floatpenalty-\@Miii\fi\def\@captype{#1}\ifinner
+      \@parmoderr\@floatpenalty\z@
+    \else\@next\@currbox\@freelist{\@tempcnta\csname ftype@#1\endcsname
+       \multiply\@tempcnta\@xxxii\advance\@tempcnta\sixt@@n
+       \@tfor \@tempa :=#2\do
+                        {\if\@tempa h\advance\@tempcnta \@ne\fi
+                         \if\@tempa t\advance\@tempcnta \tw@\fi
+                         \if\@tempa b\advance\@tempcnta 4\relax\fi
+                         \if\@tempa p\advance\@tempcnta 8\relax\fi
+         }\global\count\@currbox\@tempcnta}\@fltovf\fi
+    \global\setbox\@currbox\vbox\bgroup
+    \def\baselinestretch{1}\@normalsize
+    \boxmaxdepth\z@
+    \hsize\columnwidth \@parboxrestore}
+\long\def\@footnotetext#1{\insert\footins{\def\baselinestretch{1}\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+   \edef\@currentlabel{\csname p@footnote\endcsname\@thefnmark}\@makefntext
+    {\rule{\z@}{\footnotesep}\ignorespaces
+      #1\strut}}}
+
+\def\shortauthor#1{\gdef\@shortauthor{#1}}
+\def\field#1{\gdef\@field{#1}}
+\def\dept#1{\gdef\@dept{#1}}
+\def\degree#1{\gdef\@degree{#1}}
+\def\degreename#1{\gdef\@degreename{#1}}
+\def\halftitle#1{\gdef\@halftitle{#1}}
+\def\prevdegreeone#1{\gdef\@prevdegreeone{#1}}
+\def\prevdegreetwo#1{\gdef\@prevdegreetwo{#1}}
+\def\principaladviser#1{\gdef\@principaladviser{#1}}
+\def\advis@r{Adviser}
+\def\principaladvisor#1{\gdef\@principaladviser{#1}\gdef\advis@r{Advisor}}
+\def\firstreader#1{\gdef\@firstreader{#1}}
+\def\secondreader#1{\gdef\@secondreader{#1}}
+\def\submitdate#1{\gdef\@submitdate{#1}}
+\def\copyrightyear#1{\gdef\@copyrightyear{#1}} % \author, \title in report
+\def\@title{}\def\@author{}\def\@dept{Computing \& Software}
+\def\@halftitle{\@title}
+\def\@prevdegreeone{B.Sc.}
+\def\@prevdegreetwo{B.Sc.}	
+\def\@degree{Master of Applied Science}
+\def\@degreename{\@dept}
+\def\@principaladviser{}\def\@firstreader{}\def\@secondreader{}
+\def\@submitdate{\ifcase\the\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \space \number\the\year}
+\ifnum\month=12
+    \@tempcnta=\year \advance\@tempcnta by 1
+    \edef\@copyrightyear{\number\the\@tempcnta}
+\else
+    \def\@copyrightyear{\number\the\year}
+\fi
+\newif\ifcopyright \newif\iffigurespage \newif\iftablespage \newif\ifsignature
+\copyrighttrue \figurespagetrue \tablespagetrue \signaturefalse
+
+
+\def\halftitlep{
+    \thispagestyle{empty}
+   \null\vfill
+    \begin{center}
+       \LARGE \uppercase\expandafter{\@halftitle}
+    \end{center}
+      \vfill
+    \vskip1in\newpage\setcounter{page}{1}}
+
+\def\titlep{
+    \thispagestyle{empty}
+    \null\vskip1in
+    \begin{center}
+        \large\uppercase\expandafter{\@title}
+    \end{center}
+\vfill
+        \begin{center}
+                \rm\uppercase{By}\\
+                \uppercase\expandafter{\@author, \@prevdegreetwo}\\
+         \end{center}\vskip.5in
+    \vfill
+    \begin{center}
+      \sc   a thesis\\
+      submitted to the department of \@dept\\
+        and  the school of graduate studies\\
+        of mcmaster university\\
+        in partial fulfilment of the requirements\\
+       for the degree of\\
+        Master of Applied Science
+    \end{center}
+    \vfill
+
+  \begin{center}
+   \large
+   \copyright\ Copyright\ by \@author, \@submitdate\\
+   All Rights Reserved
+    \end{center}
+    %\vskip.5in
+    \newpage}
+
+\def\copyrightpage{%
+    \begin{center}
+        \Large\copyright\ Copyright \@copyrightyear\\
+        by\\
+        \@author\\
+    \end{center}
+    \vfill\vskip1in\newpage} \normalsize
+
+\long\def\signature#1{%
+\begin{center}
+\begin{minipage}{4in}
+\parindent=0pt
+I certify that I have read this thesis and that in my opinion
+it is fully adequate, in scope and in quality, as a dissertation for the degree
+of \@degree.
+\par
+\vspace{.5in}
+\hbox to 4in{\hfil\shortstack{\vrule width 3in height 0.4pt\\#1}}
+\end{minipage}
+\end{center}}
+
+ \def\signaturepage{%
+        \noindent
+        Master of Applied Science (\@copyrightyear) \hfill  McMaster University \\
+        (\@dept)                                \hfill  Hamilton, Ontario, Canada
+
+
+        \vspace{1in}
+        \noindent
+        \begin{tabular}{ll}
+        TITLE:           & \parbox[t]{3.5in}{\@title} \\ \\
+        AUTHOR:          & \parbox[t]{3.5in}{\@author \\ \@prevdegreeone} \\ \\
+        SUPERVISOR:      & \parbox[t]{3.5in}{\@principaladviser} \\ \\
+        NUMBER OF PAGES: & \parbox[t]{3.5in}{\pageref{NumPrefacePages}, \pageref{NumDocumentPages}}
+        \end{tabular}
+}
+
+
+\def\beforepreface{
+%\doublespacing
+	\hypersetup{pageanchor=false}
+    \pagenumbering{roman}
+    \pagestyle{plain}
+    \halftitlep
+    \titlep
+%    \ifcopyright\copyrightpage\fi
+    \signaturepage
+    }
+
+\def\prefacesection#1{
+    \chapter*{#1}
+    \addcontentsline{toc}{chapter}{#1}}
+
+\def\referencepageswithnotations#1{\newpage
+	%\doublespacing
+	\tableofcontents
+	
+	\iffigurespage
+	{\newpage
+		\addvspace{10pt}
+		\let\saveaddvspace=\addvspace
+		\def\addvspace##1{}
+		\listoffigures
+		\let\addvspace=\saveaddvspace}
+	\fi
+	
+	\iftablespage
+	{\newpage
+		\addvspace{10pt}
+		\let\saveaddvspace=\addvspace
+		\def\addvspace##1{}
+		\listoftables
+		\let\addvspace=\saveaddvspace}
+	\fi
+	\input{#1}
+	\label{NumPrefacePages}}
+
+\def\referencepages{\newpage
+%\doublespacing
+    \tableofcontents
+
+    \iffigurespage
+        {\newpage
+        \addvspace{10pt}
+        \let\saveaddvspace=\addvspace
+        \def\addvspace##1{}
+        \listoffigures
+        \let\addvspace=\saveaddvspace}
+    \fi
+    
+    \iftablespage
+        {\newpage
+        \addvspace{10pt}
+        \let\saveaddvspace=\addvspace
+        \def\addvspace##1{}
+        \listoftables
+        \let\addvspace=\saveaddvspace}
+    \fi
+    \label{NumPrefacePages}}
+    
+\def\afterpreface{
+	\hypersetup{pageanchor=true}
+	\newpage    
+    \pagenumbering{arabic}
+    %\doublespacing
+    \pagestyle{fancy}
+
+\lhead[{M.A.Sc. Thesis -- \@shortauthor}]   {{M.A.Sc. Thesis -- \@shortauthor}}
+\chead[{}]  {{}} \rhead[{McMaster University -- \@field}]
+{{McMaster University -- \@field}} \lfoot[{}] {{}}
+\cfoot[{\thepage}]  {{\thepage}} \rfoot[ {}]{{}} }
+
+% Start with pagestyle{headings} in case front matter isn't processed
+\pagestyle{headings}
+\makeatother

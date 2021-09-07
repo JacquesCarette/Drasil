@@ -23,7 +23,7 @@ ddErrSig
   = ddE ddErrSigDefn [dRef johnson2008] Nothing "ddProcessError"
       [ddErrSigNote]
 
-ddErrSigDefn :: QDefinition Expr
+ddErrSigDefn :: SimpleQDef
 ddErrSigDefn = mkQuantDef qdProcessErrorFD ddErrSigEqn
 
 ddErrSigEqn :: Expr
@@ -48,7 +48,7 @@ ddPropCtrl
   = ddE ddPropCtrlDefn [dRef johnson2008] Nothing "ddPropCtrl"
       [ddPropCtrlNote]
 
-ddPropCtrlDefn :: QDefinition Expr
+ddPropCtrlDefn :: SimpleQDef
 ddPropCtrlDefn = mkQuantDef qdPropControlFD ddPropCtrlEqn
 
 ddPropCtrlEqn :: Expr
@@ -69,7 +69,7 @@ ddDerivCtrl
   = ddE ddDerivCtrlDefn [dRef johnson2008] Nothing "ddDerivCtrl"
       [ddDerivCtrlNote]
 
-ddDerivCtrlDefn :: QDefinition Expr
+ddDerivCtrlDefn :: SimpleQDef
 ddDerivCtrlDefn = mkQuantDef qdDerivativeControlFD ddDerivCtrlEqn
 
 ddDerivCtrlEqn :: Expr
@@ -92,7 +92,7 @@ ddCtrlVar :: DataDefinition
 ddCtrlVar
   = ddE ddCtrlVarDefn [dRef johnson2008] Nothing "ddCtrlVar" [ddCtrlNote]
 
-ddCtrlVarDefn :: QDefinition Expr
+ddCtrlVarDefn :: SimpleQDef
 ddCtrlVarDefn = mkQuantDef qdCtrlVarFD ddCtrlEqn
 
 ddCtrlEqn :: Expr

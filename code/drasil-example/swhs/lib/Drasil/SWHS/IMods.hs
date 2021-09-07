@@ -276,7 +276,7 @@ heatEInWtrMK :: ModelKind Expr
 heatEInWtrMK = equationalModel "heatEInWtrIM"
   (nounPhraseSP "Heat energy in the water") heatEInWtrFD
 
-heatEInWtrFD :: QDefinition Expr
+heatEInWtrFD :: SimpleQDef
 heatEInWtrFD = mkFuncDefByQ watE [time] htWtrExpr
 
 htWtrExpr :: Expr

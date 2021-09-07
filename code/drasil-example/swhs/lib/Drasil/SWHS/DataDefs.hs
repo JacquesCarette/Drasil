@@ -20,7 +20,7 @@ import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmHTC, pcmMass, pcmSA, pcmVol,
   tankLength, tankVol, tauLP, tauSP, tauW, wDensity, wMass, wVol)
 
-qDefs :: [QDefinition Expr]
+qDefs :: [SimpleQDef]
 qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD, 
   balanceDecayTimeQD, balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD, 
   ddMeltFracQD, aspRatQD]
@@ -34,7 +34,7 @@ dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate,
 --    terms, some using defns, and some with a brand new description.
 --    I think this will need an overhaul after we fix Data Definitions.
 
-waterMassQD :: QDefinition Expr
+waterMassQD :: SimpleQDef
 waterMassQD = mkQuantDef wMass waterMassEqn
 
 waterMassEqn :: Expr
@@ -48,7 +48,7 @@ waterMass = ddENoRefs waterMassQD Nothing "waterMass" []
 
 ----
 
-waterVolumeQD :: QDefinition Expr
+waterVolumeQD :: SimpleQDef
 waterVolumeQD = mkQuantDef wVol waterVolumeEqn
 
 waterVolumeEqn :: Expr
@@ -64,7 +64,7 @@ waterVolume = ddENoRefs waterVolumeQD Nothing "waterVolume_pcm"
 
 ----
 
-tankVolumeQD :: QDefinition Expr
+tankVolumeQD :: SimpleQDef
 tankVolumeQD = mkQuantDef tankVol tankVolumeEqn
 
 tankVolumeEqn :: Expr
@@ -75,7 +75,7 @@ tankVolume = ddENoRefs tankVolumeQD Nothing "tankVolume" []
 
 ----
 
-balanceDecayRateQD :: QDefinition Expr
+balanceDecayRateQD :: SimpleQDef
 balanceDecayRateQD = mkQuantDef tauW balanceDecayRateEqn
 
 balanceDecayRateEqn :: Expr
@@ -91,7 +91,7 @@ balanceDecayRate = ddE balanceDecayRateQD [dRef koothoor2013]
 
 ----
 
-balanceDecayTimeQD :: QDefinition Expr
+balanceDecayTimeQD :: SimpleQDef
 balanceDecayTimeQD = mkQuantDef eta balanceDecayTimeEqn
 
 balanceDecayTimeEqn :: Expr
@@ -103,7 +103,7 @@ balanceDecayTime = ddE balanceDecayTimeQD [dRef koothoor2013]
 
 ----
 
-balanceSolidPCMQD :: QDefinition Expr
+balanceSolidPCMQD :: SimpleQDef
 balanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
@@ -116,7 +116,7 @@ balanceSolidPCM = ddE balanceSolidPCMQD [dRef lightstone2012]
 
 ----
 
-balanceLiquidPCMQD :: QDefinition Expr
+balanceLiquidPCMQD :: SimpleQDef
 balanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
@@ -129,7 +129,7 @@ balanceLiquidPCM = ddE balanceLiquidPCMQD [dRef lightstone2012]
 
 ----
 
-ddHtFusionQD :: QDefinition Expr
+ddHtFusionQD :: SimpleQDef
 ddHtFusionQD = mkQuantDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
@@ -148,7 +148,7 @@ htFusionNote = foldlSent [atStartNP (the htFusion),
 
 ----
 
-ddMeltFracQD :: QDefinition Expr
+ddMeltFracQD :: SimpleQDef
 ddMeltFracQD = mkQuantDef meltFrac meltFracEqn
 
 --FIXME: "Phi is the melt fraction" is produced; 
@@ -166,7 +166,7 @@ ddMeltFrac = ddE ddMeltFracQD [dRef koothoor2013]
 
 ----
 
-aspRatQD :: QDefinition Expr
+aspRatQD :: SimpleQDef
 aspRatQD = mkQuantDef aspectRatio aspRatEq
 
 aspRatEq :: Expr

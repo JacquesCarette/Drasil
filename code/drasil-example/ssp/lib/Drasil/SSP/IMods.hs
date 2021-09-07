@@ -57,7 +57,7 @@ fctSfty = im (equationalModel' fctSftyQD)
   (qw fs) [] (map dRef [chen2005, karchewski2012])
   (Just fctSftyDeriv) "fctSfty" [fctSftyDesc]
 
-fctSftyQD :: QDefinition Expr
+fctSftyQD :: SimpleQDef
 fctSftyQD = mkQuantDef' fs factorOfSafety fctSftyExpr
 
 fctSftyExpr :: Expr
@@ -381,7 +381,7 @@ nrmShrForMK :: ModelKind Expr
 nrmShrForMK = equationalModel "nrmShrForIM"
   (nounPhraseSP "normal and shear force proportionality constant") nrmShrForQD
 
-nrmShrForQD :: QDefinition Expr
+nrmShrForQD :: SimpleQDef
 nrmShrForQD = mkQuantDef normToShear nrmShrFExpr
 
 nrmShrFExpr :: Expr
@@ -597,7 +597,7 @@ crtSlpIdMK :: ModelKind Expr
 crtSlpIdMK = equationalModel "crtSlpIdIM"
   (nounPhraseSP "critical slip surface identification") crtSlpIdQD
 
-crtSlpIdQD :: QDefinition Expr
+crtSlpIdQD :: SimpleQDef
 crtSlpIdQD = mkQuantDef fsMin crtSlpIdExpr
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!

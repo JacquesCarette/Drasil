@@ -117,5 +117,5 @@ qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input
 qwC x y = (qw x, Just y)
 
 -- | Grab all related 'QDefinition's from a list of instance models.
-getEqModQdsFromIm :: [InstanceModel] -> [QDefinition Expr]
+getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
 getEqModQdsFromIm ims = getEqModQds (map _mk ims)

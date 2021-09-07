@@ -20,7 +20,7 @@ speedIX, speedIY :: DataDefinition
 speedIX = ddENoRefs speedIXQD Nothing "speedIX" [speedRef, figRef]
 speedIY = ddENoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
 
-speedIXQD, speedIYQD :: QDefinition Expr
+speedIXQD, speedIYQD :: SimpleQDef
 speedIXQD = mkQuantDef ixVel $ sy iSpeed `mulRe` cos (sy launAngle)
 speedIYQD = mkQuantDef iyVel $ sy iSpeed `mulRe` sin (sy launAngle)
 

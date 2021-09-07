@@ -38,5 +38,5 @@ message :: QuantityDict
 message = vc "message" (nounPhraseSent (S "output message as a string")) lS String
 
 ---
-tol :: QDefinition Expr
+tol :: SimpleQDef
 tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Rational) (perc 2 2)

@@ -103,11 +103,11 @@ ipSimTime
 ipSimTimeUnc = uq ipSimTime defaultUncrt
 qdSimTime = qw ipSimTime
 
-odeAbsTolConst, odeRelTolConst :: QDefinition Expr
+odeAbsTolConst, odeRelTolConst :: SimpleQDef
 
 dqdAbsTol, dqdRelTol :: DefinedQuantityDict
 
-pidConstants :: [QDefinition Expr]
+pidConstants :: [SimpleQDef]
 pidConstants = [odeAbsTolConst, odeRelTolConst]
 
 pidDqdConstants :: [DefinedQuantityDict]

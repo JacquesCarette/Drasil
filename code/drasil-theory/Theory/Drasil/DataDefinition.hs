@@ -30,10 +30,10 @@ makeLenses ''DDPkt
 -- | A data definition is a 'QDefinition' that may have additional notes: 
 -- the scope, any references (as 'DecRef's), maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
 data DataDefinition where
-  DDE  :: QDefinition Expr -> DDPkt -> DataDefinition
+  DDE  :: SimpleQDef -> DDPkt -> DataDefinition
   DDME :: QDefinition ModelExpr -> DDPkt -> DataDefinition
 
-ddQD :: Lens' (QDefinition Expr) a -> Lens' (QDefinition ModelExpr) a -> Lens' DataDefinition a
+ddQD :: Lens' (SimpleQDef) a -> Lens' (QDefinition ModelExpr) a -> Lens' DataDefinition a
 ddQD lqde lqdme = lens g s
   where
     g (DDE  qd _) = qd ^. lqde
@@ -92,12 +92,12 @@ instance Referable          DataDefinition where
 -- * Constructors
 
 -- | Smart constructor for data definitions.
-ddE :: QDefinition Expr -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+ddE :: SimpleQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddE q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
 ddE q refs der sn = DDE q . DDPkt Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
-ddENoRefs :: QDefinition Expr -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+ddENoRefs :: SimpleQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddENoRefs q der sn = DDE q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions.
@@ -110,10 +110,10 @@ ddMENoRefs :: QDefinition ModelExpr -> Maybe Derivation -> String -> [Sentence] 
 ddMENoRefs q der sn = DDME q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Extracts the 'QDefinition e' from a 'DataDefinition'.
-qdFromDD :: DataDefinition -> Either (QDefinition Expr) (QDefinition ModelExpr)
+qdFromDD :: DataDefinition -> Either (SimpleQDef) (QDefinition ModelExpr)
 qdFromDD (DDE  qd _) = Left qd
 qdFromDD (DDME qd _) = Right qd
 
-qdEFromDD :: DataDefinition -> Maybe (QDefinition Expr)
+qdEFromDD :: DataDefinition -> Maybe (SimpleQDef)
 qdEFromDD (DDE qd _) = Just qd
 qdEFromDD _          = Nothing

@@ -55,7 +55,7 @@ angularAccelMK_1 :: ModelKind Expr
 angularAccelMK_1 = equationalModel "angularAccelerationIM1"
   (nounPhraseSP "calculation of angular acceleration") angularAccelFD_1
 
-angularAccelFD_1 :: QDefinition Expr
+angularAccelFD_1 :: SimpleQDef
 angularAccelFD_1 = mkFuncDefByQ angularAccel_1
   [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularAccelExpr_1
 
@@ -74,7 +74,7 @@ angularAccelMK_2 :: ModelKind Expr
 angularAccelMK_2 = equationalModel "angularAccelerationIM2"
   (nounPhraseSP "calculation of angular acceleration") angularAccelFD_2
 
-angularAccelFD_2 :: QDefinition Expr
+angularAccelFD_2 :: SimpleQDef
 angularAccelFD_2 = mkFuncDefByQ angularAccel_2
   [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularAccelExpr_2
 

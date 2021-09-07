@@ -38,5 +38,5 @@ orientation = ucs' CM.orient   lPhi Radians radian
 
 -- * Constants
 
-piConst :: QDefinition Expr
+piConst :: SimpleQDef
 piConst = mkQuantDef pi_ (dbl 3.14159265)

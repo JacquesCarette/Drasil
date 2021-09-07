@@ -31,7 +31,7 @@ positionGEqn = deriv (sy position) time
 positionXDD_1 :: DataDefinition
 positionXDD_1 = ddENoRefs positionXQD_1 Nothing "positionXDD1" [positionXRef_1, positionXFigRef_1]
 
-positionXQD_1 :: QDefinition Expr
+positionXQD_1 :: SimpleQDef
 positionXQD_1 = mkQuantDef xPos_1 positionXEqn_1
 
 positionXEqn_1 :: Expr
@@ -49,7 +49,7 @@ positionXRef_1 = ch xPos_1 `S.isThe` phrase horizontalPos
 positionYDD_1 :: DataDefinition
 positionYDD_1 = ddENoRefs positionYQD_1 Nothing "positionYDD1" [positionYRef_1, positionYFigRef_1]
 
-positionYQD_1 :: QDefinition Expr
+positionYQD_1 :: SimpleQDef
 positionYQD_1 = mkQuantDef yPos_1 positionYEqn_1
 
 positionYEqn_1 :: Expr
@@ -67,7 +67,7 @@ positionYRef_1 = ch yPos_1 `S.isThe` phrase verticalPos
 positionXDD_2 :: DataDefinition
 positionXDD_2 = ddENoRefs positionXQD_2 Nothing "positionXDD2" [positionXRef_2, positionXFigRef_2]
 
-positionXQD_2 :: QDefinition Expr
+positionXQD_2 :: SimpleQDef
 positionXQD_2 = mkQuantDef xPos_2 positionXEqn_2
 
 positionXEqn_2 :: Expr
@@ -85,7 +85,7 @@ positionXRef_2 = ch xPos_2 `S.isThe` phrase horizontalPos
 positionYDD_2 :: DataDefinition
 positionYDD_2 = ddENoRefs positionYQD_2 Nothing "positionYDD2" [positionYRef_2, positionYFigRef_2]
 
-positionYQD_2 :: QDefinition Expr
+positionYQD_2 :: SimpleQDef
 positionYQD_2 = mkQuantDef yPos_2 positionYEqn_2
 
 positionYEqn_2 :: Expr
@@ -115,7 +115,7 @@ accelGEqn = deriv (sy velocity) time
 forceGDD :: DataDefinition
 forceGDD = ddENoRefs forceGQD Nothing "forceGDD" []
 
-forceGQD :: QDefinition Expr
+forceGQD :: SimpleQDef
 forceGQD = mkQuantDef force forceGEqn
 
 forceGEqn :: Expr

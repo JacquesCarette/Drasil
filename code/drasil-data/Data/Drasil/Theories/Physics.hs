@@ -97,7 +97,7 @@ hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
 torqueDD :: DataDefinition
 torqueDD = ddENoRefs torque Nothing "torque" [torqueDesc] 
 
-torque :: QDefinition Expr
+torque :: SimpleQDef
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
@@ -110,7 +110,7 @@ torqueDesc = foldlSent [S "The", phrase torque,
 
 -- * Vector Magnitude
 
-vecMagQD :: QDefinition Expr
+vecMagQD :: SimpleQDef
 vecMagQD = mkQuantDef QP.speed speedEqn
 
 magNote :: Sentence

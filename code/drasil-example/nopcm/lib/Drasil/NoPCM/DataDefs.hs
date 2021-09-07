@@ -9,13 +9,13 @@ import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayRateQD, tankVolume,
   tankVolumeQD, waterMass, waterMassQD)
 import Drasil.SWHS.Unitals (tankVol, wVol)
 
-qDefs :: [QDefinition Expr]
+qDefs :: [SimpleQDef]
 qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD]
 
 dataDefs :: [DataDefinition] 
 dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate]
 
-waterVolumeQD :: QDefinition Expr
+waterVolumeQD :: SimpleQDef
 waterVolumeQD = mkQuantDef wVol waterVolumeEqn
 
 waterVolumeEqn :: Expr

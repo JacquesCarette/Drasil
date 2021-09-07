@@ -49,9 +49,9 @@ data SystemInformation where
   , _configFiles :: [String]
   , _inputs      :: [h]
   , _outputs     :: [i]
-  , _defSequence :: [Block (QDefinition Expr)]
+  , _defSequence :: [Block SimpleQDef]
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  , _constants   :: [QDefinition Expr]
+  , _constants   :: [SimpleQDef]
   , _sysinfodb   :: ChunkDB
   , _usedinfodb  :: ChunkDB
   , refdb        :: ReferenceDB

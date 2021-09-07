@@ -14,7 +14,7 @@ symbols = htOutputs ++ htInputs
 dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 
-qDefs :: [QDefinition Expr]
+qDefs :: [SimpleQDef]
 qDefs = [htTransCladFuel, htTransCladCool]
 
 htVars :: [QuantityDict]
@@ -34,7 +34,7 @@ gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
 cladCond     = vc "cladCond"     (cnIES "clad conductivity") (sub lK lClad) Real
 
 htTransCladCoolEq, htTransCladFuelEq :: Expr
-htTransCladCool, htTransCladFuel :: QDefinition Expr
+htTransCladCool, htTransCladFuel :: SimpleQDef
 
 ---
 

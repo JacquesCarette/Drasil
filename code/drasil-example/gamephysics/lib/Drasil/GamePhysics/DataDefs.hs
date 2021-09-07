@@ -38,7 +38,7 @@ dataDefs = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
 ctrOfMassDD :: DataDefinition
 ctrOfMassDD = ddENoRefs ctrOfMass Nothing "ctrOfMass" [rigidBodyAssump]
 
-ctrOfMass :: QDefinition Expr
+ctrOfMass :: SimpleQDef
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (variable "i") is a horrible hack
@@ -194,7 +194,7 @@ chaslesDD :: DataDefinition
 chaslesDD = ddE chasles [dRef chaslesWiki] Nothing "chaslesThm" 
   [chaslesThmNote, rigidBodyAssump]
 
-chasles :: QDefinition Expr
+chasles :: SimpleQDef
 chasles = mkQuantDef' velB (nounPhraseSP "Chasles' theorem") chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
@@ -214,7 +214,7 @@ impulseVDD :: DataDefinition
 impulseVDD = ddENoRefs impulseV (Just impulseVDeriv) "impulseV"
   [impulseVDesc, rigidBodyAssump]
 
-impulseV :: QDefinition Expr
+impulseV :: SimpleQDef
 impulseV = mkQuantDef QP.impulseV impulseVEqn
 
 impulseVEqn :: Expr
@@ -245,7 +245,7 @@ reVelInCollDD :: DataDefinition
 reVelInCollDD = ddENoRefs reVelInColl Nothing "reVeInColl"
   [reVelInCollDesc, rigidBodyAssump]
 
-reVelInColl :: QDefinition Expr
+reVelInColl :: SimpleQDef
 reVelInColl = mkQuantDef initRelVel reVelInCollEqn
 
 reVelInCollEqn :: Expr
@@ -265,7 +265,7 @@ coeffRestitutionDD :: DataDefinition
 coeffRestitutionDD = ddENoRefs coeffRestitution Nothing "coeffRestitution"
  [coeffRestitutionDesc]
 
-coeffRestitution :: QDefinition Expr
+coeffRestitution :: SimpleQDef
 coeffRestitution = mkQuantDef QP.restitutionCoef coeffRestitutionEqn
 
 coeffRestitutionEqn :: Expr
@@ -285,7 +285,7 @@ kEnergyDD :: DataDefinition
 kEnergyDD = ddENoRefs kEnergy Nothing "kEnergy"
  [kEnergyDesc, rigidTwoDAssump, noDampingAssump] 
 
-kEnergy :: QDefinition Expr
+kEnergy :: SimpleQDef
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
@@ -299,7 +299,7 @@ momentOfInertiaDD :: DataDefinition
 momentOfInertiaDD = ddENoRefs momentOfInertia Nothing "momentOfInertia"
  [momentOfInertiaDesc, rigidBodyAssump] 
 
-momentOfInertia :: QDefinition Expr
+momentOfInertia :: SimpleQDef
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
@@ -316,7 +316,7 @@ potEnergyDD :: DataDefinition
 potEnergyDD = ddENoRefs potEnergy Nothing "potEnergy"
  [potEnergyDesc, rigidTwoDAssump, noDampingAssump] 
 
-potEnergy :: QDefinition Expr
+potEnergy :: SimpleQDef
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
 
 potEnergyEqn :: Expr

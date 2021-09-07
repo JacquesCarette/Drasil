@@ -23,7 +23,7 @@ dataDefs = [positionIX, positionIY, frequencyDD, angFrequencyDD, periodSHMDD]
 positionIX :: DataDefinition
 positionIX = ddENoRefs positionIXQD Nothing "positionIX" [positionRef, figRef]
 
-positionIXQD :: QDefinition Expr
+positionIXQD :: SimpleQDef
 positionIXQD = mkQuantDef QP.ixPos positionIXEqn
 
 positionIXEqn :: Expr
@@ -39,7 +39,7 @@ positionRef = ch QP.ixPos `S.isThe` phrase horizontalPos
 positionIY :: DataDefinition
 positionIY = ddENoRefs positionIYQD Nothing "positionIY" [positionReff, figReff]
 
-positionIYQD :: QDefinition Expr
+positionIYQD :: SimpleQDef
 positionIYQD = mkQuantDef QP.iyPos positionIYEqn
 
 positionIYEqn :: Expr
@@ -56,7 +56,7 @@ positionReff = ch QP.iyPos `S.isThe` phrase verticalPos
 frequencyDD :: DataDefinition
 frequencyDD = ddENoRefs frequencyDDQD Nothing "frequencyDD" [frequencyRef]
 
-frequencyDDQD :: QDefinition Expr
+frequencyDDQD :: SimpleQDef
 frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
 
 frequencyDDEqn :: Expr
@@ -71,7 +71,7 @@ frequencyRef = ch QP.frequency `S.isThe` S "number of back and forth swings in o
 angFrequencyDD :: DataDefinition
 angFrequencyDD = ddENoRefs angFrequencyDDQD Nothing "angFrequencyDD" [angFrequencyRef]
 
-angFrequencyDDQD :: QDefinition Expr
+angFrequencyDDQD :: SimpleQDef
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
@@ -85,7 +85,7 @@ angFrequencyRef = ch QP.period `S.is` S "from" +:+ refS periodSHMDD
 periodSHMDD :: DataDefinition
 periodSHMDD = ddENoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
 
-periodSHMDDQD :: QDefinition Expr
+periodSHMDDQD :: SimpleQDef
 periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn
 
 periodSHMDDEqn :: Expr

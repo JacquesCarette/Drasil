@@ -102,7 +102,7 @@ si
        _concepts = [] :: [DefinedQuantityDict],
        _datadefs = dataDefinitions, _instModels = [],
        _configFiles = [], _inputs = inputs, _outputs = outputs,
-       _defSequence = [] :: [Block (QDefinition Expr)],
+       _defSequence = [] :: [Block (SimpleQDef)],
        _constraints = map cnstrw inpConstrained, _constants = pidConstants,
        _sysinfodb = symbMap, _usedinfodb = usedDB, refdb = refDB}
 

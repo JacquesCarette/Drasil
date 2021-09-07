@@ -39,7 +39,7 @@ intersliceWtrF = ddE intersliceWtrFQD [dRef fredlund1977] Nothing "intersliceWtr
   []--Notes
 --FIXME: fill empty lists in
 
-intersliceWtrFQD :: QDefinition Expr
+intersliceWtrFQD :: SimpleQDef
 intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
@@ -60,7 +60,7 @@ angleA = ddE angleAQD [dRef fredlund1977] Nothing "angleA"
   [angleANotes]
 --FIXME: fill empty lists in
 
-angleAQD :: QDefinition Expr
+angleAQD :: SimpleQDef
 angleAQD = mkQuantDef baseAngle angleAEqn
 
 angleAEqn :: Expr
@@ -79,7 +79,7 @@ angleB = ddE angleBQD [dRef fredlund1977] Nothing "angleB"
   [angleBNotes]--Notes
 --FIXME: fill empty lists in
 
-angleBQD :: QDefinition Expr
+angleBQD :: SimpleQDef
 angleBQD = mkQuantDef surfAngle angleBEqn
 
 angleBEqn :: Expr
@@ -97,7 +97,7 @@ lengthB :: DataDefinition
 lengthB = ddE lengthBQD [dRef fredlund1977] Nothing "lengthB" []--Notes
 --FIXME: fill empty lists in
 
-lengthBQD :: QDefinition Expr
+lengthBQD :: SimpleQDef
 lengthBQD = mkQuantDef baseWthX lengthBEqn
 
 lengthBEqn :: Expr
@@ -110,7 +110,7 @@ lengthLb = ddE lengthLbQD [dRef fredlund1977] Nothing "lengthLb"
   [lengthLbNotes]--Notes
 --FIXME: fill empty lists in
 
-lengthLbQD :: QDefinition Expr
+lengthLbQD :: SimpleQDef
 lengthLbQD = mkQuantDef baseLngth lengthLbEqn
 
 lengthLbEqn :: Expr
@@ -127,7 +127,7 @@ lengthLs = ddE lengthLsQD [dRef fredlund1977] Nothing "lengthLs"
   [lengthLsNotes]--Notes
 --FIXME: fill empty lists in
 
-lengthLsQD :: QDefinition Expr
+lengthLsQD :: SimpleQDef
 lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
@@ -144,7 +144,7 @@ slcHeight :: DataDefinition
 slcHeight = ddE slcHeightQD [dRef fredlund1977] Nothing "slcHeight"
   slcHeightNotes
 
-slcHeightQD :: QDefinition Expr
+slcHeightQD :: SimpleQDef
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
@@ -163,7 +163,7 @@ slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
 normStressDD :: DataDefinition
 normStressDD = ddE normStressQD [dRef huston2008] Nothing "normStress" []
 
-normStressQD :: QDefinition Expr
+normStressQD :: SimpleQDef
 normStressQD = mkQuantDef totNormStress normStressEqn
 
 normStressEqn :: Expr
@@ -174,7 +174,7 @@ normStressEqn = sy fn $/ sy genericA
 tangStressDD :: DataDefinition
 tangStressDD = ddE tangStressQD [dRef huston2008] Nothing "tangStress" []
 
-tangStressQD :: QDefinition Expr
+tangStressQD :: SimpleQDef
 tangStressQD = mkQuantDef tangStress tangStressEqn
 
 tangStressEqn :: Expr
@@ -186,7 +186,7 @@ ratioVariation :: DataDefinition
 ratioVariation = ddE ratioVarQD [dRef fredlund1977] Nothing
   "ratioVariation" []
 
-ratioVarQD :: QDefinition Expr
+ratioVarQD :: SimpleQDef
 ratioVarQD = mkQuantDef scalFunc ratioVarEqn
 
 ratioVarEqn :: Expr
@@ -202,7 +202,7 @@ convertFunc1 :: DataDefinition
 convertFunc1 = ddE convertFunc1QD (map dRef [chen2005, karchewski2012]) Nothing
   "convertFunc1" [convertFunc1Notes]
 
-convertFunc1QD :: QDefinition Expr
+convertFunc1QD :: SimpleQDef
 convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
 
 convertFunc1Eqn :: Expr
@@ -220,7 +220,7 @@ convertFunc2 :: DataDefinition
 convertFunc2 = ddE convertFunc2QD (map dRef [chen2005, karchewski2012]) Nothing
   "convertFunc2" [convertFunc2Notes]
 
-convertFunc2QD :: QDefinition Expr
+convertFunc2QD :: SimpleQDef
 convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
 
 convertFunc2Eqn :: Expr
@@ -292,16 +292,16 @@ sliceHghtRightDD = ddE sliceHghtRightQD [dRef fredlund1977] Nothing
 sliceHghtLeftDD = ddE sliceHghtLeftQD [dRef fredlund1977] Nothing
   "sliceHghtLeftDD" []--Notes
 
-nrmForceSumQD :: QDefinition Expr
+nrmForceSumQD :: SimpleQDef
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce `addRe` inxiM1 intNormForce)
 
-watForceSumQD :: QDefinition Expr
+watForceSumQD :: SimpleQDef
 watForceSumQD = ec watForceSum (inxi watrForce `addRe` inxiM1 watrForce)
 
-sliceHghtRightQD :: QDefinition Expr
+sliceHghtRightQD :: SimpleQDef
 sliceHghtRightQD = ec sliceHghtRight (inxi slopeHght $- inxi slipHght)
 
-sliceHghtLeftQD :: QDefinition Expr
+sliceHghtLeftQD :: SimpleQDef
 sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght $- inxiM1 slipHght)
 
 --------------------------

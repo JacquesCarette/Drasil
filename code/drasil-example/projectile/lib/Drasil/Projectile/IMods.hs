@@ -38,7 +38,7 @@ timeIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing time")
   (qw flightDur) [UpFrom (Exc, exactDbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
-timeQD :: QDefinition Expr 
+timeQD :: SimpleQDef 
 timeQD =  mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
@@ -77,7 +77,7 @@ landPosIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing pos
   (qw landPos) [UpFrom (Exc, exactDbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
-landPosQD :: QDefinition Expr
+landPosQD :: SimpleQDef
 landPosQD = mkQuantDef landPos E.landPosExpr
 
 landPosDeriv :: Derivation
@@ -110,7 +110,7 @@ offsetIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "offset") offsetQD)
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
-offsetQD :: QDefinition Expr
+offsetQD :: SimpleQDef
 offsetQD = mkQuantDef offset E.offset'
 ---
 messageIM :: InstanceModel
@@ -120,7 +120,7 @@ messageIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "output message") me
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
-messageQD :: QDefinition Expr
+messageQD :: SimpleQDef
 messageQD = mkQuantDef message E.message
 
 --- Notes

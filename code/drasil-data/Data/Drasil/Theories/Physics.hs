@@ -36,7 +36,7 @@ weightGD :: GenDefn
 weightGD = gd (equationalModel' weightQD) (getUnit QP.weight) (Just weightDeriv) [dRef weightSrc] 
   "weight" [{-Notes-}]
 
-weightQD :: QDefinition ModelExpr
+weightQD :: ModelQDef
 weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") $ express weightEqn
 
 weightSrc :: Reference
@@ -80,7 +80,7 @@ hsPressureGD :: GenDefn
 hsPressureGD = gd (equationalModel' hsPressureQD) (getUnit QP.pressure) Nothing
   [dRef hsPressureSrc] "hsPressure" [hsPressureNotes]
 
-hsPressureQD :: QDefinition ModelExpr
+hsPressureQD :: ModelQDef
 hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") $ express hsPressureEqn
 
 hsPressureSrc :: Reference
@@ -128,7 +128,7 @@ newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRQD :: QDefinition ModelExpr
+newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") $ express newtonSLRExpr
 
 newtonSLRExpr :: Expr

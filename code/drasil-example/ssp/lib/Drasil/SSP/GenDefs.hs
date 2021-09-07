@@ -189,7 +189,7 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
 
 -- 
 
-normShrR :: QDefinition ModelExpr
+normShrR :: ModelQDef
 normShrR = mkQuantDef intShrForce $ express nmShrRExpr
 
 nmShrRExpr :: Expr

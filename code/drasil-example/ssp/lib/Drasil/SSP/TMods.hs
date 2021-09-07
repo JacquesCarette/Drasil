@@ -39,7 +39,7 @@ factOfSafety = tm (equationalModelU "factOfSafetyTM" factOfSafetyQD)
   [factOfSafetyQD] [] [] [dRef fredlund1977] "factOfSafety" []
 
 ------------------------------------
-factOfSafetyQD :: QDefinition ModelExpr
+factOfSafetyQD :: ModelQDef
 factOfSafetyQD = mkQuantDef' fs factorOfSafety $ express factOfSafetyExpr
 
 factOfSafetyExpr :: Expr
@@ -81,7 +81,7 @@ mcShrStrgth = tm (equationalModelU "mcShrSrgth" mcShrStrgthQD)
   [mcShrStrgthQD] [] [] [dRef fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
-mcShrStrgthQD :: QDefinition ModelExpr
+mcShrStrgthQD :: ModelQDef
 mcShrStrgthQD = fromEqnSt' (shrStress ^. uid) (nounPhraseSP "Mohr-Coulumb shear strength")
  mcShrStrgthDesc (symbol shrStress) Real $ express mcShrStrgthExpr
 
@@ -111,7 +111,7 @@ effStress = tm (equationalModelU "effectiveStressTM" effStressQD)
   [effStressQD] [] [] [dRef fredlund1977] "effStress" [effStressDesc]
 
 ------------------------------------
-effStressQD :: QDefinition ModelExpr
+effStressQD :: ModelQDef
 effStressQD = fromEqnSt' (effectiveStress ^. uid) (nounPhraseSP "effective stress")
  effStressDesc (symbol effectiveStress) Real $ express effStressExpr
 

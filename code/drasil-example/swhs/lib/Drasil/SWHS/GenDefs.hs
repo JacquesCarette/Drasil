@@ -5,7 +5,7 @@ import Language.Drasil (ConceptChunk, mkQuantDef, makeRC, dRef, mkDerivName,
   phrase, plural, titleize, atStartNP, nounPhraseSP, refS, (+:+), (+:+.), ch,
   eS, sC, sParen, eqSymb, ConceptInstance, QDefinition, RelationConcept,
   MayHaveUnit(..), UnitDefn, UnitalChunk, Derivation,
-  NounPhrase(..), Sentence(S, EmptyS, (:+:)))
+  NounPhrase(..), Sentence(S, EmptyS, (:+:)), ModelQDef)
 import Language.Drasil.ModelExpr
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
 import Utils.Drasil
@@ -61,7 +61,7 @@ htFluxWaterFromCoil = gd (equationalModel' htFluxWaterFromCoilQD) (getUnit htFlu
   [dRef koothoor2013] "htFluxWaterFromCoil"
   [newtonLawNote htFluxC assumpLCCCW coil, refS assumpTHCCoT]
 
-htFluxWaterFromCoilQD :: QDefinition ModelExpr
+htFluxWaterFromCoilQD :: ModelQDef
 htFluxWaterFromCoilQD = mkQuantDef htFluxC htFluxWaterFromCoilExpr
 
 htFluxWaterFromCoilExpr :: ModelExpr
@@ -75,7 +75,7 @@ htFluxPCMFromWater = gd (equationalModel' htFluxPCMFromWaterQD) (getUnit htFluxP
   [dRef koothoor2013] "htFluxPCMFromWater"
   [newtonLawNote htFluxP assumpLCCWP phaseChangeMaterial]
 
-htFluxPCMFromWaterQD :: QDefinition ModelExpr
+htFluxPCMFromWaterQD :: ModelQDef
 htFluxPCMFromWaterQD = mkQuantDef htFluxP htFluxPCMFromWaterExpr
 
 htFluxPCMFromWaterExpr :: ModelExpr

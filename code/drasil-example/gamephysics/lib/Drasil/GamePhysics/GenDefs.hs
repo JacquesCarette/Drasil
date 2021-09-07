@@ -65,7 +65,7 @@ accelGravityGD :: GenDefn
 accelGravityGD = gd (equationalModel' accelGravityQD) (getUnit QP.acceleration) (Just accelGravityDeriv)
    [dRef accelGravitySrc] "accelGravity" [accelGravityDesc]
 
-accelGravityQD :: QDefinition ModelExpr
+accelGravityQD :: ModelQDef
 accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") $ express accelGravityExpr
 
 accelGravityDesc :: Sentence
@@ -149,7 +149,7 @@ impulseGD :: GenDefn
 impulseGD = gd (equationalModel' impulseQD) (getUnit QP.impulseS) Nothing
   [dRef impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
-impulseQD :: QDefinition ModelExpr
+impulseQD :: ModelQDef
 impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") $ express impulseExpr
 
 impulseExpr :: Expr

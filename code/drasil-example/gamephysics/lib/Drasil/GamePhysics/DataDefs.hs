@@ -66,7 +66,7 @@ linDispQDef = foldl (+:+) (EmptyS) def
 linDispDD :: DataDefinition
 linDispDD = ddMENoRefs linDisp Nothing "linDisp" [rigidBodyAssump]
 
-linDisp :: QDefinition ModelExpr
+linDisp :: ModelQDef
 linDisp = mkQuantDef QP.linearDisplacement dispEqn
 
 dispEqn :: ModelExpr
@@ -95,7 +95,7 @@ linVelQDef = foldl (+:+) (EmptyS) def
 linVelDD :: DataDefinition
 linVelDD = ddMENoRefs linVel Nothing "linVel" [rigidBodyAssump]
 
-linVel :: QDefinition ModelExpr
+linVel :: ModelQDef
 linVel = mkQuantDef QP.linearVelocity velEqn
 
 velEqn :: ModelExpr
@@ -113,7 +113,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 linAccDD :: DataDefinition
 linAccDD = ddMENoRefs linAcc Nothing "linAcc" [rigidBodyAssump]
 
-linAcc :: QDefinition ModelExpr
+linAcc :: ModelQDef
 linAcc = mkQuantDef QP.linearAccel accelEqn
 
 accelEqn :: ModelExpr
@@ -131,7 +131,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 angDispDD :: DataDefinition
 angDispDD = ddMENoRefs angDisp Nothing "angDisp" [rigidTwoDAssump]
 
-angDisp :: QDefinition ModelExpr
+angDisp :: ModelQDef
 angDisp = mkQuantDef QP.angularDisplacement angDispEqn
 
 angDispEqn :: ModelExpr
@@ -149,7 +149,7 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 angVelDD :: DataDefinition
 angVelDD = ddMENoRefs angVel Nothing "angVel" [rigidTwoDAssump]
 
-angVel :: QDefinition ModelExpr
+angVel :: ModelQDef
 angVel = mkQuantDef QP.angularVelocity angVelEqn
 
 angVelEqn :: ModelExpr
@@ -167,7 +167,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 angAccelDD :: DataDefinition
 angAccelDD = ddMENoRefs angAccel Nothing "angAccel" [rigidTwoDAssump]
 
-angAccel :: QDefinition ModelExpr
+angAccel :: ModelQDef
 angAccel = mkQuantDef QP.angularAccel angAccelEqn
 
 angAccelEqn :: ModelExpr

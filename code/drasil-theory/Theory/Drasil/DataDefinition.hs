@@ -31,9 +31,9 @@ makeLenses ''DDPkt
 -- the scope, any references (as 'DecRef's), maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
 data DataDefinition where
   DDE  :: SimpleQDef -> DDPkt -> DataDefinition
-  DDME :: QDefinition ModelExpr -> DDPkt -> DataDefinition
+  DDME :: ModelQDef -> DDPkt -> DataDefinition
 
-ddQD :: Lens' (SimpleQDef) a -> Lens' (QDefinition ModelExpr) a -> Lens' DataDefinition a
+ddQD :: Lens' (SimpleQDef) a -> Lens' (ModelQDef) a -> Lens' DataDefinition a
 ddQD lqde lqdme = lens g s
   where
     g (DDE  qd _) = qd ^. lqde
@@ -101,16 +101,16 @@ ddENoRefs :: SimpleQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefin
 ddENoRefs q der sn = DDE q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions.
-ddME :: QDefinition ModelExpr -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+ddME :: ModelQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddME q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
 ddME q refs der sn = DDME q . DDPkt Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
-ddMENoRefs :: QDefinition ModelExpr -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+ddMENoRefs :: ModelQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddMENoRefs q der sn = DDME q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Extracts the 'QDefinition e' from a 'DataDefinition'.
-qdFromDD :: DataDefinition -> Either (SimpleQDef) (QDefinition ModelExpr)
+qdFromDD :: DataDefinition -> Either (SimpleQDef) (ModelQDef)
 qdFromDD (DDE  qd _) = Left qd
 qdFromDD (DDME qd _) = Right qd
 

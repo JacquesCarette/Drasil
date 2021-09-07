@@ -74,5 +74,5 @@ gdNoRefs mkind u derivs sn_ =
   GD mkind (fmap unitWrapper u) derivs [] (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.
-getEqModQdsFromGd :: [GenDefn] -> [QDefinition ModelExpr]
+getEqModQdsFromGd :: [GenDefn] -> [ModelQDef]
 getEqModQdsFromGd = getEqModQds . map _mk

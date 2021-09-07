@@ -34,7 +34,7 @@ velXGD_1 :: GenDefn
 velXGD_1 = gdNoRefs (equationalModel' velXQD_1) (getUnit velocity) (Just velXDeriv_1) "velocityX1" [{-Notes-}]
 -- general definiton block, with equation, unit, refinement explanation
 
-velXQD_1 :: QDefinition ModelExpr
+velXQD_1 :: ModelQDef
 velXQD_1 = mkQuantDef' xVel_1 (the xComp `NP.of_` (velocity `ofThe` firstObject)) $ express E.velXExpr_1
 -- lable and equation
 
@@ -63,7 +63,7 @@ velDerivSent5 = S "Therefore, using the chain rule,"
 velYGD_1 :: GenDefn
 velYGD_1 = gdNoRefs (equationalModel' velYQD_1) (getUnit velocity) (Just velYDeriv_1) "velocityY1" []
 
-velYQD_1 :: QDefinition ModelExpr
+velYQD_1 :: ModelQDef
 velYQD_1 = mkQuantDef' yVel_1 (the yComp `NP.of_` (velocity `ofThe` firstObject)) $ express E.velYExpr_1
  
 velYDeriv_1 :: Derivation
@@ -84,7 +84,7 @@ velYDerivSent2_1 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.i
 velXGD_2 :: GenDefn
 velXGD_2 = gdNoRefs (equationalModel' velXQD_2) (getUnit velocity) (Just velXDeriv_2) "velocityX2" []
 
-velXQD_2 :: QDefinition ModelExpr
+velXQD_2 :: ModelQDef
 velXQD_2 = mkQuantDef' xVel_2 (the xComp `NP.of_` (velocity `ofThe` secondObject)) $ express E.velXExpr_2
 
 velXDeriv_2 :: Derivation
@@ -105,7 +105,7 @@ velXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S
 velYGD_2 :: GenDefn
 velYGD_2 = gdNoRefs (equationalModel' velYQD_2) (getUnit velocity) (Just velYDeriv_2) "velocityY2" []
 
-velYQD_2 :: QDefinition ModelExpr
+velYQD_2 :: ModelQDef
 velYQD_2 = mkQuantDef' yVel_2 (the yComp `NP.of_` (velocity `ofThe` secondObject)) $ express E.velYExpr_2
 
 velYDeriv_2 :: Derivation
@@ -126,7 +126,7 @@ velYDerivSent2_2 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.i
 accelXGD_1 :: GenDefn
 accelXGD_1 = gdNoRefs (equationalModel' accelXQD_1) (getUnit acceleration) (Just accelXDeriv_1) "accelerationX1" []
 
-accelXQD_1 :: QDefinition ModelExpr
+accelXQD_1 :: ModelQDef
 accelXQD_1 = mkQuantDef' xAccel_1 (the xComp `NP.of_` (acceleration `ofThe` firstObject)) $ express E.accelXExpr_1
 
 accelXDeriv_1:: Derivation
@@ -152,7 +152,7 @@ accelDerivSent5 = S "Simplifying,"
 accelYGD_1 :: GenDefn
 accelYGD_1 = gdNoRefs (equationalModel' accelYQD_1) (getUnit acceleration) (Just accelYDeriv_1) "accelerationY1" []
 
-accelYQD_1 :: QDefinition ModelExpr
+accelYQD_1 :: ModelQDef
 accelYQD_1 = mkQuantDef' yAccel_1 (the yComp `NP.of_` (acceleration `ofThe` firstObject)) $ express E.accelYExpr_1
 
 accelYDeriv_1:: Derivation
@@ -173,7 +173,7 @@ accelYDerivSent2_1 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:
 accelXGD_2 :: GenDefn
 accelXGD_2 = gdNoRefs (equationalModel' accelXQD_2) (getUnit acceleration) (Just accelXDeriv_2) "accelerationX2" []
 
-accelXQD_2 :: QDefinition ModelExpr
+accelXQD_2 :: ModelQDef
 accelXQD_2 = mkQuantDef' xAccel_2 (the xComp `NP.of_` (acceleration `ofThe` secondObject)) $ express E.accelXExpr_2
 
 accelXDeriv_2:: Derivation
@@ -194,7 +194,7 @@ accelXDerivSent2_2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel 
 accelYGD_2 :: GenDefn
 accelYGD_2 = gdNoRefs (equationalModel' accelYQD_2) (getUnit acceleration) (Just accelYDeriv_2) "accelerationY2" []
 
-accelYQD_2 :: QDefinition ModelExpr
+accelYQD_2 :: ModelQDef
 accelYQD_2 = mkQuantDef' yAccel_2 (the yComp `NP.of_` (acceleration `ofThe` secondObject)) $ express E.accelYExpr_2
 
 accelYDeriv_2:: Derivation

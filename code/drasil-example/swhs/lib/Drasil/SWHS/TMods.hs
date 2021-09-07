@@ -8,7 +8,7 @@ import Language.Drasil (ConceptChunk, dccWDS, fromEqnSt'', mkFuncDefByQ, qw, dRe
   dRefInfo, atStart, phrase, plural, makeURI, atStartNP, nounPhraseSP, refS,
   (!.), (+:), (+:+), (+:+.), ch, eS, sC, sParen, shortname', eqSymb, QDefinition,
   Definition(..), HasSpace(..), HasSymbol(..), Express(..),
-  Reference, RefInfo(Page), Sentence(S, (:+:), E))
+  Reference, RefInfo(Page), Sentence(S, (:+:), E), ModelQDef)
 import Language.Drasil.ModelExpr
 import Control.Lens ((^.))
 import Theory.Drasil (ConstraintSet, mkConstraintSet,
@@ -92,7 +92,7 @@ sensHtETemplate pc desc = tm (equationalModel' qd)
       eqn = sensHtEEqn pc
 
 
-sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> QDefinition ModelExpr
+sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> ModelQDef
 sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
   where np = nounPhraseSP ("Sensible heat energy" ++ case pc of
                                                        Liquid -> " (no state change)"
@@ -143,7 +143,7 @@ latentHtEMK :: ModelKind ModelExpr
 latentHtEMK = equationalModel "latentHtETM"
   (nounPhraseSP "Latent heat energy") latentHtEFD
 
-latentHtEFD :: QDefinition ModelExpr
+latentHtEFD :: ModelQDef
 latentHtEFD = mkFuncDefByQ latentHeat [time] latentHtEExpr
 
 latentHtEExpr :: ModelExpr
@@ -180,7 +180,7 @@ nwtnCoolingMK :: ModelKind ModelExpr
 nwtnCoolingMK = equationalModel "nwtnCoolingTM"
   (nounPhraseSP "Newton's law of cooling") nwtnCoolingFD
 
-nwtnCoolingFD :: QDefinition ModelExpr
+nwtnCoolingFD :: ModelQDef
 nwtnCoolingFD = mkFuncDefByQ htFlux [time] nwtnCoolingExpr
 
 nwtnCoolingExpr :: ModelExpr

@@ -32,7 +32,7 @@ newtonTL :: TheoryModel
 newtonTL = tmNoRefs (equationalModel' newtonTLQD) [qw force_1, qw force_2]
   ([] :: [ConceptChunk]) [newtonTLQD] [] [] "NewtonThirdLawMot" [newtonTLNote]
 
-newtonTLQD :: QDefinition ModelExpr
+newtonTLQD :: ModelQDef
 newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") $ express newtonTLExpr
 
 newtonTLExpr :: Expr
@@ -83,7 +83,7 @@ newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   [qw torque, qw momentOfInertia, qw angularAccel]
   ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRQD :: QDefinition ModelExpr
+newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") $ express newtonSLRExpr
 
 newtonSLRExpr :: Relation

@@ -40,13 +40,13 @@ accelerationEqn           = deriv (sy QP.velocity) QP.time
 ------------------------------------------------------------------------------------------------------
 -- * Concepts
 
-accelerationQD :: QDefinition ModelExpr
+accelerationQD :: ModelQDef
 accelerationQD = mkQuantDef QP.acceleration accelerationEqn
 
-velocityQD :: QDefinition ModelExpr
+velocityQD :: ModelQDef
 velocityQD = mkQuantDef QP.velocity velocityEqn
 
-newtonSLQD :: QDefinition ModelExpr
+newtonSLQD :: ModelQDef
 newtonSLQD = fromEqn' "force" (nounPhraseSP "Newton's second law of motion")
   newtonSLDesc (eqSymb QP.force) Real newtonSLEqn
 

@@ -41,7 +41,7 @@ velocityIXGD :: GenDefn
 velocityIXGD = gdNoRefs (equationalModel' velocityIXQD) (getUnit velocity)
            (Just velocityIXDeriv) "velocityIX" [{-Notes-}]
 
-velocityIXQD :: QDefinition ModelExpr
+velocityIXQD :: ModelQDef
 velocityIXQD = mkQuantDef' xVel (the xComp `NP.of_` (velocity `ofThe` pendulum))
     $ express E.velocityIXExpr
 
@@ -68,7 +68,7 @@ velocityIYGD :: GenDefn
 velocityIYGD = gdNoRefs (equationalModel' velocityIYQD) (getUnit velocity)
            (Just velocityIYDeriv) "velocityIY" [{-Notes-}]
 
-velocityIYQD :: QDefinition ModelExpr
+velocityIYQD :: ModelQDef
 velocityIYQD = mkQuantDef' yVel (the yComp `NP.of_` (velocity `ofThe` pendulum)) $ express E.velocityIYExpr
  
 velocityIYDeriv :: Derivation
@@ -89,7 +89,7 @@ accelerationIXGD :: GenDefn
 accelerationIXGD = gdNoRefs (equationalModel' accelerationIXQD) (getUnit acceleration)
            (Just accelerationIXDeriv) "accelerationIX" [{-Notes-}]
 
-accelerationIXQD :: QDefinition ModelExpr
+accelerationIXQD :: ModelQDef
 accelerationIXQD = mkQuantDef' xAccel (the xComp `NP.of_` (acceleration `ofThe` pendulum))
     $ express E.accelerationIXExpr
 
@@ -118,7 +118,7 @@ accelerationIYGD :: GenDefn
 accelerationIYGD = gdNoRefs (equationalModel' accelerationIYQD) (getUnit acceleration)
            (Just accelerationIYDeriv) "accelerationIY" [{-Notes-}]
 
-accelerationIYQD :: QDefinition ModelExpr
+accelerationIYQD :: ModelQDef
 accelerationIYQD = mkQuantDef' yAccel (the yComp `NP.of_` (acceleration `ofThe` pendulum)) $ express E.accelerationIYExpr
 
 accelerationIYDeriv :: Derivation
@@ -179,7 +179,7 @@ angFrequencyGD :: GenDefn
 angFrequencyGD = gdNoRefs (equationalModelU "angFrequencyGD" angFrequencyQD) (getUnit angularFrequency)
            (Just angFrequencyDeriv) "angFrequencyGD" [angFrequencyGDNotes]
 
-angFrequencyQD :: QDefinition ModelExpr
+angFrequencyQD :: ModelQDef
 angFrequencyQD = mkQuantDef' angularFrequency (angularFrequency `the_ofThe` pendulum) $ express E.angFrequencyExpr
 
 angFrequencyDeriv :: Derivation
@@ -215,7 +215,7 @@ periodPend :: GenDefn
 periodPend = gdNoRefs (equationalModelU "periodPendGD" periodPendQD) (getUnit period)
            (Just periodPendDeriv) "periodPend" [periodPendNotes]
 
-periodPendQD :: QDefinition ModelExpr
+periodPendQD :: ModelQDef
 periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) $ express E.periodPendExpr
 
 periodPendDeriv :: Derivation

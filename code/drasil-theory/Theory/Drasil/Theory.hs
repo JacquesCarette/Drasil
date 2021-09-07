@@ -23,9 +23,9 @@ class Theory t where
   spaces        :: Lens' t [SpaceDefn]
   quantities    :: Lens' t [QuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
-  defined_quant :: Lens' t [QDefinition ModelExpr]
+  defined_quant :: Lens' t [ModelQDef]
   invariants    :: Lens' t [ModelExpr]
-  defined_fun   :: Lens' t [QDefinition ModelExpr]
+  defined_fun   :: Lens' t [ModelQDef]
 
 data SpaceDefn -- FIXME: This should be defined.
 
@@ -53,9 +53,9 @@ data TheoryModel = TM
   , _spc   :: [SpaceDefn]
   , _quan  :: [QuantityDict]
   , _ops   :: [ConceptChunk]
-  , _defq  :: [QDefinition ModelExpr]
+  , _defq  :: [ModelQDef]
   , _invs  :: [ModelExpr]
-  , _dfun  :: [QDefinition ModelExpr]
+  , _dfun  :: [ModelQDef]
   , _rf    :: [DecRef]
   ,  lb    :: ShortName
   ,  ra    :: String
@@ -113,8 +113,8 @@ instance Referable TheoryModel where
 -- have the same type!
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
 tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr ->
-    [q] -> [c] -> [QDefinition ModelExpr] ->
-    [ModelExpr] -> [QDefinition ModelExpr] -> [DecRef] ->
+    [q] -> [c] -> [ModelQDef] ->
+    [ModelExpr] -> [ModelQDef] -> [DecRef] ->
     String -> [Sentence] -> TheoryModel
 tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
 tm mkind q c dq inv dfn r  lbe = 
@@ -123,7 +123,7 @@ tm mkind q c dq inv dfn r  lbe =
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr ->
-    [q] -> [c] -> [QDefinition ModelExpr] -> [ModelExpr] -> [QDefinition ModelExpr] -> 
+    [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs mkind q c dq inv dfn lbe = 
   TM mkind [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' $ S lbe)

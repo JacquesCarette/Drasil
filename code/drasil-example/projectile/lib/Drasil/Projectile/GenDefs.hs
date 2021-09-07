@@ -33,7 +33,7 @@ rectVelGD :: GenDefn
 rectVelGD = gd (equationalModel' rectVelQD) (getUnit projSpeed) (Just rectVelDeriv)
   [dRefInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
-rectVelQD :: QDefinition ModelExpr
+rectVelQD :: ModelQDef
 rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
@@ -57,7 +57,7 @@ rectPosGD :: GenDefn
 rectPosGD = gd (equationalModel' rectPosQD) (getUnit scalarPos) (Just rectPosDeriv)
   [dRefInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
-rectPosQD :: QDefinition ModelExpr
+rectPosQD :: ModelQDef
 rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase position,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
@@ -81,7 +81,7 @@ velVecGD :: GenDefn
 velVecGD = gdNoRefs (equationalModel' velVecQD) (getUnit velocity)
            (Just velVecDeriv) "velVec" [{-Notes-}]
 
-velVecQD :: QDefinition ModelExpr
+velVecQD :: ModelQDef
 velVecQD = mkQuantDef' velocity (nounPhraseSent $ foldlSent_ 
            [atStart velocity, S "vector as a function" `S.of_` phrase time `S.for`
             getAcc twoD, S "motion under", phrase QP.constAccel]) $ express E.velVecExpr
@@ -98,7 +98,7 @@ posVecGD :: GenDefn
 posVecGD = gdNoRefs (equationalModel' posVecQD) (getUnit position) 
            (Just posVecDeriv) "posVec" [{-Notes-}]
 
-posVecQD :: QDefinition ModelExpr
+posVecQD :: ModelQDef
 posVecQD = mkQuantDef' position (nounPhraseSent $ foldlSent_ 
   [atStart position, S "vector as a function" `S.of_` phrase time `S.for`
    getAcc twoD, S "motion under", phrase QP.constAccel])

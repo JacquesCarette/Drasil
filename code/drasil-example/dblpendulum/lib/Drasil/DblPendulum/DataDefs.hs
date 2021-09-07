@@ -19,7 +19,7 @@ dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYD
 positionGDD :: DataDefinition
 positionGDD = ddMENoRefs positionGQD Nothing "positionGDD" []
 
-positionGQD :: QDefinition ModelExpr
+positionGQD :: ModelQDef
 positionGQD = mkQuantDef velocity positionGEqn
 
 positionGEqn :: ModelExpr
@@ -103,7 +103,7 @@ positionYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
 accelGDD :: DataDefinition
 accelGDD = ddMENoRefs accelGQD Nothing "accelerationGDD" []
 
-accelGQD :: QDefinition ModelExpr
+accelGQD :: ModelQDef
 accelGQD = mkQuantDef acceleration accelGEqn
 
 accelGEqn :: ModelExpr

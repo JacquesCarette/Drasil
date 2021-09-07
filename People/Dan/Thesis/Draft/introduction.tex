@@ -1,0 +1,78 @@
+\chapter{Introduction}
+
+Documentation is good [source], yet it is not often prioritized on software
+projects. Code and other software artifacts say the same thing, but to different
+audiences - if they didn't, they would be describing different systems.
+
+Take, for example, a software requirements document. It is a human-readable
+abstraction of *what* the software is supposed to do. Whereas a design document
+is a human-readable version of *how* the software is supposed to fulfill its
+requirements. The source code itself is a computer-readable list of instructions
+combining *what* must be done and, in many languages, *how* that is to be
+accomplished.
+
+[Put in figures of an example from GlassBR/Projectile here, showing SRS, DD, and
+code versions of the same knowledge]
+
+[Figure] shows an example of the same information represented in several
+different views (requirements, detailed design, and source code). We aim to
+take advantage of the inherent redundancy across these views to distill a single
+source of information, thus removing the need to manually duplicate information
+across software artifacts.
+
+Manually writing and maintaining a full range of software artifacts (i.e.
+multiple documents for different audiences plus the source code) is
+redundant and tedious. Factor in deadlines, changing requirements, and other
+common issues faced during development and you have a perfect storm for
+inter-artifact syncronization issues.
+
+How can we avoid having our artifacts fall out of sync with each other?
+Some would argue "just write code!" And that is exactly what a number of other
+approaches have tried. Documentation generators like Doxygen, Javadoc, Pandoc,
+and more take a code-centric view of the problem. Typically, they work by having
+natural-language descriptions and/or explanations written as specially delimited
+comments in the code which are later automatically compiled into a
+human-readable document.
+
+While these approaches definitely have their place and can come in quite handy,
+they do not solve the underlying redundancy problem. The developers are still
+forced to manually write descriptions of systems in both code and comments.
+They also do not generate all software artifacts - commonly they are used to
+generate only API documentation targeted towards developers or user manuals.
+
+We propose a new framework, Drasil, alongside a knowledge-centric view of
+software, to help take advantage of inherent redundancy, while avoiding manual
+duplication and synchronization problems. Our approach looks at what underlies
+the problems we solve using software and capturing that "common" or "core"
+knowledge. We then use that knowledge to generate our software artifacts, thus
+gaining the benefits inherent to the generation process: lack of manual
+duplication, one source to maintain, and 'free' traceability of information.
+
+\section{Value in the mundane}
+??
+
+\section{Scope}
+We are well aware of the ambitious nature of attempting to solve the problem of
+manual duplication and unnecessary redundancy across all possible software
+systems. Frankly, it would be highly impractical to attempt to solve such a
+broad spectrum of problems. Each software domain poses its own challenges,
+alongside specific benefits and drawbacks. 
+
+Our work on Drasil is most relevant to software that is well-understood and 
+undergoes frequent change (maintenance). Good candidates for development using
+Drasil are long-lived (10+ years) software projects with artifacts of interest
+to multiple stakeholders. With that in mind, we have decided to focus on
+scientific computing (SC) software. Specifically, we are looking at software 
+that follows the pattern 'input -> process -> output'.
+
+SC software has a strong fundamental underpinning of well-understood concepts.
+It also has the benefit of seldomly changing, and when it does, existing models
+are not necessarily invalidated. For example, rigid-body problems in physics are
+well-understood and the underlying modeling equations are unlikely to change.
+However, should they change, the current models will likely remain as good
+approximations under a specific set of assumptions. For instance, who hasn't
+heard 'assume each body is a sphere' during a physics lecture?
+
+\section{Roadmap}
+
+\section{Contributions \& Publications}

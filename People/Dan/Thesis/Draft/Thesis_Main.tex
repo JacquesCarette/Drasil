@@ -25,16 +25,34 @@
 %mathematics
 \usepackage{xcolor}
 \numberwithin{equation}{section}                 % Numbers equations based on their section
+% ********************************
+
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornotes}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornotes}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornotes{blue}{SS}{#1}}
+\newcommand{\jc}[1]{\authornotes{red}{JC}{#1}}
+\newcommand{\ds}[1]{\authornotes{cyan}{DS}{#1}}
+
 
 % ********************************
 \begin{document}
-\beforepreface                                         % Half title page, title page, declaration page   
-  \include{layabstr}                                  % Lay Abstract
-  \include{abstr}                                      % Abstract
-  \include{dedic}                                      % Dedication
-  \include{acknowledgements}                 % Acknowledgements
-  \referencepageswithnotations{notation} % Table of Contents, List of Figures, List of Tables, Notations
-  %\referencepages                                 % No notations version (choose one)
+\beforepreface                           % Half title page, title page, 	
+										 %   declaration page   
+  \include{layabstr}                     % Lay Abstract
+  \include{abstr}                        % Abstract
+  \include{dedic}                        % Dedication
+  \include{acknowledgements}             % Acknowledgements
+  \referencepageswithnotations{notation} % Table of Contents, List of Figures, 
+  										 %   List of Tables, Notations
+  %\referencepages                       % No notations version (choose one)
 \afterpreface                      
   
   
@@ -43,7 +61,27 @@
         \setcounter{equation}{0}
         \setcounter{table}{0}
         
-  \include{sample_chapter}                  
+  \include{background}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{process}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{drasil}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{results}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{futureWork}                  
        \setcounter{figure}{0}
        \setcounter{equation}{0}
        \setcounter{table}{0}

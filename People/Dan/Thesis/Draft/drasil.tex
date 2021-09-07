@@ -1,0 +1,45 @@
+\chapter{Drasil}
+
+  **Section Roadmap:
+    -- This is where the real meat of Drasil is discussed (implementation details)
+    -- Intro to our knowledge-capture mechanisms
+      - Chunks/hierarchy
+      - Break down each with examples from the case studies.
+      - Look for 'interesting' examples (synonyms, acronyms, complexity, etc.)
+    -- Intro to the DSL
+      - Captured knowledge is useless without the transformations/rendering engine
+      - DSL for each softifact
+      
+\section{What Drasil is and isn't}
+  * Basically just restating some things from the intro in more depth
+  - Not a silver bullet
+  - Built around a specific set of assumptions, for a particular class of problems
+  - NOT an ontology / ontology builder
+
+\section{Our Ingredients: Organizing and Capturing Knowledge}
+  - Organization of knowledge implies a need for knowledge-capture mechanisms 
+    at different levels (different levels of abstraction / specificity)
+  - segues right into chunks/hierarchy
+   - project-specific vs “DB of knowledge”
+   - Make it clear this is NOT an ontology
+   - Look for interesting examples (synonyms, acronyms, complexity) from case studies and refer to them here (again if was covered in Organizing Knowledge)
+
+\section{Recipes: Codifying Structure}
+  - Organized knowledge is fine, but is essentially just a collection of (collections of) definitions. Pretty meaningless on its own so we need the structure (in our case from the templates / case studies) to have meaning.
+  - Each softifact has its own recipe for combining knowledge
+  - As we consider softifacts "views" of the knowledge, we need to combine/transform/manipulate the knowledge into a meaningful form for the given view - ex: Math formula for human-readable doc, Function/method for code (show examples).
+  - Recipes define the "how" and "where" of putting together the knowledge. The rendering engine reads the recipe and follows its instructions.
+
+\section{Cooking it all up: Generation/Rendering}
+  - Recipes are “little programs”
+  - Each recipe can be rendered a number of ways, based on parameters fed to the generator.
+  -  Implicit parameters vs explicit: Ex. an SRS will always be rendered based on the recipe, but its output will either be LaTeX or HTML based on an explicit choice. Implicit params fed to gen table of symbols/A\&A / ToU.
+
+
+\section{Reimplementing the case studies in Drasil}
+\ds{TODO: move this / rearrange it into a "Iteration and refinement" section that doesn't discuss the
+ specific results with the case studies.}
+  - Practical approach to iron out kinks / find holes in Drasil
+  - Find places to improve upon the existing case studies - ‘update as you go’ mindset
+  - Observe the amount of effort required to correct errors - show examples
+  - Most of the code we’ll show off should be in here.

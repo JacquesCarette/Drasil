@@ -1,0 +1,245 @@
+\chapter{A look under the hood - Our process}
+
+The first step in removing unnecessary redundancy is identifying exactly what
+that redundancy is, and where it exists. To that end we need to understand what
+each of our software artifacts is attempting to communicate, who their audience
+is, and what information can be considered boilerplate versus system-specific.
+  **NOTE: in the breakdown make sure to mention "We actually found that some
+  info is boilerplate, some is system-specific, and some is general to all
+  members of a software family, but more specific than generic boilerplate"
+  **NOTE: Also ensure each artifact has a 'who' (audience), 'what' (problem
+  being solved), and 'how' (specific-knowledge vs boilerplate)
+Luckily, we have an excellent starting point thanks to the work of many smart
+people - artifact templates.
+
+Lots of work has been done to specify exactly what should be documented in a
+given artifact in an effort for standardization. Ironically, this has led to
+many different 'standardized' templates. However, through the examination of a
+number of templates for different artifact types, we have concluded they convey
+roughly the same overall information for a given artifact. Most differences are
+stylistic or related to content organization, as we will demonstrate in the 
+following sections.
+  --Or naming conventions
+
+Once we understand our artifacts, we take a practical, example-driven approach
+to identifying redundancy through the use of existing software system case
+studies. For each of these case studies, we start by examining the source code
+and existing software artifacts to understand exactly what problem they are
+trying to solve. From there, we attempt to distill the system-specific knowledge
+and generalize the boilerplate.
+
+\section{A (very) brief introduction to our case study systems}
+  
+  [ Potentially canibalize the intro from the next section to specify the
+    templates in use, so it doesn't seem to come out of nowhere.
+    
+    Summarize the following:
+      -- Case study name
+      -- Problem being solved
+      -- Appendices containing artifacts? -- May come in handy for examples
+  ]
+  
+To simplify the process of identifying redundancies and patterns, we have chosen
+case studies developed using common artifact templates, specifically those 
+used by [SmithEtAl] [source]. Also, as mentioned in [SCOPE], we have chosen
+software systems that follow the 'input' -> 'process' -> 'output' pattern.
+These systems cover a variety of use cases, to help avoid over-specializing into
+one particular system-type. 
+
+This section is meant to be used as a high-level reference to each case study, 
+providing the general details at a glance. For the specifics of each system, 
+all relevant case study artifacts can be found in the appendices.
+
+** Should this be a table / series of cards?
+ 
+ %============================================================================%
+ | Case Study Name: GlassBR
+ | 
+ | Problem being solved: We need to efficiently and correctly predict whether a 
+ | glass slab can withstand a blast under given conditions.
+ | 
+ | Relevant artifacts in Appendix %[A_GLASSBR]
+ %============================================================================%
+
+ %============================================================================%
+ | Case Study Name: SWHS
+ | 
+ | Problem being solved: Solar water heating systems incorporating phase change 
+ | material (PCM) use a renewable energy source and provide a novel way of 
+ | storing energy. A system is needed to investigate the effect of employing PCM
+ | within a solar water heating tank. 
+ | 
+ | Relevant artifacts in Appendix %[A_SWHS]
+ %============================================================================%
+ 
+ %============================================================================%
+ | Case Study Name: NoPCM
+ | 
+ | Problem being solved: Solar water heating systems provide a novel way of 
+ | heating water and storing renewable energy. A system is needed to investigate
+ | the heating of water within a solar water heating tank.
+ | 
+ | Relevant artifacts in Appendix %[A_NoPCM]
+ %============================================================================%
+
+ %============================================================================%
+ | Case Study Name: SSP
+ | 
+ | Problem being solved: A slope of geological mass, composed of soil and rock 
+ | and sometimes water, is subject to the influence of gravity on the mass. 
+ | This can cause instability in the form of soil or rock movement which can
+ | be hazardous. A system is needed to evaluate the factor of safety of 
+ | a slope's slip surface and identify the critical slip surface of the slope, 
+ | as well as the interslice normal force and shear force along the critical 
+ | slip surface. 
+ | 
+ | Relevant artifacts in Appendix %[A_SSP]
+ %============================================================================%
+ 
+ %============================================================================% 
+ | Case Study Name: Projectile
+ | 
+ | Problem being solved: A system is needed to efficiently and correctly predict
+ | the landing position of a projectile.
+ | 
+ | Relevant artifacts in Appendix %[A_Projectile]
+ %============================================================================%
+ 
+ %============================================================================% 
+ | Case Study Name: GamePhys
+ | 
+ | Problem being solved: Many video games need physics libraries that simulate 
+ | objects acting under various physical conditions, while simultaneously being 
+ | fast and efficient enough to work in soft real-time during the game. 
+ | Developing a physics library from scratch takes a long period of time and is 
+ | very costly, presenting barriers of entry which make it difficult for game 
+ | developers to include physics in their products.
+ | 
+ | Relevant artifacts in Appendix %[A_GamePhys]
+ %============================================================================%
+
+The majority of the aforementioned case studies were developed to solve real
+problems, though there are a couple of exceptions.
+  **NOTE: trying to find a good way to say 'these are not just things we cooked
+    up to make Drasil look good'
+    
+The NoPCM case study was created as a software family member for the SWHS case
+study. It was manually written, removing all references to PCM and thus 
+remodeling the system.
+
+The Projectile case study, however, was the first example of a system created
+solely in Drasil (there was no manually created version to compare and 
+contrast). As such, it will not be referenced often until DRASILSECTION since
+it did not inform Drasil's design or development until much further in the 
+process. The Projectile case study was created so we'd have a simple, 
+understandable example for a general audience (it requires, at most, a 
+high-school level understanding of physics). 
+
+With our carefully selected case studies in hand we were able to begin our 
+practical approach to finding and removing redundancies.
+
+\section{Breaking down artifacts}
+As noted earlier, for our approach to work we must understand exactly what each
+of our artifacts are trying to say and to whom. By selecting our case studies 
+from those developed using common artifact templates, we have given ourselves a
+head start on that process, however, there is still much work to be done.
+
+To start, we look at the Software Requirements Specification (SRS). The SRS
+(or some incarnation of it) is one of the most important artifacts for any
+software project as it specifies what problem the software is trying to solve.
+There are many ways to state this problem, and [SmithEtAl] have given us a
+strong recommendation of what to use as a starting point in their template.
+[Figure] shows the table of contents for an SRS using the [SmithEtAl] template.
+
+[Figure showing the ToC of SmithEtAl template]
+
+With the structure of the document in mind, let us look at several of our case
+studies' SRS documents to get a deeper understanding of what each section truly
+represents. [Figure] shows the first section of [one/several of our case studies, rest in Appendices].
+[ The case studies themselves will be introduced in more detail in later sections, but
+keep in mind at this point, we don't care about the superficial differences. -- Not exactly true if we introduce them in previous section ]
+ We are strictly looking for patterns! Patterns will give us insight
+into the root of *what* is being said in each section.
+
+[Figure showing the Ref Section of at least 3 (preferably 4-6) case studies, may
+need to be split into multiple, or have them somehow cropped/overlayed/arranged
+to be not terrible to look at - TBD]
+
+Looking at the Table of Symbols, Table of Units, and Table of Abbreviations and 
+Acronyms from [Previous Figure] we can see that, barring the table values 
+themselves, they are almost identical. The Table of Symbols is simply a table 
+of values, essentially akin to a glossary, specific to the symbols that appear 
+throughout the rest of the document. For each of those symbols, we see the 
+symbol itself, a brief description of what that symbol represents, and the units
+it is measured in (if applicable). Similarly, the Table of Units lists the
+Système International d’Unités (SI) Units used throughout the document, their
+descriptions, and the SI name. Finally, the table of Abbreviations and Acronyms
+merely lists the abbreviations and their full forms, which are essentially the
+symbols and their descriptions.
+
+The reference section of the SRS provides a lot of knowledge, in a very 
+straightforward and organized manner. The basic units provided in the table of 
+units give a prime example of fundamental / global knowledge. Nearly any system
+involving physical quantities will use some of these units. On the other hand, 
+the table of symbols provides system/problem-domain specific knowledge that
+will not be useful across unrelated domains. For example, the stress 
+distribution factor (J) from GlassBR may appear in several related problems, but
+would be unlikely to be seen in something like SWHS/NoPCM or Projectile. 
+Finally, acronyms are very context-dependant. They are often specific to a
+given domain and, without a coinciding definition, it can be very difficult for
+even the target audience to understand what they refer to. Within one domain, 
+there may be several acronyms meaning different things (for example: PM can 
+refer to Product Manager, Project Manager, Program Manager, etc).
+
+From the Reference section alone, 
+
+
+- Practical approach to design
+- Let's use some case studies
+- Understanding what's really going on
+
+\section{Artifact Summary}
+
+See Table [NUM] for a summary of each software artifact's 'what', 'who', and
+'how'.
+
+*TABLE*
+| Artifact | Who (Audience) | What (Problem) | How (Specific vs boilerplate) |
+
+\section{Patterns and repetition and patterns and repetition -- (OR -- Repeating patterns and patterns that repeat --)}
+From the above sections, we see many emerging patterns in our software
+artifacts. Ignoring, for now, the organizational patterns from the [SmithEtAl]
+templates we can already see simple patterns emerging. For example, we see the
+same concept being introduced in multiple areas within a single artifact and
+across artifacts in a project. [Example from one of the figures in the previous
+section. Preferably something like a DD or TM that shows up within a single doc
+multiple times]. We also see patterns of commonality across software family
+members (The SWHS and NoPCM case studies) as they have been developed to solve
+similar, or in our case nearly identical, problems.
+
+- inter-project (repetition throughout different views + other patterns.)
+  vs intra-project knowledge (repetition across projects/family members,
+  minor modifications, but fundamentally the same + other patterns.)
+- Hint at chunkifying/parceling out the fundamental (system/view-agnostic)
+knowledge vs the specific knowledge
+
+\section{Organizing knowledge - a fluid approach}
+  **Subsec roadmap:
+    - We see the patterns above, we can generalize a lot of that
+    - Direct repetition (copy-paste) vs indirect repetition (view-changes)
+    require us to pull together knowledge from all artifacts into one place
+    - Some can be derived automatically, the rest must be explicitly stated
+    - We need to create a categorization system (hint at chunks) that is both
+    robust and extensible to cover a wide variety of use cases.
+    - Finally the templates give us structure
+
+  **NOTE: Under the hood section should explain the process of how we determined
+  what we needed to do. What we ended up doing should come in the following
+  section(s) - no 'real' implementation details, only conceptual stuff here.
+  
+\section{The seeds of Drasil}
+  **Subsec roadmap:
+    -- Summarize the above subsections and lead into next section
+    -- Add relevant information that doesn't quite fit above 
+      and isn't implementation related
+    -- 'Relevant buckshot section'

@@ -3,7 +3,7 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
 
 import Language.Drasil (ConceptChunk, mkQuantDef, makeRC, dRef, mkDerivName,
   phrase, plural, titleize, atStartNP, nounPhraseSP, refS, (+:+), (+:+.), ch,
-  eS, sC, sParen, eqSymb, ConceptInstance, QDefinition, RelationConcept,
+  eS, sC, sParen, eqSymb, ConceptInstance, RelationConcept,
   MayHaveUnit(..), UnitDefn, UnitalChunk, Derivation,
   NounPhrase(..), Sentence(S, EmptyS, (:+:)), ModelQDef)
 import Language.Drasil.ModelExpr

@@ -47,6 +47,21 @@
 \newcommand{\jc}[1]{\authornotes{red}{JC}{#1}}
 \newcommand{\ds}[1]{\authornotes{cyan}{DS}{#1}}
 
+% ********************************
+%Card
+
+\newcommand{\card}[3]{
+  \begin{center}
+    \begin{tabular}{||p{\linewidth}||}
+	\hline
+	\textbf{Name}: {\textbf{#1}} \\ \hline
+	\textbf{Problem being solved}: #2 \\ \\
+	Relevant artifacts in Appendix #3 \\
+	\hline
+    \end{tabular}
+  \end{center}
+}
+
 
 % ********************************
 \begin{document}

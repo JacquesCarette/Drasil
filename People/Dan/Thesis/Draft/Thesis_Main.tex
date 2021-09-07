@@ -47,19 +47,31 @@
 \newcommand{\jc}[1]{\authornotes{red}{JC}{#1}}
 \newcommand{\ds}[1]{\authornotes{cyan}{DS}{#1}}
 
-% ********************************
-%Card
+% *******Custom commands**********
 
+%Card
 \newcommand{\card}[3]{
   \begin{center}
-    \begin{tabular}{||p{\linewidth}||}
+    \begin{tabular}{||p{0.8\linewidth}||}
 	\hline
 	\textbf{Name}: {\textbf{#1}} \\ \hline
 	\textbf{Problem being solved}: #2 \\ \\
-	Relevant artifacts in Appendix #3 \\
+	Relevant artifacts: #3 \\
 	\hline
     \end{tabular}
   \end{center}
+}
+
+%Shortcuts
+\def\smithea{Smith et al.}
+
+%Figures
+\newcommand{\fig}[3]{
+  \begin{figure}
+    #1
+  \caption{#2}
+  \label{#3}
+  \end{figure}
 }
 
 

@@ -1,25 +1,20 @@
-\chapter{A look under the hood - Our process}
+\chapter{A look under the hood: \\ Our process}
 
 The first step in removing unnecessary redundancy is identifying exactly what
-that redundancy is, and where it exists. To that end we need to understand what
+that redundancy is and where it exists. To that end we need to understand what
 each of our software artifacts is attempting to communicate, who their audience
 is, and what information can be considered boilerplate versus system-specific.
-  **NOTE: in the breakdown make sure to mention "We actually found that some
-  info is boilerplate, some is system-specific, and some is general to all
-  members of a software family, but more specific than generic boilerplate"
-  **NOTE: Also ensure each artifact has a 'who' (audience), 'what' (problem
-  being solved), and 'how' (specific-knowledge vs boilerplate)
 Luckily, we have an excellent starting point thanks to the work of many smart
 people - artifact templates.
 
-Lots of work has been done to specify exactly what should be documented in a
-given artifact in an effort for standardization. Ironically, this has led to
-many different 'standardized' templates. However, through the examination of a
-number of templates for different artifact types, we have concluded they convey
-roughly the same overall information for a given artifact. Most differences are
-stylistic or related to content organization, as we will demonstrate in the 
-following sections.
-  --Or naming conventions
+Lots of work \ds{cite some people who did this} has been done to specify 
+exactly what should be documented in a given artifact in an effort for 
+standardization. Ironically, this has led to many different `standardized' 
+templates. Through the examination of a number of different artifact templates, 
+we have concluded they convey roughly the same overall information for a given 
+artifact. Most differences are stylistic or related to content 
+organization and naming conventions, as we will demonstrate in the following 
+sections.
 
 Once we understand our artifacts, we take a practical, example-driven approach
 to identifying redundancy through the use of existing software system case
@@ -29,28 +24,35 @@ trying to solve. From there, we attempt to distill the system-specific knowledge
 and generalize the boilerplate.
 
 \section{A (very) brief introduction to our case study systems}
-  
-  [ Potentially canibalize the intro from the next section to specify the
-    templates in use, so it doesn't seem to come out of nowhere.
-    
-    Summarize the following:
-      -- Case study name
-      -- Problem being solved
-      -- Appendices containing artifacts? -- May come in handy for examples
-  ]
-  
+\ds{**NOTE: Also ensure each artifact has a 'who' (audience), 'what' (problem 
+being solved), and 'how' (specific-knowledge vs boilerplate)}
+ 
+% [ Potentially canibalize the intro from the next section to specify the
+%    templates in use, so it doesn't seem to come out of nowhere.
+%    
+%    Summarize the following:
+%      -- Case study name
+%      -- Problem being solved
+%      -- Appendices containing artifacts? -- May come in handy for examples
+%  ]
+
 To simplify the process of identifying redundancies and patterns, we have chosen
-case studies developed using common artifact templates, specifically those 
-used by [SmithEtAl] [source]. Also, as mentioned in [SCOPE], we have chosen
-software systems that follow the 'input' -> 'process' -> 'output' pattern.
-These systems cover a variety of use cases, to help avoid over-specializing into
-one particular system-type. 
+several case studies developed using common artifact templates, specifically 
+those used by \smithea{} \ds{source\citep{}} Also, as mentioned in 
+\ds{[SCOPE]}, we have chosen software systems that follow the `input' 
+$\rightarrow$ `process' $\rightarrow$ `output' pattern. These systems cover a 
+variety of use cases, to help avoid over-specializing into one particular 
+system-type. 
 
-This section is meant to be used as a high-level reference to each case study, 
-providing the general details at a glance. For the specifics of each system, 
-all relevant case study artifacts can be found in the appendices.
+The majority of the aforementioned case studies were developed to solve real
+problems, with a few minor exceptions listed below their relevant cards.
+  \ds{**NOTE: trying to find a good way to say `these are not just things we 
+  cooked up to make Drasil look good'}
+The cards below are meant to be used as a high-level reference to each case 
+study, providing the general details at a glance. For the specifics of each 
+system, all relevant case study artifacts can be found at \ds{Add a link here or
+put in appendices?}.
 
-** Should this be a table / series of cards?
 \card{GlassBR}
 {We need to efficiently and correctly predict whether a glass 
 slab can withstand a blast under given conditions.}
@@ -69,6 +71,10 @@ heating water and storing renewable energy. A system is needed to investigate
 the heating of water within a solar water heating tank.}
 {\ds{TODO}}
 
+The NoPCM case study was created as a software family member for the SWHS case
+study. It was manually written, removing all references to PCM and thus 
+remodeling the system.
+
 \card{SSP}
 {A slope of geological mass, composed of soil and rock 
  and sometimes water, is subject to the influence of gravity on the mass. 
@@ -84,6 +90,14 @@ the heating of water within a solar water heating tank.}
  the landing position of a projectile.}
 {\ds{TODO}}
 
+The Projectile case study, was the first example of a system 
+created solely in Drasil (we did not have a manually created version to compare 
+and contrast with through development). As such, it will not be referenced 
+often until \ds{DRASILSECTION} since it did not inform Drasil's design or 
+development until much further in our process. The Projectile case study was 
+created post-facto to provide a simple, understandable example for a general 
+audience as it requires, at most, a high-school level understanding of physics. 
+
 \card{GamePhys}
 {Many video games need physics libraries that simulate 
  objects acting under various physical conditions, while simultaneously being 
@@ -93,27 +107,16 @@ the heating of water within a solar water heating tank.}
  developers to include physics in their products.}
 {\ds{TODO}}
 
-The majority of the aforementioned case studies were developed to solve real
-problems, though there are a couple of exceptions.
-  **NOTE: trying to find a good way to say 'these are not just things we cooked
-    up to make Drasil look good'
-    
-The NoPCM case study was created as a software family member for the SWHS case
-study. It was manually written, removing all references to PCM and thus 
-remodeling the system.
+After carefully selecting our case studies, we went about a practical approach
+to find and remove redundancies. The first step was to break down each artifact
+type and understand exactly what they are trying to convey.
 
-The Projectile case study, however, was the first example of a system created
-solely in Drasil (there was no manually created version to compare and 
-contrast). As such, it will not be referenced often until DRASILSECTION since
-it did not inform Drasil's design or development until much further in the 
-process. The Projectile case study was created so we'd have a simple, 
-understandable example for a general audience (it requires, at most, a 
-high-school level understanding of physics). 
-
-With our carefully selected case studies in hand we were able to begin our 
-practical approach to finding and removing redundancies.
 
 \section{Breaking down artifacts}
+  \ds{**Make sure to mention "We actually found that some
+  info is boilerplate, some is system-specific, and some is general to all
+  members of a software family, but more specific than generic boilerplate"}
+
 As noted earlier, for our approach to work we must understand exactly what each
 of our artifacts are trying to say and to whom. By selecting our case studies 
 from those developed using common artifact templates, we have given ourselves a
@@ -122,56 +125,77 @@ head start on that process, however, there is still much work to be done.
 To start, we look at the Software Requirements Specification (SRS). The SRS
 (or some incarnation of it) is one of the most important artifacts for any
 software project as it specifies what problem the software is trying to solve.
-There are many ways to state this problem, and [SmithEtAl] have given us a
-strong recommendation of what to use as a starting point in their template.
-[Figure] shows the table of contents for an SRS using the [SmithEtAl] template.
+There are many ways to state this problem, and the template from \smithea{} has 
+given us a strong starting point. Figure~\ref{fig:SRSToC} shows the table of 
+contents for an SRS using the \smithea{} template.
 
-[Figure showing the ToC of SmithEtAl template]
+\fig{
+  \begin{center}
+    \emph{Figure showing the ToC of \smithea{} template}
+  \end{center}
+}{The Table of Contents from the \smithea{} template}{fig:SRSToC}
 
 With the structure of the document in mind, let us look at several of our case
 studies' SRS documents to get a deeper understanding of what each section truly
-represents. [Figure] shows the first section of [one/several of our case studies, rest in Appendices].
-[ The case studies themselves will be introduced in more detail in later sections, but
-keep in mind at this point, we don't care about the superficial differences. -- Not exactly true if we introduce them in previous section ]
- We are strictly looking for patterns! Patterns will give us insight
-into the root of *what* is being said in each section.
+represents. Figure~\ref{fig:csRefSecs} shows the reference section of the SRS 
+for \ds{TODO}. Each of the case studies' SRS contains a similar section so for 
+brevity we will omit the others here, but they can be found at \ds{TODO}. 
+% Provide a link / ref to relevant appendix
+We will look into the case studies in more detail later, for now we will try to 
+ignore the superficial differences in each of them while we look for 
+commonality. We are strictly looking for patterns! Patterns will give us 
+insight into the root of \emph{what} is being said in each section.
 
-[Figure showing the Ref Section of at least 3 (preferably 4-6) case studies, may
-need to be split into multiple, or have them somehow cropped/overlayed/arranged
-to be not terrible to look at - TBD]
+\fig{\begin{center}
+\emph{Figure showing the Ref Section of one case 
+study, split into multiple subfigures - case study TBD}\end{center}}{The 
+reference sections of \ds{TBD} respectively}
+{fig:csRefSecs}
 
 Looking at the Table of Symbols, Table of Units, and Table of Abbreviations and 
-Acronyms from [Previous Figure] we can see that, barring the table values 
-themselves, they are almost identical. The Table of Symbols is simply a table 
-of values, essentially akin to a glossary, specific to the symbols that appear 
-throughout the rest of the document. For each of those symbols, we see the 
-symbol itself, a brief description of what that symbol represents, and the units
-it is measured in (if applicable). Similarly, the Table of Units lists the
-Système International d’Unités (SI) Units used throughout the document, their
-descriptions, and the SI name. Finally, the table of Abbreviations and Acronyms
-merely lists the abbreviations and their full forms, which are essentially the
-symbols and their descriptions.
+Acronyms from Figure~\ref{fig:csRefSecs} we can see that, barring the table 
+values themselves, they are almost identical. The Table of Symbols is simply a 
+table of values, akin to a glossary, specific to the symbols that 
+appear throughout the rest of the document. For each of those symbols, we see 
+the symbol itself, a brief description of what that symbol represents, and the 
+units it is measured in, if applicable. Similarly, the Table of Units lists the
+Syst\`eme International d'Unit\'es (SI) Units used throughout the document, 
+their descriptions, and the SI name. Finally, the table of Abbreviations and 
+Acronyms lists the abbreviations and their full forms, which are 
+essentially the symbols and their descriptions for the abbreviations.
 
-The reference section of the SRS provides a lot of knowledge, in a very 
+Looking only at the reference section of our SRS template, we have already found
+three subsections that contain the majority of their information in the same
+structure: a table of symbols and any information relevant to those symbols.
+Additionally, we can see that the Table of Units and Table of Symbols have an
+introductory blurb preceding the tables themselves, whereas the Table of 
+Abbreviations and Acronyms does not. Inspecting across case studies, we can see
+that the introduction to the Table of Units is simply boilerplate text 
+dropped into each case study verbatim, thus is completely generic and 
+applicable to \emph{any} software system using SI units. The introduction to 
+the Table of Symbols appears to be boilerplate across several examples, 
+however, it does have some variation (see: GamePhysics compared to GlassBR).
+These variations reveal the obvious: the variability between systems is greater 
+than simply a difference in choice of symbols, and so there is some 
+system-specific knowledge being encoded. We can intuit this conclusion based 
+solely on each system solving a different problem, however, we have confirmed 
+this by solely looking at the structure (patterns) of one section of the SRS.
+
+The reference section of the SRS provides a lot of knowledge in a very 
 straightforward and organized manner. The basic units provided in the table of 
-units give a prime example of fundamental / global knowledge. Nearly any system
-involving physical quantities will use some of these units. On the other hand, 
-the table of symbols provides system/problem-domain specific knowledge that
-will not be useful across unrelated domains. For example, the stress 
-distribution factor (J) from GlassBR may appear in several related problems, but
-would be unlikely to be seen in something like SWHS/NoPCM or Projectile. 
-Finally, acronyms are very context-dependant. They are often specific to a
-given domain and, without a coinciding definition, it can be very difficult for
-even the target audience to understand what they refer to. Within one domain, 
-there may be several acronyms meaning different things (for example: PM can 
-refer to Product Manager, Project Manager, Program Manager, etc).
+units give a prime example of fundamental, global knowledge shared across 
+domains. Nearly any system involving physical quantities will use some of these 
+units. On the other hand, the table of symbols provides system/problem-domain 
+specific knowledge that will not be useful across unrelated domains. For 
+example, the stress distribution factor $J$ from GlassBR may appear in several 
+related problems, but would be unlikely to be seen in something like SWHS, 
+NoPCM, or Projectile. Finally, acronyms are very context-dependent. They are 
+often specific to a given domain and, without a coinciding definition, it can 
+be very difficult for even the target audience to understand what they refer 
+to. Within one domain, there may be several acronyms meaning different things, 
+for example: PM can refer to Product Manager, Project Manager, Program 
+Manager, etc.
 
-From the Reference section alone, 
-
-
-- Practical approach to design
-- Let's use some case studies
-- Understanding what's really going on
 
 \section{Artifact Summary}
 
@@ -183,7 +207,7 @@ See Table [NUM] for a summary of each software artifact's 'what', 'who', and
 
 \section{Patterns and repetition and patterns and repetition -- (OR -- Repeating patterns and patterns that repeat --)}
 From the above sections, we see many emerging patterns in our software
-artifacts. Ignoring, for now, the organizational patterns from the [SmithEtAl]
+artifacts. Ignoring, for now, the organizational patterns from the \smithea{}
 templates we can already see simple patterns emerging. For example, we see the
 same concept being introduced in multiple areas within a single artifact and
 across artifacts in a project. [Example from one of the figures in the previous

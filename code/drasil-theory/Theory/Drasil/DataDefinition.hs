@@ -33,7 +33,7 @@ data DataDefinition where
   DDE  :: SimpleQDef -> DDPkt -> DataDefinition
   DDME :: ModelQDef -> DDPkt -> DataDefinition
 
-ddQD :: Lens' (SimpleQDef) a -> Lens' (ModelQDef) a -> Lens' DataDefinition a
+ddQD :: Lens' SimpleQDef a -> Lens' ModelQDef a -> Lens' DataDefinition a
 ddQD lqde lqdme = lens g s
   where
     g (DDE  qd _) = qd ^. lqde
@@ -110,10 +110,10 @@ ddMENoRefs :: ModelQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefin
 ddMENoRefs q der sn = DDME q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Extracts the 'QDefinition e' from a 'DataDefinition'.
-qdFromDD :: DataDefinition -> Either (SimpleQDef) (ModelQDef)
+qdFromDD :: DataDefinition -> Either SimpleQDef ModelQDef
 qdFromDD (DDE  qd _) = Left qd
 qdFromDD (DDME qd _) = Right qd
 
-qdEFromDD :: DataDefinition -> Maybe (SimpleQDef)
+qdEFromDD :: DataDefinition -> Maybe SimpleQDef
 qdEFromDD (DDE qd _) = Just qd
 qdEFromDD _          = Nothing

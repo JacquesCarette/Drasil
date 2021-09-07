@@ -39,7 +39,7 @@ dataDefs = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac,
   dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, eqTNTWDD, probOfBreak,
   calofCapacity, calofDemand]
 
-qDefns :: [Block (SimpleQDef)]
+qDefns :: [Block SimpleQDef]
 qDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated on their own
   map (`Parallel` []) [dimLLQD {-DD7-}, strDisFacQD {-DD4-}, riskQD {-DD1-},
   tolStrDisFacQD {-DD9-}, tolPreQD {-DD8-}, nonFLQD {-DD5-}]

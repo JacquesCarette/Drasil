@@ -31,11 +31,11 @@ import qualified Language.Drasil.Development as D (uid)
 --     * 'FunctionalModel's represent quantity-resulting function definitions.
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds e where
-  DEModel               ::              RelationConcept -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
-  EquationalConstraints ::              ConstraintSet e -> ModelKinds e
+  DEModel               :: Express e => RelationConcept -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
+  EquationalConstraints :: Express e => ConstraintSet e -> ModelKinds e
   EquationalModel       :: Express e => QDefinition e   -> ModelKinds e
   EquationalRealm       :: Express e => MultiDefn e     -> ModelKinds e
-  OthModel              ::              RelationConcept -> ModelKinds e -- TODO: Remove.
+  OthModel              :: Express e => RelationConcept -> ModelKinds e -- TODO: Remove (after having removed all insances of it).
 
 -- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
 data ModelKind e = MK {
@@ -47,19 +47,19 @@ data ModelKind e = MK {
 makeLenses ''ModelKind
 
 -- | Smart constructor for 'DEModel's
-deModel :: String -> NP -> RelationConcept -> ModelKind e
+deModel :: Express e => String -> NP -> RelationConcept -> ModelKind e
 deModel u n rc = MK (DEModel rc) (D.uid u) n
 
 -- | Smart constructor for 'DEModel's, deriving UID+Term from the 'RelationConcept'
-deModel' :: RelationConcept -> ModelKind e
+deModel' :: Express e => RelationConcept -> ModelKind e
 deModel' rc = MK (DEModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'
-equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
+equationalConstraints :: Express e => String -> NP -> ConstraintSet e -> ModelKind e
 equationalConstraints u n qs = MK (EquationalConstraints qs) (D.uid u) n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
-equationalConstraints' :: ConstraintSet e -> ModelKind e
+equationalConstraints' :: Express e => ConstraintSet e -> ModelKind e
 equationalConstraints' qs = MK (EquationalConstraints qs) (qs ^. uid) (qs ^. term)
 
 -- | Smart constructor for 'EquationalModel's
@@ -99,7 +99,7 @@ othModel :: String -> NP -> RelationConcept -> ModelKind Expr
 othModel u n rc = MK (OthModel rc) (D.uid u) n
 
 -- | Smart constructor for 'OthModel's, deriving UID+Term from the 'RelationConcept'
-othModel' :: RelationConcept -> ModelKind e
+othModel' :: Express e => RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Finds the 'UID' of the 'ModelKinds'.

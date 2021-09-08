@@ -67,8 +67,12 @@ jobs:
         run: make gool
       - name: "Create Doxygen for generated software artifacts"
         run: make doxygen
-      - name: "Generate Haddock docs"
+      - name: "Generate Haddock docs (as test)"
         run: make docs
+        if: ${{ github.ref != 'refs/heads/master' || (github.event_name != 'push' && github.event_name != 'workflow_dispatch') }}
+      - name: "Generate Haddock docs (full + std)"
+        run: FULL=1 make docs
+        if: ${{ github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
       - name: "Generate module dependency graphs"
         run: make graphs
       - name: "Analyze Drasil code"

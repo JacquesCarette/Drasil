@@ -99,7 +99,7 @@ data ModelExpr where
   -- | Derivative syntax is:
   --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
   --   For example: Deriv Part y x1 would be (dy/dx1).
-  Deriv     :: DerivType -> ModelExpr -> UID -> ModelExpr
+  Deriv     :: Integer -> DerivType -> ModelExpr -> UID -> ModelExpr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C         :: UID -> ModelExpr
@@ -185,7 +185,7 @@ instance Eq ModelExpr where
   Str a               == Str b               =   a == b
   AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
   AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
-  Deriv t1 a b        == Deriv t2 c d        =  t1 == t2 && a == c && b == d
+  Deriv a t1 b c      == Deriv d t2 e f      =   a == d && t1 == t2 && b == e && c == f
   C a                 == C b                 =   a == b
   FCall a b c         == FCall d e f         =   a == d && b == e && c == f
   Case a b            == Case c d            =   a == c && b == d 

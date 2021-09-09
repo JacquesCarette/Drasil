@@ -18,7 +18,7 @@ module Language.Drasil.ModelExpr (
   apply, apply1, apply2, applyWithNamedArgs,
   sy,
   cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll,
-  pderiv, deriv,
+  pderiv, deriv, nthderiv, nthpderiv,
   space, isIn, defines, andMEs, equivMEs
 ) where
 
@@ -345,8 +345,13 @@ sy x = C (x ^. uid)
 -- This also wants a symbol constraint.
 -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
 deriv, pderiv :: (HasUID c, HasSymbol c, Express e) => e -> c -> ModelExpr
-deriv e c = Deriv Total (express e) (c ^. uid)
-pderiv e c = Deriv Part (express e) (c ^. uid)
+deriv e c = Deriv 1 Total (express e) (c ^. uid)
+pderiv e c = Deriv 1 Part (express e) (c ^. uid)
+
+-- | smart constructors for nth order of total and part derivative 
+nthderiv, nthpderiv :: (HasUID c, HasSymbol c, Express e) => Integer -> e -> c -> ModelExpr
+nthderiv n e c = Deriv n Total (express e) (c ^. uid)
+nthpderiv n e c = Deriv n Part (express e) (c ^. uid)
 
 -- | One expression is "defined" by another.
 defines :: (Express a, Express b) => a -> b -> ModelExpr

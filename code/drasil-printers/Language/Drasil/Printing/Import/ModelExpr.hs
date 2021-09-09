@@ -123,14 +123,15 @@ modelExpr (AssocA AddI l)            sm = assocExpr P.Add (precA AddI) l sm
 modelExpr (AssocA AddRe l)           sm = assocExpr P.Add (precA AddRe) l sm
 modelExpr (AssocA MulI l)            sm = P.Row $ mulExpr l MulI sm
 modelExpr (AssocA MulRe l)           sm = P.Row $ mulExpr l MulRe sm
-modelExpr (Deriv Part a b)           sm =
+modelExpr (Deriv n Part a b)         sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, modelExpr a sm])
         (P.Row [P.Spc P.Thin, P.Spec Partial,
                 symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
-modelExpr (Deriv Total a b)          sm =
-  P.Div (P.Row [P.Spc P.Thin, P.Ident "d", modelExpr a sm])
+-- Fix me, should replace P.Ident "" with nothing
+modelExpr (Deriv n Total a b)        sm =
+  P.Div (P.Row [P.Spc P.Thin, P.Ident "d", if n > 1 then P.Sup (P.Int n) else P.Ident "", modelExpr a sm])
         (P.Row [P.Spc P.Thin, P.Ident "d",
-                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
+                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b, if n > 1 then P.Sup (P.Int n) else P.Ident ""])
 modelExpr (C c)                      sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 modelExpr (FCall f [x] [])           sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ modelExpr x sm]

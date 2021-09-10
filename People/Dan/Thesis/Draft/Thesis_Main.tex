@@ -31,6 +31,7 @@
 \usepackage{xcolor}
 \numberwithin{equation}{section}       % Numbers equations based on their 
 									   %   section
+\usepackage[normalem]{ulem}			   % Strikeout and advanced emphasis
 % ********************************
 
 \newif\ifcomments\commentstrue
@@ -64,6 +65,17 @@
 
 %Shortcuts
 \def\smithea{Smith et al.}
+\def\sfs{softifacts}
+\def\sf{softifact}
+\def\SFS{Softifacts}
+\def\SF{Softifact}
+\def\gp{GamePhysics}
+\def\gb{GlassBR}
+\def\sw{SWHS}
+\def\np{NoPCM}
+\def\sp{SSP}
+\def\pr{Projectile}
+
 
 %Figures
 \newcommand{\fig}[3]{
@@ -74,6 +86,8 @@
   \end{figure}
 }
 
+%Tables
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
 % ********************************
 \begin{document}

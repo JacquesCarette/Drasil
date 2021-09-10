@@ -24,23 +24,15 @@ trying to solve. From there, we attempt to distill the system-specific knowledge
 and generalize the boilerplate.
 
 \section{A (very) brief introduction to our case study systems}
-\ds{**NOTE: Also ensure each artifact has a 'who' (audience), 'what' (problem 
-being solved), and 'how' (specific-knowledge vs boilerplate)}
- 
-% [ Potentially canibalize the intro from the next section to specify the
-%    templates in use, so it doesn't seem to come out of nowhere.
-%    
-%    Summarize the following:
-%      -- Case study name
-%      -- Problem being solved
-%      -- Appendices containing artifacts? -- May come in handy for examples
-%  ]
+\ds{**NOTE: ensure each artifact has a 'who' (audience), 'what' (problem 
+being solved), and 'how' (specific-knowledge vs boilerplate) - this last one 
+may not be necessary}
 
 To simplify the process of identifying redundancies and patterns, we have chosen
 several case studies developed using common artifact templates, specifically 
-those used by \smithea{} \ds{source\citep{}} Also, as mentioned in 
-\ds{[SCOPE]}, we have chosen software systems that follow the `input' 
-$\rightarrow$ `process' $\rightarrow$ `output' pattern. These systems cover a 
+those used by \smithea{} \ds{source\citep{SmithEtAlXXXX}} Also, as mentioned in 
+\ds{[SCOPE]}, we have chosen software systems that follow the $`input' 
+\rightarrow `process' \rightarrow `output'$ pattern. These systems cover a 
 variety of use cases, to help avoid over-specializing into one particular 
 system-type. 
 
@@ -53,19 +45,19 @@ study, providing the general details at a glance. For the specifics of each
 system, all relevant case study artifacts can be found at \ds{Add a link here or
 put in appendices?}.
 
-\card{GlassBR}
+\card{\gb}
 {We need to efficiently and correctly predict whether a glass 
 slab can withstand a blast under given conditions.}
 {\ds{TODO}}
 
-\card{SWHS}
+\card{\sw}
 {Solar water heating systems incorporating phase change 
  material (PCM) use a renewable energy source and provide a novel way of 
  storing energy. A system is needed to investigate the effect of employing PCM
  within a solar water heating tank.}
 {\ds{TODO}}
 
-\card{NoPCM}
+\card{\np}
 {Solar water heating systems provide a novel way of 
 heating water and storing renewable energy. A system is needed to investigate
 the heating of water within a solar water heating tank.}
@@ -75,7 +67,7 @@ The NoPCM case study was created as a software family member for the SWHS case
 study. It was manually written, removing all references to PCM and thus 
 remodeling the system.
 
-\card{SSP}
+\card{\sp}
 {A slope of geological mass, composed of soil and rock 
  and sometimes water, is subject to the influence of gravity on the mass. 
  This can cause instability in the form of soil or rock movement which can
@@ -85,20 +77,21 @@ remodeling the system.
  slip surface.}
 {\ds{TODO}}
 
-\card{Projectile}
+\card{\pr}
 {A system is needed to efficiently and correctly predict
  the landing position of a projectile.}
 {\ds{TODO}}
 
 The Projectile case study, was the first example of a system 
-created solely in Drasil (we did not have a manually created version to compare 
-and contrast with through development). As such, it will not be referenced 
-often until \ds{DRASILSECTION} since it did not inform Drasil's design or 
-development until much further in our process. The Projectile case study was 
-created post-facto to provide a simple, understandable example for a general 
-audience as it requires, at most, a high-school level understanding of physics. 
+created solely in Drasil, i.e. we did not have a manually created version to 
+compare and contrast with through development. As such, it will not be 
+referenced often until \ds{DRASILSECTION} since it did not inform Drasil's 
+design or development until much further in our process. The Projectile case 
+study was created post-facto to provide a simple, understandable example for a 
+general audience as it requires, at most, a high-school level understanding of 
+physics. 
 
-\card{GamePhys}
+\card{\gp}
 {Many video games need physics libraries that simulate 
  objects acting under various physical conditions, while simultaneously being 
  fast and efficient enough to work in soft real-time during the game. 
@@ -112,10 +105,8 @@ to find and remove redundancies. The first step was to break down each artifact
 type and understand exactly what they are trying to convey.
 
 
-\section{Breaking down artifacts}
-  \ds{**Make sure to mention "We actually found that some
-  info is boilerplate, some is system-specific, and some is general to all
-  members of a software family, but more specific than generic boilerplate"}
+\section{Breaking down \sfs}
+\label{sec:breakdown}
 
 As noted earlier, for our approach to work we must understand exactly what each
 of our artifacts are trying to say and to whom. By selecting our case studies 
@@ -143,8 +134,9 @@ brevity we will omit the others here, but they can be found at \ds{TODO}.
 % Provide a link / ref to relevant appendix
 We will look into the case studies in more detail later, for now we will try to 
 ignore the superficial differences in each of them while we look for 
-commonality. We are strictly looking for patterns! Patterns will give us 
-insight into the root of \emph{what} is being said in each section.
+commonality. \sout{We are strictly looking for patterns! Patterns will give 
+us insight into the root of \emph{what} is being said in each section.}\ds{Not 
+really true, will need to rework}
 
 \fig{\begin{center}
 \emph{Figure showing the Ref Section of one case 
@@ -162,19 +154,98 @@ units it is measured in, if applicable. Similarly, the Table of Units lists the
 Syst\`eme International d'Unit\'es (SI) Units used throughout the document, 
 their descriptions, and the SI name. Finally, the table of Abbreviations and 
 Acronyms lists the abbreviations and their full forms, which are 
-essentially the symbols and their descriptions for the abbreviations.
+essentially the symbols and their descriptions for each of the abbreviations.
 
-Looking only at the reference section of our SRS template, we have already found
+While the reference material section should be fairly self-explanatory as to 
+what it contains, other sections and subsections may not be so clear from their 
+name alone. For example, it may not be clear offhand of what constitutes a 
+theoretical model compared to a data definition or an instance model. One may 
+argue that the author of the SRS, particularly if they chose to use the 
+\smithea{} template, would need to understand that difference. However, it is 
+not clear whether the intended audience would also have such an understanding. 
+Who is that audience? We will explore that in Section~\ref{sec:sfsummary}.
+
+Returning to our exercise of breaking down each section of the SRS to determine 
+the subtleties of \emph{what} is contained therein (the details are omitted for 
+brevity, although the overall process is very much akin to that of our 
+breakdown of the Reference Material section) it should be unsurprising that 
+each section maps to the definition provided in the \smithea{} template. 
+However, as noted above, we can see distinct differences in the types of 
+information contained in each section. Again we find some is boilerplate text 
+meant to give a generic  (non-specific) overview, some is specific to the 
+proposed system, and some is in-between: it is specific to the 
+problem domain for the proposed system, but not necessarily specific to the 
+system itself.
+
+\section{\SF{} Summary}
+\label{sec:sfsummary}
+
+Parns~\citep{Parnas2010} does an excellent job of defining the target audience 
+for each of the most common \sfs{} and we extend that alongside our work. A 
+summary can be found in Table~\ref{tab:sfsummary}.
+
+\begin{table}
+\label{tab:sfsummary}
+\caption{A summary of the Audience for each of the most common \sfs{} and what 
+problem that \sf{} is solving}
+\begin{tabular}{| P{.3\linewidth} | p{.3\linewidth}  | p{.3\linewidth} |}
+\hline
+ \SF{} & Who (Audience) & What (Problem)
+\\ \hline
+	SRS & 
+	\begin{enumerate}
+		\item Software Architects
+		\item QA analysts
+	\end{enumerate} & 
+	Define exactly what specification the software system must adhere to. 
+\\ \hline
+	Module Guide & 
+	\begin{enumerate} 
+		\item{All developers} 
+		\item{QA analysts} 
+	\end{enumerate} & 
+	\ds{TODO}
+\\ \hline
+	Module Interface Specifications & 
+	\begin{enumerate}
+		\item Developers who implement the module
+		\item Developers who use the module
+		\item QA analysts
+	\end{enumerate} & 
+	\ds{TODO}
+\\ \hline
+	Verification and Validation Plan &
+	\begin{enumerate}
+		\item Developers who implement the module
+		\item QA analysts
+	\end{enumerate} &
+	\ds{TODO}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\section{Patterns and repetition and patterns and repetition -- (OR -- 
+Repeating patterns and patterns that repeat --)}
+  \ds{**Make sure to mention "We actually found that some
+  info is boilerplate, some is system-specific, and some is general to all
+  members of a software family, but more specific than generic boilerplate"}
+
+From the above sections, we see many emerging patterns in our \sfs{}. Ignoring, 
+for now, the organizational patterns from the \smithea{} templates we can 
+already see simple patterns emerging.
+
+Returning to our example from Section~\ref{sec:breakdown}, looking only at the 
+reference section of our SRS template, we have already found
 three subsections that contain the majority of their information in the same
-structure: a table of symbols and any information relevant to those symbols.
-Additionally, we can see that the Table of Units and Table of Symbols have an
-introductory blurb preceding the tables themselves, whereas the Table of 
-Abbreviations and Acronyms does not. Inspecting across case studies, we can see
-that the introduction to the Table of Units is simply boilerplate text 
-dropped into each case study verbatim, thus is completely generic and 
+organizational structure: a table of symbols and general information relevant 
+to those symbols. Additionally, we can see that the Table of Units and Table of 
+Symbols have an introductory blurb preceding the tables themselves, whereas the 
+Table of Abbreviations and Acronyms does not. Inspecting across case studies, 
+we can see that the introduction to the Table of Units is simply boilerplate 
+text dropped into each case study verbatim, thus is completely generic and 
 applicable to \emph{any} software system using SI units. The introduction to 
 the Table of Symbols appears to be boilerplate across several examples, 
-however, it does have some variation (see: GamePhysics compared to GlassBR).
+however, it does have some variation (see: \gp{} compared to \gb).
 These variations reveal the obvious: the variability between systems is greater 
 than simply a difference in choice of symbols, and so there is some 
 system-specific knowledge being encoded. We can intuit this conclusion based 
@@ -196,25 +267,14 @@ to. Within one domain, there may be several acronyms meaning different things,
 for example: PM can refer to Product Manager, Project Manager, Program 
 Manager, etc.
 
-
-\section{Artifact Summary}
-
-See Table [NUM] for a summary of each software artifact's 'what', 'who', and
-'how'.
-
-*TABLE*
-| Artifact | Who (Audience) | What (Problem) | How (Specific vs boilerplate) |
-
-\section{Patterns and repetition and patterns and repetition -- (OR -- Repeating patterns and patterns that repeat --)}
-From the above sections, we see many emerging patterns in our software
-artifacts. Ignoring, for now, the organizational patterns from the \smithea{}
-templates we can already see simple patterns emerging. For example, we see the
-same concept being introduced in multiple areas within a single artifact and
-across artifacts in a project. [Example from one of the figures in the previous
-section. Preferably something like a DD or TM that shows up within a single doc
-multiple times]. We also see patterns of commonality across software family
-members (The SWHS and NoPCM case studies) as they have been developed to solve
-similar, or in our case nearly identical, problems.
+By continuing to breakdown the SRS and other \sfs{}, we are able to find many 
+more patterns. For example, we see the same concept being introduced in 
+multiple areas within a single artifact and across artifacts in a project. 
+[Example from one of the figures in the previous section. Preferably something 
+like a DD or TM that shows up within a single doc multiple times]. We also see 
+patterns of commonality across software family members (The SWHS and NoPCM case 
+studies) as they have been developed to solve similar, or in our case nearly 
+identical, problems.
 
 - inter-project (repetition throughout different views + other patterns.)
   vs intra-project knowledge (repetition across projects/family members,

@@ -30,6 +30,11 @@ else
   exit 1
 fi
 
+if [ "$FULL" -ne "1" ]; then
+  echo "Haddock docs build (with strictly the intent to test Haddock generation) complete. Exiting."
+  exit 0
+fi
+
 # Get doc folder
 DOCS_LOC="$(stack path --local-install-root)/doc"
 

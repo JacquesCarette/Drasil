@@ -328,8 +328,9 @@ hlint: check_stack ##@HLint Run HLint through the drasil packages. Uses a local 
 hot_hlint: ##@HLint Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
-docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules.
-	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
+FULL ?= 0
+docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules. Set FULL=1 if you want to additionally test Haddock generation for website deployment.
+	FULL="$(FULL)" DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
 
 #----------------------------#
 #--- GOOL related targets ---#

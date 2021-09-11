@@ -35,7 +35,7 @@ data ModelKinds e where
   EquationalConstraints :: Express e => ConstraintSet e -> ModelKinds e
   EquationalModel       :: Express e => QDefinition e   -> ModelKinds e
   EquationalRealm       :: Express e => MultiDefn e     -> ModelKinds e
-  OthModel              :: Express e => RelationConcept -> ModelKinds e -- TODO: Remove (after having removed all insances of it).
+  OthModel              :: Express e => RelationConcept -> ModelKinds e -- TODO: Remove (after having removed all instances of it).
 
 -- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
 data ModelKind e = MK {

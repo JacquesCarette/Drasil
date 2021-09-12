@@ -22,7 +22,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr(..))
-import Language.Drasil.Expr (sy)
+import Language.Drasil.ModelExpr (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
@@ -110,7 +110,7 @@ instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.d
 -- | Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
 -- | Convert the symbol of the 'ConstrConcept' to a 'ModelExpr'.
-instance Express       ConstrConcept where express = express . sy
+instance Express       ConstrConcept where express = sy
 
 -- | Creates a 'ConstrConcept' with a quantitative concept, a list of 'Constraint's and an 'Expr'.
 constrained' :: (Concept c, MayHaveUnit c, Quantity c) =>

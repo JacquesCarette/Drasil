@@ -16,47 +16,47 @@ import Data.Drasil.Quantities.Physics (gravitationalAccelConst,
 
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)
 
-flightDur', iyPos, yConstAccel, iSpeed :: Expr
+flightDur', iyPos, yConstAccel, iSpeed :: ExprC r => r
 flightDur' = exactDbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
 iyPos = exactDbl 0                              -- launchOrigin
 yConstAccel = neg $ sy gravitationalAccelConst  -- accelYGravity
 iSpeed = sy launSpeed
 
-offset' :: Expr
+offset' :: ExprC r => r
 offset' = sy landPos $- sy targPos
 
-message :: Expr
+message :: ExprC r => r
 message = completeCase [case1, case2, case3]
   where case1 = (str "The target was hit.",        abs_ (sy offset $/ sy targPos) $< sy tol)
         case2 = (str "The projectile fell short.", sy offset $< exactDbl 0)
         case3 = (str "The projectile went long.",  sy offset $> exactDbl 0)
 
 --
-speed' :: Expr
+speed' :: ExprC r => r
 speed' = sy QP.iSpeed `addRe` (sy QP.constAccel `mulRe` sy time)
 
-scalarPos' :: Expr
+scalarPos' :: ExprC r => r
 scalarPos' = sy iPos `addRe` (sy QP.iSpeed `mulRe` sy time `addRe` half (sy QP.constAccel `mulRe` square (sy time)))
 
-rectNoTime :: Expr
+rectNoTime :: ExprC r => r
 rectNoTime = square (sy speed) $= square (sy QP.iSpeed) `addRe` (exactDbl 2 `mulRe` sy QP.constAccel `mulRe` (sy scalarPos $- sy iPos))
 
 --
-velVecExpr :: Expr
+velVecExpr :: ExprC r => r
 velVecExpr = vec2D (sy ixVel `addRe` (sy QP.xConstAccel `mulRe` sy time)) (sy iyVel `addRe` (sy QP.yConstAccel `mulRe` sy time))
 
 --
-posVecExpr :: Expr
+posVecExpr :: ExprC r => r
 posVecExpr = vec2D
               (sy QP.ixPos `addRe` (sy ixVel `mulRe` sy time) `addRe` half (sy QP.xConstAccel `mulRe` square (sy time)))
               (sy QP.iyPos `addRe` (sy iyVel `mulRe` sy time) `addRe` half (sy QP.yConstAccel `mulRe` square (sy time)))
 
 --
-landPosExpr :: Expr
+landPosExpr :: ExprC r => r
 landPosExpr = exactDbl 2 `mulRe` square (sy launSpeed) `mulRe` sin (sy launAngle) `mulRe` cos (sy launAngle) $/ sy gravitationalAccelConst
 
 -- Helper expressions that represent the vectors of quantities as components
-positionXY, velocityXY, accelerationXY, constAccelXY :: Expr
+positionXY, velocityXY, accelerationXY, constAccelXY :: ExprC r => r
 positionXY     = sy position     $= vec2D (sy xPos)           (sy yPos)
 velocityXY     = sy velocity     $= vec2D (sy xVel)           (sy yVel)
 accelerationXY = sy acceleration $= vec2D (sy xAccel)         (sy yAccel)

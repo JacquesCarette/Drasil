@@ -9,7 +9,7 @@ import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil (qw, makeRC, dRef, mkDerivName, phrase, atStartNP, nounPhraseSP,
-  (!.), (+:+), (+:+.), eS, sC, RelationConcept, Derivation, Sentence(..), Inclusive(..),
+  (!.), (+:+), (+:+.), eS, eS', sC, RelationConcept, Derivation, Sentence(..), Inclusive(..),
   RealInterval(UpFrom))
 import qualified Language.Drasil.Expr as E
 import Language.Drasil.ModelExpr
@@ -65,7 +65,7 @@ imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
-      [atStartNP (the processVariable), eS qdProcessVariableFD, S "in a", phrase pidCL +:+
+      [atStartNP (the processVariable), eS' qdProcessVariableFD, S "in a", phrase pidCL +:+
          S "is the product of the", phrase processError, fromSource ddErrSig `sC`
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
@@ -104,7 +104,7 @@ derivEqn3
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [atStartNP (the setPoint), eS qdSetPointTD, S "is a step function and a constant" +:+.
+      [atStartNP (the setPoint), eS' qdSetPointTD, S "is a step function and a constant" +:+.
          fromSource aSP,
        S "Therefore the",
          S "differential of the set point is zero. Hence the equation",

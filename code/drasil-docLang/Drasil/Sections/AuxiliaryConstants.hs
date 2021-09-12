@@ -28,7 +28,7 @@ intro kWord =  foldlSP [S "This section contains the standard values that are us
 tableOfConstants :: [SimpleQDef] -> LabelledContent
 tableOfConstants f = llcc tableOfConstantsRef $ Table
   [titleize symbol_, titleize description, titleize value, titleize CM.unit_]
-  (mkTable [ch, phrase, \c -> eS $ c ^. defnExpr, toSentence] f)
+  (mkTable [ch, phrase, \c -> eS $ express $ c ^. defnExpr, toSentence] f)
   (titleize' tAuxConsts)
   True
 

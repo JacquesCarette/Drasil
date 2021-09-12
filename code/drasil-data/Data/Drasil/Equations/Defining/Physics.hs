@@ -1,3 +1,4 @@
+{-# LANGUAGE NoMonomorphismRestriction #-}
 -- | Defines some basic equations of physics and their wrappers as concepts.
 module Data.Drasil.Equations.Defining.Physics where
 
@@ -17,10 +18,9 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 
 weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
-  hsPressureEqn, speedEqn :: Relation
+  newtonSLEqn, hsPressureEqn, speedEqn :: ExprC r => r
 
-newtonSLEqn :: ModelExpr
-newtonSLEqn               = express $ sy QPP.mass `mulRe` sy QP.acceleration
+newtonSLEqn               = sy QPP.mass `mulRe` sy QP.acceleration
 
 weightEqn                 = sy QPP.vol `mulRe` sy QPP.specWeight
 weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitationalAccel)

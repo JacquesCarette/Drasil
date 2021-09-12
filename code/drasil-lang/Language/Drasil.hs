@@ -10,35 +10,19 @@ module Language.Drasil (
   
   -- Language.Drasil.Expr
   Expr
+  , ExprC(..)
   , UFunc, UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
   , AssocArithOper, AssocBoolOper
   , Completeness, Relation
-  , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
-  , ($-), ($/), addI, addRe, mulI, mulRe
-  -- ** Math Functions
-  -- | Defines math-related expression functions, ranging from trigonometric
-  -- functions to matrix manipulation.
 
-  -- Language.Drasil.Expr.Math
-  , abs_, neg, negVec, log, ln, abs
-  , sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
-  , sqrt, euclidean, norm, not_
-  , square, half, oneHalf, oneThird, recip_
-  , dim, idx, int, dbl, exactDbl, frac, str, perc, completeCase, incompleteCase
-  , sumAll, defsum, prodAll, defprod, defint, intAll
-  , realInterval
-  , sy -- old "Chunk" constructor C
-  , apply, apply1, apply2, applyWithNamedArgs
-  , cross, m2x2, vec2D, dgnl2x2
   -- ** Expression Modelling Language 
   -- | Defines display-related expression functions. Used in models.
 
   -- Language.Drasil.Expr.ModelExpr
   , ModelExpr
   , DerivType
-  , defines, space, isIn, andMEs, equivMEs
-  , deriv, pderiv
+  , ModelExprC(..)
   -- ** Unicode symbols
   -- | Some expressions need special unicode characters.
 
@@ -192,7 +176,7 @@ module Language.Drasil (
 
   -- Language.Drasil.Sentence
   , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
-  , ch, eS, sC, sDash, sParen  
+  , ch, eS, eS', sC, sDash, sParen  
   -- Language.Drasil.Sentence.Extract
   , sdep, shortdep
   -- Language.Drasil.NounPhrase
@@ -251,9 +235,7 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.Expr
 import Language.Drasil.Expr.Lang
-import Language.Drasil.ModelExpr (space, isIn, defines
-  , andMEs, equivMEs
-  , deriv, pderiv)
+import Language.Drasil.ModelExpr (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
@@ -327,7 +309,7 @@ import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
-  (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
+  (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS)
 import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef)

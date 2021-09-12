@@ -16,7 +16,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Expr (sy)
+import Language.Drasil.ModelExpr (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol)
@@ -104,7 +104,7 @@ instance ConceptDomain  UncertQ where cdom = cdom . view coco
 -- | Finds the units of the 'ConstrConcept' used to make the 'UncertQ'.
 instance MayHaveUnit    UncertQ where getUnit = getUnit . view coco
 -- | Convert the symbol of the 'UncertQ' to a 'ModelExpr'.
-instance Express        UncertQ where express = express . sy
+instance Express        UncertQ where express = sy
 
 {-- Constructors --}
 -- | Smart constructor that requires a 'Quantity', a percentage, and a typical value with an 'Uncertainty'.

@@ -34,7 +34,7 @@ positionXDD_1 = ddENoRefs positionXQD_1 Nothing "positionXDD1" [positionXRef_1, 
 positionXQD_1 :: SimpleQDef
 positionXQD_1 = mkQuantDef xPos_1 positionXEqn_1
 
-positionXEqn_1 :: Expr
+positionXEqn_1 :: ExprC r => r
 positionXEqn_1 = sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
 
 positionXFigRef_1 :: Sentence
@@ -70,7 +70,7 @@ positionXDD_2 = ddENoRefs positionXQD_2 Nothing "positionXDD2" [positionXRef_2, 
 positionXQD_2 :: SimpleQDef
 positionXQD_2 = mkQuantDef xPos_2 positionXEqn_2
 
-positionXEqn_2 :: Expr
+positionXEqn_2 :: ExprC r => r
 positionXEqn_2 = sy positionXDD_1 `addRe` (sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
 
 positionXFigRef_2 :: Sentence
@@ -88,7 +88,7 @@ positionYDD_2 = ddENoRefs positionYQD_2 Nothing "positionYDD2" [positionYRef_2, 
 positionYQD_2 :: SimpleQDef
 positionYQD_2 = mkQuantDef yPos_2 positionYEqn_2
 
-positionYEqn_2 :: Expr
+positionYEqn_2 :: ExprC r => r
 positionYEqn_2 = sy positionYDD_1 `addRe` neg (sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
 
 positionYFigRef_2 :: Sentence

@@ -21,9 +21,8 @@ import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
-import Language.Drasil.ModelExpr (defines)
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Expr.Lang (Expr(FCall, C))
+import Language.Drasil.ModelExpr
+import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
 import Language.Drasil.Expr (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (mkFunction, Space)
@@ -58,10 +57,9 @@ instance DefiningExpr  QDefinition where
 instance Express e => Express       (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
-      f :: Express g => g -> ModelExpr
       f = case q ^. qdInputs of
         [] -> defines (sy q)
-        is -> defines (FCall (q ^. uid) (map C is) [])
+        is -> defines $ apply q (map C is)
 instance Express e => ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
 
 -- data QDefinition e = Express e => QD

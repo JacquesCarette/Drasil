@@ -119,25 +119,25 @@ accelGravityDerivSentence5 :: [Sentence]
 accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the", phrase QP.force `S.is`
                                S "an attractive", phrase QP.force]
 
-accelGravityDerivEqn1 :: Expr
+accelGravityDerivEqn1 :: ExprC r => r
 accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2) $/
                         sy sqrDist) `mulRe` sy dVect
 
-accelGravityDerivEqn2 :: Expr
+accelGravityDerivEqn2 :: ExprC r => r
 accelGravityDerivEqn2 = sy dVect $= (sy distMass $/ sy dispNorm)
 
-accelGravityDerivEqn3 :: Expr
+accelGravityDerivEqn3 :: ExprC r => r
 accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst `mulRe`
                          (sy mLarger `mulRe` sy QPP.mass $/ sy sqrDist) `mulRe` sy dVect
                          $= sy QPP.mass `mulRe` sy QP.gravitationalAccel
 
-accelGravityDerivEqn4 :: Expr
+accelGravityDerivEqn4 :: ExprC r => r
 accelGravityDerivEqn4 = sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist) `mulRe` sy dVect $= sy QP.gravitationalAccel
 
-accelGravityDerivEqn5 :: Expr
+accelGravityDerivEqn5 :: ExprC r => r
 accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist)) `mulRe` sy dVect
 
-accelGravityDerivEqns :: [Expr]
+accelGravityDerivEqns :: ExprC r => [r]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
                          accelGravityDerivEqn4, accelGravityDerivEqn5]
 

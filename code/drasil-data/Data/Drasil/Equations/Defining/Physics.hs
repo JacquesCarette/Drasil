@@ -1,4 +1,3 @@
-{-# LANGUAGE NoMonomorphismRestriction #-}
 -- | Defines some basic equations of physics and their wrappers as concepts.
 module Data.Drasil.Equations.Defining.Physics where
 

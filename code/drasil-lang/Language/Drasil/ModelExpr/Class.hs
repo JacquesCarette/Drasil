@@ -26,17 +26,21 @@ assocSanitize b (it@(AssocB c des):r)
   | otherwise = it : assocSanitize b r
 assocSanitize b (de:des) = de : assocSanitize b des
 
+-- TODO: Check if we can remove andMEs
+-- TODO: Rename equivMEs
+
 class ModelExprC r where
   -- This also wants a symbol constraint.
   -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
   deriv, pderiv :: (HasUID c, HasSymbol c) => r -> c -> r
   
-  -- TODO: This "defines" is odd, it should really be accepting a (HasUID c, HasSymbol c) => c as a first parameter, I think?
   -- | One expression is "defined" by another.
   defines :: r -> r -> r
   
+  -- | Space literals.
   space :: Space -> r
 
+  -- | Check if a value belongs to a Space.
   isIn :: r -> Space -> r
   
   -- | Binary associative "And".

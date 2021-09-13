@@ -1,5 +1,11 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
-module Language.Drasil.Expr.Class (ExprC(..)) where
+module Language.Drasil.Expr.Class (
+  ExprC(..),
+  frac, recip_,
+  square, half,
+  oneHalf, oneThird,
+  apply1, apply2
+) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 
@@ -13,6 +19,39 @@ import Language.Drasil.Classes (IsArgumentName)
 import qualified Language.Drasil.ModelExpr.Lang as M
 
 -- TODO: figure out which ones can be moved outside of the ExprC class
+
+-- | Smart constructor for fractions.
+frac :: ExprC r => Integer -> Integer -> r
+frac n d = exactDbl n $/ exactDbl d
+
+-- | Smart constructor for rational expressions (only in 1/x form).
+recip_ :: ExprC r => r -> r
+recip_ denom = exactDbl 1 $/ denom
+
+-- | Smart constructor to square a function.
+square :: ExprC r => r -> r
+square x = x $^ exactDbl 2
+
+-- | Smart constructor to half a function exactly.
+half :: ExprC r => r -> r
+half x = x $/ exactDbl 2
+
+-- | 1/2, as an expression.
+oneHalf :: ExprC r => r
+oneHalf = frac 1 2
+
+-- | 1/3rd, as an expression.
+oneThird :: ExprC r => r
+oneThird = frac 1 3
+
+-- | Similar to 'apply', but converts second argument into 'Symbol's.
+apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
+apply1 f a = apply f [sy a]
+
+-- | Similar to 'apply', but the applied function takes two parameters (which are both 'Symbol's).
+apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) 
+    => f -> a -> b -> r
+apply2 f a b = apply f [sy a, sy b]
 
 class ExprC r where
   infixr 8 $^
@@ -118,12 +157,6 @@ class ExprC r where
   -- | Smart constructor for exact doubles.
   exactDbl :: Integer -> r
   
-  -- | Smart constructor for fractions.
-  frac :: Integer -> Integer -> r
-  
-  -- | Smart constructor for rational expressions (only in 1/x form).
-  recip_ :: r -> r
-  
   -- | Smart constructor for strings.
   str :: String -> r
   
@@ -153,18 +186,6 @@ class ExprC r where
   -- | Smart constructor for case statements with an incomplete set of cases.
   incompleteCase :: [(r, r)] -> r
   
-  -- | Smart constructor to square a function.
-  square :: r -> r
-  
-  -- | Smart constructor to half a function exactly.
-  half :: r -> r
-  
-  -- | Constructs 1/2.
-  oneHalf :: r
-  
-  -- | Constructs 1/3.
-  oneThird :: r
-  
   -- | Create a two-by-two matrix from four given values. For example:
   --
   -- >>> m2x2 1 2 3 4
@@ -188,13 +209,6 @@ class ExprC r where
   -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
-  
-  -- | Similar to 'apply', but converts second argument into 'Symbol's.
-  apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
-  
-  -- | Similar to 'apply', but the applied function takes two parameters (which are both 'Symbol's).
-  apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) 
-    => f -> a -> b -> r
   
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
   applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 
@@ -345,12 +359,6 @@ instance ExprC Expr where
   -- | Smart constructor for exact doubles.
   exactDbl = ExactDbl
   
-  -- | Smart constructor for fractions.
-  frac l r = exactDbl l $/ exactDbl r
-  
-  -- | Smart constructor for rational expressions (only in 1/x form).
-  recip_ denom = exactDbl 1 $/ denom
-  
   -- | Smart constructor for strings.
   str = Str
   
@@ -388,18 +396,6 @@ instance ExprC Expr where
   -- | Smart constructor for case statements with an incomplete set of cases.
   incompleteCase = Case Incomplete
   
-  -- | Smart constructor to square a function.
-  square x = x $^ exactDbl 2
-  
-  -- | Smart constructor to half a function exactly.
-  half x = x $/ exactDbl 2
-  
-  -- | Constructs 1/2.
-  oneHalf = frac 1 2
-  
-  -- | Constructs 1/3.
-  oneThird = frac 1 3
-  
   -- | Create a two-by-two matrix from four given values. For example:
   --
   -- >>> m2x2 1 2 3 4
@@ -423,12 +419,6 @@ instance ExprC Expr where
   -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
   apply f ps = FCall (f ^. uid) ps []
-  
-  -- | Similar to 'apply', but converts second argument into 'Symbol's.
-  apply1 f a = FCall (f ^. uid) [sy a] []
-  
-  -- | Similar to 'apply', but the applied function takes two parameters (which are both 'Symbol's).
-  apply2 f a b = FCall (f ^. uid) [sy a, sy b] []
   
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
   applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
@@ -579,12 +569,6 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for exact doubles.
   exactDbl = M.ExactDbl
 
-  -- | Smart constructor for fractions.
-  frac l r = exactDbl l $/ exactDbl r
-
-  -- | Smart constructor for rational expressions (only in 1/x form).
-  recip_ denom = exactDbl 1 $/ denom
-
   -- | Smart constructor for strings.
   str = M.Str
 
@@ -622,18 +606,6 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for case statements with an incomplete set of cases.
   incompleteCase = M.Case Incomplete
 
-  -- | Smart constructor to square a function.
-  square x = x $^ exactDbl 2
-
-  -- | Smart constructor to half a function exactly.
-  half x = x $/ exactDbl 2
-
-  -- | Constructs 1/2.
-  oneHalf = frac 1 2
-
-  -- | Constructs 1/3.
-  oneThird = frac 1 3
-
   -- | Create a two-by-two matrix from four given values. For example:
   --
   -- >>> m2x2 1 2 3 4
@@ -657,12 +629,6 @@ instance ExprC M.ModelExpr where
   -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
   apply f ps = M.FCall (f ^. uid) ps []
-
-  -- | Similar to 'apply', but converts second argument into 'Symbol's.
-  apply1 f a = M.FCall (f ^. uid) [sy a] []
-
-  -- | Similar to 'apply', but the applied function takes two parameters (which are both 'Symbol's).
-  apply2 f a b = M.FCall (f ^. uid) [sy a, sy b] []
 
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
   applyWithNamedArgs f ps ns = M.FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 

@@ -2,7 +2,7 @@ module Drasil.NoPCM.Derivations (
   eBalanceOnWtrDerivEqns
 ) where
 
-import Language.Drasil (ExprC(..), ModelExprC(..), ModelExpr)
+import Language.Drasil (ExprC(..), ModelExprC(..), ModelExpr, recip_)
 
 import Data.Drasil.Quantities.Physics (time)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,

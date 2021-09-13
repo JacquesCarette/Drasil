@@ -1,4 +1,4 @@
-{-# LANGUAGE RankNTypes, FlexibleInstances, GADTs, InstanceSigs #-}
+{-# LANGUAGE RankNTypes, FlexibleInstances, GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 
 -- | Contains chunks related to adding an expression to a quantitative concept. 
@@ -21,7 +21,8 @@ import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
-import Language.Drasil.ModelExpr
+import Language.Drasil.Expr.Class (ExprC(apply, sy))
+import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (mkFunction, Space)

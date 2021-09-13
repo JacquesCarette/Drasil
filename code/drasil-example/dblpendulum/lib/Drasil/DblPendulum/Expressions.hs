@@ -9,7 +9,6 @@ import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   xVel_1, yVel_1, xAccel_1, yAccel_1, angularAccel_1, angularAccel_2,
   tension_1, tension_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2)
-import Control.Lens ((^.))
 
 -- Velocity X/Y First Object
 velXExpr_1, velYExpr_1 :: ExprC r => r

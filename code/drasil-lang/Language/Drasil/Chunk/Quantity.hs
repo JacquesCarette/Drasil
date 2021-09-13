@@ -14,7 +14,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasSpace(typ), Quantity, Express(..))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, mkIdea, nc, ncUID, mkIdeaUID)
 import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
-import Language.Drasil.ModelExpr (sy)
+import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))

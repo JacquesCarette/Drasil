@@ -233,9 +233,9 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.Expr
+import Language.Drasil.Expr.Class (ExprC(..))
 import Language.Drasil.Expr.Lang
-import Language.Drasil.ModelExpr (ModelExprC(..))
+import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)

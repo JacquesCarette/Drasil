@@ -10,6 +10,9 @@ import Language.Drasil.Expr.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
 import Language.Drasil.Classes.Core (HasSymbol, HasUID(..))
 import Language.Drasil.Classes (IsArgumentName)
+import qualified Language.Drasil.ModelExpr.Lang as M
+
+-- TODO: figure out which ones can be moved outside of the ExprC class
 
 class ExprC r where
   infixr 8 $^
@@ -435,3 +438,236 @@ instance ExprC Expr where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C (x ^. uid)
   
+instance ExprC M.ModelExpr where
+  -- | Smart constructor for equating two expressions.
+  ($=)  = M.EqBinaryOp M.Eq
+  -- | Smart constructor for showing that two expressions are not equal.
+  ($!=) = M.EqBinaryOp M.NEq
+
+  -- | Smart constructor for ordering two equations.
+  -- | Less than.
+  ($<)  = M.OrdBinaryOp M.Lt
+  -- | Greater than.
+  ($>)  = M.OrdBinaryOp M.Gt
+  -- | Less than or equal to.
+  ($<=) = M.OrdBinaryOp M.LEq
+  -- | Greater than or equal to.
+  ($>=) = M.OrdBinaryOp M.GEq
+
+  -- | Smart constructor for the dot product of two equations.
+  ($.) = M.VVNBinaryOp M.Dot
+
+  -- | Add two expressions (Integers).
+  addI l (M.Int 0) = l
+  addI (M.Int 0) r = r
+  addI (M.AssocA M.AddI l) (M.AssocA M.AddI r) = M.AssocA M.AddI (l ++ r)
+  addI (M.AssocA M.AddI l) r = M.AssocA M.AddI (l ++ [r])
+  addI l (M.AssocA M.AddI r) = M.AssocA M.AddI (l : r)
+  addI l r = M.AssocA M.AddI [l, r]
+
+  -- | Add two expressions (Real numbers).
+  addRe l (M.Dbl 0)      = l
+  addRe (M.Dbl 0) r      = r
+  addRe l (M.ExactDbl 0) = l
+  addRe (M.ExactDbl 0) r = r
+  addRe (M.AssocA M.AddRe l) (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l ++ r)
+  addRe (M.AssocA M.AddRe l) r = M.AssocA M.AddRe (l ++ [r])
+  addRe l (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l : r)
+  addRe l r = M.AssocA M.AddRe [l, r]
+
+  -- | Multiply two expressions (Integers).
+  mulI l (M.Int 1) = l
+  mulI (M.Int 1) r = r
+  mulI (M.AssocA M.MulI l) (M.AssocA M.MulI r) = M.AssocA M.MulI (l ++ r)
+  mulI (M.AssocA M.MulI l) r = M.AssocA M.MulI (l ++ [r])
+  mulI l (M.AssocA M.MulI r) = M.AssocA M.MulI (l : r)
+  mulI l r = M.AssocA M.MulI [l, r]
+
+  -- | Multiply two expressions (Real numbers).
+  mulRe l (M.Dbl 1)      = l
+  mulRe (M.Dbl 1) r      = r
+  mulRe l (M.ExactDbl 1) = l
+  mulRe (M.ExactDbl 1) r = r
+  mulRe (M.AssocA M.MulRe l) (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l ++ r)
+  mulRe (M.AssocA M.MulRe l) r = M.AssocA M.MulRe (l ++ [r])
+  mulRe l (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l : r)
+  mulRe l r = M.AssocA M.MulRe [l, r]
+
+  -- | Smart constructor for subtracting two expressions.
+  ($-) = M.ArithBinaryOp M.Subt
+  -- | Smart constructor for dividing two expressions.
+  ($/) = M.ArithBinaryOp M.Frac
+  -- | Smart constructor for rasing the first expression to the power of the second.
+  ($^) = M.ArithBinaryOp M.Pow
+
+  -- | Smart constructor to show that one expression implies the other (conditional operator).
+  ($=>)  = M.BoolBinaryOp M.Impl
+  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
+  ($<=>) = M.BoolBinaryOp M.Iff
+
+  -- | Smart constructor for the boolean /and/ operator.
+  a $&& b = M.AssocB M.And [a, b]
+  -- | Smart constructor for the boolean /or/ operator.
+  a $|| b = M.AssocB M.Or  [a, b]
+
+  -- | Smart constructor for taking the absolute value of an expression.
+  abs_ = M.UnaryOp M.Abs
+
+  -- | Smart constructor for negating an expression.
+  neg = M.UnaryOp M.Neg
+
+  -- | Smart constructor to take the log of an expression.
+  log = M.UnaryOp M.Log
+
+  -- | Smart constructor to take the ln of an expression.
+  ln = M.UnaryOp M.Ln
+
+  -- | Smart constructor to take the square root of an expression.
+  sqrt = M.UnaryOp M.Sqrt
+
+  -- | Smart constructor to apply sin to an expression.
+  sin = M.UnaryOp M.Sin
+
+  -- | Smart constructor to apply cos to an expression.
+  cos = M.UnaryOp M.Cos
+
+  -- | Smart constructor to apply tan to an expression.
+  tan = M.UnaryOp M.Tan
+
+  -- | Smart constructor to apply sec to an expression.
+  sec = M.UnaryOp M.Sec
+
+  -- | Smart constructor to apply csc to an expression.
+  csc = M.UnaryOp M.Csc
+
+  -- | Smart constructor to apply cot to an expression.
+  cot = M.UnaryOp M.Cot
+
+  -- | Smart constructor to apply arcsin to an expression.
+  arcsin = M.UnaryOp M.Arcsin
+
+  -- | Smart constructor to apply arccos to an expression.
+  arccos = M.UnaryOp M.Arccos
+
+  -- | Smart constructor to apply arctan to an expression.
+  arctan = M.UnaryOp M.Arctan
+
+  -- | Smart constructor for the exponential (base e) function.
+  exp = M.UnaryOp M.Exp
+
+  -- | Smart constructor for calculating the dimension of a vector.
+  dim = M.UnaryOpVN M.Dim
+
+  -- | Smart constructor for calculating the normal form of a vector.
+  norm = M.UnaryOpVN M.Norm
+
+  -- | Smart constructor for negating vectors.
+  negVec = M.UnaryOpVV M.NegV
+
+  -- | Smart constructor for applying logical negation to an expression.
+  not_ = M.UnaryOpB M.Not
+
+  -- | Smart constructor for indexing.
+  idx = M.LABinaryOp M.Index
+
+  -- | Smart constructor for integers.
+  int = M.Int
+
+  -- | Smart constructor for doubles.
+  dbl = M.Dbl
+
+  -- | Smart constructor for exact doubles.
+  exactDbl = M.ExactDbl
+
+  -- | Smart constructor for fractions.
+  frac l r = exactDbl l $/ exactDbl r
+
+  -- | Smart constructor for rational expressions (only in 1/x form).
+  recip_ denom = exactDbl 1 $/ denom
+
+  -- | Smart constructor for strings.
+  str = M.Str
+
+  -- | Smart constructors for percents.
+  perc = M.Perc
+
+  -- | Integrate over some expression with bounds (∫).
+  defint v low high = M.Operator M.AddRe (BoundedDD v Continuous low high)
+  -- | Integrate over some expression (∫).
+  intAll v = M.Operator M.AddRe (AllDD v Continuous)
+
+  -- | Sum over some expression with bounds (∑).
+  defsum v low high = M.Operator M.AddRe (BoundedDD v Discrete low high)
+  -- | Sum over some expression (∑).
+  sumAll v = M.Operator M.AddRe (AllDD v Discrete)
+
+  -- | Product over some expression with bounds (∏).
+  defprod v low high = M.Operator M.MulRe (BoundedDD v Discrete low high)
+  -- | Product over some expression (∏).
+  prodAll v = M.Operator M.MulRe (AllDD v Discrete)
+  -- TODO: Above only does for Reals
+
+  -- | Smart constructor for 'real interval' membership.
+  realInterval c = M.RealI (c ^. uid)
+
+  -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
+  euclidean = sqrt . foldr1 addRe . map square
+
+  -- | Smart constructor to cross product two expressions.
+  cross = M.VVVBinaryOp M.Cross
+
+  -- | Smart constructor for case statements with a complete set of cases.
+  completeCase = M.Case Complete
+
+  -- | Smart constructor for case statements with an incomplete set of cases.
+  incompleteCase = M.Case Incomplete
+
+  -- | Smart constructor to square a function.
+  square x = x $^ exactDbl 2
+
+  -- | Smart constructor to half a function exactly.
+  half x = x $/ exactDbl 2
+
+  -- | Constructs 1/2.
+  oneHalf = frac 1 2
+
+  -- | Constructs 1/3.
+  oneThird = frac 1 3
+
+  -- | Create a two-by-two matrix from four given values. For example:
+  --
+  -- >>> m2x2 1 2 3 4
+  -- [ [1,2],
+  --   [3,4] ]
+  m2x2 a b c d = M.Matrix [[a,b],[c,d]]
+
+  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
+  vec2D a b    = M.Matrix [[a],[b]]
+
+  -- | Creates a diagonal two-by-two matrix. For example:
+  --
+  -- >>> dgnl2x2 1 2
+  -- [ [1, 0],
+  --   [0, 2] ]
+  dgnl2x2 a  = m2x2 a (M.Int 0) (M.Int 0)
+
+  -- Some helper functions to do function application
+
+  -- FIXME: These constructors should check that the UID is associated with a
+  -- chunk that is actually callable.
+  -- | Applies a given function with a list of parameters.
+  apply f ps = M.FCall (f ^. uid) ps []
+
+  -- | Similar to 'apply', but converts second argument into 'Symbol's.
+  apply1 f a = M.FCall (f ^. uid) [sy a] []
+
+  -- | Similar to 'apply', but the applied function takes two parameters (which are both 'Symbol's).
+  apply2 f a b = M.FCall (f ^. uid) [sy a, sy b] []
+
+  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
+  applyWithNamedArgs f ps ns = M.FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
+    (map snd ns))
+
+  -- Note how |sy| 'enforces' having a symbol
+  -- | Create an 'Expr' from a 'Symbol'ic Chunk.
+  sy x = M.C (x ^. uid)

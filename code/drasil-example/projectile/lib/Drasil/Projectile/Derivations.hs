@@ -9,8 +9,7 @@ module Drasil.Projectile.Derivations (
 
 import Prelude hiding (cos, sin)
 
-import Language.Drasil (eqSymb)
-import Language.Drasil.ModelExpr
+import Language.Drasil (eqSymb, ModelExprC(..), ExprC(..), ModelExpr)
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, ixPos, iyPos)
 import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelConst,

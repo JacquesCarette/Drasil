@@ -8,11 +8,7 @@ import Drasil.PDController.DataDefs
 import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
-import Language.Drasil (qw, makeRC, dRef, mkDerivName, phrase, atStartNP, nounPhraseSP,
-  (!.), (+:+), (+:+.), eS, eS', sC, RelationConcept, Derivation, Sentence(..), Inclusive(..),
-  RealInterval(UpFrom))
-import qualified Language.Drasil.Expr as E
-import Language.Drasil.ModelExpr
+import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, deModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -27,10 +23,10 @@ instanceModels = [imPD]
 imPD :: InstanceModel
 imPD
   = im (deModel' imPDRC)
-      [qwC qdSetPointTD $ UpFrom (Exc, E.exactDbl 0), qwC qdPropGain $ UpFrom (Exc, E.exactDbl 0),
-       qwC qdDerivGain $ UpFrom (Exc, E.exactDbl 0)]
+      [qwC qdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC qdPropGain $ UpFrom (Exc, exactDbl 0),
+       qwC qdDerivGain $ UpFrom (Exc, exactDbl 0)]
       (qw qdProcessVariableTD)
-      [UpFrom (Exc, E.exactDbl 0)]
+      [UpFrom (Exc, exactDbl 0)]
       [dRef abbasi2015, dRef johnson2008]
       (Just imDeriv)
       "pdEquationIM"

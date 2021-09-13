@@ -2,7 +2,7 @@ module Drasil.SglPendulum.Derivations where
 
 import Prelude hiding (sin, cos, tan, sqrt)
 
-import Language.Drasil.ModelExpr
+import Language.Drasil
 
 import Data.Drasil.Quantities.Physics (acceleration, angularAccel, angularFrequency,
   angularVelocity, gravitationalAccel, momentOfInertia, period, position, time,

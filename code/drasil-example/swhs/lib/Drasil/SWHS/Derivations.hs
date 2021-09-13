@@ -2,10 +2,11 @@ module Drasil.SWHS.Derivations where
 
 import Data.Drasil.Quantities.Physics (time)
 
-import Drasil.SWHS.Unitals
+import Drasil.SWHS.Unitals (wMass, tauW, tauSP, pcmSA, pcmMass,
+  pcmHTC, htCapW, htCapSP, eta, coilSA, coilHTC, htFluxC,
+  htFluxP, tempC, tempW, tempPCM)
 
-import Language.Drasil.ModelExpr
-
+import Language.Drasil (ModelExprC(deriv), ExprC(..), ModelExpr)
 
 --
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,

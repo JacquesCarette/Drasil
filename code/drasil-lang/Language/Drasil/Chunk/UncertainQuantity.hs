@@ -16,7 +16,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.ModelExpr (sy)
+import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol)

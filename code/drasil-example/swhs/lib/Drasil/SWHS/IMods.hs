@@ -2,7 +2,6 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
-import qualified Language.Drasil.ModelExpr as M
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
   equationalModel, ModelKind)
 import Utils.Drasil
@@ -58,7 +57,7 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
 
 -- TODO: Clean this up properly once we have a better way of intermixing Expr & ModelExpr in files
 balWtrRel :: ModelExpr
-balWtrRel = M.deriv (M.sy tempW) time M.$= express balWtrExpr
+balWtrRel = deriv (sy tempW) time $= express balWtrExpr
 
 balWtrExpr :: Expr
 balWtrExpr = recip_ (sy tauW) `mulRe` ((sy tempC $- apply1 tempW time) `addRe`
@@ -166,9 +165,9 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
   (tempPCM ^. defn) balPCMRel -- eBalanceOnPCML
 
 balPCMRel :: ModelExpr
-balPCMRel = M.deriv (M.sy tempPCM) time M.$= express balPCMExpr
+balPCMRel = deriv (sy tempPCM) time $= balPCMExpr
 
-balPCMExpr :: Expr
+balPCMExpr :: ExprC r => r
 balPCMExpr = completeCase [case1, case2, case3]
   where case1 = (recip_ (sy tauSP) `mulRe` (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))

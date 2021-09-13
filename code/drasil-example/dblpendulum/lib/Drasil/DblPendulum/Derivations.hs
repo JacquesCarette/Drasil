@@ -2,8 +2,8 @@ module Drasil.DblPendulum.Derivations where
 
 import Prelude hiding (sin, cos)
 
-import Language.Drasil (defnExpr, express)
-import Language.Drasil.ModelExpr
+import Language.Drasil (ModelExprC(..), ExprC(..),
+  Express(..), ModelExpr, DefiningExpr(..))
 
 import Data.Drasil.Quantities.Physics(velocity, acceleration, gravitationalAccel, time)
 import Drasil.DblPendulum.DataDefs

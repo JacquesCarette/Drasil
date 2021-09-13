@@ -167,6 +167,7 @@ debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC)
 debug: test ## Run test target with better debugging tools.
 
+#----------------------#
 #--- Initial checks ---#
 #----------------------#
 
@@ -187,6 +188,7 @@ graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 deps: check_stack ##@Dependencies Build only dependencies.
 	- stack build $(stackArgs) --only-dependencies
 
+#-------------------------------------------------#
 #--- Targets that affect all packages/examples ---#
 #-------------------------------------------------#
 
@@ -218,6 +220,7 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 # then make pdfs from the generated TeX files.
 tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
+#--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
 # Use filter to make a target for every package (second argument of filter)

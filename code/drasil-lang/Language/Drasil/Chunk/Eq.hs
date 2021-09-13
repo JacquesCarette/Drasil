@@ -23,7 +23,6 @@ import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
 import Language.Drasil.ModelExpr
 import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
-import Language.Drasil.Expr (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (mkFunction, Space)
 import Language.Drasil.Sentence (Sentence(EmptyS))

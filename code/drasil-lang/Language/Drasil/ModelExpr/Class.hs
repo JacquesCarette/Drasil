@@ -26,7 +26,6 @@ assocSanitize b (it@(AssocB c des):r)
   | otherwise = it : assocSanitize b r
 assocSanitize b (de:des) = de : assocSanitize b des
 
--- TODO: Check if we can remove andMEs
 -- TODO: Rename equivMEs
 
 class ModelExprC r where
@@ -43,9 +42,6 @@ class ModelExprC r where
   -- | Check if a value belongs to a Space.
   isIn :: r -> Space -> r
   
-  -- | Binary associative "And".
-  andMEs :: [r] -> r
-  
   -- | Binary associative "Equivalence".
   equivMEs :: [r] -> r
 
@@ -59,8 +55,6 @@ instance ModelExprC ModelExpr where
 
   isIn a s = SpaceBinaryOp IsIn a (Spc s)
 
-  andMEs = assocCreate And
-  
   equivMEs des
     | length des >= 2 = assocCreate Equivalence des
     | otherwise       = error $ "Need at least 2 expressions to create " ++ show Equivalence

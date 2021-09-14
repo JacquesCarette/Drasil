@@ -40,9 +40,9 @@ factOfSafety = tm (equationalModelU "factOfSafetyTM" factOfSafetyQD)
 
 ------------------------------------
 factOfSafetyQD :: ModelQDef
-factOfSafetyQD = mkQuantDef' fs factorOfSafety $ express factOfSafetyExpr
+factOfSafetyQD = mkQuantDef' fs factorOfSafety factOfSafetyExpr
 
-factOfSafetyExpr :: Expr
+factOfSafetyExpr :: ExprC r => r
 factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 
 --
@@ -83,9 +83,9 @@ mcShrStrgth = tm (equationalModelU "mcShrSrgth" mcShrStrgthQD)
 ------------------------------------
 mcShrStrgthQD :: ModelQDef
 mcShrStrgthQD = fromEqnSt' (shrStress ^. uid) (nounPhraseSP "Mohr-Coulumb shear strength")
- mcShrStrgthDesc (symbol shrStress) Real $ express mcShrStrgthExpr
+ mcShrStrgthDesc (symbol shrStress) Real mcShrStrgthExpr
 
-mcShrStrgthExpr :: Expr
+mcShrStrgthExpr :: ExprC r => r
 mcShrStrgthExpr = sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion
 
 mcShrStrgthDesc :: Sentence
@@ -113,9 +113,9 @@ effStress = tm (equationalModelU "effectiveStressTM" effStressQD)
 ------------------------------------
 effStressQD :: ModelQDef
 effStressQD = fromEqnSt' (effectiveStress ^. uid) (nounPhraseSP "effective stress")
- effStressDesc (symbol effectiveStress) Real $ express effStressExpr
+ effStressDesc (symbol effectiveStress) Real effStressExpr
 
-effStressExpr :: Expr
+effStressExpr :: ExprC r => r
 effStressExpr = sy totNormStress $- sy porePressure
 
 effStressDesc :: Sentence

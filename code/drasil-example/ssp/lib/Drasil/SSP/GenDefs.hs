@@ -190,9 +190,9 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
 -- 
 
 normShrR :: ModelQDef
-normShrR = mkQuantDef intShrForce $ express nmShrRExpr
+normShrR = mkQuantDef intShrForce nmShrRExpr
 
-nmShrRExpr :: Expr
+nmShrRExpr :: ExprC r => r
 nmShrRExpr = sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
 
 nmShrRDesc :: Sentence

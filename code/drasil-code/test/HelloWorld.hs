@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | GOOL test program for various OO program functionality.
 -- Should run print statements, basic loops, math, and create a helper module without errors.
-module Test.HelloWorld (helloWorld) where
+module HelloWorld (helloWorld) where
 
 import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner, 
@@ -11,7 +11,7 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
   ValueExpression(..), extFuncApp, List(..),
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
-import Test.Helper (helper)
+import Helper (helper)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorld :: (OOProg r) => GSProgram r

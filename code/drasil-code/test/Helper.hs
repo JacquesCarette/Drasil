@@ -1,5 +1,5 @@
 -- | Makes the helper file for the GOOL HelloWorld tests.
-module Test.Helper (helper) where
+module Helper (helper) where
 
 import GOOL.Drasil (SFile, SMethod,
   OOProg, FileSym(..), bodyStatements, TypeSym(..), 

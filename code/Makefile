@@ -313,7 +313,7 @@ analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasi
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
 	@cd $(CLASSINST_GRAPH_FOLDER) && for pack in $(PACKAGES_E); do \
-		echo "Converting type dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
+		echo "Converting classInst dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done

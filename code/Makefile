@@ -311,10 +311,12 @@ analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasi
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
 	@echo Making dependency graphs. This may take a few minutes.
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
+		echo "Converting type dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
 	@cd $(CLASSINST_GRAPH_FOLDER) && for pack in $(PACKAGES_E); do \
+		echo "Converting classInst dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done

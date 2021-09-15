@@ -1,15 +1,12 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: August 20, 2021
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Data**
-  - Contains information used in Drasil (for ODEs)
+**lib**
+  - Contains the library code for this package.
 
-**Language**
-  - Contains the code for Drasil
-
-**Test**
+**test**
   - Contains code tests for GOOL
 
 package.yaml

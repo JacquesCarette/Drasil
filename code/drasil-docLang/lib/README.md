@@ -1,10 +1,7 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: August 20, 2021
 --------------------------------------------------
 
 **Drasil**
-  - Contains the current common-knowledge base for Drasil
- 
-README.md
-  - This file
+  - Contains the document language for Drasil

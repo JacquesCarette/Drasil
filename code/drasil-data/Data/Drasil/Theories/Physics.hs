@@ -131,7 +131,7 @@ newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
 newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRExpr :: ExprC r => r
+newtonSLRExpr :: PExpr
 newtonSLRExpr = sy QP.momentOfInertia `mulRe` sy QP.angularAccel
 
 newtonSLRNotes :: [Sentence]

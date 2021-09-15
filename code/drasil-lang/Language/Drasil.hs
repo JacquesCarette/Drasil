@@ -234,6 +234,7 @@ module Language.Drasil (
 
   -- * Type Synonyms
   , SimpleQDef, ModelQDef
+  , PExpr
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -322,9 +323,9 @@ import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable)
-import Language.Drasil.Synonyms (SimpleQDef, ModelQDef)
+import Language.Drasil.Synonyms (SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Misc -- all of it
+import Language.Drasil.Misc (mkTable)
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)

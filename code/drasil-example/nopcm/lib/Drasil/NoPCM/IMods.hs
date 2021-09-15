@@ -2,7 +2,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil (dRefInfo, (+:+), ch, eS, atStartNP, refS, sParen,
   sC, phrase, nounPhraseSP, qw, RefInfo(RefNote), NounPhrase(..),
-  ModelExprC(..), ExprC(..), Definition(..), MayHaveUnit(..),
+  ModelExprC(..), ExprC(..), PExpr, Definition(..), MayHaveUnit(..),
   Sentence(..), ModelExpr, Inclusive(..), RealInterval(..), Derivation,
   makeRC, mkDerivName, RelationConcept, recip_, apply1)
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
@@ -54,7 +54,7 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
 balWtrRel :: ModelExpr
 balWtrRel = deriv (sy tempW) time $= balWtrExpr
 
-balWtrExpr :: ExprC r => r
+balWtrExpr :: PExpr
 balWtrExpr = recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time)
 
 balWtrNotes :: [Sentence]

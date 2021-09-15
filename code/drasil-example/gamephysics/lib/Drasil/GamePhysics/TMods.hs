@@ -35,7 +35,7 @@ newtonTL = tmNoRefs (equationalModel' newtonTLQD) [qw force_1, qw force_2]
 newtonTLQD :: ModelQDef
 newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") newtonTLExpr
 
-newtonTLExpr :: ExprC r => r
+newtonTLExpr :: PExpr
 newtonTLExpr = neg (sy force_2)
 
 newtonTLNote :: Sentence
@@ -86,7 +86,7 @@ newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
 newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRExpr :: ExprC r => r
+newtonSLRExpr :: PExpr
 newtonSLRExpr = sy momentOfInertia `mulRe` sy angularAccel
 
 newtonSLRNotes :: [Sentence]

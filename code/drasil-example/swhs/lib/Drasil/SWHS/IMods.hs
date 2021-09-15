@@ -167,7 +167,7 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
 balPCMRel :: ModelExpr
 balPCMRel = deriv (sy tempPCM) time $= balPCMExpr
 
-balPCMExpr :: ExprC r => r
+balPCMExpr :: PExpr
 balPCMExpr = completeCase [case1, case2, case3]
   where case1 = (recip_ (sy tauSP) `mulRe` (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))

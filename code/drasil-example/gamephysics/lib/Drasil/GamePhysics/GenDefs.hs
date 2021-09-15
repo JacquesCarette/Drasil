@@ -74,7 +74,7 @@ accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much lar
   S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
   phrase QP.force]
 
-accelGravityExpr :: ExprC r => r
+accelGravityExpr :: PExpr
 accelGravityExpr = neg ((sy QP.gravitationalConst `mulRe` sy mLarger $/
   square (sy dispNorm)) `mulRe` sy dVect)
 
@@ -119,22 +119,22 @@ accelGravityDerivSentence5 :: [Sentence]
 accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the", phrase QP.force `S.is`
                                S "an attractive", phrase QP.force]
 
-accelGravityDerivEqn1 :: ExprC r => r
+accelGravityDerivEqn1 :: PExpr
 accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2) $/
                         sy sqrDist) `mulRe` sy dVect
 
-accelGravityDerivEqn2 :: ExprC r => r
+accelGravityDerivEqn2 :: PExpr
 accelGravityDerivEqn2 = sy dVect $= (sy distMass $/ sy dispNorm)
 
-accelGravityDerivEqn3 :: ExprC r => r
+accelGravityDerivEqn3 :: PExpr
 accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst `mulRe`
                          (sy mLarger `mulRe` sy QPP.mass $/ sy sqrDist) `mulRe` sy dVect
                          $= sy QPP.mass `mulRe` sy QP.gravitationalAccel
 
-accelGravityDerivEqn4 :: ExprC r => r
+accelGravityDerivEqn4 :: PExpr
 accelGravityDerivEqn4 = sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist) `mulRe` sy dVect $= sy QP.gravitationalAccel
 
-accelGravityDerivEqn5 :: ExprC r => r
+accelGravityDerivEqn5 :: PExpr
 accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist)) `mulRe` sy dVect
 
 accelGravityDerivEqns :: ExprC r => [r]
@@ -152,7 +152,7 @@ impulseGD = gd (equationalModel' impulseQD) (getUnit QP.impulseS) Nothing
 impulseQD :: ModelQDef
 impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impulseExpr
 
-impulseExpr :: ExprC r => r
+impulseExpr :: PExpr
 impulseExpr = (neg (exactDbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRelVel $.
   sy normalVect) $/ ((recip_ (sy massA) `addRe` recip_ (sy massB)) `mulRe`
   square (sy normalLen) `addRe`

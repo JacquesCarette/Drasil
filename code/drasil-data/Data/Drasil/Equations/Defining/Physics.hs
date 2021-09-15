@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 
 weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
-  newtonSLEqn, hsPressureEqn, speedEqn :: ExprC r => r
+  newtonSLEqn, hsPressureEqn, speedEqn :: PExpr
 
 newtonSLEqn               = sy QPP.mass `mulRe` sy QP.acceleration
 

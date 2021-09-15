@@ -29,7 +29,7 @@ lrIsSafe = tm (equationalModel' lrIsSafeQD)
 lrIsSafeQD :: ModelQDef
 lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") lrIsSafeExpr
 
-lrIsSafeExpr :: ExprC r => r
+lrIsSafeExpr :: PExpr
 lrIsSafeExpr = sy tmLRe $> sy tmDemand
 
 lrIsSafeDesc :: Sentence
@@ -44,7 +44,7 @@ pbIsSafe = tm (equationalModel' pbIsSafeQD)
 pbIsSafeQD :: ModelQDef
 pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") pbIsSafeExpr
 
-pbIsSafeExpr :: ExprC r => r
+pbIsSafeExpr :: PExpr
 pbIsSafeExpr = sy probFail $< sy pbTolfail
 
 pbIsSafeDesc :: Sentence

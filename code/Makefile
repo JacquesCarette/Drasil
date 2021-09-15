@@ -140,7 +140,7 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 #--- `make` command line options ---#
 #####################################
 
-# Indicating whether an operation will be used for deployment (1), or for generaal testing purposes (0).
+# Indicating whether an operation will be used for deployment (1), or for general testing purposes (0).
 FULL ?= 0
 
 # GHC debug options
@@ -323,7 +323,7 @@ convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
-	@echo "Built dependency graphs."
+	@echo "Dependency graphs built."
 
 #---------------------------------------#
 #--- HLint and Haddock Documentation ---#

@@ -2,7 +2,7 @@ name:                drasil-code
 version:             0.1.9.0
 author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - Code SubPackage
+synopsis:	     A framework for code and document generation for scientific software - Code SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
@@ -32,7 +32,7 @@ ghc-options:
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
   - Language.Drasil.Code
   - Data.Drasil.ExternalLibraries.ODELibraries
@@ -90,13 +90,15 @@ library:
 tests:
   codegenTest:
     main: Test.Main
-    source-dirs: ./
+    source-dirs:
+    - lib
+    - test
     other-modules:
-    - Test.FileTests
-    - Test.HelloWorld
-    - Test.Helper
-    - Test.Observer
-    - Test.PatternTest
+    - FileTests
+    - HelloWorld
+    - Helper
+    - Observer
+    - PatternTest
     - Language.Drasil.Code
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeDefinition

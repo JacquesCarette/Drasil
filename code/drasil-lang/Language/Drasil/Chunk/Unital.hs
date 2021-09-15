@@ -15,7 +15,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
-import Language.Drasil.Expr (sy)
+import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
@@ -57,7 +57,7 @@ instance TempHasUnit       UnitalChunk where findUnit = view uni
 -- | Equal if 'UID's are equal.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Convert the symbol of the 'UnitalChunk' to a 'ModelExpr'.
-instance Express       UnitalChunk where express = express . sy
+instance Express       UnitalChunk where express = sy
 
 --{BEGIN HELPER FUNCTIONS}--
 

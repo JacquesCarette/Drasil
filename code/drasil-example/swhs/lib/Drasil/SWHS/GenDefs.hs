@@ -1,12 +1,7 @@
 module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
   rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
-import Language.Drasil (ConceptChunk, mkQuantDef, makeRC, dRef, mkDerivName,
-  phrase, plural, titleize, atStartNP, nounPhraseSP, refS, (+:+), (+:+.), ch,
-  eS, sC, sParen, eqSymb, ConceptInstance, RelationConcept,
-  MayHaveUnit(..), UnitDefn, UnitalChunk, Derivation,
-  NounPhrase(..), Sentence(S, EmptyS, (:+:)), ModelQDef)
-import Language.Drasil.ModelExpr
+import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts

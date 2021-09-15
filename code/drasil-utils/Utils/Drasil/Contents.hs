@@ -14,12 +14,12 @@ import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
 import Control.Lens ((^.))
 
 -- | Displays a given expression and attaches a 'Reference' to it.
-lbldExpr :: Express c => c -> Reference -> LabelledContent
-lbldExpr c lbl = llcc lbl $ EqnBlock $ express c
+lbldExpr :: ModelExpr -> Reference -> LabelledContent
+lbldExpr c lbl = llcc lbl $ EqnBlock c
 
 -- | Same as 'eqUnR' except content is unlabelled (does not attach a 'Reference').
-unlbldExpr :: Express c => c -> Contents
-unlbldExpr c = UlC $ ulcc $ EqnBlock $ express c
+unlbldExpr :: ModelExpr -> Contents
+unlbldExpr c = UlC $ ulcc $ EqnBlock c
 
 -- | Creates a bulleted list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?

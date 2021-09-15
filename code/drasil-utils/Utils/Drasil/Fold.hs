@@ -35,7 +35,7 @@ foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 -- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
 foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ andMEs $ map constraintToExpr e
+foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
   where
     constraintToExpr (Range _ ri) = express $ realInterval c ri
 

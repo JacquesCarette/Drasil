@@ -4,12 +4,12 @@ module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
 
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil (ConceptChunk, dccWDS, fromEqnSt'', mkFuncDefByQ, qw, dRef,
-  dRefInfo, atStart, phrase, plural, makeURI, atStartNP, nounPhraseSP, refS,
-  (!.), (+:), (+:+), (+:+.), ch, eS, sC, sParen, shortname', eqSymb,
-  Definition(..), HasSpace(..), HasSymbol(..), Express(..),
-  Reference, RefInfo(Page), Sentence(S, (:+:), E), ModelQDef)
-import Language.Drasil.ModelExpr
+import Language.Drasil (plural, (+:), dRefInfo, eS', (+:+), ch, eqSymb,
+  mkFuncDefByQ, eS, (+:+.), atStartNP, (!.), atStart, fromEqnSt'', refS,
+  sParen, sC, phrase, shortname', makeURI, nounPhraseSP, dccWDS, dRef,
+  qw, RefInfo(Page), HasSpace(typ), ModelExprC(..), HasSymbol(..), ExprC(..),
+  Definition(..), Reference, Express(..), Sentence(S, (:+:), E), ModelQDef,
+  ConceptChunk, ModelExpr, apply1)
 import Control.Lens ((^.))
 import Theory.Drasil (ConstraintSet, mkConstraintSet,
   TheoryModel, tm, equationalModel', equationalConstraints',
@@ -159,7 +159,7 @@ latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [
   [ch latentHeat `S.isThe` S "change" `S.in_` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [eS latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
+  [eS' latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
    phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange, S "is not complete"],

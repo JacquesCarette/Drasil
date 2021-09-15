@@ -6,14 +6,14 @@ import Drasil.GamePhysics.Unitals (massj, velj, torquej, forcej, angAccj)
 import Data.Drasil.Quantities.Physics (time, momentOfInertia, 
     gravitationalAccel, angularVelocity)
 
-transMotExpr :: Expr
+transMotExpr :: PExpr
 transMotExpr = sy gravitationalAccel `addRe` (apply1 forcej time $/ sy massj)
 
-transMotExprDeriv1 :: ModelExpr
-transMotExprDeriv1 = defines angAccj $ deriv (apply1 velj time) time
+transMotExprDeriv1 :: (ModelExprC r, ExprC r) => r
+transMotExprDeriv1 = defines (sy angAccj) $ deriv (apply1 velj time) time
 
-rotMotExpr :: Expr
+rotMotExpr :: PExpr
 rotMotExpr = apply1 torquej time $/ sy momentOfInertia
 
-rotMotExprDeriv1 :: ModelExpr
-rotMotExprDeriv1 = defines angAccj $ deriv (apply1 angularVelocity time) time
+rotMotExprDeriv1 :: (ModelExprC r, ExprC r) => r
+rotMotExprDeriv1 = defines (sy angAccj) $ deriv (apply1 angularVelocity time) time

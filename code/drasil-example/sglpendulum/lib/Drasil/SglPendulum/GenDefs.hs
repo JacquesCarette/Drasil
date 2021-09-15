@@ -53,14 +53,14 @@ velocityIXDerivSents = [velocityDerivSent1, velocityIXDerivSent2, velocityDerivS
                         velocityDerivSent4, velocityDerivSent5]
 
 velocityIXDerivEqns :: [Sentence]
-velocityIXDerivEqns = map eS D.velocityIXDerivEqns ++ [eS velocityIXQD]
+velocityIXDerivEqns = map eS D.velocityIXDerivEqns ++ [eS' velocityIXQD]
 
 velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
     velocityDerivSent4, velocityDerivSent5 :: Sentence
 velocityDerivSent1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
 velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontalPos
 velocityDerivSent3 = S "Applying this,"
-velocityDerivSent4 = eS lenRod `S.is` S "constant" `S.wrt` S  "time, so"
+velocityDerivSent4 = eS' lenRod `S.is` S "constant" `S.wrt` S  "time, so"
 velocityDerivSent5 = S "Therefore, using the chain rule,"
 
 ---------------------
@@ -79,7 +79,7 @@ velocityIYDerivSents = [velocityDerivSent1, velocityIYDerivSent2, velocityDerivS
                         velocityDerivSent4, velocityDerivSent5]
 
 velocityIYDerivEqns :: [Sentence]
-velocityIYDerivEqns = map eS D.velocityIYDerivEqns ++ [eS velocityIYQD]
+velocityIYDerivEqns = map eS D.velocityIYDerivEqns ++ [eS' velocityIYQD]
 
 velocityIYDerivSent2 :: Sentence
 velocityIYDerivSent2 = S "We also know the" +:+ phrase verticalPos
@@ -101,8 +101,8 @@ accelerationIXDerivSents = [accelerationDerivSent1, accelerationIXDerivSent2, ac
     accelerationDerivSent4, accelerationDerivSent5]
 
 accelerationIXDerivEqns :: [Sentence]
-accelerationIXDerivEqns = eS D.accelerationIDerivEqn1 : eS velocityIXQD :
-    map eS [D.accelerationIXDerivEqn3, D.accelerationIXDerivEqn4] ++ [eS accelerationIXQD]
+accelerationIXDerivEqns = eS D.accelerationIDerivEqn1 : eS' velocityIXQD :
+    map eS [D.accelerationIXDerivEqn3, D.accelerationIXDerivEqn4] ++ [eS' accelerationIXQD]
 
 accelerationDerivSent1, accelerationIXDerivSent2, accelerationDerivSent3,
      accelerationDerivSent4, accelerationDerivSent5 :: Sentence
@@ -129,8 +129,8 @@ accelerationIYDerivSents = [accelerationDerivSent1, accelerationIYDerivSent2, ac
     accelerationDerivSent4, accelerationDerivSent5]
 
 accelerationIYDerivEqns :: [Sentence]
-accelerationIYDerivEqns = eS D.accelerationIDerivEqn1 : eS velocityIYQD :
-    map eS [D.accelerationIYDerivEqn3, D.accelerationIYDerivEqn4] ++ [eS accelerationIYQD]
+accelerationIYDerivEqns = eS D.accelerationIDerivEqn1 : eS' velocityIYQD :
+    map eS [D.accelerationIYDerivEqn3, D.accelerationIYDerivEqn4] ++ [eS' accelerationIYQD]
 
 accelerationIYDerivSent2 :: Sentence
 accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
@@ -152,7 +152,7 @@ hForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
                   ]
 
 hForceOnPendulumDeriv :: Derivation
-hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS hForceOnPendulumMD]
+hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS' hForceOnPendulumMD]
 
 ----------------------------------------Vertical force acting on the pendulum 
 vForceOnPendulumGD :: GenDefn
@@ -171,7 +171,7 @@ vForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
                   ]
 
 vForceOnPendulumDeriv :: Derivation
-vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS vForceOnPendulumMD]
+vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS' vForceOnPendulumMD]
 
 --------------------------------------Angular Frequency Of Pendulum
 

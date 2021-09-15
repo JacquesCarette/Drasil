@@ -1,4 +1,4 @@
-{-# LANGUAGE RankNTypes, FlexibleInstances, GADTs, InstanceSigs #-}
+{-# LANGUAGE RankNTypes, FlexibleInstances, GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 
 -- | Contains chunks related to adding an expression to a quantitative concept. 
@@ -21,10 +21,9 @@ import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
-import Language.Drasil.ModelExpr (defines)
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Expr.Lang (Expr(FCall, C))
-import Language.Drasil.Expr (sy)
+import Language.Drasil.Expr.Class (ExprC(apply, sy))
+import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
+import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (mkFunction, Space)
 import Language.Drasil.Sentence (Sentence(EmptyS))
@@ -58,64 +57,10 @@ instance DefiningExpr  QDefinition where
 instance Express e => Express       (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
-      f :: Express g => g -> ModelExpr
       f = case q ^. qdInputs of
         [] -> defines (sy q)
-        is -> defines (FCall (q ^. uid) (map C is) [])
+        is -> defines $ apply q (map C is)
 instance Express e => ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
-
--- data QDefinition e = Express e => QD
---   { _qdQua    :: QuantityDict
---   , _qdDefn   :: Sentence
---   , _qdInputs :: [UID]
---   , _qdExpr   :: Express e => e
---   , _qdCD     :: [UID]
---   }
-
--- makeLenses ''QDefinition
-
--- elimQD_E :: Express e => QDefinition e -> e
--- elimQD_E = _qdExpr
-
--- setQD_E :: Express e => QDefinition e -> e -> QDefinition e
--- setQD_E QD
---   { _qdQua = a
---   , _qdDefn = b
---   , _qdInputs = c
---   , _qdCD = d
---   } e = QD a b c e d
-
--- instance DefiningExpr QDefinition where
---   defnExpr = lens elimQD_E setQD_E
-
--- instance Contravariant QDefinition where
---   contramap :: (a -> b) -> QDefinition b -> QDefinition a
---   contramap f QD 
---     { _qdQua = a
---     , _qdDefn = b
---     , _qdInputs = c
---     , _qdExpr = d
---     , _qdCD = e
---     } = _ -- QD a b c (f d) e -- QD a b c d e
-
-
--- instance HasUID (QDefinition e) where uid = qdQua . uid
--- instance NamedIdea     (QDefinition e) where term = qdQua . term
--- instance Idea          (QDefinition e) where getA = getA . (^. qdQua)
--- instance HasSpace      (QDefinition e) where typ = qdQua . typ
--- instance HasSymbol     (QDefinition e) where symbol = symbol . (^. qdQua)
--- instance Definition    (QDefinition e) where defn = qdDefn
--- instance Quantity      (QDefinition e) where
--- instance Eq            (QDefinition e) where a == b = (a ^. uid) == (b ^. uid)
--- instance MayHaveUnit   (QDefinition e) where getUnit = getUnit . view qdQua
--- instance Express e => Express       (QDefinition e) where
---   express q = f (express $ q ^. defnExpr)
---     where
---       f = case q ^. qdInputs of
---         [] -> defines (sy q)
---         is -> defines (FCall (q ^. uid) (map C is) [])
--- instance ConceptDomain (QDefinition e) where cdom = (^. qdCD)
-
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.

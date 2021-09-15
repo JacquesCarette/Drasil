@@ -161,7 +161,7 @@ meltFracEqn = sy latentEP $/ (sy htFusion `mulRe` sy pcmMass)
 ddMeltFrac :: DataDefinition
 ddMeltFrac = ddE ddMeltFracQD [dRef koothoor2013]
   Nothing "meltFrac" [meltFracConst, refS ddHtFusion]
-  where meltFracConst = atStartNP (the value) `S.of_` eS meltFrac `S.is`
+  where meltFracConst = atStartNP (the value) `S.of_` eS' meltFrac `S.is`
                         S "constrained to" +:+. eS (realInterval meltFrac (Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)))
 
 ----

@@ -1,6 +1,6 @@
 -- | GOOL PatternTest module. Various tests to make sure equating and
 -- the Observer class both work.
-module Test.PatternTest (patternTest) where
+module PatternTest (patternTest) where
 
 import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
@@ -9,7 +9,7 @@ import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   addObserver, VariableSym(..), Literal(..), VariableValue(..), 
   ValueExpression(..), extNewObj, FunctionSym(..), GetSet(..), List, StatePattern(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
-import Test.Observer (observer, observerName, printNum, x)
+import Observer (observer, observerName, printNum, x)
 
 -- | Variables, program names, and used strings within the program.
 progName, fsmName, offState, onState, noState, strat1, strat2, obs1Name, 

@@ -3,14 +3,6 @@
 Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**lib**
-  - Contains the library code for this package.
-
-package.yaml
-  - Used by Hpack
- 
-README.md
-  - This file
-
-stack.yaml
-  - Used by Stack
+**Data**
+  - Contains very fundamental data for Drasil. It is meta in the sense
+    that drasil-data (and drasil-theory) use it

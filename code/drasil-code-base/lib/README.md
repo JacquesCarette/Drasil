@@ -3,14 +3,5 @@
 Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**lib**
-  - Contains the library code for this package.
-
-package.yaml
-  - Used by Hpack
- 
-README.md
-  - This file
-
-stack.yaml
-  - Used by Stack
+**Language**
+  - Proxy package between `drasil-printers` and `drasil-code`, for the bits of code in `drasil-printers` that relies on bits of `drasil-code` (`CodeExpr` specifically)

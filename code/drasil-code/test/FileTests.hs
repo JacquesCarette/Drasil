@@ -1,12 +1,12 @@
 -- | Simple GOOL test program for making sure generated programs can read
 -- and write to files. See stable/gooltest for more details on what is generated through this.
-module Test.FileTests (fileTests) where
+module FileTests (fileTests) where
 
 import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, OOProg, 
   ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   DeclStatement(..), IOStatement(..), VariableSym(..), Literal(..), 
   VariableValue(..), MethodSym(..), ModuleSym(..))
-import Prelude hiding (return,print,log,exp,sin,cos,tan)
+import Prelude hiding (return, print, log, exp, sin, cos, tan)
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTests :: (OOProg r) => GSProgram r

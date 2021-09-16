@@ -3,14 +3,8 @@
 Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**lib**
-  - Contains the library code for this package.
+**Data**
+  - Contains information used in Drasil (for ODEs)
 
-package.yaml
-  - Used by Hpack
- 
-README.md
-  - This file
-
-stack.yaml
-  - Used by Stack
+**Language**
+  - Contains the code for Drasil

@@ -23,7 +23,7 @@ ghc-options:
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
   - GOOL.Drasil
   when:

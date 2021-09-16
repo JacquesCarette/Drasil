@@ -1,11 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: Sun Apr 11, 2021
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Data**
-  - Contains very fundamental data for Drasil. It is meta in the sense
-    that drasil-data (and drasil-theory) use it
+**lib**
+  - Contains the library code for this package.
  
 README.md
   - This file

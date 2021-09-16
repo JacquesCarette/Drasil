@@ -1,10 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: August 20, 2021
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Data**
-  - Contains the current common-knowledge base for Drasil
+**lib**
+  - Contains the library code for this package.
 
 package.yaml
   - Used by Hpack

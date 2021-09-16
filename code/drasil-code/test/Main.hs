@@ -1,5 +1,5 @@
 -- | Main module to gather all the GOOL tests and generate them.
-module Test.Main (main) where
+module Main (main) where
 
 import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC, 
   unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
@@ -13,9 +13,9 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurre
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
-import Test.HelloWorld (helloWorld)
-import Test.PatternTest (patternTest)
-import Test.FileTests (fileTests)
+import HelloWorld (helloWorld)
+import PatternTest (patternTest)
+import FileTests (fileTests)
 
 -- | Renders three GOOL tests (FileTests, HelloWorld, and PatternTest)
 -- in Java, Python, C#, C++, and Swift.

@@ -1,10 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: August 12, 2021
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Utils**
-  - Contains various utilities used in Drasil.
+**lib**
+  - Contains the library code for this package.
  
 README.md
   - This file

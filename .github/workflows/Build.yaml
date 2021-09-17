@@ -79,6 +79,9 @@ jobs:
         run: make graphs
       - name: "Analyze Drasil code"
         run: make analysis
+      - name: "Convert analysis graphs into dot and circo SVGs" # only needed in deployments, not required for tests
+        run: make convertAnalyzed
+        if: ${{ fromJSON(env.is_deployment) }}
       - name: "Build website generator"
         run: make website
       - name: "Build website"

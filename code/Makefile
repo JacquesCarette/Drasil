@@ -140,6 +140,9 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 #--- `make` command line options ---#
 #####################################
 
+# Indicating whether an operation will be used for deployment (1), or for general testing purposes (0).
+FULL ?= 0
+
 # GHC debug options
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
@@ -309,7 +312,10 @@ analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasi
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
-	@echo Making dependency graphs. This may take a few minutes.
+	@echo "Analysis complete. Please see 'analysis/' folder."
+
+convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs.
+	@echo "Building dependency graphs in Dot and Circo formats. This may take a few minutes."
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
 		echo "Converting type dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
@@ -320,7 +326,7 @@ analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasi
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
-	@echo Done dependency graphs.
+	@echo "Dependency graphs built."
 
 #---------------------------------------#
 #--- HLint and Haddock Documentation ---#
@@ -333,7 +339,6 @@ hlint: check_stack ##@HLint Run HLint through the drasil packages. Uses a local 
 hot_hlint: ##@HLint Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
-FULL ?= 0
 docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules. Set FULL=1 if you want to additionally test Haddock generation for website deployment.
 	FULL="$(FULL)" DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
 

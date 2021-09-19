@@ -15,9 +15,6 @@ module Language.Drasil (
   , square, half
   , oneHalf, oneThird
   , apply1, apply2
-  , UFunc, UFuncB, UFuncVV, UFuncVN
-  , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
-  , AssocArithOper, AssocBoolOper
   , Completeness, Relation
 
   -- ** Expression Modelling Language 
@@ -240,7 +237,7 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2)
-import Language.Drasil.Expr.Lang
+import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
 import Language.Drasil.Document (section, fig, figWithWidth

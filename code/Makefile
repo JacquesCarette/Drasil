@@ -76,6 +76,7 @@ DCP_E_SUFFIX = _deploy_code_path
 STABILIZE_E_SUFFIX = _stabilize
 BC_E_SUFFIX = _build_clean
 TRACE_GRAPH_SUFFIX = _trace_graph
+INSTALL_E_SUFFIX = _install
 
 # add example names with the appropriate suffixes to create per-example targets
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
@@ -86,6 +87,7 @@ DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 STABILIZE_EXAMPLES = $(addsuffix $(STABILIZE_E_SUFFIX), $(EXAMPLES))
 BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
+INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
@@ -163,12 +165,14 @@ SUMMARIZE_TEX=no
 
 # Default `make` will just run examples and test them against stable.
 # See `test` target for more details.
-all: test ## Run examples and test against stable.
+all: test ##@Examples Run examples and test against stable.
 
+install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
+	stack install $(stackArgs)
 
-debug: stackArgs+=$(PROFALL)
-debug: EXECARGS+=$(PROFEXEC)
-debug: test ## Run test target with better debugging tools.
+debug: stackArgs += $(PROFALL)
+debug: EXECARGS += $(PROFEXEC)
+debug: test ##@Examples Run test target with better debugging tools.
 
 #--- Initial checks ---#
 #----------------------#
@@ -227,29 +231,32 @@ tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to wo
 # with an appended suffix (first argument of filter).
 
 # Variables needed to create individual example targets using filter.
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
-	stack install $(stackArgs) "drasil-$*"
+	stack build $(stackArgs) "drasil-$*"
 
 # First build all Drasil packages, then run individual examples.
 # No traceability graphs will be created, only the dot files.
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
-%$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
-	stack install $(stackArgs) "$(EEXE)"
+	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
-	
+
+# Install individual Drasil examples
+$(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
+	stack install $(stackArgs) "$(EEXE)"
+
 # Same as above targets; run individual examples but create traceability graphs
 # for each example run. Needs Graphviz to run. Graphs generate in svg, pdf, and png formats.
 # Specific example targets will have the name exampleName_trace_graph.
-%$(TRACE_GRAPH_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): graphmod
-	stack install $(stackArgs) "$(EEXE)"
+	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
@@ -379,7 +386,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 
 # For more information, see the *.hs files in the drasil-website folder.
 website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
-	stack install $(stackArgs) "drasil-website"
+	stack build $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
 	DOCS_FOLDER="$(DOCS_FOLDER)" \
@@ -391,7 +398,7 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 	PACKAGES="$(PACKAGES)" \
 	TYPEGRAPH_FOLDER="$(TYPEGRAPH_FOLDER)" \
 	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
-	stack exec website
+	stack exec -- "website"
 
 # Deploys the Drasil website. Called by the deploy target.
 # If you have all the necessary generated targets listed
@@ -425,7 +432,7 @@ $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 clean_artifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders. (alt.: cleanArtifacts)
 	- rm -f "$(CACHED_MSV_FILE)"
 
-# TODO: Help function's pattern match ignores targets with aliases, this is a temporary thing until we fix it.
+# TODO: HELP_FUN's pattern match ignores targets with aliases, this is a temporary exterior alias until we fix it.
 cleanArtifacts: clean_artifacts
 
 clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, & folders.
@@ -454,6 +461,7 @@ help:  ##@Help Show this help.
 	@echo "Example-specific targets where X is the example. Run \"make help_examples\" to see a list of possible examples:"
 	@echo "  X$(GEN_E_SUFFIX)               Generate individual example in HTML and LaTeX format."
 	@echo "  X$(TEST_E_SUFFIX)              Generate individual example and create a comparison against stable in the log folder."
+	@echo "  X$(INSTALL_E_SUFFIX)           Install individual example executable(s) into your local binary path."
 	@echo "  X$(STABILIZE_E_SUFFIX)         Generate individual example and overwrite the contents of stable with the new version."
 	@echo "  X$(TEX_E_SUFFIX)               Generate individual example as a PDF (from LaTeX files)."
 	@echo "  X$(TRACE_GRAPH_SUFFIX)       Generate individual example in HTML and LaTeX format with traceability graphs filled in."
@@ -475,4 +483,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

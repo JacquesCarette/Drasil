@@ -37,7 +37,7 @@ rectVelQD :: ModelQDef
 rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
-            (express E.speed')
+            E.speed'
 
 rectVelDeriv :: Derivation
 rectVelDeriv = mkDerivName (phrase rectVel)
@@ -47,10 +47,10 @@ rectVelDerivSents :: [Sentence]
 rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
   where
     motSent = foldlSent [atStartNP (the motion) `S.in_` refS accelerationTM `S.is` S "now", phrase oneD,
-                         S "with a", phrase QP.constAccel `sC` S "represented by", eS QP.constAccel]
+                         S "with a", phrase QP.constAccel `sC` S "represented by", eS' QP.constAccel]
 
 rectVelDerivEqns :: [Sentence]
-rectVelDerivEqns = map eS D.rectVelDeriv ++ [eS rectVelQD]
+rectVelDerivEqns = map eS D.rectVelDeriv ++ [eS' rectVelQD]
 
 ----------
 rectPosGD :: GenDefn
@@ -61,7 +61,7 @@ rectPosQD :: ModelQDef
 rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase position,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
-            (express E.scalarPos')
+            E.scalarPos'
 
 rectPosDeriv :: Derivation
 rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
@@ -84,11 +84,11 @@ velVecGD = gdNoRefs (equationalModel' velVecQD) (getUnit velocity)
 velVecQD :: ModelQDef
 velVecQD = mkQuantDef' velocity (nounPhraseSent $ foldlSent_ 
            [atStart velocity, S "vector as a function" `S.of_` phrase time `S.for`
-            getAcc twoD, S "motion under", phrase QP.constAccel]) $ express E.velVecExpr
+            getAcc twoD, S "motion under", phrase QP.constAccel]) E.velVecExpr
 
 velVecDeriv :: Derivation
 velVecDeriv = mkDerivName (phrase velocity +:+ phrase vector) [velVecDerivSent, 
-  E $ defines velocity E.velVecExpr]
+  E $ defines (sy velocity) E.velVecExpr]
 
 velVecDerivSent :: Sentence
 velVecDerivSent = vecDeriv [(velocity, E.velocityXY), (acceleration, E.accelerationXY)] rectVelGD
@@ -102,10 +102,10 @@ posVecQD :: ModelQDef
 posVecQD = mkQuantDef' position (nounPhraseSent $ foldlSent_ 
   [atStart position, S "vector as a function" `S.of_` phrase time `S.for`
    getAcc twoD, S "motion under", phrase QP.constAccel])
-  (express E.posVecExpr)
+  E.posVecExpr
 
 posVecDeriv :: Derivation
-posVecDeriv = mkDerivName (phrase positionVec) [posVecDerivSent, eS posVecQD]
+posVecDeriv = mkDerivName (phrase positionVec) [posVecDerivSent, eS' posVecQD]
 
 posVecDerivSent :: Sentence
 posVecDerivSent =
@@ -123,11 +123,11 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   S "From", refS ctm `sC` S "using the above", plural symbol_ +: S "we have"]
   where
     getScalar c
-      | c == position     = eS scalarPos
-      | c == velocity     = eS speed
-      | c == acceleration = eS scalarAccel
-      | c == iPos         = eS iPos
-      | c == iVel         = eS iSpeed
+      | c == position     = eS' scalarPos
+      | c == velocity     = eS' speed
+      | c == acceleration = eS' scalarAccel
+      | c == iPos         = eS' iPos
+      | c == iVel         = eS' iSpeed
       | otherwise         = error "Not implemented in getScalar"
 
 rearrAndIntSent, performIntSent :: Sentence
@@ -135,7 +135,7 @@ rearrAndIntSent = S "Rearranging" `S.and_` S "integrating" `sC` S "we" +: S "hav
 performIntSent  = S "Performing the integration" `sC` S "we have the required" +: phrase equation
 
 -- Helper for making vector derivations
-vecDeriv :: [(UnitalChunk, Expr)] -> GenDefn -> Sentence
+vecDeriv :: [(UnitalChunk, ModelExpr)] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSentCol [
   S "For a", phraseNP (combineNINI twoD cartesian), sParen (refS twoDMotion `S.and_` refS cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List 

@@ -97,7 +97,7 @@ landPosDerivSent2 = foldlSentCol [S "To find the", phrase landPos `sC`
   S "we want to find the", ch xPos, phrase value, sParen (ch landPos),
   S "at", phrase flightDur, fromSource timeIM]
 landPosDerivSent3 = foldlSentCol [S "From", refS speedIX,
-  sParen (S "with" +:+ E (defines iSpeed launSpeed)), S "we can replace", ch ixVel]
+  sParen (S "with" +:+ E (defines (sy iSpeed) (sy launSpeed))), S "we can replace", ch ixVel]
 landPosDerivSent4 = S "Rearranging this gives us the required" +: phrase equation
 
 landPosDerivEqns :: [ModelExpr]

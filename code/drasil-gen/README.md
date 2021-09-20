@@ -1,10 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2018
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Language**
-  - Contains the generation file(s) for actually generating code
+**lib**
+  - Contains the library code for this package.
 
 package.yaml
   - Used by Hpack

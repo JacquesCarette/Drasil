@@ -8,11 +8,7 @@ import Drasil.PDController.DataDefs
 import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
-import Language.Drasil (qw, makeRC, dRef, mkDerivName, phrase, atStartNP, nounPhraseSP,
-  (!.), (+:+), (+:+.), eS, sC, RelationConcept, Derivation, Sentence(..), Inclusive(..),
-  RealInterval(UpFrom))
-import qualified Language.Drasil.Expr as E
-import Language.Drasil.ModelExpr
+import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, deModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -27,10 +23,10 @@ instanceModels = [imPD]
 imPD :: InstanceModel
 imPD
   = im (deModel' imPDRC)
-      [qwC qdSetPointTD $ UpFrom (Exc, E.exactDbl 0), qwC qdPropGain $ UpFrom (Exc, E.exactDbl 0),
-       qwC qdDerivGain $ UpFrom (Exc, E.exactDbl 0)]
+      [qwC qdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC qdPropGain $ UpFrom (Exc, exactDbl 0),
+       qwC qdDerivGain $ UpFrom (Exc, exactDbl 0)]
       (qw qdProcessVariableTD)
-      [UpFrom (Exc, E.exactDbl 0)]
+      [UpFrom (Exc, exactDbl 0)]
       [dRef abbasi2015, dRef johnson2008]
       (Just imDeriv)
       "pdEquationIM"
@@ -65,7 +61,7 @@ imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
-      [atStartNP (the processVariable), eS qdProcessVariableFD, S "in a", phrase pidCL +:+
+      [atStartNP (the processVariable), eS' qdProcessVariableFD, S "in a", phrase pidCL +:+
          S "is the product of the", phrase processError, fromSource ddErrSig `sC`
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
@@ -104,7 +100,7 @@ derivEqn3
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [atStartNP (the setPoint), eS qdSetPointTD, S "is a step function and a constant" +:+.
+      [atStartNP (the setPoint), eS' qdSetPointTD, S "is a step function and a constant" +:+.
          fromSource aSP,
        S "Therefore the",
          S "differential of the set point is zero. Hence the equation",

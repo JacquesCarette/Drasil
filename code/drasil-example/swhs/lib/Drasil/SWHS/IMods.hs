@@ -2,7 +2,6 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
-import qualified Language.Drasil.ModelExpr as M
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
   equationalModel, ModelKind)
 import Utils.Drasil
@@ -58,7 +57,7 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
 
 -- TODO: Clean this up properly once we have a better way of intermixing Expr & ModelExpr in files
 balWtrRel :: ModelExpr
-balWtrRel = M.deriv (M.sy tempW) time M.$= express balWtrExpr
+balWtrRel = deriv (sy tempW) time $= express balWtrExpr
 
 balWtrExpr :: Expr
 balWtrExpr = recip_ (sy tauW) `mulRe` ((sy tempC $- apply1 tempW time) `addRe`
@@ -66,7 +65,7 @@ balWtrExpr = recip_ (sy tauW) `mulRe` ((sy tempC $- apply1 tempW time) `addRe`
 
 balWtrDesc :: [Sentence]
 balWtrDesc = map foldlSent [
-  [eS tempPCM `S.is` S "defined by", refS eBalanceOnPCM],
+  [eS' tempPCM `S.is` S "defined by", refS eBalanceOnPCM],
   [atStartNP (the input_), phrase constraint, eS $ sy tempInit $<= sy tempC,
    S "comes from", refS assumpCTNOD],
   [ch tauW `S.is` S "calculated from", refS balanceDecayRate],
@@ -95,12 +94,12 @@ eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 htTransEnd overAreas extr
 
 eBalanceOnWtrDerivDesc1 :: Sentence -> Sentence-> Sentence -> ConceptInstance -> Sentence
 eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
-  S "To find the", phrase rOfChng `S.of_` eS tempW `sC`
+  S "To find the", phrase rOfChng `S.of_` eS' tempW `sC`
   S "we look at the", phrase energy, S "balance on" +:+. phrase water, atStartNP (the vol),
   S "being considered" `S.isThe` phraseNP (vol `of_` water) `S.inThe`
-  phrase tank, eS wVol `sC` S "which has", phrase mass +:+. (eS wMass `S.and_`
-  phrase heatCapSpec `sC` eS htCapW), atStart heatTrans, S "occurs in the",
-  phrase water, S "from the", phrase coil, S "as", eS htFluxC,
+  phrase tank, eS' wVol `sC` S "which has", phrase mass +:+. (eS' wMass `S.and_`
+  phrase heatCapSpec `sC` eS' htCapW), atStart heatTrans, S "occurs in the",
+  phrase water, S "from the", phrase coil, S "as", eS' htFluxC,
   sParen (refS htFluxWaterFromCoil) +:+ htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `S.the_ofThe`
   phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
   sParen (refS assumpPIT), S "Since the", phrase assumption,
@@ -128,7 +127,7 @@ eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", refS htFluxWaterFromCoil `S.f
   ch htFluxC `S.and_` refS htFluxPCMFromWater `S.for` ch htFluxP `sC` S "this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Sentence
-eBalanceOnWtrDerivDesc3 = foldlSentCol [S "Dividing", eqN 2, S "by", eS eq1 `sC` S "we obtain"]
+eBalanceOnWtrDerivDesc3 = foldlSentCol [S "Dividing", eqN 2, S "by", eS' eq1 `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: Sentence
 eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Factoring the negative sign out" `S.of_`
@@ -143,7 +142,7 @@ eBalanceOnWtrDerivDesc6 :: Sentence
 eBalanceOnWtrDerivDesc6 = substitute [balanceDecayRate, balanceDecayTime]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> Sentence
-eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", eS eq22 `sC`
+eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", eS' eq22 `sC`
   S "we are left with the governing", getAcc ode `S.for` refS eBalanceOnWtr]
 
 eq1, eq2 :: Expr
@@ -166,9 +165,9 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
   (tempPCM ^. defn) balPCMRel -- eBalanceOnPCML
 
 balPCMRel :: ModelExpr
-balPCMRel = M.deriv (M.sy tempPCM) time M.$= express balPCMExpr
+balPCMRel = deriv (sy tempPCM) time $= balPCMExpr
 
-balPCMExpr :: Expr
+balPCMExpr :: PExpr
 balPCMExpr = completeCase [case1, case2, case3]
   where case1 = (recip_ (sy tauSP) `mulRe` (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
@@ -245,7 +244,7 @@ eBalanceOnPCMDerivDesc5 = foldlSent [
 
 eBalanceOnPCMDerivDesc6 :: Sentence
 eBalanceOnPCMDerivDesc6 = foldlSent [
-  S "In the case where", eS eq6_1 `S.and_` S "not all of the", getAcc phsChgMtrl `S.is`
+  S "In the case where", eS' eq6_1 `S.and_` S "not all of the", getAcc phsChgMtrl `S.is`
   S "melted" `sC` S "the", phrase tempPCM +:+. S "does not change", S "Therefore" `sC` eq6_2]
 
 eBalanceOnPCMDerivDesc7 :: Sentence

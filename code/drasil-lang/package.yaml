@@ -20,14 +20,12 @@ ghc-options:
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
   - Language.Drasil
   - Language.Drasil.Development
   - Language.Drasil.Display
-  - Language.Drasil.Expr
   - Language.Drasil.Expr.Development
-  - Language.Drasil.ModelExpr
   - Language.Drasil.ModelExpr.Development
   - Language.Drasil.ShortHands
   when:

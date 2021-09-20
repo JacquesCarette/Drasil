@@ -81,4 +81,9 @@ authors:
     country: "CA"
     email: szymczdm@mcmaster.ca
     website: "https://www.dszymczak.com"
+  - family-names: MacLachlan
+    given-names: Brooks
+    alias: bmaclach
+    email: "brooks.maclachlan@gmail.com"
+    website: "https://github.com/bmaclach"
 

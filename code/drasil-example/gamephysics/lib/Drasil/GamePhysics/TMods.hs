@@ -33,9 +33,9 @@ newtonTL = tmNoRefs (equationalModel' newtonTLQD) [qw force_1, qw force_2]
   ([] :: [ConceptChunk]) [newtonTLQD] [] [] "NewtonThirdLawMot" [newtonTLNote]
 
 newtonTLQD :: ModelQDef
-newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") $ express newtonTLExpr
+newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") newtonTLExpr
 
-newtonTLExpr :: Expr
+newtonTLExpr :: PExpr
 newtonTLExpr = neg (sy force_2)
 
 newtonTLNote :: Sentence
@@ -49,8 +49,8 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 -- FIXME: Missing ConceptDomain!
 newtonLUGModel :: ModelKind ModelExpr
 newtonLUGModel = equationalRealm' $ mkMultiDefnForQuant newtonForceQuant EmptyS $ NE.fromList [
-    mkDefiningExpr "newtonLUGviaDeriv" [] EmptyS (express $ sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
-    mkDefiningExpr "newtonLUGviaForm"  [] EmptyS (express $ sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
+    mkDefiningExpr "newtonLUGviaDeriv" [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
+    mkDefiningExpr "newtonLUGviaForm"  [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
   ]
 
 newtonLUG :: TheoryModel
@@ -84,9 +84,9 @@ newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRQD :: ModelQDef
-newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") $ express newtonSLRExpr
+newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRExpr :: Relation
+newtonSLRExpr :: PExpr
 newtonSLRExpr = sy momentOfInertia `mulRe` sy angularAccel
 
 newtonSLRNotes :: [Sentence]

@@ -2,8 +2,8 @@ module Drasil.DblPendulum.Derivations where
 
 import Prelude hiding (sin, cos)
 
-import Language.Drasil (defnExpr, express)
-import Language.Drasil.ModelExpr
+import Language.Drasil (ModelExprC(..), ExprC(..),
+  Express(..), ModelExpr, DefiningExpr(..))
 
 import Data.Drasil.Quantities.Physics(velocity, acceleration, gravitationalAccel, time)
 import Drasil.DblPendulum.DataDefs
@@ -17,8 +17,8 @@ import Control.Lens ((^.))
 -- Velocity X/Y First Object
 velDerivEqn1, velXDerivEqn2_1, velXDerivEqn3_1, velXDerivEqn4_1 :: ModelExpr
 velDerivEqn1    = sy velocity $= positionGQD ^. defnExpr
-velXDerivEqn2_1 = sy xPos_1 $= express (positionXQD_1 ^. defnExpr)
-velXDerivEqn3_1 = sy xVel_1 $= deriv (positionXQD_1 ^. defnExpr) time
+velXDerivEqn2_1 = sy xPos_1 $= positionXEqn_1
+velXDerivEqn3_1 = sy xVel_1 $= deriv positionXEqn_1 time
 velXDerivEqn4_1 = sy xVel_1 $= sy lenRod_1 `mulRe` deriv (sin (sy pendDisAngle_1)) time
 
 velYDerivEqn2_1,velYDerivEqn3_1,velYDerivEqn4_1 :: ModelExpr
@@ -29,11 +29,11 @@ velYDerivEqn4_1 = sy yVel_1 $= neg (sy lenRod_1 `mulRe` deriv (cos (sy pendDisAn
 -- Velocity X/Y Second Object
 velXDerivEqn2_2, velXDerivEqn3_2 :: ModelExpr
 velXDerivEqn2_2 = sy xPos_2 $= express (positionXQD_2 ^. defnExpr)
-velXDerivEqn3_2 = sy xVel_2 $= deriv (positionXQD_2 ^. defnExpr) time
+velXDerivEqn3_2 = sy xVel_2 $= deriv positionXEqn_2 time
 
 velYDerivEqn2_2,velYDerivEqn3_2 :: ModelExpr
 velYDerivEqn2_2 = sy yPos_2 $= express (positionYQD_2 ^. defnExpr)
-velYDerivEqn3_2 = sy yVel_2 $= neg (deriv (positionYQD_2 ^. defnExpr) time)
+velYDerivEqn3_2 = sy yVel_2 $= neg (deriv positionYEqn_2 time)
 
 -- Acceleration X/Y First Object
 
@@ -50,7 +50,7 @@ accelYDerivEqn4_1 = sy yAccel_1 $= deriv (sy angularVel_1) time `mulRe` sy lenRo
 
 -- Acceleration X/Y Second Object
 accelXDerivEqn3_2 :: ModelExpr
-accelXDerivEqn3_2 = sy xAccel_2 $= deriv (express velXExpr_2) time
+accelXDerivEqn3_2 = sy xAccel_2 $= deriv velXExpr_2 time
 
 accelYDerivEqn3_2 :: ModelExpr
 accelYDerivEqn3_2 = sy yAccel_2 $= deriv velYExpr_2 time

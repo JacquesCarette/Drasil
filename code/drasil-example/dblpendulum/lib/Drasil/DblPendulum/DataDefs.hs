@@ -34,7 +34,7 @@ positionXDD_1 = ddENoRefs positionXQD_1 Nothing "positionXDD1" [positionXRef_1, 
 positionXQD_1 :: SimpleQDef
 positionXQD_1 = mkQuantDef xPos_1 positionXEqn_1
 
-positionXEqn_1 :: Expr
+positionXEqn_1 :: PExpr
 positionXEqn_1 = sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
 
 positionXFigRef_1 :: Sentence
@@ -52,7 +52,7 @@ positionYDD_1 = ddENoRefs positionYQD_1 Nothing "positionYDD1" [positionYRef_1, 
 positionYQD_1 :: SimpleQDef
 positionYQD_1 = mkQuantDef yPos_1 positionYEqn_1
 
-positionYEqn_1 :: Expr
+positionYEqn_1 :: PExpr
 positionYEqn_1 = neg (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
 
 positionYFigRef_1 :: Sentence
@@ -70,7 +70,7 @@ positionXDD_2 = ddENoRefs positionXQD_2 Nothing "positionXDD2" [positionXRef_2, 
 positionXQD_2 :: SimpleQDef
 positionXQD_2 = mkQuantDef xPos_2 positionXEqn_2
 
-positionXEqn_2 :: Expr
+positionXEqn_2 :: PExpr
 positionXEqn_2 = sy positionXDD_1 `addRe` (sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
 
 positionXFigRef_2 :: Sentence
@@ -88,7 +88,7 @@ positionYDD_2 = ddENoRefs positionYQD_2 Nothing "positionYDD2" [positionYRef_2, 
 positionYQD_2 :: SimpleQDef
 positionYQD_2 = mkQuantDef yPos_2 positionYEqn_2
 
-positionYEqn_2 :: Expr
+positionYEqn_2 :: PExpr
 positionYEqn_2 = sy positionYDD_1 `addRe` neg (sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
 
 positionYFigRef_2 :: Sentence
@@ -118,5 +118,5 @@ forceGDD = ddENoRefs forceGQD Nothing "forceGDD" []
 forceGQD :: SimpleQDef
 forceGQD = mkQuantDef force forceGEqn
 
-forceGEqn :: Expr
+forceGEqn :: PExpr
 forceGEqn = sy mass `mulRe` sy acceleration

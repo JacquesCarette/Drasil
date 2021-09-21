@@ -102,6 +102,13 @@ eop sm AddRe = eopAdds sm
 eop sm MulI = eopMuls sm
 eop sm MulRe = eopMuls sm
 
+-- | Helper function for display nth derivative
+sup :: Integer -> [P.Expr]
+sup n | n == 1 = []
+      | n > 1 = [P.Sup (P.Int n)]
+      | n < 0 = error "negative derivative"
+      | n == 0 = error "zero derivative"
+      | otherwise = error "derivative error"
 
 -- | Translate Exprs to printable layout AST.
 modelExpr :: ModelExpr -> PrintingInformation -> P.Expr
@@ -124,14 +131,13 @@ modelExpr (AssocA AddRe l)           sm = assocExpr P.Add (precA AddRe) l sm
 modelExpr (AssocA MulI l)            sm = P.Row $ mulExpr l MulI sm
 modelExpr (AssocA MulRe l)           sm = P.Row $ mulExpr l MulRe sm
 modelExpr (Deriv n Part a b)         sm =
-  P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, modelExpr a sm])
-        (P.Row [P.Spc P.Thin, P.Spec Partial,
-                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
--- Fix me, should replace P.Ident "" with nothing
+  let st = [P.Spc P.Thin, P.Spec Partial] in 
+    P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
+    (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
 modelExpr (Deriv n Total a b)        sm =
-  P.Div (P.Row [P.Spc P.Thin, P.Ident "d", if n > 1 then P.Sup (P.Int n) else P.Ident "", modelExpr a sm])
-        (P.Row [P.Spc P.Thin, P.Ident "d",
-                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b, if n > 1 then P.Sup (P.Int n) else P.Ident ""])
+  let st = [P.Spc P.Thin, P.Ident "d"] in
+    P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
+        (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
 modelExpr (C c)                      sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 modelExpr (FCall f [x] [])           sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ modelExpr x sm]

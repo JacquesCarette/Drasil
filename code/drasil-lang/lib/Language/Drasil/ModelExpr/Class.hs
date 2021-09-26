@@ -49,8 +49,17 @@ class ModelExprC r where
 instance ModelExprC ModelExpr where
   deriv e c  = Deriv 1 Total e (c ^. uid)
   pderiv e c = Deriv 1 Part  e (c ^. uid)
-  nthderiv n e c  = Deriv n Total e (c ^. uid)
-  nthpderiv n e c = Deriv n Part  e (c ^. uid)
+  nthderiv n e c
+    | n > 0 = Deriv n Total e (c ^. uid)
+    | n < 0 = error "negative derivative"
+    | n == 0 = error "zero derivative"
+    | otherwise = error "derivative error"
+
+  nthpderiv n e c
+    | n > 0 = Deriv n Part e (c ^. uid)
+    | n < 0 = error "negative derivative"
+    | n == 0 = error "zero derivative"
+    | otherwise = error "derivative error"
 
   defines = StatBinaryOp Defines
 

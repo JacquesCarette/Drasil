@@ -106,9 +106,7 @@ eop sm MulRe = eopMuls sm
 sup :: Integer -> [P.Expr]
 sup n | n == 1 = []
       | n > 1 = [P.Sup (P.Int n)]
-      | n < 0 = error "negative derivative"
-      | n == 0 = error "zero derivative"
-      | otherwise = error "derivative error"
+      | otherwise = error "non-positive argument to derivative"
 
 -- | Translate Exprs to printable layout AST.
 modelExpr :: ModelExpr -> PrintingInformation -> P.Expr

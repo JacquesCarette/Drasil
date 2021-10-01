@@ -15,9 +15,9 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty (unc))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
-import Language.Drasil.Expr (Expr)
-import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.NounPhrase(NP)
+import Language.Drasil.Expr.Lang (Expr)
+import Language.Drasil.Expr.Class (sy)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Uncertainty.Core (Uncertainty)
@@ -103,8 +103,8 @@ instance Definition     UncertQ where defn = coco . defn
 instance ConceptDomain  UncertQ where cdom = cdom . view coco
 -- | Finds the units of the 'ConstrConcept' used to make the 'UncertQ'.
 instance MayHaveUnit    UncertQ where getUnit = getUnit . view coco
--- | Convert the symbol of the 'UncertQ' to a 'DisplayExpr'.
-instance Express        UncertQ where express = express . sy
+-- | Convert the symbol of the 'UncertQ' to a 'ModelExpr'.
+instance Express        UncertQ where express = sy
 
 {-- Constructors --}
 -- | Smart constructor that requires a 'Quantity', a percentage, and a typical value with an 'Uncertainty'.

@@ -2,7 +2,7 @@ module Drasil.HGHC.HeatTransfer where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Theory.Drasil (DataDefinition, ddNoRefs)
+import Theory.Drasil (DataDefinition, ddENoRefs)
 
 import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 
@@ -14,7 +14,7 @@ symbols = htOutputs ++ htInputs
 dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 
-qDefs :: [QDefinition]
+qDefs :: [SimpleQDef]
 qDefs = [htTransCladFuel, htTransCladCool]
 
 htVars :: [QuantityDict]
@@ -34,12 +34,12 @@ gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
 cladCond     = vc "cladCond"     (cnIES "clad conductivity") (sub lK lClad) Real
 
 htTransCladCoolEq, htTransCladFuelEq :: Expr
-htTransCladCool, htTransCladFuel :: QDefinition
+htTransCladCool, htTransCladFuel :: SimpleQDef
 
 ---
 
 htTransCladCoolDD :: DataDefinition
-htTransCladCoolDD = ddNoRefs htTransCladCool Nothing "htTransCladCool"--Label
+htTransCladCoolDD = ddENoRefs htTransCladCool Nothing "htTransCladCool"--Label
   []--no additional notes
 
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
@@ -53,7 +53,7 @@ htTransCladCoolEq =
 ---
 
 htTransCladFuelDD :: DataDefinition
-htTransCladFuelDD = ddNoRefs htTransCladFuel Nothing "htTransCladFuel"--Label
+htTransCladFuelDD = ddENoRefs htTransCladFuel Nothing "htTransCladFuel"--Label
   []--no additional notes
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP

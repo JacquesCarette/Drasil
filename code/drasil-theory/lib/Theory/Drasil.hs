@@ -7,7 +7,9 @@ module Theory.Drasil (
   , mkConstraintSet
   -- * Data Definitions
   , DataDefinition
-  , dd, ddNoRefs, qdFromDD
+  , ddE, ddENoRefs
+  , ddME, ddMENoRefs
+  , qdFromDD, qdEFromDD
   -- * General Definitions
   , GenDefn
   , gd, gdNoRefs
@@ -32,7 +34,8 @@ module Theory.Drasil (
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
 import Theory.Drasil.ConstraintSet (ConstraintSet, mkConstraintSet)
-import Theory.Drasil.DataDefinition (DataDefinition, dd, ddNoRefs, qdFromDD)
+import Theory.Drasil.DataDefinition (ddMENoRefs, ddME, ddENoRefs, ddE,
+  DataDefinition, qdFromDD, qdEFromDD)
 import Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs, getEqModQdsFromGd)
 import Theory.Drasil.ModelKinds (ModelKind,
   deModel', deModel,

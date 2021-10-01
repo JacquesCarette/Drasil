@@ -165,21 +165,21 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 -- | Our chunk databases. \Must contain all maps needed in an example.\
 -- In turn, these maps must contain every chunk definition or concept 
 -- used in its respective example, else an error is thrown.
-data ChunkDB = CDB { symbolTable :: SymbolMap
-                   , termTable :: TermMap 
-                   , defTable  :: ConceptMap
-                   , _unitTable :: UnitMap
-                   , _traceTable :: TraceMap
-                   , _refbyTable :: RefbyMap
-                   , _dataDefnTable  :: DatadefnMap
-                   , _insmodelTable   :: InsModelMap
-                   , _gendefTable   :: GendefMap
-                   , _theoryModelTable :: TheoryModelMap
-                   , _conceptinsTable :: ConceptInstanceMap
-                   , _sectionTable :: SectionMap
+data ChunkDB = CDB { symbolTable           :: SymbolMap
+                   , termTable             :: TermMap 
+                   , defTable              :: ConceptMap
+                   , _unitTable            :: UnitMap
+                   , _traceTable           :: TraceMap
+                   , _refbyTable           :: RefbyMap
+                   , _dataDefnTable        :: DatadefnMap
+                   , _insmodelTable        :: InsModelMap
+                   , _gendefTable          :: GendefMap
+                   , _theoryModelTable     :: TheoryModelMap
+                   , _conceptinsTable      :: ConceptInstanceMap
+                   , _sectionTable         :: SectionMap
                    , _labelledcontentTable :: LabelledContentMap
-                   , _refTable :: ReferenceMap
-                   } --TODO: Expand and add more databases
+                   , _refTable             :: ReferenceMap
+                   } -- TODO: Expand and add more databases
 makeLenses ''ChunkDB
 
 -- | Smart constructor for chunk databases. Takes in the following:

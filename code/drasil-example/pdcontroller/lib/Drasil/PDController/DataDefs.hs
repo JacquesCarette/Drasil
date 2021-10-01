@@ -8,7 +8,7 @@ import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Data.Drasil.Concepts.Math (equation)
 import Language.Drasil
-import Theory.Drasil (DataDefinition, dd)
+import Theory.Drasil (DataDefinition, ddE)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -20,10 +20,10 @@ dataDefinitions = [ddErrSig, ddPropCtrl, ddDerivCtrl, ddCtrlVar]
 
 ddErrSig :: DataDefinition
 ddErrSig
-  = dd ddErrSigDefn [dRef johnson2008] Nothing "ddProcessError"
+  = ddE ddErrSigDefn [dRef johnson2008] Nothing "ddProcessError"
       [ddErrSigNote]
 
-ddErrSigDefn :: QDefinition
+ddErrSigDefn :: SimpleQDef
 ddErrSigDefn = mkQuantDef qdProcessErrorFD ddErrSigEqn
 
 ddErrSigEqn :: Expr
@@ -45,10 +45,10 @@ ddErrSigNote
 
 ddPropCtrl :: DataDefinition
 ddPropCtrl
-  = dd ddPropCtrlDefn [dRef johnson2008] Nothing "ddPropCtrl"
+  = ddE ddPropCtrlDefn [dRef johnson2008] Nothing "ddPropCtrl"
       [ddPropCtrlNote]
 
-ddPropCtrlDefn :: QDefinition
+ddPropCtrlDefn :: SimpleQDef
 ddPropCtrlDefn = mkQuantDef qdPropControlFD ddPropCtrlEqn
 
 ddPropCtrlEqn :: Expr
@@ -66,10 +66,10 @@ ddPropCtrlNote
 
 ddDerivCtrl :: DataDefinition
 ddDerivCtrl
-  = dd ddDerivCtrlDefn [dRef johnson2008] Nothing "ddDerivCtrl"
+  = ddE ddDerivCtrlDefn [dRef johnson2008] Nothing "ddDerivCtrl"
       [ddDerivCtrlNote]
 
-ddDerivCtrlDefn :: QDefinition
+ddDerivCtrlDefn :: SimpleQDef
 ddDerivCtrlDefn = mkQuantDef qdDerivativeControlFD ddDerivCtrlEqn
 
 ddDerivCtrlEqn :: Expr
@@ -90,9 +90,9 @@ ddDerivCtrlNote
 
 ddCtrlVar :: DataDefinition
 ddCtrlVar
-  = dd ddCtrlVarDefn [dRef johnson2008] Nothing "ddCtrlVar" [ddCtrlNote]
+  = ddE ddCtrlVarDefn [dRef johnson2008] Nothing "ddCtrlVar" [ddCtrlNote]
 
-ddCtrlVarDefn :: QDefinition
+ddCtrlVarDefn :: SimpleQDef
 ddCtrlVarDefn = mkQuantDef qdCtrlVarFD ddCtrlEqn
 
 ddCtrlEqn :: Expr

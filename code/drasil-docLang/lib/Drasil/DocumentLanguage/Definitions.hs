@@ -22,7 +22,7 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
-  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints))
+  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
 import Utils.Drasil
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -139,7 +139,7 @@ mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, [unlbldExpr d]) : fs
+mkDDField d _ l@DefiningEquation fs = (show l, [unlbldExpr $ express d]) : fs
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getDecRefs) : fs
@@ -160,15 +160,16 @@ buildDescription Verbose u e m cs = (UlC . ulcc .
 buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformation ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
-buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $
-  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ express $ d ^. defnExpr)]
+buildDDescription' Verbose  u d m = [UlC . ulcc . Enumeration $ Definitions $
+  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $
+  either (express . (^. defnExpr)) (^. defnExpr) (qdFromDD d))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, [mkParagraph $ atStart g]) : fs
 mkGDField g _ l@Units fs =
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
-mkGDField g _ l@DefiningEquation fs = (show l, [unlbldExpr g]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, [unlbldExpr $ express g]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   buildDescription v u (express g) m []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
@@ -179,7 +180,7 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
-mkIMField i _ l@DefiningEquation fs = (show l, [unlbldExpr i]) : fs
+mkIMField i _ l@DefiningEquation fs = (show l, [unlbldExpr $ express i]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [express i]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in

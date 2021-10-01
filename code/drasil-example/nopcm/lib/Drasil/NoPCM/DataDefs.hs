@@ -1,7 +1,7 @@
 module Drasil.NoPCM.DataDefs where --exports all of it
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, ddNoRefs)
+import Theory.Drasil (DataDefinition, ddENoRefs)
 import Utils.Drasil
 
 import Drasil.SWHS.Assumptions (assumpVCN)
@@ -9,13 +9,13 @@ import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayRateQD, tankVolume,
   tankVolumeQD, waterMass, waterMassQD)
 import Drasil.SWHS.Unitals (tankVol, wVol)
 
-qDefs :: [QDefinition]
+qDefs :: [SimpleQDef]
 qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD]
 
 dataDefs :: [DataDefinition] 
 dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate]
 
-waterVolumeQD :: QDefinition
+waterVolumeQD :: SimpleQDef
 waterVolumeQD = mkQuantDef wVol waterVolumeEqn
 
 waterVolumeEqn :: Expr
@@ -26,5 +26,5 @@ waterVolumeNotes = foldlSent [S "Based on" +:+. refS assumpVCN, ch tankVol,
   S "is defined in", refS tankVolume]
 
 waterVolume :: DataDefinition
-waterVolume = ddNoRefs waterVolumeQD Nothing "waterVolume_nopcm" 
+waterVolume = ddENoRefs waterVolumeQD Nothing "waterVolume_nopcm" 
   [waterVolumeNotes]

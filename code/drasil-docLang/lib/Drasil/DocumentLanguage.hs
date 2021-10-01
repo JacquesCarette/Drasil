@@ -167,7 +167,7 @@ fillReferences dd si@SI{_sys = sys} = si2
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
     inRefs = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++ concatMap dRefToRef imods ++ concatMap dRefToRef tmods
-    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
+    ddefs  = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
     gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
     imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
     tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
@@ -366,16 +366,18 @@ mkSolChSpec si (SCSProg l) =
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ _ [])   = error "There are no Theoretical Models"
-    mkSubSCS _ (GDs _ _ [] _) = SSD.genDefnF []
+    mkSubSCS _ (TMs _ _ [])      = error "There are no Theoretical Models"
+    mkSubSCS _ (GDs _ _ [] _)    = SSD.genDefnF []
     mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ _ [] _)  = error "There are no Instance Models"
+    mkSubSCS _ (IMs _ _ [] _)    = error "There are no Instance Models"
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap (\x -> [LlC $ ddefn fields si' x, derivation x]) dds
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
+      where f e = [LlC $ ddefn fields si' e, derivation e]
     mkSubSCS si' (DDs intro fields dds _) =
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map (LlC . ddefn fields si') dds
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map f dds
+      where f e = LlC $ ddefn fields si' e
     mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
       SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
     mkSubSCS si' (GDs intro fields gs' _) =

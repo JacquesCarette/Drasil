@@ -1,4 +1,5 @@
-{-# Language TypeFamilies, ConstraintKinds #-}
+{-# LANGUAGE TypeFamilies, ConstraintKinds, ConstrainedClassMethods #-}
+
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (
     -- * Classes
@@ -32,12 +33,12 @@ module Language.Drasil.Classes (
 
 -- some classes are so 'core' that they are defined elswhere
 -- also helps with cycles...
-import Language.Drasil.Classes.Core
+import Language.Drasil.Classes.Core (HasSymbol, HasUID)
 
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
-import Language.Drasil.Expr (Expr)
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Reference (Reference)
@@ -165,12 +166,9 @@ class UnitEq u where
 
 -----------------------------------------------------
 
--- TODO: I think that this DefiningExpr is missing a "what it defines" component...
---       It's also only used for CodeDefinitions, QDefinitions, and DataDefinitions (food for thought on naming if we want to add ^)
--- | A better version of 'ExprRelat' that holds an 'Expr'.
 class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
-  defnExpr :: Lens' c Expr
+  defnExpr :: Express e => Lens' (c e) e
 
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

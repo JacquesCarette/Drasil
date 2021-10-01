@@ -8,12 +8,12 @@ module Language.Drasil.Sentence (
   -- ** Context Types
   SentenceStyle(..), RefInfo(..), TermCapitalization(..),
   -- * Functions
-  (+:+), (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen,
+  (+:+), (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
-import Language.Drasil.ModelExpr (ModelExpr)
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
@@ -75,8 +75,11 @@ data Sentence where
   -- | Empty Sentence.
   EmptyS :: Sentence
 
-eS :: Express t => t -> Sentence
-eS = E . express
+eS :: ModelExpr -> Sentence
+eS = E
+
+eS' :: Express t => t -> Sentence
+eS' = E . express
 
 -- The HasSymbol is redundant, but on purpose
 -- | Gets a symbol and places it in a 'Sentence'.

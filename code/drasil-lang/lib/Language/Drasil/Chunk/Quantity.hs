@@ -14,8 +14,8 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasSpace(typ), Quantity, Express(..))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, mkIdea, nc, ncUID, mkIdeaUID)
 import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
-import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.Expr.Class (sy)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Symbol (Symbol(Empty))
@@ -51,7 +51,7 @@ instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the units of the 'QuantityDict'.
 instance MayHaveUnit   QuantityDict where getUnit = view unit'
 -- | Convert the symbol of the 'QuantityDict' to a 'ModelExpr'.
-instance Express       QuantityDict where express = express . sy
+instance Express       QuantityDict where express = sy
 
 -- | Smart constructor for a 'QuantityDict' from another 'Quantity' with units.
 qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict

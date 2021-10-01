@@ -11,7 +11,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import Language.Drasil.Expr.Math (sy)
+import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)
@@ -54,7 +54,7 @@ instance Quantity      DefinedQuantityDict where
 -- | Finds the units of the 'DefinedQuantityDict'.
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 -- | Convert the symbol of the 'DefinedQuantityDict' to a 'ModelExpr'.
-instance Express       DefinedQuantityDict where express = express . sy
+instance Express       DefinedQuantityDict where express = sy
 
 -- | Smart constructor that creates a DefinedQuantityDict with a 'ConceptChunk', a 'Symbol' independent of 'Stage', a 'Space', and a unit.
 dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict

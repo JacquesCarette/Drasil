@@ -15,35 +15,37 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 ------------------------------------------------------------------------------------------------------
 -- * Equations
 
-newtonSLEqn, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
+weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
-  hsPressureEqn, speedEqn, velocityEqn, accelerationEqn  :: Relation
+  newtonSLEqn, hsPressureEqn, speedEqn :: PExpr
 
 newtonSLEqn               = sy QPP.mass `mulRe` sy QP.acceleration
 
 weightEqn                 = sy QPP.vol `mulRe` sy QPP.specWeight
 weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitationalAccel)
-weightDerivReplaceMassEqn = sy QP.weight $= mulRe (sy QPP.density) (mulRe (sy QPP.vol) (sy QP.gravitationalAccel))
+weightDerivReplaceMassEqn = sy QP.weight $= mulRe (sy QPP.density) (sy QPP.vol `mulRe` sy QP.gravitationalAccel)
 weightDerivSpecWeightEqn  = sy QP.weight $= mulRe (sy QPP.vol) (sy QPP.specWeight)
 
-weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (mulRe (sy QP.gravitationalAccel) (sy QM.unitVectj))
+weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (sy QP.gravitationalAccel `mulRe` sy QM.unitVectj)
 
 hsPressureEqn             = sy QPP.specWeight `mulRe` sy QP.height
 
 speedEqn                  = norm (sy QP.velocity)
+
+velocityEqn, accelerationEqn :: ModelExpr
 velocityEqn               = deriv (sy QP.position) QP.time
 accelerationEqn           = deriv (sy QP.velocity) QP.time
 
 ------------------------------------------------------------------------------------------------------
 -- * Concepts
 
-accelerationQD :: QDefinition
+accelerationQD :: ModelQDef
 accelerationQD = mkQuantDef QP.acceleration accelerationEqn
 
-velocityQD :: QDefinition
+velocityQD :: ModelQDef
 velocityQD = mkQuantDef QP.velocity velocityEqn
 
-newtonSLQD :: QDefinition
+newtonSLQD :: ModelQDef
 newtonSLQD = fromEqn' "force" (nounPhraseSP "Newton's second law of motion")
   newtonSLDesc (eqSymb QP.force) Real newtonSLEqn
 

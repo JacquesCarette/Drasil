@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
-import Language.Drasil.ModelExpr (ModelExpr)
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Label.Type (LblType(RP), IRefProg, prepend, getAdd)
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)

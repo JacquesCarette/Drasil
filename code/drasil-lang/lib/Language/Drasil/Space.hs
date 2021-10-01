@@ -50,7 +50,7 @@ data DomainDesc a b where
   BoundedDD :: Symbol -> RTopology -> a -> b -> DomainDesc a b
   AllDD     :: Symbol -> RTopology -> DomainDesc a b
 
--- | Inclusitivity of a 'Space'.
+-- | Inclusive or exclusive bounds.
 data Inclusive = Inc | Exc
 
 -- | A RealInterval is a subset of 'Real' (as a 'Space').

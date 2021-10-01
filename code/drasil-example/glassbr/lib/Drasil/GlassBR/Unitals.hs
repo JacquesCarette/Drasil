@@ -143,12 +143,12 @@ pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure")
 
 {--}
 
-specParamVals :: [QDefinition]
+specParamVals :: [SimpleQDef]
 specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
   sdMax, sdMin, stressDistFacMin, stressDistFacMax]
 
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDistFacMax,
-  sdMin :: QDefinition
+  sdMin :: SimpleQDef
 
 dimMax     = mkQuantDef (unitary "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
@@ -379,11 +379,11 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 --Constants--
 
-constants :: [QDefinition]
+constants :: [SimpleQDef]
 constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
                 ++ specParamVals 
 
-constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: QDefinition
+constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: SimpleQDef
 constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53
 constantM       = mkQuantDef sflawParamM $ exactDbl 7
 constantModElas = mkQuantDef modElas     $ dbl 7.17e10

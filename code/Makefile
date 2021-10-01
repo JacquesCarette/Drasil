@@ -178,6 +178,7 @@ pr_ready: all hot_hlint ##@General Check if your current work is ready to for a 
 	- echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	- echo "Feel free to create a PR for your code if you feel it's ready."
 
+#----------------------#
 #--- Initial checks ---#
 #----------------------#
 
@@ -198,6 +199,7 @@ graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 deps: check_stack ##@Dependencies Build only dependencies.
 	- stack build $(stackArgs) --only-dependencies
 
+#-------------------------------------------------#
 #--- Targets that affect all packages/examples ---#
 #-------------------------------------------------#
 
@@ -229,6 +231,7 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 # then make pdfs from the generated TeX files.
 tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
+#--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
 # Use filter to make a target for every package (second argument of filter)

@@ -40,7 +40,7 @@ imPDRC
       EmptyS
       eqn
 
-eqn :: Expr
+eqn :: ModelExpr
 eqn
   = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
       ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
@@ -55,18 +55,18 @@ imDeriv
 imDerivStmts :: [Sentence]
 imDerivStmts = [derivStmt1, derivStmt2, derivStmt3, derivStmt4]
 
-imDerivEqns :: [Expr]
+imDerivEqns :: [ModelExpr]
 imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 
 derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
-      [atStartNP (the processVariable), eS qdProcessVariableFD, S "in a", phrase pidCL +:+
+      [atStartNP (the processVariable), eS' qdProcessVariableFD, S "in a", phrase pidCL +:+
          S "is the product of the", phrase processError, fromSource ddErrSig `sC`
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
 
-derivEqn1 :: Expr
+derivEqn1 :: ModelExpr
 derivEqn1
   = sy qdProcessVariableFD
       $= (sy qdSetPointFD $- sy qdProcessVariableFD)
@@ -76,7 +76,7 @@ derivEqn1
 derivStmt2 :: Sentence
 derivStmt2 = (S "Substituting the values and rearranging the equation" !.)
 
-derivEqn2 :: Expr
+derivEqn2 :: ModelExpr
 derivEqn2
   = square (sy qdFreqDomain) `mulRe` sy qdProcessVariableFD
       `addRe` ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` sy qdProcessVariableFD `mulRe` sy qdFreqDomain)
@@ -89,7 +89,7 @@ derivStmt3
   = S "Computing the" +:+ phrase qdInvLaplaceTransform +:+
      fromSource tmInvLaplace +:+. S "of the equation"
 
-derivEqn3 :: Expr
+derivEqn3 :: ModelExpr
 derivEqn3
   = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
       (((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
@@ -100,13 +100,13 @@ derivEqn3
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [atStartNP (the setPoint), eS qdSetPointTD, S "is a step function and a constant" +:+.
+      [atStartNP (the setPoint), eS' qdSetPointTD, S "is a step function and a constant" +:+.
          fromSource aSP,
        S "Therefore the",
          S "differential of the set point is zero. Hence the equation",
          S "reduces to"]
 
-derivEqn4 :: Expr
+derivEqn4 :: ModelExpr
 derivEqn4
   = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
       ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)

@@ -31,7 +31,7 @@ import Data.Char (isSpace)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
-gen ds fn sm = prnt sm ds fn
+gen ds fn sm = prnt sm ds fn -- FIXME: 'prnt' is just 'gen' with the arguments reordered
 
 -- TODO: Include Jupyter into the SRS setup.
 -- | Generate the output artifacts (TeX+Makefile or HTML).

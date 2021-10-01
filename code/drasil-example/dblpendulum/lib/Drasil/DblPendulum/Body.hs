@@ -111,9 +111,9 @@ si = SI {
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
-  _defSequence = [] :: [Block QDefinition],
+  _defSequence = [] :: [Block SimpleQDef],
   _constraints = inConstraints,
-  _constants   = [] :: [QDefinition],
+  _constants   = [] :: [SimpleQDef],
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
    refdb       = refDB
@@ -126,8 +126,8 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
    [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
-  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] [] ([] :: [Reference])
+  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
+  dataDefs iMods genDefns tMods concIns [] [] ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])

@@ -5,9 +5,10 @@ import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Theory.Drasil (qdFromDD)
+import Theory.Drasil (qdEFromDD)
 
 import Prelude hiding (sin, cos, tan)
+import Data.Maybe (mapMaybe)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -81,7 +82,7 @@ si = SI {
   _configFiles = [],
   _inputs      = map qw inputs,
   _outputs     = map qw outputs,
-  _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
+  _defSequence = [(\x -> Parallel (head x) (tail x)) $ mapMaybe qdEFromDD SSP.dataDefs],
   _constraints = constrained,
   _constants   = [],
   _sysinfodb   = symbMap,

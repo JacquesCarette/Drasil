@@ -7,7 +7,7 @@ module Language.Drasil.Constraint (
   physc, sfwrc, isPhysC, isSfwrC
   ) where
 
-import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.Expr.Lang
 import Language.Drasil.Space (RealInterval(..))
 
 -- | The reason behind the constraint's existence.

@@ -39,10 +39,10 @@ factOfSafety = tm (equationalModelU "factOfSafetyTM" factOfSafetyQD)
   [factOfSafetyQD] [] [] [dRef fredlund1977] "factOfSafety" []
 
 ------------------------------------
-factOfSafetyQD :: QDefinition
+factOfSafetyQD :: ModelQDef
 factOfSafetyQD = mkQuantDef' fs factorOfSafety factOfSafetyExpr
 
-factOfSafetyExpr :: Expr
+factOfSafetyExpr :: PExpr
 factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 
 --
@@ -54,11 +54,11 @@ equilibrium = tm (equationalConstraints' equilibriumCS)
 
 ------------------------------------  
 
-equilibriumRels :: [Expr]
+equilibriumRels :: [ModelExpr]
 equilibriumRels = map (($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
 
 -- FIXME: variable "i" is a hack.  But we need to sum over something!
-equilibriumCS :: ConstraintSet
+equilibriumCS :: ConstraintSet ModelExpr
 equilibriumCS = mkConstraintSet
   (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $
   NE.fromList equilibriumRels
@@ -81,11 +81,11 @@ mcShrStrgth = tm (equationalModelU "mcShrSrgth" mcShrStrgthQD)
   [mcShrStrgthQD] [] [] [dRef fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
-mcShrStrgthQD :: QDefinition
+mcShrStrgthQD :: ModelQDef
 mcShrStrgthQD = fromEqnSt' (shrStress ^. uid) (nounPhraseSP "Mohr-Coulumb shear strength")
  mcShrStrgthDesc (symbol shrStress) Real mcShrStrgthExpr
 
-mcShrStrgthExpr :: Expr
+mcShrStrgthExpr :: PExpr
 mcShrStrgthExpr = sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion
 
 mcShrStrgthDesc :: Sentence
@@ -111,11 +111,11 @@ effStress = tm (equationalModelU "effectiveStressTM" effStressQD)
   [effStressQD] [] [] [dRef fredlund1977] "effStress" [effStressDesc]
 
 ------------------------------------
-effStressQD :: QDefinition
+effStressQD :: ModelQDef
 effStressQD = fromEqnSt' (effectiveStress ^. uid) (nounPhraseSP "effective stress")
  effStressDesc (symbol effectiveStress) Real effStressExpr
 
-effStressExpr :: Expr
+effStressExpr :: PExpr
 effStressExpr = sy totNormStress $- sy porePressure
 
 effStressDesc :: Sentence

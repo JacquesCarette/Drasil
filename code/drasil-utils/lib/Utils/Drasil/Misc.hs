@@ -49,7 +49,7 @@ eqN :: Int -> Sentence
 eqN n = S "Equation" +:+ sParen (S $ show n)
 
 -- | Takes an expression and a 'Referable' and outputs as a Sentence "expression (source)".
-eqnWSource :: (Express e, Referable r, HasShortName r) => e -> r -> Sentence
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
 eqnWSource a b = eS a +:+ sParen (refS b)
 
 -- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
@@ -227,13 +227,11 @@ getTandS a = phrase a +:+ ch a
 
 -- | Produces a 'Sentence' that displays the constraints in a set {}.
 displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-displayStrConstrntsAsSet sym listOfVals = eS $ 
-  isIn (sy sym) (space $ DiscreteS listOfVals)
+displayStrConstrntsAsSet sym listOfVals = eS $ isIn (sy sym) (DiscreteS listOfVals)
 
 -- | Produces a 'Sentence' that displays the constraints in a set {}.
 displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
-displayDblConstrntsAsSet sym listOfVals = eS $ 
-  isIn (sy sym) (space $ DiscreteD listOfVals)
+displayDblConstrntsAsSet sym listOfVals = eS $ isIn (sy sym) (DiscreteD listOfVals)
 
 -- | Output is of the form "@reference - sentence@".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

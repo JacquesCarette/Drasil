@@ -21,7 +21,7 @@ dependencyPlate = preorderFold $ purePlate {
     _ -> [],
   scsSub = Constant <$> \case
     (Assumptions a) -> getDependenciesOf [defs] a
-    (TMs _ _ t) -> getDependenciesOf [\x -> map (^. defn) (x ^. defined_quant) ++
+    (TMs _ _ t)     -> getDependenciesOf [\x -> map (^. defn) (x ^. defined_quant) ++
       map (^. defn) (x ^. operations), notes] t
     (DDs _ _ d _) -> getDependenciesOf [derivs, notes] d
     (GDs _ _ g _) -> getDependenciesOf [defs, derivs, notes] g

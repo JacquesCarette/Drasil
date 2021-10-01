@@ -115,7 +115,7 @@ si = SI {
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
-  _defSequence = [] :: [Block QDefinition],
+  _defSequence = [] :: [Block SimpleQDef],
   _constraints = map cnstrw constrained,
   _constants   = constants,
   _sysinfodb   = symbMap,
@@ -181,7 +181,7 @@ symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
   iyPos, ixVel, iyVel, position, scalarPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
 
-constants :: [QDefinition]
+constants :: [SimpleQDef]
 constants = [gravitationalAccelConst, piConst, tol]
 
 inputs :: [QuantityDict]

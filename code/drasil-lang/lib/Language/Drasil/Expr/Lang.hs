@@ -1,8 +1,7 @@
 {-# LANGUAGE GADTs #-}
--- | The Drasil Expression language
-module Language.Drasil.Expr where
 
-import Prelude hiding (sqrt)
+-- | The Drasil Expression language 
+module Language.Drasil.Expr.Lang where
 
 import Language.Drasil.Space (DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
@@ -12,11 +11,8 @@ import Language.Drasil.UID (UID)
 -- | A relation is just an expression ('Expr').
 type Relation = Expr
 
-infixr 8 $^
-infixl 7 $/
-infixr 4 $=
-infixr 9 $&&
-infixr 9 $||
+-- | The variable type is just a renamed 'String'.
+type Variable = String
 
 -- Binary functions
 
@@ -96,10 +92,6 @@ data Expr where
   AssocA   :: AssocArithOper -> [Expr] -> Expr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB   :: AssocBoolOper  -> [Expr] -> Expr
-  -- | Derivative syntax is:
-  --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
-  --   For example: Deriv Part y x1 would be (dy/dx1).
-  Deriv    :: DerivType -> Expr -> UID -> Expr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C        :: UID -> Expr
@@ -146,98 +138,29 @@ data Expr where
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
 
--- * Binary Operators
-
-($=), ($!=) :: Expr -> Expr -> Expr
--- | Smart constructor for equating two expressions.
-($=)  = EqBinaryOp Eq
--- | Smart constructor for showing that two expressions are not equal.
-($!=) = EqBinaryOp NEq
-
--- | Smart constructor for ordering two equations.
-($<), ($>), ($<=), ($>=) :: Expr -> Expr -> Expr
--- | Less than.
-($<)  = OrdBinaryOp Lt
--- | Greater than.
-($>)  = OrdBinaryOp Gt
--- | Less than or equal to.
-($<=) = OrdBinaryOp LEq
--- | Greater than or equal to.
-($>=) = OrdBinaryOp GEq
-
--- | Smart constructor for the dot product of two equations.
-($.) :: Expr -> Expr -> Expr
-($.) = VVNBinaryOp Dot
-
--- Generate below 4 functions with TH?
--- | Add two expressions (Integers).
-addI :: Expr -> Expr -> Expr
-addI l (Int 0) = l
-addI (Int 0) r = r
-addI (AssocA AddI l) (AssocA AddI r) = AssocA AddI (l ++ r)
-addI (AssocA AddI l) r = AssocA AddI (l ++ [r])
-addI l (AssocA AddI r) = AssocA AddI (l : r)
-addI l r = AssocA AddI [l, r]
-
--- | Add two expressions (Real numbers).
-addRe :: Expr -> Expr -> Expr
-addRe l (Dbl 0)      = l
-addRe (Dbl 0) r      = r
-addRe l (ExactDbl 0) = l
-addRe (ExactDbl 0) r = r
-addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
-addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
-addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
-addRe l r = AssocA AddRe [l, r]
-
--- | Multiply two expressions (Integers).
-mulI :: Expr -> Expr -> Expr
-mulI l (Int 1) = l
-mulI (Int 1) r = r
-mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
-mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
-mulI l (AssocA MulI r) = AssocA MulI (l : r)
-mulI l r = AssocA MulI [l, r]
-
--- | Multiply two expressions (Real numbers).
-mulRe :: Expr -> Expr -> Expr
-mulRe l (Dbl 1)      = l
-mulRe (Dbl 1) r      = r
-mulRe l (ExactDbl 1) = l
-mulRe (ExactDbl 1) r = r
-mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
-mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
-mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)
-mulRe l r = AssocA MulRe [l, r]
-
-($-), ($/), ($^) :: Expr -> Expr -> Expr
--- | Smart constructor for subtracting two expressions.
-($-) = ArithBinaryOp Subt
--- | Smart constructor for dividing two expressions.
-($/) = ArithBinaryOp Frac
--- | Smart constructor for rasing the first expression to the power of the second.
-($^) = ArithBinaryOp Pow
-
-($=>), ($<=>) :: Expr -> Expr -> Expr
--- | Smart constructor to show that one expression implies the other (conditional operator).
-($=>)  = BoolBinaryOp Impl
--- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-($<=>) = BoolBinaryOp Iff
-
-($&&), ($||) :: Expr -> Expr -> Expr
--- | Smart constructor for the boolean /and/ operator.
-a $&& b = AssocB And [a, b]
--- | Smart constructor for the boolean /or/ operator.
-a $|| b = AssocB Or  [a, b]
-
--- * Misc.
-
--- | The variable type is just a renamed 'String'.
-type Variable = String
-
--- | Determines the type of the derivative (either a partial derivative or a total derivative).
-data DerivType = Part | Total
-  deriving Eq
+-- | Expressions are equal if their constructors and contents are equal.
+instance Eq Expr where
+  Dbl a               == Dbl b               =   a == b
+  Int a               == Int b               =   a == b
+  Str a               == Str b               =   a == b
+  AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
+  AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
+  C a                 == C b                 =   a == b
+  FCall a b c         == FCall d e f         =   a == d && b == e && c == f
+  Case a b            == Case c d            =   a == c && b == d 
+  UnaryOp a b         == UnaryOp c d         =   a == c && b == d
+  UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
+  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
+  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
+  ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
+  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
+  EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
+  OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
+  LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
+  VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
+  VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
+  _                   == _                   =   False
+-- ^ TODO: This needs to add more equality checks
 
 -- instance Num Expr where
 --   (Int 0)        + b              = b
@@ -260,31 +183,6 @@ data DerivType = Part | Total
 
 --   -- this is a Num wart
 --   signum _ = error "should not use signum in expressions"
-
--- | Expressions are equal if their constructors and contents are equal.
-instance Eq Expr where
-  Dbl a               == Dbl b               =   a == b
-  Int a               == Int b               =   a == b
-  Str a               == Str b               =   a == b
-  AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
-  AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
-  Deriv t1 a b        == Deriv t2 c d        =  t1 == t2 && a == c && b == d
-  C a                 == C b                 =   a == b
-  FCall a b c         == FCall d e f         =   a == d && b == e && c == f
-  Case a b            == Case c d            =   a == c && b == d 
-  UnaryOp a b         == UnaryOp c d         =   a == c && b == d
-  UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
-  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
-  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
-  ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
-  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
-  EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
-  OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
-  LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
-  VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
-  VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
-  _                   == _                   =   False
--- ^ TODO: This needs to add more equality checks
 
 -- instance Fractional Expr where
 --   a / b = ArithBinaryOp Frac a b

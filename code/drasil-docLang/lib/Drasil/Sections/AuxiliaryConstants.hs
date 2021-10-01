@@ -11,11 +11,11 @@ import qualified Data.Drasil.Concepts.Math as CM (unit_)
 import Control.Lens ((^.))
 
 -- | Gets the auxiliary constant values given an introductory 'Idea' and a 'QDefinition'.
-valsOfAuxConstantsF :: (Idea a) => a ->[QDefinition] -> Section
+valsOfAuxConstantsF :: Idea a => a ->[SimpleQDef] -> Section
 valsOfAuxConstantsF kWord listOfConstants = SRS.valsOfAuxCons (contentGenerator kWord listOfConstants)  []
 
 -- | Gets a table of constants from a 'QDefinition'. Also uses an 'Idea' as the introduction.
-contentGenerator :: (Idea a) => a -> [QDefinition] -> [Contents]
+contentGenerator :: Idea a => a -> [SimpleQDef] -> [Contents]
 contentGenerator _ [] = [foldlSP [S "There are no auxiliary constants"]]
 contentGenerator a b  = [intro a, LlC $ tableOfConstants b]
 
@@ -25,10 +25,10 @@ intro :: (Idea a) => a -> Contents
 intro kWord =  foldlSP [S "This section contains the standard values that are used for calculations in" +:+ short kWord]
 
 -- | Helper that gets a table of constants from a 'QDefinition'.
-tableOfConstants :: [QDefinition] -> LabelledContent
+tableOfConstants :: [SimpleQDef] -> LabelledContent
 tableOfConstants f = llcc tableOfConstantsRef $ Table
   [titleize symbol_, titleize description, titleize value, titleize CM.unit_]
-  (mkTable [ch, phrase, \c -> eS $ c ^. defnExpr, toSentence] f)
+  (mkTable [ch, phrase, \c -> eS $ express $ c ^. defnExpr, toSentence] f)
   (titleize' tAuxConsts)
   True
 

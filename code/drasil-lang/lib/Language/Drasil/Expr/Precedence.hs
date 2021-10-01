@@ -1,7 +1,7 @@
 -- | Defines operator precedence.
 module Language.Drasil.Expr.Precedence where
 
-import Language.Drasil.Expr (Expr(..),
+import Language.Drasil.Expr.Lang (Expr(..),
   ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   AssocBoolOper(..), AssocArithOper(..), VVVBinOp)
@@ -80,7 +80,6 @@ eprec Perc{}                 = 500
 eprec (AssocA op _)          = precA op
 eprec (AssocB op _)          = precB op
 eprec C{}                    = 500
-eprec Deriv{}                = prec2Arith Frac
 eprec FCall{}                = 210
 eprec Case{}                 = 200
 eprec Matrix{}               = 220

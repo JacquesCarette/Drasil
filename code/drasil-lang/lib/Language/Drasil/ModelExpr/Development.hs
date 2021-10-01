@@ -18,8 +18,8 @@ module Language.Drasil.ModelExpr.Development (
   , mePrec, precB, precA
 ) where
 
-import Language.Drasil.Expr (DerivType(..), Completeness(..))
-import Language.Drasil.ModelExpr
+import Language.Drasil.Expr.Lang (Completeness(..))
 import Language.Drasil.ModelExpr.Convert (expr)
 import Language.Drasil.ModelExpr.Extract (meDep)
+import Language.Drasil.ModelExpr.Lang
 import Language.Drasil.ModelExpr.Precedence

@@ -3,15 +3,14 @@ module Language.Drasil.Expr.Extract where
 
 import Data.List (nub)
 
-import Language.Drasil.UID (UID)
-import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Space (RealInterval(..))
+import Language.Drasil.UID (UID)
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [UID]
 eNames (AssocA _ l)          = concatMap eNames l
 eNames (AssocB _ l)          = concatMap eNames l
-eNames (Deriv _ a b)         = b : eNames a
 eNames (C c)                 = [c]
 eNames Int{}                 = []
 eNames Dbl{}                 = []
@@ -48,7 +47,6 @@ eNamesRI (UpFrom (_, il))          = eNames il
 eNames' :: Expr -> [UID]
 eNames' (AssocA _ l)          = concatMap eNames' l
 eNames' (AssocB _ l)          = concatMap eNames' l
-eNames' (Deriv _ a b)         = b : eNames' a
 eNames' (C c)                 = [c]
 eNames' Int{}                 = []
 eNames' Dbl{}                 = []

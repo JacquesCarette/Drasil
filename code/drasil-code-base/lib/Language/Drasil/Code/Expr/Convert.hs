@@ -3,7 +3,7 @@ module Language.Drasil.Code.Expr.Convert (
 ) where
 
 import qualified Language.Drasil as L
-import qualified Language.Drasil.Development as LD
+import qualified Language.Drasil.Expr.Development as LD
 
 import Data.Bifunctor (Bifunctor(bimap, second))
 
@@ -35,7 +35,6 @@ expr (LD.VVVBinaryOp bo l r) = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
 expr (LD.VVNBinaryOp bo l r) = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
 expr (LD.Operator aao dd e) = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
 expr (LD.RealI u ri) = RealI u (realInterval ri)
-expr  LD.Deriv {} = error "Expr's Deriv is not convertible to the language of CodeExpr"
 
 -- | Convert 'RealInterval' 'Expr' 'Expr's into 'RealInterval' 'CodeExpr' 'CodeExpr's.
 realInterval :: L.RealInterval L.Expr L.Expr -> L.RealInterval CodeExpr CodeExpr

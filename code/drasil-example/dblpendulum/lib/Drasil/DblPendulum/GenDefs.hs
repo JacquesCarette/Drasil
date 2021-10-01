@@ -14,9 +14,9 @@ import qualified Utils.Drasil.Sentence as S
 import qualified Utils.Drasil.NounPhrase as NP
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
-import Drasil.DblPendulum.DataDefs (positionGDD,
-    positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, forceGDD)
+import Drasil.DblPendulum.DataDefs
 import qualified Drasil.DblPendulum.Expressions as E
+import qualified Drasil.DblPendulum.Derivations as D
 import Drasil.DblPendulum.Unitals (lenRod_1, xVel_1, xVel_2,
     yVel_1, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2)
 import Drasil.DblPendulum.Concepts (horizontalPos,
@@ -34,7 +34,7 @@ velXGD_1 :: GenDefn
 velXGD_1 = gdNoRefs (equationalModel' velXQD_1) (getUnit velocity) (Just velXDeriv_1) "velocityX1" [{-Notes-}]
 -- general definiton block, with equation, unit, refinement explanation
 
-velXQD_1 :: QDefinition
+velXQD_1 :: ModelQDef
 velXQD_1 = mkQuantDef' xVel_1 (the xComp `NP.of_` (velocity `ofThe` firstObject)) E.velXExpr_1
 -- lable and equation
 
@@ -47,14 +47,14 @@ velXDerivSents_1 = [velDerivSent1,velXDerivSent2_1,velDerivSent3,velDerivSent4, 
 -- words used to explain the equation refinement
 
 velXDerivEqns_1 :: [Sentence]
-velXDerivEqns_1 = map eS [E.velDerivEqn1, E.velXDerivEqn2_1, E.velXDerivEqn3_1, E.velXDerivEqn4_1] ++ [eS velXQD_1]
+velXDerivEqns_1 = map eS [D.velDerivEqn1, D.velXDerivEqn2_1, D.velXDerivEqn3_1, D.velXDerivEqn4_1] ++ [eS' velXQD_1]
 -- refinement equation after explained words
 
 velDerivSent1, velXDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5 :: Sentence
 velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` definedIn'' positionGDD
 velXDerivSent2_1 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionXDD_1
 velDerivSent3 = S "Applying this,"
-velDerivSent4 = eS lenRod_1 `S.is` S "constant" `S.wrt` S  "time, so"
+velDerivSent4 = eS' lenRod_1 `S.is` S "constant" `S.wrt` S  "time, so"
 velDerivSent5 = S "Therefore, using the chain rule,"
 
 ------------------------------------------------
@@ -63,7 +63,7 @@ velDerivSent5 = S "Therefore, using the chain rule,"
 velYGD_1 :: GenDefn
 velYGD_1 = gdNoRefs (equationalModel' velYQD_1) (getUnit velocity) (Just velYDeriv_1) "velocityY1" []
 
-velYQD_1 :: QDefinition
+velYQD_1 :: ModelQDef
 velYQD_1 = mkQuantDef' yVel_1 (the yComp `NP.of_` (velocity `ofThe` firstObject)) E.velYExpr_1
  
 velYDeriv_1 :: Derivation
@@ -73,7 +73,7 @@ velYDerivSents_1 :: [Sentence]
 velYDerivSents_1 = [velDerivSent1, velYDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5]
 
 velYDerivEqns_1 :: [Sentence]
-velYDerivEqns_1 = map eS [E.velDerivEqn1, E.velYDerivEqn2_1, E.velYDerivEqn3_1, E.velYDerivEqn4_1] ++ [eS velYQD_1]
+velYDerivEqns_1 = map eS [D.velDerivEqn1, D.velYDerivEqn2_1, D.velYDerivEqn3_1, D.velYDerivEqn4_1] ++ [eS' velYQD_1]
 
 velYDerivSent2_1 :: Sentence
 velYDerivSent2_1 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.is` definedIn'' positionYDD_1
@@ -84,7 +84,7 @@ velYDerivSent2_1 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.i
 velXGD_2 :: GenDefn
 velXGD_2 = gdNoRefs (equationalModel' velXQD_2) (getUnit velocity) (Just velXDeriv_2) "velocityX2" []
 
-velXQD_2 :: QDefinition
+velXQD_2 :: ModelQDef
 velXQD_2 = mkQuantDef' xVel_2 (the xComp `NP.of_` (velocity `ofThe` secondObject)) E.velXExpr_2
 
 velXDeriv_2 :: Derivation
@@ -94,7 +94,7 @@ velXDerivSents_2 :: [Sentence]
 velXDerivSents_2 = [velDerivSent1, velXDerivSent2_2, velDerivSent3, velDerivSent4]
 
 velXDerivEqns_2 :: [Sentence]
-velXDerivEqns_2 = map eS [E.velDerivEqn1, E.velXDerivEqn2_2, E.velXDerivEqn3_2] ++ [eS velXQD_2] 
+velXDerivEqns_2 = map eS [D.velDerivEqn1, D.velXDerivEqn2_2, D.velXDerivEqn3_2] ++ [eS' velXQD_2] 
 
 velXDerivSent2_2 :: Sentence
 velXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionXDD_2
@@ -105,7 +105,7 @@ velXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S
 velYGD_2 :: GenDefn
 velYGD_2 = gdNoRefs (equationalModel' velYQD_2) (getUnit velocity) (Just velYDeriv_2) "velocityY2" []
 
-velYQD_2 :: QDefinition
+velYQD_2 :: ModelQDef
 velYQD_2 = mkQuantDef' yVel_2 (the yComp `NP.of_` (velocity `ofThe` secondObject)) E.velYExpr_2
 
 velYDeriv_2 :: Derivation
@@ -115,7 +115,7 @@ velYDerivSents_2 :: [Sentence]
 velYDerivSents_2 = [velDerivSent1,velYDerivSent2_2,velDerivSent3,velDerivSent5]
 
 velYDerivEqns_2 :: [Sentence]
-velYDerivEqns_2 = map eS [E.velDerivEqn1, E.velYDerivEqn2_2, E.velYDerivEqn3_2] ++ [eS velYQD_2]
+velYDerivEqns_2 = map eS [D.velDerivEqn1, D.velYDerivEqn2_2, D.velYDerivEqn3_2] ++ [eS' velYQD_2]
 
 velYDerivSent2_2 :: Sentence
 velYDerivSent2_2 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.is` definedIn'' positionYDD_2
@@ -126,7 +126,7 @@ velYDerivSent2_2 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.i
 accelXGD_1 :: GenDefn
 accelXGD_1 = gdNoRefs (equationalModel' accelXQD_1) (getUnit acceleration) (Just accelXDeriv_1) "accelerationX1" []
 
-accelXQD_1 :: QDefinition
+accelXQD_1 :: ModelQDef
 accelXQD_1 = mkQuantDef' xAccel_1 (the xComp `NP.of_` (acceleration `ofThe` firstObject)) E.accelXExpr_1
 
 accelXDeriv_1:: Derivation
@@ -136,7 +136,7 @@ accelXDerivSents_1:: [Sentence]
 accelXDerivSents_1= [accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
 
 accelXDerivEqns_1 :: [Sentence]
-accelXDerivEqns_1 = eS E.accelDerivEqn1 : eS velXQD_1 : map eS [E.accelXDerivEqn3_1, E.accelXDerivEqn4_1] ++ [eS accelXQD_1]
+accelXDerivEqns_1 = eS D.accelDerivEqn1 : eS' velXQD_1 : map eS [D.accelXDerivEqn3_1, D.accelXDerivEqn4_1] ++ [eS' accelXQD_1]
 
 accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5 :: Sentence
 
@@ -152,7 +152,7 @@ accelDerivSent5 = S "Simplifying,"
 accelYGD_1 :: GenDefn
 accelYGD_1 = gdNoRefs (equationalModel' accelYQD_1) (getUnit acceleration) (Just accelYDeriv_1) "accelerationY1" []
 
-accelYQD_1 :: QDefinition
+accelYQD_1 :: ModelQDef
 accelYQD_1 = mkQuantDef' yAccel_1 (the yComp `NP.of_` (acceleration `ofThe` firstObject)) E.accelYExpr_1
 
 accelYDeriv_1:: Derivation
@@ -162,7 +162,7 @@ accelYDerivSents_1 :: [Sentence]
 accelYDerivSents_1 = [accelDerivSent1, accelYDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
 
 accelYDerivEqns_1 :: [Sentence]
-accelYDerivEqns_1 = eS E.accelDerivEqn1 : eS velYQD_1 : map eS [E.accelYDerivEqn3_1, E.accelYDerivEqn4_1] ++ [eS accelYQD_1]
+accelYDerivEqns_1 = eS D.accelDerivEqn1 : eS' velYQD_1 : map eS [D.accelYDerivEqn3_1, D.accelYDerivEqn4_1] ++ [eS' accelYQD_1]
 
 accelYDerivSent2_1 :: Sentence
 accelYDerivSent2_1 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
@@ -173,7 +173,7 @@ accelYDerivSent2_1 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:
 accelXGD_2 :: GenDefn
 accelXGD_2 = gdNoRefs (equationalModel' accelXQD_2) (getUnit acceleration) (Just accelXDeriv_2) "accelerationX2" []
 
-accelXQD_2 :: QDefinition
+accelXQD_2 :: ModelQDef
 accelXQD_2 = mkQuantDef' xAccel_2 (the xComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelXExpr_2
 
 accelXDeriv_2:: Derivation
@@ -183,7 +183,7 @@ accelXDerivSents_2:: [Sentence]
 accelXDerivSents_2= [accelDerivSent1, accelXDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelXDerivEqns_2 :: [Sentence]
-accelXDerivEqns_2 = eS E.accelDerivEqn1 : eS velXQD_2 : map eS [E.accelXDerivEqn3_2] ++ [eS accelXQD_2]
+accelXDerivEqns_2 = eS D.accelDerivEqn1 : eS' velXQD_2 : map eS [D.accelXDerivEqn3_2] ++ [eS' accelXQD_2]
 
 accelXDerivSent2_2 :: Sentence
 accelXDerivSent2_2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"
@@ -194,7 +194,7 @@ accelXDerivSent2_2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel 
 accelYGD_2 :: GenDefn
 accelYGD_2 = gdNoRefs (equationalModel' accelYQD_2) (getUnit acceleration) (Just accelYDeriv_2) "accelerationY2" []
 
-accelYQD_2 :: QDefinition
+accelYQD_2 :: ModelQDef
 accelYQD_2 = mkQuantDef' yAccel_2 (the yComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelYExpr_2
 
 accelYDeriv_2:: Derivation
@@ -204,7 +204,7 @@ accelYDerivSents_2:: [Sentence]
 accelYDerivSents_2= [accelDerivSent1, accelYDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelYDerivEqns_2 :: [Sentence]
-accelYDerivEqns_2 = eS E.accelDerivEqn1 : eS velYQD_2 : map eS [E.accelYDerivEqn3_2] ++ [eS accelYQD_2]
+accelYDerivEqns_2 = eS D.accelDerivEqn1 : eS' velYQD_2 : [eS D.accelYDerivEqn3_2, eS' accelYQD_2]
 
 accelYDerivSent2_2 :: Sentence
 accelYDerivSent2_2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"
@@ -216,18 +216,18 @@ xForceGD_1 :: GenDefn
 xForceGD_1 = gdNoRefs (equationalRealmU "xForce1" xForceMD_1)
         (getUnit force) (Just xForceDeriv_1) "xForce1" []
 
-xForceMD_1 :: MultiDefn
+xForceMD_1 :: MultiDefn ModelExpr
 xForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
     where quant = mkQuant' "force" (horizontalForce `onThe` firstObject)
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
-                      [] EmptyS (forceGDD ^. defnExpr),
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "xForceWithAngle1"
                       [] EmptyS E.xForceWithAngle_1]
 
 xForceDeriv_1 :: Derivation
-xForceDeriv_1 = mkDerivName (phraseNP (force `onThe` firstObject)) [eS xForceMD_1]
+xForceDeriv_1 = mkDerivName (phraseNP (force `onThe` firstObject)) [eS' xForceMD_1]
 
 -------------------------------------------------
 -- Vertical force acting on the first object --
@@ -236,18 +236,18 @@ yForceGD_1 :: GenDefn
 yForceGD_1 = gdNoRefs (equationalRealmU "yForce1" yForceMD_1)
         (getUnit force) (Just yForceDeriv_1) "yForce1" []
 
-yForceMD_1 :: MultiDefn
+yForceMD_1 :: MultiDefn ModelExpr
 yForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
     where quant = mkQuant' "force" (verticalForce `onThe` firstObject)
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
-                      [] EmptyS (forceGDD ^. defnExpr),
-                    mkDefiningExpr "yForceWithAngle1"    
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
+                    mkDefiningExpr "yForceWithAngle1"
                       [] EmptyS E.yForceWithAngle_1]
 
 yForceDeriv_1 :: Derivation
-yForceDeriv_1 = mkDerivName (phraseNP (force `onThe` firstObject)) [eS yForceMD_1]
+yForceDeriv_1 = mkDerivName (phraseNP (force `onThe` firstObject)) [eS' yForceMD_1]
 
 -------------------------------------------------
 -- Horizontal force acting on the second object --
@@ -256,18 +256,18 @@ xForceGD_2 :: GenDefn
 xForceGD_2 = gdNoRefs (equationalRealmU "xForce2" xForceMD_2)
         (getUnit force) (Just xForceDeriv_2) "xForce2" []
 
-xForceMD_2 :: MultiDefn
+xForceMD_2 :: MultiDefn ModelExpr
 xForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
     where quant = mkQuant' "force" (horizontalForce `onThe` secondObject)
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
-                      [] EmptyS (forceGDD ^. defnExpr),
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "xForceWithAngle2"
                       [] EmptyS E.xForceWithAngle_2]
 
 xForceDeriv_2 :: Derivation
-xForceDeriv_2 = mkDerivName (phraseNP (force `onThe` secondObject)) [eS xForceMD_2]
+xForceDeriv_2 = mkDerivName (phraseNP (force `onThe` secondObject)) [eS' xForceMD_2]
 
 -------------------------------------------------
 -- Vertical force acting on the first object --
@@ -276,15 +276,15 @@ yForceGD_2 :: GenDefn
 yForceGD_2 = gdNoRefs (equationalRealmU "yForce2" yForceMD_2)
         (getUnit force) (Just yForceDeriv_2) "yForce2" []
 
-yForceMD_2 :: MultiDefn
+yForceMD_2 :: MultiDefn ModelExpr
 yForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
     where quant = mkQuant' "force" (verticalForce `onThe` secondObject)
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"
-                      [] EmptyS (forceGDD ^. defnExpr),
-                    mkDefiningExpr "yForceWithAngle2"    
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
+                    mkDefiningExpr "yForceWithAngle2"
                       [] EmptyS E.yForceWithAngle_2]
 
 yForceDeriv_2 :: Derivation
-yForceDeriv_2 = mkDerivName (phraseNP (force `onThe` secondObject)) [eS yForceMD_2]
+yForceDeriv_2 = mkDerivName (phraseNP (force `onThe` secondObject)) [eS' yForceMD_2]

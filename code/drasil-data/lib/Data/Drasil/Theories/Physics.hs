@@ -36,7 +36,7 @@ weightGD :: GenDefn
 weightGD = gd (equationalModel' weightQD) (getUnit QP.weight) (Just weightDeriv) [dRef weightSrc] 
   "weight" [{-Notes-}]
 
-weightQD :: QDefinition
+weightQD :: ModelQDef
 weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") weightEqn
 
 weightSrc :: Reference
@@ -80,7 +80,7 @@ hsPressureGD :: GenDefn
 hsPressureGD = gd (equationalModel' hsPressureQD) (getUnit QP.pressure) Nothing
   [dRef hsPressureSrc] "hsPressure" [hsPressureNotes]
 
-hsPressureQD :: QDefinition
+hsPressureQD :: ModelQDef
 hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") hsPressureEqn
 
 hsPressureSrc :: Reference
@@ -95,9 +95,9 @@ hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
 -- * Torque
 
 torqueDD :: DataDefinition
-torqueDD = ddNoRefs torque Nothing "torque" [torqueDesc] 
+torqueDD = ddENoRefs torque Nothing "torque" [torqueDesc] 
 
-torque :: QDefinition
+torque :: SimpleQDef
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
@@ -110,7 +110,7 @@ torqueDesc = foldlSent [S "The", phrase torque,
 
 -- * Vector Magnitude
 
-vecMagQD :: QDefinition
+vecMagQD :: SimpleQDef
 vecMagQD = mkQuantDef QP.speed speedEqn
 
 magNote :: Sentence
@@ -119,7 +119,7 @@ magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velo
   S "scalar called", phrase QP.speed]
 
 vecMag :: DataDefinition
-vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
+vecMag = ddENoRefs vecMagQD Nothing "vecMag" [magNote]
 
 -- * Newton's Second Law of Rotational Motion
 
@@ -128,10 +128,10 @@ newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRQD :: QDefinition
+newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRExpr :: Expr
+newtonSLRExpr :: PExpr
 newtonSLRExpr = sy QP.momentOfInertia `mulRe` sy QP.angularAccel
 
 newtonSLRNotes :: [Sentence]

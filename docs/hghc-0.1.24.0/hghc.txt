@@ -14,7 +14,7 @@ module Drasil.HGHC.Choices
 module Drasil.HGHC.HeatTransfer
 symbols :: [QuantityDict]
 dataDefs :: [DataDefinition]
-qDefs :: [QDefinition]
+qDefs :: [SimpleQDef]
 htVars :: [QuantityDict]
 htInputs :: [QuantityDict]
 htOutputs :: [QuantityDict]
@@ -24,8 +24,8 @@ gapFilmCond :: QuantityDict
 cladCond :: QuantityDict
 htTransCladCoolEq :: Expr
 htTransCladFuelEq :: Expr
-htTransCladCool :: QDefinition
-htTransCladFuel :: QDefinition
+htTransCladCool :: SimpleQDef
+htTransCladFuel :: SimpleQDef
 htTransCladCoolDD :: DataDefinition
 htTransCladFuelDD :: DataDefinition
 hghc :: CommonConcept

@@ -92,27 +92,30 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. ExprC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. ExprC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. ExprC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">40</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="annot"><a href="Drasil.NoPCM.Unitals.html#specParamValList"><span class="hs-identifier hs-type">specParamValList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>
-</span><span id="line-31"></span><span id="specParamValList"><span class="annot"><span class="annottext">specParamValList :: [QDefinition]
-</span><a href="Drasil.NoPCM.Unitals.html#specParamValList"><span class="hs-identifier hs-var hs-var">specParamValList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">tankLengthMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.NoPCM.Unitals.html#specParamValList"><span class="hs-identifier hs-type">specParamValList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span><span id="specParamValList"><span class="annot"><span class="annottext">specParamValList :: [SimpleQDef]
+</span><a href="Drasil.NoPCM.Unitals.html#specParamValList"><span class="hs-identifier hs-var hs-var">specParamValList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">tankLengthMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><span class="hs-identifier hs-var">tankLengthMax</span></span><span class="hs-special">,</span><span>
-</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">wDensityMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">wDensityMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">coilSAMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">htCapWMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">wDensityMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">wDensityMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">coilSAMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">htCapWMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><span class="hs-identifier hs-var">htCapWMax</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">coilHTCMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">coilHTCMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">timeFinalMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><span class="hs-identifier hs-var">arMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">coilHTCMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">coilHTCMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">timeFinalMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">arMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
 </span><span class="hs-identifier hs-var">arMax</span></span><span class="hs-special">]</span><span>
 </span><span id="line-34"></span></pre></body></html>

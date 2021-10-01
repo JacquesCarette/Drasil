@@ -1,0 +1,5 @@
+digraph constraintsete{
+ConstraintSete	[shape=oval, color=cyan3, label="ConstraintSete"];
+ConstraintSete -> ConceptChunk;
+ConstraintSete -> NonEmptye;
+}

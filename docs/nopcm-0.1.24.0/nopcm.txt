@@ -25,9 +25,9 @@ assumpAPT :: ConceptInstance
 assumpWAL :: ConceptInstance
 
 module Drasil.NoPCM.DataDefs
-qDefs :: [QDefinition]
+qDefs :: [SimpleQDef]
 dataDefs :: [DataDefinition]
-waterVolumeQD :: QDefinition
+waterVolumeQD :: SimpleQDef
 waterVolumeEqn :: Expr
 waterVolumeNotes :: Sentence
 waterVolume :: DataDefinition
@@ -35,6 +35,9 @@ waterVolume :: DataDefinition
 module Drasil.NoPCM.Definitions
 htTrans :: NamedChunk
 srsSWHS :: CommonConcept
+
+module Drasil.NoPCM.Derivations
+eBalanceOnWtrDerivEqns :: [ModelExpr]
 
 module Drasil.NoPCM.GenDefs
 rocTempSimp :: GenDefn
@@ -66,7 +69,7 @@ inputs :: [QuantityDict]
 unconstrained :: [UncertainChunk]
 constrained :: [UncertQ]
 tempInit :: UncertQ
-specParamValList :: [QDefinition]
+specParamValList :: [SimpleQDef]
 
 module Drasil.NoPCM.Requirements
 funcReqs :: [ConceptInstance]

@@ -76,45 +76,28 @@ launSpeed :: ConstrConcept
 offset :: ConstrConcept
 targPos :: ConstrConcept
 message :: QuantityDict
-tol :: QDefinition
+tol :: SimpleQDef
 
 module Drasil.Projectile.Expressions
-flightDur' :: Expr
-iyPos :: Expr
-yConstAccel :: Expr
-iSpeed :: Expr
-timeDerivEqn1 :: Expr
-timeDerivEqn2 :: Expr
-timeDerivEqn3 :: Expr
-timeDerivEqn4 :: Expr
-landPosExpr :: Expr
-landPosDerivEqn1 :: Expr
-landPosDerivEqn2 :: Expr
-landPosDerivEqn3 :: Expr
-offset' :: Expr
-message :: Expr
-speed' :: Expr
-rectVelDerivEqn1 :: Expr
-rectVelDerivEqn2 :: Expr
-scalarPos' :: Expr
-rectNoTime :: Expr
-rectPosDerivEqn1 :: Expr
-rectPosDerivEqn2 :: Expr
-rectPosDerivEqn3 :: Expr
-velVecExpr :: Expr
-posVecExpr :: Expr
-positionXY :: Expr
-velocityXY :: Expr
-accelerationXY :: Expr
-constAccelXY :: Expr
+flightDur' :: PExpr
+iyPos :: PExpr
+yConstAccel :: PExpr
+iSpeed :: PExpr
+offset' :: PExpr
+message :: PExpr
+speed' :: PExpr
+scalarPos' :: PExpr
+rectNoTime :: PExpr
+velVecExpr :: PExpr
+posVecExpr :: PExpr
+landPosExpr :: PExpr
+positionXY :: PExpr
+velocityXY :: PExpr
+accelerationXY :: PExpr
+constAccelXY :: PExpr
 lcrectVel :: LabelledContent
 lcrectPos :: LabelledContent
 lcrectNoTime :: LabelledContent
-horMotionEqn1 :: Expr
-horMotionEqn2 :: Expr
-verMotionEqn1 :: Expr
-verMotionEqn2 :: Expr
-verMotionEqn3 :: Expr
 eqnRefs :: [Reference]
 
 module Drasil.Projectile.Lesson.Review
@@ -122,6 +105,16 @@ reviewContent :: [Contents]
 reviewContextP1 :: Contents
 reviewEqns :: Contents
 reviewContextP2 :: Contents
+
+module Drasil.Projectile.Derivations
+timeDeriv :: [ModelExpr]
+landPosDeriv :: [ModelExpr]
+rectVelDeriv :: [ModelExpr]
+rectPosDeriv :: [ModelExpr]
+horMotionDeriv :: [ModelExpr]
+horMotionEqn1 :: ModelExpr
+horMotionEqn2 :: ModelExpr
+verMotionDeriv :: [ModelExpr]
 
 module Drasil.Projectile.Lesson.Motion
 motionContextP1 :: Contents
@@ -132,8 +125,7 @@ summary :: Section
 resourcePath :: String
 figCSandA :: LabelledContent
 equationsSents :: [Sentence]
-horMotionEqns :: [Expr]
-verMotionEqns :: [Expr]
+horMotionEqns :: [ModelExpr]
 motionSent :: Sentence
 figRefs :: [Reference]
 foot :: UnitDefn

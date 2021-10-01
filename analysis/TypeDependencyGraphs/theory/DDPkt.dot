@@ -1,0 +1,9 @@
+digraph ddpkt{
+DDPkt	[shape=oval, color=cyan3, label="DDPkt"];
+DDPkt -> ScopeType;
+DDPkt -> DecRef;
+DDPkt -> MaybeDerivation;
+DDPkt -> ShortName;
+DDPkt -> String;
+DDPkt -> Sentence;
+}

@@ -1,6 +1,6 @@
 digraph gendefn{
 GenDefn	[shape=oval, color=cyan3, label="GenDefn"];
-GenDefn -> ModelKind;
+GenDefn -> ModelKindModelExpr;
 GenDefn -> MaybeUnitDefn;
 GenDefn -> MaybeDerivation;
 GenDefn -> DecRef;

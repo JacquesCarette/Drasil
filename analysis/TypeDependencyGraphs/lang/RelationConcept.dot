@@ -1,5 +1,5 @@
 digraph relationconcept{
 RelationConcept	[shape=oval, color=cyan3, label="RelationConcept"];
 RelationConcept -> ConceptChunk;
-RelationConcept -> Relation;
+RelationConcept -> ModelExpr;
 }

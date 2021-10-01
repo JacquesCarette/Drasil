@@ -40,7 +40,7 @@ data ModelExpr
 -- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [ModelExpr] -> ModelExpr
 
--- | Derivative syntax is: Type (<tt>Part</tt>ial or <tt>Total</tt>) -&gt;
+-- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
 --   principal part of change -&gt; with respect to For example: Deriv Part
 --   y x1 would be (dy/dx1).
 [Deriv] :: DerivType -> ModelExpr -> UID -> ModelExpr
@@ -236,6 +236,215 @@ precB :: AssocBoolOper -> Int
 -- | precA - precedence for arithmetic-related Binary-Associative
 --   (Commutative) operators.
 precA :: AssocArithOper -> Int
+
+module Language.Drasil.Expr.Development
+
+-- | Drasil expressions.
+data Expr
+
+-- | Turns a decimal value (<a>Double</a>) into an expression.
+[Dbl] :: Double -> Expr
+
+-- | Turns an integer into an expression.
+[Int] :: Integer -> Expr
+
+-- | Represents decimal values that are exact as integers.
+[ExactDbl] :: Integer -> Expr
+
+-- | Turns a string into an expression.
+[Str] :: String -> Expr
+
+-- | Turns two integers into a fraction (or percent).
+[Perc] :: Integer -> Integer -> Expr
+
+-- | Takes an associative arithmetic operator with a list of expressions.
+[AssocA] :: AssocArithOper -> [Expr] -> Expr
+
+-- | Takes an associative boolean operator with a list of expressions.
+[AssocB] :: AssocBoolOper -> [Expr] -> Expr
+
+-- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
+--   Implicitly assumes that the chunk has a symbol.
+[C] :: UID -> Expr
+
+-- | A function call accepts a list of parameters and a list of named
+--   parameters. For example
+--   
+--   <ul>
+--   <li>F(x) is (FCall F [x] []).</li>
+--   <li>F(x,y) would be (FCall F [x,y]).</li>
+--   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
+--   </ul>
+[FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+
+-- | For multi-case expressions, each pair represents one case.
+[Case] :: Completeness -> [(Expr, Relation)] -> Expr
+
+-- | Represents a matrix of expressions.
+[Matrix] :: [[Expr]] -> Expr
+
+-- | Unary operation for most functions (eg. sin, cos, log, etc.).
+[UnaryOp] :: UFunc -> Expr -> Expr
+
+-- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
+[UnaryOpB] :: UFuncB -> Expr -> Expr
+
+-- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
+[UnaryOpVV] :: UFuncVV -> Expr -> Expr
+
+-- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
+[UnaryOpVN] :: UFuncVN -> Expr -> Expr
+
+-- | Binary operator for arithmetic between expressions (fractional, power,
+--   and subtraction).
+[ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for boolean operators (implies, iff).
+[BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for equality between expressions.
+[EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for indexing two expressions.
+[LABinaryOp] :: LABinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for ordering expressions (less than, greater than,
+--   etc.).
+[OrdBinaryOp] :: OrdBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
+--   (cross product).
+[VVVBinaryOp] :: VVVBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
+--   (dot product).
+[VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
+
+-- | Operators are generalized arithmetic operators over a
+--   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
+--   Summation is represented via <tt>Add</tt> over a discrete domain.
+[Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+
+-- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
+--   interval.
+[RealI] :: UID -> RealInterval Expr Expr -> Expr
+
+-- | Unary functions (abs, log, ln, sin, etc.).
+data UFunc
+Abs :: UFunc
+Log :: UFunc
+Ln :: UFunc
+Sin :: UFunc
+Cos :: UFunc
+Tan :: UFunc
+Sec :: UFunc
+Csc :: UFunc
+Cot :: UFunc
+Arcsin :: UFunc
+Arccos :: UFunc
+Arctan :: UFunc
+Exp :: UFunc
+Sqrt :: UFunc
+Neg :: UFunc
+
+-- | <tt>Bool -&gt; Bool</tt> operators.
+data UFuncB
+Not :: UFuncB
+
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+NegV :: UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
+Norm :: UFuncVN
+Dim :: UFuncVN
+
+-- | Arithmetic operators (fractional, power, and subtraction).
+data ArithBinOp
+Frac :: ArithBinOp
+Pow :: ArithBinOp
+Subt :: ArithBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
+data BoolBinOp
+Impl :: BoolBinOp
+Iff :: BoolBinOp
+
+-- | Equality operators (equal or not equal).
+data EqBinOp
+Eq :: EqBinOp
+NEq :: EqBinOp
+
+-- | Index operator.
+data LABinOp
+Index :: LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
+data OrdBinOp
+Lt :: OrdBinOp
+Gt :: OrdBinOp
+LEq :: OrdBinOp
+GEq :: OrdBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product).
+data VVVBinOp
+Cross :: VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
+data VVNBinOp
+Dot :: VVNBinOp
+
+-- | Associative operators (adding and multiplication). Also specifies
+--   whether it is for integers or for real numbers.
+data AssocArithOper
+AddI :: AssocArithOper
+AddRe :: AssocArithOper
+MulI :: AssocArithOper
+MulRe :: AssocArithOper
+
+-- | Associative boolean operators (and, or).
+data AssocBoolOper
+And :: AssocBoolOper
+Or :: AssocBoolOper
+
+-- | For case expressions (either complete or incomplete).
+data Completeness
+Complete :: Completeness
+Incomplete :: Completeness
+
+-- | A relation is just an expression (<a>Expr</a>).
+type Relation = Expr
+
+-- | Get dependencies from an equation.
+eDep :: Expr -> [UID]
+
+-- | Generic traverse of all expressions that could lead to names.
+eNames :: Expr -> [UID]
+
+-- | Generic traverse of all positions that could lead to <a>eNames</a>
+--   without functions. FIXME : this should really be done via post-facto
+--   filtering, but right now the information needed to do this is not
+--   available!
+eNames' :: Expr -> [UID]
+
+-- | Generic traversal of everything that could come from an interval to
+--   names (similar to <a>eNames</a>).
+eNamesRI :: RealInterval Expr Expr -> [UID]
+
+-- | precA - precedence for arithmetic-related Binary-Associative
+--   (Commutative) operators.
+precA :: AssocArithOper -> Int
+
+-- | precB - precedence for boolean-related Binary-Associative
+--   (Commutative) operators.
+precB :: AssocBoolOper -> Int
+
+-- | eprec - <a>Expression</a> precedence.
+eprec :: Expr -> Int
 
 
 -- | Re-export display-related functions and types to simplify external
@@ -787,230 +996,6 @@ phraseNP :: NounPhrase n => n -> Sentence
 -- | Retrieves plural form of term. Ex. "the quick brown foxes".
 pluralNP :: NounPhrase n => n -> PluralForm
 
--- | Drasil expressions.
-data Expr
-
--- | Turns a decimal value (<a>Double</a>) into an expression.
-[Dbl] :: Double -> Expr
-
--- | Turns an integer into an expression.
-[Int] :: Integer -> Expr
-
--- | Represents decimal values that are exact as integers.
-[ExactDbl] :: Integer -> Expr
-
--- | Turns a string into an expression.
-[Str] :: String -> Expr
-
--- | Turns two integers into a fraction (or percent).
-[Perc] :: Integer -> Integer -> Expr
-
--- | Takes an associative arithmetic operator with a list of expressions.
-[AssocA] :: AssocArithOper -> [Expr] -> Expr
-
--- | Takes an associative boolean operator with a list of expressions.
-[AssocB] :: AssocBoolOper -> [Expr] -> Expr
-
--- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
---   principal part of change -&gt; with respect to For example: Deriv Part
---   y x1 would be (dy/dx1).
-[Deriv] :: DerivType -> Expr -> UID -> Expr
-
--- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
---   Implicitly assumes that the chunk has a symbol.
-[C] :: UID -> Expr
-
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-
--- | For multi-case expressions, each pair represents one case.
-[Case] :: Completeness -> [(Expr, Relation)] -> Expr
-
--- | Represents a matrix of expressions.
-[Matrix] :: [[Expr]] -> Expr
-
--- | Unary operation for most functions (eg. sin, cos, log, etc.).
-[UnaryOp] :: UFunc -> Expr -> Expr
-
--- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
-[UnaryOpB] :: UFuncB -> Expr -> Expr
-
--- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
-[UnaryOpVV] :: UFuncVV -> Expr -> Expr
-
--- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
-[UnaryOpVN] :: UFuncVN -> Expr -> Expr
-
--- | Binary operator for arithmetic between expressions (fractional, power,
---   and subtraction).
-[ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for equality between expressions.
-[EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for indexing two expressions.
-[LABinaryOp] :: LABinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for ordering expressions (less than, greater than,
---   etc.).
-[OrdBinaryOp] :: OrdBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
---   (cross product).
-[VVVBinaryOp] :: VVVBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
---   (dot product).
-[VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
-
--- | Operators are generalized arithmetic operators over a
---   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
---   Summation is represented via <tt>Add</tt> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
-
--- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
---   interval.
-[RealI] :: UID -> RealInterval Expr Expr -> Expr
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc
-Abs :: UFunc
-Log :: UFunc
-Ln :: UFunc
-Sin :: UFunc
-Cos :: UFunc
-Tan :: UFunc
-Sec :: UFunc
-Csc :: UFunc
-Cot :: UFunc
-Arcsin :: UFunc
-Arccos :: UFunc
-Arctan :: UFunc
-Exp :: UFunc
-Sqrt :: UFunc
-Neg :: UFunc
-
--- | <tt>Bool -&gt; Bool</tt> operators.
-data UFuncB
-Not :: UFuncB
-
--- | <tt>Vector -&gt; Vector</tt> operators.
-data UFuncVV
-NegV :: UFuncVV
-
--- | <tt>Vector -&gt; Number</tt> operators.
-data UFuncVN
-Norm :: UFuncVN
-Dim :: UFuncVN
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp
-Frac :: ArithBinOp
-Pow :: ArithBinOp
-Subt :: ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
-
--- | Equality operators (equal or not equal).
-data EqBinOp
-Eq :: EqBinOp
-NEq :: EqBinOp
-
--- | Index operator.
-data LABinOp
-Index :: LABinOp
-
--- | Ordered binary operators (less than, greater than, less than or equal
---   to, greater than or equal to).
-data OrdBinOp
-Lt :: OrdBinOp
-Gt :: OrdBinOp
-LEq :: OrdBinOp
-GEq :: OrdBinOp
-
--- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
-data VVVBinOp
-Cross :: VVVBinOp
-
--- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
-data VVNBinOp
-Dot :: VVNBinOp
-
--- | Associative operators (adding and multiplication). Also specifies
---   whether it is for integers or for real numbers.
-data AssocArithOper
-AddI :: AssocArithOper
-AddRe :: AssocArithOper
-MulI :: AssocArithOper
-MulRe :: AssocArithOper
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper
-And :: AssocBoolOper
-Or :: AssocBoolOper
-
--- | Determines the type of the derivative (either a partial derivative or
---   a total derivative).
-data DerivType
-Part :: DerivType
-Total :: DerivType
-
--- | For case expressions (either complete or incomplete).
-data Completeness
-Complete :: Completeness
-Incomplete :: Completeness
-
--- | A relation is just an expression (<a>Expr</a>).
-type Relation = Expr
-
--- | precA - precedence for arithmetic-related Binary-Associative
---   (Commutative) operators.
-precA :: AssocArithOper -> Int
-
--- | precB - precedence for boolean-related Binary-Associative
---   (Commutative) operators.
-precB :: AssocBoolOper -> Int
-
--- | eprec - <a>Expression</a> precedence.
-eprec :: Expr -> Int
-
--- | eprec - <a>ModelExpr</a> precedence.
-mePrec :: ModelExpr -> Int
-
--- | Get dependencies from an equation.
-eDep :: Expr -> [UID]
-
--- | Generic traverse of all expressions that could lead to names.
-eNames :: Expr -> [UID]
-
--- | Generic traverse of all positions that could lead to <a>eNames</a>
---   without functions. FIXME : this should really be done via post-facto
---   filtering, but right now the information needed to do this is not
---   available!
-eNames' :: Expr -> [UID]
-
--- | Generic traversal of everything that could come from an interval to
---   names (similar to <a>eNames</a>).
-eNamesRI :: RealInterval Expr Expr -> [UID]
-
--- | Get dependencies from an equation.
-meDep :: ModelExpr -> [UID]
-
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
@@ -1037,298 +1022,158 @@ module Language.Drasil
 
 -- | Drasil expressions.
 data Expr
+class ExprC r
+($=) :: ExprC r => r -> r -> r
+($!=) :: ExprC r => r -> r -> r
 
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc
+-- | Smart constructor for ordering two equations.
+($<) :: ExprC r => r -> r -> r
 
--- | <tt>Bool -&gt; Bool</tt> operators.
-data UFuncB
+-- | Smart constructor for ordering two equations.
+($>) :: ExprC r => r -> r -> r
 
--- | <tt>Vector -&gt; Vector</tt> operators.
-data UFuncVV
+-- | Smart constructor for ordering two equations.
+($<=) :: ExprC r => r -> r -> r
 
--- | <tt>Vector -&gt; Number</tt> operators.
-data UFuncVN
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-
--- | Equality operators (equal or not equal).
-data EqBinOp
-
--- | Index operator.
-data LABinOp
-
--- | Ordered binary operators (less than, greater than, less than or equal
---   to, greater than or equal to).
-data OrdBinOp
-
--- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
-data VVVBinOp
-
--- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
-data VVNBinOp
-
--- | Associative operators (adding and multiplication). Also specifies
---   whether it is for integers or for real numbers.
-data AssocArithOper
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper
-
--- | Determines the type of the derivative (either a partial derivative or
---   a total derivative).
-data DerivType
-
--- | For case expressions (either complete or incomplete).
-data Completeness
-
--- | A relation is just an expression (<a>Expr</a>).
-type Relation = Expr
-
--- | Smart constructor for equating two expressions.
-($=) :: Expr -> Expr -> Expr
-infixr 4 $=
-
--- | Less than.
---   
---   Smart constructor for ordering two equations.
-($<) :: Expr -> Expr -> Expr
-
--- | Less than or equal to.
---   
---   Smart constructor for ordering two equations.
-($<=) :: Expr -> Expr -> Expr
-
--- | Greater than.
---   
---   Smart constructor for ordering two equations.
-($>) :: Expr -> Expr -> Expr
-
--- | Greater than or equal to.
---   
---   Smart constructor for ordering two equations.
-($>=) :: Expr -> Expr -> Expr
-
--- | Smart constructor for rasing the first expression to the power of the
---   second.
-($^) :: Expr -> Expr -> Expr
-infixr 8 $^
-
--- | Smart constructor for the boolean <i>and</i> operator.
-($&&) :: Expr -> Expr -> Expr
-infixr 9 $&&
-
--- | Smart constructor for the boolean <i>or</i> operator.
-($||) :: Expr -> Expr -> Expr
-infixr 9 $||
-
--- | Smart constructor to show that one expression implies the other
---   (conditional operator).
-($=>) :: Expr -> Expr -> Expr
-
--- | Smart constructor to show that an expression exists if and only if
---   another expression exists (biconditional operator).
-($<=>) :: Expr -> Expr -> Expr
+-- | Smart constructor for ordering two equations.
+($>=) :: ExprC r => r -> r -> r
 
 -- | Smart constructor for the dot product of two equations.
-($.) :: Expr -> Expr -> Expr
-
--- | Smart constructor for subtracting two expressions.
-($-) :: Expr -> Expr -> Expr
-
--- | Smart constructor for dividing two expressions.
-($/) :: Expr -> Expr -> Expr
-infixl 7 $/
+($.) :: ExprC r => r -> r -> r
 
 -- | Add two expressions (Integers).
-addI :: Expr -> Expr -> Expr
+addI :: ExprC r => r -> r -> r
 
 -- | Add two expressions (Real numbers).
-addRe :: Expr -> Expr -> Expr
+addRe :: ExprC r => r -> r -> r
 
 -- | Multiply two expressions (Integers).
-mulI :: Expr -> Expr -> Expr
+mulI :: ExprC r => r -> r -> r
 
 -- | Multiply two expressions (Real numbers).
-mulRe :: Expr -> Expr -> Expr
+mulRe :: ExprC r => r -> r -> r
+($-) :: ExprC r => r -> r -> r
+($/) :: ExprC r => r -> r -> r
+($^) :: ExprC r => r -> r -> r
+($=>) :: ExprC r => r -> r -> r
+($<=>) :: ExprC r => r -> r -> r
+($&&) :: ExprC r => r -> r -> r
+($||) :: ExprC r => r -> r -> r
 
 -- | Smart constructor for taking the absolute value of an expression.
-abs_ :: Expr -> Expr
+abs_ :: ExprC r => r -> r
 
 -- | Smart constructor for negating an expression.
-neg :: Expr -> Expr
-
--- | Smart constructor for negating vectors.
-negVec :: Expr -> Expr
+neg :: ExprC r => r -> r
 
 -- | Smart constructor to take the log of an expression.
-log :: Expr -> Expr
+log :: ExprC r => r -> r
 
 -- | Smart constructor to take the ln of an expression.
-ln :: Expr -> Expr
-
--- | Absolute value.
-abs :: Num a => a -> a
-
--- | Smart constructor to apply sin to an expression.
-sin :: Expr -> Expr
-
--- | Smart constructor to apply cos to an expression.
-cos :: Expr -> Expr
-
--- | Smart constructor to apply tan to an expression.
-tan :: Expr -> Expr
-
--- | Smart constructor to apply sec to an expression.
-sec :: Expr -> Expr
-
--- | Smart constructor to apply csc to an expression.
-csc :: Expr -> Expr
-
--- | Smart constructor to apply cot to an expression.
-cot :: Expr -> Expr
-
--- | Smart constructor to apply arcsin to an expression.
-arcsin :: Expr -> Expr
-
--- | Smart constructor to apply arccos to an expression.
-arccos :: Expr -> Expr
-
--- | Smart constructor to apply arctan to an expression.
-arctan :: Expr -> Expr
-
--- | Smart constructor for the exponential (base e) function.
-exp :: Expr -> Expr
+ln :: ExprC r => r -> r
 
 -- | Smart constructor to take the square root of an expression.
-sqrt :: Expr -> Expr
+sqrt :: ExprC r => r -> r
+
+-- | Smart constructor to apply sin to an expression.
+sin :: ExprC r => r -> r
+
+-- | Smart constructor to apply cos to an expression.
+cos :: ExprC r => r -> r
+
+-- | Smart constructor to apply tan to an expression.
+tan :: ExprC r => r -> r
+
+-- | Smart constructor to apply sec to an expression.
+sec :: ExprC r => r -> r
+
+-- | Smart constructor to apply csc to an expression.
+csc :: ExprC r => r -> r
+
+-- | Smart constructor to apply cot to an expression.
+cot :: ExprC r => r -> r
+
+-- | Smart constructor to apply arcsin to an expression.
+arcsin :: ExprC r => r -> r
+
+-- | Smart constructor to apply arccos to an expression.
+arccos :: ExprC r => r -> r
+
+-- | Smart constructor to apply arctan to an expression.
+arctan :: ExprC r => r -> r
+
+-- | Smart constructor for the exponential (base e) function.
+exp :: ExprC r => r -> r
+
+-- | Smart constructor for calculating the dimension of a vector.
+dim :: ExprC r => r -> r
+
+-- | Smart constructor for calculating the normal form of a vector.
+norm :: ExprC r => r -> r
+
+-- | Smart constructor for negating vectors.
+negVec :: ExprC r => r -> r
+
+-- | Smart constructor for applying logical negation to an expression.
+not_ :: ExprC r => r -> r
+
+-- | Smart constructor for indexing.
+idx :: ExprC r => r -> r -> r
+
+-- | Smart constructor for integers.
+int :: ExprC r => Integer -> r
+
+-- | Smart constructor for doubles.
+dbl :: ExprC r => Double -> r
+
+-- | Smart constructor for exact doubles.
+exactDbl :: ExprC r => Integer -> r
+
+-- | Smart constructor for strings.
+str :: ExprC r => String -> r
+
+-- | Smart constructors for percents.
+perc :: ExprC r => Integer -> Integer -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defint :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defsum :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defprod :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+intAll :: ExprC r => Symbol -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+sumAll :: ExprC r => Symbol -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+prodAll :: ExprC r => Symbol -> r -> r
+
+-- | Smart constructor for 'real interval' membership.
+realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
 
 -- | Euclidean function : takes a vector and returns the sqrt of the
 --   sum-of-squares.
-euclidean :: [Expr] -> Expr
-
--- | Smart constructor for calculating the normal form of a vector.
-norm :: Expr -> Expr
-
--- | Smart constructor for applying logical negation to an expression.
-not_ :: Expr -> Expr
-
--- | Smart constructor to square a function.
-square :: Expr -> Expr
-
--- | Smart constructor to half a function exactly.
-half :: Expr -> Expr
-
--- | Constructs 1/2.
-oneHalf :: Expr
-
--- | Constructs 1/3.
-oneThird :: Expr
-
--- | Smart constructor for rational expressions (only in 1/x form).
-recip_ :: Expr -> Expr
-
--- | Smart constructor for calculating the dimension of a vector.
-dim :: Expr -> Expr
-
--- | Smart constructor for indexing.
-idx :: Expr -> Expr -> Expr
-
--- | Smart constructor for integers.
-int :: Integer -> Expr
-
--- | Smart constructor for doubles.
-dbl :: Double -> Expr
-
--- | Smart constructor for exact doubles.
-exactDbl :: Integer -> Expr
-
--- | Smart constructor for fractions.
-frac :: Integer -> Integer -> Expr
-
--- | Smart constructor for strings.
-str :: String -> Expr
-
--- | Smart constructors for percents.
-perc :: Integer -> Integer -> Expr
-
--- | Smart constructor for case statements with a complete set of cases.
-completeCase :: [(Expr, Relation)] -> Expr
-
--- | Smart constructor for case statements with an incomplete set of cases.
-incompleteCase :: [(Expr, Relation)] -> Expr
-
--- | Sum over some expression (∑).
---   
---   Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-sumAll :: Symbol -> Expr -> Expr
-
--- | Sum over some expression with bounds (∑).
---   
---   Smart constructor for the summation, product, and integral functions
---   over an interval.
-defsum :: Symbol -> Expr -> Expr -> Expr -> Expr
-
--- | Product over some expression (∏).
---   
---   Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-prodAll :: Symbol -> Expr -> Expr
-
--- | Product over some expression with bounds (∏).
---   
---   Smart constructor for the summation, product, and integral functions
---   over an interval.
-defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
-
--- | Integrate over some expression with bounds (∫).
---   
---   Smart constructor for the summation, product, and integral functions
---   over an interval.
-defint :: Symbol -> Expr -> Expr -> Expr -> Expr
-
--- | Integrate over some expression (∫).
---   
---   Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-intAll :: Symbol -> Expr -> Expr
-
--- | Smart constructor for 'real interval' membership.
-realInterval :: HasUID c => c -> RealInterval Expr Expr -> Expr
-
--- | Gets the derivative of an <a>Expr</a> with respect to a <a>Symbol</a>.
-deriv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
-
--- | Gets the derivative of an <a>Expr</a> with respect to a <a>Symbol</a>.
-pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
-
--- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
-sy :: (HasUID c, HasSymbol c) => c -> Expr
-
--- | Applies a given function with a list of parameters.
-apply :: (HasUID f, HasSymbol f) => f -> [Expr] -> Expr
-
--- | Similar to <a>apply</a>, but converts second argument into
---   <a>Symbol</a>s.
-apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> Expr
-
--- | Similar to <a>apply</a>, but the applied function takes two parameters
---   (which are both <a>Symbol</a>s).
-apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> Expr
-
--- | Similar to <a>apply</a>, but takes a relation to apply to
---   <a>FCall</a>.
-applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [Expr] -> [(a, Expr)] -> Expr
+euclidean :: ExprC r => [r] -> r
 
 -- | Smart constructor to cross product two expressions.
-cross :: Expr -> Expr -> Expr
+cross :: ExprC r => r -> r -> r
+
+-- | Smart constructor for case statements with a complete set of cases.
+completeCase :: ExprC r => [(r, r)] -> r
+
+-- | Smart constructor for case statements with an incomplete set of cases.
+incompleteCase :: ExprC r => [(r, r)] -> r
 
 -- | Create a two-by-two matrix from four given values. For example:
 --   
@@ -1337,11 +1182,11 @@ cross :: Expr -> Expr -> Expr
 --   [ [1,2],
 --     [3,4] ]
 --   </pre>
-m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr
+m2x2 :: ExprC r => r -> r -> r -> r -> r
 
 -- | Create a 2D vector (a matrix with two rows, one column). First
 --   argument is placed above the second.
-vec2D :: Expr -> Expr -> Expr
+vec2D :: ExprC r => r -> r -> r
 
 -- | Creates a diagonal two-by-two matrix. For example:
 --   
@@ -1350,23 +1195,82 @@ vec2D :: Expr -> Expr -> Expr
 --   [ [1, 0],
 --     [0, 2] ]
 --   </pre>
-dgnl2x2 :: Expr -> Expr -> Expr
+dgnl2x2 :: ExprC r => r -> r -> r
+
+-- | Applies a given function with a list of parameters.
+apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
+
+-- | Similar to <a>apply</a>, but takes a relation to apply to
+--   <a>FCall</a>.
+applyWithNamedArgs :: (ExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [r] -> [(a, r)] -> r
+
+-- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
+sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
+infixl 7 $/
+infixr 8 $^
+infixr 4 $=
+infixr 9 $&&
+infixr 9 $||
+
+-- | Smart constructor for fractions.
+frac :: ExprC r => Integer -> Integer -> r
+
+-- | Smart constructor for rational expressions (only in 1/x form).
+recip_ :: ExprC r => r -> r
+
+-- | Smart constructor to square a function.
+square :: ExprC r => r -> r
+
+-- | Smart constructor to half a function exactly.
+half :: ExprC r => r -> r
+
+-- | 1/2, as an expression.
+oneHalf :: ExprC r => r
+
+-- | 1/3rd, as an expression.
+oneThird :: ExprC r => r
+
+-- | Similar to <a>apply</a>, but converts second argument into
+--   <a>Symbol</a>s.
+apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
+
+-- | Similar to <a>apply</a>, but the applied function takes two parameters
+--   (which are both <a>Symbol</a>s).
+apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
+
+-- | For case expressions (either complete or incomplete).
+data Completeness
+
+-- | A relation is just an expression (<a>Expr</a>).
+type Relation = Expr
 
 -- | Drasil expressions.
 data ModelExpr
 
+-- | Determines the type of the derivative (either a partial derivative or
+--   a total derivative).
+data DerivType
+class ModelExprC r
+
+-- | Gets the derivative of an <a>ModelExpr</a> with respect to a
+--   <tt>Symbol</tt>.
+deriv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
+
+-- | Gets the derivative of an <a>ModelExpr</a> with respect to a
+--   <tt>Symbol</tt>.
+pderiv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
+
 -- | One expression is "defined" by another.
-defines :: (Express a, Express b) => a -> b -> ModelExpr
+defines :: ModelExprC r => r -> r -> r
 
--- | Bring a Space into the ModelExpr.
-space :: Space -> ModelExpr
-isIn :: Express a => a -> ModelExpr -> ModelExpr
+-- | Space literals.
+space :: ModelExprC r => Space -> r
 
--- | Binary associative <a>And</a>.
-andMEs :: Express d => [d] -> ModelExpr
+-- | Check if a value belongs to a Space.
+isIn :: ModelExprC r => r -> Space -> r
 
 -- | Binary associative <a>Equivalence</a>.
-equivMEs :: Express a => [a] -> ModelExpr
+equiv :: ModelExprC r => [r] -> r
 
 -- | Special characters include partial derivatives and the degree circle.
 data Special
@@ -1488,12 +1392,10 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u
 
 -- | Holds units as a list of <a>UID</a>.
 getUnits :: IsUnit u => u -> [UID]
-
--- | A better version of <tt>ExprRelat</tt> that holds an <a>Expr</a>.
 class DefiningExpr c
 
 -- | Provides a <tt>Lens</tt> to the expression.
-defnExpr :: DefiningExpr c => Lens' c Expr
+defnExpr :: (DefiningExpr c, Express e) => Lens' (c e) e
 
 -- | Data that can be expressed using <a>ModelExpr</a>.
 class Express c
@@ -1695,21 +1597,20 @@ cw :: Concept c => c -> ConceptChunk
 --   (<a>String</a>), and a domain (for explicit tagging).
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 
--- | For a concept (<a>ConceptChunk</a>) that also has a <a>Relation</a>
---   attached.
+-- | For a concept (<a>ConceptChunk</a>) that also has a <tt>Relation</tt>
+--   (<a>ModelExpr</a>) attached.
 --   
 --   Ex. We can describe a pendulum arm and then apply an associated
 --   equation so that we know its behaviour.
 data RelationConcept
 
--- | Create a <a>RelationConcept</a> from a given <a>UID</a> (as a
---   <a>String</a>), term (<a>NP</a>), definition (<a>Sentence</a>), and
---   <a>Relation</a>.
-makeRC :: String -> NP -> Sentence -> Relation -> RelationConcept
+-- | Create a <a>RelationConcept</a> from a given <a>UID</a>, term
+--   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
+makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 
 -- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
---   a <a>Concept</a>, new <a>UID</a> (as a <a>String</a>) and relation.
-addRelToCC :: Concept c => c -> String -> Relation -> RelationConcept
+--   a <a>Concept</a>, new <a>UID</a> and relation.
+addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
 
 -- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
 --   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from
@@ -1776,58 +1677,52 @@ data NamedArgument
 
 -- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
-
--- | A QDefinition is a <tt>QuantityDict</tt> with a defining expression
---   (<a>Expr</a>), a definition (<a>Sentence</a>), and a domain
---   ([<a>UID</a>]). This chunk now contains almost enough information to
---   generate code, definitions, and models. Used for high-level quantities
---   with equations and inputs.
-data QDefinition
+data QDefinition e
 
 -- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>String</a>),
 --   term (<a>NP</a>), definition (<a>Sentence</a>), <a>Symbol</a>,
 --   <a>Space</a>, unit, and defining expression.
-fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
+fromEqn :: (Express e, IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
 
 -- | Same as <a>fromEqn</a>, but has no units.
-fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> Expr -> QDefinition
+fromEqn' :: Express e => String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage.
-fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> Expr -> QDefinition
+fromEqnSt :: (Express e, IsUnit u) => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> e -> QDefinition e
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage and has no units.
-fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
+fromEqnSt' :: Express e => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 
 -- | Same as <a>fromEqnSt'</a>, but takes a <a>String</a> instead of a
 --   <a>UID</a>.
-fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
+fromEqnSt'' :: Express e => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
-mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Expr -> QDefinition
+mkQDefSt :: Express e => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> e -> QDefinition e
 
 -- | Used to help make <a>QDefinition</a>s when <a>UID</a>, term, and
 --   <a>Symbol</a> come from the same source.
-mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
+mkQuantDef :: (Quantity c, MayHaveUnit c, Express e) => c -> e -> QDefinition e
 
 -- | Used to help make <a>QDefinition</a>s when <a>UID</a> and
 --   <a>Symbol</a> come from the same source, with the term separate.
-mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
+mkQuantDef' :: (Quantity c, MayHaveUnit c, Express e) => c -> NP -> e -> QDefinition e
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its
 --   defining equation.
-ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
+ec :: (Quantity c, MayHaveUnit c, Express e) => c -> e -> QDefinition e
 
 -- | Create a <a>QDefinition</a> function with a symbol, name, term, list
 --   of inputs, resultant units, and a defining Expr
-mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, IsUnit u) => f -> NP -> Sentence -> u -> [i] -> Expr -> QDefinition
+mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, IsUnit u, Express e) => f -> NP -> Sentence -> u -> [i] -> e -> QDefinition e
 
 -- | Create a <a>QDefinition</a> function with a symbol, name, term, list
 --   of inputs, and a defining Expr
-mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i) => f -> NP -> Sentence -> [i] -> Expr -> QDefinition
+mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, Express e) => f -> NP -> Sentence -> [i] -> e -> QDefinition e
 
 -- | Create a <a>QDefinition</a> functions using a symbol, list of inputs,
 --   and a defining Expr
-mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> Expr -> QDefinition
+mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i, Express e) => c -> [i] -> e -> QDefinition e
 
 -- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit.
 class (Quantity c) => Unitary c
@@ -2666,7 +2561,8 @@ capSent :: Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
-eS :: Express t => t -> Sentence
+eS :: ModelExpr -> Sentence
+eS' :: Express t => t -> Sentence
 
 -- | Helper for concatenating two <a>Sentence</a>s with a comma and space
 --   between them.
@@ -3189,7 +3085,7 @@ data RealInterval a b
 [UpTo] :: (Inclusive, a) -> RealInterval a b
 [UpFrom] :: (Inclusive, b) -> RealInterval a b
 
--- | Inclusitivity of a <a>Space</a>.
+-- | Inclusive or exclusive bounds.
 data Inclusive
 Inc :: Inclusive
 Exc :: Inclusive
@@ -3313,3 +3209,12 @@ label :: String -> Symbol
 
 -- | Variable smart constructor, requires non-empty variables
 variable :: String -> Symbol
+
+-- | Commonly used type for QDefinitions containing Exprs.
+type SimpleQDef = QDefinition Expr
+
+-- | Commonly used type for QDefinitions containing ModelExprs.
+type ModelQDef = QDefinition ModelExpr
+
+-- | Commonly used type for polymorphic Exprs.
+type PExpr = forall r. ExprC r => r

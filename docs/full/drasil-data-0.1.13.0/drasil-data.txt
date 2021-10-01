@@ -593,7 +593,7 @@ diameter :: UnitalChunk
 surface :: UnitalChunk
 surArea :: UnitalChunk
 orientation :: UnitalChunk
-piConst :: QDefinition
+piConst :: SimpleQDef
 
 
 -- | Defines common software products.
@@ -859,26 +859,26 @@ subY :: Symbol -> Symbol
 subZ :: Symbol -> Symbol
 supMax :: Symbol -> Symbol
 supMin :: Symbol -> Symbol
-gravitationalConstValue :: QDefinition
-gravitationalAccelConst :: QDefinition
+gravitationalConstValue :: SimpleQDef
+gravitationalAccelConst :: SimpleQDef
 
 
 -- | Defines some basic equations of physics and their wrappers as
 --   concepts.
 module Data.Drasil.Equations.Defining.Physics
-newtonSLEqn :: Relation
-weightEqn :: Relation
-weightDerivAccelEqn :: Relation
-weightDerivNewtonEqn :: Relation
-weightDerivReplaceMassEqn :: Relation
-weightDerivSpecWeightEqn :: Relation
-hsPressureEqn :: Relation
-speedEqn :: Relation
-velocityEqn :: Relation
-accelerationEqn :: Relation
-accelerationQD :: QDefinition
-velocityQD :: QDefinition
-newtonSLQD :: QDefinition
+weightEqn :: PExpr
+weightDerivAccelEqn :: PExpr
+weightDerivNewtonEqn :: PExpr
+weightDerivReplaceMassEqn :: PExpr
+weightDerivSpecWeightEqn :: PExpr
+newtonSLEqn :: PExpr
+hsPressureEqn :: PExpr
+speedEqn :: PExpr
+velocityEqn :: ModelExpr
+accelerationEqn :: ModelExpr
+accelerationQD :: ModelQDef
+velocityQD :: ModelQDef
+newtonSLQD :: ModelQDef
 newtonSLDesc :: Sentence
 
 
@@ -889,7 +889,7 @@ module Data.Drasil.Theories.Physics
 physicsTMs :: [TheoryModel]
 newtonSL :: TheoryModel
 weightGD :: GenDefn
-weightQD :: QDefinition
+weightQD :: ModelQDef
 weightSrc :: Reference
 weightDeriv :: Derivation
 weightDerivSentences :: [Sentence]
@@ -899,19 +899,19 @@ weightDerivNewtonSentence :: [Sentence]
 weightDerivReplaceMassSentence :: [Sentence]
 weightDerivSpecWeightSentence :: [Sentence]
 hsPressureGD :: GenDefn
-hsPressureQD :: QDefinition
+hsPressureQD :: ModelQDef
 hsPressureSrc :: Reference
 hsPressureNotes :: Sentence
 torqueDD :: DataDefinition
-torque :: QDefinition
+torque :: SimpleQDef
 torqueEqn :: Expr
 torqueDesc :: Sentence
-vecMagQD :: QDefinition
+vecMagQD :: SimpleQDef
 magNote :: Sentence
 vecMag :: DataDefinition
 newtonSLR :: TheoryModel
-newtonSLRQD :: QDefinition
-newtonSLRExpr :: Expr
+newtonSLRQD :: ModelQDef
+newtonSLRExpr :: PExpr
 newtonSLRNotes :: [Sentence]
 accelerationTM :: TheoryModel
 velocityTM :: TheoryModel

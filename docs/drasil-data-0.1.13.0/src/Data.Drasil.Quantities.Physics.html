@@ -796,64 +796,70 @@ c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-132"></span><span class="hs-comment">-- Helpers for common modifiers</span><span>
 </span><span id="line-133"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subMax"><span class="hs-identifier hs-type">subMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subMin"><span class="hs-identifier hs-type">subMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subX"><span class="hs-identifier hs-type">subX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subY"><span class="hs-identifier hs-type">subY</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subZ"><span class="hs-identifier hs-type">subZ</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#supMax"><span class="hs-identifier hs-type">supMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#supMin"><span class="hs-identifier hs-type">supMin</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
 </span><span id="line-134"></span><span id="subMax"><span class="annot"><span class="annottext">subMax :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subMax"><span class="hs-identifier hs-var hs-var">subMax</span></a></span></span><span> </span><span id="local-6989586621679066324"><span class="annot"><span class="annottext">s :: Symbol
-</span><a href="#local-6989586621679066324"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subMax"><span class="hs-identifier hs-var hs-var">subMax</span></a></span></span><span> </span><span id="local-6989586621679066841"><span class="annot"><span class="annottext">s :: Symbol
+</span><a href="#local-6989586621679066841"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679066324"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679066841"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;max&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-135"></span><span id="subMin"><span class="annot"><span class="annottext">subMin :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subMin"><span class="hs-identifier hs-var hs-var">subMin</span></a></span></span><span> </span><span id="local-6989586621679066323"><span class="annot"><span class="annottext">s :: Symbol
-</span><a href="#local-6989586621679066323"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subMin"><span class="hs-identifier hs-var hs-var">subMin</span></a></span></span><span> </span><span id="local-6989586621679066840"><span class="annot"><span class="annottext">s :: Symbol
+</span><a href="#local-6989586621679066840"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679066323"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679066840"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;min&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-136"></span><span id="subX"><span class="annot"><span class="annottext">subX :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subX"><span class="hs-identifier hs-var hs-var">subX</span></a></span></span><span>   </span><span id="local-6989586621679066322"><span class="annot"><span class="annottext">s :: Symbol
-</span><a href="#local-6989586621679066322"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subX"><span class="hs-identifier hs-var hs-var">subX</span></a></span></span><span>   </span><span id="local-6989586621679066839"><span class="annot"><span class="annottext">s :: Symbol
+</span><a href="#local-6989586621679066839"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679066322"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679066839"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;x&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-137"></span><span id="subY"><span class="annot"><span class="annottext">subY :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subY"><span class="hs-identifier hs-var hs-var">subY</span></a></span></span><span>   </span><span id="local-6989586621679066321"><span class="annot"><span class="annottext">s :: Symbol
-</span><a href="#local-6989586621679066321"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subY"><span class="hs-identifier hs-var hs-var">subY</span></a></span></span><span>   </span><span id="local-6989586621679066838"><span class="annot"><span class="annottext">s :: Symbol
+</span><a href="#local-6989586621679066838"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679066321"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679066838"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;y&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-138"></span><span id="subZ"><span class="annot"><span class="annottext">subZ :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subZ"><span class="hs-identifier hs-var hs-var">subZ</span></a></span></span><span>   </span><span id="local-6989586621679066320"><span class="annot"><span class="annottext">s :: Symbol
-</span><a href="#local-6989586621679066320"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subZ"><span class="hs-identifier hs-var hs-var">subZ</span></a></span></span><span>   </span><span id="local-6989586621679066837"><span class="annot"><span class="annottext">s :: Symbol
+</span><a href="#local-6989586621679066837"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679066320"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679066837"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;z&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-139"></span><span id="supMax"><span class="annot"><span class="annottext">supMax :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#supMax"><span class="hs-identifier hs-var hs-var">supMax</span></a></span></span><span> </span><span id="local-6989586621679066319"><span class="annot"><span class="annottext">s :: Symbol
-</span><a href="#local-6989586621679066319"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#supMax"><span class="hs-identifier hs-var hs-var">supMax</span></a></span></span><span> </span><span id="local-6989586621679066836"><span class="annot"><span class="annottext">s :: Symbol
+</span><a href="#local-6989586621679066836"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sup</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679066319"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679066836"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;max&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-140"></span><span id="supMin"><span class="annot"><span class="annottext">supMin :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#supMin"><span class="hs-identifier hs-var hs-var">supMin</span></a></span></span><span> </span><span id="local-6989586621679066318"><span class="annot"><span class="annottext">s :: Symbol
-</span><a href="#local-6989586621679066318"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#supMin"><span class="hs-identifier hs-var hs-var">supMin</span></a></span></span><span> </span><span id="local-6989586621679066835"><span class="annot"><span class="annottext">s :: Symbol
+</span><a href="#local-6989586621679066835"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sup</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679066318"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679066835"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;min&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-141"></span><span>
 </span><span id="line-142"></span><span class="hs-comment">-- * Constants</span><span>
 </span><span id="line-143"></span><span>
-</span><span id="line-144"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalConstValue"><span class="hs-identifier hs-type">gravitationalConstValue</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
-</span><span id="line-145"></span><span id="gravitationalConstValue"><span class="annot"><span class="annottext">gravitationalConstValue :: QDefinition
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConstValue"><span class="hs-identifier hs-var hs-var">gravitationalConstValue</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; QDefinition
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
+</span><span id="line-144"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalConstValue"><span class="hs-identifier hs-type">gravitationalConstValue</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-145"></span><span id="gravitationalConstValue"><span class="annot"><span class="annottext">gravitationalConstValue :: SimpleQDef
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConstValue"><span class="hs-identifier hs-var hs-var">gravitationalConstValue</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
+forall c e.
+(Quantity c, MayHaveUnit c, Express e) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConst"><span class="hs-identifier hs-var">gravitationalConst</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+forall r. ExprC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">6.6743E-11</span></span><span class="hs-special">)</span><span>
 </span><span id="line-146"></span><span class="hs-comment">--(dbl 6.673 * 10E-11)</span><span>
 </span><span id="line-147"></span><span class="hs-comment">--(dbl 0.00000000006673)</span><span>
-</span><span id="line-148"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccelConst"><span class="hs-identifier hs-type">gravitationalAccelConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
-</span><span id="line-149"></span><span id="gravitationalAccelConst"><span class="annot"><span class="annottext">gravitationalAccelConst :: QDefinition
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccelConst"><span class="hs-identifier hs-var hs-var">gravitationalAccelConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; QDefinition
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
+</span><span id="line-148"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccelConst"><span class="hs-identifier hs-type">gravitationalAccelConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-149"></span><span id="gravitationalAccelConst"><span class="annot"><span class="annottext">gravitationalAccelConst :: SimpleQDef
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccelConst"><span class="hs-identifier hs-var hs-var">gravitationalAccelConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
+forall c e.
+(Quantity c, MayHaveUnit c, Express e) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">gravitationalAccel</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+forall r. ExprC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">9.8</span></span><span class="hs-special">)</span><span>
 </span><span id="line-150"></span></pre></body></html>

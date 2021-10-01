@@ -81,16 +81,16 @@ probBr :: ConstrainedChunk
 probFail :: ConstrainedChunk
 pbTolfail :: ConstrainedChunk
 stressDistFac :: ConstrainedChunk
-specParamVals :: [QDefinition]
-dimMax :: QDefinition
-dimMin :: QDefinition
-arMax :: QDefinition
-cWeightMax :: QDefinition
-cWeightMin :: QDefinition
-sdMax :: QDefinition
-stressDistFacMin :: QDefinition
-stressDistFacMax :: QDefinition
-sdMin :: QDefinition
+specParamVals :: [SimpleQDef]
+dimMax :: SimpleQDef
+dimMin :: SimpleQDef
+arMax :: SimpleQDef
+cWeightMax :: SimpleQDef
+cWeightMin :: SimpleQDef
+sdMax :: SimpleQDef
+stressDistFacMin :: SimpleQDef
+stressDistFacMax :: SimpleQDef
+sdMin :: SimpleQDef
 symbols :: [UnitaryChunk]
 minThick :: UnitaryChunk
 sflawParamK :: UnitaryChunk
@@ -153,12 +153,12 @@ safeMessage :: ConceptChunk
 notSafe :: ConceptChunk
 bomb :: ConceptChunk
 explosion :: ConceptChunk
-constants :: [QDefinition]
-constantM :: QDefinition
-constantK :: QDefinition
-constantModElas :: QDefinition
-constantLoadDur :: QDefinition
-constantLoadSF :: QDefinition
+constants :: [SimpleQDef]
+constantM :: SimpleQDef
+constantK :: SimpleQDef
+constantModElas :: SimpleQDef
+constantLoadDur :: SimpleQDef
+constantLoadSF :: SimpleQDef
 sdVectorSent :: Sentence
 sdVector :: [UnitaryChunk]
 termsWithDefsOnly :: [ConceptChunk]
@@ -203,14 +203,14 @@ assumpGL :: ConceptInstance
 assumpBC :: ConceptInstance
 assumpRT :: ConceptInstance
 assumpLDFC :: ConceptInstance
-assumptionConstants :: [QDefinition]
+assumptionConstants :: [SimpleQDef]
 assumptions :: [ConceptInstance]
 
 module Drasil.GlassBR.DataDefs
 aspRat :: DataDefinition
 dataDefs :: [DataDefinition]
 dimLL :: DataDefinition
-qDefns :: [Block QDefinition]
+qDefns :: [Block SimpleQDef]
 glaTyFac :: DataDefinition
 hFromt :: DataDefinition
 loadDF :: DataDefinition
@@ -266,7 +266,7 @@ termsAndDescBullets :: Contents
 termsAndDescBulletsGlTySubSec :: [ItemType]
 termsAndDescBulletsLoadSubSec :: [ItemType]
 solChSpecSubsections :: [CI]
-auxiliaryConstants :: [QDefinition]
+auxiliaryConstants :: [SimpleQDef]
 priorityNFReqs :: [ConceptChunk]
 startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 undIR :: [Sentence]

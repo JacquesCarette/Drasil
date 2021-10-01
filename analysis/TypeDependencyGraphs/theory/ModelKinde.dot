@@ -1,0 +1,6 @@
+digraph modelkinde{
+ModelKinde	[shape=oval, color=cyan3, label="ModelKinde"];
+ModelKinde -> ModelKindse;
+ModelKinde -> UID;
+ModelKinde -> NP;
+}

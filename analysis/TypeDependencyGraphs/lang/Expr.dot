@@ -6,7 +6,6 @@ Expr -> Integer;
 Expr -> String;
 Expr -> AssocArithOper;
 Expr -> AssocBoolOper;
-Expr -> DerivType;
 Expr -> UID;
 Expr -> Completeness;
 Expr -> ExprRelation;

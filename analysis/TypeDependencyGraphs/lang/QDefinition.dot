@@ -1,6 +1,0 @@
-digraph qdefinition{
-QDefinition	[shape=oval, color=cyan3, label="QDefinition"];
-QDefinition -> DefinedQuantityDict;
-QDefinition -> UID;
-QDefinition -> Expr;
-}

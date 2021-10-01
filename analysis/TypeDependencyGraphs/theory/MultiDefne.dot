@@ -1,0 +1,7 @@
+digraph multidefne{
+MultiDefne	[shape=oval, color=cyan3, label="MultiDefne"];
+MultiDefne -> UID;
+MultiDefne -> QuantityDict;
+MultiDefne -> Sentence;
+MultiDefne -> NonEmptyDefiningExpre;
+}

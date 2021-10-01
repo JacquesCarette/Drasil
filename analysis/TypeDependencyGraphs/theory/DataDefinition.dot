@@ -1,10 +1,9 @@
 digraph datadefinition{
-DataDefinition	[shape=oval, color=cyan3, label="DataDefinition"];
-DataDefinition -> QDefinition;
-DataDefinition -> ScopeType;
-DataDefinition -> DecRef;
-DataDefinition -> MaybeDerivation;
-DataDefinition -> ShortName;
-DataDefinition -> String;
-DataDefinition -> Sentence;
+DataDefinition	[shape=oval, color=darkviolet, label="DataDefinition"];
+DataDefinition -> SimpleQDef;
+DataDefinition -> DDPkt;
+DataDefinition -> DataDefinition;
+DataDefinition -> ModelQDef;
+DataDefinition -> Lens_;
+DataDefinition -> a;
 }

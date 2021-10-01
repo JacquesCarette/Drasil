@@ -4,22 +4,34 @@ digraph alltypes {
 	subgraph clasess {
 	}
 	subgraph contraintsets {
-		subgraph constraintset{
-		ConstraintSet	[shape=oval, color=cyan3, label="ConstraintSet"];
-		ConstraintSet -> ConceptChunk;
-		ConstraintSet -> NonEmptyExpr;
+		subgraph constraintsete{
+		ConstraintSete	[shape=oval, color=cyan3, label="ConstraintSete"];
+		ConstraintSete -> ConceptChunk;
+		ConstraintSete -> NonEmptye;
 		}
 	}
 	subgraph datadefinition {
+		subgraph ddpkt{
+		DDPkt	[shape=oval, color=cyan3, label="DDPkt"];
+		DDPkt -> ScopeType;
+		DDPkt -> DecRef;
+		DDPkt -> MaybeDerivation;
+		DDPkt -> ShortName;
+		DDPkt -> String;
+		DDPkt -> Sentence;
+		}
+		subgraph scopetype{
+		ScopeType	[shape=oval, color=darkviolet, label="ScopeType"];
+		ScopeType -> Scope;
+		}
 		subgraph datadefinition{
-		DataDefinition	[shape=oval, color=cyan3, label="DataDefinition"];
-		DataDefinition -> QDefinition;
-		DataDefinition -> ScopeType;
-		DataDefinition -> DecRef;
-		DataDefinition -> MaybeDerivation;
-		DataDefinition -> ShortName;
-		DataDefinition -> String;
-		DataDefinition -> Sentence;
+		DataDefinition	[shape=oval, color=darkviolet, label="DataDefinition"];
+		DataDefinition -> SimpleQDef;
+		DataDefinition -> DDPkt;
+		DataDefinition -> DataDefinition;
+		DataDefinition -> ModelQDef;
+		DataDefinition -> Lens_;
+		DataDefinition -> a;
 		}
 		subgraph scope{
 		Scope	[shape=oval, color=darkgreen, label="Scope"];
@@ -29,7 +41,7 @@ digraph alltypes {
 	subgraph gendefn {
 		subgraph gendefn{
 		GenDefn	[shape=oval, color=cyan3, label="GenDefn"];
-		GenDefn -> ModelKind;
+		GenDefn -> ModelKindModelExpr;
 		GenDefn -> MaybeUnitDefn;
 		GenDefn -> MaybeDerivation;
 		GenDefn -> DecRef;
@@ -41,7 +53,7 @@ digraph alltypes {
 	subgraph intancemodels {
 		subgraph instancemodel{
 		InstanceModel	[shape=oval, color=cyan3, label="InstanceModel"];
-		InstanceModel -> ModelKind;
+		InstanceModel -> ModelKindExpr;
 		InstanceModel -> Inputs;
 		InstanceModel -> Output;
 		InstanceModel -> DecRef;
@@ -68,44 +80,44 @@ digraph alltypes {
 		}
 	}
 	subgraph modelkinds {
-		subgraph modelkind{
-		ModelKind	[shape=oval, color=cyan3, label="ModelKind"];
-		ModelKind -> ModelKinds;
-		ModelKind -> UID;
-		ModelKind -> NP;
+		subgraph modelkinde{
+		ModelKinde	[shape=oval, color=cyan3, label="ModelKinde"];
+		ModelKinde -> ModelKindse;
+		ModelKinde -> UID;
+		ModelKinde -> NP;
 		}
-		subgraph modelkinds{
-		ModelKinds	[shape=oval, color=darkviolet, label="ModelKinds"];
-		ModelKinds -> RelationConcept;
-		ModelKinds -> ConstraintSet;
-		ModelKinds -> QDefinition;
-		ModelKinds -> MultiDefn;
+		subgraph modelkindse{
+		ModelKindse	[shape=oval, color=darkviolet, label="ModelKindse"];
+		ModelKindse -> Express;
+		ModelKindse -> e;
+		ModelKindse -> RelationConcept;
+		ModelKindse -> ModelKinds;
 		}
 	}
 	subgraph multidefn {
-		subgraph definingexpr{
-		DefiningExpr	[shape=oval, color=cyan3, label="DefiningExpr"];
-		DefiningExpr -> UID;
-		DefiningExpr -> Sentence;
-		DefiningExpr -> Expr;
+		subgraph definingexpre{
+		DefiningExpre	[shape=oval, color=cyan3, label="DefiningExpre"];
+		DefiningExpre -> UID;
+		DefiningExpre -> Sentence;
+		DefiningExpre -> Expressee;
 		}
-		subgraph multidefn{
-		MultiDefn	[shape=oval, color=cyan3, label="MultiDefn"];
-		MultiDefn -> UID;
-		MultiDefn -> QuantityDict;
-		MultiDefn -> Sentence;
-		MultiDefn -> NonEmptyDefiningExpr;
+		subgraph multidefne{
+		MultiDefne	[shape=oval, color=cyan3, label="MultiDefne"];
+		MultiDefne -> UID;
+		MultiDefne -> QuantityDict;
+		MultiDefne -> Sentence;
+		MultiDefne -> NonEmptyDefiningExpre;
 		}
 	}
 	subgraph teoryh {
 		subgraph theorymodel{
 		TheoryModel	[shape=oval, color=cyan3, label="TheoryModel"];
-		TheoryModel -> ModelKind;
+		TheoryModel -> ModelKindModelExpr;
 		TheoryModel -> TheoryModel;
 		TheoryModel -> SpaceDefn;
 		TheoryModel -> QuantityDict;
 		TheoryModel -> ConceptChunk;
-		TheoryModel -> QDefinition;
+		TheoryModel -> ModelQDef;
 		TheoryModel -> ModelExpr;
 		TheoryModel -> DecRef;
 		TheoryModel -> ShortName;

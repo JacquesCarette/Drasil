@@ -25,7 +25,7 @@
 </span><span id="line-23"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlant"><span class="hs-identifier hs-type">gdPowerPlant</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
 </span><span id="line-24"></span><span id="gdPowerPlant"><span class="annot"><span class="annottext">gdPowerPlant :: GenDefn
 </span><a href="Drasil.PDController.GenDefs.html#gdPowerPlant"><span class="hs-identifier hs-var hs-var">gdPowerPlant</span></a></span></span><span>
-</span><span id="line-25"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+</span><span id="line-25"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
 -&gt; [DecRef]
@@ -34,14 +34,15 @@
 -&gt; GenDefn
 forall u.
 IsUnit u =&gt;
-ModelKind
+ModelKind ModelExpr
 -&gt; Maybe u
 -&gt; Maybe Derivation
 -&gt; [DecRef]
 -&gt; String
 -&gt; [Sentence]
 -&gt; GenDefn
-</span><span class="hs-identifier hs-var">gd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind
+</span><span class="hs-identifier hs-var">gd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
+forall e. Express e =&gt; RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
 </span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantRC"><span class="hs-identifier hs-var">gdPowerPlantRC</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
@@ -66,7 +67,10 @@ r -&gt; DecRef
 </span><span id="line-30"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlantRC"><span class="hs-identifier hs-type">gdPowerPlantRC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
 </span><span id="line-31"></span><span id="gdPowerPlantRC"><span class="annot"><span class="annottext">gdPowerPlantRC :: RelationConcept
 </span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantRC"><span class="hs-identifier hs-var hs-var">gdPowerPlantRC</span></a></span></span><span>
-</span><span id="line-32"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Relation -&gt; RelationConcept
+</span><span id="line-32"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Expr -&gt; RelationConcept
+forall e.
+Express e =&gt;
+String -&gt; NP -&gt; Sentence -&gt; e -&gt; RelationConcept
 </span><span class="hs-identifier hs-var">makeRC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;gdPowerPlantRC&quot;</span></span><span>
 </span><span id="line-33"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#ccTransferFxn"><span class="hs-identifier hs-var">ccTransferFxn</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
@@ -75,23 +79,28 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><a href="Drasil.PDController.Concepts.html#powerPlant"><span class="hs-identifier hs-var">powerPlant</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-34"></span><span>      </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-35"></span><span>      </span><span class="annot"><span class="annottext">Relation
+</span><span id="line-35"></span><span>      </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantEqn"><span class="hs-identifier hs-var">gdPowerPlantEqn</span></a></span><span>
 </span><span id="line-36"></span><span>
 </span><span id="line-37"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlantEqn"><span class="hs-identifier hs-type">gdPowerPlantEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-38"></span><span id="gdPowerPlantEqn"><span class="annot"><span class="annottext">gdPowerPlantEqn :: Relation
+</span><span id="line-38"></span><span id="gdPowerPlantEqn"><span class="annot"><span class="annottext">gdPowerPlantEqn :: Expr
 </span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantEqn"><span class="hs-identifier hs-var hs-var">gdPowerPlantEqn</span></a></span></span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation
-</span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Relation -&gt; Relation
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span id="line-39"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Relation
+</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. ExprC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">20</span></span><span class="hs-special">)</span><span>
 </span><span id="line-40"></span><span>
 </span><span id="line-41"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlantNote"><span class="hs-identifier hs-type">gdPowerPlantNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>

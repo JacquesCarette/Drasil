@@ -381,7 +381,7 @@ definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -
 
 -- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
 --   "expression (source)".
-eqnWSource :: (Express e, Referable r, HasShortName r) => e -> r -> Sentence
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
 
 -- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
 --   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
@@ -585,11 +585,11 @@ enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
 
 -- | Displays a given expression and attaches a <a>Reference</a> to it.
-lbldExpr :: Express c => c -> Reference -> LabelledContent
+lbldExpr :: ModelExpr -> Reference -> LabelledContent
 
 -- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
 --   <a>Reference</a>).
-unlbldExpr :: Express c => c -> Contents
+unlbldExpr :: ModelExpr -> Contents
 
 
 -- | Gather Drasil's utility functions and re-export for easy use. For now,
@@ -638,11 +638,11 @@ enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
 
 -- | Displays a given expression and attaches a <a>Reference</a> to it.
-lbldExpr :: Express c => c -> Reference -> LabelledContent
+lbldExpr :: ModelExpr -> Reference -> LabelledContent
 
 -- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
 --   <a>Reference</a>).
-unlbldExpr :: Express c => c -> Contents
+unlbldExpr :: ModelExpr -> Contents
 
 -- | Creates a blank document with no text.
 blank :: Doc
@@ -757,7 +757,7 @@ definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -
 
 -- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
 --   "expression (source)".
-eqnWSource :: (Express e, Referable r, HasShortName r) => e -> r -> Sentence
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
 
 -- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
 --   as a <a>Sentence</a>: "From <tt>source</tt> we can replace

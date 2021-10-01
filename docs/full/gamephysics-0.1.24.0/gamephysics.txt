@@ -166,10 +166,16 @@ linearGS :: ConceptInstance
 angularGS :: ConceptInstance
 
 module Drasil.GamePhysics.Expressions
-transMotExpr :: Expr
-transMotExprDeriv1 :: ModelExpr
-rotMotExpr :: Expr
-rotMotExprDeriv1 :: ModelExpr
+transMotExpr :: PExpr
+transMotExprDeriv1 :: (ModelExprC r, ExprC r) => r
+rotMotExpr :: PExpr
+rotMotExprDeriv1 :: (ModelExprC r, ExprC r) => r
+
+module Drasil.GamePhysics.Derivations
+impulseVDerivEqn1 :: ModelExpr
+impulseVDerivEqn2 :: ModelExpr
+impulseVDerivEqn3 :: ModelExpr
+impulseVDerivEqns :: [ModelExpr]
 
 module Drasil.GamePhysics.DataDefs
 dataDefs :: [DataDefinition]

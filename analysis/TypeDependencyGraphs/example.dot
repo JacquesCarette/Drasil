@@ -9,6 +9,8 @@ digraph alltypes {
 	}
 	subgraph datadefs {
 	}
+	subgraph derivations {
+	}
 	subgraph expresionss {
 	}
 	subgraph figures {
@@ -42,6 +44,8 @@ digraph alltypes {
 	subgraph concepts {
 	}
 	subgraph datadefs {
+	}
+	subgraph derivations {
 	}
 	subgraph expresionss {
 	}
@@ -125,6 +129,8 @@ digraph alltypes {
 	}
 	subgraph definitions {
 	}
+	subgraph derivations {
+	}
 	subgraph gendefs {
 	}
 	subgraph goals {
@@ -197,6 +203,8 @@ digraph alltypes {
 	}
 	subgraph datadefs {
 	}
+	subgraph derivations {
+	}
 	subgraph expresionss {
 	}
 	subgraph figures {
@@ -218,6 +226,8 @@ digraph alltypes {
 	subgraph body {
 	}
 	subgraph datadefs {
+	}
+	subgraph derivations {
 	}
 	subgraph expresionss {
 	}
@@ -278,6 +288,8 @@ digraph alltypes {
 	subgraph concepts {
 	}
 	subgraph datadefs {
+	}
+	subgraph derivations {
 	}
 	subgraph gendefs {
 	}

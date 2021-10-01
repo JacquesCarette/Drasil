@@ -1,0 +1,4 @@
+digraph simpleqdef{
+SimpleQDef	[shape=oval, color=red2, label="SimpleQDef"];
+SimpleQDef -> QDefinitionExpr;
+}

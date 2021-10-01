@@ -728,7 +728,7 @@ AppndxProg :: [Contents] -> AppndxSec
 
 -- | Values of Auxiliary Constants section.
 data AuxConstntSec
-AuxConsProg :: CI -> [QDefinition] -> AuxConstntSec
+AuxConsProg :: CI -> [SimpleQDef] -> AuxConstntSec
 
 -- | Choose whether to show or hide the derivation of an expression.
 data DerivationDisplay
@@ -995,7 +995,7 @@ traceMatOtherReq :: SystemInformation -> TraceConfig
 generateTraceMap :: [DocSection] -> TraceMap
 
 -- | Helper that gets a table of constants from a <a>QDefinition</a>.
-tableOfConstants :: [QDefinition] -> LabelledContent
+tableOfConstants :: [SimpleQDef] -> LabelledContent
 
 -- | Combines <a>purpDocPara1</a> and <a>developmentProcessParagraph</a>.
 --   Verbosity controls if the <a>developmentProcessParagraph</a> is added
@@ -1096,7 +1096,7 @@ data ReferenceDB
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: forall a b c e f h i j d. (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => {_sys :: a, _kind :: b, _authors :: [c], _purpose :: d, _quants :: [e], _concepts :: [f], _instModels :: [InstanceModel], _datadefs :: [DataDefinition], _configFiles :: [String], _inputs :: [h], _outputs :: [i], _defSequence :: [Block QDefinition], _constraints :: [j], _constants :: [QDefinition], _sysinfodb :: ChunkDB, _usedinfodb :: ChunkDB, refdb :: ReferenceDB} -> SystemInformation
+[SI] :: forall a b c e f h i j d. (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => {_sys :: a, _kind :: b, _authors :: [c], _purpose :: d, _quants :: [e], _concepts :: [f], _instModels :: [InstanceModel], _datadefs :: [DataDefinition], _configFiles :: [String], _inputs :: [h], _outputs :: [i], _defSequence :: [Block SimpleQDef], _constraints :: [j], _constants :: [SimpleQDef], _sysinfodb :: ChunkDB, _usedinfodb :: ChunkDB, refdb :: ReferenceDB} -> SystemInformation
 
 -- | Smart constructor for chunk databases. Takes in the following:
 --   
@@ -1266,7 +1266,7 @@ AppndxProg :: [Contents] -> AppndxSec
 
 -- | Values of Auxiliary Constants section.
 data AuxConstntSec
-AuxConsProg :: CI -> [QDefinition] -> AuxConstntSec
+AuxConsProg :: CI -> [SimpleQDef] -> AuxConstntSec
 
 -- | Choose whether to show or hide the derivation of an expression.
 data DerivationDisplay

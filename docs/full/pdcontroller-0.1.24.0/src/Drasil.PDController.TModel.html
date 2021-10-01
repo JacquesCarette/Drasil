@@ -25,29 +25,30 @@
 </span><span id="line-21"></span><span class="annot"><a href="Drasil.PDController.TModel.html#tmLaplace"><span class="hs-identifier hs-type">tmLaplace</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
 </span><span id="line-22"></span><span id="tmLaplace"><span class="annot"><span class="annottext">tmLaplace :: TheoryModel
 </span><a href="Drasil.PDController.TModel.html#tmLaplace"><span class="hs-identifier hs-var hs-var">tmLaplace</span></a></span></span><span>
-</span><span id="line-23"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+</span><span id="line-23"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [ModelExpr]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
 -&gt; [Sentence]
 -&gt; TheoryModel
 forall q c.
 (Quantity q, MayHaveUnit q, Concept c) =&gt;
-ModelKind
+ModelKind ModelExpr
 -&gt; [q]
 -&gt; [c]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [ModelExpr]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
 -&gt; [Sentence]
 -&gt; TheoryModel
-</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind
+</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
+forall e. Express e =&gt; RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
 </span><a href="Drasil.PDController.TModel.html#laplaceRC"><span class="hs-identifier hs-var">laplaceRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-24"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict -&gt; QuantityDict
@@ -87,6 +88,9 @@ r -&gt; DecRef
 </span><span id="line-34"></span><span class="annot"><a href="Drasil.PDController.TModel.html#laplaceRC"><span class="hs-identifier hs-type">laplaceRC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
 </span><span id="line-35"></span><span id="laplaceRC"><span class="annot"><span class="annottext">laplaceRC :: RelationConcept
 </span><a href="Drasil.PDController.TModel.html#laplaceRC"><span class="hs-identifier hs-var hs-var">laplaceRC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Relation -&gt; RelationConcept
+forall e.
+Express e =&gt;
+String -&gt; NP -&gt; Sentence -&gt; e -&gt; RelationConcept
 </span><span class="hs-identifier hs-var">makeRC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;laplaceRC&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Laplace Transform&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Relation
@@ -96,33 +100,39 @@ r -&gt; DecRef
 </span><span id="line-38"></span><span id="laplaceRel"><span class="annot"><span class="annottext">laplaceRel :: Relation
 </span><a href="Drasil.PDController.TModel.html#laplaceRel"><span class="hs-identifier hs-var hs-var">laplaceRel</span></a></span></span><span>
 </span><span id="line-39"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdLaplaceTransform"><span class="hs-identifier hs-var">qdLaplaceTransform</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
 </span><span id="line-40"></span><span>      </span><span class="annot"><span class="annottext">Symbol -&gt; Relation -&gt; Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdNegInf"><span class="hs-identifier hs-var">qdNegInf</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdPosInf"><span class="hs-identifier hs-var">qdPosInf</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-var">qdFxnTDomain</span></a></span><span> </span><span>
 </span><span id="line-41"></span><span>      </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">DrasilLang.exp</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span>
@@ -160,29 +170,30 @@ r -&gt; Sentence
 </span><span id="line-53"></span><span class="annot"><a href="Drasil.PDController.TModel.html#tmInvLaplace"><span class="hs-identifier hs-type">tmInvLaplace</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
 </span><span id="line-54"></span><span id="tmInvLaplace"><span class="annot"><span class="annottext">tmInvLaplace :: TheoryModel
 </span><a href="Drasil.PDController.TModel.html#tmInvLaplace"><span class="hs-identifier hs-var hs-var">tmInvLaplace</span></a></span></span><span>
-</span><span id="line-55"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+</span><span id="line-55"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [ModelExpr]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
 -&gt; [Sentence]
 -&gt; TheoryModel
 forall q c.
 (Quantity q, MayHaveUnit q, Concept c) =&gt;
-ModelKind
+ModelKind ModelExpr
 -&gt; [q]
 -&gt; [c]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [ModelExpr]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
 -&gt; [Sentence]
 -&gt; TheoryModel
-</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind
+</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
+forall e. Express e =&gt; RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
 </span><a href="Drasil.PDController.TModel.html#invlaplaceRC"><span class="hs-identifier hs-var">invlaplaceRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-56"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict -&gt; QuantityDict
@@ -223,6 +234,9 @@ r -&gt; DecRef
 </span><span id="line-67"></span><span id="invlaplaceRC"><span class="annot"><span class="annottext">invlaplaceRC :: RelationConcept
 </span><a href="Drasil.PDController.TModel.html#invlaplaceRC"><span class="hs-identifier hs-var hs-var">invlaplaceRC</span></a></span></span><span>
 </span><span id="line-68"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Relation -&gt; RelationConcept
+forall e.
+Express e =&gt;
+String -&gt; NP -&gt; Sentence -&gt; e -&gt; RelationConcept
 </span><span class="hs-identifier hs-var">makeRC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;invLaplaceRC&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Inverse Laplace Transform&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Relation
@@ -231,11 +245,12 @@ r -&gt; DecRef
 </span><span id="line-70"></span><span class="annot"><a href="Drasil.PDController.TModel.html#invLaplaceRel"><span class="hs-identifier hs-type">invLaplaceRel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Relation</span></span><span>
 </span><span id="line-71"></span><span id="invLaplaceRel"><span class="annot"><span class="annottext">invLaplaceRel :: Relation
 </span><a href="Drasil.PDController.TModel.html#invLaplaceRel"><span class="hs-identifier hs-var hs-var">invLaplaceRel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-var">qdFxnTDomain</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdInvLaplaceTransform"><span class="hs-identifier hs-var">qdInvLaplaceTransform</span></a></span><span>
 </span><span id="line-72"></span><span>
@@ -264,29 +279,30 @@ r -&gt; Sentence
 </span><span id="line-83"></span><span class="annot"><a href="Drasil.PDController.TModel.html#tmSOSystem"><span class="hs-identifier hs-type">tmSOSystem</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
 </span><span id="line-84"></span><span id="tmSOSystem"><span class="annot"><span class="annottext">tmSOSystem :: TheoryModel
 </span><a href="Drasil.PDController.TModel.html#tmSOSystem"><span class="hs-identifier hs-var hs-var">tmSOSystem</span></a></span></span><span>
-</span><span id="line-85"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+</span><span id="line-85"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [ModelExpr]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
 -&gt; [Sentence]
 -&gt; TheoryModel
 forall q c.
 (Quantity q, MayHaveUnit q, Concept c) =&gt;
-ModelKind
+ModelKind ModelExpr
 -&gt; [q]
 -&gt; [c]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [ModelExpr]
--&gt; [QDefinition]
+-&gt; [ModelQDef]
 -&gt; [DecRef]
 -&gt; String
 -&gt; [Sentence]
 -&gt; TheoryModel
-</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind
+</span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
+forall e. Express e =&gt; RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
 </span><a href="Drasil.PDController.TModel.html#tmSOSystemRC"><span class="hs-identifier hs-var">tmSOSystemRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-86"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
@@ -323,6 +339,9 @@ r -&gt; DecRef
 </span><span id="line-96"></span><span id="tmSOSystemRC"><span class="annot"><span class="annottext">tmSOSystemRC :: RelationConcept
 </span><a href="Drasil.PDController.TModel.html#tmSOSystemRC"><span class="hs-identifier hs-var hs-var">tmSOSystemRC</span></a></span></span><span>
 </span><span id="line-97"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Relation -&gt; RelationConcept
+forall e.
+Express e =&gt;
+String -&gt; NP -&gt; Sentence -&gt; e -&gt; RelationConcept
 </span><span class="hs-identifier hs-var">makeRC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tmSOSystemRC&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Second Order Mass-Spring-Damper System&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
@@ -333,29 +352,36 @@ r -&gt; DecRef
 </span><span id="line-101"></span><span id="soSystemRel"><span class="annot"><span class="annottext">soSystemRel :: Relation
 </span><a href="Drasil.PDController.TModel.html#soSystemRel"><span class="hs-identifier hs-var hs-var">soSystemRel</span></a></span></span><span>
 </span><span id="line-102"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Relation
+forall r. ExprC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span>
 </span><span id="line-103"></span><span>    </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-104"></span><span>    </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-var">qdDampingCoeff</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-105"></span><span>    </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdStiffnessCoeff"><span class="hs-identifier hs-var">qdStiffnessCoeff</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-106"></span><span>

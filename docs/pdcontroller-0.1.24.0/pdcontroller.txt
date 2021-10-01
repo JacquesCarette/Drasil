@@ -173,11 +173,11 @@ ipPropGainUnc :: UncertQ
 ipDerGainUnc :: UncertQ
 ipStepTimeUnc :: UncertQ
 ipSimTimeUnc :: UncertQ
-odeAbsTolConst :: QDefinition
-odeRelTolConst :: QDefinition
+odeAbsTolConst :: SimpleQDef
+odeRelTolConst :: SimpleQDef
 dqdAbsTol :: DefinedQuantityDict
 dqdRelTol :: DefinedQuantityDict
-pidConstants :: [QDefinition]
+pidConstants :: [SimpleQDef]
 pidDqdConstants :: [DefinedQuantityDict]
 
 module Drasil.PDController.TModel
@@ -209,19 +209,19 @@ gdPowerPlantNote :: Sentence
 module Drasil.PDController.DataDefs
 dataDefinitions :: [DataDefinition]
 ddErrSig :: DataDefinition
-ddErrSigDefn :: QDefinition
+ddErrSigDefn :: SimpleQDef
 ddErrSigEqn :: Expr
 ddErrSigNote :: Sentence
 ddPropCtrl :: DataDefinition
-ddPropCtrlDefn :: QDefinition
+ddPropCtrlDefn :: SimpleQDef
 ddPropCtrlEqn :: Expr
 ddPropCtrlNote :: Sentence
 ddDerivCtrl :: DataDefinition
-ddDerivCtrlDefn :: QDefinition
+ddDerivCtrlDefn :: SimpleQDef
 ddDerivCtrlEqn :: Expr
 ddDerivCtrlNote :: Sentence
 ddCtrlVar :: DataDefinition
-ddCtrlVarDefn :: QDefinition
+ddCtrlVarDefn :: SimpleQDef
 ddCtrlEqn :: Expr
 ddCtrlNote :: Sentence
 
@@ -229,18 +229,18 @@ module Drasil.PDController.IModel
 instanceModels :: [InstanceModel]
 imPD :: InstanceModel
 imPDRC :: RelationConcept
-eqn :: Expr
+eqn :: ModelExpr
 imDeriv :: Derivation
 imDerivStmts :: [Sentence]
-imDerivEqns :: [Expr]
+imDerivEqns :: [ModelExpr]
 derivStmt1 :: Sentence
-derivEqn1 :: Expr
+derivEqn1 :: ModelExpr
 derivStmt2 :: Sentence
-derivEqn2 :: Expr
+derivEqn2 :: ModelExpr
 derivStmt3 :: Sentence
-derivEqn3 :: Expr
+derivEqn3 :: ModelExpr
 derivStmt4 :: Sentence
-derivEqn4 :: Expr
+derivEqn4 :: ModelExpr
 
 module Drasil.PDController.Requirements
 funcReqs :: [ConceptInstance]

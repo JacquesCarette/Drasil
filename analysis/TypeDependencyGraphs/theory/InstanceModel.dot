@@ -1,6 +1,6 @@
 digraph instancemodel{
 InstanceModel	[shape=oval, color=cyan3, label="InstanceModel"];
-InstanceModel -> ModelKind;
+InstanceModel -> ModelKindExpr;
 InstanceModel -> Inputs;
 InstanceModel -> Output;
 InstanceModel -> DecRef;

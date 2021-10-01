@@ -1,0 +1,6 @@
+digraph definingexpre{
+DefiningExpre	[shape=oval, color=cyan3, label="DefiningExpre"];
+DefiningExpre -> UID;
+DefiningExpre -> Sentence;
+DefiningExpre -> Expressee;
+}

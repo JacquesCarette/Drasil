@@ -1,0 +1,4 @@
+digraph scopetype{
+ScopeType	[shape=oval, color=darkviolet, label="ScopeType"];
+ScopeType -> Scope;
+}

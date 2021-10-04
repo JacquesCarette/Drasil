@@ -15,7 +15,8 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-14.27
+resolver:
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/31.yaml
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -40,14 +41,27 @@ packages:
 - drasil-utils/
 - drasil-gool/
 - drasil-build/
+- drasil-code-base/
 - drasil-code/
 - drasil-theory/
 - drasil-database/
 - drasil-printers/
 - drasil-gen/
 - drasil-data/
-- drasil-example/
 - drasil-docLang/
+- drasil-metadata/
+- drasil-website/
+- drasil-example/dblpendulum/
+- drasil-example/sglpendulum/
+- drasil-example/gamephysics/
+- drasil-example/glassbr/
+- drasil-example/hghc/
+- drasil-example/nopcm/
+- drasil-example/pdcontroller/
+- drasil-example/projectile/
+- drasil-example/ssp/
+- drasil-example/swhs/
+- drasil-example/template/
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
@@ -55,6 +69,11 @@ extra-deps:
 - multiplate-0.0.3@sha256:5d2ffc50d23c55008100b7a8b70f77b5fcce08c6f23822c5a6adc5b5b9356a32
 - unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2
 - unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699
+- json-0.10@sha256:d9fc6b07ce92b8894825a17d2cf14799856767eb30c8bf55962baa579207d799,3210
+
+# Used only for a basic set of flags for haddock
+build:
+  haddock-deps: false
 
 # Override default flag values for local packages and extra-deps
 flags: {}
@@ -79,3 +98,5 @@ require-stack-version: ">=2.3.1"
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+
+dump-logs: all

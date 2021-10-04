@@ -1,9 +1,11 @@
 *.sh text eol=lf
-People/* linguist-documentation
-FamilyOfGamePhysicsEngines/* linguist-documentation
-notes/* linguist-documentation
-Presentations/* linguist-documentation
-code/stable/* linguist-generated=true
-code/datafiles/NoPCM/cpp/* linguist-vendored
-code/datafiles/NoPCM/csharp/* linguist-vendored
-code/datafiles/NoPCM/java/* linguist-vendored
+*.cls linguist-vendored
+*.bst linguist-vendored
+People/** linguist-documentation
+Presentations/** linguist-documentation
+code/stable/** linguist-generated
+code/datafiles/nopcm/cpp/** linguist-vendored
+code/datafiles/nopcm/csharp/** linguist-vendored
+code/datafiles/nopcm/java/** linguist-vendored
+doc/** linguist-documentation
+notes/** linguist-documentation

@@ -1,0 +1,99 @@
+cff-version: 1.2.0
+title: "Drasil"
+abstract: "Generate All The Things! Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain."
+type: software
+message: "If you use this software, please cite it using these metadata."
+contact:
+  - family-names: Carette
+    given-names: Jacques
+    orcid: "https://orcid.org/0000-0001-8993-9804"
+    website: "https://www.cas.mcmaster.ca/~carette/"
+    affiliation: "McMaster University, Computing and Software Department"
+    email: "carette@mcmaster.ca"
+  - family-names: Smith
+    given-names: Spencer
+    orcid: "https://orcid.org/0000-0002-0760-0987"
+    website: "https://www.cas.mcmaster.ca/~smiths/"
+    affiliation: "McMaster University, Computing and Software Department"
+    email: "smiths@mcmaster.ca"
+identifiers:
+  - description: "All archived snapshots of Drasil."
+    type: doi
+    value: 10.5281/zenodo.4526444
+  - description: "Snapshot v0.1-alpha."
+    type: doi
+    value: 10.5281/zenodo.4526445
+keywords:
+  - research
+  - haskell
+  - knowledge
+  - dsl
+  - scientific
+  - "code generation"
+  - "documentation generator"
+  - "software generator"
+  - "drasil framework"
+license: "BSD-2-Clause"
+url: "https://jacquescarette.github.io/Drasil/"
+repository: "https://github.com/JacquesCarette/Drasil"
+repository-code: "https://github.com/JacquesCarette/Drasil/tree/v0.1-alpha"
+version: "v0.1-alpha"
+date-released: "2021-02-09"
+authors:
+  - family-names: Carette
+    given-names: Jacques
+    orcid: "https://orcid.org/0000-0001-8993-9804"
+    website: "https://www.cas.mcmaster.ca/~carette/"
+    affiliation: "McMaster University, Computing and Software Department"
+    email: "carette@mcmaster.ca"
+  - family-names: Smith
+    given-names: Spencer
+    orcid: "https://orcid.org/0000-0002-0760-0987"
+    website: "https://www.cas.mcmaster.ca/~smiths/"
+    affiliation: "McMaster University, Computing and Software Department"
+    email: "smiths@mcmaster.ca"
+  - family-names: Balaci
+    given-names: Jason
+    email: "balacij@mcmaster.ca"
+    website: "https://github.com/balacij"
+  - family-names: Hunt
+    given-names: Anthony
+    email: hunta12@mcmaster.ca
+    website: "https://github.com/Ant13731"
+  - family-names: Wu
+    given-names: Ting-Yu
+    email: wut99@mcmaster.ca
+    website: "https://github.com/tingyuw"
+  - family-names: Crawford
+    given-names: Samuel
+    alias: samm82
+    country: "CA"
+    email: "sam.crawford82@gmail.com"
+    website: "https://github.com/samm82"
+  - family-names: Chen
+    given-names: Dong
+    email: chend79@mcmaster.ca
+    website: "https://github.com/cd155"
+  - family-names: Szymczak
+    given-names: Dan
+    alias: szymczdm
+    city: "Hamilton"
+    country: "CA"
+    email: szymczdm@mcmaster.ca
+    website: "https://www.dszymczak.com"
+  - family-names: MacLachlan
+    given-names: Brooks
+    alias: bmaclach
+    email: "brooks.maclachlan@gmail.com"
+    website: "https://github.com/bmaclach"
+  - family-names: Scime
+    given-names: Dan
+    alias: danscime
+    email: "danscime@gmail.com"
+    website: "https://github.com/danscime"
+  - family-names: Niazi
+    given-names: Maryyam
+    alias: niazim3
+    country: "CA"
+    email: "maryyamn01@gmail.com"
+    website: "https://github.com/niazim3"

@@ -17,7 +17,7 @@ public class Calculations {
     }
     
     /** \brief Calculates mass of water: the quantity of matter within the water (kg)
-        \param rho_W density of water: nass per unit volume of water (kg/m^3)
+        \param rho_W density of water: mass per unit volume of water (kg/m^3)
         \param V_W volume of water: the amount of space occupied by a given quantity of water (m^3)
         \return mass of water: the quantity of matter within the water (kg)
     */
@@ -49,7 +49,7 @@ public class Calculations {
     public static List<double> func_T_W(double T_C, double t_final, double T_init, double A_tol, double R_tol, double t_step, double tau_W) {
         List<double> T_W;
         Func<double, Vector, Vector> f = (t, T_W_vec) => {
-            return new Vector(1 / tau_W * (T_C - T_W_vec[0]));
+            return new Vector(1.0 / tau_W * (T_C - T_W_vec[0]));
         };
         Options opts = new Options();
         opts.AbsoluteTolerance = A_tol;

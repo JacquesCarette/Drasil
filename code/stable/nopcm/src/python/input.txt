@@ -22,7 +22,5 @@
 1.0e-10
 # relative tolerance
 1.0e-10
-# temperature of the water (degreeC)
-40.0
 # change in heat energy in the water (J)
 0.0

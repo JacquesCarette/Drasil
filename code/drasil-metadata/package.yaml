@@ -1,0 +1,26 @@
+name:                drasil-metadata
+version:             0.1.1.0
+author:              "Jacques Carette"
+maintainer:          "Jacques Carette"
+synopsis:	     Meta-data sub-package fro Drasil
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- drasil-lang
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: lib
+  exposed-modules:
+  - Data.Drasil.Domains
+  when:
+  - condition: false
+    other-modules: Paths_drasil_metadata

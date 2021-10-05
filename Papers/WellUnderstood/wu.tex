@@ -1,49 +1,62 @@
-\documentclass[10pt,twoside,onecolumn,openany,letterpaper]{memoir}
-\usepackage[paperwidth=8.50in, paperheight=11in]{geometry}
+\documentclass[sigconf,review]{acmart}
+
+% \usepackage[paperwidth=8.50in, paperheight=11in]{geometry} %% option clash
 \usepackage[T1]{fontenc}
 %\usepackage[latin1]{inputenc}
-\usepackage[english]{babel}
-%\usepackage{tgtermes}
 
-\usepackage{newpxtext}
-\usepackage{newpxmath}
-\usepackage[protrusion=true,expansion=true]{microtype}
+% \usepackage[protrusion=true,expansion=true]{microtype} %% option clash
 
 % for inline lists
 \usepackage[inline]{enumitem}
 % for nice internal links
 \usepackage{hyperref}
 
-% set the margins
-\setlrmarginsandblock{1in}{1in}{*}
-\setulmarginsandblock{1in}{*}{1}
-\checkandfixthelayout
-
 \begin{document}
 
-\title{A Sustainable Approach to Developing Software in Well-Understood Domains}
+\title{A Sustainable Approach to Developing Software in Well Understood Domains}
 
 %\orcid{0000-0001-8993-9804}
-%\affiliation{\department{Computing and Software}
-%  \institution{McMaster University}
-%  \country{Canada}
-%}
-%\email{carette@mcmaster.ca}
-\author{Jacques Carette \and Spencer Smith}
-%\email{smiths@mcmaster.ca}
 
-%\begin{abstract}
-%\end{abstract}
+\author{Jacques Carette}
+\affiliation{
+  \department{Computing and Software}
+  \institution{McMaster University}
+  \city{Hamilton}
+  \country{Canada}}
+\email{carette@mcmaster.ca}
 
-%\keywords{code generation, document generation, knowledge capture,
-%  software engineering, scientific software}
+\author{Spencer Smith}
+\affiliation{
+  \department{Computing and Software}
+  \institution{McMaster University}
+  \city{Hamilton}
+  \country{Canada}}
+\email{smiths@mcmaster.ca}
+
+\author{Jason Balaci}
+\affiliation{
+  \department{Computing and Software}
+  \institution{McMaster University}
+  \city{Hamilton}
+  \country{Canada}}
+\email{balacij@mcmaster.ca}
+
+\begin{abstract}
+  Missing abstract. % TODO: abstract
+\end{abstract}
+
+% TODO: We need to build the CCS Concepts list
+%       Generator:   http://dl.acm.org/ccs.cfm
+
+\keywords{code generation, document generation, knowledge capture,
+  software engineering, scientific software}
 
 % set up math environment
 \newtheorem{defn}{Definition}
 
 \maketitle
 
-\chapter{Introduction}
+\section{Introduction} \label{ch:introduction}
 % What if we're doing it all wrong?
 
 ``Software'' is not uniform. To use the exact same process for
@@ -75,7 +88,7 @@ credit is due. More than just ideas, there are also technologies that back
 these ideas, some of which we're already using, others which lie in our
 future, and we outline some of these as well. %add references to the section numbers?
 
-\chapter{What is ``well understood'' Software?}\label{ch:wellUnderstood}
+\section{What is ``well understood'' Software?}\label{ch:wellUnderstood}
 
 \begin{defn}
 A software domain is \emph{well understood} if
@@ -153,7 +166,7 @@ part of solving $a = \ddot{x}$ to obtain a position ($x$) as a function of time 
 And we also get choices of phrasing, which are equivalent but may be more
 adequate in context, for example.
 
-\chapter{How would you go building that?}\label{ch:process}
+\section{How would you go building that?}\label{ch:process}
 
 So what would be a reasonable process for building a piece of software
 assuming some kind of infrastructure exists for recording the kind of
@@ -231,9 +244,9 @@ Management}~\cite{KM-textbook}.
 TODO: insert graphical illustration of the funnel from information to
 softifacts.
 
-\chapter{Example}\label{ch:example}
+\section{Example}\label{ch:example}
 
-\chapter{Connected Ideas}\label{ch:ideas}
+\section{Connected Ideas}\label{ch:ideas}
 
 A multitude of ideas, old and new, have influenced us. They appear
 indirectly in our work; we use the conceptual aspects, and not the
@@ -341,7 +354,7 @@ software product lines.
 \item Grounded Theory
 \end{itemize}
 
-\chapter{Some Useful Technologies}\label{ch:techniques}
+\section{Some Useful Technologies}\label{ch:techniques}
 
 % first, some pointform notes, which will later be filled-in
 
@@ -376,6 +389,10 @@ papers. This review article from 2010 might be useful:
 \url{https://www.researchgate.net/publication/220147479_Review_of_PSE_Problem_Solving_Environment_Study}
   
 \end{itemize}
+
+%% Bibliography
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{References}
 
 \end{document}
 

@@ -136,11 +136,12 @@ understood.
 \end{enumerate}
 \end{defn}
 
-By \emph{codified}, we mean that the knowledge exists in standard form in
-a variety of textbooks. For example, many domains of knowledge in engineering
-use differential equations as models. Furthermore, the quantities of interest
-are known, given standard names and standard units. In other words, there is
-an established vocabulary and body of knowledge that is uncontroversial.
+By \emph{codified}, we mean that the knowledge exists in standard form in a
+variety of textbooks. For example, many domains of knowledge in engineering use
+standard differential equations as models. Furthermore, the quantities of
+interest are known, given standard names and standard units. In other words,
+standard vocabulary has been established over time and the body of knowledge is
+uncontroversial.
 
 We can further refine these high level ideas as follows, where we use
 the same numbering as above to indicate which part of the definition is
@@ -150,40 +151,39 @@ understood more holistically.
 \item Models in the DK \emph{can be} written formally.
 \item Models in the DK \emph{can be} turned into functional relations by
  existing mathematical steps.
-\item Turning these functional relations into code is also an understood
+\item Turning these functional relations into code is an understood
  transformation.
 \end{enumerate}
-Perhaps the most important aspect of this refinement is that the last two
-parts deeply involve \emph{choices}: What quantities are considered inputs,
-outputs and parameters to make the model functional? There are also a host
-of choices, including which programming language, but also software
-architecture, data-structures, algorithms, etc, which are also part of
-creating the code.
+Perhaps the most important aspect of this refinement is that the last two parts
+deeply involve \emph{choices}: What quantities are considered inputs, outputs
+and parameters to make the model functional? What programming language?  What
+software architecture data-structures, algorithms, etc.?
 
-It is important to understand that \emph{well understood} does not imply
-\emph{choice free}.  Writing a small script to move some files around can
-be easily written as a Shell script, or in Python or in Haskell, depending on
-the author's style. In all cases, assuming the author chooses a language
-in which they are fluent, the job will be entirely straightforward.
+\emph{Well understood} does not imply \emph{choice free}.  For instance,
+different authors would make different choices when writing a small script to
+move files.  Depending on the author's style, this can be easily written as a
+Shell script, or in Python or in Haskell. In all cases, assuming the author
+chooses a language in which they are fluent, the job will be entirely
+straightforward because the domain is well understood.
 
-Lest our reader gets misled into thinking that code is the only artifact
-that matters, we should explicitly refine our definition in a different
-direction, equally important.
+Code is \emph{not} the only artifact that matters.  Our definition for well
+understood also applies, equally importantly, to documentation for humans, as
+follows:
 \begin{enumerate}
 \item The meaning of the models is understood at a human-pedagogical
 level, i.e. it is explainable.
-\item Combining models is also explainable. Thus the \emph{transformers}
-  we mentioned before %this is actually the first time transformers are mentioned
+\item Combining models is also explainable. Thus \emph{transformers}
+  %we mentioned before %this is actually the first time transformers are mentioned
   simultaneously operate on mathematical representations
 and on explanations. This requires that English descriptions also be
 captured in the same manner as the formal-mathematical knowledge.
-\item Similarly, the \emph{transformers} the arise from making software
-oriented decisions requires that they be captured with a similar mechanism,
-including English explanations as well.
+\item Similarly, the \emph{transformers} that arise from making software
+oriented decisions should be captured with a similar mechanism, and also include
+English explanations.
 \end{enumerate}
 
-We dub these \emph{triform theories}, as a nod to \emph{biform theories}%
-\cite{Farmer}. The idea is that we couple 
+We dub these \emph{triform theories}, as a nod to \emph{biform
+theories}~\cite{Farmer2007}. The idea is that we couple 
 \begin{enumerate*}
 \item an axiomatic description,
 \item a computational description, and
@@ -191,16 +191,15 @@ We dub these \emph{triform theories}, as a nod to \emph{biform theories}%
 \end{enumerate*}
 of a concept.
 
-It is important to notice that there are various kinds of choices
-embedded in the different kinds of knowledge. They can show up simply as
-\emph{parameters}, for example the gravity constant associated to a planet.
-This also shows up as different transformers, for example turning
-$F - m\cdot a = 0$ into $F\left(m, a\right) = m\cdot a$, i.e. from a 
-conservation law into a computation. Note that, for motion computation, that
-same conservation law is often rewritten as $a\left(m,F\right) = F/m$ as
-part of solving $a = \ddot{x}$ to obtain a position ($x$) as a function of time ($t$).
-And we also get choices of phrasing, which are equivalent but may be more
-adequate in context, for example.
+Different kinds of choices are embedded in the different kinds of knowledge.
+They can show up simply as \emph{parameters}, for example the acceleration due
+to gravity constant associated with a planet. They can also shows up as
+different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
+a\right) = m\cdot a$, i.e. from a conservation law into a computation. Note
+that, for motion computation, that same conservation law is often rewritten as
+$a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
+($x$) as a function of time ($t$). We also get choices of phrasing, which are
+equivalent but may be more adequate in a given context.
 
 \section{How would you go building that?}\label{ch:process}
 

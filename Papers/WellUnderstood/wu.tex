@@ -69,7 +69,7 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 \email{balacij@mcmaster.ca}
 
 \begin{abstract}
-  Current software development methods are too general to be well suited to
+  Current software development methods are too general to be ideally suited to
   sustainable development of software in well understood domains.  A software
   domain is considered well understood if the domain knowledge can be codified,
   the computational interpretation of the domain knowledge is clear and the
@@ -201,14 +201,19 @@ $a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
 ($x$) as a function of time ($t$). We also get choices of phrasing, which are
 equivalent but may be more adequate in a given context.
 
-\section{How would you go building that?}\label{ch:process}
+\section{Ideal Process}\label{ch:process}
 
-So what would be a reasonable process for building a piece of software
-assuming some kind of infrastructure exists for recording the kind of
-knowledge outlined in~\autoref{ch:wellUnderstood}? Let us outline a
-chronological ``story'' of such an idealized process.  It is important to
-note that we're \textbf{not} outlining the process to follow, but rather
-the \emph{idealized process} (influenced by Parnas' \cite{Parnas1986}).
+When a domain is well understood, codifying the domain knowledge is an option.
+However, codification requires significant effort; this effort is only
+worthwhile when the goal is long-lived software.  Moreover, the process that is
+followed needs to explicitly take advantage of the well understood domain
+knowledge.  So what would be a reasonable process for building a piece of
+software, assuming some kind of infrastructure exists for recording the kind of
+knowledge outlined in~\autoref{ch:wellUnderstood}?  Below we outline a
+chronological ``story'' of such an idealized process.  We are \textbf{not}
+outlining the actual process to follow, but rather the \emph{idealized process}
+(influenced by Parnas's paper on faking a rational design process
+\cite{Parnas1986}).
 
 \begin{enumerate}
 \item\label{it:problem} Have a problem to solve, or task to achieve, which
@@ -226,7 +231,7 @@ is \emph{well understood}, as defined in~\autoref{ch:wellUnderstood}.
   \item Identify the naturally occurring known quantities associated to the
     problem domain, as well as some desired quantities. For example,
     some problems naturally involve lengths lying in particular
-    ranges, while others will involve ingredient concentrations, again
+    ranges, while others will involve reagent concentrations, again
     in particular ranges.
   \end{enumerate}
 \item\label{it:refine} Describe, by successive transformations, how the natural
@@ -251,21 +256,21 @@ input-output process.
 \ref{it:refine} can be turned into code. Note that the same kinds of choice
 can occur here.
 \item\label{it:recipe} Turn the steps (i.e.\ from items~\ref{it:refine} and
-\ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together
-all the information into a variety of artifacts (softifacts). These can
-be read, or execute, or \ldots\ as appropriate.
+\ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together all the
+information into a variety of artifacts (documentation, code, build scripts,
+test cases, etc). These can be read, or executed, or \ldots\, as appropriate.
 \end{enumerate}
 
-While this last step might appear somewhat magical, it isn't. The whole
-point of defining \emph{well understood} is to enable that last step. A
-suitable knowledge encoding is needed to enable it, but this step is a
-reflection of what humans currently themselves do when assembling these very
-same softifacts. We are merely being explicit about how to go about
-mechanizing these steps.
+While this last step might appear somewhat magical, it isn't. The whole point of
+defining \emph{well understood} is to enable that last step. A suitable
+knowledge encoding is needed to enable it, but this step is a reflection of what
+humans currently themselves do when assembling their software and associated
+artifacts. We are merely being explicit about how to go about mechanizing these
+steps.
 
 What is missing is an explicit \emph{information architecture} of each of
-the necessary softifacts. In other words, what information is necessary to
-enable the mechanized generation of each softifact? It turns out that many
+the necessary artifact. In other words, what information is necessary to
+enable the mechanized generation of each artifact? It turns out that many
 of them are quite straightforward.
 
 It is worthwhile to note that way too many research projects skip
@@ -276,8 +281,12 @@ whole process that this knowledge go from tacit to explicit. This is also one
 of the fundamental recognitions of \emph{Knowledge
 Management}~\cite{KM-textbook}.
 
-TODO: insert graphical illustration of the funnel from information to
-softifacts.
+% TODO: insert graphical illustration of the funnel from information to
+% softifacts.
+
+\section{Example}\label{ch:example}
+
+Implementation found in Drasil~\cite{}.
 
 \begin{figure*}[h]
   \centering
@@ -286,151 +295,9 @@ softifacts.
   \Description{TODO: description}
 \end{figure*}
 
-\section{Example}\label{ch:example}
+\section{Concluding Remarks} \label{ch:concluding_remarks}
 
-\section{Connected Ideas}\label{ch:ideas}
-
-A multitude of ideas, old and new, have influenced us. They appear
-indirectly in our work; we use the conceptual aspects, and not the
-associated technologies (when they exist). The technologies we do use
-are in Section~\ref{ch:techniques}.
-
-We do not always use the original conceptualization of the work, but
-a modern re-interpretation, incorporation various ``lessons learned''
-through years of use. To keep things short, we outline our take-away, and refer
-the reader to the original literature for the initial view of the ideas.
-
-\section{Re-organizing artifacts}
-
-The most important idea that got all of this started is
-\emph{literate programming}\cite{Knuth1984}. A key observation here
-is that computer code really has two audiences: the computer, proxied
-via a compiler or interpreter, and human readers. Traditionally, code
-is arranged for the convenience of the compiler\footnote{we use ``compiler''
-even though this applies equally well to interpreters}. Many languages
-are quite inflexible with respect to how code must be arranged to be
-acceptable. This directly clashes with the desire to inform the
-human reader of the code as to the \emph{underlying story} that forms the
-backbone of why the code is written the way it is.
-
-Thus the fundamental ideas of literate programming are:
-\begin{enumerate}
-\item The idea of not writing the eventual artifacts directly,
-\item Of being able to ``chunk up'' pieces of code in arbitrary
-ways,
-\item Of writing a program to explicitly weave together the chunks
-into a final program.
-\end{enumerate}
-In the end, two artifacts are generated: a human-readable ``story'' that
-is nicely typeset, that follows a logical flow amenable to human understanding,
-and a piece of code.
-
-Not all literate programming tools actually support all these features.
-For example \emph{literate Haskell} only keeps the feature of nice typesetting,
-completely dropping the $3$ main ideas above!
-
-The next source of idea is \emph{org-mode}\cite{org-mode}. A shallow view
-is that org-mode is an Emacs major mode for plain text markup%
-\footnote{taken literally from \url{https://orgmode.org}.}
-\emph{and much more}.  It is that ``and much more'' which is of interest
-here. Amongst other features, Org-mode lets you write documents that mixes many
-different languages together. It also allows you to run certain code blocks
-and insert their results into the document itself. And, like literate
-programming, it also allows the export of both nice documents
-(via \LaTeX) and code (via a tangling process). The paper
-\textit{A Computing Environment for Literate Programming and
-Reproducible Research}\cite{SchulteEtAl2012} further describes the features
-and process. The possibilities are quite extensive.
-
-A slightly different take on similar ideas is offered by
-\emph{Jupyter notebooks} and 
-\emph{JupyterLab}\footnote{\url{https://jupyter.org}}. To quote the
-developers' own descriptions:
-
-\begin{quote}
-The Jupyter Notebook is an open-source web application that allows you to
-create and share documents that contain live code, equations, visualizations
-and narrative text. Uses include: data cleaning and transformation, numerical
-simulation, statistical modeling, data visualization, machine learning, and
-much more.
-\end{quote}
-\noindent and
-\begin{quote}
-JupyterLab is a web-based interactive development environment for Jupyter
-notebooks, code, and data. JupyterLab is flexible: configure and arrange the
-user interface to support a wide range of workflows in data science, scientific
-computing, and machine learning. JupyterLab is extensible and modular: write
-plugins that add new components and integrate with existing ones.
-\end{quote}
-The principal difference is that the main interface is a web page
-which is furthermore \emph{very interactive}. It is also multi-lingual.
-The weaving and tangling features, while somewhat present, are de-emphasized
-over interactivity. The all-in-one interactive document is the most
-important element.  The feature set is very appealing, and contributes greatly
-to its success.
-
-\paragraph{Commentary:} The main weakness in all of these approaches is
-that they are all centered on a single-document idea. The information
-contained in the document itself is not re-usable. So while all three
-ideas are a definite improvement over more traditional means of doing
-development, it is still not enough. Furthermore, all three approaches
-still involve hand-writing a lot of code, even though that code is
-somewhat liberated from the strictures imposed by the languages themselves.
-
-\section{The rest}
-\begin{itemize}
-\item cognitive work analysis, ecological interface design
-\item knowledge management
-\item ontologies, domain knowledge
-\item biform theories
-\item variabilities and commonalities, program families,
-software product lines.
-\item re-use
-\item views (software architecture)
-\item software artifacts
-\item (re)certification
-\item some ities: traceability, consistency
-\item reproducible research
-\item knowledge-based SE?
-\item MDD, MDE
-\item Grounded Theory
-\end{itemize}
-
-\section{Some Useful Technologies}\label{ch:techniques}
-
-% first, some pointform notes, which will later be filled-in
-
-\begin{itemize}
-\item DSLs
-\item code generation
-\item program families
-\item grammatical framework
-\item plate, multiplate, optics
-\item Problem Solving Environments (PSEs).
-
-Another item to consider adding to the list is Problem Solving Environments
-(PSE). A PSE is "[a] system that provides all the computational facilities
-necessary to solve a target class of problems. It uses the language of the
-target class and users need not have specialized knowledge of the underlying
-hardware or software" ( Kawata et al., 2012 ). 
-(From
-\url{https://www.igi-global.com/dictionary/computer-assisted-problem-solving-environment-pse/41954}).
-This is a different way to solve the same problem we are trying to solve. They
-want the user to work with their domain knowledge, but they accomplish this (as
-far as I can tell) by providing powerful general purpose tools and a language
-to interface with these tools. They are focusing on run-time variability, while
-we can focus on build time variability. An argument could be made that general
-purpose tools are overwhelming for people. Being able to generate an
-application that is as complex as the user needs, but no more complex, sounds
-like a good thing to me. I believe they try to handle the complexity by
-often providing a graphical DSL.
-
-The idea of PSEs might be getting old. My quick search didn't find many newer
-papers. This review article from 2010 might be useful:
-
-\url{https://www.researchgate.net/publication/220147479_Review_of_PSE_Problem_Solving_Environment_Study}
-  
-\end{itemize}
+Concluding remarks.
 
 %% Bibliography
 \bibliographystyle{ACM-Reference-Format}

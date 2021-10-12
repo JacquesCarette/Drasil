@@ -67,7 +67,17 @@
 \email{balacij@mcmaster.ca}
 
 \begin{abstract}
-  Missing abstract. % TODO: abstract
+  Current software development methods are too general to be well suited to
+  sustainable development of software in well understood domains.  A software
+  domain is considered well understood if the domain knowledge can be codified,
+  the computational interpretation of the domain knowledge is clear and the
+  engineering of code to perform the computations is well understood.  When the
+  domain is well-understood developers can invest in building an infrastructure
+  that will facilitate long-lived software.  In this paper we present an
+  idealized process that codifies domain knowledge and employs generative
+  techniques to create the required software artifacts.  The methodology is
+  illustrated via an example of software used to predict the risk of breakage
+  for glass windows subjected to a nearby explosion.
 \end{abstract}
 
 
@@ -117,38 +127,6 @@
 \newtheorem{defn}{Definition}
 
 \maketitle
-
-\section{Introduction} \label{ch:introduction}
-% What if we're doing it all wrong?
-
-``Software'' is not uniform. To use the exact same process for
-developing an embedded safety-critical piece of code (like that of
-a pacemaker), the flight control software for an airplane, a one-off
-script for moving some files around, and some amusing animations on
-one's personal web site, is patently ridiculous.
-
-The same is true in say, civil engineering: you don't need architects,
-licensed engineers and a million permits to build a small shed in your
-backyard, but you do need them to build a $100$ story skyscraper.
-
-Which brings us to our central topic: there are some kinds of software
-where our current development methods \emph{are all wrong}. Our task
-is to define exactly which type of software we have in mind, and then
-derive an entirely different development methodology that is
-customized to the special characteristics of that strict subset.
-
-There are many properties of software that can be used for providing
-a classification. Here we will focus on one particular ``axis'': how
-\textbf{well understood} it is. The majority of the next section will
-be devoted to explaining exactly what this means. Once that is set up,
-we can then unravel some operational consequences: how the characteristics of
-well understood softare lead to innovative methods of building such
-software. As this might be perceived as too abstract, we give a very
-concrete example. Of course, our ideas do not exist in a vacuum: we were
-inspired by a number of connected ideas, and we then give credit where
-credit is due. More than just ideas, there are also technologies that back
-these ideas, some of which we're already using, others which lie in our
-future, and we outline some of these as well. %add references to the section numbers?
 
 \section{What is ``well understood'' Software?}\label{ch:wellUnderstood}
 

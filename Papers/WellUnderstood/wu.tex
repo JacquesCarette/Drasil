@@ -339,7 +339,119 @@ etc. The knowledge for GlassBR can also be reused in different projects.
   \label{Fig_DrasilAndChange}
 \end{figure*}
 
-[TODO : Jason - insert the code examples for the ideal process here]
+\begin{enumerate}
+  \item\label{it:ex:problem} %1
+    For example, undergraduate-level physics problems.
+  \item\label{it:ex:understood} %2
+    TODO: Textual justification of undergraduate-level physics problems being well understood
+  \item\label{it:ex:probdesc} %3
+    \begin{enumerate}
+    \item %3a
+      Types of glass:
+      \begin{verbatim}
+fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
+fullyT        = commonIdeaWithDict "fullyT"        (nounPhraseSP "fully tempered")          "FT"       [idglass]
+glassTypeFac  = commonIdeaWithDict "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"      [idglass]
+heatS         = commonIdeaWithDict "heatS"         (nounPhraseSP "heat strengthened")       "HS"       [idglass]
+iGlass        = commonIdeaWithDict "iGlass"        (nounPhraseSP "insulating glass")        "IG"       [idglass]
+lGlass        = commonIdeaWithDict "lGlass"        (nounPhraseSP "laminated glass")         "LG"       [idglass]
+      \end{verbatim}
+
+      Alternatively, a data definition for "risk of failure":
+      \begin{verbatim}
+risk :: DataDefinition
+risk = ddE riskQD
+  [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
+  dRefInfo campidelli $ Equation [14]]
+  Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
+  where riskQD = mkQuantDef riskFun riskEq
+        riskEq = (sy sflawParamK $/
+          (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
+          ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
+      \end{verbatim}
+    \item %3b
+    Using the SmithEtAl guidelines, we might want to write a goal:
+      \begin{verbatim}
+Predict-Glass-Withstands-Explosion: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+      \end{verbatim}
+      via:
+      \begin{verbatim}
+willBreakGS :: ConceptInstance
+willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
+  S "predict whether the", phrase glaSlab, S "under consideration will be able",
+  S "to withstand the", phrase explosion `S.of_` S "a certain", phrase degree_',
+  S "which is calculated based on", phrase userInput])
+  "Predict-Glass-Withstands-Explosion" goalStmtDom
+      \end{verbatim}
+    \item %3c
+      TODO: TBD
+    \item %3d
+      TODO: Needs clarification
+    \item %3e
+      TODO: Needs clarification
+    \end{enumerate}
+  \item\label{it:ex:refine} %4
+    \begin{enumerate}
+    \item %4a
+      We might want to note one of our assumptions:
+      \begin{verbatim}
+glassCondition: Following astm2009 (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: UC:Accommodate-Altered-Glass.)
+      \end{verbatim}
+      via:
+      \begin{verbatim}
+glassConditionDesc :: Sentence
+glassConditionDesc = foldlSent [S "Following", complexRef astm2009 (Page [1]) `sC` 
+  S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
+  "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
+  phrase surface `S.and_` S "edge treatments that alter the glass strength"]
+      \end{verbatim}
+    \item %4b
+      We create a closed harmonic system containing all related knowledge (in particular, the grounded theories), which is as simple as collecting them into a single system.
+      \begin{verbatim}
+iMods :: [InstanceModel]
+iMods = [pbIsSafe, lrIsSafe]
+
+si :: SystemInformation
+si = SI {
+  _sys = glassBR, _kind = Doc.srs, _authors = [nikitha, spencerSmith],
+  _purpose = purpDoc glassBR Verbose, _quants = symbolsForTable,
+  _concepts = [] :: [DefinedQuantityDict], _instModels = iMods,
+  _datadefs = GB.dataDefs, _configFiles = configFp,
+  _inputs = inputs, _outputs = outputs,
+  _defSequence = qDefns, _constraints = constrained,
+  _constants = constants, _sysinfodb = symbMap,
+  _usedinfodb = usedDB, refdb = refDB
+}
+      \end{verbatim}
+    \end{enumerate}
+  \item\label{it:ex:tocode} %5
+    We make choices about the software representations of the theories:
+    \begin{verbatim}
+code :: CodeSpec
+code = codeSpec fullSI choices allMods
+
+choices :: Choices
+choices = defaultChoices {
+  lang = [Python, Cpp, CSharp, Java, Swift], modularity = Modular Separated,
+  impType = Program, logFile = "log.txt", logging = [LogVar, LogFunc],
+  comments = [CommentFunc, CommentClass, CommentMod], doxVerbosity = Quiet,
+  dates = Hide, onSfwrConstraint = Exception, onPhysConstraint = Exception,
+  inputStructure = Bundled, constStructure = Inline, constRepr = Const,
+  auxFiles = [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME] 
+}
+    \end{verbatim}
+  \item\label{it:ex:recipe} %6
+    A final executable program which should take the knowledge discussed above, and use premade printers/generators to generate software artifacts, SRS documents, etc:
+    \begin{verbatim}
+main :: IO()
+main = do
+    setLocaleEncoding utf8
+    gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
+    genCode choices code
+    genDot fullSI
+    genLog fullSI printSetting
+    \end{verbatim}
+\end{enumerate}
 
 \section{Concluding Remarks} \label{ch:concluding_remarks}
 

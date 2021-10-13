@@ -1,6 +1,4 @@
-\documentclass[sigconf,review]{acmart}
-
-
+\documentclass[sigconf,review,anonymous=true]{acmart}
 
 %% Copyright information
 \setcopyright{acmcopyright} % TODO: copyright?
@@ -313,19 +311,19 @@ of them are quite straightforward.
 
 Often steps~\ref{it:problem} and~\ref{it:probdesc} are skipped; this is
 part of the \textbf{tacit knowledge} of a lot
-of software.  Our process requirements that this knowledge be made explicit,
+of software.  Our process requires that this knowledge be made explicit,
 a fundamental step in \emph{Knowledge Management}~\cite{KM-textbook}.
 
 % TODO: insert graphical illustration of the funnel from information to
 % softifacts.
 
-\section{Scientific Software Example}\label{ch:example}
+\section{An Example}\label{ch:example}
 
-We have build an infrastructure that shows our idealized process is possible.
-The infrastructure consists of approximately 60,000 lines of Haskell code to
-implement Domain Specific Languages (DSLs) for knowledge encoding, expressions,
-theories, code generation and document generation.  For space reasons we cannot
-provide a complete overview of our infrastructure.
+We have built the needed infrastructure. It consists of 60kloc of Haskell
+implementing a series of interaction Domain Specific Languages (DSLs) for
+knowledge encodings, mathematical expressions, theories, English fragments,
+code generation and document generation\footnote{We will provide a link
+to it if the paper is accepted.}
 %because of the double blind review process, we can't really cite Drasil here
 Instead, we will focus on an example that illustrates the ideal process,
 including how we capture information and the potential artifacts we can

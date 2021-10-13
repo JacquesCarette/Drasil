@@ -230,27 +230,35 @@ theories}~\cite{Farmer2007}. We couple
 \end{enumerate*}
 of a concept.
 
-Different kinds of choices are embedded in the different kinds of knowledge.
-They can show up simply as \emph{parameters}, for example the acceleration due
-to the gravity constant associated with a planet. They can also shows up as
-different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
-a\right) = m\cdot a$, i.e.\ from a conservation law into a computation.
-For motion computation that same conservation law is often rewritten as
-$a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
-($x$) as a function of time ($t$). We also get choices of phrasing, which are
-equivalent but may be more adequate in a given context.
 
-\section{Ideal Process}\label{ch:process}
+%\subsection{Choices}
+%
+%Different kinds of choices are embedded in the different kinds of knowledge.
+%They can show up simply as \emph{parameters}, for example the acceleration due
+%to the gravity constant associated with a planet. They can also shows up as
+%different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
+%a\right) = m\cdot a$, i.e. from a conservation law into a computation.
+%For motion computation that same conservation law is often rewritten as
+%$a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
+%($x$) as a function of time ($t$). We also get choices of phrasing, which are
+%equivalent but may be more adequate in a given context.
 
-When a domain is well understood, codifying the domain knowledge is an option.
-However, codification requires significant effort; this effort is only
-worthwhile when the goal is long-term productivity.  In this paper we adopt the
-the view (as explained in \cite{SmithAndCarette2020arXiv}) that the outputs for
-assessing productivity are knowledge and user satisfaction, where user
-satisfaction acts as a proxy for effective quality. This explicit emphasis on
-all knowledge produced, rather than just the operationalizable knowledge (code)
-implies that human-reusable knowledge, i.e.\ documentation, should also be
-greatly valued.
+\subsection{Softifacts}
+
+Software currently consists of a whole host of artifacts: requirements,
+specifications, user manual, unit tests, system tests, usability tests,
+build scripts, READMEs, license documents, process documents, as well as
+code. We use the word \emph{softifacts} for this collection.
+
+\subsection{Examples of context}
+
+When are these conditions fulfilled? One example is
+\emph{research software} in science and engineering. While the results of
+running various simulations is entirely new, the underlying models and
+how to simulate them are indeed well-known. One particularly long-lived
+example is embedded software for space probes (like Pioneer 10).
+
+\section{A New Development Process}\label{ch:process}
 
 Given appropriate infrastructure, what would be an \emph{idealized process}
 (akin to Parnas' ideas of faking a rational design process \cite{Parnas1986})
@@ -268,32 +276,24 @@ is \emph{well understood}.
   \item Assemble the ingredients into a coherent narrative,
   \item Describe the characteristics of a good solution,
   \item Come up with basic examples (to test correctness, intuitions, etc).
-  \item Identify the naturally occurring known quantities associated to the
-    problem domain, as well as some desired quantities. For example,
-    some problems naturally involve lengths lying in particular
-    ranges, while others will involve reagent concentrations, again
-    in particular ranges.
+  \item Identify the naturally occurring known quantities in the
+    problem domain, as well as their associated constraints.
   \end{enumerate}
-\item\label{it:refine} Describe, by successive transformations, how the natural
-knowledge can be turned from a set of relations (and constraints) into a
-deterministic\footnote{For the moment, we explicitly restrict our domain to
-deterministic solutions, as a meta-design choice. This can be expanded later.}
+\item\label{it:refine} Describe, by successive refinement transformations, how
+the above can be turned into a
+deterministic\footnote{A current meta-design choice.}
 input-output process.
   \begin{enumerate}
-  \item This set of relations might require \emph{specializing} the
-    theory (eg. from $n$-dimensional to $2$-dimensional, assuming no
-    friction, etc).  These \emph{choices} need to be documented, and are
-    a crucial aspect of the solution process. The \emph{rationale} for the
-    choices should also be documented. Lastly, whether these choices are
-    likely or unlikely to change in the future should be recorded.
-  \item This set of choices is likely dependent, and thus somewhat ordered.
-  In other words, some \emph{decisions} will enable other choices to be
-  made that would otherwise be unavailable. Eg: some data involved in the
-  solution process is orderable, so that sorting is now a possibility that
-  may be useful.
+  \item Some refinements will involve \emph{specialization}
+    (eg. from $n$-dimensional to $2$-dimensional, assuming no
+    friction, etc).  These \emph{choices} and their \emph{rationale} need to be
+    documented, as a a crucial part of the solution.  Whether these choices
+    are (un)likely to change in the future should be recorded.
+  \item Choices tend to be dependent, and thus (partially) ordered.
+   \emph{Decisions} frequently enable or reveal downstream choices.
   \end{enumerate}
-\item\label{it:tocode} Describe how the computation process from step
-\ref{it:refine} can be turned into code. Note that the same kinds of choice
+\item\label{it:tocode} Describe how the process from step
+\ref{it:refine} can be turned into code. The same kinds of choice
 can occur here.
 \item\label{it:recipe} Turn the steps (i.e.\ from items~\ref{it:refine} and
 \ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together all the
@@ -302,23 +302,19 @@ test cases, etc). These can be read, or executed, or \ldots\, as appropriate.
 \end{enumerate}
 
 While this last step might appear somewhat magical, it isn't. The whole point of
-defining \emph{well understood} is to enable that last step. A suitable
-knowledge encoding is needed to enable it, but this step is a reflection of what
-humans currently themselves do when assembling their software and associated
-artifacts. We are merely being explicit about how to go about mechanizing these
-steps.
+defining \emph{well understood} is to enable it! A \emph{suitable}
+knowledge encoding is key to enable it. This is usually tacit knowledge that
+entirely resides in developers' heads.
 
 What is missing is an explicit \emph{information architecture} of each of
 the necessary artifact. In other words, what information is necessary to
 enable the mechanized generation of each artifact? It turns out that many
 of them are quite straightforward.
 
-Unfortunately many research projects skip step~\ref{it:problem}
-and~\ref{it:probdesc}: in other words, they never really write down what problem
-they're trying to solve. This is part of the \textbf{tacit knowledge} of a lot
-of research software.  It is crucial to our whole process that this knowledge go
-from tacit to explicit. This is also one of the fundamental recognitions of
-\emph{Knowledge Management}~\cite{KM-textbook}.
+Often steps~\ref{it:problem} and~\ref{it:probdesc} are skipped; this is
+part of the \textbf{tacit knowledge} of a lot
+of software.  Our process requirements that this knowledge be made explicit,
+a fundamental step in \emph{Knowledge Management}~\cite{KM-textbook}.
 
 % TODO: insert graphical illustration of the funnel from information to
 % softifacts.

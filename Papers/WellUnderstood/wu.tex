@@ -19,6 +19,7 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 \usepackage[T1]{fontenc}
 %\usepackage[latin1]{inputenc}
 
+
 % \usepackage[protrusion=true,expansion=true]{microtype} %% option clash
 
 % for inline lists
@@ -27,6 +28,11 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 \usepackage{hyperref}
 
 \usepackage{listings}
+
+
+\makeatletter
+\newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
+\makeatother
 
 \begin{document}
 
@@ -197,7 +203,8 @@ captured.
 We adapt the standard definition of productivity, where inputs are labour,
 but adjust the outputs to be knowledge and user satisfaction, where user
 satisfaction acts as a proxy for effective quality
-(see~\cite{SmithAndCarette2020arXiv} for more).
+%(see~\cite{SmithAndCarette2020arXiv} for more)
+.
 This explicit emphasis on all knowledge produced, rather than just the
 operationalizable knowledge (aka code)
 implies that human-reusable knowledge, i.e.\ documentation, should also be
@@ -247,6 +254,12 @@ Software currently consists of a whole host of artifacts: requirements,
 specifications, user manual, unit tests, system tests, usability tests,
 build scripts, READMEs, license documents, process documents, as well as
 code. We use the word \emph{softifacts} for this collection.
+
+Whenever appropriate, we use standards and templates for each of the
+generated artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
+%~\cite{SmithAndLai2005,
+of IEEE XXXX~\cite{IEEESpec}
+and the Volere template~\cite{Volere}.
 
 \subsection{Examples of context}
 
@@ -378,11 +391,11 @@ corresponding to steps of the process.
 
 \begin{lstlisting}
 fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
-fullyT = ci' "fullyT" (np' "fully tempered") "FT" [idglass]
+fullyT  = ci' "fullyT" (np' "fully tempered") "FT" [idglass]
 glassTF = ci' "glassTypeFac" (np' "glass type factor") "GTF" [idglass]
-heatS = ci' "heatS" (np' "heat strengthened") "HS"[idglass]
-iGlass = ci' "iGlass" (np' "insulating glass") "IG"[idglass]
-lGlass = ci' "lGlass" (np' "laminated glass") "LG" [idglass]
+heatS   = ci' "heatS" (np' "heat strengthened") "HS"[idglass]
+iGlass  = ci' "iGlass" (np' "insulating glass") "IG"[idglass]
+lGlass  = ci' "lGlass" (np' "laminated glass") "LG" [idglass]
 
 risk :: DataDefinition
 risk = ddE riskQD
@@ -392,73 +405,86 @@ risk = ddE riskQD
  where 
   riskQD = mkQuantDef riskFun riskEq
   riskEq = (sy sflawParamK $/ (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) 
-    `mulRe`
-        ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
+   `mulRe`
+   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
 \end{lstlisting}
 
 \subsection*{Step 3b: Coherent Narrative}
 
-As per the requirements template for scientific software~\cite{SmithAndLai2005,
-SmithEtAl2007}, we have a goal: ``\textbf{Predict-Glass-Withstands-Explosion}: Analyze and predict whether the glass slab
+The goal of GlassBR is:
+``\textbf{Predict-Glass-Withstands-Explosion}: Analyze and predict whether the glass slab
 under consideration will be able to withstand the explosion of a certain degree
-which is calculated based on user input.'' The goal statement is generated via:
+which is calculated based on user input.'', encoded as:
 
 \begin{lstlisting}
 willBreakGS :: ConceptInstance
 willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
-S "predict whether the", phrase glaSlab, S "under consideration will be able",
-S "to withstand the", phrase explosion `S.of_` S "a certain", phrase degree_',
-S "which is calculated based on", phrase userInput])
-"Predict-Glass-Withstands-Explosion" goalStmtDom
+ S "predict whether the", phrase glaSlab, 
+ S "under consideration will be able to withstand the", 
+ phrase explosion `S.of_` S "a certain", phrase degree_',
+ S "which is calculated based on", phrase userInput])
+ "Predict-Glass-Withstands-Explosion" goalStmtDom
 \end{lstlisting}
+
+The admitedly awkward embedding of English used here allows us to do all sorts of
+static analysis on the documents themselves. This part of the system is certainly
+extremely experimental.
 
 \subsection*{Step 3c: Characteristics of a Good Solution}
 
-We can use the example here that the probability that is calculated has to be
-between 0 and 1.
+One of our outputs is a probability, which can be checked to be between $0$ and $1$
+(not shown).
 
 \subsection*{Step 4a: Specialization of Theories}
 
-Theories are specialized via assumptions, like this one: ``\textbf{glassCondition}:
-Following astm2009 (pg. 1), this practice does not apply to any form of wired,
-patterned, etched, sandblasted, drilled, notched, or grooved glass with surface
-and edge treatments that alter the glass strength. (RefBy:
-UC:Accommodate-Altered-Glass.)''  This assumptions is generated via:
-
+We use assumptions to justify specializing theories, such as:
+\verbatimfont{\small}
+\begin{verbatim}
+Following [35] (pg. 1), this practice does not apply to any form 
+of wired, patterned, etched, sandblasted, drilled, notched, or 
+grooved glass with surface and edge treatments that alter the 
+glass strength.
+\end{verbatim}
+\noindent via
 \begin{lstlisting}
 glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", complexRef astm2009 (Page [1]) `sC` 
-  S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
-  "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
-  phrase surface `S.and_` S "edge treatments that alter the glass strength"]
+glassConditionDesc = foldlSent [S "Following", 
+ complexRef astm2009 (Page [1]) `sC` 
+ S "this", phrase practice, S "does not apply to any form of", 
+ foldlList Comma Options (map S 
+   ["wired", "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], 
+ S "with", phrase surface `S.and_` S "edge treatments that alter the glass strength"])
 \end{lstlisting}
 
-\subsection*{Step 4b: ?}
+%% Commenting this out, as it didn't really represent 4b
+%
+%\subsection*{Step 4b: Choices}
+%
+%We create a closed harmonic system containing all related knowledge (in
+%particular, the grounded theories), which is as simple as collecting them into a
+%single system.
+%
+%\begin{lstlisting}
+%iMods :: [InstanceModel]
+%iMods = [pbIsSafe, lrIsSafe]
+%
+%si :: SystemInformation
+%si = SI {
+%_sys = glassBR, _kind = Doc.srs, _authors = [nikitha],
+%_purpose = purpDoc glassBR Verbose, _quants = symbolsForTable,
+%_concepts = [] :: [DefinedQuantityDict], _instModels = iMods,
+%_datadefs = GB.dataDefs, _configFiles = configFp,
+%_inputs = inputs, _outputs = outputs,
+%_defSequence = qDefns, _constraints = constrained,
+%_constants = constants, _sysinfodb = symbMap,
+%_usedinfodb = usedDB, refdb = refDB
+%}
+%\end{lstlisting}
 
-We create a closed harmonic system containing all related knowledge (in
-particular, the grounded theories), which is as simple as collecting them into a
-single system.
+\subsection*{Step 5 : Code-level Choices}
 
-\begin{lstlisting}
-iMods :: [InstanceModel]
-iMods = [pbIsSafe, lrIsSafe]
-
-si :: SystemInformation
-si = SI {
-_sys = glassBR, _kind = Doc.srs, _authors = [nikitha, spencerSmith],
-_purpose = purpDoc glassBR Verbose, _quants = symbolsForTable,
-_concepts = [] :: [DefinedQuantityDict], _instModels = iMods,
-_datadefs = GB.dataDefs, _configFiles = configFp,
-_inputs = inputs, _outputs = outputs,
-_defSequence = qDefns, _constraints = constrained,
-_constants = constants, _sysinfodb = symbMap,
-_usedinfodb = usedDB, refdb = refDB
-}
-\end{lstlisting}
-
-\subsection*{Step 5}
-
-We make choices about the software representations of the theories:
+We can choose languages, how ``modular'' the generated code is, whether we
+want programs or libraries, the level of logging and comments, etc.
 
 \begin{lstlisting}
 code :: CodeSpec
@@ -466,29 +492,33 @@ code = codeSpec fullSI choices allMods
 
 choices :: Choices
 choices = defaultChoices {
-  lang = [Python, Cpp, CSharp, Java, Swift], modularity = Modular Separated,
-  impType = Program, logFile = "log.txt", logging = [LogVar, LogFunc],
-  comments = [CommentFunc, CommentClass, CommentMod], doxVerbosity = Quiet,
-  dates = Hide, onSfwrConstraint = Exception, onPhysConstraint = Exception,
-  inputStructure = Bundled, constStructure = Inline, constRepr = Const,
-  auxFiles = [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME] 
+ lang = [Python, Cpp, CSharp, Java, Swift], 
+ modularity = Modular Separated,
+ impType = Program, logFile = "log.txt", 
+ logging = [LogVar, LogFunc],
+ comments = [CommentFunc, CommentClass, CommentMod], 
+ doxVerbosity = Quiet,
+ dates = Hide, 
+ onSfwrConstraint = Exception, onPhysConstraint = Exception,
+ inputStructure = Bundled, 
+ constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
 
 \subsection*{Step 6}
 
-A final executable program which should take the knowledge discussed above, and
-use pre-made printers/generators to generate software artifacts, SRS documents,
-etc:
+We can the generate multiple artifacts (here: specification in HTML and \LaTeX,
+code in multiple languages with choices, dependency diagram and log of all
+choices used) as desired:
 
 \begin{lstlisting}
 main :: IO()
 main = do
-    setLocaleEncoding utf8
-    gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
-    genCode choices code
-    genDot fullSI
-    genLog fullSI printSetting
+  setLocaleEncoding utf8
+  gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
+  genCode choices code
+  genDot fullSI
+  genLog fullSI printSetting
 \end{lstlisting}
 
 \section{Concluding Remarks} \label{ch:concluding_remarks}

@@ -333,9 +333,9 @@ a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 \section{An Example}\label{ch:example}
 
 We have built the needed infrastructure. It consists of 60KLoc of Haskell
-implementing a series of interaction Domain Specific Languages (DSLs) for
+implementing a series of interacting Domain Specific Languages (DSLs) for
 knowledge encodings, mathematical expressions, theories, English fragments,
-code generation and document generation\footnote{We will provide a link
+code generation and document generation.\footnote{We will provide a link
 if the paper is accepted.} A full description would take too much space.
 %because of the double blind review process, we can't really cite Drasil here
 Instead, we provide an illustrative example.
@@ -349,12 +349,12 @@ are based on an American Standard Test Method (ASTM) standard
 The transformation of captured knowledge is illustrated in
 Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper
 right box. Each piece of information in this figure has its own
-shape and colour (orange-cloud, pink lozenge, etc). It should be immediate
+shape and colour (orange-cloud, pink lozenge, etc). It should be immediately clear
 that all pieces of information reappear in multiple places in the generated
 artifacts. For example, the name of the software (GlassBR) ends up
 appearing more than 80 times in the generated softifacts (in the folder
 structure, requirements, README, Makefile and source code). Changing this
-name would traditionally be extremely difficult; we can achiece this by
+name would traditionally be extremely difficult; we can achieve this by
 modifying a single place, and regenerating.
 
 The first box shows the directory structure of the currently generated
@@ -366,8 +366,7 @@ requirements.
 
 The name GlassBR is probably the simplest example of what we mean by
 \emph{knowledge}: here, the concept ``program name'' is internally defined, and
-its \emph{value} is used throughout. A more complex example is that
-of the assumption that the ``Load Distribution Factor'' (LDF) is constant
+its \emph{value} is used throughout. A more complex example is the assumption that the ``Load Distribution Factor'' (LDF) is constant
 (pink lozenge). If this changes to be an input, the generated software
 will have LDF as an input variable.  We also capture design decisions,
 such as whether to log all calculations, whether to in-line constants rather
@@ -426,7 +425,7 @@ willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
  "Predict-Glass-Withstands-Explosion" goalStmtDom
 \end{lstlisting}
 
-The admitedly awkward embedding of English used here allows us to do all sorts of
+The admittedly awkward embedding of English used here allows us to do all sorts of
 static analysis on the documents themselves. This part of the system is certainly
 extremely experimental.
 
@@ -507,7 +506,7 @@ choices = defaultChoices {
 
 \subsection*{Step 6}
 
-We can the generate multiple artifacts (here: specification in HTML and \LaTeX,
+We can now generate multiple artifacts (here: specification in HTML and \LaTeX,
 code in multiple languages with choices, dependency diagram and log of all
 choices used) as desired:
 

@@ -28,7 +28,13 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 % for nice internal links
 \usepackage{hyperref}
 
+\usepackage{listings}
+
 \begin{document}
+
+\lstset{language=haskell, basicstyle=\ttfamily, breaklines=true,
+  showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
+  escapeinside={\%*}{*)}}
 
 \title{Improving Long-term Software Development Productivity in Well Understood Domains}
 
@@ -314,18 +320,20 @@ for the software are based on an American Standard Test Method (ASTM) standard
 Figure~\ref{Fig_DrasilAndChange} shows, for the GlassBR example, the
 transformation of captured knowledge (as shown in the darker bordered box at the
 top right). The generated artifacts come from the weaving together of
-information, as outlined in Step~\ref{it:recipe} of the ideal process.  An example of this weaving can be seen in the name of the software.  In the generated artifacts the name
-GlassBR appears more than 80 times –- in the folder structure, in the
-requirements specification, in the README file, in the Makefile, and in the
-source code. In a conventional software project changing the name across all
-artifacts is surprisingly difficult –- difficult enough that the change may not be
-made. With our approach a change like this is made by one modification to the
-source knowledge and regeneration. By capturing domain knowledge, we facilitates
-more than just renaming. For instance, if the assumption of a constant Load
-Distribution Factor (LDF) changes, the regenerated software will have LDF as an
-input variable. We also capture design decisions, like whether to log all
-calculations, whether to in-line constants rather than show them symbolically,
-etc. The knowledge for GlassBR can also be reused in different projects.
+information, as outlined in Step~\ref{it:recipe} of the ideal process.  An
+example of this weaving can be seen in the name of the software.  In the
+generated artifacts the name GlassBR appears more than 80 times –- in the folder
+structure, in the requirements specification, in the README file, in the
+Makefile, and in the source code. In a conventional software project changing
+the name across all artifacts is surprisingly difficult –- difficult enough that
+the change may not be made. With our approach a change like this is made by one
+modification to the source knowledge and regeneration. By capturing domain
+knowledge, we facilitates more than just renaming. For instance, if the
+assumption of a constant Load Distribution Factor (LDF) changes, the regenerated
+software will have LDF as an input variable. We also capture design decisions,
+like whether to log all calculations, whether to in-line constants rather than
+show them symbolically, etc. The knowledge for GlassBR can also be reused in
+different projects.
 
 \begin{figure*}[h]
   \centering
@@ -339,6 +347,29 @@ etc. The knowledge for GlassBR can also be reused in different projects.
   \label{Fig_DrasilAndChange}
 \end{figure*}
 
+\subsection{Describe the Problem}
+
+\begin{lstlisting}
+  fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
+  fullyT = commonIdeaWithDict "fullyT" (nounPhraseSP "fully tempered") "FT" [idglass]
+  glassTypeFac = commonIdeaWithDict "glassTypeFac" (nounPhraseSP "glass type factor") "GTF" [idglass]
+  heatS = commonIdeaWithDict "heatS" (nounPhraseSP "heat strengthened") "HS"[idglass]
+  iGlass = commonIdeaWithDict "iGlass" (nounPhraseSP "insulating glass") "IG"[idglass]
+  lGlass = commonIdeaWithDict "lGlass" (nounPhraseSP "laminated glass") "LG" [idglass]
+\end{lstlisting}
+
+\begin{lstlisting}
+  risk :: DataDefinition
+  risk = ddE riskQD
+    [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
+    dRefInfo campidelli $ Equation [14]]
+    Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
+    where riskQD = mkQuantDef riskFun riskEq
+          riskEq = (sy sflawParamK $/
+            (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
+            ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
+\end{lstlisting}
+  
 \begin{enumerate}
   \item\label{it:ex:problem} %1
     For example, undergraduate-level physics problems.

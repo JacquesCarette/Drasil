@@ -30,7 +30,7 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 
 \begin{document}
 
-\title{A Sustainable Approach to Developing Software in Well Understood Domains}
+\title{Improving Long-term Software Development Productivity in Well Understood Domains}
 
 \author{Jacques Carette}
 \orcid{0000-0001-8993-9804}
@@ -69,17 +69,23 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 \email{balacij@mcmaster.ca}
 
 \begin{abstract}
-  Current software development methods are too general to be ideally suited to
-  sustainable development of software in well understood domains.  A software
-  domain is considered well understood if the domain knowledge can be codified,
-  the computational interpretation of the domain knowledge is clear and the
-  engineering of code to perform the computations is well understood.  When the
-  domain is well-understood developers can invest in building an infrastructure
-  that will facilitate long-lived software.  In this paper we present an
-  idealized process that codifies domain knowledge and employs generative
-  techniques to create the required software artifacts.  The methodology is
+  Current software development methods are often too short-sighted and too
+  code-centric to be ideally suited to productive long-term development of
+  software in well understood domains.  Well understood domains, like scientific
+  and mathematical domains, provide an opportunity for capturing knowledge,
+  which can then be used to generate multiple views of this knowledge in
+  software artifacts (documentation, code, test cases, build scripts, etc.)
+  within and between projects.  %A software
+  % domain is considered well understood if the domain knowledge can be codified,
+  % the computational interpretation of the domain knowledge is clear and the
+  % engineering of code to perform the computations is well understood.  
+  We present an idealized process that codifies domain knowledge and employs
+  generative techniques to create the required software artifacts.  To be
+  successful, the process requires tool support, which we developed as a set of
+  Domain Specific Languages implemented in Haskell.  The process, along with
+  opportunities for knowledge reuse, traceability and change management, is
   illustrated via an example of software used to predict the risk of breakage
-  for glass windows subjected to a nearby explosion.
+  for glass windows subjected to an explosive blast.
 \end{abstract}
 
 
@@ -214,6 +220,14 @@ chronological ``story'' of such an idealized process.  We are \textbf{not}
 outlining the actual process to follow, but rather the \emph{idealized process}
 (influenced by Parnas's paper on faking a rational design process
 \cite{Parnas1986}).
+
+We have presented a conceptual definition that emphasizes that productivity
+for knowledge based work, like research software, only makes sense when
+considered over the long term. If our goal is sustainable software, then we
+need a definition of productivity that will drive developers to value long-term
+considerations. In particular, this means explicitly considering knowledge
+as an output. One practical consequence would be an increased emphasis
+on internal documentation meant to capture crucial internal knowledge. 
 
 \begin{enumerate}
 \item\label{it:problem} Have a problem to solve, or task to achieve, which

@@ -19,6 +19,7 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 \usepackage[T1]{fontenc}
 %\usepackage[latin1]{inputenc}
 
+
 % \usepackage[protrusion=true,expansion=true]{microtype} %% option clash
 
 % for inline lists
@@ -28,9 +29,14 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 
 \usepackage{listings}
 
+
+\makeatletter
+\newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
+\makeatother
+
 \begin{document}
 
-\lstset{language=haskell, basicstyle=\tiny, breaklines=true,
+\lstset{language=haskell, basicstyle=\scriptsize, breaklines=true,
   showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
   escapeinside={\%*}{*)}}
 
@@ -197,7 +203,8 @@ captured.
 We adapt the standard definition of productivity, where inputs are labour,
 but adjust the outputs to be knowledge and user satisfaction, where user
 satisfaction acts as a proxy for effective quality
-(see~\cite{SmithAndCarette2020arXiv} for more).
+%(see~\cite{SmithAndCarette2020arXiv} for more)
+.
 This explicit emphasis on all knowledge produced, rather than just the
 operationalizable knowledge (aka code)
 implies that human-reusable knowledge, i.e.\ documentation, should also be
@@ -248,6 +255,12 @@ specifications, user manual, unit tests, system tests, usability tests,
 build scripts, READMEs, license documents, process documents, as well as
 code. We use the word \emph{softifacts} for this collection.
 
+Whenever appropriate, we use standards and templates for each of the
+generated artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
+%~\cite{SmithAndLai2005,
+of IEEE XXXX~\cite{IEEESpec}
+and the Volere template~\cite{Volere}.
+
 \subsection{Examples of context}
 
 When are these conditions fulfilled? One example is
@@ -271,11 +284,11 @@ is \emph{well understood}.
   \begin{enumerate}
   \item Find the base knowledge (theory) in the pre-existing library
     or, failing that, write it if it does not yet exist,
+    for instance the naturally occurring known quantities and
+    associated constraints.
   \item Assemble the ingredients into a coherent narrative,
   \item Describe the characteristics of a good solution,
   \item Come up with basic examples (to test correctness, intuitions, etc).
-  \item Identify the naturally occurring known quantities in the
-    problem domain, as well as their associated constraints.
   \end{enumerate}
 \item\label{it:refine} Describe, by successive refinement transformations, how
 the above can be turned into a
@@ -312,7 +325,7 @@ of them are quite straightforward.
 Often steps~\ref{it:problem} and~\ref{it:probdesc} are skipped; this is
 part of the \textbf{tacit knowledge} of a lot
 of software.  Our process requires that this knowledge be made explicit,
-a fundamental step in \emph{Knowledge Management}~\cite{KM-textbook}.
+a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 
 % TODO: insert graphical illustration of the funnel from information to
 % softifacts.
@@ -320,130 +333,157 @@ a fundamental step in \emph{Knowledge Management}~\cite{KM-textbook}.
 \section{An Example}\label{ch:example}
 
 We have built the needed infrastructure. It consists of 60KLoc of Haskell
-implementing a series of interaction Domain Specific Languages (DSLs) for
+implementing a series of interacting Domain Specific Languages (DSLs) for
 knowledge encodings, mathematical expressions, theories, English fragments,
-code generation and document generation\footnote{We will provide a link
-if the paper is accepted.}
+code generation and document generation.\footnote{We will provide a link
+if the paper is accepted.} A full description would take too much space.
 %because of the double blind review process, we can't really cite Drasil here
-Instead, we will focus on an example that illustrates the ideal process,
-including how we capture information and the potential artifacts we can
-generate.  To make the examples grounded, we'll focus mainly on the code and
-software artifacts generated for one of our examples: GlassBR, which is software
-used to predict the blast risk involved for a glass window.  The requirements
-for the software are based on an American Standard Test Method (ASTM) standard
+Instead, we provide an illustrative example.
+
+We will focus on information capture and the artifacts we can generate.
+For concreteness, we'll use a single example from our suite: GlassBR, used
+to predict the blast risk involved for a glass window.  The requirements
+are based on an American Standard Test Method (ASTM) standard
 \cite{BeasonEtAl1998}.
 
-Figure~\ref{Fig_DrasilAndChange} shows, for the GlassBR example, the
-transformation of captured knowledge (as shown in the darker bordered box at the
-top right). The generated artifacts come from the weaving together of
-information, as outlined in Step~\ref{it:recipe} of the ideal process.  An
-example of this weaving can be seen in the name of the software.  In the
-generated artifacts the name GlassBR appears more than 80 times –- in the folder
-structure, in the requirements specification, in the README file, in the
-Makefile, and in the source code. In a conventional software project changing
-the name across all artifacts is surprisingly difficult –- difficult enough that
-the change may not be made. With our approach a change like this is made by one
-modification to the source knowledge and regeneration. By capturing domain
-knowledge, we facilitates more than just renaming. For instance, if the
-assumption of a constant Load Distribution Factor (LDF) changes, the regenerated
-software will have LDF as an input variable. We also capture design decisions,
-like whether to log all calculations, whether to in-line constants rather than
-show them symbolically, etc. The knowledge for GlassBR can also be reused in
-different projects.
+The transformation of captured knowledge is illustrated in
+Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper
+right box. Each piece of information in this figure has its own
+shape and colour (orange-cloud, pink lozenge, etc). It should be immediately clear
+that all pieces of information reappear in multiple places in the generated
+artifacts. For example, the name of the software (GlassBR) ends up
+appearing more than 80 times in the generated softifacts (in the folder
+structure, requirements, README, Makefile and source code). Changing this
+name would traditionally be extremely difficult; we can achieve this by
+modifying a single place, and regenerating.
+
+The first box shows the directory structure of the currently generated
+softifacts; continuing clockwise, we see examples of Makefiles for
+the Java and Python versions, parts of the fully documented, 
+generated code for the main computation in those languages, user
+instructions for running the code, and the processed \LaTeX for the
+requirements.
+
+The name GlassBR is probably the simplest example of what we mean by
+\emph{knowledge}: here, the concept ``program name'' is internally defined, and
+its \emph{value} is used throughout. A more complex example is the assumption that the ``Load Distribution Factor'' (LDF) is constant
+(pink lozenge). If this changes to be an input, the generated software
+will have LDF as an input variable.  We also capture design decisions,
+such as whether to log all calculations, whether to in-line constants rather
+than show them symbolically, etc. The knowledge for GlassBR can also be reused
+in different projects.
 
 \begin{figure*}[h]
   \centering
   \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-11ptFont-squished-noSmith-v1-300dpi.png}
-  \caption{Mapping between changes in DSL source code to the generated
-  artifacts. The different colors and shapes show the connection between the
-  source knowledge and the generated artifacts.}
-  \Description{Mapping between changes in DSL source code to the generated
-  artifacts. The different colours and shapes show the connection between the
-  source knowledge and the generated artifacts.}
+  \caption{Colors and shapes mapping from captured knowledge to generated
+  artifacts.}
+  \Description{Colors and shapes mapping from captured knowledge to generated
+  artifacts.}
   \label{Fig_DrasilAndChange}
 \end{figure*}
 
+We give example encodings\footnote{with some additional abbreviations 
+for space.}
+corresponding to steps of the process.
 \subsection*{Step 3a: Base Knowledge}
 
 \begin{lstlisting}
-  fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
-  fullyT = commonIdeaWithDict "fullyT" (nounPhraseSP "fully tempered") "FT" [idglass]
-  glassTypeFac = commonIdeaWithDict "glassTypeFac" (nounPhraseSP "glass type factor") "GTF" [idglass]
-  heatS = commonIdeaWithDict "heatS" (nounPhraseSP "heat strengthened") "HS"[idglass]
-  iGlass = commonIdeaWithDict "iGlass" (nounPhraseSP "insulating glass") "IG"[idglass]
-  lGlass = commonIdeaWithDict "lGlass" (nounPhraseSP "laminated glass") "LG" [idglass]
-\end{lstlisting}
+fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
+fullyT  = ci' "fullyT" (np' "fully tempered") "FT" [idglass]
+glassTF = ci' "glassTypeFac" (np' "glass type factor") "GTF" [idglass]
+heatS   = ci' "heatS" (np' "heat strengthened") "HS"[idglass]
+iGlass  = ci' "iGlass" (np' "insulating glass") "IG"[idglass]
+lGlass  = ci' "lGlass" (np' "laminated glass") "LG" [idglass]
 
-\begin{lstlisting}
-  risk :: DataDefinition
-  risk = ddE riskQD
-    [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
-    dRefInfo campidelli $ Equation [14]]
-    Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
-    where riskQD = mkQuantDef riskFun riskEq
-          riskEq = (sy sflawParamK $/
-            (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
-            ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
+risk :: DataDefinition
+risk = ddE riskQD
+ [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
+ dRefInfo campidelli $ Equation [14]] Nothing "riskFun" 
+ [aGrtrThanB, hRef, ldfRef, jRef]
+ where 
+  riskQD = mkQuantDef riskFun riskEq
+  riskEq = (sy sflawParamK $/ (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) 
+   `mulRe`
+   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
 \end{lstlisting}
 
 \subsection*{Step 3b: Coherent Narrative}
 
-As per the requirements template for scientific software~\cite{SmithAndLai2005,
-SmithEtAl2007}, we have a goal: ``\textbf{Predict-Glass-Withstands-Explosion}: Analyze and predict whether the glass slab
+The goal of GlassBR is:
+``\textbf{Predict-Glass-Withstands-Explosion}: Analyze and predict whether the glass slab
 under consideration will be able to withstand the explosion of a certain degree
-which is calculated based on user input.'' The goal statement is generated via:
+which is calculated based on user input.'', encoded as:
 
 \begin{lstlisting}
 willBreakGS :: ConceptInstance
 willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
-S "predict whether the", phrase glaSlab, S "under consideration will be able",
-S "to withstand the", phrase explosion `S.of_` S "a certain", phrase degree_',
-S "which is calculated based on", phrase userInput])
-"Predict-Glass-Withstands-Explosion" goalStmtDom
+ S "predict whether the", phrase glaSlab, 
+ S "under consideration will be able to withstand the", 
+ phrase explosion `S.of_` S "a certain", phrase degree_',
+ S "which is calculated based on", phrase userInput])
+ "Predict-Glass-Withstands-Explosion" goalStmtDom
 \end{lstlisting}
+
+The admittedly awkward embedding of English used here allows us to do all sorts of
+static analysis on the documents themselves. This part of the system is certainly
+extremely experimental.
+
+\subsection*{Step 3c: Characteristics of a Good Solution}
+
+One of our outputs is a probability, which can be checked to be between $0$ and $1$
+(not shown).
 
 \subsection*{Step 4a: Specialization of Theories}
 
-Theories are specialized via assumptions, like this one: ``\textbf{glassCondition}:
-Following astm2009 (pg. 1), this practice does not apply to any form of wired,
-patterned, etched, sandblasted, drilled, notched, or grooved glass with surface
-and edge treatments that alter the glass strength. (RefBy:
-UC:Accommodate-Altered-Glass.)''  This assumptions is generated via:
-
+We use assumptions to justify specializing theories, such as:
+\verbatimfont{\small}
+\begin{verbatim}
+Following [35] (pg. 1), this practice does not apply to any form 
+of wired, patterned, etched, sandblasted, drilled, notched, or 
+grooved glass with surface and edge treatments that alter the 
+glass strength.
+\end{verbatim}
+\noindent via
 \begin{lstlisting}
 glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", complexRef astm2009 (Page [1]) `sC` 
-  S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
-  "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
-  phrase surface `S.and_` S "edge treatments that alter the glass strength"]
+glassConditionDesc = foldlSent [S "Following", 
+ complexRef astm2009 (Page [1]) `sC` 
+ S "this", phrase practice, S "does not apply to any form of", 
+ foldlList Comma Options (map S 
+   ["wired", "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], 
+ S "with", phrase surface `S.and_` S "edge treatments that alter the glass strength"])
 \end{lstlisting}
 
-\subsection*{Step 4b: ?}
+%% Commenting this out, as it didn't really represent 4b
+%
+%\subsection*{Step 4b: Choices}
+%
+%We create a closed harmonic system containing all related knowledge (in
+%particular, the grounded theories), which is as simple as collecting them into a
+%single system.
+%
+%\begin{lstlisting}
+%iMods :: [InstanceModel]
+%iMods = [pbIsSafe, lrIsSafe]
+%
+%si :: SystemInformation
+%si = SI {
+%_sys = glassBR, _kind = Doc.srs, _authors = [nikitha],
+%_purpose = purpDoc glassBR Verbose, _quants = symbolsForTable,
+%_concepts = [] :: [DefinedQuantityDict], _instModels = iMods,
+%_datadefs = GB.dataDefs, _configFiles = configFp,
+%_inputs = inputs, _outputs = outputs,
+%_defSequence = qDefns, _constraints = constrained,
+%_constants = constants, _sysinfodb = symbMap,
+%_usedinfodb = usedDB, refdb = refDB
+%}
+%\end{lstlisting}
 
-We create a closed harmonic system containing all related knowledge (in
-particular, the grounded theories), which is as simple as collecting them into a
-single system.
+\subsection*{Step 5 : Code-level Choices}
 
-\begin{lstlisting}
-iMods :: [InstanceModel]
-iMods = [pbIsSafe, lrIsSafe]
-
-si :: SystemInformation
-si = SI {
-_sys = glassBR, _kind = Doc.srs, _authors = [nikitha, spencerSmith],
-_purpose = purpDoc glassBR Verbose, _quants = symbolsForTable,
-_concepts = [] :: [DefinedQuantityDict], _instModels = iMods,
-_datadefs = GB.dataDefs, _configFiles = configFp,
-_inputs = inputs, _outputs = outputs,
-_defSequence = qDefns, _constraints = constrained,
-_constants = constants, _sysinfodb = symbMap,
-_usedinfodb = usedDB, refdb = refDB
-}
-\end{lstlisting}
-
-\subsection*{Step 5}
-
-We make choices about the software representations of the theories:
+We can choose languages, how ``modular'' the generated code is, whether we
+want programs or libraries, the level of logging and comments, etc.
 
 \begin{lstlisting}
 code :: CodeSpec
@@ -451,29 +491,33 @@ code = codeSpec fullSI choices allMods
 
 choices :: Choices
 choices = defaultChoices {
-  lang = [Python, Cpp, CSharp, Java, Swift], modularity = Modular Separated,
-  impType = Program, logFile = "log.txt", logging = [LogVar, LogFunc],
-  comments = [CommentFunc, CommentClass, CommentMod], doxVerbosity = Quiet,
-  dates = Hide, onSfwrConstraint = Exception, onPhysConstraint = Exception,
-  inputStructure = Bundled, constStructure = Inline, constRepr = Const,
-  auxFiles = [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME] 
+ lang = [Python, Cpp, CSharp, Java, Swift], 
+ modularity = Modular Separated,
+ impType = Program, logFile = "log.txt", 
+ logging = [LogVar, LogFunc],
+ comments = [CommentFunc, CommentClass, CommentMod], 
+ doxVerbosity = Quiet,
+ dates = Hide, 
+ onSfwrConstraint = Exception, onPhysConstraint = Exception,
+ inputStructure = Bundled, 
+ constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
 
 \subsection*{Step 6}
 
-A final executable program which should take the knowledge discussed above, and
-use pre-made printers/generators to generate software artifacts, SRS documents,
-etc:
+We can now generate multiple artifacts (here: specification in HTML and \LaTeX,
+code in multiple languages with choices, dependency diagram and log of all
+choices used) as desired:
 
 \begin{lstlisting}
 main :: IO()
 main = do
-    setLocaleEncoding utf8
-    gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
-    genCode choices code
-    genDot fullSI
-    genLog fullSI printSetting
+  setLocaleEncoding utf8
+  gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
+  genCode choices code
+  genDot fullSI
+  genLog fullSI printSetting
 \end{lstlisting}
 
 \section{Concluding Remarks} \label{ch:concluding_remarks}

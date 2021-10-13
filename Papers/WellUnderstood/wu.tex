@@ -36,7 +36,7 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
   showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
   escapeinside={\%*}{*)}}
 
-\title{Improving Long-term Software Development Productivity in Well Understood Domains}
+\title{When Capturing Knowledge Improves Productivity}
 
 \author{Jacques Carette}
 \orcid{0000-0001-8993-9804}
@@ -75,23 +75,36 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 \email{balacij@mcmaster.ca}
 
 \begin{abstract}
-  Current software development methods are often too short-sighted and too
-  code-centric to be ideally suited to productive long-term development of
-  software (and software families) in well understood domains.  Well understood
-  domains, like scientific and mathematical domains, provide an opportunity for
-  capturing knowledge, which can then be transformed into multiple views in
-  different software artifacts (documentation, code, test cases, build scripts,
-  etc.) within and between projects.  %A software
-  % domain is considered well understood if the domain knowledge can be codified,
-  % the computational interpretation of the domain knowledge is clear and the
-  % engineering of code to perform the computations is well understood.  
-  We present an idealized process that codifies domain knowledge and employs
-  generative techniques to create the required software artifacts.  To be
-  successful, the process requires tool support, which we developed as a set of
-  Domain Specific Languages implemented in Haskell.  The process, along with
-  opportunities for knowledge reuse, traceability and change management, is
-  illustrated via an example of software used to predict the risk of breakage
-  for glass windows subjected to an explosive blast.
+  Current software development is often quite code-centric and aimed at
+  short-term deliverables, due to various contextual forces. We're interested
+  in contexts where different forces are at play.  \textbf{Well-understood
+  domains} and \textbf{long-lived software} provide such an opportunity. By
+  further applying
+  generative techniques, aggressive knowledge capture has the real potential
+  to greatly increase long-term productivity.
+
+%  Current software development methods are often too short-sighted and too
+%  code-centric to be ideally suited to productive long-term development of
+%  software (and software families) in well understood domains.  Well understood
+%  domains, like scientific and mathematical domains, provide an opportunity for
+%  capturing knowledge, which can then be transformed into multiple views in
+%  different software artifacts (documentation, code, test cases, build scripts,
+%  etc.) within and between projects.  A software
+% domain is considered well understood if the domain knowledge can be codified,
+% the computational interpretation of the domain knowledge is clear and the
+% engineering of code to perform the computations is well understood.  
+  Key is to recognize that currently hand-written software artifacts
+  contain a lot of knowledge duplication. With proper tooling and
+  appropriate codification of domain knowledge this is feasible. We present
+  an example of what this looks like, and the benefits (reuse, traceability,
+  change management) thus gained.
+%  We present an idealized process that codifies domain knowledge and employs
+%  generative techniques to create the required software artifacts.  To be
+%  successful, the process requires tool support, which we developed as a set of
+%  Domain Specific Languages implemented in Haskell.  The process, along with
+%  opportunities for knowledge reuse, traceability and change management, is
+%  illustrated via an example of software used to predict the risk of breakage
+%  for glass windows subjected to an explosive blast.
 \end{abstract}
 
 
@@ -129,35 +142,33 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 %% End of generated code
 
 \keywords{code generation, document generation, knowledge capture,
-  software engineering, scientific software}
+  software engineering}
 
 % set up math environment
 \newtheorem{defn}{Definition}
 
 \maketitle
 
-\section{What is ``well understood'' Software?}\label{ch:wellUnderstood}
+\section{``Well understood'' Software?}\label{ch:wellUnderstood}
 
 \begin{defn}
 A software domain is \emph{well understood} if
 \begin{enumerate}
-\item the Domain Knowledge (DK) is codified,
-\item the computational interpretation of the DK is clear,
-\item the engineering of code to perform said computations is well
-understood.
+\item its Domain Knowledge (DK) is codified,
+\item the computational interpretation of the DK is clear, and
+\item writing code to perform said computations is well understood.
 \end{enumerate}
 \end{defn}
 
 By \emph{codified}, we mean that the knowledge exists in standard form in a
-variety of textbooks. For example, many domains of knowledge in engineering use
-standard differential equations as models. Furthermore, the quantities of
+variety of textbooks. For example, many engineering domains use
+ordinary differential equations as models, the quantities of
 interest are known, given standard names and standard units. In other words,
 standard vocabulary has been established over time and the body of knowledge is
 uncontroversial.
 
-We can further refine these high level ideas as follows, where we use
-the same numbering as above to indicate which part of the definition is
-being directly refined, but where the refinement nevertheless should be
+We can refine these high level ideas, using the same numbering,
+although the refinement should be
 understood more holistically.
 \begin{enumerate}
 \item Models in the DK \emph{can be} written formally.
@@ -166,25 +177,32 @@ understood more holistically.
 \item Turning these functional relations into code is an understood
  transformation.
 \end{enumerate}
-Perhaps the most important aspect of this refinement is that the last two parts
+Most importantly, the last two parts
 deeply involve \emph{choices}: What quantities are considered inputs, outputs
 and parameters to make the model functional? What programming language?  What
 software architecture data-structures, algorithms, etc.?
 
-\emph{Well understood} does not imply \emph{choice free}.  For instance,
-different authors would make different choices when writing a small script to
-move files.  Depending on the author's style, this can be easily written as a
-Shell script, or in Python or in Haskell. In all cases, assuming the author
-chooses a language in which they are fluent, the job will be entirely
-straightforward because the domain is well understood.
+In other words,
+\emph{well understood} does not imply \emph{choice free}.  Writing a small 
+script to move files could just as easily be done in Bash, Python or Haskell.
+In all cases, assuming fluency, the author's job is straightforward because
+the domain is well understood.
 
-Code is \emph{not} the only artifact that matters.  Our definition for well
-understood also applies, equally importantly, to documentation for humans, as
-follows:
+\section{Long-lived software?}
+For us, long-lived software is software that is expected to be in continuous
+use and evolution for $20$ or more years. The main characteristic of
+such software is the \emph{expected turnover} of key staff. This means that
+all tacit knowledge about the software will be lost over time if it is not
+captured.
+
+In other words, here code is \emph{not} the only artifact that matters.  
+Our definition of well understood also applies to 
+\textbf{documentation} aimed at humans.
+Explicitly:
 \begin{enumerate}
 \item The meaning of the models is understood at a human-pedagogical
 level, i.e. it is explainable.
-\item Combining models is also explainable. Thus \emph{transformers}
+\item Combining models is explainable. Thus \emph{transformers}
   %we mentioned before %this is actually the first time transformers are mentioned
   simultaneously operate on mathematical representations
 and on explanations. This requires that English descriptions also be
@@ -195,7 +213,7 @@ English explanations.
 \end{enumerate}
 
 We dub these \emph{triform theories}, as a nod to \emph{biform
-theories}~\cite{Farmer2007}. The idea is that we couple 
+theories}~\cite{Farmer2007}. We couple 
 \begin{enumerate*}
 \item an axiomatic description,
 \item a computational description, and
@@ -205,10 +223,10 @@ of a concept.
 
 Different kinds of choices are embedded in the different kinds of knowledge.
 They can show up simply as \emph{parameters}, for example the acceleration due
-to gravity constant associated with a planet. They can also shows up as
+to the gravity constant associated with a planet. They can also shows up as
 different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
-a\right) = m\cdot a$, i.e. from a conservation law into a computation. Note
-that, for motion computation, that same conservation law is often rewritten as
+a\right) = m\cdot a$, i.e. from a conservation law into a computation.
+For motion computation that same conservation law is often rewritten as
 $a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
 ($x$) as a function of time ($t$). We also get choices of phrasing, which are
 equivalent but may be more adequate in a given context.

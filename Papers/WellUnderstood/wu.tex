@@ -76,12 +76,11 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 
 \begin{abstract}
   Current software development is often quite code-centric and aimed at
-  short-term deliverables, due to various contextual forces. We're interested
-  in contexts where different forces are at play.  \textbf{Well-understood
-  domains} and \textbf{long-lived software} provide such an opportunity. By
-  further applying
-  generative techniques, aggressive knowledge capture has the real potential
-  to greatly increase long-term productivity.
+  short-term deliverables, due to various contextual forces. We're interested in
+  contexts where different forces are at play.  \textbf{Well-understood domains}
+  and \textbf{long-lived software} provide such an opportunity. By further
+  applying generative techniques, aggressive knowledge capture has the real
+  potential to greatly increase long-term productivity.
 
 %  Current software development methods are often too short-sighted and too
 %  code-centric to be ideally suited to productive long-term development of
@@ -93,11 +92,11 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 % domain is considered well understood if the domain knowledge can be codified,
 % the computational interpretation of the domain knowledge is clear and the
 % engineering of code to perform the computations is well understood.  
-  Key is to recognize that currently hand-written software artifacts
-  contain a lot of knowledge duplication. With proper tooling and
-  appropriate codification of domain knowledge this is feasible. We present
-  an example of what this looks like, and the benefits (reuse, traceability,
-  change management) thus gained.
+  Key is to recognize that currently hand-written software artifacts contain
+  considerable knowledge duplication. With proper tooling and appropriate
+  codification of domain knowledge increasing productivity is feasible. We
+  present an example of what this looks like, and the benefits (reuse,
+  traceability, change management) thus gained.
 %  We present an idealized process that codifies domain knowledge and employs
 %  generative techniques to create the required software artifacts.  To be
 %  successful, the process requires tool support, which we developed as a set of
@@ -211,7 +210,7 @@ Our definition of well understood also applies to \textbf{documentation} aimed
 at humans.  Explicitly:
 \begin{enumerate}
 \item The meaning of the models is understood at a human-pedagogical
-level, i.e. it is explainable.
+level, i.e.\ it is explainable.
 \item Combining models is explainable. Thus \emph{transformers}
   %we mentioned before %this is actually the first time transformers are mentioned
   simultaneously operate on mathematical representations
@@ -231,19 +230,27 @@ theories}~\cite{Farmer2007}. We couple
 \end{enumerate*}
 of a concept.
 
-%\subsection{Choices}
-%
-%Different kinds of choices are embedded in the different kinds of knowledge.
-%They can show up simply as \emph{parameters}, for example the acceleration due
-%to the gravity constant associated with a planet. They can also shows up as
-%different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
-%a\right) = m\cdot a$, i.e. from a conservation law into a computation.
-%For motion computation that same conservation law is often rewritten as
-%$a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
-%($x$) as a function of time ($t$). We also get choices of phrasing, which are
-%equivalent but may be more adequate in a given context.
+Different kinds of choices are embedded in the different kinds of knowledge.
+They can show up simply as \emph{parameters}, for example the acceleration due
+to the gravity constant associated with a planet. They can also shows up as
+different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
+a\right) = m\cdot a$, i.e.\ from a conservation law into a computation.
+For motion computation that same conservation law is often rewritten as
+$a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
+($x$) as a function of time ($t$). We also get choices of phrasing, which are
+equivalent but may be more adequate in a given context.
 
-\section{A New Development Process}\label{ch:process}
+\section{Ideal Process}\label{ch:process}
+
+When a domain is well understood, codifying the domain knowledge is an option.
+However, codification requires significant effort; this effort is only
+worthwhile when the goal is long-term productivity.  In this paper we adopt the
+the view (as explained in \cite{SmithAndCarette2020arXiv}) that the outputs for
+assessing productivity are knowledge and user satisfaction, where user
+satisfaction acts as a proxy for effective quality. This explicit emphasis on
+all knowledge produced, rather than just the operationalizable knowledge (code)
+implies that human-reusable knowledge, i.e.\ documentation, should also be
+greatly valued.
 
 Given appropriate infrastructure, what would be an \emph{idealized process}
 (akin to Parnas' ideas of faking a rational design process \cite{Parnas1986})

@@ -284,13 +284,12 @@ the necessary artifact. In other words, what information is necessary to
 enable the mechanized generation of each artifact? It turns out that many
 of them are quite straightforward.
 
-It is worthwhile to note that way too many research projects skip
-step~\ref{it:problem} and~\ref{it:probdesc}: in other words, they never really
-write down what problem they're trying to solve. This is part of the
-\textbf{tacit knowledge} of a lot of research software.  It is crucial to our
-whole process that this knowledge go from tacit to explicit. This is also one
-of the fundamental recognitions of \emph{Knowledge
-Management}~\cite{KM-textbook}.
+Unfortunately many research projects skip step~\ref{it:problem}
+and~\ref{it:probdesc}: in other words, they never really write down what problem
+they're trying to solve. This is part of the \textbf{tacit knowledge} of a lot
+of research software.  It is crucial to our whole process that this knowledge go
+from tacit to explicit. This is also one of the fundamental recognitions of
+\emph{Knowledge Management}~\cite{KM-textbook}.
 
 % TODO: insert graphical illustration of the funnel from information to
 % softifacts.
@@ -298,26 +297,46 @@ Management}~\cite{KM-textbook}.
 \section{Example}\label{ch:example}
 
 We have build an infrastructure that shows our idealized process is possible.
-The infrastructure consists of Domain Specific Languages (DSLs) embedded in
-Haskell.  For space reasons we cannot provide a complete overview of our
-infrastructure.
+The infrastructure consists of approximately 60,000 lines of Haskell code to
+implement Domain Specific Languages (DSLs) for knowledge encoding, code
+generation and document generation.  For space reasons we cannot provide a
+complete overview of our infrastructure.
 %because of the double blind review process, we can't really cite Drasil here
 Instead, we will focus on an example that illustrates the ideal process,
 including how we capture information and the potential artifacts we can
 generate.  To make the examples grounded, we'll focus mainly on the code and
-software artifacts generated for GlassBR, which is software to predict the blast
-risk involved with the glass slab. The blast under consideration is any kind of
-man-made explosion.
+software artifacts generated for one of our examples: GlassBR, which is software
+used to predict the blast risk involved for a glass window.  The requirements
+for the software are based on an American Standard Test Method (ASTM) standard
+\cite{BeasonEtAl1998}.
 
 [TODO : Jason - insert the code examples for the ideal process here]
 
-Introduce generated artifacts.  Explain some of the examples, as space permits.
+Figure~\ref{Fig_DrasilAndChange} shows, for the GlassBR example, the
+transformation of captured knowledge (as shown in the darker bordered box at the
+top right). An important property of the software is its name.  In the generated
+artifacts the name GlassBR appears more than 80 times – in the folder structure,
+in the requirements specification, in the README file, in the Makefile, and in
+the source code. In a conventional software project changing the name across all
+artifacts is surprisingly difficult–-difficult enough that the change may not be
+made. With our approach a change like this is made by one modification to the source
+knowledge and regeneration. By capturing domain knowledge, we facilitates
+more than just renaming. For instance, if the assumption of a constant Load
+Distribution Factor (LDF) changes, the regenerated software will have LDF as an
+input variable. We also capture design decisions, like whether to log all
+calculations, whether to in-line constants rather than show them symbolically,
+etc. The knowledge for GlassBR can also be reused in different projects.
 
 \begin{figure*}[h]
   \centering
   \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-v1.drawio.png}
-  \caption{TODO: caption}
-  \Description{TODO: description}
+  \caption{Mapping between changes in DSL source code to the generated
+  artifacts. The different colors and shapes show the connection between the
+  source knowledge and the generated artifacts.}
+  \Description{Mapping between changes in DSL source code to the generated
+  artifacts. The different colours and shapes show the connection between the
+  source knowledge and the generated artifacts.}
+  \label{Fig_DrasilAndChange}
 \end{figure*}
 
 \section{Concluding Remarks} \label{ch:concluding_remarks}
@@ -328,6 +347,12 @@ understood'' is being able to teach the domain language to a computer. We have
 shown samples of a framework for generating all of the software artifacts for
 (well understood) research software, from the natural knowledge base of the
 domain.
+
+We take advantage of inherent knowledge duplication between artifacts in a
+project, and between projects, by capturing the knowledge once and providing
+means to transform that information into all of the views needed within a given
+project.  Developers can now generate sustainable software, with documentation
+and code that are consistent by construction.
 
 %% Bibliography
 \bibliographystyle{ACM-Reference-Format}

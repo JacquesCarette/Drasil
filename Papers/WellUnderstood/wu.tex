@@ -73,9 +73,9 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
   code-centric to be ideally suited to productive long-term development of
   software (and software families) in well understood domains.  Well understood
   domains, like scientific and mathematical domains, provide an opportunity for
-  capturing knowledge, which can then be used to generate multiple views of this
-  knowledge in software artifacts (documentation, code, test cases, build
-  scripts, etc.) within and between projects.  %A software
+  capturing knowledge, which can then be transformed into multiple views in
+  different software artifacts (documentation, code, test cases, build scripts,
+  etc.) within and between projects.  %A software
   % domain is considered well understood if the domain knowledge can be codified,
   % the computational interpretation of the domain knowledge is clear and the
   % engineering of code to perform the computations is well understood.  
@@ -219,12 +219,13 @@ all knowledge produced, rather than just the operationalizable knowledge (code)
 implies that human-reusable knowledge, i.e.\ documentation, should also be
 greatly valued.
 
-So what would be a reasonable process for building a piece of software, assuming
-some kind of infrastructure exists for recording the kind of knowledge outlined
-in~\autoref{ch:wellUnderstood}?  Below we outline a chronological ``story'' of
-such an idealized process.  We are \textbf{not} outlining the actual process to
-follow, but rather the \emph{idealized process} (influenced by Parnas's paper on
-faking a rational design process \cite{Parnas1986}).
+So what would be a reasonable process for building a piece of software and
+associated artifacts, assuming some kind of infrastructure exists for recording
+the kind of knowledge outlined in~\autoref{ch:wellUnderstood}?  Below we outline
+a chronological ``story'' of such an idealized process.  We are \textbf{not}
+outlining the actual process to follow, but rather the \emph{idealized process}
+(influenced by Parnas's paper on faking a rational design process
+\cite{Parnas1986}).
 
 \begin{enumerate}
 \item\label{it:problem} Have a problem to solve, or task to achieve, which
@@ -298,9 +299,9 @@ from tacit to explicit. This is also one of the fundamental recognitions of
 
 We have build an infrastructure that shows our idealized process is possible.
 The infrastructure consists of approximately 60,000 lines of Haskell code to
-implement Domain Specific Languages (DSLs) for knowledge encoding, code
-generation and document generation.  For space reasons we cannot provide a
-complete overview of our infrastructure.
+implement Domain Specific Languages (DSLs) for knowledge encoding, expressions,
+theories, code generation and document generation.  For space reasons we cannot
+provide a complete overview of our infrastructure.
 %because of the double blind review process, we can't really cite Drasil here
 Instead, we will focus on an example that illustrates the ideal process,
 including how we capture information and the potential artifacts we can
@@ -312,13 +313,14 @@ for the software are based on an American Standard Test Method (ASTM) standard
 
 Figure~\ref{Fig_DrasilAndChange} shows, for the GlassBR example, the
 transformation of captured knowledge (as shown in the darker bordered box at the
-top right). An important property of the software is its name.  In the generated
-artifacts the name GlassBR appears more than 80 times – in the folder structure,
-in the requirements specification, in the README file, in the Makefile, and in
-the source code. In a conventional software project changing the name across all
-artifacts is surprisingly difficult–-difficult enough that the change may not be
-made. With our approach a change like this is made by one modification to the source
-knowledge and regeneration. By capturing domain knowledge, we facilitates
+top right). The generated artifacts come from the weaving together of
+information, as outlined in Step~\ref{it:recipe} of the ideal process.  An example of this weaving can be seen in the name of the software.  In the generated artifacts the name
+GlassBR appears more than 80 times –- in the folder structure, in the
+requirements specification, in the README file, in the Makefile, and in the
+source code. In a conventional software project changing the name across all
+artifacts is surprisingly difficult –- difficult enough that the change may not be
+made. With our approach a change like this is made by one modification to the
+source knowledge and regeneration. By capturing domain knowledge, we facilitates
 more than just renaming. For instance, if the assumption of a constant Load
 Distribution Factor (LDF) changes, the regenerated software will have LDF as an
 input variable. We also capture design decisions, like whether to log all
@@ -344,15 +346,26 @@ etc. The knowledge for GlassBR can also be reused in different projects.
 For well understood domains, building software ought to be a matter of
 engineering, based on solid scientific foundations. The ultimate test of ``well
 understood'' is being able to teach the domain language to a computer. We have
-shown samples of a framework for generating all of the software artifacts for
-(well understood) research software, from the natural knowledge base of the
-domain.
+shown samples of a process and implementation framework for generating all of
+the software artifacts for (well understood) software, from the natural
+knowledge base of the domain.
 
 We take advantage of inherent knowledge duplication between artifacts in a
 project, and between projects, by capturing the knowledge once and providing
 means to transform that information into all of the views needed within a given
-project.  Developers can now generate sustainable software, with documentation
-and code that are consistent by construction.
+project.  Developers can realize long-term productivity with documentation and
+code that are consistent by construction.
+
+Codifying scientific, engineering and computational knowledge is challenging,
+but success will completely transform the development of software, and software
+families, in well understood domains. Our process will remove human errors from
+generating and maintaining documentation, code, test cases and build
+environments, since the mundane details are handled by the generator.  With the
+new software tools, we can potentially detect inconsistencies between theory via
+inter-theory consistency constraints. Moreover, we can explicitly track the
+ramifications of a proposed change.  With the right up-front investment, we can
+have sustainable software because stable knowledge is separated from rapidly
+changing assumptions and design decisions.
 
 %% Bibliography
 \bibliographystyle{ACM-Reference-Format}

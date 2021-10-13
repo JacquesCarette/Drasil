@@ -370,11 +370,11 @@ risk = ddE riskQD
           ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
       \end{verbatim}
     \item %3b
-    Using the SmithEtAl guidelines, we might want to write a goal:
+      As per the requirements template for scientific software\cite{SmithAndLai2005}\cite{SmithEtAl2007} by Spencer Smith and Lei Lai, we have a goal:
       \begin{verbatim}
 Predict-Glass-Withstands-Explosion: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
       \end{verbatim}
-      via:
+      generated via:
       \begin{verbatim}
 willBreakGS :: ConceptInstance
 willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`

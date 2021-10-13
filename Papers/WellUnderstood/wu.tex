@@ -30,7 +30,7 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 
 \begin{document}
 
-\lstset{language=haskell, basicstyle=\tiny, breaklines=true,
+\lstset{language=haskell, basicstyle=\scriptsize, breaklines=true,
   showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
   escapeinside={\%*}{*)}}
 
@@ -271,11 +271,11 @@ is \emph{well understood}.
   \begin{enumerate}
   \item Find the base knowledge (theory) in the pre-existing library
     or, failing that, write it if it does not yet exist,
+    for instance the naturally occurring known quantities and
+    associated constraints.
   \item Assemble the ingredients into a coherent narrative,
   \item Describe the characteristics of a good solution,
   \item Come up with basic examples (to test correctness, intuitions, etc).
-  \item Identify the naturally occurring known quantities in the
-    problem domain, as well as their associated constraints.
   \end{enumerate}
 \item\label{it:refine} Describe, by successive refinement transformations, how
 the above can be turned into a
@@ -323,67 +323,77 @@ We have built the needed infrastructure. It consists of 60KLoc of Haskell
 implementing a series of interaction Domain Specific Languages (DSLs) for
 knowledge encodings, mathematical expressions, theories, English fragments,
 code generation and document generation\footnote{We will provide a link
-if the paper is accepted.}
+if the paper is accepted.} A full description would take too much space.
 %because of the double blind review process, we can't really cite Drasil here
-Instead, we will focus on an example that illustrates the ideal process,
-including how we capture information and the potential artifacts we can
-generate.  To make the examples grounded, we'll focus mainly on the code and
-software artifacts generated for one of our examples: GlassBR, which is software
-used to predict the blast risk involved for a glass window.  The requirements
-for the software are based on an American Standard Test Method (ASTM) standard
+Instead, we provide an illustrative example.
+
+We will focus on information capture and the artifacts we can generate.
+For concreteness, we'll use a single example from our suite: GlassBR, used
+to predict the blast risk involved for a glass window.  The requirements
+are based on an American Standard Test Method (ASTM) standard
 \cite{BeasonEtAl1998}.
 
-Figure~\ref{Fig_DrasilAndChange} shows, for the GlassBR example, the
-transformation of captured knowledge (as shown in the darker bordered box at the
-top right). The generated artifacts come from the weaving together of
-information, as outlined in Step~\ref{it:recipe} of the ideal process.  An
-example of this weaving can be seen in the name of the software.  In the
-generated artifacts the name GlassBR appears more than 80 times –- in the folder
-structure, in the requirements specification, in the README file, in the
-Makefile, and in the source code. In a conventional software project changing
-the name across all artifacts is surprisingly difficult –- difficult enough that
-the change may not be made. With our approach a change like this is made by one
-modification to the source knowledge and regeneration. By capturing domain
-knowledge, we facilitates more than just renaming. For instance, if the
-assumption of a constant Load Distribution Factor (LDF) changes, the regenerated
-software will have LDF as an input variable. We also capture design decisions,
-like whether to log all calculations, whether to in-line constants rather than
-show them symbolically, etc. The knowledge for GlassBR can also be reused in
-different projects.
+The transformation of captured knowledge is illustrated in
+Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper
+right box. Each piece of information in this figure has its own
+shape and colour (orange-cloud, pink lozenge, etc). It should be immediate
+that all pieces of information reappear in multiple places in the generated
+artifacts. For example, the name of the software (GlassBR) ends up
+appearing more than 80 times in the generated softifacts (in the folder
+structure, requirements, README, Makefile and source code). Changing this
+name would traditionally be extremely difficult; we can achiece this by
+modifying a single place, and regenerating.
+
+The first box shows the directory structure of the currently generated
+softifacts; continuing clockwise, we see examples of Makefiles for
+the Java and Python versions, parts of the fully documented, 
+generated code for the main computation in those languages, user
+instructions for running the code, and the processed \LaTeX for the
+requirements.
+
+The name GlassBR is probably the simplest example of what we mean by
+\emph{knowledge}: here, the concept ``program name'' is internally defined, and
+its \emph{value} is used throughout. A more complex example is that
+of the assumption that the ``Load Distribution Factor'' (LDF) is constant
+(pink lozenge). If this changes to be an input, the generated software
+will have LDF as an input variable.  We also capture design decisions,
+such as whether to log all calculations, whether to in-line constants rather
+than show them symbolically, etc. The knowledge for GlassBR can also be reused
+in different projects.
 
 \begin{figure*}[h]
   \centering
   \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-11ptFont-squished-v1-300dpi.png}
-  \caption{Mapping between changes in DSL source code to the generated
-  artifacts. The different colors and shapes show the connection between the
-  source knowledge and the generated artifacts.}
-  \Description{Mapping between changes in DSL source code to the generated
-  artifacts. The different colours and shapes show the connection between the
-  source knowledge and the generated artifacts.}
+  \caption{Colors and shapes mapping from captured knowledge to generated
+  artifacts.}
+  \Description{Colors and shapes mapping from captured knowledge to generated
+  artifacts.}
   \label{Fig_DrasilAndChange}
 \end{figure*}
 
+We give example encodings\footnote{with some additional abbreviations 
+for space.}
+corresponding to steps of the process.
 \subsection*{Step 3a: Base Knowledge}
 
 \begin{lstlisting}
-  fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
-  fullyT = commonIdeaWithDict "fullyT" (nounPhraseSP "fully tempered") "FT" [idglass]
-  glassTypeFac = commonIdeaWithDict "glassTypeFac" (nounPhraseSP "glass type factor") "GTF" [idglass]
-  heatS = commonIdeaWithDict "heatS" (nounPhraseSP "heat strengthened") "HS"[idglass]
-  iGlass = commonIdeaWithDict "iGlass" (nounPhraseSP "insulating glass") "IG"[idglass]
-  lGlass = commonIdeaWithDict "lGlass" (nounPhraseSP "laminated glass") "LG" [idglass]
-\end{lstlisting}
+fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
+fullyT = ci' "fullyT" (np' "fully tempered") "FT" [idglass]
+glassTF = ci' "glassTypeFac" (np' "glass type factor") "GTF" [idglass]
+heatS = ci' "heatS" (np' "heat strengthened") "HS"[idglass]
+iGlass = ci' "iGlass" (np' "insulating glass") "IG"[idglass]
+lGlass = ci' "lGlass" (np' "laminated glass") "LG" [idglass]
 
-\begin{lstlisting}
-  risk :: DataDefinition
-  risk = ddE riskQD
-    [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
-    dRefInfo campidelli $ Equation [14]]
-    Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
-    where riskQD = mkQuantDef riskFun riskEq
-          riskEq = (sy sflawParamK $/
-            (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
-            ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
+risk :: DataDefinition
+risk = ddE riskQD
+ [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
+ dRefInfo campidelli $ Equation [14]] Nothing "riskFun" 
+ [aGrtrThanB, hRef, ldfRef, jRef]
+ where 
+  riskQD = mkQuantDef riskFun riskEq
+  riskEq = (sy sflawParamK $/ (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) 
+    `mulRe`
+        ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
 \end{lstlisting}
 
 \subsection*{Step 3b: Coherent Narrative}

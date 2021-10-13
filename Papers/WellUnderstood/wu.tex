@@ -149,7 +149,8 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 
 \maketitle
 
-\section{``Well understood'' Software?}\label{ch:wellUnderstood}
+\section{The Context}
+\subsection{``Well understood'' Software?}\label{ch:wellUnderstood}
 
 \begin{defn}
 A software domain is \emph{well understood} if
@@ -188,17 +189,26 @@ script to move files could just as easily be done in Bash, Python or Haskell.
 In all cases, assuming fluency, the author's job is straightforward because
 the domain is well understood.
 
-\section{Long-lived software?}
+\subsection{Long-lived software?}
 For us, long-lived software is software that is expected to be in continuous
 use and evolution for $20$ or more years. The main characteristic of
 such software is the \emph{expected turnover} of key staff. This means that
 all tacit knowledge about the software will be lost over time if it is not
 captured.
 
-In other words, here code is \emph{not} the only artifact that matters.  
-Our definition of well understood also applies to 
-\textbf{documentation} aimed at humans.
-Explicitly:
+\subsection{Productivity?}
+We adapt the standard definition of productivity, where inputs are labour,
+but adjust the outputs to be knowledge and user satisfaction, where user
+satisfaction acts as a proxy for effective quality
+(see~\cite{SmithAndCarette2020arXiv} for more).
+This explicit emphasis on all knowledge produced, rather than just the
+operationalizable knowledge (aka code)
+implies that human-reusable knowledge, i.e.\ documentation, should also be
+greatly valued.
+
+\subsection{Documentation}
+Our definition of well understood also applies to \textbf{documentation} aimed
+at humans.  Explicitly:
 \begin{enumerate}
 \item The meaning of the models is understood at a human-pedagogical
 level, i.e. it is explainable.
@@ -221,42 +231,29 @@ theories}~\cite{Farmer2007}. We couple
 \end{enumerate*}
 of a concept.
 
-Different kinds of choices are embedded in the different kinds of knowledge.
-They can show up simply as \emph{parameters}, for example the acceleration due
-to the gravity constant associated with a planet. They can also shows up as
-different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
-a\right) = m\cdot a$, i.e. from a conservation law into a computation.
-For motion computation that same conservation law is often rewritten as
-$a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
-($x$) as a function of time ($t$). We also get choices of phrasing, which are
-equivalent but may be more adequate in a given context.
+%\subsection{Choices}
+%
+%Different kinds of choices are embedded in the different kinds of knowledge.
+%They can show up simply as \emph{parameters}, for example the acceleration due
+%to the gravity constant associated with a planet. They can also shows up as
+%different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
+%a\right) = m\cdot a$, i.e. from a conservation law into a computation.
+%For motion computation that same conservation law is often rewritten as
+%$a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
+%($x$) as a function of time ($t$). We also get choices of phrasing, which are
+%equivalent but may be more adequate in a given context.
 
-\section{Ideal Process}\label{ch:process}
+\section{A New Development Process}\label{ch:process}
 
-When a domain is well understood, codifying the domain knowledge is an option.
-However, codification requires significant effort; this effort is only
-worthwhile when the goal is long-term productivity.  In this paper we adopt the
-the view (as explained in \cite{SmithAndCarette2020arXiv}) that the outputs for
-assessing productivity are knowledge and user satisfaction, where user
-satisfaction acts as a proxy for effective quality. This explicit emphasis on
-all knowledge produced, rather than just the operationalizable knowledge (code)
-implies that human-reusable knowledge, i.e.\ documentation, should also be
-greatly valued.
-
-So what would be a reasonable process for building a piece of software and
-associated artifacts, assuming some kind of infrastructure exists for recording
-the kind of knowledge outlined in~\autoref{ch:wellUnderstood}?  Below we outline
-a chronological ``story'' of such an idealized process.  We are \textbf{not}
-outlining the actual process to follow, but rather the \emph{idealized process}
-(influenced by Parnas's paper on faking a rational design process
-\cite{Parnas1986}).
+Given appropriate infrastructure, what would be an \emph{idealized process}
+(akin to Parnas' ideas of faking a rational design process \cite{Parnas1986})
+in such a scenario?
 
 \begin{enumerate}
-\item\label{it:problem} Have a problem to solve, or task to achieve, which
-falls into the realm where \emph{software} is likely to be the central part of
-the solution.
-\item\label{it:understood} Convince oneself that the underlying problem domain
-is \emph{well understood}, as defined in~\autoref{ch:wellUnderstood}.
+\item\label{it:problem} Have a task to achieve where
+\emph{software} can play a central part in the solution.
+\item\label{it:understood} The underlying problem domain
+is \emph{well understood}.
 \item\label{it:probdesc} Describe the problem:
   \begin{enumerate}
   \item Find the base knowledge (theory) in the pre-existing library

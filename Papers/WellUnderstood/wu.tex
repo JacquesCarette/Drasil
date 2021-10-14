@@ -29,6 +29,7 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 
 \usepackage{listings}
 
+\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\small\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\small\bf +}}
 
 \makeatletter
 \newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
@@ -200,7 +201,7 @@ all tacit knowledge about the software will be lost over time if it is not
 captured.
 
 \subsection{Productivity?}
-We adapt the standard definition of productivity, where inputs are labour,
+We adapt the standard definition of productivity \cite{Boehm1987}, where inputs are labour,
 but adjust the outputs to be knowledge and user satisfaction, where user
 satisfaction acts as a proxy for effective quality
 %(see~\cite{SmithAndCarette2020arXiv} for more)
@@ -258,8 +259,8 @@ code. We use the word \emph{softifacts} for this collection.
 Whenever appropriate, we use standards and templates for each of the
 generated artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
 %~\cite{SmithAndLai2005,
-of IEEE XXXX~\cite{IEEESpec}
-and the Volere template~\cite{Volere}.
+of the IEEE~\cite{IEEE1998}
+and Volere templates~\cite{RobertsonAndRobertson1999Vol}.
 
 \subsection{Examples of context}
 
@@ -272,8 +273,7 @@ example is embedded software for space probes (like Pioneer 10).
 \section{A New Development Process}\label{ch:process}
 
 Given appropriate infrastructure, what would be an \emph{idealized process}
-(akin to Parnas' ideas of faking a rational design process \cite{Parnas1986})
-in such a scenario?
+(akin to Parnas' ideas of faking a rational design process \cite{Parnas1986})?
 
 \begin{enumerate}
 \item\label{it:problem} Have a task to achieve where
@@ -314,7 +314,7 @@ test cases, etc). These can be read, or executed, or \ldots\, as appropriate.
 
 While this last step might appear somewhat magical, it isn't. The whole point of
 defining \emph{well understood} is to enable it! A \emph{suitable}
-knowledge encoding is key to enable it. This is usually tacit knowledge that
+knowledge encoding is key. This is usually tacit knowledge that
 entirely resides in developers' heads.
 
 What is missing is an explicit \emph{information architecture} of each of
@@ -340,11 +340,19 @@ if the paper is accepted.} A full description would take too much space.
 %because of the double blind review process, we can't really cite Drasil here
 Instead, we provide an illustrative example.
 
-We will focus on information capture and the artifacts we can generate.
-For concreteness, we'll use a single example from our suite: GlassBR, used
-to predict the blast risk involved for a glass window.  The requirements
-are based on an American Standard Test Method (ASTM) standard
-\cite{BeasonEtAl1998}.
+We will focus on information capture and the artifacts we can generate. For
+concreteness, we'll use a single example from our suite: GlassBR, used to
+assess the risk for glass facades subject to blast loading.
+The requirements are based on an American Standard Test Method (ASTM) standard
+\cite{BeasonEtAl1998, ASTM2009}. GlassBR was originally a Visual
+Basic code/spreadsheet created by colleagues in a civil engineering research
+lab.  We added their domain knowledge to our framework, along with recipes to
+generate relevant artifacts.  Not only can we generate code for the necessary
+calculations (in \CC, C\#, Java, Python and Swift), we added documentation that
+was not in the original (Software Requirements Specification, doxygen, README.md
+and a Makefile). Moreover, our implementation is actually a family of
+implementations, since some design decisions are explicitly exposed as
+changeable variabilities, as described below.
 
 The transformation of captured knowledge is illustrated in
 Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper
@@ -367,8 +375,8 @@ requirements.
 The name GlassBR is probably the simplest example of what we mean by
 \emph{knowledge}: here, the concept ``program name'' is internally defined, and
 its \emph{value} is used throughout. A more complex example is the assumption that the ``Load Distribution Factor'' (LDF) is constant
-(pink lozenge). If this changes to be an input, the generated software
-will have LDF as an input variable.  We also capture design decisions,
+(pink lozenge). If this needs to be modified to instead be an input, the generated software
+will now have LDF as an input variable.  We also capture design decisions,
 such as whether to log all calculations, whether to in-line constants rather
 than show them symbolically, etc. The knowledge for GlassBR can also be reused
 in different projects.
@@ -383,7 +391,7 @@ in different projects.
   \label{Fig_DrasilAndChange}
 \end{figure*}
 
-We give example encodings\footnote{with some additional abbreviations 
+We now give example encodings\footnote{with some additional abbreviations 
 for space.}
 corresponding to steps of the process.
 \subsection*{Step 3a: Base Knowledge}

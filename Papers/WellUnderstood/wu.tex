@@ -484,24 +484,30 @@ One of our outputs is a probability, which can be checked to be between $0$ and 
 
 \subsection*{Step 4a: Specialization of Theories}
 
-We use assumptions to justify specializing theories, such as:
-\verbatimfont{\small}
-\begin{verbatim}
-Following [35] (pg. 1), this practice does not apply to any form 
-of wired, patterned, etched, sandblasted, drilled, notched, or 
-grooved glass with surface and edge treatments that alter the 
-glass strength.
-\end{verbatim}
-\noindent via
-\begin{lstlisting}
-glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", 
- complexRef astm2009 (Page [1]) `sC` 
- S "this", phrase practice, S "does not apply to any form of", 
- foldlList Comma Options (map S 
-   ["wired", "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], 
- S "with", phrase surface `S.and_` S "edge treatments that alter the glass strength"])
-\end{lstlisting}
+To illustrate the specialization of theories, we will look outside of the
+GlassBr example because, due to its phenomenological nature, GlassBr only has
+trivial specializations.  Instead, to illustrate this step we will turn our
+attention to another example we built in our framework: a solar water heating
+system (based on original FORTRAN code from colleagues in mechanical
+engineering).  Since this is a heat transfer problem, the initial theory is the
+general form of the conservation of thermal energy.  This general form is a
+partial differential equation in 3D space and time.  To specialize the theory to
+the solar water heating tank, we introduced the following assumptions:
+
+\begin{itemize}
+
+\item The water in the tank is fully mixed, so the temperature of the water is
+the same throughout the entire tank.
+
+\item The density of water has no spatial variation; that is, it is constant
+over their entire volume.
+
+\item The specific heat capacity of water has no spatial variation; that is, it
+is constant over its entire volume.
+
+\end{itemize}
+
+Allows to refine to new theory.  For readers too.  like ..., to get a system of first order ordinary differential equations.  Rationale.  Reuse - change assumptions, family of models.
 
 %% Commenting this out, as it didn't really represent 4b
 %

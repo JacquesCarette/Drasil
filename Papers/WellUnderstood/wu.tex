@@ -431,7 +431,7 @@ We also need to capture the \textit{data definition} of ``Risk of Failure''.
     \textbf{Equation} & $B = \frac{k}{(ab)^{m-1}}(Eh^2)^m\mathit{LDF}e^J$ \\ \hline
     \textbf{Description} & \vbox{
       \hbox{\strut $B$ is the Risk of Failure (Unitless)}
-      \hbox{\strut $k$ is the surface flaw parameter ($\frac{m^12}{N^7}$)}
+      \hbox{\strut $k$ is the surface flaw parameter ($\frac{m^{12}}{N^7}$)}
       \hbox{\strut $a$ \& $b$ are the plate length \& width (\textit{m})}
       \hbox{\strut $...$}
 % Do we want to have all of the variables listed? - No - there isn't room
@@ -460,24 +460,40 @@ We also need to capture the \textit{data definition} of ``Risk of Failure''.
 
 \subsection*{Step 3b: Coherent Narrative}
 
-The goal of GlassBR is:
-``\textbf{Predict-Glass-Withstands-Explosion}: Analyze and predict whether the glass slab
-under consideration will be able to withstand the explosion of a certain degree
-which is calculated based on user input.'', encoded as:
+% explosion - concept chunk
+% glass slag - named chunk
+% degree - concept chunk
+% user input - named chunk
 
-\begin{lstlisting}
-willBreakGS :: ConceptInstance
-willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
- S "predict whether the", phrase glaSlab, 
- S "under consideration will be able to withstand the", 
- phrase explosion `S.of_` S "a certain", phrase degree_',
- S "which is calculated based on", phrase userInput])
- "Predict-Glass-Withstands-Explosion" goalStmtDom
-\end{lstlisting}
+The goal of GlassBR (``Predict-Glass-Withstands-Explosion'') is to ``Analyze 
+and predict whether the \textit{glass slab} under consideration will be able
+to withstand the \textbf{explosion} of a certain \textbf{degree} which is 
+calculated based on \textit{user input}.'', where italicized names are 
+``named chunks'' (named ideas), and bold-faced names are ``concept chunks'' 
+(named ideas with a domain of related ideas). We call this goal a 
+``concept instance'' (a concept chunk applied in some way). The goal statement 
+is constructed using an experimental language for naturally describing relations
+between knowledge. Through this language, we are able to perform all sorts of 
+static analysis on the documents themselves.
 
-The admittedly awkward embedding of English used here allows us to do all sorts of
-static analysis on the documents themselves. This part of the system is certainly
-extremely experimental.
+% The goal of GlassBR is:
+% ``\textbf{Predict-Glass-Withstands-Explosion}: Analyze and predict whether the glass slab
+% under consideration will be able to withstand the explosion of a certain degree
+% which is calculated based on user input.'', encoded as:
+% 
+% \begin{lstlisting}
+% willBreakGS :: ConceptInstance
+% willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
+%  S "predict whether the", phrase glaSlab, 
+%  S "under consideration will be able to withstand the", 
+%  phrase explosion `S.of_` S "a certain", phrase degree_',
+%  S "which is calculated based on", phrase userInput])
+%  "Predict-Glass-Withstands-Explosion" goalStmtDom
+% \end{lstlisting}
+% 
+% The admittedly awkward embedding of English used here allows us to do all sorts of
+% static analysis on the documents themselves. This part of the system is certainly
+% extremely experimental.
 
 \subsection*{Step 3c: Characteristics of a Good Solution}
 

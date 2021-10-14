@@ -486,28 +486,35 @@ One of our outputs is a probability, which can be checked to be between $0$ and 
 
 To illustrate the specialization of theories, we will look outside of the
 GlassBr example because, due to its phenomenological nature, GlassBr only has
-trivial specializations.  Instead, to illustrate this step we will turn our
-attention to another example we built in our framework: a solar water heating
-system (based on original FORTRAN code from colleagues in mechanical
-engineering).  Since this is a heat transfer problem, the initial theory is the
-general form of the conservation of thermal energy.  This general form is a
-partial differential equation in 3D space and time.  To specialize the theory to
-the solar water heating tank, we introduced the following assumptions:
+trivial specializations.  To illustrate this step we will turn to another
+example: a solar water heating system (based on original FORTRAN code from
+colleagues in mechanical engineering).  Since this is a heat transfer problem,
+the initial theory is the general form of the conservation of thermal energy.
+This general form is a partial differential equation in 3D space and time.  To
+specialize the theory to the solar water heating tank, we introduced the
+following assumptions:
 
 \begin{itemize}
 
-\item The water in the tank is fully mixed, so the temperature of the water is
-the same throughout the entire tank.
+\item The water in the tank is fully mixed.
 
-\item The density of water has no spatial variation; that is, it is constant
-over their entire volume.
+\item The density of water has no spatial variation.
 
-\item The specific heat capacity of water has no spatial variation; that is, it
-is constant over its entire volume.
+\item The specific heat capacity of water has no spatial variation.
 
 \end{itemize}
 
-Allows to refine to new theory.  For readers too.  like ..., to get a system of first order ordinary differential equations.  Rationale.  Reuse - change assumptions, family of models.
+The refined theory is an ordinary differential equation that depends only on
+time.  This new theory is parameterized by material properties and the area and
+thermal flux between two adjacent bodies. This theory in turn is specialized
+into two more theories: one where the adjacent bodies are the tank and the
+heating coil, and one where the bodies are the water and a phase change
+material.
+
+By systematically refining the theory, and generating documentation, human
+beings can validate the assumptions and the mathematical model. By capturing the
+knowledge, changes can be made to realize a family of mathematical models.
+Moreover, the knowledge can be reused for other heat transfer problems.
 
 %% Commenting this out, as it didn't really represent 4b
 %

@@ -396,8 +396,9 @@ for space.}
 corresponding to steps of the process.
 \subsection*{Step 3a: Base Knowledge}
 
-Common ideas prevalent in GlassBR contain the different types 
+A common idea prevalent in GlassBR is the different types 
 of \texttt{Glass} (a canonical representation of glass):
+
 \begin{center}
   \begin{tabular}{|l|l|l|l|}
     \hline
@@ -419,7 +420,8 @@ of \texttt{Glass} (a canonical representation of glass):
 %   lGlass  = ci' "lGlass" (np' "laminated glass") "LG" [idglass]
 % \end{lstlisting}
 
-One important \textit{data definition} is that of ``Risk of Failure'':
+We also need to capture the \textit{data definition} of ``Risk of Failure''.
+
 \begin{center}
   \begin{tabular}{|l|l|}
     \hline
@@ -432,14 +434,14 @@ One important \textit{data definition} is that of ``Risk of Failure'':
       \hbox{\strut $k$ is the surface flaw parameter ($\frac{m^12}{N^7}$)}
       \hbox{\strut $a$ \& $b$ are the plate length \& width (\textit{m})}
       \hbox{\strut $...$}
-% TODO: Do we want to have all of the variables listed?
+% Do we want to have all of the variables listed? - No - there isn't room
 %      \hbox{\strut $m$ is the surface flaw parameter ($\frac{m^{12}}{N^7}$)}
 %      \hbox{\strut $E$ is the modulus of elasticity of glass (\textit{Pa})}
 %      \hbox{\strut $h$ is the minimum thickness (\textit{m})}
 %      \hbox{\strut $LDF$ is the load duration factor (Unitless)}
 %      \hbox{\strut $J$ is the stress distribution factor (Unitless)}
     } \\ \hline
-    \textbf{Source} & \cite{ASTM2009}, \cite{BeasonEtAl1998} (Equations 4 \& 5), \& \cite{Campidelli} (Equation 14) \\ \hline % TODO: Campidelli reference?
+    \textbf{Source} & \cite{ASTM2009}, \cite{BeasonEtAl1998} \\ \hline % The Campidelli reference was removed because we cannot really cite personal communication and not reveal our identities
   \end{tabular}
 \end{center}
 

@@ -22,12 +22,12 @@
       \node [instModel] (im) {
           { \Large \textbf{IM:isSafePb} } \\
           \textit{Equational} \\
-          $is-safePb = P_b < P_{btol}$
+          $\mathit{is\_safePb} = P_b < P_{btol}$
         };
       \node [theoModel, above of = im] (tm) {
           { \Large \textbf{TM:isSafeProb} } \\
           \textit{Equational} \\
-          $is-safeProb = P_f < P_{ftol}$
+          $\mathit{is\_safeProb} = P_f < P_{ftol}$
         };
       \node [dataDefn, below of = im] (ddPb) {
           { \Large \textbf{DD:probOfBreak} } \\
@@ -46,11 +46,11 @@
       \node [dataDefn, left of = dds1] (dds3) {
          { \Large \textbf{...}}
         };
-      \node [unital, above of = tm] (unIsSafeProb) {$is-safeProb$};
+      \node [unital, above of = tm] (unIsSafeProb) {$\mathit{is\_safeProb}$};
       \node [unital, right of = unIsSafeProb] (unPf) {$P_f$};
       \node [unital, right of = unPf] (unPftol) {$P_{ftol}$};
       \node [unital, right of = ddPb, node distance = 8cm] (unPb) {$P_b$};
-      \node [unital, above of = unPb, node distance = 6cm] (unIsSafePb) {$is-safePb$};
+      \node [unital, above of = unPb, node distance = 6cm] (unIsSafePb) {$\mathit{is\_safePb}$};
       \node [unital, right of = im, node distance = 8cm] (unPbtol) {$P_{btol}$};
       \node [unital, below of = unPb] (unB) {$B$};
       \node [unital, below of = dds1] (uns1) {$...$};

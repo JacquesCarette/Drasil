@@ -396,25 +396,65 @@ for space.}
 corresponding to steps of the process.
 \subsection*{Step 3a: Base Knowledge}
 
-\begin{lstlisting}
-fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
-fullyT  = ci' "fullyT" (np' "fully tempered") "FT" [idglass]
-glassTF = ci' "glassTypeFac" (np' "glass type factor") "GTF" [idglass]
-heatS   = ci' "heatS" (np' "heat strengthened") "HS"[idglass]
-iGlass  = ci' "iGlass" (np' "insulating glass") "IG"[idglass]
-lGlass  = ci' "lGlass" (np' "laminated glass") "LG" [idglass]
+Common ideas prevalent in GlassBR contain the different types 
+of \texttt{Glass} (a canonical representation of glass):
+\begin{center}
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{UID} & \textbf{Term (Name)} & \textbf{Abbrev.} & \textbf{Domain} \\ \hline
+    \texttt{fullyT} & Fully Tempered & FT & \texttt{[Glass]} \\ \hline
+    \texttt{heatS} & Heat Strengthened & HS & \texttt{[Glass]} \\ \hline
+    \texttt{iGlass} & Insulating Glass & IG & \texttt{[Glass]} \\ \hline
+    \texttt{lGlass} & Laminated Glass & LG & \texttt{[Glass]} \\ \hline
+    \texttt{glassTypeFac} & Glass Type Factor & GTF & \texttt{[Glass]} \\ \hline
+  \end{tabular}
+\end{center}
 
-risk :: DataDefinition
-risk = ddE riskQD
- [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
- dRefInfo campidelli $ Equation [14]] Nothing "riskFun" 
- [aGrtrThanB, hRef, ldfRef, jRef]
- where 
-  riskQD = mkQuantDef riskFun riskEq
-  riskEq = (sy sflawParamK $/ (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) 
-   `mulRe`
-   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
-\end{lstlisting}
+% \begin{lstlisting}
+%   fullyT, glassTypeFac, heatS, iGlass, lGlass :: CI
+%   fullyT  = ci' "fullyT" (np' "fully tempered") "FT" [idglass]
+%   glassTF = ci' "glassTypeFac" (np' "glass type factor") "GTF" [idglass]
+%   heatS   = ci' "heatS" (np' "heat strengthened") "HS"[idglass]
+%   iGlass  = ci' "iGlass" (np' "insulating glass") "IG"[idglass]
+%   lGlass  = ci' "lGlass" (np' "laminated glass") "LG" [idglass]
+% \end{lstlisting}
+
+One important \textit{data definition} is that of ``Risk of Failure'':
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    \textbf{Label} & Risk of Failure \\ \hline
+%    \textbf{Symbol} & $B$ \\ \hline
+%    \textbf{Units} & Unitless \\ \hline
+    \textbf{Equation} & $B = \frac{k}{(ab)^{m-1}}(Eh^2)^m\mathit{LDF}e^J$ \\ \hline
+    \textbf{Description} & \vbox{
+      \hbox{\strut $B$ is the Risk of Failure (Unitless)}
+      \hbox{\strut $k$ is the surface flaw parameter ($\frac{m^12}{N^7}$)}
+      \hbox{\strut $a$ \& $b$ are the plate length \& width (\textit{m})}
+      \hbox{\strut $...$}
+% TODO: Do we want to have all of the variables listed?
+%      \hbox{\strut $m$ is the surface flaw parameter ($\frac{m^{12}}{N^7}$)}
+%      \hbox{\strut $E$ is the modulus of elasticity of glass (\textit{Pa})}
+%      \hbox{\strut $h$ is the minimum thickness (\textit{m})}
+%      \hbox{\strut $LDF$ is the load duration factor (Unitless)}
+%      \hbox{\strut $J$ is the stress distribution factor (Unitless)}
+    } \\ \hline
+    \textbf{Source} & \cite{ASTM2009}, \cite{BeasonEtAl1998} (Equations 4 \& 5), \& \cite{Campidelli} (Equation 14) \\ \hline % TODO: Campidelli reference?
+  \end{tabular}
+\end{center}
+
+% \begin{lstlisting}
+% risk :: DataDefinition
+% risk = ddE riskQD
+%  [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
+%  dRefInfo campidelli $ Equation [14]] Nothing "riskFun" 
+%  [aGrtrThanB, hRef, ldfRef, jRef]
+%  where 
+%   riskQD = mkQuantDef riskFun riskEq
+%   riskEq = (sy sflawParamK $/ (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) 
+%    `mulRe`
+%    ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
+% \end{lstlisting}
 
 \subsection*{Step 3b: Coherent Narrative}
 

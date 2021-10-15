@@ -1,4 +1,4 @@
-\documentclass[sigconf,review,anonymous=true]{acmart}
+\documentclass[sigconf,review,anonymous=false]{acmart}
 
 %% Copyright information
 \setcopyright{acmcopyright} % TODO: copyright?
@@ -151,7 +151,7 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 \maketitle
 
 \section{The Context}
-\subsection{``Well understood'' Software?}\label{ch:wellUnderstood}
+\subsection{``Well understood'' software?}\label{ch:wellUnderstood}
 
 \begin{defn}
 A software domain is \emph{well understood} if
@@ -339,12 +339,12 @@ We will focus on information capture and the artifacts we can generate. For
 concreteness, we'll use a single example from our suite: GlassBR, used to
 assess the risk for glass facades subject to blast loading.
 The requirements are based on an American Standard Test Method (ASTM) standard
-\cite{BeasonEtAl1998, ASTM2009}. GlassBR was originally a Visual
+\cite{BeasonEtAl1998, ASTM2009, ASTM2015}. GlassBR was originally a Visual
 Basic code/spreadsheet created by colleagues in a civil engineering research
 lab.  We added their domain knowledge to our framework, along with recipes to
 generate relevant artifacts.  Not only can we generate code for the necessary
 calculations (in \CC, C\#, Java, Python and Swift), we added documentation that
-was not in the original (Software Requirements Specification, doxygen, README.md
+was absent in the original (Software Requirements Specification, doxygen, README.md
 and a Makefile). Moreover, our implementation is actually a family of
 implementations, since some design decisions are explicitly exposed as
 changeable variabilities, as described below.
@@ -393,7 +393,7 @@ We now give example conceptual encodings corresponding to steps of the process.
 This could be in the context of the glass facade for a building.
 
 \heading{Step 2: Understood}
-The details are extensively documented in~\cite{BeasonEtAl1998, ASTM2009}.
+The details are extensively documented in~\cite{BeasonEtAl1998, ASTM2009, ASTM2015}.
 
 \heading{Step 3a: Base Knowledge}
 A recurring idea is the different types of \texttt{Glass}:
@@ -409,7 +409,7 @@ A recurring idea is the different types of \texttt{Glass}:
   \end{tabular}
 \end{center}
 
-The ``Risk of Failure'' is definable, using the following template for a
+\noindent The ``Risk of Failure'' is definable, using the following template for a
 \textit{data definition}:
 \begin{center}
   \begin{tabular}{|l|l|}
@@ -440,7 +440,7 @@ The ``Risk of Failure'' is definable, using the following template for a
 % glass slag - named chunk
 % degree - concept chunk
 % user input - named chunk
-\heading{Step 3b: Coherent Narrative}
+\heading{Step 3b: Coherent narrative}
 The descriptions in GlassBR are produced using an experimental language 
 using specialized markup
 for describing relations between knowledge. For example, the goal of GlassBR 
@@ -453,14 +453,15 @@ related ideas). We call this goal a ``concept instance'' (a concept chunk
 applied in some way). This language lets us
 perform various static analyses on our artifacts.
 
-\heading{Step 3c: Characteristics of a Good Solution}
-One of our outputs is a probability, which can be checked to be between $0$ and
-$1$ (not shown).
+\heading{Step 3c: Characteristics of a good solution}
+One of our outputs is a probability, which should be checked to be between $0$ and
+$1$ (code not shown).
 
-\heading{Step 4: Specialization of Theories}
-In the GlassBR example, the main specialization occurs because manufacturers standardize glass
-thickness, so the thickness parameter is not free to vary,
-but must take on specific values.
+\heading{Step 4: Specialization of theories}
+In the GlassBR example, the main specialization is that the thickness parameter
+is not free to vary, but must take one of a specific set of values. The
+rationale for this specialization is that manufacturers have standardized the
+glass thickness they will provide.
 
 The phenomenological nature of the GlassBR example is atypical in this way; most research software examples involve more significant
 specialization, such as partial differential equations to ordinary,
@@ -492,8 +493,8 @@ and so on.
 %}
 %\end{lstlisting}
 
-\heading{Step 5: Code-level Choices}
-We can choose output programming language, how ``modular'' the generated code
+\heading{Step 5: Code-level choices}
+We can choose the output programming language, how ``modular'' the generated code
 is, whether we want programs or libraries, the level of logging and comments,
 etc. Here we show the actual code we use for this, as it is reasonably
 direct.
@@ -517,11 +518,11 @@ choices = defaultChoices {
 }
 \end{lstlisting}
 
-\heading{Step 6: Recipe to Generate Artifacts}
+\heading{Step 6: Recipe to generate artifacts}
 
 The various pieces of knowledge specified in the previous steps are
 assembled into \emph{recipes} for generating the artifacts, for example
-specification, code, dependency diagram and log of all choices used.  Each one
+specification, code, dependency diagrams and log of all choices used.  Each one
 of these has its own DSL that encodes the parts of a specification, the
 requirements for code\footnote{which has been already published
 and will be cited later}, etc.
@@ -544,8 +545,8 @@ main = do
 
 \section{Concluding Remarks} \label{ch:concluding_remarks}
 
-To summarize:
-\\
+% To summarize:
+% \\
 
 \begin{mdframed}[style=MyFrame]
 \begin{itemize}[leftmargin=\widthof{[\textbf{Opportunity}]}]
@@ -555,21 +556,24 @@ To summarize:
 \end{itemize}
 \end{mdframed}
 
-The reason we get productivity gains is because there is in fact an
+We get productivity gains because there is in fact an
 incredible amount of \emph{knowledge duplication} present in software,
-especially in well understood domains. There, building software really
-ought to be a matter of assembly-line style engineering. Furthermore,
+especially in well understood domains. For these domains building software really
+should be a matter of assembly-line style engineering. Furthermore,
 there is also inherent knowledge duplication between the softifacts of
 a project because \emph{they are about the same topic}.
 
 This means that if we spend some up-front time capturing the fundamental
 knowledge of specific domains (such as mechanics of rigid body motion,
-dynamics of soil, trains, etc), most development time can then be later
+dynamics of soil, trains, etc), most later development time can be
 spent on the \emph{specifics} of the given requirements.
 
-As a side-effect, something we have not been able to illustrate in the 
-short space of this paper, we can obtain traceability and consistency, by
-construction.
+As a side-effect, we obtain traceability and consistency, by construction.
+Traceability is illustrated by Figure~\ref{Fig_DrasilAndChange}, which shows we
+can track where each of the concepts is used.  An example of consistency is
+found in the table of symbols that appears in our generated documentation.  The
+list of symbols is not entered by the user; it is automatically constructed from
+the base knowledge (Step 3a).
 
 There are further ideas that co-exist smoothly with our framework, most notably
 software families and correctness.  Our process will remove human errors from
@@ -577,7 +581,7 @@ generating and maintaining documentation, code, test cases and build
 environments, since these mundane details are handled by the generator.
 Furthermore, our work makes it easy to experiment with ``what if'' scenarios,
 which make it easy to explicitly track the
-ramifications of a proposed change.  
+ramifications proposed changes.  
 
 With the right up-front investment, we can have sustainable software
 development because stable knowledge is separated from 
@@ -599,7 +603,7 @@ and requirements reside.
 
 %% Was in 4a
 To illustrate the specialization of theories, we will look outside of the
-GlassBr example because, due to its phenomenological nature, GlassBr only has
+GlassBR example because, due to its phenomenological nature, GlassBR only has
 trivial specializations.  To illustrate this step we will turn to another
 example: a solar water heating system incorporating phase change material
 \cite{DouviEtAl2021} (based on original FORTRAN code from colleagues in

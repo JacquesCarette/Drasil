@@ -1,4 +1,4 @@
-\documentclass[sigconf,review,anonymous=false]{acmart}
+\documentclass[sigconf,review,anonymous=true]{acmart}
 
 %% Copyright information
 \setcopyright{acmcopyright} % TODO: copyright?
@@ -22,12 +22,24 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
 
 % \usepackage[protrusion=true,expansion=true]{microtype} %% option clash
 
-% for inline lists
-\usepackage[inline]{enumitem}
+% for inline lists, and label computation
+\usepackage{calc}
+\usepackage[inline,shortlabels]{enumitem}
 % for nice internal links
 \usepackage{hyperref}
 
 \usepackage{listings}
+\usepackage[framemethod=TikZ]{mdframed}
+
+\mdfdefinestyle{MyFrame}{%
+  linecolor=blue,
+  outerlinewidth=2pt,
+  roundcorner=10pt,
+  innertopmargin=\baselineskip,
+  innerbottommargin=\baselineskip,
+  innerrightmargin=10pt,
+  innerleftmargin=10pt
+}
 
 \newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\small\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\small\bf +}}
 
@@ -85,32 +97,15 @@ May 21--29, 2022, Pittsburgh, PA, USA} \acmISBN{978-1-4503-XXXX-X/18/06}
   Current software development is often quite code-centric and aimed at
   short-term deliverables, due to various contextual forces. We're interested in
   contexts where different forces are at play.  \textbf{Well understood domains}
-  and \textbf{long-lived software} provide such an opportunity. By further
+  and \textbf{long-lived software} provide such an opportunity. By
   applying generative techniques, aggressive knowledge capture has the real
   potential to greatly increase long-term productivity.
 
-%  Current software development methods are often too short-sighted and too
-%  code-centric to be ideally suited to productive long-term development of
-%  software (and software families) in well understood domains.  Well understood
-%  domains, like scientific and mathematical domains, provide an opportunity for
-%  capturing knowledge, which can then be transformed into multiple views in
-%  different software artifacts (documentation, code, test cases, build scripts,
-%  etc.) within and between projects.  A software
-% domain is considered well understood if the domain knowledge can be codified,
-% the computational interpretation of the domain knowledge is clear and the
-% engineering of code to perform the computations is well understood.  
   Key is to recognize that currently hand-written software artifacts contain
   considerable knowledge duplication. With proper tooling and appropriate
-  codification of domain knowledge increasing productivity is feasible. We
-  present an example of what this looks like, and the benefits (reuse,
-  traceability, change management) thus gained.
-%  We present an idealized process that codifies domain knowledge and employs
-%  generative techniques to create the required software artifacts.  To be
-%  successful, the process requires tool support, which we developed as a set of
-%  Domain Specific Languages implemented in Haskell.  The process, along with
-%  opportunities for knowledge reuse, traceability and change management, is
-%  illustrated via an example of software used to predict the risk of breakage
-%  for glass windows subjected to an explosive blast.
+  codification of domain knowledge, greatly increasing productivity is
+  feasible. We present an example of what this looks like, and just some of
+  the benefits (reuse, traceability, change management) thus gained.
 \end{abstract}
 
 
@@ -210,8 +205,8 @@ satisfaction acts as a proxy for effective quality
 .
 This explicit emphasis on all knowledge produced, rather than just the
 operationalizable knowledge (aka code) 
-implies that human-reusable knowledge, i.e.\ documentation, should also be
-greatly valued.
+implies that human-reusable knowledge, i.e.\ documentation, is crucial.
+This is why the \emph{long-lived} context is important.
 
 \subsection{Documentation}
 Our definition of well understood also applies to \textbf{documentation} aimed
@@ -220,8 +215,7 @@ at humans.  Explicitly:
 \item The meaning of the models is understood at a human-pedagogical
 level, i.e.\ it is explainable.
 \item Combining models is explainable. Thus \emph{transformers}
-  %we mentioned before %this is actually the first time transformers are mentioned
-  simultaneously operate on mathematical representations
+simultaneously operate on mathematical representations
 and on explanations. This requires that English descriptions also be
 captured in the same manner as the formal-mathematical knowledge.
 \item Similarly, the \emph{transformers} that arise from making software
@@ -237,7 +231,6 @@ theories}~\cite{Farmer2007}. We couple
 \item an English description
 \end{enumerate*}
 of a concept.
-
 
 %\subsection{Choices}
 %
@@ -552,29 +545,45 @@ main = do
 
 \section{Concluding Remarks} \label{ch:concluding_remarks}
 
-For well understood domains, building software ought to be a matter of
-engineering, based on solid scientific foundations. The ultimate test of ``well
-understood'' is being able to teach the domain language to a computer. We have
-shown samples of a process and implementation framework for generating all of
-the software artifacts for (well understood) software, from the natural
-knowledge base of the domain.
+To summarize:
+\\
 
-We take advantage of inherent knowledge duplication between artifacts in a
-project, and between projects, by capturing the knowledge once and providing
-means to transform that information into all of the views needed within a given
-project.  Developers can realize long-term productivity with documentation and
-code that are consistent by construction.
+\begin{mdframed}[style=MyFrame]
+\begin{itemize}[leftmargin=\widthof{[\textbf{Opportunity}]}]
+\item[\textbf{Opportunity}]: well-understood + long-lived
+\item[\textbf{Tools}]: knowledge capture + DSLs + generators
+\item[\textbf{Result}]: \emph{long-term productivity gain}
+\end{itemize}
+\end{mdframed}
 
-Codifying scientific, engineering and computational knowledge is challenging,
-but success will completely transform the development of software, and software
-families, in well understood domains. Our process will remove human errors from
+The reason we get productivity gains is because there is in fact an
+incredible amount of \emph{knowledge duplication} present in software,
+especially in well understood domains. There, building software really
+ought to be a matter of assembly-line style engineering. Furthermore,
+there is also inherent knowledge duplication between the softifacts of
+a project because \emph{they are about the same topic}.
+
+This means that if we spend some up-front time capturing the fundamental
+knowledge of specific domains (such as mechanics of rigid body motion,
+dynamics of soil, trains, etc), most development time can then be later
+spent on the \emph{specifics} of the given requirements.
+
+As a side-effect, something we have not been able to illustrate in the 
+short space of this paper, we can obtain traceability and consistency, by
+construction.
+
+There are further ideas that co-exist smoothly with our framework, most notably
+software families and correctness.  Our process will remove human errors from
 generating and maintaining documentation, code, test cases and build
-environments, since the mundane details are handled by the generator.  With the
-new software tools, we can potentially detect inconsistencies between theory via
-inter-theory consistency constraints. Moreover, we can explicitly track the
-ramifications of a proposed change.  With the right up-front investment, we can
-have sustainable software because stable knowledge is separated from rapidly
-changing assumptions and design decisions.
+environments, since these mundane details are handled by the generator.
+Furthermore, our work makes it easy to experiment with ``what if'' scenarios,
+which make it easy to explicitly track the
+ramifications of a proposed change.  
+
+With the right up-front investment, we can have sustainable software
+development because stable knowledge is separated from 
+local context, which is where most of the rapidly changing assumptions
+and requirements reside.
 
 \newpage
 %% Bibliography

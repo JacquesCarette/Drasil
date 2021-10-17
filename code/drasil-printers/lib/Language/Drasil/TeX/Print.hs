@@ -81,7 +81,8 @@ print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
 
--- TODO: It seems that there's a disconnect with this function and
+-- TODO: It seems that there's a disconnect from this function and that of Symbol.hs?
+
 -- | Converts a symbol into a printable document form.
 symbol :: LD.Symbol -> D
 symbol (LD.Variable s) = pure $ text s

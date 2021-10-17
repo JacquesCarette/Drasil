@@ -80,6 +80,8 @@ print :: PrintingInformation -> [LayoutObj] -> D
 print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
+
+-- TODO: It seems that there's a disconnect with this function and
 -- | Converts a symbol into a printable document form.
 symbol :: LD.Symbol -> D
 symbol (LD.Variable s) = pure $ text s
@@ -123,7 +125,8 @@ pExpr (Case ps)      = mkEnv "cases" (cases ps)
 pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
-pExpr (Ident s)      = pure . text $ s
+pExpr (Ident s@[_])  = pure . text $ s
+pExpr (Ident s)      = commandD "mathit" (pure $ text s)
 pExpr (Label s)      = command "text" s
 pExpr (Spec s)       = pure . text $ unPL $ L.special s
 --pExpr (Gr g)         = unPL $ greek g

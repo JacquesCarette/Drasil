@@ -80,11 +80,11 @@ ${A_{\text{out}}}$ & Surface area over which heat is transferred out & ${\text{m
 \\
 ${A_{\text{P}}}$ & Phase change material surface area & ${\text{m}^{2}}$
 \\
-$AR$ & Aspect ratio & --
+$\mathit{AR}$ & Aspect ratio & --
 \\
-${AR_{\text{max}}}$ & Maximum aspect ratio & --
+${\mathit{AR}_{\text{max}}}$ & Maximum aspect ratio & --
 \\
-${AR_{\text{min}}}$ & Minimum aspect ratio & --
+${\mathit{AR}_{\text{min}}}$ & Minimum aspect ratio & --
 \\
 $C$ & Specific heat capacity & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
@@ -160,7 +160,7 @@ ${m_{\text{P}}}$ & Mass of phase change material & ${\text{kg}}$
 \\
 ${m_{\text{W}}}$ & Mass of water & ${\text{kg}}$
 \\
-$MINFRACT$ & Minimum fraction of the tank volume taken up by the PCM & --
+$\mathit{MINFRACT}$ & Minimum fraction of the tank volume taken up by the PCM & --
 \\
 $\symbf{\hat{n}}$ & Unit outward normal vector for a surface & --
 \\
@@ -1105,18 +1105,18 @@ RefBy & \hyperref[TM:latentHtE]{TM:latentHtE} and \hyperref[IM:eBalanceOnPCM]{IM
 Label & Aspect ratio
         
 \\ \midrule \\
-Symbol & $AR$
+Symbol & $\mathit{AR}$
          
 \\ \midrule \\
 Units & Unitless
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           AR=\frac{D}{L}
+           \mathit{AR}=\frac{D}{L}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$AR$ is the aspect ratio (Unitless)}
+              \item{$\mathit{AR}$ is the aspect ratio (Unitless)}
               \item{$D$ is the diameter of tank (${\text{m}}$)}
               \item{$L$ is the length of tank (${\text{m}}$)}
               \end{symbDescription}
@@ -1459,7 +1459,7 @@ ${{C_{\text{P}}}^{\text{S}}}$ & ${{C_{\text{P}}}^{\text{S}}}\gt{}0$ & ${{{C_{\te
 \\
 ${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${{C_{\text{W}}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{{C_{\text{W}}}^{\text{max}}}$ & $4186$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-$D$ & $D\gt{}0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ ${\text{m}}$ & 10$\%$
+$D$ & $D\gt{}0$ & ${\mathit{AR}_{\text{min}}}\leq{}D\leq{}{\mathit{AR}_{\text{max}}}$ & $0.412$ ${\text{m}}$ & 10$\%$
 \\
 ${H_{\text{f}}}$ & ${H_{\text{f}}}\gt{}0$ & ${{H_{\text{f}}}_{\text{min}}}\lt{}{H_{\text{f}}}\lt{}{{H_{\text{f}}}_{\text{max}}}$ & $211600$ $\frac{\text{J}}{\text{kg}}$ & 10$\%$
 \\
@@ -1479,7 +1479,7 @@ ${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{{t_
 \\
 ${t_{\text{step}}}$ & $0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ ${\text{s}}$ & 10$\%$
 \\
-${V_{\text{P}}}$ & $0\lt{}{V_{\text{P}}}\lt{}{V_{\text{tank}}}$ & ${V_{\text{P}}}\geq{}MINFRACT {V_{\text{tank}}}$ & $0.05$ ${\text{m}^{3}}$ & 10$\%$
+${V_{\text{P}}}$ & $0\lt{}{V_{\text{P}}}\lt{}{V_{\text{tank}}}$ & ${V_{\text{P}}}\geq{}\mathit{MINFRACT} {V_{\text{tank}}}$ & $0.05$ ${\text{m}^{3}}$ & 10$\%$
 \\
 ${ρ_{\text{P}}}$ & ${ρ_{\text{P}}}\gt{}0$ & ${{ρ_{\text{P}}}^{\text{min}}}\lt{}{ρ_{\text{P}}}\lt{}{{ρ_{\text{P}}}^{\text{max}}}$ & $1007$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
@@ -1942,9 +1942,9 @@ This section contains the standard values that are used for calculations in SWHS
 \endhead
 ${{A_{\text{C}}}^{\text{max}}}$ & maximum surface area of coil & $100000$ & ${\text{m}^{2}}$
 \\
-${AR_{\text{max}}}$ & maximum aspect ratio & $100$ & --
+${\mathit{AR}_{\text{max}}}$ & maximum aspect ratio & $100$ & --
 \\
-${AR_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
+${\mathit{AR}_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
 \\
 ${C_{\text{tol}}}$ & relative tolerance for conservation of energy & $0.001\%$ & --
 \\
@@ -1976,7 +1976,7 @@ ${L_{\text{max}}}$ & maximum length of tank & $50$ & ${\text{m}}$
 \\
 ${L_{\text{min}}}$ & minimum length of tank & $0.1$ & ${\text{m}}$
 \\
-$MINFRACT$ & minimum fraction of the tank volume taken up by the PCM & $1.0\cdot{}10^{-6}$ & --
+$\mathit{MINFRACT}$ & minimum fraction of the tank volume taken up by the PCM & $1.0\cdot{}10^{-6}$ & --
 \\
 ${{t_{\text{final}}}^{\text{max}}}$ & maximum final time & $86400$ & ${\text{s}}$
 \\

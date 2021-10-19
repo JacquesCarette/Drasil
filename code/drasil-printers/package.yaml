@@ -2,7 +2,7 @@ name:                drasil-printers
 version:             0.1.10.0
 author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - Printers SubPackage
+synopsis:	     A framework for code and document generation for scientific software - Printers SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
@@ -13,17 +13,23 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - pretty
+- containers
+- directory
+- drasil-data
 - drasil-code-base
 - drasil-database
 - drasil-lang
+- drasil-theory
 - drasil-utils
+- json
+- split
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
   - Language.Drasil.Printers
   when:

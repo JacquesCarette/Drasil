@@ -1,16 +1,16 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2018
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Data**
-  - Contains the current common-knowledge base for Drasil
- 
+**lib**
+  - Contains the library code for this package.
+
+package.yaml
+  - Used by Hpack
+
 README.md
   - This file
-
-drasil-data.cabal
-  - Cabal file, used by stack to build drasil-data
 
 stack.yaml
   - Used by Stack

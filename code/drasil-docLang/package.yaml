@@ -28,11 +28,14 @@ ghc-options:
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
   - Drasil.DocLang
+  - Drasil.DocLang.Notebook
   - Drasil.DocLang.SRS
   - Drasil.DocumentLanguage.Units
+  - Drasil.DocumentLanguage.TraceabilityGraph
+  - Drasil.SRSDocument
   when:
   - condition: false
     other-modules: Paths_drasil_docLang

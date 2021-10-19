@@ -1,8 +1,9 @@
 If you are looking for **build instructions**, find them in the [top level README](https://github.com/JacquesCarette/Drasil).
 
 --------------------------------------------------
-### Drasil Coding Style Guide
-Last updated: July 26, 2018
+## Drasil Coding Style Guide
+Last updated: August 20, 2021
+
 --------------------------------------------------
 
 1. Use spaces instead of tabs. Preferably 2 spaces per indent level. Ex:
@@ -29,6 +30,7 @@ top level
   S "is the"
   ...
 ```
+For more information, please see the [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
 
 -------------------------------------------------
 ### Quick Start Legend
@@ -38,33 +40,28 @@ top level
 |------------|-----------------|----------------|
 | `+:+` | Concatenates two sentences and adds a space in between them | Sentence -> Sentence -> Sentence |
 | `:+:` | Concatenates two sentences | Sentence -> Sentence -> Sentence |
-| `atStart` | Returns the singular form of a NounPhrase, for use at the start of a sentence (ie. Capitalized) | NounPhrase n => n -> Sentence |
-| `atStart'` | Returns the plural form of a NounPhrase, for use at the start of a sentence (ie. Capitalized) | NounPhrase n => n -> Sentence |
+| `atStart` | Returns the singular form of a NamedIdea, for use at the start of a sentence (ie. Capitalized) | NamedIdea n => n -> Sentence |
+| `atStart'` | Returns the plural form of a NamedIdea, for use at the start of a sentence (ie. Capitalized) | NamedIdea n => n -> Sentence |
 | `cn` | Create a self-plural, common-noun NounPhrase | String -> NP |
 | `cn'` | Create a common-noun NounPhrase which becomes plural by adding "s" | String -> NP |
 | `introduceAbb` | Introduces an abbreviation using the titleized version of the term followed by the abbreviation in parentheses | NamedIdea n => n -> Sentence |
 | `of_` | Creates a compound nounphrase from two terms, with " of " between them | (NamedIdea a, NamedIdea b) => a -> b -> NP |
-| `of'` | Similar to `of_` except the second term is always plural and the arguments must be NounPhrases, not NamedIdeas | (NounPhrase a, NounPhrase b) => a -> b -> NP |
-| `npnc` | Creates a NamedIdea with a given id (String) and term (NP). Does not have an abbreviation | String -> NP -> NPNC |
-| `npnc'` | Same as `npnc` except with the addition of an abbreviation (String) | String -> NP -> String -> NPNC |
-| `phrase` | Returns the singular form of a NounPhrase | NounPhrase n => n -> Sentence |
-| `plural` | Returns the plural form of a NounPhrase | NounPhrase n => n -> Sentence |
+| `phrase` | Returns the singular form of a NamedIdea | NamedIdea n => n -> Sentence |
+| `plural` | Returns the plural form of a NamedIdea | NamedIdea n => n -> Sentence |
 | `sParen` | Wraps a Sentence in parentheses | Sentence -> Sentence |
-| `titleize` | Returns the singular, title form of a NounPhrase | NounPhrase n => n -> Sentence |
-| `titleize'` | Returns the plural, title form of a NounPhrase | NounPhrase n => n -> Sentence |
+| `titleize` | Returns the singular, title form of a NamedIdea | NamedIdea n => n -> Sentence |
+| `titleize'` | Returns the plural, title form of a NamedIdea | NamedIdea n => n -> Sentence |
 
-**Note: See Language.Drasil.Spec.hs for more information on the Sentence type**
+**Note: See Language.Drasil for more information on the Sentence type**
 
-More to come as questions arise.
+Also take a look at the Documentation section of the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki) for more information, as well as the [Haddock documentation](https://jacquescarette.github.io/Drasil/docs/full/index.html) for more functions.
 
 -------------------------------------------------
-### Data types and class instances
+### Data Types and Class Instances
 -------------------------------------------------
 
 See the 
-[cheat sheet on Data Types](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/DataTypes.xlsx) 
-(located in ../People/Dan/DataTypes.xlsx) for more information on which chunk types are instances
-of which classes.
+[Analysis of the Drasil Framework](https://jacquescarette.github.io/Drasil/#Sec:Analysis) for more information on which chunk types are instances of which classes.
 
 -------------------------------------------------
 ### Building Up-to-Date Documentation
@@ -116,25 +113,42 @@ you should instead open the `code/docs/full/index.html` file.
 **drasil-lang**
   - Contains the base for the Drasil language
 
+**drasil-metadata**
+  - Records domain information for use in Drasil
+
 **drasil-printers**
   - Contains the printers for the Drasil language
+
+**drasil-theory**
+  - Contains data structures and functions for models and definitions
+
+**drasil-utils**
+  - Contains utilities used throughout Drasil
+
+**scripts**
+  - Contains all Drasil-related scripts for compiling and deploying Drasil
   
 **stable**
   - Contains the (currently) expected output for each of the examples
-  
+
+countCommand.txt
+  - A text file containing instructions on how to count all unique words 
+  within a file using bash commands
+
+.hlint.yaml
+  - Used by HLint
+
+Drasil.md
+  - (Outdated) detailed contents of some Drasil packages
+
 Makefile
   - The makefile for building Drasil and the examples
 
 README.md
   - This file
-  
-countCommand.txt
-  - A text file containing instructions on how to count all unique words 
-  within a file using bash commands
-  
-log_check.sh
-  - A shell script for comparing the generated output to the expected output for
-  each example. Outputs whether the examples match their stable versions or not
+
+shell.nix
+  - Installs Drasil development requirements (for use with nix)
   
 stack.yaml
   - Used by Stack

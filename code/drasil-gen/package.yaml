@@ -19,13 +19,15 @@ dependencies:
 - drasil-build
 - drasil-code
 - drasil-printers
+- drasil-docLang
+- drasil-database
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
   - Language.Drasil.Generate
   when:

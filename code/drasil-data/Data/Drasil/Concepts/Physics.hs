@@ -22,7 +22,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVe
   cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
   friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
-  iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
+  iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
@@ -44,7 +44,7 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
   gravitationalAccel, gravitationalConst, height, iPos, iSpeed, iVel, impulseS,
-  impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint, kEnergy, linAccel,
+  impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel, joint, kEnergy, linAccel,
   linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, potEnergy,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos, shm,
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
@@ -196,6 +196,9 @@ iyPos = dccWDS "iyPos" (yComp `of_` iPos) (atStartNP $ NP.the $ yComp `of_` iPos
 
 fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
+
+ixSpeed = dccWDS "ixSpeed" (xComp `of_` iSpeed) (atStartNP $ NP.the $ xComp `of_` iSpeed)
+iySpeed = dccWDS "iySpeed" (yComp `of_` iSpeed) (atStartNP $ NP.the $ yComp `of_` iSpeed)
 
 fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")

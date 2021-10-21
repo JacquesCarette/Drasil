@@ -110,6 +110,7 @@ br x = text "{" <> x <> text"}"
 mkDiv :: String -> Doc -> Doc -> Doc
 mkDiv s a0 a1 = (H.bslash <> text s) <> br a0 <> br a1
 
+-- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc
 stripnewLine s = hcat (map text (splitOn "\n" s))
 --filter (`notElem` "\n" )

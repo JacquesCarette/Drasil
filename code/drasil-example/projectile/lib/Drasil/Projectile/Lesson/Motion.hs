@@ -1,7 +1,5 @@
 module Drasil.Projectile.Lesson.Motion where
 
-import Data.List
-
 import qualified Drasil.DocLang.Notebook as NB (summary, hormotion, vermotion)
 
 import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
@@ -11,7 +9,7 @@ import Data.Drasil.Concepts.Math (xDir, yAxis)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 import Drasil.Projectile.Expressions (lcrectVel, lcrectPos, lcrectNoTime, horMotionEqn1, horMotionEqn2,
   verMotionEqn1, verMotionEqn2, verMotionEqn3)
-import qualified Data.Drasil.Quantities.Physics as QP (ixDist, iyDist, iSpeed, ixVel, iyVel, speed,
+import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, ixSpeed, iySpeed, speed, 
   constAccel, gravitationalAccel, xAccel, yAccel, time, xVel, yVel)
 import Data.Drasil.Concepts.Documentation (coordinateSystem)
 import Language.Drasil
@@ -28,11 +26,11 @@ motionContextP1
         S "is often studied in terms of its rectangular components, since the",
         phrasePoss projectile, phrase acceleration +:+. S "always acts in the vertical direciton",
        S "To illustrate the kinematic analysis, consider a ", phrase projectile,
-         S "launched at point", sParen (eS (sy QP.ixDist) `sC` eS (sy QP.iyDist)),
+         S "launched at point", sParen (P lX `sC` P lY),
          S "as shown in" +:+. refS figCSandA,
        S "The path is defined in the", P lX `sDash` P lY, S "plane such that the initial", 
          phrase velocity, S "is", eS (sy QP.iSpeed) :+: S ", having components", 
-         eS (sy QP.ixVel) `S.and_` eS (sy QP.iyVel),
+         eS (sy QP.ixSpeed) `S.and_` eS (sy QP.iySpeed),
        S "When air resistance is neglected, the only", phrase force, S "acting on the",
          phrase projectile, S"is its weight, which causes the", phrase projectile, 
          S "to have a *constant downward acceleration* of approximately",
@@ -51,7 +49,7 @@ horMotion = NB.hormotion [intro, equations, concl] []
                   S "For", phrase projMotion +:+ S "the", phrase acceleration, 
                   S "in the horizontal direction is and equal to zero" +:+. 
                   sParen(eS (sy QP.xAccel $= exactDbl 0)), motionSent]
-        equations = foldlSP_ $ intersperse (S ",") (weave [equationsSents, map eS horMotionEqns])
+        equations = foldlSP_ $ weave [equationsSents, map eS horMotionEqns]
         concl = foldlSP [
                   S "Since the", phrase acceleration, S "in the" +:+ phrase xDir, 
                   sParen (eS (sy QP.xAccel)), S "is zero, the horizontal component of ", phrase velocity,

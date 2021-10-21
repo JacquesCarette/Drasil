@@ -28,7 +28,7 @@ import Control.Lens ((^.))
 
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.Function (on)
-import Data.List (sortBy, transpose)
+import Data.List (sortBy, transpose, intercalate)
 
 -- | Sorts a list of 'HasSymbols' by 'Symbol'.
 sortBySymbol :: HasSymbol a => [a] -> [a]
@@ -152,6 +152,10 @@ bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 -- | Interweaves two lists together @[[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]@.
 weave :: [[a]] -> [a]
 weave = concat . transpose
+
+-- | Interweaves two lists together with new line in between.
+--weave' :: [[a]] -> [a]
+--weave' a = intercalate "\n" (transpose a)
 
 -- | Get a unit symbol if there is one.
 unwrap :: Maybe UnitDefn -> Sentence

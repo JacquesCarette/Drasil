@@ -10,9 +10,9 @@ import Language.Drasil
 import Utils.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst, gravitationalAccel,
+import Data.Drasil.Quantities.Physics (gravitationalAccelConst,
   ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, 
-  velocity, acceleration, constAccelV, speed, ixSpeed, iySpeed)
+  velocity, acceleration, constAccelV, speed)
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)
 
 flightDur', iyPos, yConstAccel, iSpeed :: PExpr
@@ -66,15 +66,6 @@ lcrectVel, lcrectPos, lcrectNoTime :: LabelledContent
 lcrectVel = lbldExpr (sy speed $= speed') (makeEqnRef "rectVel")
 lcrectPos = lbldExpr (sy scalarPos $= scalarPos') (makeEqnRef "rectPos")
 lcrectNoTime = lbldExpr rectNoTime (makeEqnRef "rectNoTime")
-
---horMotionEqn1, horMotionEqn2 :: Expr
---horMotionEqn1 = sy xVel $= sy ixSpeed
---horMotionEqn2 = sy xPos $= sy QP.ixPos `addRe` (sy ixSpeed `mulRe` sy time)
-
---verMotionEqn1, verMotionEqn2, verMotionEqn3 :: Expr
---verMotionEqn1 = sy yVel $= sy iySpeed $- (sy gravitationalAccel `mulRe` sy time)
---verMotionEqn2 = sy yPos $= sy QP.iyPos `addRe` (sy iySpeed `mulRe` sy time) $- (sy gravitationalAccel `mulRe` square (sy time) $/ exactDbl 2)
---verMotionEqn3 = square (sy yVel) $= square (sy iySpeed) $- (exactDbl 2 `mulRe` sy gravitationalAccel `mulRe` (sy yPos $- sy QP.iyPos)) 
 
 -- References --
 eqnRefs :: [Reference]

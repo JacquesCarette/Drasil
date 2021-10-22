@@ -28,7 +28,7 @@ import Control.Lens ((^.))
 
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.Function (on)
-import Data.List (sortBy, transpose, intercalate)
+import Data.List (sortBy, transpose)
 
 -- | Sorts a list of 'HasSymbols' by 'Symbol'.
 sortBySymbol :: HasSymbol a => [a] -> [a]

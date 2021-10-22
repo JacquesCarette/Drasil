@@ -26,10 +26,10 @@ lrIsSafe = tm (equationalModel' lrIsSafeQD)
    [lrIsSafeQD] [] [] [dRef astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
 
-lrIsSafeQD :: QDefinition
+lrIsSafeQD :: ModelQDef
 lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") lrIsSafeExpr
 
-lrIsSafeExpr :: Expr
+lrIsSafeExpr :: PExpr
 lrIsSafeExpr = sy tmLRe $> sy tmDemand
 
 lrIsSafeDesc :: Sentence
@@ -41,10 +41,10 @@ pbIsSafe = tm (equationalModel' pbIsSafeQD)
   [pbIsSafeQD] [] [] [dRef astm2009]
   "isSafeProb" [pbIsSafeDesc]
 
-pbIsSafeQD :: QDefinition
+pbIsSafeQD :: ModelQDef
 pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") pbIsSafeExpr
 
-pbIsSafeExpr :: Expr
+pbIsSafeExpr :: PExpr
 pbIsSafeExpr = sy probFail $< sy pbTolfail
 
 pbIsSafeDesc :: Sentence

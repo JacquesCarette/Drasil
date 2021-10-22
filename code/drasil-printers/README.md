@@ -1,16 +1,16 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 20, 2018
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Language**
-  - Contains the printers for the Drasil language
+**lib**
+  - Contains the library code for this package.
+
+package.yaml
+  - Used by Hpack
  
 README.md
   - This file
-
-drasil-printers.cabal
-  - Cabal file, used by Stack to build drasil-printers
 
 stack.yaml
   - Used by Stack

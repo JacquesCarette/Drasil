@@ -67,9 +67,9 @@ si fl = SI {
     _configFiles = [],
     _inputs      = [] :: [QuantityDict],
     _outputs     = [] :: [QuantityDict],
-    _defSequence = [] :: [Block QDefinition],
+    _defSequence = [] :: [Block SimpleQDef],
     _constraints = [] :: [ConstrainedChunk],
-    _constants   = [] :: [QDefinition],
+    _constants   = [] :: [SimpleQDef],
     _sysinfodb   = symbMap fl,
     _usedinfodb  = usedDB,
     refdb        = rdb [] []
@@ -123,9 +123,9 @@ imageContent = llcc (makeFigRef "Drasil") $ figWithWidth EmptyS imagePath 50
 
 -- | Used for the repository link.
 gitHubRef :: Reference
-gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' $ S "gitHubRepo")
+gitHubRef = makeURI "gitHubRepo" gitHubInfoURL (shortname' $ S "gitHubRepo")
 wikiRef :: Reference
-wikiRef = Reference "gitHubWiki" (URI $ gitHubInfoURL ++ "/wiki") (shortname' $ S "gitHubWiki")
+wikiRef = makeURI "gitHubWiki" (gitHubInfoURL ++ "/wiki") (shortname' $ S "gitHubWiki")
 
 -- | Hardcoded info for the title, URL, and image path.
 websiteTitle :: String

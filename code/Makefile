@@ -76,6 +76,7 @@ DCP_E_SUFFIX = _deploy_code_path
 STABILIZE_E_SUFFIX = _stabilize
 BC_E_SUFFIX = _build_clean
 TRACE_GRAPH_SUFFIX = _trace_graph
+INSTALL_E_SUFFIX = _install
 
 # add example names with the appropriate suffixes to create per-example targets
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
@@ -86,6 +87,7 @@ DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 STABILIZE_EXAMPLES = $(addsuffix $(STABILIZE_E_SUFFIX), $(EXAMPLES))
 BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
+INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
@@ -140,6 +142,9 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 #--- `make` command line options ---#
 #####################################
 
+# Indicating whether an operation will be used for deployment (1), or for general testing purposes (0).
+FULL ?= 0
+
 # GHC debug options
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
@@ -160,13 +165,20 @@ SUMMARIZE_TEX=no
 
 # Default `make` will just run examples and test them against stable.
 # See `test` target for more details.
-all: test ## Run examples and test against stable.
+all: test ##@Examples Run examples and test against stable.
 
+install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
+	stack install $(stackArgs)
 
-debug: stackArgs+=$(PROFALL)
-debug: EXECARGS+=$(PROFEXEC)
-debug: test ## Run test target with better debugging tools.
+debug: stackArgs += $(PROFALL)
+debug: EXECARGS += $(PROFEXEC)
+debug: test ##@Examples Run test target with better debugging tools.
 
+pr_ready: all hot_hlint ##@General Check if your current work is ready to for a PR via `all` and `hot_hlint`.
+	- echo "Your build/ and stable/ match, and your code currently passes HLint tests."
+	- echo "Feel free to create a PR for your code if you feel it's ready."
+
+#----------------------#
 #--- Initial checks ---#
 #----------------------#
 
@@ -184,6 +196,10 @@ graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 #--- Targets for building, running, or testing examples ---#
 #----------------------------------------------------------#
 
+deps: check_stack ##@Dependencies Build only dependencies.
+	- stack build $(stackArgs) --only-dependencies
+
+#-------------------------------------------------#
 #--- Targets that affect all packages/examples ---#
 #-------------------------------------------------#
 
@@ -215,35 +231,39 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 # then make pdfs from the generated TeX files.
 tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
+#--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
 # Use filter to make a target for every package (second argument of filter)
 # with an appended suffix (first argument of filter).
 
 # Variables needed to create individual example targets using filter.
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
-	stack install $(stackArgs) "drasil-$*"
+	stack build $(stackArgs) "drasil-$*"
 
 # First build all Drasil packages, then run individual examples.
 # No traceability graphs will be created, only the dot files.
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
-%$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
-	stack install $(stackArgs) "$(EEXE)"
+	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
-	
+
+# Install individual Drasil examples
+$(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
+	stack install $(stackArgs) "$(EEXE)"
+
 # Same as above targets; run individual examples but create traceability graphs
 # for each example run. Needs Graphviz to run. Graphs generate in svg, pdf, and png formats.
 # Specific example targets will have the name exampleName_trace_graph.
-%$(TRACE_GRAPH_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): graphmod
-	stack install $(stackArgs) "$(EEXE)"
+	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
@@ -261,7 +281,7 @@ $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX
 # to those in the stable folder. Targets will have the form exampleName_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
+	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)"
 
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.
@@ -292,9 +312,7 @@ graphs: $(GRAPH_PACKAGES) ##@Analysis Generate all module dependency graphs.
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
 	@mkdir -p "$(GRAPH_FOLDER)"
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*.pdf"
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tsvg > "$(GRAPH_FOLDER)drasil-$*.svg"
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpng > "$(GRAPH_FOLDER)drasil-$*.png"
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | tee >(dot -Tpdf -o "$(GRAPH_FOLDER)drasil-$*.pdf") >(dot -Tsvg -o "$(GRAPH_FOLDER)drasil-$*.svg") | dot -Tpng -o "$(GRAPH_FOLDER)drasil-$*.png"
 
 # Dot graphs are currently generated for datatypes and class instance structures.
 # They are made using the default dot algorithm and the circo algorithm for options
@@ -305,16 +323,21 @@ analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasi
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
-	@echo Making dependency graphs. This may take a few minutes.
+	@echo "Analysis complete. Please see 'analysis/' folder."
+
+convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs.
+	@echo "Building dependency graphs in Dot and Circo formats. This may take a few minutes."
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
+		echo "Converting type dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
 	@cd $(CLASSINST_GRAPH_FOLDER) && for pack in $(PACKAGES_E); do \
+		echo "Converting classInst dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
-	@echo Done dependency graphs.
+	@echo "Dependency graphs built."
 
 #---------------------------------------#
 #--- HLint and Haddock Documentation ---#
@@ -327,8 +350,8 @@ hlint: check_stack ##@HLint Run HLint through the drasil packages. Uses a local 
 hot_hlint: ##@HLint Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
-docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules.
-	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
+docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules. Set FULL=1 if you want to additionally test Haddock generation for website deployment.
+	FULL="$(FULL)" DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
 
 #----------------------------#
 #--- GOOL related targets ---#
@@ -370,7 +393,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 
 # For more information, see the *.hs files in the drasil-website folder.
 website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
-	stack install $(stackArgs) "drasil-website"
+	stack build $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
 	DOCS_FOLDER="$(DOCS_FOLDER)" \
@@ -382,7 +405,7 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 	PACKAGES="$(PACKAGES)" \
 	TYPEGRAPH_FOLDER="$(TYPEGRAPH_FOLDER)" \
 	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
-	stack exec website
+	stack exec -- "website"
 
 # Deploys the Drasil website. Called by the deploy target.
 # If you have all the necessary generated targets listed
@@ -413,8 +436,11 @@ deploy: analysis graphs docs tex doxygen website ##@Deploy Generates all artifac
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 	- rm -rf "./$*/"
 
-clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders.
+clean_artifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders. (alt.: cleanArtifacts)
 	- rm -f "$(CACHED_MSV_FILE)"
+
+# TODO: HELP_FUN's pattern match ignores targets with aliases, this is a temporary exterior alias until we fix it.
+cleanArtifacts: clean_artifacts
 
 clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, & folders.
 	- stack clean
@@ -442,6 +468,7 @@ help:  ##@Help Show this help.
 	@echo "Example-specific targets where X is the example. Run \"make help_examples\" to see a list of possible examples:"
 	@echo "  X$(GEN_E_SUFFIX)               Generate individual example in HTML and LaTeX format."
 	@echo "  X$(TEST_E_SUFFIX)              Generate individual example and create a comparison against stable in the log folder."
+	@echo "  X$(INSTALL_E_SUFFIX)           Install individual example executable(s) into your local binary path."
 	@echo "  X$(STABILIZE_E_SUFFIX)         Generate individual example and overwrite the contents of stable with the new version."
 	@echo "  X$(TEX_E_SUFFIX)               Generate individual example as a PDF (from LaTeX files)."
 	@echo "  X$(TRACE_GRAPH_SUFFIX)       Generate individual example in HTML and LaTeX format with traceability graphs filled in."
@@ -463,4 +490,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

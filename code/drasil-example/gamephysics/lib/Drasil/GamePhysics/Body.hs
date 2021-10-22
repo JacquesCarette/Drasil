@@ -1,9 +1,11 @@
 module Drasil.GamePhysics.Body where
 
+import Data.Maybe (mapMaybe)
+
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
-import Theory.Drasil (qdFromDD)
+import Theory.Drasil (qdEFromDD)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -120,7 +122,7 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
-  where qDefs = map qdFromDD dataDefs
+  where qDefs = mapMaybe qdEFromDD dataDefs
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs

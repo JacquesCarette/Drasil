@@ -26,6 +26,7 @@ import Data.Drasil.Theories.Physics (newtonSLR)
 import Drasil.SglPendulum.DataDefs (frequencyDD, periodSHMDD, angFrequencyDD)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
+import qualified Drasil.SglPendulum.Derivations as D
 import qualified Drasil.SglPendulum.Expressions as E
 import Drasil.SglPendulum.Unitals (lenRod, pendDisplacementAngle)
 import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
@@ -40,9 +41,9 @@ velocityIXGD :: GenDefn
 velocityIXGD = gdNoRefs (equationalModel' velocityIXQD) (getUnit velocity)
            (Just velocityIXDeriv) "velocityIX" [{-Notes-}]
 
-velocityIXQD :: QDefinition
+velocityIXQD :: ModelQDef
 velocityIXQD = mkQuantDef' xVel (the xComp `NP.of_` (velocity `ofThe` pendulum))
-    E.velocityIXExpr
+    $ express E.velocityIXExpr
 
 velocityIXDeriv :: Derivation
 velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, velocityIXDerivEqns])
@@ -52,15 +53,14 @@ velocityIXDerivSents = [velocityDerivSent1, velocityIXDerivSent2, velocityDerivS
                         velocityDerivSent4, velocityDerivSent5]
 
 velocityIXDerivEqns :: [Sentence]
-velocityIXDerivEqns = map eS [E.velocityIDerivEqn1, E.velocityIXDerivEqn2,
-    E.velocityIXDerivEqn3, E.velocityIXDerivEqn4] ++ [eS velocityIXQD]
+velocityIXDerivEqns = map eS D.velocityIXDerivEqns ++ [eS' velocityIXQD]
 
 velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
     velocityDerivSent4, velocityDerivSent5 :: Sentence
 velocityDerivSent1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
 velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontalPos
 velocityDerivSent3 = S "Applying this,"
-velocityDerivSent4 = eS lenRod `S.is` S "constant" `S.wrt` S  "time, so"
+velocityDerivSent4 = eS' lenRod `S.is` S "constant" `S.wrt` S  "time, so"
 velocityDerivSent5 = S "Therefore, using the chain rule,"
 
 ---------------------
@@ -68,8 +68,8 @@ velocityIYGD :: GenDefn
 velocityIYGD = gdNoRefs (equationalModel' velocityIYQD) (getUnit velocity)
            (Just velocityIYDeriv) "velocityIY" [{-Notes-}]
 
-velocityIYQD :: QDefinition
-velocityIYQD = mkQuantDef' yVel (the yComp `NP.of_` (velocity `ofThe` pendulum)) E.velocityIYExpr
+velocityIYQD :: ModelQDef
+velocityIYQD = mkQuantDef' yVel (the yComp `NP.of_` (velocity `ofThe` pendulum)) $ express E.velocityIYExpr
  
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, velocityIYDerivEqns])
@@ -79,8 +79,7 @@ velocityIYDerivSents = [velocityDerivSent1, velocityIYDerivSent2, velocityDerivS
                         velocityDerivSent4, velocityDerivSent5]
 
 velocityIYDerivEqns :: [Sentence]
-velocityIYDerivEqns = map eS [E.velocityIDerivEqn1, E.velocityIYDerivEqn2,
-    E.velocityIYDerivEqn3, E.velocityIYDerivEqn4] ++ [eS velocityIYQD]
+velocityIYDerivEqns = map eS D.velocityIYDerivEqns ++ [eS' velocityIYQD]
 
 velocityIYDerivSent2 :: Sentence
 velocityIYDerivSent2 = S "We also know the" +:+ phrase verticalPos
@@ -90,9 +89,9 @@ accelerationIXGD :: GenDefn
 accelerationIXGD = gdNoRefs (equationalModel' accelerationIXQD) (getUnit acceleration)
            (Just accelerationIXDeriv) "accelerationIX" [{-Notes-}]
 
-accelerationIXQD :: QDefinition
+accelerationIXQD :: ModelQDef
 accelerationIXQD = mkQuantDef' xAccel (the xComp `NP.of_` (acceleration `ofThe` pendulum))
-    E.accelerationIXExpr
+    $ express E.accelerationIXExpr
 
 accelerationIXDeriv :: Derivation
 accelerationIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelerationIXDerivSents, accelerationIXDerivEqns])
@@ -102,8 +101,8 @@ accelerationIXDerivSents = [accelerationDerivSent1, accelerationIXDerivSent2, ac
     accelerationDerivSent4, accelerationDerivSent5]
 
 accelerationIXDerivEqns :: [Sentence]
-accelerationIXDerivEqns = eS E.accelerationIDerivEqn1 : eS velocityIXQD :
-    map eS [E.accelerationIXDerivEqn3, E.accelerationIXDerivEqn4] ++ [eS accelerationIXQD]
+accelerationIXDerivEqns = eS D.accelerationIDerivEqn1 : eS' velocityIXQD :
+    map eS [D.accelerationIXDerivEqn3, D.accelerationIXDerivEqn4] ++ [eS' accelerationIXQD]
 
 accelerationDerivSent1, accelerationIXDerivSent2, accelerationDerivSent3,
      accelerationDerivSent4, accelerationDerivSent5 :: Sentence
@@ -119,8 +118,8 @@ accelerationIYGD :: GenDefn
 accelerationIYGD = gdNoRefs (equationalModel' accelerationIYQD) (getUnit acceleration)
            (Just accelerationIYDeriv) "accelerationIY" [{-Notes-}]
 
-accelerationIYQD :: QDefinition
-accelerationIYQD = mkQuantDef' yAccel (the yComp `NP.of_` (acceleration `ofThe` pendulum)) E.accelerationIYExpr
+accelerationIYQD :: ModelQDef
+accelerationIYQD = mkQuantDef' yAccel (the yComp `NP.of_` (acceleration `ofThe` pendulum)) $ express E.accelerationIYExpr
 
 accelerationIYDeriv :: Derivation
 accelerationIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelerationIYDerivSents, accelerationIYDerivEqns])
@@ -130,8 +129,8 @@ accelerationIYDerivSents = [accelerationDerivSent1, accelerationIYDerivSent2, ac
     accelerationDerivSent4, accelerationDerivSent5]
 
 accelerationIYDerivEqns :: [Sentence]
-accelerationIYDerivEqns = eS E.accelerationIDerivEqn1 : eS velocityIYQD :
-    map eS [E.accelerationIYDerivEqn3, E.accelerationIYDerivEqn4] ++ [eS accelerationIYQD]
+accelerationIYDerivEqns = eS D.accelerationIDerivEqn1 : eS' velocityIYQD :
+    map eS [D.accelerationIYDerivEqn3, D.accelerationIYDerivEqn4] ++ [eS' accelerationIYQD]
 
 accelerationIYDerivSent2 :: Sentence
 accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
@@ -141,38 +140,38 @@ hForceOnPendulumGD :: GenDefn
 hForceOnPendulumGD = gdNoRefs (equationalRealmU "hForceOnPendulum" hForceOnPendulumMD)
         (getUnit force) (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
 
-hForceOnPendulumMD :: MultiDefn
+hForceOnPendulumMD :: MultiDefn ModelExpr
 hForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
     where quant = mkQuant' "force" (horizontalForce `onThe` pendulum)
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "hForceOnPendulumViaComponent"
-                      [] EmptyS E.hForceOnPendulumViaComponent,
+                      [] EmptyS $ express E.hForceOnPendulumViaComponent,
                     mkDefiningExpr "hForceOnPendulumViaAngle"
-                      [] EmptyS E.hForceOnPendulumViaAngle
+                      [] EmptyS $ express E.hForceOnPendulumViaAngle
                   ]
 
 hForceOnPendulumDeriv :: Derivation
-hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS hForceOnPendulumMD]
+hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS' hForceOnPendulumMD]
 
 ----------------------------------------Vertical force acting on the pendulum 
 vForceOnPendulumGD :: GenDefn
 vForceOnPendulumGD = gdNoRefs (equationalRealmU "vForceOnPendulum" vForceOnPendulumMD)
         (getUnit force) (Just vForceOnPendulumDeriv) "vForceOnPendulum" [{-Notes-}]
 
-vForceOnPendulumMD :: MultiDefn
+vForceOnPendulumMD :: MultiDefn ModelExpr
 vForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
     where quant = mkQuant' "force" (verticalForce `onThe` pendulum)
                     Nothing Real (symbol force) (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "vForceOnPendulumViaComponent"
-                      [] EmptyS E.vForceOnPendulumViaComponent ,
+                      [] EmptyS $ express E.vForceOnPendulumViaComponent,
                     mkDefiningExpr "vForceOnPendulumViaAngle"    
-                      [] EmptyS E.vForceOnPendulumViaAngle
+                      [] EmptyS $ express E.vForceOnPendulumViaAngle
                   ]
 
 vForceOnPendulumDeriv :: Derivation
-vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS vForceOnPendulumMD]
+vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS' vForceOnPendulumMD]
 
 --------------------------------------Angular Frequency Of Pendulum
 
@@ -180,11 +179,11 @@ angFrequencyGD :: GenDefn
 angFrequencyGD = gdNoRefs (equationalModelU "angFrequencyGD" angFrequencyQD) (getUnit angularFrequency)
            (Just angFrequencyDeriv) "angFrequencyGD" [angFrequencyGDNotes]
 
-angFrequencyQD :: QDefinition
-angFrequencyQD = mkQuantDef' angularFrequency (angularFrequency `the_ofThe` pendulum) E.angFrequencyExpr
+angFrequencyQD :: ModelQDef
+angFrequencyQD = mkQuantDef' angularFrequency (angularFrequency `the_ofThe` pendulum) $ express E.angFrequencyExpr
 
 angFrequencyDeriv :: Derivation
-angFrequencyDeriv = mkDerivName (phraseNP (angularFrequency `the_ofThe` pendulum)) (weave [angFrequencyDerivSents, map eS E.angFrequencyDerivEqns])
+angFrequencyDeriv = mkDerivName (phraseNP (angularFrequency `the_ofThe` pendulum)) (weave [angFrequencyDerivSents, map eS D.angFrequencyDerivEqns])
 
 
 angFrequencyDerivSents :: [Sentence]
@@ -216,11 +215,11 @@ periodPend :: GenDefn
 periodPend = gdNoRefs (equationalModelU "periodPendGD" periodPendQD) (getUnit period)
            (Just periodPendDeriv) "periodPend" [periodPendNotes]
 
-periodPendQD :: QDefinition
-periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) E.periodPendExpr
+periodPendQD :: ModelQDef
+periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) $ express E.periodPendExpr
 
 periodPendDeriv :: Derivation
-periodPendDeriv = mkDerivName (phraseNP (NP.the (period `ofThe` pendulum))) (weave [periodPendDerivSents, map eS E.periodPendDerivEqns])
+periodPendDeriv = mkDerivName (phraseNP (NP.the (period `ofThe` pendulum))) (weave [periodPendDerivSents, map eS D.periodPendDerivEqns])
 
 periodPendDerivSents :: [Sentence]
 periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]

@@ -182,7 +182,7 @@ solChSpecSubsections :: [CI]
 solChSpecSubsections = [thModel, inModel, Doc.dataDefn, dataConst]
 
 --Used in "Values of Auxiliary Constants" Section--
-auxiliaryConstants :: [QDefinition]
+auxiliaryConstants :: [SimpleQDef]
 auxiliaryConstants = assumptionConstants ++ specParamVals
 
 --Used in "Non-Functional Requirements" Section--

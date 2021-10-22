@@ -187,12 +187,12 @@ getCodeRef :: Example -> Lang -> String -> Reference
 --
 -- Pattern matches so that examples that only have a single set of choices will be referenced one way.
 getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
-  Reference refUID refURI refShortNm
+  makeURI refUID refURI refShortNm
   where
     -- Append system name and program language to ensure a unique id for each.
     refUID = "codeRef" ++ sysName ++ programLang
     -- Finds the folder path that holds code for the respective program and system.
-    refURI = URI $ getCodePath (codePath ex) sysName programLang
+    refURI = getCodePath (codePath ex) sysName programLang
     -- Shortname is the same as the UID, just converted to a Sentence.
     refShortNm = shortname' $ S refUID
 
@@ -206,10 +206,10 @@ getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
 getDoxRef :: Example -> Lang -> String -> Reference
 getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
-  Reference refUID refURI refShortNm
+  makeURI refUID refURI refShortNm
   where
     refUID = "doxRef" ++ sysName ++ programLang
-    refURI = URI $ getDoxPath (srsDoxPath ex) sysName programLang
+    refURI = getDoxPath (srsDoxPath ex) sysName programLang
     refShortNm = shortname' $ S refUID
 
     sysName = filter (not.isSpace) $ abrv sys
@@ -221,7 +221,7 @@ getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
 
 -- | Make references for each of the generated SRS files.
 getSRSRef :: FilePath -> String -> String -> Reference
-getSRSRef path sufx ex = Reference refUID (URI $ getSRSPath path (map toLower sufx) ex) $ shortname' $ S refUID
+getSRSRef path sufx ex = makeURI refUID (getSRSPath path (map toLower sufx) ex) $ shortname' $ S refUID
   where
     refUID = map toLower sufx ++ "Ref" ++ ex
 
@@ -249,10 +249,10 @@ exampleRefs codePth srsDoxPth = concatMap getCodeRefDB (examples codePth srsDoxP
 getCodeRefDB, getDoxRefDB :: Example -> [Reference]
 getCodeRefDB ex = concatMap (\x -> map (\y -> getCodeRef ex y $ verName x) $ lang x) $ choicesE ex
   where
-    verName z = Projectile.codedDirName (getAbrv ex) z
+    verName = Projectile.codedDirName (getAbrv ex)
 getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang x) $ choicesE ex
   where
-    verName z = Projectile.codedDirName (getAbrv ex) z
+    verName = Projectile.codedDirName (getAbrv ex)
 
 -- | Helper to pull the system name (abbreviation) from an 'Example'.
 getAbrv :: Example -> String

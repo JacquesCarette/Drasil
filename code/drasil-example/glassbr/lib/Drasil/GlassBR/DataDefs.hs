@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Language.Drasil.Code (asVC')
 import Prelude hiding (log, exp, sqrt)
-import Theory.Drasil (DataDefinition, dd)
+import Theory.Drasil (DataDefinition, ddE)
 import Database.Drasil (Block(Parallel))
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
@@ -39,7 +39,7 @@ dataDefs = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac,
   dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, eqTNTWDD, probOfBreak,
   calofCapacity, calofDemand]
 
-qDefns :: [Block QDefinition]
+qDefns :: [Block SimpleQDef]
 qDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated on their own
   map (`Parallel` []) [dimLLQD {-DD7-}, strDisFacQD {-DD4-}, riskQD {-DD1-},
   tolStrDisFacQD {-DD9-}, tolPreQD {-DD8-}, nonFLQD {-DD5-}]
@@ -52,11 +52,11 @@ riskEq = (sy sflawParamK $/
   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
 
 -- FIXME [4] !!!
-riskQD :: QDefinition
+riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun riskEq
 
 risk :: DataDefinition
-risk = dd riskQD
+risk = ddE riskQD
   [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
   dRefInfo campidelli $ Equation [14]]
   Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
@@ -70,22 +70,22 @@ hFromtEq = frac 1 1000 `mulRe` incompleteCase (zipWith hFromtHelper
 hFromtHelper :: Double -> Double -> (Expr, Relation)
 hFromtHelper result condition = (dbl result, sy nomThick $= dbl condition)
 
-hFromtQD :: QDefinition
+hFromtQD :: SimpleQDef
 hFromtQD = mkQuantDef minThick hFromtEq
 
 hFromt :: DataDefinition
-hFromt = dd hFromtQD [dRef astm2009] Nothing "minThick" [hMin]
+hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick" [hMin]
 
 --DD3-- (#749)
 
 loadDFEq :: Expr
 loadDFEq = (sy loadDur $/ exactDbl 60) $^ (sy sflawParamM $/ exactDbl 16)
 
-loadDFQD :: QDefinition
+loadDFQD :: SimpleQDef
 loadDFQD = mkQuantDef lDurFac loadDFEq
 
 loadDF :: DataDefinition
-loadDF = dd loadDFQD [dRef astm2009] Nothing "loadDurFactor"
+loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
 
 --DD4--
@@ -95,11 +95,11 @@ strDisFacEq :: Expr
 --   [sy dimlessLoad, sy aspectRatio]
 strDisFacEq = apply (asVC' interpZ) [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 
-strDisFacQD :: QDefinition
+strDisFacQD :: SimpleQDef
 strDisFacQD = mkQuantDef stressDistFac strDisFacEq
 
 strDisFac :: DataDefinition
-strDisFac = dd strDisFacQD [dRef astm2009] Nothing "stressDistFac"
+strDisFac = ddE strDisFacQD [dRef astm2009] Nothing "stressDistFac"
   [interpolating stressDistFac dimlessloadVsARFig, arRef, qHtRef]
 
 --DD5--
@@ -108,11 +108,11 @@ nonFLEq :: Expr
 nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
   square (mulRe (sy plateLen) (sy plateWidth))
 
-nonFLQD :: QDefinition
+nonFLQD :: SimpleQDef
 nonFLQD = mkQuantDef nonFactorL nonFLEq
 
 nonFL :: DataDefinition
-nonFL = dd nonFLQD [dRef astm2009] Nothing "nFL"
+nonFL = ddE nonFLQD [dRef astm2009] Nothing "nFL"
   [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
 
 --DD6--
@@ -123,11 +123,11 @@ glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (getA
 glaTyFacHelper :: Integer -> String -> (Expr, Relation)
 glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)
 
-glaTyFacQD :: QDefinition
+glaTyFacQD :: SimpleQDef
 glaTyFacQD = mkQuantDef gTF glaTyFacEq
 
 glaTyFac :: DataDefinition
-glaTyFac = dd glaTyFacQD [dRef astm2009] Nothing "gTF"
+glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
   [anGlass, ftGlass, hsGlass]
 
 --DD7--
@@ -136,11 +136,11 @@ dimLLEq :: Expr
 dimLLEq = mulRe (sy demand) (square (mulRe (sy plateLen) (sy plateWidth)))
   $/ mulRe (mulRe (sy modElas) (sy minThick $^ exactDbl 4)) (sy gTF)
 
-dimLLQD :: QDefinition
+dimLLQD :: SimpleQDef
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 dimLL :: DataDefinition
-dimLL = dd dimLLQD [dRef astm2009, dRefInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
+dimLL = ddE dimLLQD [dRef astm2009, dRefInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
   [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 
 --DD8--
@@ -149,11 +149,11 @@ tolPreEq :: Expr
 --tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
 tolPreEq = apply (asVC' interpY) [str "SDF.txt", sy aspectRatio, sy sdfTol]
 
-tolPreQD :: QDefinition
+tolPreQD :: SimpleQDef
 tolPreQD = mkQuantDef tolLoad tolPreEq
 
 tolPre :: DataDefinition
-tolPre = dd tolPreQD [dRef astm2009] Nothing "tolLoad"
+tolPre = ddE tolPreQD [dRef astm2009] Nothing "tolLoad"
   [interpolating tolLoad dimlessloadVsARFig, arRef, jtolRef]
 
 --DD9--
@@ -164,11 +164,11 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
     (sy sflawParamK `mulRe` ((sy modElas `mulRe`
     square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
 
-tolStrDisFacQD :: QDefinition
+tolStrDisFacQD :: SimpleQDef
 tolStrDisFacQD = mkQuantDef sdfTol tolStrDisFacEq
 
 tolStrDisFac :: DataDefinition
-tolStrDisFac = dd tolStrDisFacQD [dRef astm2009] Nothing "sdfTol"
+tolStrDisFac = ddE tolStrDisFacQD [dRef astm2009] Nothing "sdfTol"
   [pbTolUsr, aGrtrThanB, stdVals [sflawParamM, sflawParamK, mkUnitary modElas],
    hRef, ldfRef]
 
@@ -177,63 +177,63 @@ tolStrDisFac = dd tolStrDisFacQD [dRef astm2009] Nothing "sdfTol"
 standOffDisEq :: Expr
 standOffDisEq = sqrt (square (sy sdx) `addRe` square (sy sdy) `addRe` square (sy sdz))
 
-standOffDisQD :: QDefinition
+standOffDisQD :: SimpleQDef
 standOffDisQD = mkQuantDef standOffDist standOffDisEq
 
 standOffDis :: DataDefinition
-standOffDis = dd standOffDisQD [dRef astm2009] Nothing "standOffDist" []
+standOffDis = ddE standOffDisQD [dRef astm2009] Nothing "standOffDist" []
 
 --DD11--
 
 aspRatEq :: Expr
 aspRatEq = sy plateLen $/ sy plateWidth
 
-aspRatQD :: QDefinition
+aspRatQD :: SimpleQDef
 aspRatQD = mkQuantDef aspectRatio aspRatEq
 
 aspRat :: DataDefinition
-aspRat = dd aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
+aspRat = ddE aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
 
 --DD12--
 eqTNTWEq :: Expr
 eqTNTWEq = mulRe (sy charWeight) (sy tNT)
 
-eqTNTWQD :: QDefinition
+eqTNTWQD :: SimpleQDef
 eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 
 eqTNTWDD :: DataDefinition
-eqTNTWDD = dd eqTNTWQD [dRef astm2009] Nothing "eqTNTW" []
+eqTNTWDD = ddE eqTNTWQD [dRef astm2009] Nothing "eqTNTW" []
 
 --DD13--
 probOfBreakEq :: Expr
 probOfBreakEq = exactDbl 1 $- exp (neg (sy risk))
 
-probOfBreakQD :: QDefinition
+probOfBreakQD :: SimpleQDef
 probOfBreakQD = mkQuantDef probBr probOfBreakEq
 
 probOfBreak :: DataDefinition
-probOfBreak = dd probOfBreakQD (map dRef [astm2009, beasonEtAl1998]) Nothing "probOfBreak" [riskRef]
+probOfBreak = ddE probOfBreakQD (map dRef [astm2009, beasonEtAl1998]) Nothing "probOfBreak" [riskRef]
 
 --DD14--
 calofCapacityEq :: Expr
 calofCapacityEq = sy nonFL `mulRe` sy glaTyFac `mulRe` sy loadSF
 
-calofCapacityQD :: QDefinition
+calofCapacityQD :: SimpleQDef
 calofCapacityQD = mkQuantDef lRe calofCapacityEq
 
 calofCapacity :: DataDefinition
-calofCapacity = dd calofCapacityQD [dRef astm2009] Nothing "calofCapacity"
+calofCapacity = ddE calofCapacityQD [dRef astm2009] Nothing "calofCapacity"
   [lrCap, nonFLRef, gtfRef]
 
 --DD15--
 calofDemandEq :: Expr
 calofDemandEq = apply (asVC' interpY) [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
 
-calofDemandQD :: QDefinition
+calofDemandQD :: SimpleQDef
 calofDemandQD = mkQuantDef demand calofDemandEq
 
 calofDemand :: DataDefinition
-calofDemand = dd calofDemandQD [dRef astm2009] Nothing "calofDemand" [calofDemandDesc]
+calofDemand = ddE calofDemandQD [dRef astm2009] Nothing "calofDemand" [calofDemandDesc]
 
 
 --Additional Notes--
@@ -248,7 +248,10 @@ calofDemandDesc =
 
 aGrtrThanB :: Sentence
 aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are` (plural dimension `S.the_ofThe` S "plate") `sC`
-  S "where" +:+. sParen (eS (sy plateLen $>= sy plateWidth))
+  S "where" +:+. sParen (eS rel)
+  where
+    rel :: ModelExpr
+    rel = sy plateLen $>= sy plateWidth
 
 anGlass :: Sentence
 anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass

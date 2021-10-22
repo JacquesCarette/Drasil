@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, generalDefinitions,
+  normShrR, generalDefinitions,
   normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD,
   mobShearWOGD, resShearWOGD, srfWtrFGD) where
 
@@ -189,12 +189,11 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
 
 -- 
 
-normShrR :: QDefinition 
-normShrR = mkQuantDef intShrForce nmShrRRel
+normShrR :: ModelQDef
+normShrR = mkQuantDef intShrForce nmShrRExpr
 
-
-nmShrRRel :: Relation
-nmShrRRel = sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
+nmShrRExpr :: PExpr
+nmShrRExpr = sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
 
 nmShrRDesc :: Sentence
 nmShrRDesc = foldlSent [S "Mathematical representation of the primary",
@@ -242,18 +241,13 @@ mobShearWODesc = (foldlList Comma List [slcWght `definedIn'''` sliceWghtGD,
   watrForce `definedIn'''` intersliceWtrF] !.)
 
 --
-
-momentEqlModel :: ModelKind
+momentEqlModel :: ModelKind ModelExpr
 momentEqlModel = equationalConstraints' $
   mkConstraintSet (dccWDS "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
-  NE.fromList [momEqlRel]
+  NE.fromList [express momEqlExpr]
 
-momentEql :: RelationConcept
-momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEqlDesc momEqlRel -- genDef6Label
-
-momEqlRel :: Relation
-momEqlRel = exactDbl 0 $= momExpr (\ x y -> x `addRe`
+momEqlExpr :: Expr
+momEqlExpr = exactDbl 0 $= momExpr (\ x y -> x `addRe`
   (half (inxi baseWthX) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
 
 momEqlDesc :: Sentence
@@ -301,7 +295,7 @@ momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
   momEqlDerivSheariM1Eqn, momEqlDerivSeismicIntEqn,
   momEqlDerivSeismicEqn, momEqlDerivSeismicWEqn,
   momEqlDerivHydroEqn, momEqlDerivExtEqn,
-  momEqlDerivFinalEqn :: Expr
+  momEqlDerivFinalEqn :: PExpr
 
 momEqlDerivTorqueSentence = [atStart genericM, S "is equal to",
   phrase torque `sC` S "so", phraseNP (the equation), S "from", refS torqueDD,
@@ -369,7 +363,7 @@ momEqlDerivSeismicIntSentence = [S "Seismic", plural force, S "act over the",
   `S.ofThe` phrase slice `sC` S "the seismic", phrase force `S.is`
   eS (sy earthqkLoadFctr `mulRe` inxi slcWght), S "where", eS (inxi slcWght),
   S "can be expressed as", eS (sy genericSpWght `mulRe` inxi baseWthX `mulRe` sy yi),
-  S "using", refS weightGD, S "where", eS yi, S "is the height of" +:+.
+  S "using", refS weightGD, S "where", eS' yi, S "is the height of" +:+.
   S "the segment under consideration", S "The corresponding", phrase momntArm `S.is`
   ch yi `sC` S "the height from the base of", phraseNP (the slice) +:+.
   S "to the segment under consideration", S "In reality,", pluralNP (the force),
@@ -502,7 +496,7 @@ sliceWghtDerivSatCaseIntroSentence, sliceWghtDerivSatCase2DSentence,
 
 sliceWghtDerivSatCaseWeightEqn, sliceWghtDerivSatCaseSliceEqn,
   sliceWghtDerivDryCaseWeightEqn, sliceWghtDerivDryCaseSliceEqn,
-  sliceWghtDerivMixCaseWeightEqn, sliceWghtDerivMixCaseSliceEqn :: Expr
+  sliceWghtDerivMixCaseWeightEqn, sliceWghtDerivMixCaseSliceEqn :: PExpr
 
 sliceWghtDerivSatCaseIntroSentence = [S "For the case where the",
   phrase waterTable, S "is above", phraseNP (the slopeSrf) `sC`
@@ -618,7 +612,7 @@ bsWtrFDerivSentences = map foldlSentCol [bsWtrFDerivIntroSentence,
 bsWtrFDerivIntroSentence, bsWtrFDerivHeightSentence, bsWtrFDeriv2DSentence,
   bsWtrFDerivEndSentence :: [Sentence]
 
-bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn, bsWtrFDerivSliceEqn :: Expr
+bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn, bsWtrFDerivSliceEqn :: PExpr
 
 bsWtrFDerivIntroSentence = [atStartNP (the baseHydroForce), S "come from the",
   S "hydrostatic", phrase pressure, S "exerted by the water above the base of",
@@ -701,7 +695,7 @@ srfWtrFDerivSentences = map foldlSentCol [srfWtrFDerivIntroSentence,
 srfWtrFDerivIntroSentence, srfWtrFDerivHeightSentence, srfWtrFDeriv2DSentence,
   srfWtrFDerivEndSentence :: [Sentence]
 
-srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn, srfWtrFDerivSliceEqn :: Expr
+srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn, srfWtrFDerivSliceEqn :: PExpr
 
 srfWtrFDerivIntroSentence = [atStartNP (the surfHydroForce), S "come from the",
   S "hydrostatic", phrase pressure, S "exerted by the water above the surface",

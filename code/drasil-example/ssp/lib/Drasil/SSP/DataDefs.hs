@@ -5,7 +5,7 @@ module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
-import Theory.Drasil (DataDefinition, dd)
+import Theory.Drasil (DataDefinition, ddE)
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -35,11 +35,11 @@ dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
 --DD intersliceWtrF: interslice normal water forces
 
 intersliceWtrF :: DataDefinition
-intersliceWtrF = dd intersliceWtrFQD [dRef fredlund1977] Nothing "intersliceWtrF"
+intersliceWtrF = ddE intersliceWtrFQD [dRef fredlund1977] Nothing "intersliceWtrF"
   []--Notes
 --FIXME: fill empty lists in
 
-intersliceWtrFQD :: QDefinition
+intersliceWtrFQD :: SimpleQDef
 intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
@@ -56,11 +56,11 @@ intersliceWtrFEqn = completeCase [case1,case2,case3]
 --DD angleA: base angles
 
 angleA :: DataDefinition
-angleA = dd angleAQD [dRef fredlund1977] Nothing "angleA"
+angleA = ddE angleAQD [dRef fredlund1977] Nothing "angleA"
   [angleANotes]
 --FIXME: fill empty lists in
 
-angleAQD :: QDefinition
+angleAQD :: SimpleQDef
 angleAQD = mkQuantDef baseAngle angleAEqn
 
 angleAEqn :: Expr
@@ -75,11 +75,11 @@ angleANotes = foldlSent [S "This", phrase equation, S "is based" `S.onThe`
 --DD angleB: surface angles
 
 angleB :: DataDefinition
-angleB = dd angleBQD [dRef fredlund1977] Nothing "angleB"
+angleB = ddE angleBQD [dRef fredlund1977] Nothing "angleB"
   [angleBNotes]--Notes
 --FIXME: fill empty lists in
 
-angleBQD :: QDefinition
+angleBQD :: SimpleQDef
 angleBQD = mkQuantDef surfAngle angleBEqn
 
 angleBEqn :: Expr
@@ -94,10 +94,10 @@ angleBNotes = foldlSent [S "This", phrase equation, S "is based" `S.onThe`
 --DD lengthB: base width of slices
 
 lengthB :: DataDefinition
-lengthB = dd lengthBQD [dRef fredlund1977] Nothing "lengthB" []--Notes
+lengthB = ddE lengthBQD [dRef fredlund1977] Nothing "lengthB" []--Notes
 --FIXME: fill empty lists in
 
-lengthBQD :: QDefinition
+lengthBQD :: SimpleQDef
 lengthBQD = mkQuantDef baseWthX lengthBEqn
 
 lengthBEqn :: Expr
@@ -106,11 +106,11 @@ lengthBEqn = inxi slipDist $- inx slipDist (-1)
 --DD lengthLb: total base lengths of slices
 
 lengthLb :: DataDefinition
-lengthLb = dd lengthLbQD [dRef fredlund1977] Nothing "lengthLb"
+lengthLb = ddE lengthLbQD [dRef fredlund1977] Nothing "lengthLb"
   [lengthLbNotes]--Notes
 --FIXME: fill empty lists in
 
-lengthLbQD :: QDefinition
+lengthLbQD :: SimpleQDef
 lengthLbQD = mkQuantDef baseLngth lengthLbEqn
 
 lengthLbEqn :: Expr
@@ -123,11 +123,11 @@ lengthLbNotes = foldlSent [baseWthX `definedIn'''`
 --DD lengthLs: surface lengths of slices
 
 lengthLs :: DataDefinition
-lengthLs = dd lengthLsQD [dRef fredlund1977] Nothing "lengthLs"
+lengthLs = ddE lengthLsQD [dRef fredlund1977] Nothing "lengthLs"
   [lengthLsNotes]--Notes
 --FIXME: fill empty lists in
 
-lengthLsQD :: QDefinition
+lengthLsQD :: SimpleQDef
 lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
@@ -141,10 +141,10 @@ lengthLsNotes = foldlSent [baseWthX `definedIn'''`
 --DD slcHeight: y-direction heights of slices
 
 slcHeight :: DataDefinition
-slcHeight = dd slcHeightQD [dRef fredlund1977] Nothing "slcHeight"
+slcHeight = ddE slcHeightQD [dRef fredlund1977] Nothing "slcHeight"
   slcHeightNotes
 
-slcHeightQD :: QDefinition
+slcHeightQD :: SimpleQDef
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
@@ -161,9 +161,9 @@ slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
 --DD normStress: total normal stress
 
 normStressDD :: DataDefinition
-normStressDD = dd normStressQD [dRef huston2008] Nothing "normStress" []
+normStressDD = ddE normStressQD [dRef huston2008] Nothing "normStress" []
 
-normStressQD :: QDefinition
+normStressQD :: SimpleQDef
 normStressQD = mkQuantDef totNormStress normStressEqn
 
 normStressEqn :: Expr
@@ -172,9 +172,9 @@ normStressEqn = sy fn $/ sy genericA
 --DD tangStress: tangential stress
 
 tangStressDD :: DataDefinition
-tangStressDD = dd tangStressQD [dRef huston2008] Nothing "tangStress" []
+tangStressDD = ddE tangStressQD [dRef huston2008] Nothing "tangStress" []
 
-tangStressQD :: QDefinition
+tangStressQD :: SimpleQDef
 tangStressQD = mkQuantDef tangStress tangStressEqn
 
 tangStressEqn :: Expr
@@ -183,10 +183,10 @@ tangStressEqn = sy ft $/ sy genericA
 --DD ratioVariation: interslice normal to shear force ratio variation function
 
 ratioVariation :: DataDefinition
-ratioVariation = dd ratioVarQD [dRef fredlund1977] Nothing
+ratioVariation = ddE ratioVarQD [dRef fredlund1977] Nothing
   "ratioVariation" []
 
-ratioVarQD :: QDefinition
+ratioVarQD :: SimpleQDef
 ratioVarQD = mkQuantDef scalFunc ratioVarEqn
 
 ratioVarEqn :: Expr
@@ -199,10 +199,10 @@ ratioVarEqn = completeCase [case1, case2]
 --DD convertFunc1: first function for incorporating interslice forces into shear force
 
 convertFunc1 :: DataDefinition
-convertFunc1 = dd convertFunc1QD (map dRef [chen2005, karchewski2012]) Nothing
+convertFunc1 = ddE convertFunc1QD (map dRef [chen2005, karchewski2012]) Nothing
   "convertFunc1" [convertFunc1Notes]
 
-convertFunc1QD :: QDefinition
+convertFunc1QD :: SimpleQDef
 convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
 
 convertFunc1Eqn :: Expr
@@ -217,10 +217,10 @@ convertFunc1Notes = foldlSent [scalFunc `definedIn'''` ratioVariation `S.and_` (
 --DD convertFunc2: second function for incorporating interslice forces into shear force
 
 convertFunc2 :: DataDefinition
-convertFunc2 = dd convertFunc2QD (map dRef [chen2005, karchewski2012]) Nothing
+convertFunc2 = ddE convertFunc2QD (map dRef [chen2005, karchewski2012]) Nothing
   "convertFunc2" [convertFunc2Notes]
 
-convertFunc2QD :: QDefinition
+convertFunc2QD :: SimpleQDef
 convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
 
 convertFunc2Eqn :: Expr
@@ -238,7 +238,7 @@ convertFunc2Notes = (foldlList Comma List
 {--DD10
 
 resShearWO :: DataDefinition
-resShearWO = dd resShearWOQD [chen2005] resShr_deriv_ssp resShearWOL
+resShearWO = ddE resShearWOQD [chen2005] resShr_deriv_ssp resShearWOL
   [refS newA3, refS newA4, refS newA5]--Notes
 --FIXME: fill empty lists in
 
@@ -260,7 +260,7 @@ resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp
 --DD11
 
 mobShearWO :: DataDefinition
-mobShearWO = dd mobShearWOQD [chen2005] mobShr_deriv_ssp mobShearWOL
+mobShearWO = ddE mobShearWOQD [chen2005] mobShr_deriv_ssp mobShearWOL
   [refS newA3, refS newA4, refS newA5]--Notes
 --FIXME: fill empty lists in
 
@@ -283,25 +283,25 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 
 nrmForceSumDD, watForceSumDD, sliceHghtRightDD,
   sliceHghtLeftDD :: DataDefinition
-nrmForceSumDD = dd nrmForceSumQD [dRef fredlund1977] Nothing
+nrmForceSumDD = ddE nrmForceSumQD [dRef fredlund1977] Nothing
   "nrmForceSumDD" []--Notes
-watForceSumDD = dd watForceSumQD [dRef fredlund1977] Nothing
+watForceSumDD = ddE watForceSumQD [dRef fredlund1977] Nothing
   "watForceSumDD" []--Notes
-sliceHghtRightDD = dd sliceHghtRightQD [dRef fredlund1977] Nothing
+sliceHghtRightDD = ddE sliceHghtRightQD [dRef fredlund1977] Nothing
   "sliceHghtRightDD" []--Notes
-sliceHghtLeftDD = dd sliceHghtLeftQD [dRef fredlund1977] Nothing
+sliceHghtLeftDD = ddE sliceHghtLeftQD [dRef fredlund1977] Nothing
   "sliceHghtLeftDD" []--Notes
 
-nrmForceSumQD :: QDefinition
+nrmForceSumQD :: SimpleQDef
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce `addRe` inxiM1 intNormForce)
 
-watForceSumQD :: QDefinition
+watForceSumQD :: SimpleQDef
 watForceSumQD = ec watForceSum (inxi watrForce `addRe` inxiM1 watrForce)
 
-sliceHghtRightQD :: QDefinition
+sliceHghtRightQD :: SimpleQDef
 sliceHghtRightQD = ec sliceHghtRight (inxi slopeHght $- inxi slipHght)
 
-sliceHghtLeftQD :: QDefinition
+sliceHghtLeftQD :: SimpleQDef
 sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght $- inxiM1 slipHght)
 
 --------------------------

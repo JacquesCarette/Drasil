@@ -1,3 +1,5 @@
+{-# LANGUAGE NoMonomorphismRestriction #-}
+
 module Drasil.NoPCM.GenDefs (rocTempSimp, genDefs) where
 
 import Language.Drasil

@@ -1,5 +1,6 @@
 on:
   push:
+  pull_request:
     branches: master
   workflow_dispatch:
 name: Build
@@ -7,8 +8,14 @@ defaults:
   run:
     shell: bash
     working-directory: code
+env:
+  is_deployment: ${{ github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
 jobs:
   auto-cancel:
+    if: | 
+      github.event_name == 'pull_request'
+      || github.event_name == 'workflow_dispatch'
+      || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || contains(github.event.head_commit.message, '[workflow-trigger]')))
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -51,32 +58,41 @@ jobs:
       - name: "HLint"
         run: make hot_hlint
       - name: "Install dependencies"
-        run: stack --no-terminal test --bench --only-dependencies
+        run: make stackArgs="--no-terminal" deps
       - name: "Build"
         run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
-      - name: "Stable"
+      - name: "Test built artifacts against stable"
         run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
-      - name: "TeX"
+      - name: "Compile generated TeX artifacts"
         run: make tex SUMMARIZE_TEX=yes
-      - name: "Code"
+      - name: "Compile generated software artifacts"
         run: make gool
-      - name: "Doxygen"
+      - name: "Create Doxygen for generated software artifacts"
         run: make doxygen
-      - name: "Docs"
+      - name: "Generate Haddock docs (as test)"
         run: make docs
-      - name: "Graphs"
+        if: ${{ !fromJSON(env.is_deployment) }}
+      - name: "Generate Haddock docs (full + std)"
+        run: FULL=1 make docs
+        if: ${{ fromJSON(env.is_deployment) }}
+      - name: "Generate module dependency graphs"
         run: make graphs
-      - name: "Analysis"
+      - name: "Analyze Drasil code"
         run: make analysis
+      - name: "Convert analysis graphs into dot and circo SVGs" # only needed in deployments, not required for tests
+        run: make convertAnalyzed
+        if: ${{ fromJSON(env.is_deployment) }}
+      - name: "Build website generator"
+        run: make website
       - name: "Build website"
         run: |
-          make website
           LABEL_FILE=/tmp/ci_build_failures \
             MANAGED_LABEL_FILE=/tmp/ci_managed_labels \
             ALL_FUNCTIONS_FILE=$(mktemp) \
             SHELL_OPTS_FILE=$(mktemp) \
             bash scripts/deploy_wrapper.bash
       - name: "Deploy 🚀"
+        if: ${{ fromJSON(env.is_deployment) }}
         uses: JamesIves/github-pages-deploy-action@4.1.3
         with:
           git-config-name: ${{ secrets.BOT_NAME }}

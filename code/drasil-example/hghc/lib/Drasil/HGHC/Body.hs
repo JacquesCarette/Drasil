@@ -35,7 +35,7 @@ si = SI {
   _configFiles = [],
   _inputs      = htInputs,
   _outputs     = htOutputs,
-  _defSequence = [] :: [Block QDefinition],
+  _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
   _sysinfodb   = symbMap,
@@ -61,4 +61,5 @@ symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+           [] [] [] [] [] [] [] ([] :: [Reference])

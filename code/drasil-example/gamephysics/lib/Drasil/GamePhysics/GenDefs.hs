@@ -65,7 +65,7 @@ accelGravityGD :: GenDefn
 accelGravityGD = gd (equationalModel' accelGravityQD) (getUnit QP.acceleration) (Just accelGravityDeriv)
    [dRef accelGravitySrc] "accelGravity" [accelGravityDesc]
 
-accelGravityQD :: QDefinition
+accelGravityQD :: ModelQDef
 accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") accelGravityExpr
 
 accelGravityDesc :: Sentence
@@ -74,7 +74,7 @@ accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much lar
   S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
   phrase QP.force]
 
-accelGravityExpr :: Relation
+accelGravityExpr :: PExpr
 accelGravityExpr = neg ((sy QP.gravitationalConst `mulRe` sy mLarger $/
   square (sy dispNorm)) `mulRe` sy dVect)
 
@@ -119,25 +119,25 @@ accelGravityDerivSentence5 :: [Sentence]
 accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the", phrase QP.force `S.is`
                                S "an attractive", phrase QP.force]
 
-accelGravityDerivEqn1 :: Expr
+accelGravityDerivEqn1 :: PExpr
 accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2) $/
                         sy sqrDist) `mulRe` sy dVect
 
-accelGravityDerivEqn2 :: Expr
+accelGravityDerivEqn2 :: PExpr
 accelGravityDerivEqn2 = sy dVect $= (sy distMass $/ sy dispNorm)
 
-accelGravityDerivEqn3 :: Expr
+accelGravityDerivEqn3 :: PExpr
 accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst `mulRe`
                          (sy mLarger `mulRe` sy QPP.mass $/ sy sqrDist) `mulRe` sy dVect
                          $= sy QPP.mass `mulRe` sy QP.gravitationalAccel
 
-accelGravityDerivEqn4 :: Expr
+accelGravityDerivEqn4 :: PExpr
 accelGravityDerivEqn4 = sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist) `mulRe` sy dVect $= sy QP.gravitationalAccel
 
-accelGravityDerivEqn5 :: Expr
+accelGravityDerivEqn5 :: PExpr
 accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist)) `mulRe` sy dVect
 
-accelGravityDerivEqns :: [Expr]
+accelGravityDerivEqns :: ExprC r => [r]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
                          accelGravityDerivEqn4, accelGravityDerivEqn5]
 
@@ -149,10 +149,10 @@ impulseGD :: GenDefn
 impulseGD = gd (equationalModel' impulseQD) (getUnit QP.impulseS) Nothing
   [dRef impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
-impulseQD :: QDefinition
+impulseQD :: ModelQDef
 impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impulseExpr
 
-impulseExpr :: Expr
+impulseExpr :: PExpr
 impulseExpr = (neg (exactDbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRelVel $.
   sy normalVect) $/ ((recip_ (sy massA) `addRe` recip_ (sy massB)) `mulRe`
   square (sy normalLen) `addRe`

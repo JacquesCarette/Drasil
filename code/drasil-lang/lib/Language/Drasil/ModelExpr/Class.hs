@@ -50,11 +50,13 @@ instance ModelExprC ModelExpr where
   deriv e c  = Deriv 1 Total e (c ^. uid)
   pderiv e c = Deriv 1 Part  e (c ^. uid)
   nthderiv n e c
-    | n > 0 = Deriv n Total e (c ^. uid)
+    | n > 0     = Deriv n Total e (c ^. uid)
+    | n == 0    = e
     | otherwise = error "non-positive argument to derivative"
 
   nthpderiv n e c
-    | n > 0 = Deriv n Part e (c ^. uid)
+    | n > 0     = Deriv n Part e (c ^. uid)
+    | n == 0    = e
     | otherwise = error "non-positive argument to derivative"
 
   defines = StatBinaryOp Defines

@@ -3,8 +3,7 @@ module Language.Drasil.Chunk.DifferentialModel (
     -- * Chunk Type
     DifferentialModel,
     -- * Constructors
-    makeLinear
-    ) where
+    makeLinear, displayODE) where
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
@@ -17,14 +16,29 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (ExprC(mulRe, addRe, exactDbl))
+import Language.Drasil.Expr.Class (ExprC(mulRe, addRe, exactDbl, sy))
+import Language.Drasil.Chunk.Constrained (ConstrConcept)
+import Language.Drasil.Chunk.Quantity (qw)
 
--- checked 1 how to build the coefficients 
--- checked 2 auto constr relation when coeff and const were given
--- 3 integrate ODEInfo, build ODEInfo
+{-
+  checked 1 how to build the coefficients 
+  checked 2 auto constr relation when coeff and const were given
+  3 integrate ODEInfo, build ODEInfo
+
+  data ODEInfo = ODEInfo {
+    indepVar :: CodeVarChunk, -- | Independent variable. 
+    depVar :: CodeVarChunk, -- | Dependent variable.
+    otherVars :: [CodeVarChunk], -- | Other variables in the ODE.
+    tInit :: CodeExpr,
+    tFinal :: CodeExpr,
+    initVal :: CodeExpr, -- | Initial value of an ODE.
+    odeSyst :: [CodeExpr], -- | ODE equations.
+    odeOpts :: ODEOptions 
+-}
+
 data DifferentialModel = Linear {
                                   _indepVar :: UnitalChunk, -- often time
-                                  _depVar :: ModelExpr, -- qdProcessVariableTD in PDController
+                                  _depVar :: ConstrConcept, -- opProcessVariable in PDController
                                   _coefficients :: [Expr],
                                   _constant :: Expr,
                                   _conc :: ConceptChunk
@@ -51,13 +65,14 @@ instance Express       DifferentialModel where express d = equiv $ displayODE d 
 -- | x0 is the highest order, x1 is the second higest order, and so on. The c is the constant.
 displayODE :: DifferentialModel -> ModelExpr
 displayODE d = foldr1 addRe (
-               zipWith mulRe (map express (d ^.coefficients))
-               [nthderiv (toInteger n) (d ^. depVar) (d ^. indepVar)
-               | n <- reverse [1..length (d ^. coefficients)]])
+                            zipWith mulRe (map express (d ^.coefficients))
+                                          [nthderiv (toInteger n) (sy (qw (d ^. depVar))) (d ^. indepVar)
+                                          | n <- reverse [0..(length (d ^. coefficients) - 1)]]
+                            )
                `addRe` express (d ^. constant)
 
 -- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), DepVar ('ModelExpr'),
 -- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').
-makeLinear :: UnitalChunk -> ModelExpr -> [Expr] -> Expr -> String -> NP -> Sentence -> DifferentialModel
+makeLinear :: UnitalChunk -> ConstrConcept -> [Expr] -> Expr -> String -> NP -> Sentence -> DifferentialModel
 makeLinear dmIndepVar dmDepVar dmCoeff dmConst dmID dmTerm dmDefn = 
   Linear dmIndepVar dmDepVar dmCoeff dmConst (dccWDS dmID dmTerm dmDefn)

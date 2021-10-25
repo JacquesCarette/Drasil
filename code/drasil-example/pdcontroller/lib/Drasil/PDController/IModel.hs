@@ -40,12 +40,13 @@ imPDRC
       EmptyS
       eqn
 
+diffModel :: DifferentialModel
+diffModel = makeLinear time opProcessVariable coe c "dmPDController" (cn' "Differential Model") EmptyS
+            where c = sy qdSetPointTD `mulRe` sy qdPropGain
+                  coe = [exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]
+
 eqn :: ModelExpr
-eqn
-  = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
-      ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
-      `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableTD)
-      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0
+eqn = displayODE diffModel
 
 imDeriv :: Derivation
 imDeriv

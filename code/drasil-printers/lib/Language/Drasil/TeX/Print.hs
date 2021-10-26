@@ -117,7 +117,11 @@ data OpenClose = Open | Close
 -- (Since this is all implicitly in Math, leave it as String for now)
 
 -- | Escape all special TeX characters.
--- TODO: This function should be improved.
+-- TODO: This function should be improved. It should escape all special
+--       TeX symbols that would affect rendering. For example, `_`
+--       turns the RHS of text into subscript, and `^` would turn it
+--       into superscript. This will need to be much more comprehensive.
+--       e.g., `%`, `&`, `#`, etc
 escapeIdentSymbols :: String -> String
 escapeIdentSymbols ('_':ss) = '\\' : '_' : escapeIdentSymbols ss
 escapeIdentSymbols (s:ss) = s : escapeIdentSymbols ss

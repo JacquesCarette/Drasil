@@ -96,13 +96,13 @@ $\mathit{interpY}$ & InterpY & --
 \\
 $\mathit{interpZ}$ & InterpZ & --
 \\
-$\mathit{is-safeLoad}$ & Load resistance safety requirement & --
+$\mathit{is_safeLoad}$ & Load resistance safety requirement & --
 \\
-$\mathit{is-safeLR}$ & 3 second load equivalent resistance safety requirement & --
+$\mathit{is_safeLR}$ & 3 second load equivalent resistance safety requirement & --
 \\
-$\mathit{is-safePb}$ & Probability of glass breakage safety requirement & --
+$\mathit{is_safePb}$ & Probability of glass breakage safety requirement & --
 \\
-$\mathit{is-safeProb}$ & Probability of failure safety requirement & --
+$\mathit{is_safeProb}$ & Probability of failure safety requirement & --
 \\
 $J$ & Stress distribution factor (Function) & --
 \\
@@ -406,16 +406,16 @@ Label & Safety Probability
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathit{is-safeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}
+           \mathit{is_safeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathit{is-safeProb}$ is the probability of failure safety requirement (Unitless)}
+              \item{$\mathit{is_safeProb}$ is the probability of failure safety requirement (Unitless)}
               \item{${P_{\text{f}}}$ is the probability of failure (Unitless)}
               \item{${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $\mathit{is-safeProb}$, the structure is considered safe.
+Notes & If $\mathit{is_safeProb}$, the structure is considered safe.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -438,16 +438,16 @@ Label & Safety Load
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathit{is-safeLoad}=\mathit{capacity}\gt{}\mathit{Load}
+           \mathit{is_safeLoad}=\mathit{capacity}\gt{}\mathit{Load}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathit{is-safeLoad}$ is the load resistance safety requirement (Unitless)}
+              \item{$\mathit{is_safeLoad}$ is the load resistance safety requirement (Unitless)}
               \item{$\mathit{capacity}$ is the capacity or load resistance (${\text{Pa}}$)}
               \item{$\mathit{Load}$ is the applied load (demand) or pressure (${\text{Pa}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $\mathit{is-safeLoad}$, the structure is considered safe.
+Notes & If $\mathit{is_safeLoad}$, the structure is considered safe.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1149,7 +1149,7 @@ Label & Safety Req-Pb
 Input & ${P_{\text{b}}}$, ${P_{\text{b}\text{tol}}}$
         
 \\ \midrule \\
-Output & $\mathit{is-safePb}$
+Output & $\mathit{is_safePb}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
@@ -1162,16 +1162,16 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathit{is-safePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}
+           \mathit{is_safePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathit{is-safePb}$ is the probability of glass breakage safety requirement (Unitless)}
+              \item{$\mathit{is_safePb}$ is the probability of glass breakage safety requirement (Unitless)}
               \item{${P_{\text{b}}}$ is the probability of breakage (Unitless)}
               \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $\mathit{is-safePb}$, the glass is considered safe. $\mathit{is-safePb}$ and $\mathit{is-safePb}$ (from \hyperref[IM:isSafeLR]{IM:isSafeLR}) are either both True or both False.
+Notes & If $\mathit{is_safePb}$, the glass is considered safe. $\mathit{is_safePb}$ and $\mathit{is_safePb}$ (from \hyperref[IM:isSafeLR]{IM:isSafeLR}) are either both True or both False.
         
         ${P_{\text{b}}}$ is defined in \hyperref[DD:probOfBreak]{DD:probOfBreak}.
         
@@ -1200,7 +1200,7 @@ Label & Safety Req-LR
 Input & $\mathit{LR}$, $q$
         
 \\ \midrule \\
-Output & $\mathit{is-safeLR}$
+Output & $\mathit{is_safeLR}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
@@ -1213,16 +1213,16 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathit{is-safeLR}=\mathit{LR}\gt{}q
+           \mathit{is_safeLR}=\mathit{LR}\gt{}q
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathit{is-safeLR}$ is the 3 second load equivalent resistance safety requirement (Unitless)}
+              \item{$\mathit{is_safeLR}$ is the 3 second load equivalent resistance safety requirement (Unitless)}
               \item{$\mathit{LR}$ is the load resistance (${\text{Pa}}$)}
               \item{$q$ is the applied load (demand) (${\text{Pa}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $\mathit{is-safeLR}$, the glass is considered safe. $\mathit{is-safePb}$ (from \hyperref[IM:isSafePb]{IM:isSafePb}) and $\mathit{is-safeLR}$ are either both True or both False.
+Notes & If $\mathit{is_safeLR}$, the glass is considered safe. $\mathit{is_safePb}$ (from \hyperref[IM:isSafePb]{IM:isSafePb}) and $\mathit{is_safeLR}$ are either both True or both False.
         
         $\mathit{LR}$ is defined in \hyperref[DD:calofCapacity]{DD:calofCapacity} and is also called capacity.
         
@@ -1296,7 +1296,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]{The system shall set the known values as described in the table for \hyperref[Table:ReqAssignments]{Required Assignments}.}
 \item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]{The system shall check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Output-Values-and-Known-Values:\phantomsection\label{outputValsAndKnownValues}]{Output the input values from \hyperref[inputValues]{FR:Input-Values} and the known values from \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}.}
-\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]{If $\mathit{is-safePb}\land{}\mathit{is-safeLR}$ (from \hyperref[TM:isSafeProb]{TM:isSafeProb} and \hyperref[TM:isSafeLoad]{TM:isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''}
+\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]{If $\mathit{is_safePb}\land{}\mathit{is_safeLR}$ (from \hyperref[TM:isSafeProb]{TM:isSafeProb} and \hyperref[TM:isSafeLoad]{TM:isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output the values from the table for \hyperref[Table:ReqOutputs]{Required Outputs}.}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
@@ -1373,9 +1373,9 @@ $\mathit{GTF}$ & Glass type factor & \hyperref[DD:gTF]{DD:gTF} & --
 \\
 $h$ & Minimum thickness & \hyperref[DD:minThick]{DD:minThick} & ${\text{m}}$
 \\
-$\mathit{is-safeLR}$ & Safety Req-LR & \hyperref[IM:isSafeLR]{IM:isSafeLR} & --
+$\mathit{is_safeLR}$ & Safety Req-LR & \hyperref[IM:isSafeLR]{IM:isSafeLR} & --
 \\
-$\mathit{is-safePb}$ & Safety Req-Pb & \hyperref[IM:isSafePb]{IM:isSafePb} & --
+$\mathit{is_safePb}$ & Safety Req-Pb & \hyperref[IM:isSafePb]{IM:isSafePb} & --
 \\
 $J$ & Stress distribution factor (Function) & \hyperref[DD:stressDistFac]{DD:stressDistFac} & --
 \\

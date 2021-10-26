@@ -116,6 +116,13 @@ data OpenClose = Open | Close
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
 
+-- | Escape all special TeX characters.
+-- TODO: This function should be improved.
+escapeIdentSymbols :: String -> String
+escapeIdentSymbols ('_':ss) = '\\' : '_' : escapeIdentSymbols ss
+escapeIdentSymbols (s:ss) = s : escapeIdentSymbols ss
+escapeIdentSymbols [] = []
+
 -- | Print an expression to a document.
 pExpr :: Expr -> D
 pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
@@ -126,8 +133,8 @@ pExpr (Case ps)      = mkEnv "cases" (cases ps)
 pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
-pExpr (Ident s@[_])  = pure . text $ s
-pExpr (Ident s)      = commandD "mathit" (pure $ text s)
+pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
+pExpr (Ident s)      = commandD "mathit" (pure . text . escapeIdentSymbols $ s)
 pExpr (Label s)      = command "text" s
 pExpr (Spec s)       = pure . text $ unPL $ L.special s
 --pExpr (Gr g)         = unPL $ greek g

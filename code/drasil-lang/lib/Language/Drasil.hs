@@ -214,8 +214,10 @@ module Language.Drasil (
   -- | Used for rendering mathematical symbols in Drasil.
 
   -- Language.Drasil.Space
-  , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
-  , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
+  , Space(..)
+  , RealInterval(..), Inclusive(..)
+  , DomainDesc(..), RTopology(..), ContinuousDomainDesc, DiscreteDomainDesc
+  , getActorName, getInnerSpace
   -- Language.Drasil.Symbol
   , Decoration, Symbol
   -- Language.Drasil.UnitLang
@@ -310,7 +312,8 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
-  RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
+  RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
+  getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?

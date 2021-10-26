@@ -1,9 +1,10 @@
+{-# LANGUAGE GADTs #-}
 -- | Defines functions to convert from the base expression language to 'ModelExpr's.
 module Language.Drasil.ModelExpr.Convert where
 
 import Data.Bifunctor (bimap, second)
 
-import Language.Drasil.Space (DomainDesc(..), RealInterval(..))
+import Language.Drasil.Space
 import qualified Language.Drasil.Expr.Lang as E
 import Language.Drasil.ModelExpr.Lang
 
@@ -103,6 +104,6 @@ realInterval (Bounded (li, l) (ri, r)) = Bounded (li, expr l) (ri, expr r)
 realInterval (UpTo (i, e)) = UpTo (i, expr e)
 realInterval (UpFrom (i, e)) = UpFrom (i, expr e)
 
-domainDesc :: DomainDesc E.Expr E.Expr -> DomainDesc ModelExpr ModelExpr
+domainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc ModelExpr ModelExpr
 domainDesc (BoundedDD s rt l r) = BoundedDD s rt (expr l) (expr r)
-domainDesc (AllDD s rt) = AllDD s rt
+-- domainDesc (AllDD s rt) = AllDD s rt

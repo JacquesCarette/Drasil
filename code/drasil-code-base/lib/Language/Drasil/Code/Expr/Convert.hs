@@ -1,3 +1,4 @@
+{-# LANGUAGE GADTs #-}
 module Language.Drasil.Code.Expr.Convert (
     expr, realInterval, constraint
 ) where
@@ -47,9 +48,8 @@ constraint :: L.ConstraintE -> L.Constraint CodeExpr
 constraint (L.Range r ri) = L.Range r (realInterval ri)
 
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
-renderDomainDesc :: L.DomainDesc L.Expr L.Expr -> L.DomainDesc CodeExpr CodeExpr
+renderDomainDesc :: L.DiscreteDomainDesc L.Expr L.Expr -> L.DiscreteDomainDesc CodeExpr CodeExpr
 renderDomainDesc (L.BoundedDD s t l r) = L.BoundedDD s t (expr l) (expr r)
-renderDomainDesc (L.AllDD s t) = L.AllDD s t
 
 arithBinOp :: LD.ArithBinOp -> ArithBinOp
 arithBinOp LD.Frac = Frac

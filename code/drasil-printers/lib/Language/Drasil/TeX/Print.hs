@@ -10,7 +10,6 @@ import Numeric (showEFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L
-import qualified Language.Drasil.ShortHands as LD (cDelta)
 import qualified Language.Drasil.Display as LD
 import Utils.Drasil (checkValidStr, foldNums)
 

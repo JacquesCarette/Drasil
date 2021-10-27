@@ -79,35 +79,6 @@ lo (Cell _) _               = empty
 print :: PrintingInformation -> [LayoutObj] -> D
 print sm = foldr (($+$) . (`lo` sm)) empty
 
------------------- Symbol ----------------------------
-
--- TODO: It seems that there's a disconnect from this function and that of Symbol.hs?
-
--- | Converts a symbol into a printable document form.
-symbol :: LD.Symbol -> D
-symbol (LD.Variable s) = pure $ text s
-symbol (LD.Label    s) = pure $ text s
-symbol (LD.Integ    n) = pure $ text $ show n
-symbol (LD.Special  s) = pure $ text $ unPL $ L.special s
-symbol (LD.Concat  sl) = foldl (<>) empty $ map symbol sl
---
--- handle the special cases first, then general case
-symbol (LD.Corners [] [] [x] [] s) = br $ symbol s <> pure hat <> br (symbol x)
-symbol (LD.Corners [] [] [] [x] s) = br $ symbol s <> pure unders <> br (symbol x)
-symbol (LD.Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbol (LD.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol LD.Corners{}                = error "rendering of Corners (general)"
-symbol (LD.Atop f s)               = sFormat f s
-symbol LD.Empty                    = empty
-
--- | Converts a decorated symbol into a printable document form.
-sFormat :: L.Decoration -> L.Symbol -> D
-sFormat LD.Hat       s = commandD "hat" (symbol s)
-sFormat LD.Vector    s = commandD "symbf" (symbol s)
-sFormat LD.Prime     s = symbol s <> pure (text "'")
-sFormat LD.Delta     s = symbol LD.cDelta <> symbol s
-sFormat LD.Magnitude s = fence Open Norm <> symbol s <> fence Open Norm
-
 -- | Determine wether braces and brackets are opening or closing.
 data OpenClose = Open | Close
 
@@ -349,7 +320,7 @@ pUnit (L.US ls) = formatu t b
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (LD.Concat s) = foldl (<>) empty $ map p_symb s
-    p_symb n = let cn = symbolNeeds n in switch (const cn) $ symbol n
+    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pExpr $ I.symbol n
 
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------

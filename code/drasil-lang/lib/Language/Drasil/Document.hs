@@ -119,6 +119,9 @@ mkRawLC x lb = llcc lb x
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
 
+section' :: Sentence -> [Contents] -> Reference -> Section
+section' title intro = Section title (map Con intro)
+
 -- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
 extractSection :: Document -> [Section]
 extractSection (Document _ _ _ sec) = concatMap getSec sec

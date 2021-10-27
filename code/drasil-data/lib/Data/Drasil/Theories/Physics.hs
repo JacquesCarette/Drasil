@@ -15,9 +15,8 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, position,
   force, gravitationalAccel, pressure, torque, weight, positionVec, time, momentOfInertia,
   angularAccel, speed)
-import Data.Drasil.Equations.Defining.Physics (newtonSLQD, newtonSLDesc, weightEqn,
-  weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
-  hsPressureEqn, accelerationQD, velocityQD, speedEqn)
+import Data.Drasil.Equations.Defining.Physics
+import Data.Drasil.Equations.Defining.Derivations
 
 -- | Collects theoretical models defined in this file.
 physicsTMs :: [TheoryModel]
@@ -131,7 +130,7 @@ newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
 newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRExpr :: PExpr
+newtonSLRExpr :: ExprC r => r
 newtonSLRExpr = sy QP.momentOfInertia `mulRe` sy QP.angularAccel
 
 newtonSLRNotes :: [Sentence]

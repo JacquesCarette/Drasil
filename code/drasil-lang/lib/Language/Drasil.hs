@@ -17,6 +17,10 @@ module Language.Drasil (
   , apply1, apply2
   , Completeness, Relation
 
+  -- ** Literals Language
+  , Literal
+  , LiteralC(..)
+
   -- ** Expression Modelling Language 
   -- | Defines display-related expression functions. Used in models.
 
@@ -240,6 +244,8 @@ import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, 
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2)
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
+import Language.Drasil.Literal.Class (LiteralC(..))
+import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
 import Language.Drasil.Document (section, fig, figWithWidth

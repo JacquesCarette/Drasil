@@ -14,11 +14,7 @@ eNames :: CodeExpr -> [UID]
 eNames (AssocA _ l)          = concatMap eNames l
 eNames (AssocB _ l)          = concatMap eNames l
 eNames (C c)                 = [c]
-eNames Int{}                 = []
-eNames Dbl{}                 = []
-eNames ExactDbl{}            = []
-eNames Str{}                 = []
-eNames Perc{}                = []
+eNames Lit{}                 = []
 eNames (FCall f x ns)        = f : concatMap eNames x ++ map fst ns ++ 
                               concatMap (eNames . snd) ns
 eNames (New c x ns)          = c : concatMap eNames x ++ map fst ns ++ 
@@ -55,11 +51,7 @@ eNames' :: CodeExpr -> [UID]
 eNames' (AssocA _ l)          = concatMap eNames' l
 eNames' (AssocB _ l)          = concatMap eNames' l
 eNames' (C c)                 = [c]
-eNames' Int{}                 = []
-eNames' Dbl{}                 = []
-eNames' ExactDbl{}            = []
-eNames' Str{}                 = []
-eNames' Perc{}                = []
+eNames' Lit{}                 = []
 eNames' (FCall _ x ns)        = concatMap eNames' x ++ map fst ns ++ 
                                concatMap (eNames .snd) ns
 eNames' (New _ x ns)          = concatMap eNames' x ++ map fst ns ++ 

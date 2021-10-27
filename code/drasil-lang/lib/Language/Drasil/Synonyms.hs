@@ -8,6 +8,7 @@ module Language.Drasil.Synonyms (
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Expr.Class (ExprC)
 import Language.Drasil.Expr.Lang (Expr)
+import Language.Drasil.Literal.Class (LiteralC)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 
 -- | Commonly used type for QDefinitions containing Exprs.
@@ -16,4 +17,4 @@ type SimpleQDef = QDefinition Expr
 type ModelQDef  = QDefinition ModelExpr
 
 -- | Commonly used type for polymorphic Exprs.
-type PExpr = forall r . ExprC r => r
+type PExpr = forall r . (ExprC r, LiteralC r) => r

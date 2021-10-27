@@ -12,11 +12,7 @@ import Language.Drasil.Code.Expr
 
 -- | Render an algebraic expression into our code expression language.
 expr :: LD.Expr -> CodeExpr
-expr (LD.Dbl d) = Dbl d
-expr (LD.Int i) = Int i
-expr (LD.ExactDbl i) = ExactDbl i
-expr (LD.Str s) = Str s
-expr (LD.Perc n d) = Perc n d
+expr (LD.Lit l) = Lit l
 expr (LD.AssocA ao es) = AssocA (assocArithOp ao) $ map expr es
 expr (LD.AssocB bo es) = AssocB (assocBoolOp bo) $ map expr es
 expr (LD.C u) = C u

@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.Derivations where
 
-import Language.Drasil (eqSymb, ModelExprC(..), ExprC(..), ModelExpr)
+import Language.Drasil (eqSymb, ModelExprC(..), ExprC(..), ModelExpr, LiteralC(..))
 
 import Drasil.GamePhysics.Unitals (timeT, time_1, time_2, velo_1, velo_2)
 

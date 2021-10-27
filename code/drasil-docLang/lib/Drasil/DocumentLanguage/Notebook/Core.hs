@@ -1,78 +1,85 @@
 {-# LANGUAGE GADTs #-}
--- | Lesson plan notebook section types.
 module Drasil.DocumentLanguage.Notebook.Core where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 import Language.Drasil
 
--- * Section Types
-
 type NBDesc = [DocSection]
 
 data DocSection = IntrodSec IntrodSec
+                | InPurposeSub InPurposeSub
                 | BodySec BodySec
+                | ReviewSub ReviewSub
+                | MainIdeaSub MainIdeaSub
+                | MethsAnlsSub MethsAnlsSub
+                | ExampleSub ExampleSub
                 | SmmrySec SmmrySec
                 | BibSec
                 | ApndxSec ApndxSec
 
--- TODO: Work on detail structure of notebooks
+-- **TODO: Work on detail structure of notebooks
 
--- ** Introduction Section
+{--}
 
 -- | Introduction section. Contents are top level followed by a list of subsections.
-data IntrodSec = IntrodProg [Contents] [IntrodSub]
+newtype IntrodSec = IntrodProg [Contents] 
 
 -- | Introduction subsections
-data IntrodSub where
-  InPurpose :: [Sentence] -> IntrodSub -- TODO: maybe change to [Contents]  
+newtype InPurposeSub = InPurposeProg [Sentence] -- **maybe change to [Contents]  
 
--- ** Body Section
+{--}
 
-newtype BodySec = BodyProg [BodySub]
+newtype BodySec = BodyProg [Contents]
 
-data BodySub where
-  Review       :: [Contents] -> BodySub
-  MainIdea     :: [Contents] -> [Section] -> BodySub
-  MethsAndAnls :: [Contents] -> [Section] -> BodySub
-  Example      :: [Contents] -> [Section] -> BodySub
+newtype ReviewSub    =  ReviewProg [Contents] 
+newtype MainIdeaSub  =  MainIdeaProg [Contents] 
+newtype MethsAnlsSub =  MethsAnlsProg [Contents] 
+newtype ExampleSub   =  ExampleProg [Contents] 
   
--- ** Summary Section
+{--}
 
 newtype SmmrySec = SmmryProg [Contents]
 
--- ** Appendix Section
+{--}
 
 newtype ApndxSec = ApndxProg [Contents]
 
--- * Multiplate Definition and Type
+{--}
 
 data DLPlate f = DLPlate {
   docSec :: DocSection -> f DocSection,
   introdSec :: IntrodSec -> f IntrodSec,
-  introdSub :: IntrodSub -> f IntrodSub,
+  inpurposeSub :: InPurposeSub -> f InPurposeSub,
   bodySec :: BodySec -> f BodySec,
-  bodySub :: BodySub -> f BodySub,
+  reviewSub :: ReviewSub -> f ReviewSub,
+  mainIdeaSub :: MainIdeaSub -> f MainIdeaSub,
+  methsAnlsSub :: MethsAnlsSub -> f MethsAnlsSub,
+  exampleSub :: ExampleSub -> f ExampleSub,
   smmrySec ::SmmrySec -> f SmmrySec,
   apendSec :: ApndxSec -> f ApndxSec
 }
 
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds intro intro' body body' smry aps where
+  multiplate p = DLPlate ds intro inpurp body review mainid methanl exmp smry aps where
     ds (IntrodSec x) = IntrodSec <$> introdSec p x
+    ds (InPurposeSub x) = InPurposeSub <$> inpurposeSub p x
     ds (BodySec x) = BodySec <$> bodySec p x
+    ds (ReviewSub x) = ReviewSub <$> reviewSub p x
+    ds (MainIdeaSub x) = MainIdeaSub <$> mainIdeaSub p x
+    ds (MethsAnlsSub x) = MethsAnlsSub <$> methsAnlsSub p x
+    ds (ExampleSub x) = ExampleSub <$> exampleSub p x
     ds (SmmrySec x) = SmmrySec <$> smmrySec p x
     ds (ApndxSec x) = ApndxSec <$> apendSec p x
     ds BibSec = pure BibSec
 
-    intro (IntrodProg c progs) = IntrodProg c <$>
-      traverse (introdSub p) progs
-    intro' (InPurpose s) = pure $ InPurpose s
-    body (BodyProg progs) = BodyProg <$> traverse (bodySub p) progs
-    body' (Review c) = pure $ Review c
-    body' (MainIdea c s) = pure $ MainIdea c s
-    body' (MethsAndAnls c s) = pure $ MethsAndAnls c s
-    body' (Example c s) = pure $ Example c s
-    smry (SmmryProg con) = pure $ SmmryProg con 
-    aps (ApndxProg con) = pure $ ApndxProg con
-  mkPlate b = DLPlate (b docSec) (b introdSec) (b introdSub) (b bodySec)
-    (b bodySub) (b smmrySec) (b apendSec)
+    intro (IntrodProg c) = pure $ IntrodProg c 
+    inpurp (InPurposeProg s) = pure $ InPurposeProg s
+    body (BodyProg c) = pure $ BodyProg c 
+    review (ReviewProg c) = pure $ ReviewProg c
+    mainid (MainIdeaProg c) = pure $ MainIdeaProg c
+    methanl (MethsAnlsProg c) = pure $ MethsAnlsProg c
+    exmp (ExampleProg c) = pure $ ExampleProg c
+    smry (SmmryProg c) = pure $ SmmryProg c 
+    aps (ApndxProg c) = pure $ ApndxProg c
+  mkPlate b = DLPlate (b docSec) (b introdSec) (b inpurposeSub) (b bodySec)
+    (b reviewSub) (b mainIdeaSub) (b methsAnlsSub) (b exampleSub) (b smmrySec) (b apendSec)

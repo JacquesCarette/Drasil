@@ -25,7 +25,8 @@ module Drasil.DocLang (
   -- Drasil.DocumentLanguage.Notebook.NBDecl
   NBDecl, NbSection(BibSec, IntrodSec, BodySec),
   -- Drasil.DocumentLanguage.Notebook.Core
-  IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..), ApndxSec(..),
+  IntrodSec(..), InPurposeSub(..), BodySec(..), 
+  ReviewSub(..), MainIdeaSub(..), MethsAnlsSub(..), ExampleSub(..), ApndxSec(..), SmmrySec(..),
   -- *** Functions
   -- Drasil.DocumentLanguage.Notebook.DocumentLanguage
   mkNb,
@@ -77,8 +78,8 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
-import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), IntrodSub(..), BodySec(..), 
-  BodySub(..), ApndxSec(..), SmmrySec(..))
+import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), InPurposeSub(..), BodySec(..), 
+  ReviewSub(..), MainIdeaSub(..), MethsAnlsSub(..), ExampleSub(..), ApndxSec(..), SmmrySec(..))
 import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)
 import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(BibSec, IntrodSec, BodySec))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),

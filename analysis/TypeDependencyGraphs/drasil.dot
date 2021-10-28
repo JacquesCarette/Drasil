@@ -334,7 +334,7 @@ digraph alltypes {
 		Expr -> OrdBinOp;
 		Expr -> VVVBinOp;
 		Expr -> VVNBinOp;
-		Expr -> DomainDesc;
+		Expr -> DiscreteDomainDesc;
 		Expr -> RealInterval;
 		}
 		subgraph relation{
@@ -442,6 +442,7 @@ digraph alltypes {
 		ModelExpr -> VVVBinOp;
 		ModelExpr -> VVNBinOp;
 		ModelExpr -> DomainDesc;
+		ModelExpr -> t;
 		ModelExpr -> RealInterval;
 		}
 		subgraph variable{
@@ -684,14 +685,14 @@ digraph alltypes {
 		}
 		subgraph rtopology{
 		RTopology	[shape=oval, color=darkviolet, label="RTopology"];
-		}
-		subgraph domaindescab{
-		DomainDescab	[shape=oval, color=darkviolet, label="DomainDescab"];
-		DomainDescab -> Symbol;
-		DomainDescab -> RTopology;
-		DomainDescab -> a;
-		DomainDescab -> b;
-		DomainDescab -> DomainDesc;
+		RTopology -> DomainDesc;
+		RTopology -> tplgy;
+		RTopology -> RTopology;
+		RTopology -> a;
+		RTopology -> b;
+		RTopology -> Symbol;
+		RTopology -> _Discrete;
+		RTopology -> _Continuous;
 		}
 		subgraph inclusive{
 		Inclusive	[shape=oval, color=darkviolet, label="Inclusive"];
@@ -706,6 +707,14 @@ digraph alltypes {
 		subgraph primitive{
 		Primitive	[shape=oval, color=red2, label="Primitive"];
 		Primitive -> Space;
+		}
+		subgraph discretedomaindescab{
+		DiscreteDomainDescab	[shape=oval, color=red2, label="DiscreteDomainDescab"];
+		DiscreteDomainDescab -> DomainDesc_Discreteab;
+		}
+		subgraph continuousdomaindescab{
+		ContinuousDomainDescab	[shape=oval, color=red2, label="ContinuousDomainDescab"];
+		ContinuousDomainDescab -> DomainDesc_Continuousab;
 		}
 	}
 	subgraph stages {
@@ -856,7 +865,7 @@ digraph alltypes {
 		CodeExpr -> OrdBinOp;
 		CodeExpr -> VVVBinOp;
 		CodeExpr -> VVNBinOp;
-		CodeExpr -> DomainDesc;
+		CodeExpr -> DiscreteDomainDesc;
 		CodeExpr -> RealInterval;
 		}
 	}

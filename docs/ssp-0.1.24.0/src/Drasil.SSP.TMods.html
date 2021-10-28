@@ -171,7 +171,7 @@ forall r. ExprC r =&gt; Integer -&gt; r
 -&gt; (UnitalChunk -&gt; ModelExpr) -&gt; UnitalChunk -&gt; ModelExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r
+forall r. ModelExprC r =&gt; Symbol -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sumAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;i&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; ModelExpr)
 -&gt; (UnitalChunk -&gt; ModelExpr) -&gt; UnitalChunk -&gt; ModelExpr

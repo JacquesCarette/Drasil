@@ -1,3 +1,11 @@
 digraph rtopology{
 RTopology	[shape=oval, color=darkviolet, label="RTopology"];
+RTopology -> DomainDesc;
+RTopology -> tplgy;
+RTopology -> RTopology;
+RTopology -> a;
+RTopology -> b;
+RTopology -> Symbol;
+RTopology -> _Discrete;
+RTopology -> _Continuous;
 }

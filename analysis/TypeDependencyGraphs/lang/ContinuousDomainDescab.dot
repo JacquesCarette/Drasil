@@ -1,0 +1,4 @@
+digraph continuousdomaindescab{
+ContinuousDomainDescab	[shape=oval, color=red2, label="ContinuousDomainDescab"];
+ContinuousDomainDescab -> DomainDesc_Continuousab;
+}

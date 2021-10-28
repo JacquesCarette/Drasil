@@ -548,12 +548,6 @@ DiscreteS :: [String] -> Space
 Function :: NonEmpty Primitive -> Primitive -> Space
 Void :: Space
 
--- | Describes the domain of a <a>Symbol</a> given a topology. Can be
---   bounded or encase all of the domain.
-data DomainDesc a b
-[BoundedDD] :: Symbol -> RTopology -> a -> b -> DomainDesc a b
-[AllDD] :: Symbol -> RTopology -> DomainDesc a b
-
 -- | A RealInterval is a subset of <a>Real</a> (as a <a>Space</a>). These
 --   come in different flavours. For now, we embed <tt>Expr</tt> for the
 --   bounds, but that will change as well.
@@ -562,15 +556,23 @@ data RealInterval a b
 [UpTo] :: (Inclusive, a) -> RealInterval a b
 [UpFrom] :: (Inclusive, b) -> RealInterval a b
 
--- | Topology of a subset of reals.
-data RTopology
-Continuous :: RTopology
-Discrete :: RTopology
-
 -- | Inclusive or exclusive bounds.
 data Inclusive
 Inc :: Inclusive
 Exc :: Inclusive
+
+-- | Describes the domain of a <a>Symbol</a> given a topology. Can be
+--   bounded or encase all of the domain.
+data DomainDesc (tplgy :: RTopology) a b
+[BoundedDD] :: Symbol -> RTopology -> a -> b -> DomainDesc 'Discrete a b
+[AllDD] :: Symbol -> RTopology -> DomainDesc 'Continuous a b
+
+-- | Topology of a subset of reals.
+data RTopology
+Continuous :: RTopology
+Discrete :: RTopology
+type DiscreteDomainDesc a b = DomainDesc 'Discrete a b
+type ContinuousDomainDesc a b = DomainDesc 'Continuous a b
 
 -- | Gets the name of an <a>Actor</a>.
 getActorName :: Space -> String
@@ -760,9 +762,9 @@ data Expr
 [VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
 
 -- | Operators are generalized arithmetic operators over a
---   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
+--   <tt>DomainDesc</tt> of an <a>Expr</a>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+[Operator] :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
 
 -- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
 --   interval.
@@ -982,7 +984,7 @@ data ModelExpr
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> ModelExpr
+[Operator] :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
 
 -- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
 --   interval.
@@ -1107,7 +1109,7 @@ vvvBinOp :: VVVBinOp -> VVVBinOp
 vvnBinOp :: VVNBinOp -> VVNBinOp
 expr :: Expr -> ModelExpr
 realInterval :: RealInterval Expr Expr -> RealInterval ModelExpr ModelExpr
-domainDesc :: DomainDesc Expr Expr -> DomainDesc ModelExpr ModelExpr
+domainDesc :: DiscreteDomainDesc Expr Expr -> DiscreteDomainDesc ModelExpr ModelExpr
 
 
 -- | Re-export functions and types related to <a>ModelExpr</a>
@@ -1211,7 +1213,7 @@ data ModelExpr
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> ModelExpr
+[Operator] :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
 
 -- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
 --   interval.
@@ -1506,9 +1508,9 @@ data Expr
 [VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
 
 -- | Operators are generalized arithmetic operators over a
---   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
+--   <tt>DomainDesc</tt> of an <a>Expr</a>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+[Operator] :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
 
 -- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
 --   interval.
@@ -2319,11 +2321,11 @@ assocSanitize :: AssocBoolOper -> [ModelExpr] -> [ModelExpr]
 class ModelExprC r
 
 -- | Gets the derivative of an <a>ModelExpr</a> with respect to a
---   <tt>Symbol</tt>.
+--   <a>Symbol</a>.
 deriv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
 
 -- | Gets the derivative of an <a>ModelExpr</a> with respect to a
---   <tt>Symbol</tt>.
+--   <a>Symbol</a>.
 pderiv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
 
 -- | One expression is "defined" by another.
@@ -2337,6 +2339,18 @@ isIn :: ModelExprC r => r -> Space -> r
 
 -- | Binary associative <a>Equivalence</a>.
 equiv :: ModelExprC r => [r] -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+intAll :: ModelExprC r => Symbol -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+sumAll :: ModelExprC r => Symbol -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+prodAll :: ModelExprC r => Symbol -> r -> r
 instance Language.Drasil.ModelExpr.Class.ModelExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 
 
@@ -3616,18 +3630,6 @@ defsum :: ExprC r => Symbol -> r -> r -> r -> r
 --   over an interval.
 defprod :: ExprC r => Symbol -> r -> r -> r -> r
 
--- | Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-intAll :: ExprC r => Symbol -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-sumAll :: ExprC r => Symbol -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-prodAll :: ExprC r => Symbol -> r -> r
-
 -- | Smart constructor for 'real interval' membership.
 realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
 
@@ -4746,18 +4748,6 @@ defsum :: ExprC r => Symbol -> r -> r -> r -> r
 --   over an interval.
 defprod :: ExprC r => Symbol -> r -> r -> r -> r
 
--- | Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-intAll :: ExprC r => Symbol -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-sumAll :: ExprC r => Symbol -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over all Real numbers.
-prodAll :: ExprC r => Symbol -> r -> r
-
 -- | Smart constructor for 'real interval' membership.
 realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
 
@@ -4852,11 +4842,11 @@ data DerivType
 class ModelExprC r
 
 -- | Gets the derivative of an <a>ModelExpr</a> with respect to a
---   <tt>Symbol</tt>.
+--   <a>Symbol</a>.
 deriv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
 
 -- | Gets the derivative of an <a>ModelExpr</a> with respect to a
---   <tt>Symbol</tt>.
+--   <a>Symbol</a>.
 pderiv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
 
 -- | One expression is "defined" by another.
@@ -4870,6 +4860,18 @@ isIn :: ModelExprC r => r -> Space -> r
 
 -- | Binary associative <a>Equivalence</a>.
 equiv :: ModelExprC r => [r] -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+intAll :: ModelExprC r => Symbol -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+sumAll :: ModelExprC r => Symbol -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
+prodAll :: ModelExprC r => Symbol -> r -> r
 
 -- | Special characters include partial derivatives and the degree circle.
 data Special
@@ -6689,16 +6691,18 @@ data Inclusive
 Inc :: Inclusive
 Exc :: Inclusive
 
+-- | Describes the domain of a <a>Symbol</a> given a topology. Can be
+--   bounded or encase all of the domain.
+data DomainDesc (tplgy :: RTopology) a b
+[BoundedDD] :: Symbol -> RTopology -> a -> b -> DomainDesc 'Discrete a b
+[AllDD] :: Symbol -> RTopology -> DomainDesc 'Continuous a b
+
 -- | Topology of a subset of reals.
 data RTopology
 Continuous :: RTopology
 Discrete :: RTopology
-
--- | Describes the domain of a <a>Symbol</a> given a topology. Can be
---   bounded or encase all of the domain.
-data DomainDesc a b
-[BoundedDD] :: Symbol -> RTopology -> a -> b -> DomainDesc a b
-[AllDD] :: Symbol -> RTopology -> DomainDesc a b
+type ContinuousDomainDesc a b = DomainDesc 'Continuous a b
+type DiscreteDomainDesc a b = DomainDesc 'Discrete a b
 
 -- | Gets the name of an <a>Actor</a>.
 getActorName :: Space -> String

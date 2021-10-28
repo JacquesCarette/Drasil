@@ -1,8 +1,0 @@
-digraph domaindescab{
-DomainDescab	[shape=oval, color=darkviolet, label="DomainDescab"];
-DomainDescab -> Symbol;
-DomainDescab -> RTopology;
-DomainDescab -> a;
-DomainDescab -> b;
-DomainDescab -> DomainDesc;
-}

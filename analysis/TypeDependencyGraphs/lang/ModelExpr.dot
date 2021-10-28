@@ -24,5 +24,6 @@ ModelExpr -> StatBinOp;
 ModelExpr -> VVVBinOp;
 ModelExpr -> VVNBinOp;
 ModelExpr -> DomainDesc;
+ModelExpr -> t;
 ModelExpr -> RealInterval;
 }

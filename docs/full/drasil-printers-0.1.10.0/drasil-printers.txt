@@ -1034,13 +1034,13 @@ indx :: PrintingInformation -> ModelExpr -> ModelExpr -> Expr
 call :: PrintingInformation -> UID -> [ModelExpr] -> [(UID, ModelExpr)] -> Expr
 
 -- | Helper function for addition <tt>EOperator</tt>s.
-eopAdds :: PrintingInformation -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> Expr
+eopAdds :: PrintingInformation -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> Expr
 
 -- | Helper function for multiplicative <tt>EOperator</tt>s.
-eopMuls :: PrintingInformation -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> Expr
+eopMuls :: PrintingInformation -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> Expr
 
 -- | Helper function for translating <tt>EOperator</tt>s.
-eop :: PrintingInformation -> AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> Expr
+eop :: PrintingInformation -> AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> Expr
 
 -- | Translate Exprs to printable layout AST.
 modelExpr :: ModelExpr -> PrintingInformation -> Expr

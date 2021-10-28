@@ -5,14 +5,14 @@
 </span><span id="line-5"></span><span class="hs-comment">-- of information. We use a newtype wrapper to make sure we are only using</span><span>
 </span><span id="line-6"></span><span class="hs-comment">-- 'UID's where desired.</span><span>
 </span><span id="line-7"></span><span class="hs-keyword">newtype</span><span> </span><span id="UID"><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-var">UID</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="UID"><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-var">UID</span></a></span></span><span> </span><span class="hs-special">{</span><span id="uidToStr"><span class="annot"><span class="annottext">UID -&gt; String
-</span><a href="Language.Drasil.UID.html#uidToStr"><span class="hs-identifier hs-var hs-var">uidToStr</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679391927"><span id="local-6989586621679391929"><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
+</span><a href="Language.Drasil.UID.html#uidToStr"><span class="hs-identifier hs-var hs-var">uidToStr</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679390970"><span id="local-6989586621679390972"><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 (UID -&gt; UID -&gt; Bool) -&gt; (UID -&gt; UID -&gt; Bool) -&gt; Eq UID
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: UID -&gt; UID -&gt; Bool
 $c/= :: UID -&gt; UID -&gt; Bool
 == :: UID -&gt; UID -&gt; Bool
 $c== :: UID -&gt; UID -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679391911"><span id="local-6989586621679391913"><span id="local-6989586621679391915"><span id="local-6989586621679391917"><span id="local-6989586621679391919"><span id="local-6989586621679391921"><span id="local-6989586621679391923"><span class="annot"><span class="annottext">Eq UID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679390954"><span id="local-6989586621679390956"><span id="local-6989586621679390958"><span id="local-6989586621679390960"><span id="local-6989586621679390962"><span id="local-6989586621679390964"><span id="local-6989586621679390966"><span class="annot"><span class="annottext">Eq UID
 Eq UID =&gt;
 (UID -&gt; UID -&gt; Ordering)
 -&gt; (UID -&gt; UID -&gt; Bool)
@@ -52,8 +52,8 @@ $ccompare :: UID -&gt; UID -&gt; Ordering
 $cp1Ord :: Eq UID
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span>
-</span><span id="line-9"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679391905"><span id="local-6989586621679391908"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-10"></span><span>  </span><span id="local-6989586621679391903"><span class="annot"><span class="annottext">show :: UID -&gt; String
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span id="local-6989586621679391901"><span class="annot"><span class="annottext">u :: String
-</span><a href="#local-6989586621679391901"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679391901"><span class="hs-identifier hs-var">u</span></a></span></pre></body></html>
+</span><span id="line-9"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679390948"><span id="local-6989586621679390951"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-10"></span><span>  </span><span id="local-6989586621679390946"><span class="annot"><span class="annottext">show :: UID -&gt; String
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span id="local-6989586621679390944"><span class="annot"><span class="annottext">u :: String
+</span><a href="#local-6989586621679390944"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679390944"><span class="hs-identifier hs-var">u</span></a></span></pre></body></html>

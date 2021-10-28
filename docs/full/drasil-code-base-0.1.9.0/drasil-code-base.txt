@@ -194,9 +194,9 @@ data CodeExpr
 [VVNBinaryOp] :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
 -- | Operators are generalized arithmetic operators over a
---   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
+--   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
+[Operator] :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
 
 -- | The expression is an element of a space. IsIn :: Expr -&gt; Space
 --   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
@@ -461,9 +461,9 @@ data CodeExpr
 [VVNBinaryOp] :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
 -- | Operators are generalized arithmetic operators over a
---   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
+--   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
+[Operator] :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
 
 -- | The expression is an element of a space. IsIn :: Expr -&gt; Space
 --   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an

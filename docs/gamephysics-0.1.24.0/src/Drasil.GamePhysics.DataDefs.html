@@ -53,41 +53,41 @@
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassDD"><span class="hs-identifier hs-type">ctrOfMassDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
 </span><span id="line-39"></span><span id="ctrOfMassDD"><span class="annot"><span class="annottext">ctrOfMassDD :: DataDefinition
-</span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassDD"><span class="hs-identifier hs-var hs-var">ctrOfMassDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassDD"><span class="hs-identifier hs-var hs-var">ctrOfMassDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
-</span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">ddMENoRefs</span></span><span> </span><span class="annot"><span class="annottext">ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMass"><span class="hs-identifier hs-var">ctrOfMass</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ctrOfMass&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#rigidBodyAssump"><span class="hs-identifier hs-var">rigidBodyAssump</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMass"><span class="hs-identifier hs-type">ctrOfMass</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-42"></span><span id="ctrOfMass"><span class="annot"><span class="annottext">ctrOfMass :: SimpleQDef
-</span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMass"><span class="hs-identifier hs-var hs-var">ctrOfMass</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
+</span><span id="line-41"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMass"><span class="hs-identifier hs-type">ctrOfMass</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
+</span><span id="line-42"></span><span id="ctrOfMass"><span class="annot"><span class="annottext">ctrOfMass :: ModelQDef
+</span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMass"><span class="hs-identifier hs-var hs-var">ctrOfMass</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Express e) =&gt;
 c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#posCM"><span class="hs-identifier hs-var">posCM</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.GamePhysics.Unitals.html#posCM"><span class="hs-identifier hs-var">posCM</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassEqn"><span class="hs-identifier hs-var">ctrOfMassEqn</span></a></span><span>
 </span><span id="line-43"></span><span>
 </span><span id="line-44"></span><span class="hs-comment">-- FIXME (variable &quot;i&quot;) is a horrible hack</span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassEqn"><span class="hs-identifier hs-type">ctrOfMassEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-46"></span><span id="ctrOfMassEqn"><span class="annot"><span class="annottext">ctrOfMassEqn :: Expr
-</span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassEqn"><span class="hs-identifier hs-var hs-var">ctrOfMassEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Expr -&gt; Expr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r
+</span><span id="line-45"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassEqn"><span class="hs-identifier hs-type">ctrOfMassEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-46"></span><span id="ctrOfMassEqn"><span class="annot"><span class="annottext">ctrOfMassEqn :: ModelExpr
+</span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassEqn"><span class="hs-identifier hs-var hs-var">ctrOfMassEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
+forall r. ModelExprC r =&gt; Symbol -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sumAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
-</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;j&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;j&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier hs-var">massj</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier hs-var">massj</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#posj"><span class="hs-identifier hs-var">posj</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="Drasil.GamePhysics.Unitals.html#posj"><span class="hs-identifier hs-var">posj</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#mTot"><span class="hs-identifier hs-var">mTot</span></a></span><span>
@@ -804,9 +804,9 @@ forall c. Definition c =&gt; Lens' c Sentence
 </span><span id="line-297"></span><span>
 </span><span id="line-298"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaDD"><span class="hs-identifier hs-type">momentOfInertiaDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span>
 </span><span id="line-299"></span><span id="momentOfInertiaDD"><span class="annot"><span class="annottext">momentOfInertiaDD :: DataDefinition
-</span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaDD"><span class="hs-identifier hs-var hs-var">momentOfInertiaDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaDD"><span class="hs-identifier hs-var hs-var">momentOfInertiaDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelQDef
 -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; DataDefinition
-</span><span class="hs-identifier hs-var">ddENoRefs</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">ddMENoRefs</span></span><span> </span><span class="annot"><span class="annottext">ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertia"><span class="hs-identifier hs-var">momentOfInertia</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="hs-string">&quot;momentOfInertia&quot;</span></span><span>
@@ -814,31 +814,31 @@ forall a. Maybe a
 </span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaDesc"><span class="hs-identifier hs-var">momentOfInertiaDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.DataDefs.html#rigidBodyAssump"><span class="hs-identifier hs-var">rigidBodyAssump</span></a></span><span class="hs-special">]</span><span> </span><span>
 </span><span id="line-301"></span><span>
-</span><span id="line-302"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertia"><span class="hs-identifier hs-type">momentOfInertia</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
-</span><span id="line-303"></span><span id="momentOfInertia"><span class="annot"><span class="annottext">momentOfInertia :: SimpleQDef
-</span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertia"><span class="hs-identifier hs-var hs-var">momentOfInertia</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
+</span><span id="line-302"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertia"><span class="hs-identifier hs-type">momentOfInertia</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
+</span><span id="line-303"></span><span id="momentOfInertia"><span class="annot"><span class="annottext">momentOfInertia :: ModelQDef
+</span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertia"><span class="hs-identifier hs-var hs-var">momentOfInertia</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
 forall c e.
 (Quantity c, MayHaveUnit c, Express e) =&gt;
 c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.momentOfInertia</span></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><span class="hs-identifier hs-var">QP.momentOfInertia</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaEqn"><span class="hs-identifier hs-var">momentOfInertiaEqn</span></a></span><span>
 </span><span id="line-304"></span><span>
-</span><span id="line-305"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaEqn"><span class="hs-identifier hs-type">momentOfInertiaEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-306"></span><span id="momentOfInertiaEqn"><span class="annot"><span class="annottext">momentOfInertiaEqn :: Expr
-</span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaEqn"><span class="hs-identifier hs-var hs-var">momentOfInertiaEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Expr -&gt; Expr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r
+</span><span id="line-305"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaEqn"><span class="hs-identifier hs-type">momentOfInertiaEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-306"></span><span id="momentOfInertiaEqn"><span class="annot"><span class="annottext">momentOfInertiaEqn :: ModelExpr
+</span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaEqn"><span class="hs-identifier hs-var hs-var">momentOfInertiaEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
+forall r. ModelExprC r =&gt; Symbol -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sumAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
-</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;j&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;j&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; ModelExpr) -&gt; ModelExpr -&gt; ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier hs-var">massj</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier hs-var">massj</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#rRot"><span class="hs-identifier hs-var">rRot</span></a></span><span class="hs-special">)</span><span>

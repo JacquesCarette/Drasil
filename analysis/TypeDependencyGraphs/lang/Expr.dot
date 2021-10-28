@@ -20,6 +20,6 @@ Expr -> LABinOp;
 Expr -> OrdBinOp;
 Expr -> VVVBinOp;
 Expr -> VVNBinOp;
-Expr -> DomainDesc;
+Expr -> DiscreteDomainDesc;
 Expr -> RealInterval;
 }

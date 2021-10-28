@@ -4,8 +4,8 @@ module Theory.Drasil.ModelKinds (
   -- * Types
   ModelKind(..), ModelKinds(..),
   -- * Constructors
-  deModel, equationalConstraints, equationalModel, equationalRealm, othModel,
-  deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
+  newDEModel, deModel, equationalConstraints, equationalModel, equationalRealm, othModel,
+  newDEModel', deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
   equationalModelU, equationalModelN, equationalRealmU, equationalRealmN,
   -- * Lenses
   setMk, elimMk, lensMk,
@@ -33,11 +33,11 @@ import qualified Language.Drasil.Development as D (uid)
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds e where
   NewDEModel            :: Express e => DifferentialModel -> ModelKinds e
-  DEModel               :: Express e => RelationConcept -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
-  EquationalConstraints :: Express e => ConstraintSet e -> ModelKinds e
-  EquationalModel       :: Express e => QDefinition e   -> ModelKinds e
-  EquationalRealm       :: Express e => MultiDefn e     -> ModelKinds e
-  OthModel              :: Express e => RelationConcept -> ModelKinds e -- TODO: Remove (after having removed all instances of it).
+  DEModel               :: Express e => RelationConcept   -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
+  EquationalConstraints :: Express e => ConstraintSet e   -> ModelKinds e
+  EquationalModel       :: Express e => QDefinition e     -> ModelKinds e
+  EquationalRealm       :: Express e => MultiDefn e       -> ModelKinds e
+  OthModel              :: Express e => RelationConcept   -> ModelKinds e -- TODO: Remove (after having removed all instances of it).
 
 -- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
 data ModelKind e = MK {
@@ -47,6 +47,14 @@ data ModelKind e = MK {
 }
 
 makeLenses ''ModelKind
+
+-- | Smart constructor for 'NewDEModel's
+newDEModel :: Express e => String -> NP -> DifferentialModel -> ModelKind e
+newDEModel u n dm = MK (NewDEModel dm) (D.uid u) n
+
+-- | Smart constructor for 'NewDEModel's, deriving UID+Term from the 'DifferentialModel'
+newDEModel' :: Express e => DifferentialModel -> ModelKind e
+newDEModel' dm = MK (NewDEModel dm) (dm ^. uid) (dm ^. term)
 
 -- | Smart constructor for 'DEModel's
 deModel :: Express e => String -> NP -> RelationConcept -> ModelKind e

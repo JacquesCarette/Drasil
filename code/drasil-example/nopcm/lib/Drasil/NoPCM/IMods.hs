@@ -2,11 +2,12 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil (dRefInfo, (+:+), ch, eS, atStartNP, refS, sParen,
   sC, phrase, nounPhraseSP, qw, RefInfo(RefNote), NounPhrase(..),
-  ModelExprC(..), ExprC(..), PExpr, Definition(..), MayHaveUnit(..),
-  Sentence(..), ModelExpr, Inclusive(..), RealInterval(..), Derivation,
-  makeRC, mkDerivName, RelationConcept, recip_, apply1)
-import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
+  ExprC(..), PExpr, Definition(..), MayHaveUnit(..),
+  Sentence(..), Inclusive(..), RealInterval(..), Derivation,
+  mkDerivName, recip_, apply1, DifferentialModel, makeLinear)
+import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel')
 import Utils.Drasil
+    ( foldlSent, weave, foldlSentCol, substitute, unwrap )
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Control.Lens ((^.))
@@ -38,7 +39,7 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 ---------
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
+eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
   [qwC tempC $ UpFrom (Inc, sy tempInit)
   , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass]
   (qw tempW) []
@@ -46,13 +47,18 @@ eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
   [dRefInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes
 
-eBalanceOnWtrRC :: RelationConcept
-eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") (tempW ^. defn) balWtrRel
-  -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
-
-balWtrRel :: ModelExpr
-balWtrRel = deriv (sy tempW) time $= balWtrExpr
+eBalanceOnWtrRC :: DifferentialModel 
+eBalanceOnWtrRC = 
+  makeLinear
+    time 
+    tempW
+    coe
+    c
+    "eBalanceOnWtrRC" 
+    (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water") 
+    (tempW ^. defn) 
+      where c = balWtrExpr
+            coe = [exactDbl 1, exactDbl 0]
 
 balWtrExpr :: PExpr
 balWtrExpr = recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time)

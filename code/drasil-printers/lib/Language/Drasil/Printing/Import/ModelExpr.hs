@@ -128,6 +128,8 @@ modelExpr (AssocA AddI l)            sm = assocExpr P.Add (precA AddI) l sm
 modelExpr (AssocA AddRe l)           sm = assocExpr P.Add (precA AddRe) l sm
 modelExpr (AssocA MulI l)            sm = P.Row $ mulExpr l MulI sm
 modelExpr (AssocA MulRe l)           sm = P.Row $ mulExpr l MulRe sm
+modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
+modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
   let st = [P.Spc P.Thin, P.Spec Partial] in 
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))

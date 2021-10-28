@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.DifferentialModel (
     -- * Chunk Type
     DifferentialModel,
     -- * Constructors
-    makeLinear, displayODE) where
+    makeLinear) where
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
@@ -59,20 +59,25 @@ instance ConceptDomain DifferentialModel where cdom = cdom . view conc
 -- | Finds the domain of the 'ConceptChunk' used to make the 'DifferentialModel'.
 -- | Convert the 'DifferentialModel' into the model expression language.
 -- | Set Canonical form of ODE to Zero, e.g. ax0 + bx1 + cx2 + .... + c = 0
-instance Express       DifferentialModel where express d = equiv $ displayODE d : [exactDbl 0]
+instance Express       DifferentialModel where express d = formStdODE d
 
 -- | Construct a Canonical form of ODE, e.g. ax0 + bx1 + cx2 + .... + c
 -- | x0 is the highest order, x1 is the second higest order, and so on. The c is the constant.
-displayODE :: DifferentialModel -> ModelExpr
-displayODE d = foldr1 addRe (
-                            zipWith mulRe (map express (d ^.coefficients))
-                                          [nthderiv (toInteger n) (sy (qw (d ^. depVar))) (d ^. indepVar)
-                                          | n <- reverse [0..(length (d ^. coefficients) - 1)]]
-                            )
-               `addRe` express (d ^. constant)
+formStdODE :: DifferentialModel -> ModelExpr
+formStdODE d = equiv $ (addCoes d `addRe` express (d ^. constant)) : [exactDbl 0]
+
+formConODE :: DifferentialModel -> ModelExpr
+formConODE d = equiv $ addCoes d : [express (d ^. constant)] 
+
+addCoes :: DifferentialModel -> ModelExpr
+addCoes d = foldr1 addRe (
+                          zipWith mulRe (map express (d ^.coefficients))
+                                        [nthderiv (toInteger n) (sy (qw (d ^. depVar))) (d ^. indepVar)
+                                        | n <- reverse [0..(length (d ^. coefficients) - 1)]]
+                          )
 
 -- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), DepVar ('ModelExpr'),
 -- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').
 makeLinear :: UnitalChunk -> ConstrConcept -> [Expr] -> Expr -> String -> NP -> Sentence -> DifferentialModel
-makeLinear dmIndepVar dmDepVar dmCoeff dmConst dmID dmTerm dmDefn = 
+makeLinear dmIndepVar dmDepVar dmCoeff dmConst dmID dmTerm dmDefn =
   Linear dmIndepVar dmDepVar dmCoeff dmConst (dccWDS dmID dmTerm dmDefn)

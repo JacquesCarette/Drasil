@@ -1,8 +1,12 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs, DataKinds #-}
+{-# LANGUAGE KindSignatures #-}
+
 -- | Number space types and functions.
 module Language.Drasil.Space (
   -- * Types
-  Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
+  Space(..), 
+  RealInterval(..), Inclusive(..),
+  DomainDesc(..), RTopology(..), DiscreteDomainDesc, ContinuousDomainDesc,
   -- * Functions
   getActorName, getInnerSpace, mkFunction) where
 
@@ -46,9 +50,12 @@ mkFunction ins = Function (NE.fromList ins)
 data RTopology = Continuous | Discrete
 
 -- | Describes the domain of a 'Symbol' given a topology. Can be bounded or encase all of the domain.
-data DomainDesc a b where
-  BoundedDD :: Symbol -> RTopology -> a -> b -> DomainDesc a b
-  AllDD     :: Symbol -> RTopology -> DomainDesc a b
+data DomainDesc (tplgy :: RTopology) a b where
+  BoundedDD :: Symbol -> RTopology -> a -> b -> DomainDesc 'Discrete a b
+  AllDD     :: Symbol -> RTopology -> DomainDesc 'Continuous a b
+
+type DiscreteDomainDesc a b = DomainDesc 'Discrete a b
+type ContinuousDomainDesc a b = DomainDesc 'Continuous a b
 
 -- | Inclusive or exclusive bounds.
 data Inclusive = Inc | Exc

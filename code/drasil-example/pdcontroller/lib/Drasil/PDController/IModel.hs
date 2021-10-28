@@ -9,7 +9,7 @@ import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, deModel')
+import Theory.Drasil (InstanceModel, im, qwC, newDEModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -22,7 +22,7 @@ instanceModels = [imPD]
 
 imPD :: InstanceModel
 imPD
-  = im (deModel' imPDRC)
+  = im (newDEModel' imPDRC)
       [qwC qdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC qdPropGain $ UpFrom (Exc, exactDbl 0),
        qwC qdDerivGain $ UpFrom (Exc, exactDbl 0)]
       (qw qdProcessVariableTD)
@@ -32,21 +32,18 @@ imPD
       "pdEquationIM"
       []
 
-imPDRC :: RelationConcept
+imPDRC :: DifferentialModel
 imPDRC
-  = makeRC "imPDRC"
-      (nounPhraseSP
-         "Computation of the Process Variable as a function of time")
+  = makeLinear
+      time 
+      opProcessVariable 
+      coe 
+      c 
+      "imPDRC" 
+      (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
-      eqn
-
-diffModel :: DifferentialModel
-diffModel = makeLinear time opProcessVariable coe c "dmPDController" (cn' "Differential Model") EmptyS
-            where c = sy qdSetPointTD `mulRe` sy qdPropGain
-                  coe = [exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]
-
-eqn :: ModelExpr
-eqn = displayODE diffModel
+        where c = sy qdSetPointTD `mulRe` sy qdPropGain
+              coe = [exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]
 
 imDeriv :: Derivation
 imDeriv

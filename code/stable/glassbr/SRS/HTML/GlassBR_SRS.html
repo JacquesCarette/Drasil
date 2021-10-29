@@ -247,22 +247,22 @@
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is_safeLoad</em></td>
+                  <td><em>isSafeLoad</em></td>
                   <td>Load resistance safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is_safeLR</em></td>
+                  <td><em>isSafeLR</em></td>
                   <td>3 second load equivalent resistance safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is_safePb</em></td>
+                  <td><em>isSafePb</em></td>
                   <td>Probability of glass breakage safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is_safeProb</em></td>
+                  <td><em>isSafeProb</em></td>
                   <td>Probability of failure safety requirement</td>
                   <td>--</td>
                 </tr>
@@ -884,7 +884,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{is\_safeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}\]
+                        \[\mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -892,7 +892,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is_safeProb</em> is the probability of failure safety requirement (Unitless)
+                            <em>isSafeProb</em> is the probability of failure safety requirement (Unitless)
                           </li>
                           <li>
                             <em>P<sub>f</sub></em> is the probability of failure (Unitless)
@@ -907,7 +907,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is_safeProb</em>, the structure is considered safe.
+                          If <em>isSafeProb</em>, the structure is considered safe.
                         </p>
                       </td>
                     </tr>
@@ -938,7 +938,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{is\_safeLoad}=\mathit{capacity}\gt{}\mathit{Load}\]
+                        \[\mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}\]
                       </td>
                     </tr>
                     <tr>
@@ -946,7 +946,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is_safeLoad</em> is the load resistance safety requirement (Unitless)
+                            <em>isSafeLoad</em> is the load resistance safety requirement (Unitless)
                           </li>
                           <li>
                             <em>capacity</em> is the capacity or load resistance (<em>Pa</em>)
@@ -961,7 +961,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is_safeLoad</em>, the structure is considered safe.
+                          If <em>isSafeLoad</em>, the structure is considered safe.
                         </p>
                       </td>
                     </tr>
@@ -2022,7 +2022,7 @@
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em>is_safePb</em></p></td>
+                      <td><p class="paragraph"><em>isSafePb</em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
@@ -2038,7 +2038,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{is\_safePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}\]
+                        \[\mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2046,7 +2046,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is_safePb</em> is the probability of glass breakage safety requirement (Unitless)
+                            <em>isSafePb</em> is the probability of glass breakage safety requirement (Unitless)
                           </li>
                           <li>
                             <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
@@ -2061,7 +2061,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is_safePb</em>, the glass is considered safe. <em>is_safePb</em> and <em>is_safePb</em> (from <a href=#IM:isSafeLR>IM:isSafeLR</a>) are either both True or both False.
+                          If <em>isSafePb</em>, the glass is considered safe. <em>isSafePb</em> and <em>isSafePb</em> (from <a href=#IM:isSafeLR>IM:isSafeLR</a>) are either both True or both False.
                         </p>
                         <p class="paragraph">
                           <em>P<sub>b</sub></em> is defined in <a href=#DD:probOfBreak>DD:probOfBreak</a>.
@@ -2099,7 +2099,7 @@
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em>is_safeLR</em></p></td>
+                      <td><p class="paragraph"><em>isSafeLR</em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
@@ -2114,14 +2114,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathit{is\_safeLR}=\mathit{LR}\gt{}q\]</td>
+                      <td>\[\mathit{isSafeLR}=\mathit{LR}\gt{}q\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is_safeLR</em> is the 3 second load equivalent resistance safety requirement (Unitless)
+                            <em>isSafeLR</em> is the 3 second load equivalent resistance safety requirement (Unitless)
                           </li>
                           <li><em>LR</em> is the load resistance (<em>Pa</em>)</li>
                           <li><em>q</em> is the applied load (demand) (<em>Pa</em>)</li>
@@ -2132,7 +2132,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is_safeLR</em>, the glass is considered safe. <em>is_safePb</em> (from <a href=#IM:isSafePb>IM:isSafePb</a>) and <em>is_safeLR</em> are either both True or both False.
+                          If <em>isSafeLR</em>, the glass is considered safe. <em>isSafePb</em> (from <a href=#IM:isSafePb>IM:isSafePb</a>) and <em>isSafeLR</em> are either both True or both False.
                         </p>
                         <p class="paragraph">
                           <em>LR</em> is defined in <a href=#DD:calofCapacity>DD:calofCapacity</a> and is also called capacity.
@@ -2305,7 +2305,7 @@
               </p>
               <p>
                 <div id="checkGlassSafety">
-                  Check-Glass-Safety: If <em>is_safePb &and; is_safeLR</em> (from <a href=#TM:isSafeProb>TM:isSafeProb</a> and <a href=#TM:isSafeLoad>TM:isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
+                  Check-Glass-Safety: If <em>isSafePb &and; isSafeLR</em> (from <a href=#TM:isSafeProb>TM:isSafeProb</a> and <a href=#TM:isSafeLoad>TM:isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
                 </div>
               </p>
               <p>
@@ -2484,13 +2484,13 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em>is_safeLR</em></td>
+                  <td><em>isSafeLR</em></td>
                   <td>Safety Req-LR</td>
                   <td><a href=#IM:isSafeLR>IM:isSafeLR</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is_safePb</em></td>
+                  <td><em>isSafePb</em></td>
                   <td>Safety Req-Pb</td>
                   <td><a href=#IM:isSafePb>IM:isSafePb</a></td>
                   <td>--</td>

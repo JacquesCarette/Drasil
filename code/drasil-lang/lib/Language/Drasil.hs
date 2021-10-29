@@ -236,7 +236,7 @@ module Language.Drasil (
   , label, variable
 
   -- * Type Synonyms
-  , SimpleQDef, ModelQDef
+  , ConstQDef, SimpleQDef, ModelQDef
   , PExpr
 ) where
 
@@ -329,7 +329,7 @@ import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable)
-import Language.Drasil.Synonyms (SimpleQDef, ModelQDef, PExpr)
+import Language.Drasil.Synonyms (ConstQDef, SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc (mkTable)
 import Language.Drasil.People (People, Person, person, HasName(..),

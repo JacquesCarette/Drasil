@@ -13,7 +13,7 @@ module Language.Drasil.CodeExpr (CodeExpr,
   -- * Programming-related CodeExpr Constructors
   new, newWithNamedArgs, message, msgWithNamedArgs,
   field, apply, apply1, apply2, applyWithNamedArgs,
-  -- * 'Expr' -> 'CodeExpr'
+  -- * 'Expr' -> 'CodeExpr' -- FIXME: Remove
   expr) where
 
 import Prelude hiding (exp, sin, cos, tan, sqrt, log)

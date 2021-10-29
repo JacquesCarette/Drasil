@@ -62,6 +62,8 @@ class ExprC r where
   infixr 9 $&&
   infixr 9 $||
   
+  lit :: Literal -> r
+
   -- * Binary Operators
   
   ($=), ($!=) :: r -> r -> r
@@ -204,6 +206,8 @@ class ExprC r where
   sy :: (HasUID c, HasSymbol c) => c -> r
 
 instance ExprC Expr where
+  lit = Lit
+
   -- | Smart constructor for equating two expressions.
   ($=)  = EqBinaryOp Eq
   -- | Smart constructor for showing that two expressions are not equal.
@@ -392,6 +396,8 @@ instance ExprC Expr where
   sy x = C (x ^. uid)
   
 instance ExprC M.ModelExpr where
+  lit = M.Lit
+
   -- | Smart constructor for equating two expressions.
   ($=)  = M.EqBinaryOp M.Eq
   -- | Smart constructor for showing that two expressions are not equal.

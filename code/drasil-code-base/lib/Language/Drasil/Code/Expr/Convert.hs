@@ -1,14 +1,25 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Code.Expr.Convert (
-    expr, realInterval, constraint
+    expr, realInterval, constraint,
+    CanGenCode(..)
 ) where
 
 import qualified Language.Drasil as L
 import qualified Language.Drasil.Expr.Development as LD
+import qualified Language.Drasil.Literal.Development as LL
+
+import Language.Drasil.Code.Expr
 
 import Data.Bifunctor (Bifunctor(bimap, second))
 
-import Language.Drasil.Code.Expr
+class CanGenCode e where
+    toCodeExpr :: e -> CodeExpr
+
+instance CanGenCode LL.Literal where
+    toCodeExpr = Lit
+
+instance CanGenCode LD.Expr where
+    toCodeExpr = expr
 
 -- | Render an algebraic expression into our code expression language.
 expr :: LD.Expr -> CodeExpr

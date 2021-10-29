@@ -60,7 +60,7 @@ qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q) => q Expr -> C
 qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.
-qtov :: (CanGenCode e, Express e) => QDefinition e -> CodeDefinition -- FIXME: I can't figure out why this `Express` constraint is required!!!
+qtov :: CanGenCode e => QDefinition e -> CodeDefinition
 qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.

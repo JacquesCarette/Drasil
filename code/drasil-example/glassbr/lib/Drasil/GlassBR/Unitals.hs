@@ -379,8 +379,6 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 --Constants--
 
--- TODO: Convert these 'constants' into actual constants
-
 constants :: [ConstQDef]
 constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
                 ++ specParamVals 

@@ -111,9 +111,10 @@ instance Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
 instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
-instance Express e => ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
+instance ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
 -- | Rewrites the underlying model using 'ModelExpr'
-instance Express e => Express       (ModelKinds e) where express = elimMk (to express) (to express) (to express) (to express)
+instance Express e => Express (ModelKinds e) where
+  express = elimMk (to express) (to express) (to express) (to express)
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
@@ -126,9 +127,10 @@ instance Idea          (ModelKind e) where getA    = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
 instance Definition    (ModelKind e) where defn    = mk . defn
 -- | Finds the domain of the 'ModelKind'.
-instance Express e => ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
+instance ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
 -- | Rewrites the underlying model using 'ModelExpr'
-instance Express e => Express       (ModelKind e) where express = express . (^. mk)
+instance Express e => Express (ModelKind e) where
+  express = express . (^. mk)
 
 
 -- | Retrieve internal data from ModelKinds

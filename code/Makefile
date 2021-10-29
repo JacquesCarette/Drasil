@@ -204,7 +204,8 @@ deps: check_stack ##@Dependencies Build only dependencies.
 #-------------------------------------------------#
 
 # Build all the Drasil packages.
-code: $(BUILD_PACKAGES) ##@Examples Build all Drasil packages.
+code: ##@Examples Build all Drasil packages.
+	stack build $(stackArgs)
 
 # First build all the Drasil packages, then run all examples (no traceability graphs).
 examples: $(GEN_EXAMPLES) ##@Examples Run all examples (no traceability graphs).

@@ -1,3 +1,5 @@
+{-# LANGUAGE GADTs #-}
+
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
 
@@ -73,7 +75,7 @@ call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
   P.MO P.Eq, modelExpr a sm]) (map fst ns) (map snd ns)]
 
 -- | Helper function for addition 'EOperator's.
-eopAdds :: PrintingInformation -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> P.Expr
+eopAdds :: PrintingInformation -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> P.Expr
 eopAdds sm (BoundedDD v Continuous l h) e =
   P.Row [P.MO P.Inte, P.Sub (modelExpr l sm), P.Sup (modelExpr h sm),
          P.Row [modelExpr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
@@ -86,7 +88,7 @@ eopAdds sm (BoundedDD v Discrete l h) e =
 eopAdds sm (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [modelExpr e sm]]
 
 -- | Helper function for multiplicative 'EOperator's.
-eopMuls :: PrintingInformation -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> P.Expr
+eopMuls :: PrintingInformation -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> P.Expr
 eopMuls sm (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, modelExpr l sm]), P.Sup (modelExpr h sm),
          P.Row [modelExpr e sm]]
@@ -96,7 +98,7 @@ eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Int
 
 
 -- | Helper function for translating 'EOperator's.
-eop :: PrintingInformation -> AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> P.Expr
+eop :: PrintingInformation -> AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> P.Expr
 eop sm AddI = eopAdds sm
 eop sm AddRe = eopAdds sm
 eop sm MulI = eopMuls sm

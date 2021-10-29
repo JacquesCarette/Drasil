@@ -3,7 +3,7 @@
 -- | The Drasil Expression language 
 module Language.Drasil.Expr.Lang where
 
-import Language.Drasil.Space (DomainDesc, RealInterval)
+import Language.Drasil.Space (DiscreteDomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 
 -- * Expression Types
@@ -134,7 +134,7 @@ data Expr where
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+  Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
 

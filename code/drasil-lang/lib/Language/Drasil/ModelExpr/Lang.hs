@@ -146,7 +146,7 @@ data ModelExpr where
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> ModelExpr
+  Operator :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
   

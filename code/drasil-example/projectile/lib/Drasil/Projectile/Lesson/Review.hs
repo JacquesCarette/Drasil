@@ -8,8 +8,8 @@ import Language.Drasil
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
-reviewContent :: [Contents]
-reviewContent = [reviewContextP1, LlC E.lcrectVel, LlC E.lcrectPos, LlC E.lcrectNoTime, reviewEqns, reviewContextP2]
+
+--reviewContent = [reviewContextP1, LlC E.lcrectVel, LlC E.lcrectPos, LlC E.lcrectNoTime, reviewEqns, reviewContextP2]
 
 reviewContextP1, reviewEqns, reviewContextP2 :: Contents
 reviewContextP1

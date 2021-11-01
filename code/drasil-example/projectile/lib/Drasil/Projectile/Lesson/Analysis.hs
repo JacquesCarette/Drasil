@@ -18,10 +18,10 @@ import qualified Utils.Drasil.Sentence as S
 import Drasil.Projectile.Derivations (horMotionEqn1, horMotionEqn2)
 
 coorSyst, kinematicEq, horMotionAna, verMotionAna :: Section
-coorSyst = NB.coorSyst [coorSystContext] []
-kinematicEq = NB.kinematic [kinematicContext] []
-horMotionAna = NB.hormotion [horMotionContext] []
-verMotionAna = NB.vermotion [verMotionContext] []
+coorSyst = NB.coorSyst [coorSystContext] 
+kinematicEq = NB.kinematic [kinematicContext] 
+horMotionAna = NB.hormotion [horMotionContext] 
+verMotionAna = NB.vermotion [verMotionContext] 
 
 coorSystContext, kinematicContext, horMotionContext, verMotionContext :: Contents
 coorSystContext = enumBulletU $ map foldlSent 

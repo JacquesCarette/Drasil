@@ -19,7 +19,7 @@
 </span><span id="line-19"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#flightDur%27"><span class="hs-identifier hs-type">flightDur'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#iyPos"><span class="hs-identifier hs-type">iyPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#yConstAccel"><span class="hs-identifier hs-type">yConstAccel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#iSpeed"><span class="hs-identifier hs-type">iSpeed</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PExpr</span></span><span>
 </span><span id="line-20"></span><span id="flightDur%27"><span class="annot"><span class="annottext">flightDur' :: r
 </span><a href="Drasil.Projectile.Expressions.html#flightDur%27"><span class="hs-identifier hs-var hs-var">flightDur'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; r
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; r
@@ -34,22 +34,22 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span>
 </span><span id="line-21"></span><span id="iyPos"><span class="annot"><span class="annottext">iyPos :: r
 </span><a href="Drasil.Projectile.Expressions.html#iyPos"><span class="hs-identifier hs-var hs-var">iyPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; r
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>                              </span><span class="hs-comment">-- launchOrigin</span><span>
 </span><span id="line-22"></span><span id="yConstAccel"><span class="annot"><span class="annottext">yConstAccel :: r
 </span><a href="Drasil.Projectile.Expressions.html#yConstAccel"><span class="hs-identifier hs-var hs-var">yConstAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="annot"><span class="annottext">(r -&gt; r) -&gt; r -&gt; r
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span>  </span><span class="hs-comment">-- accelYGravity</span><span>
 </span><span id="line-23"></span><span id="iSpeed"><span class="annot"><span class="annottext">iSpeed :: r
 </span><a href="Drasil.Projectile.Expressions.html#iSpeed"><span class="hs-identifier hs-var hs-var">iSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; r
@@ -74,12 +74,12 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.Projectile.Expressions.html#message"><span class="hs-identifier hs-var hs-var">message</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(r, r)] -&gt; r
 forall r. ExprC r =&gt; [(r, r)] -&gt; r
 </span><span class="hs-identifier hs-var">completeCase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679093814"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679093813"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679093812"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-30"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679093814"><span class="annot"><span class="annottext">case1 :: (r, r)
-</span><a href="#local-6989586621679093814"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; r
-forall r. ExprC r =&gt; String -&gt; r
+</span><a href="#local-6989586621679093932"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
+</span><a href="#local-6989586621679093931"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
+</span><a href="#local-6989586621679093930"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679093932"><span class="annot"><span class="annottext">case1 :: (r, r)
+</span><a href="#local-6989586621679093932"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; r
+forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The target was hit.&quot;</span></span><span class="hs-special">,</span><span>        </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">abs_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; r
@@ -92,31 +92,31 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var">targPos</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; r
+</span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-var">tol</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-31"></span><span>        </span><span id="local-6989586621679093813"><span class="annot"><span class="annottext">case2 :: (r, r)
-</span><a href="#local-6989586621679093813"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; r
-forall r. ExprC r =&gt; String -&gt; r
+</span><span id="line-31"></span><span>        </span><span id="local-6989586621679093931"><span class="annot"><span class="annottext">case2 :: (r, r)
+</span><a href="#local-6989586621679093931"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; r
+forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The projectile fell short.&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; r
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-32"></span><span>        </span><span id="local-6989586621679093812"><span class="annot"><span class="annottext">case3 :: (r, r)
-</span><a href="#local-6989586621679093812"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; r
-forall r. ExprC r =&gt; String -&gt; r
+</span><span id="line-32"></span><span>        </span><span id="local-6989586621679093930"><span class="annot"><span class="annottext">case3 :: (r, r)
+</span><a href="#local-6989586621679093930"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; r
+forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The projectile went long.&quot;</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">ConstrConcept -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; r
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-33"></span><span>
 </span><span id="line-34"></span><span class="hs-comment">--</span><span>
@@ -155,14 +155,14 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.constAccel</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -171,21 +171,21 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-41"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#rectNoTime"><span class="hs-identifier hs-type">rectNoTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PExpr</span></span><span>
 </span><span id="line-42"></span><span id="rectNoTime"><span class="annot"><span class="annottext">rectNoTime :: r
 </span><a href="Drasil.Projectile.Expressions.html#rectNoTime"><span class="hs-identifier hs-var hs-var">rectNoTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.iSpeed</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; r
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
@@ -258,14 +258,14 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.xConstAccel</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -286,14 +286,14 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.yConstAccel</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -303,11 +303,11 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-55"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#landPosExpr"><span class="hs-identifier hs-type">landPosExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PExpr</span></span><span>
 </span><span id="line-56"></span><span id="landPosExpr"><span class="annot"><span class="annottext">landPosExpr :: r
 </span><a href="Drasil.Projectile.Expressions.html#landPosExpr"><span class="hs-identifier hs-var hs-var">landPosExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; r
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -327,9 +327,9 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span>
 </span><span id="line-57"></span><span>
 </span><span id="line-58"></span><span class="hs-comment">-- Helper expressions that represent the vectors of quantities as components</span><span>

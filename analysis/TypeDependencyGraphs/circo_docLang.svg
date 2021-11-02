@@ -507,17 +507,17 @@
 <path fill="none" stroke="black" d="M3274.66,-3057.98C3296.18,-3101.44 3351.16,-3212.49 3376.35,-3263.36"/>
 <polygon fill="black" stroke="black" points="3373.26,-3265.01 3380.84,-3272.42 3379.53,-3261.9 3373.26,-3265.01"/>
 </g>
-<!-- SimpleQDef -->
+<!-- ConstQDef -->
 <g id="node62" class="node">
-<title>SimpleQDef</title>
-<ellipse fill="none" stroke="black" cx="3137.51" cy="-3091.73" rx="66.09" ry="18"/>
-<text text-anchor="middle" x="3137.51" y="-3088.03" font-family="Times,serif" font-size="14.00">SimpleQDef</text>
+<title>ConstQDef</title>
+<ellipse fill="none" stroke="black" cx="3142.33" cy="-3089.79" rx="61.19" ry="18"/>
+<text text-anchor="middle" x="3142.33" y="-3086.09" font-family="Times,serif" font-size="14.00">ConstQDef</text>
 </g>
-<!-- AuxConstntSec&#45;&gt;SimpleQDef -->
+<!-- AuxConstntSec&#45;&gt;ConstQDef -->
 <g id="edge94" class="edge">
-<title>AuxConstntSec&#45;&gt;SimpleQDef</title>
-<path fill="none" stroke="black" d="M3226.59,-3055.83C3213.19,-3061.23 3198.05,-3067.33 3184.12,-3072.95"/>
-<polygon fill="black" stroke="black" points="3182.66,-3069.76 3174.69,-3076.74 3185.28,-3076.25 3182.66,-3069.76"/>
+<title>AuxConstntSec&#45;&gt;ConstQDef</title>
+<path fill="none" stroke="black" d="M3226.38,-3055.91C3214.12,-3060.85 3200.5,-3066.34 3187.86,-3071.44"/>
+<polygon fill="black" stroke="black" points="3186.39,-3068.25 3178.43,-3075.24 3189.01,-3074.75 3186.39,-3068.25"/>
 </g>
 <!-- OffShelfSolnsSec&#45;&gt;Contents -->
 <g id="edge102" class="edge">

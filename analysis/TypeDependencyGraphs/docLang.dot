@@ -200,7 +200,7 @@ digraph alltypes {
 		subgraph auxconstntsec{
 		AuxConstntSec	[shape=oval, color=darkviolet, label="AuxConstntSec"];
 		AuxConstntSec -> CI;
-		AuxConstntSec -> SimpleQDef;
+		AuxConstntSec -> ConstQDef;
 		}
 		subgraph appndxsec{
 		AppndxSec	[shape=oval, color=darkgreen, label="AppndxSec"];

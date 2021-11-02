@@ -1,9 +1,7 @@
 digraph codeexpr{
 CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
-CodeExpr -> Double;
+CodeExpr -> Literal;
 CodeExpr -> CodeExpr;
-CodeExpr -> Integer;
-CodeExpr -> String;
 CodeExpr -> AssocArithOper;
 CodeExpr -> AssocBoolOper;
 CodeExpr -> UID;

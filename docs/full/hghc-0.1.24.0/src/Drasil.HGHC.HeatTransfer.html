@@ -113,8 +113,8 @@ forall a. Maybe a
 -&gt; UnitDefn
 -&gt; Expr
 -&gt; SimpleQDef
-forall e u.
-(Express e, IsUnit u) =&gt;
+forall u e.
+IsUnit u =&gt;
 String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">fromEqn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;htTransCladCool&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -132,7 +132,7 @@ String
 </span><span id="line-49"></span><span id="htTransCladCoolEq"><span class="annot"><span class="annottext">htTransCladCoolEq :: Expr
 </span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladCoolEq"><span class="hs-identifier hs-var hs-var">htTransCladCoolEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
@@ -146,7 +146,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.HGHC.HeatTransfer.html#coolFilmCond"><span class="hs-identifier hs-var">coolFilmCond</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
@@ -186,8 +186,8 @@ forall a. Maybe a
 -&gt; UnitDefn
 -&gt; Expr
 -&gt; SimpleQDef
-forall e u.
-(Express e, IsUnit u) =&gt;
+forall u e.
+IsUnit u =&gt;
 String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">fromEqn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;htTransCladFuel&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -204,7 +204,7 @@ String
 </span><span id="line-62"></span><span>
 </span><span id="line-63"></span><span id="htTransCladFuelEq"><span class="annot"><span class="annottext">htTransCladFuelEq :: Expr
 </span><a href="Drasil.HGHC.HeatTransfer.html#htTransCladFuelEq"><span class="hs-identifier hs-var hs-var">htTransCladFuelEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
@@ -218,7 +218,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.HGHC.HeatTransfer.html#gapFilmCond"><span class="hs-identifier hs-var">gapFilmCond</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr

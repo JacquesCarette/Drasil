@@ -25,6 +25,7 @@ forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
 forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">timeStep</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-type">noPCMODEInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ODEInfo</span></span><span>
@@ -52,6 +53,7 @@ forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
 forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempC</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
 forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -73,6 +75,7 @@ forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
 forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">ODEOptions
 </span><a href="Drasil.NoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-var">noPCMODEOpts</span></a></span><span>
 </span><span id="line-20"></span></pre></body></html>

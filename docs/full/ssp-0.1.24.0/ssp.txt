@@ -158,13 +158,13 @@ mobShrC :: DefinedQuantityDict
 shrResC :: DefinedQuantityDict
 index :: DefinedQuantityDict
 varblV :: DefinedQuantityDict
-indx1 :: (ExprC r, Quantity a) => a -> r
+indx1 :: (ExprC r, LiteralC r, Quantity a) => a -> r
 indxn :: (ExprC r, Quantity a) => a -> r
-inxi :: (ExprC r, Quantity e) => e -> r
-inxiP1 :: (ExprC r, Quantity e) => e -> r
-inxiM1 :: (ExprC r, Quantity e) => e -> r
-inx :: (ExprC r, Quantity e) => e -> Integer -> r
-sum1toN :: ExprC r => r -> r
+inxi :: (ExprC r, LiteralC r, Quantity e) => e -> r
+inxiP1 :: (ExprC r, LiteralC r, Quantity e) => e -> r
+inxiM1 :: (ExprC r, LiteralC r, Quantity e) => e -> r
+inx :: (ExprC r, LiteralC r, Quantity e) => e -> Integer -> r
+sum1toN :: (ExprC r, LiteralC r) => r -> r
 lBase :: Symbol
 lCoeff :: Symbol
 lCoords :: Symbol
@@ -196,15 +196,15 @@ determineNormalFGS :: ConceptInstance
 determineShearFGS :: ConceptInstance
 
 module Drasil.SSP.BasicExprs
-eqlExpr :: ExprC r => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
-eqlExprN :: ExprC r => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
-eqlExprSepG :: ExprC r => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
-eqlExprNSepG :: ExprC r => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
-eqlExprNoKQ :: ExprC r => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
-eqlExprNNoKQ :: ExprC r => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
-sliceExpr :: ExprC r => Integer -> r
-momExpr :: ExprC r => (r -> r -> r) -> r
-momExprNoKQ :: ExprC r => (r -> r -> r) -> r
+eqlExpr :: (ExprC r, LiteralC r) => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
+eqlExprN :: (ExprC r, LiteralC r) => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
+eqlExprSepG :: (ExprC r, LiteralC r) => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
+eqlExprNSepG :: (ExprC r, LiteralC r) => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
+eqlExprNoKQ :: (ExprC r, LiteralC r) => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
+eqlExprNNoKQ :: (ExprC r, LiteralC r) => (r -> r) -> (r -> r) -> (r -> r -> r) -> r
+sliceExpr :: (ExprC r, LiteralC r) => Integer -> r
+momExpr :: (ExprC r, LiteralC r) => (r -> r -> r) -> r
+momExprNoKQ :: (ExprC r, LiteralC r) => (r -> r -> r) -> r
 
 module Drasil.SSP.Assumptions
 assumptions :: [ConceptInstance]
@@ -291,8 +291,8 @@ fctSftyDesc :: Sentence
 fctSftyDeriv :: Derivation
 fctSftyDerivSentences1 :: [Sentence]
 fctSftyDerivSentences2 :: [Sentence]
-fctSftyDerivEqns1 :: ExprC r => [r]
-fctSftyDerivEqns2 :: ExprC r => [r]
+fctSftyDerivEqns1 :: (ExprC r, LiteralC r) => [r]
+fctSftyDerivEqns2 :: (ExprC r, LiteralC r) => [r]
 fctSftyDerivSentence1 :: [Sentence]
 fctSftyDerivSentence2 :: [Sentence]
 fctSftyDerivSentence3 :: [Sentence]
@@ -349,7 +349,7 @@ nrmShrDerivSentence3 :: [Sentence]
 nrmShrDerivSentence4 :: [Sentence]
 nrmShrDerivSentence5 :: [Sentence]
 nrmShrDerivationSentences :: [Sentence]
-nrmShrDerivEqns :: ExprC r => [r]
+nrmShrDerivEqns :: (ExprC r, LiteralC r) => [r]
 nrmShrDerivEqn1 :: PExpr
 nrmShrDerivEqn2 :: PExpr
 nrmShrDerivEqn3 :: PExpr
@@ -373,7 +373,7 @@ intrSlcDerivSentence1 :: [Sentence]
 intrSlcDerivSentence2 :: [Sentence]
 intrSlcDerivSentence3 :: [Sentence]
 intrSlcDerivationSentences :: [Sentence]
-intrSlcDerivEqns :: ExprC r => [r]
+intrSlcDerivEqns :: (ExprC r, LiteralC r) => [r]
 intrSlcDerivEqn :: PExpr
 crtSlpId :: InstanceModel
 crtSlpIdMK :: ModelKind Expr

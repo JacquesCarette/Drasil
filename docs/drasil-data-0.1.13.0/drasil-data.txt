@@ -593,7 +593,7 @@ diameter :: UnitalChunk
 surface :: UnitalChunk
 surArea :: UnitalChunk
 orientation :: UnitalChunk
-piConst :: SimpleQDef
+piConst :: ConstQDef
 
 
 -- | Defines common software products.
@@ -859,21 +859,17 @@ subY :: Symbol -> Symbol
 subZ :: Symbol -> Symbol
 supMax :: Symbol -> Symbol
 supMin :: Symbol -> Symbol
-gravitationalConstValue :: SimpleQDef
-gravitationalAccelConst :: SimpleQDef
+gravitationalConstValue :: ConstQDef
+gravitationalAccelConst :: ConstQDef
 
 
 -- | Defines some basic equations of physics and their wrappers as
 --   concepts.
 module Data.Drasil.Equations.Defining.Physics
-weightEqn :: PExpr
-weightDerivAccelEqn :: PExpr
-weightDerivNewtonEqn :: PExpr
-weightDerivReplaceMassEqn :: PExpr
-weightDerivSpecWeightEqn :: PExpr
-newtonSLEqn :: PExpr
-hsPressureEqn :: PExpr
-speedEqn :: PExpr
+weightEqn :: ExprC r => r
+newtonSLEqn :: ExprC r => r
+hsPressureEqn :: ExprC r => r
+speedEqn :: ExprC r => r
 velocityEqn :: ModelExpr
 accelerationEqn :: ModelExpr
 accelerationQD :: ModelQDef
@@ -911,7 +907,7 @@ magNote :: Sentence
 vecMag :: DataDefinition
 newtonSLR :: TheoryModel
 newtonSLRQD :: ModelQDef
-newtonSLRExpr :: PExpr
+newtonSLRExpr :: ExprC r => r
 newtonSLRNotes :: [Sentence]
 accelerationTM :: TheoryModel
 velocityTM :: TheoryModel

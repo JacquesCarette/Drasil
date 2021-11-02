@@ -1,7 +1,6 @@
 digraph modelkindse{
 ModelKindse	[shape=oval, color=darkviolet, label="ModelKindse"];
-ModelKindse -> Express;
-ModelKindse -> e;
 ModelKindse -> RelationConcept;
 ModelKindse -> ModelKinds;
+ModelKindse -> e;
 }

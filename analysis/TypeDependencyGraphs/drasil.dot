@@ -71,10 +71,9 @@ digraph alltypes {
 	subgraph eq {
 		subgraph qdefinitione{
 		QDefinitione	[shape=oval, color=darkviolet, label="QDefinitione"];
-		QDefinitione -> Express;
-		QDefinitione -> e;
 		QDefinitione -> DefinedQuantityDict;
 		QDefinitione -> UID;
+		QDefinitione -> e;
 		QDefinitione -> QDefinition;
 		QDefinitione -> Lens_;
 		}
@@ -314,10 +313,8 @@ digraph alltypes {
 		}
 		subgraph expr{
 		Expr	[shape=oval, color=darkviolet, label="Expr"];
-		Expr -> Double;
+		Expr -> Literal;
 		Expr -> Expr;
-		Expr -> Integer;
-		Expr -> String;
 		Expr -> AssocArithOper;
 		Expr -> AssocBoolOper;
 		Expr -> UID;
@@ -357,6 +354,19 @@ digraph alltypes {
 		subgraph irefprog{
 		IRefProg	[shape=oval, color=darkviolet, label="IRefProg"];
 		IRefProg -> UID;
+		}
+	}
+	subgraph class {
+	}
+	subgraph development {
+	}
+	subgraph lang {
+		subgraph literal{
+		Literal	[shape=oval, color=darkviolet, label="Literal"];
+		Literal -> Integer;
+		Literal -> Literal;
+		Literal -> String;
+		Literal -> Double;
 		}
 	}
 	subgraph class {
@@ -418,10 +428,8 @@ digraph alltypes {
 		}
 		subgraph modelexpr{
 		ModelExpr	[shape=oval, color=darkviolet, label="ModelExpr"];
-		ModelExpr -> Double;
+		ModelExpr -> Literal;
 		ModelExpr -> ModelExpr;
-		ModelExpr -> Integer;
-		ModelExpr -> String;
 		ModelExpr -> Space;
 		ModelExpr -> AssocArithOper;
 		ModelExpr -> AssocBoolOper;
@@ -732,6 +740,10 @@ digraph alltypes {
 		}
 	}
 	subgraph synonyms {
+		subgraph constqdef{
+		ConstQDef	[shape=oval, color=red2, label="ConstQDef"];
+		ConstQDef -> QDefinitionLiteral;
+		}
 		subgraph simpleqdef{
 		SimpleQDef	[shape=oval, color=red2, label="SimpleQDef"];
 		SimpleQDef -> QDefinitionExpr;
@@ -742,7 +754,7 @@ digraph alltypes {
 		}
 		subgraph pexpr{
 		PExpr	[shape=oval, color=red2, label="PExpr"];
-		PExpr -> ExprCr;
+		PExpr -> ExprCrLiteralCr;
 		PExpr -> r;
 		}
 	}
@@ -846,10 +858,8 @@ digraph alltypes {
 		}
 		subgraph codeexpr{
 		CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
-		CodeExpr -> Double;
+		CodeExpr -> Literal;
 		CodeExpr -> CodeExpr;
-		CodeExpr -> Integer;
-		CodeExpr -> String;
 		CodeExpr -> AssocArithOper;
 		CodeExpr -> AssocBoolOper;
 		CodeExpr -> UID;
@@ -1866,7 +1876,7 @@ digraph alltypes {
 		subgraph auxconstntsec{
 		AuxConstntSec	[shape=oval, color=darkviolet, label="AuxConstntSec"];
 		AuxConstntSec -> CI;
-		AuxConstntSec -> SimpleQDef;
+		AuxConstntSec -> ConstQDef;
 		}
 		subgraph appndxsec{
 		AppndxSec	[shape=oval, color=darkgreen, label="AppndxSec"];
@@ -2138,6 +2148,8 @@ digraph alltypes {
 	subgraph expr {
 	}
 	subgraph helpers {
+	}
+	subgraph literal {
 	}
 	subgraph modelexpr {
 	}
@@ -2490,10 +2502,9 @@ digraph alltypes {
 		}
 		subgraph modelkindse{
 		ModelKindse	[shape=oval, color=darkviolet, label="ModelKindse"];
-		ModelKindse -> Express;
-		ModelKindse -> e;
 		ModelKindse -> RelationConcept;
 		ModelKindse -> ModelKinds;
+		ModelKindse -> e;
 		}
 	}
 	subgraph multidefn {
@@ -2501,7 +2512,7 @@ digraph alltypes {
 		DefiningExpre	[shape=oval, color=cyan3, label="DefiningExpre"];
 		DefiningExpre -> UID;
 		DefiningExpre -> Sentence;
-		DefiningExpre -> Expressee;
+		DefiningExpre -> e;
 		}
 		subgraph multidefne{
 		MultiDefne	[shape=oval, color=cyan3, label="MultiDefne"];
@@ -3562,6 +3573,8 @@ digraph alltypes {
 	subgraph solidmecanichs {
 	}
 	subgraph termodynamichs {
+	}
+	subgraph derivations {
 	}
 	subgraph pyicshs {
 	}

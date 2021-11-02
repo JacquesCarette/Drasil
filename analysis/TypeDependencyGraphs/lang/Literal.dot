@@ -1,0 +1,7 @@
+digraph literal{
+Literal	[shape=oval, color=darkviolet, label="Literal"];
+Literal -> Integer;
+Literal -> Literal;
+Literal -> String;
+Literal -> Double;
+}

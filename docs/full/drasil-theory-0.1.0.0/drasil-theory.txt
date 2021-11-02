@@ -66,7 +66,7 @@ module Theory.Drasil.ConstraintSet
 data ConstraintSet e
 
 -- | Smart constructor for building ConstraintSets
-mkConstraintSet :: Express e => ConceptChunk -> NonEmpty e -> ConstraintSet e
+mkConstraintSet :: ConceptChunk -> NonEmpty e -> ConstraintSet e
 instance Language.Drasil.Classes.Core.HasUID (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.Classes.NamedIdea (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.Classes.Idea (Theory.Drasil.ConstraintSet.ConstraintSet e)
@@ -165,22 +165,22 @@ data DefiningExpr e
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment.
 --   First argument is the <a>String</a> to become a <a>UID</a>.
-mkMultiDefn :: Express e => String -> QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefn :: String -> QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
 
 -- | Smart constructor for <a>MultiDefn</a>s defining <a>UID</a>s using
 --   that of the <a>QuantityDict</a>.
-mkMultiDefnForQuant :: Express e => QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefnForQuant :: QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
 
 -- | Smart constructor for <a>DefiningExpr</a>s.
-mkDefiningExpr :: Express e => String -> [UID] -> Sentence -> e -> DefiningExpr e
+mkDefiningExpr :: String -> [UID] -> Sentence -> e -> DefiningExpr e
 
 -- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
 --   <a>DefiningExpr</a>.
-multiDefnGenQD :: Express e => MultiDefn e -> DefiningExpr e -> QDefinition e
+multiDefnGenQD :: MultiDefn e -> DefiningExpr e -> QDefinition e
 
 -- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
 --   <a>DefiningExpr</a> (by <a>UID</a>).
-multiDefnGenQDByUID :: Express e => MultiDefn e -> UID -> QDefinition e
+multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
 instance Language.Drasil.Classes.Core.HasUID (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Classes.Core.HasSymbol (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Classes.NamedIdea (Theory.Drasil.MultiDefn.MultiDefn e)
@@ -188,7 +188,7 @@ instance Language.Drasil.Classes.Idea (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Classes.HasSpace (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Classes.Quantity (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit (Theory.Drasil.MultiDefn.MultiDefn e)
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.ConceptDomain (Theory.Drasil.MultiDefn.MultiDefn e)
+instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Classes.Definition (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.MultiDefn.MultiDefn e)
 instance GHC.Classes.Eq (Theory.Drasil.MultiDefn.DefiningExpr e)
@@ -227,61 +227,61 @@ MK :: ModelKinds e -> UID -> NP -> ModelKind e
 --   other kinds.</li>
 --   </ul>
 data ModelKinds e
-[DEModel] :: Express e => RelationConcept -> ModelKinds e
-[EquationalConstraints] :: Express e => ConstraintSet e -> ModelKinds e
-[EquationalModel] :: Express e => QDefinition e -> ModelKinds e
-[EquationalRealm] :: Express e => MultiDefn e -> ModelKinds e
-[OthModel] :: Express e => RelationConcept -> ModelKinds e
+[DEModel] :: RelationConcept -> ModelKinds e
+[EquationalConstraints] :: ConstraintSet e -> ModelKinds e
+[EquationalModel] :: QDefinition e -> ModelKinds e
+[EquationalRealm] :: MultiDefn e -> ModelKinds e
+[OthModel] :: RelationConcept -> ModelKinds e
 
 -- | Smart constructor for <a>DEModel</a>s
-deModel :: Express e => String -> NP -> RelationConcept -> ModelKind e
+deModel :: String -> NP -> RelationConcept -> ModelKind e
 
 -- | Smart constructor for <a>EquationalConstraints</a>
-equationalConstraints :: Express e => String -> NP -> ConstraintSet e -> ModelKind e
+equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalModel</a>s
-equationalModel :: Express e => String -> NP -> QDefinition e -> ModelKind e
+equationalModel :: String -> NP -> QDefinition e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalRealm</a>s
-equationalRealm :: Express e => String -> NP -> MultiDefn e -> ModelKind e
+equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>OthModel</a>s
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
 
 -- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>
-deModel' :: Express e => RelationConcept -> ModelKind e
+deModel' :: RelationConcept -> ModelKind e
 
 -- | Smart constructor for <a>EquationalConstraints</a>, deriving UID+Term
 --   from the <a>ConstraintSet</a>
-equationalConstraints' :: Express e => ConstraintSet e -> ModelKind e
+equationalConstraints' :: ConstraintSet e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving UID+Term from
 --   the <a>QDefinition</a>
-equationalModel' :: Express e => QDefinition e -> ModelKind e
+equationalModel' :: QDefinition e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalRealm</a>s, deriving UID+Term from
 --   the <a>MultiDefn</a>
-equationalRealm' :: Express e => MultiDefn e -> ModelKind e
+equationalRealm' :: MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>OthModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>
-othModel' :: Express e => RelationConcept -> ModelKind e
+othModel' :: RelationConcept -> ModelKind e
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving Term from the
 --   <a>QDefinition</a>
-equationalModelU :: Express e => String -> QDefinition e -> ModelKind e
+equationalModelU :: String -> QDefinition e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving UID from the
 --   <a>QDefinition</a>
-equationalModelN :: Express e => NP -> QDefinition e -> ModelKind e
+equationalModelN :: NP -> QDefinition e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalRealm</a>s
-equationalRealmU :: Express e => String -> MultiDefn e -> ModelKind e
+equationalRealmU :: String -> MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalRealm</a>s, deriving UID from the
 --   <a>MultiDefn</a>
-equationalRealmN :: Express e => NP -> MultiDefn e -> ModelKind e
+equationalRealmN :: NP -> MultiDefn e -> ModelKind e
 
 -- | Map into internal representations of ModelKinds
 setMk :: ModelKinds e -> Setter' RelationConcept a -> Setter' (ConstraintSet e) a -> Setter' (QDefinition e) a -> Setter' (MultiDefn e) a -> a -> ModelKinds e
@@ -295,17 +295,17 @@ lensMk :: forall e a. Lens' RelationConcept a -> Lens' (ConstraintSet e) a -> Le
 -- | Extract a list of <a>QDefinition</a>s from a list of
 --   <a>ModelKinds</a>.
 getEqModQds :: [ModelKind e] -> [QDefinition e]
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.Core.HasUID (Theory.Drasil.ModelKinds.ModelKinds e)
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.NamedIdea (Theory.Drasil.ModelKinds.ModelKinds e)
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.Idea (Theory.Drasil.ModelKinds.ModelKinds e)
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKinds e)
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ModelKinds.ModelKinds e)
+instance Language.Drasil.Classes.Core.HasUID (Theory.Drasil.ModelKinds.ModelKinds e)
+instance Language.Drasil.Classes.NamedIdea (Theory.Drasil.ModelKinds.ModelKinds e)
+instance Language.Drasil.Classes.Idea (Theory.Drasil.ModelKinds.ModelKinds e)
+instance Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKinds e)
+instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.Classes.Core.HasUID (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Classes.NamedIdea (Theory.Drasil.ModelKinds.ModelKind e)
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.Idea (Theory.Drasil.ModelKinds.ModelKind e)
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKind e)
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ModelKinds.ModelKind e)
+instance Language.Drasil.Classes.Idea (Theory.Drasil.ModelKinds.ModelKind e)
+instance Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKind e)
+instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.ModelKinds.ModelKind e)
 
 
@@ -476,7 +476,7 @@ out_constraints :: HasOutput c => Lens' c [RealInterval Expr Expr]
 data ConstraintSet e
 
 -- | Smart constructor for building ConstraintSets
-mkConstraintSet :: Express e => ConceptChunk -> NonEmpty e -> ConstraintSet e
+mkConstraintSet :: ConceptChunk -> NonEmpty e -> ConstraintSet e
 
 -- | A data definition is a <a>QDefinition</a> that may have additional
 --   notes: the scope, any references (as <a>DecRef</a>s), maybe a
@@ -527,76 +527,76 @@ data DefiningExpr e
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment.
 --   First argument is the <a>String</a> to become a <a>UID</a>.
-mkMultiDefn :: Express e => String -> QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefn :: String -> QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
 
 -- | Smart constructor for <a>MultiDefn</a>s defining <a>UID</a>s using
 --   that of the <a>QuantityDict</a>.
-mkMultiDefnForQuant :: Express e => QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefnForQuant :: QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
 
 -- | Smart constructor for <a>DefiningExpr</a>s.
-mkDefiningExpr :: Express e => String -> [UID] -> Sentence -> e -> DefiningExpr e
+mkDefiningExpr :: String -> [UID] -> Sentence -> e -> DefiningExpr e
 
 -- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
 --   <a>DefiningExpr</a>.
-multiDefnGenQD :: Express e => MultiDefn e -> DefiningExpr e -> QDefinition e
+multiDefnGenQD :: MultiDefn e -> DefiningExpr e -> QDefinition e
 
 -- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
 --   <a>DefiningExpr</a> (by <a>UID</a>).
-multiDefnGenQDByUID :: Express e => MultiDefn e -> UID -> QDefinition e
+multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
 
 -- | <a>ModelKinds</a> carrier, used to carry commonly overwritten
 --   information from the IMs<i>TMs</i>GDs.
 data ModelKind e
 
 -- | Smart constructor for <a>DEModel</a>s
-deModel :: Express e => String -> NP -> RelationConcept -> ModelKind e
+deModel :: String -> NP -> RelationConcept -> ModelKind e
 
 -- | Smart constructor for <a>EquationalConstraints</a>
-equationalConstraints :: Express e => String -> NP -> ConstraintSet e -> ModelKind e
+equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalModel</a>s
-equationalModel :: Express e => String -> NP -> QDefinition e -> ModelKind e
+equationalModel :: String -> NP -> QDefinition e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalRealm</a>s
-equationalRealm :: Express e => String -> NP -> MultiDefn e -> ModelKind e
+equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>OthModel</a>s
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
 
 -- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>
-deModel' :: Express e => RelationConcept -> ModelKind e
+deModel' :: RelationConcept -> ModelKind e
 
 -- | Smart constructor for <a>EquationalConstraints</a>, deriving UID+Term
 --   from the <a>ConstraintSet</a>
-equationalConstraints' :: Express e => ConstraintSet e -> ModelKind e
+equationalConstraints' :: ConstraintSet e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving UID+Term from
 --   the <a>QDefinition</a>
-equationalModel' :: Express e => QDefinition e -> ModelKind e
+equationalModel' :: QDefinition e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalRealm</a>s, deriving UID+Term from
 --   the <a>MultiDefn</a>
-equationalRealm' :: Express e => MultiDefn e -> ModelKind e
+equationalRealm' :: MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>OthModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>
-othModel' :: Express e => RelationConcept -> ModelKind e
+othModel' :: RelationConcept -> ModelKind e
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving Term from the
 --   <a>QDefinition</a>
-equationalModelU :: Express e => String -> QDefinition e -> ModelKind e
+equationalModelU :: String -> QDefinition e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalModel</a>s, deriving UID from the
 --   <a>QDefinition</a>
-equationalModelN :: Express e => NP -> QDefinition e -> ModelKind e
+equationalModelN :: NP -> QDefinition e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalRealm</a>s
-equationalRealmU :: Express e => String -> MultiDefn e -> ModelKind e
+equationalRealmU :: String -> MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>EquationalRealm</a>s, deriving UID from the
 --   <a>MultiDefn</a>
-equationalRealmN :: Express e => NP -> MultiDefn e -> ModelKind e
+equationalRealmN :: NP -> MultiDefn e -> ModelKind e
 
 -- | An instance model is a ModelKind that may have specific inputs,
 --   outputs, and output constraints. It also has attributes like

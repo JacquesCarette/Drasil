@@ -42,7 +42,7 @@ ModelKind ModelExpr
 -&gt; [Sentence]
 -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; RelationConcept -&gt; ModelKind e
+forall e. RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
 </span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantRC"><span class="hs-identifier hs-var">gdPowerPlantRC</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
@@ -86,9 +86,9 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-38"></span><span id="gdPowerPlantEqn"><span class="annot"><span class="annottext">gdPowerPlantEqn :: Expr
 </span><a href="Drasil.PDController.GenDefs.html#gdPowerPlantEqn"><span class="hs-identifier hs-var hs-var">gdPowerPlantEqn</span></a></span></span><span>
 </span><span id="line-39"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
@@ -100,7 +100,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">20</span></span><span class="hs-special">)</span><span>
 </span><span id="line-40"></span><span>
 </span><span id="line-41"></span><span class="annot"><a href="Drasil.PDController.GenDefs.html#gdPowerPlantNote"><span class="hs-identifier hs-type">gdPowerPlantNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>

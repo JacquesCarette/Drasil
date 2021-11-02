@@ -1,9 +1,7 @@
 digraph modelexpr{
 ModelExpr	[shape=oval, color=darkviolet, label="ModelExpr"];
-ModelExpr -> Double;
+ModelExpr -> Literal;
 ModelExpr -> ModelExpr;
-ModelExpr -> Integer;
-ModelExpr -> String;
 ModelExpr -> Space;
 ModelExpr -> AssocArithOper;
 ModelExpr -> AssocBoolOper;

@@ -9,6 +9,23 @@
 @package drasil-code-base
 @version 0.1.9.0
 
+module Language.Drasil.Code.Expr.Convert
+
+-- | Render an algebraic expression into our code expression language.
+expr :: Expr -> CodeExpr
+
+-- | Convert <tt>RealInterval</tt> <tt>Expr</tt> <tt>Expr</tt>s into
+--   <tt>RealInterval</tt> <a>CodeExpr</a> <a>CodeExpr</a>s.
+realInterval :: RealInterval Expr Expr -> RealInterval CodeExpr CodeExpr
+
+-- | Convert constrained expressions (<tt>ConstraintE</tt>) into
+--   <tt>Constraint''CodeExpr</tt>s.
+constraint :: ConstraintE -> Constraint CodeExpr
+class CanGenCode e
+toCodeExpr :: CanGenCode e => e -> CodeExpr
+instance Language.Drasil.Code.Expr.Convert.CanGenCode Language.Drasil.Literal.Lang.Literal
+instance Language.Drasil.Code.Expr.Convert.CanGenCode Language.Drasil.Expr.Lang.Expr
+
 
 -- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.CodeBase
@@ -114,20 +131,8 @@ module Language.Drasil.Code.Expr.Development
 -- | A one-to-one clone of Expr, with extra OO/code-related functionality.
 data CodeExpr
 
--- | Turns a decimal value (<a>Double</a>) into an expression.
-[Dbl] :: Double -> CodeExpr
-
--- | Turns an integer into an expression.
-[Int] :: Integer -> CodeExpr
-
--- | Represents decimal values that are exact as integers.
-[ExactDbl] :: Integer -> CodeExpr
-
--- | Turns a string into an expression.
-[Str] :: String -> CodeExpr
-
--- | Turns two integers into a fraction (or percent).
-[Perc] :: Integer -> Integer -> CodeExpr
+-- | Brings literals into the expression language.
+[Lit] :: Literal -> CodeExpr
 
 -- | Takes an associative arithmetic operator with a list of expressions.
 [AssocA] :: AssocArithOper -> [CodeExpr] -> CodeExpr
@@ -349,18 +354,10 @@ data CodeExpr
 
 -- | Smart constructor for chunk symbols.
 sy :: (HasUID u, HasSymbol u) => u -> CodeExpr
-
--- | Smart constructor for strings.
-str :: String -> CodeExpr
-
--- | Smart constructor for integers.
-int :: Integer -> CodeExpr
-
--- | Smart constructor for doubles.
-dbl :: Double -> CodeExpr
-
--- | Smart constructor for exact doubles.
-exactDbl :: Integer -> CodeExpr
+str :: LiteralC r => String -> r
+int :: LiteralC r => Integer -> r
+dbl :: LiteralC r => Double -> r
+exactDbl :: LiteralC r => Integer -> r
 
 -- | Smart constructor for matrices.
 matrix :: [[CodeExpr]] -> CodeExpr

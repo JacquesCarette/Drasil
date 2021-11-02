@@ -69,7 +69,7 @@ inputs :: [QuantityDict]
 unconstrained :: [UncertainChunk]
 constrained :: [UncertQ]
 tempInit :: UncertQ
-specParamValList :: [SimpleQDef]
+specParamValList :: [ConstQDef]
 
 module Drasil.NoPCM.Requirements
 funcReqs :: [ConceptInstance]

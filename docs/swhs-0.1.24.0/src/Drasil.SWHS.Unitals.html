@@ -70,21 +70,21 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SWHS.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(SimpleQDef -&gt; QuantityDict) -&gt; [SimpleQDef] -&gt; [QuantityDict]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConstQDef -&gt; QuantityDict) -&gt; [ConstQDef] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="Drasil.SWHS.Unitals.html#specParamValList"><span class="hs-identifier hs-var">specParamValList</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">(SimpleQDef -&gt; QuantityDict) -&gt; [SimpleQDef] -&gt; [QuantityDict]
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">(ConstQDef -&gt; QuantityDict) -&gt; [ConstQDef] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var">htFusionMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var">htFusionMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var">htFusionMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var">htFusionMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var">coilSAMax</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
@@ -994,15 +994,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#tankLengthMin"><span class="hs-identifier hs-var">tankLengthMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#tankLengthMax"><span class="hs-identifier hs-var">tankLengthMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">1.5</span></span><span class="hs-special">)</span><span>
 </span><span id="line-268"></span><span>  </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
@@ -1045,16 +1045,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#arMin"><span class="hs-identifier hs-var">arMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#arMax"><span class="hs-identifier hs-var">arMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-274"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">0.412</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-275"></span><span>
@@ -1101,7 +1101,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -1124,7 +1124,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tankVol"><span class="hs-identifier hs-var">tankVol</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span>
 </span><span id="line-282"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">0.05</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-283"></span><span>  </span><span class="hs-comment">-- needs to add (D,L)*minfract to end of last constraint</span><span>
@@ -1198,7 +1198,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmVol"><span class="hs-identifier hs-var">pcmVol</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
@@ -1211,7 +1211,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tankVol"><span class="hs-identifier hs-var">tankVol</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-296"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">1.2</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-297"></span><span>
@@ -1264,16 +1264,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensityMin"><span class="hs-identifier hs-var">pcmDensityMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensityMax"><span class="hs-identifier hs-var">pcmDensityMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-303"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1007</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-304"></span><span>
@@ -1323,13 +1323,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier hs-var">tempC</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">44.2</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-311"></span><span>
@@ -1383,16 +1383,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapSPMin"><span class="hs-identifier hs-var">htCapSPMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapSPMax"><span class="hs-identifier hs-var">htCapSPMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-320"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1760</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-321"></span><span>
@@ -1446,16 +1446,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapLPMin"><span class="hs-identifier hs-var">htCapLPMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapLPMax"><span class="hs-identifier hs-var">htCapLPMax</span></a></span><span> </span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-330"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2270</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-331"></span><span>
@@ -1501,15 +1501,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var">htFusionMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var">htFusionMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">211600</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-338"></span><span>
@@ -1575,11 +1575,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpTo</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var">coilSAMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">0.12</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-348"></span><span>
@@ -1626,12 +1626,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">50</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-354"></span><span>
@@ -1686,16 +1686,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#wDensityMin"><span class="hs-identifier hs-var">wDensityMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#wDensityMax"><span class="hs-identifier hs-var">wDensityMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-359"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1000</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-360"></span><span>
@@ -1749,15 +1749,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapWMin"><span class="hs-identifier hs-var">htCapWMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapWMax"><span class="hs-identifier hs-var">htCapWMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">4186</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-368"></span><span>  </span><span>
@@ -1810,15 +1810,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#coilHTCMin"><span class="hs-identifier hs-var">coilHTCMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#coilHTCMax"><span class="hs-identifier hs-var">coilHTCMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1000</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-378"></span><span>
@@ -1868,15 +1868,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTCMin"><span class="hs-identifier hs-var">pcmHTCMin</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTCMax"><span class="hs-identifier hs-var">pcmHTCMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1000</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-387"></span><span>  </span><span>
@@ -1923,13 +1923,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">meltPt</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">40</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-393"></span><span>  </span><span>
@@ -1980,11 +1980,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpTo</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
-</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Expr
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#timeFinalMax"><span class="hs-identifier hs-var">timeFinalMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">50000</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-401"></span><span>
@@ -2033,14 +2033,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#timeFinal"><span class="hs-identifier hs-var">timeFinal</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-407"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">0.01</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
 </span><span id="line-408"></span><span>  </span><span>
@@ -2104,7 +2104,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier hs-var">tempC</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-420"></span><span>
 </span><span id="line-421"></span><span class="hs-comment">-- Constraint 19</span><span>
@@ -2156,7 +2156,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier hs-var">tempC</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-427"></span><span>  </span><span>
 </span><span id="line-428"></span><span class="hs-comment">-- Constraint 20</span><span>
@@ -2200,9 +2200,9 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-433"></span><span>  </span><span>
 </span><span id="line-434"></span><span class="hs-comment">-- Constraint 21</span><span>
@@ -2246,9 +2246,9 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-439"></span><span>
 </span><span id="line-440"></span><span class="hs-comment">---------------------------------</span><span>
@@ -2281,13 +2281,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span>
 </span><span id="line-449"></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">10.0</span></span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double
 forall a. Floating a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">**</span></span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">10</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Maybe Int -&gt; Uncertainty
@@ -2319,13 +2319,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span>
 </span><span id="line-454"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">10.0</span></span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double
 forall a. Floating a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">**</span></span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">10</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Maybe Int -&gt; Uncertainty
@@ -2337,62 +2337,58 @@ forall a. Maybe a
 </span><span id="line-457"></span><span class="hs-comment">-- Max / Min Variables --</span><span>
 </span><span id="line-458"></span><span class="hs-comment">-------------------------</span><span>
 </span><span id="line-459"></span><span>
-</span><span id="line-460"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#specParamValList"><span class="hs-identifier hs-type">specParamValList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span class="hs-special">]</span><span>
-</span><span id="line-461"></span><span id="specParamValList"><span class="annot"><span class="annottext">specParamValList :: [SimpleQDef]
-</span><a href="Drasil.SWHS.Unitals.html#specParamValList"><span class="hs-identifier hs-var hs-var">specParamValList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#tankLengthMin"><span class="hs-identifier hs-var">tankLengthMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#tankLengthMax"><span class="hs-identifier hs-var">tankLengthMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#pcmDensityMin"><span class="hs-identifier hs-var">pcmDensityMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-460"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#specParamValList"><span class="hs-identifier hs-type">specParamValList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span>
+</span><span id="line-461"></span><span id="specParamValList"><span class="annot"><span class="annottext">specParamValList :: [ConstQDef]
+</span><a href="Drasil.SWHS.Unitals.html#specParamValList"><span class="hs-identifier hs-var hs-var">specParamValList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#tankLengthMin"><span class="hs-identifier hs-var">tankLengthMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#tankLengthMax"><span class="hs-identifier hs-var">tankLengthMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#pcmDensityMin"><span class="hs-identifier hs-var">pcmDensityMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensityMax"><span class="hs-identifier hs-var">pcmDensityMax</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-462"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#wDensityMin"><span class="hs-identifier hs-var">wDensityMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#wDensityMax"><span class="hs-identifier hs-var">wDensityMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapSPMin"><span class="hs-identifier hs-var">htCapSPMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapSPMax"><span class="hs-identifier hs-var">htCapSPMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapLPMin"><span class="hs-identifier hs-var">htCapLPMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-462"></span><span>  </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#wDensityMin"><span class="hs-identifier hs-var">wDensityMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#wDensityMax"><span class="hs-identifier hs-var">wDensityMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapSPMin"><span class="hs-identifier hs-var">htCapSPMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapSPMax"><span class="hs-identifier hs-var">htCapSPMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapLPMin"><span class="hs-identifier hs-var">htCapLPMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapLPMax"><span class="hs-identifier hs-var">htCapLPMax</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-463"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var">htFusionMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var">htFusionMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var">coilSAMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapWMin"><span class="hs-identifier hs-var">htCapWMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapWMax"><span class="hs-identifier hs-var">htCapWMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-463"></span><span>  </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var">htFusionMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var">htFusionMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var">coilSAMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapWMin"><span class="hs-identifier hs-var">htCapWMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapWMax"><span class="hs-identifier hs-var">htCapWMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#coilHTCMin"><span class="hs-identifier hs-var">coilHTCMin</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-464"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#coilHTCMax"><span class="hs-identifier hs-var">coilHTCMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#pcmHTCMin"><span class="hs-identifier hs-var">pcmHTCMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#pcmHTCMax"><span class="hs-identifier hs-var">pcmHTCMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#timeFinalMax"><span class="hs-identifier hs-var">timeFinalMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#fracMinAux"><span class="hs-identifier hs-var">fracMinAux</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-464"></span><span>  </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#coilHTCMax"><span class="hs-identifier hs-var">coilHTCMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#pcmHTCMin"><span class="hs-identifier hs-var">pcmHTCMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#pcmHTCMax"><span class="hs-identifier hs-var">pcmHTCMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#timeFinalMax"><span class="hs-identifier hs-var">timeFinalMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#fracMinAux"><span class="hs-identifier hs-var">fracMinAux</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#consTolAux"><span class="hs-identifier hs-var">consTolAux</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-465"></span><span>  </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#arMin"><span class="hs-identifier hs-var">arMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SimpleQDef
+</span><span id="line-465"></span><span>  </span><span class="annot"><span class="annottext">ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#arMin"><span class="hs-identifier hs-var">arMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#arMax"><span class="hs-identifier hs-var">arMax</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-466"></span><span>
 </span><span id="line-467"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tankLengthMin"><span class="hs-identifier hs-type">tankLengthMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tankLengthMax"><span class="hs-identifier hs-type">tankLengthMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmDensityMin"><span class="hs-identifier hs-type">pcmDensityMin</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-468"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmDensityMax"><span class="hs-identifier hs-type">pcmDensityMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#wDensityMin"><span class="hs-identifier hs-type">wDensityMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#wDensityMax"><span class="hs-identifier hs-type">wDensityMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapSPMin"><span class="hs-identifier hs-type">htCapSPMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapSPMax"><span class="hs-identifier hs-type">htCapSPMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapLPMin"><span class="hs-identifier hs-type">htCapLPMin</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-469"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapLPMax"><span class="hs-identifier hs-type">htCapLPMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-type">htFusionMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-type">htFusionMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-type">coilSAMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapWMin"><span class="hs-identifier hs-type">htCapWMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htCapWMax"><span class="hs-identifier hs-type">htCapWMax</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-470"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilHTCMin"><span class="hs-identifier hs-type">coilHTCMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilHTCMax"><span class="hs-identifier hs-type">coilHTCMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmHTCMin"><span class="hs-identifier hs-type">pcmHTCMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmHTCMax"><span class="hs-identifier hs-type">pcmHTCMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#timeFinalMax"><span class="hs-identifier hs-type">timeFinalMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#fracMinAux"><span class="hs-identifier hs-type">fracMinAux</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-471"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#consTolAux"><span class="hs-identifier hs-type">consTolAux</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#arMin"><span class="hs-identifier hs-type">arMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#arMax"><span class="hs-identifier hs-type">arMax</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
+</span><span id="line-471"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#consTolAux"><span class="hs-identifier hs-type">consTolAux</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#arMin"><span class="hs-identifier hs-type">arMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#arMax"><span class="hs-identifier hs-type">arMax</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
 </span><span id="line-472"></span><span>
-</span><span id="line-473"></span><span id="consTolAux"><span class="annot"><span class="annottext">consTolAux :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#consTolAux"><span class="hs-identifier hs-var hs-var">consTolAux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-473"></span><span id="consTolAux"><span class="annot"><span class="annottext">consTolAux :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#consTolAux"><span class="hs-identifier hs-var hs-var">consTolAux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="Drasil.SWHS.Unitals.html#consTol"><span class="hs-identifier hs-var">consTol</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><a href="Drasil.SWHS.Unitals.html#consTol"><span class="hs-identifier hs-var">consTol</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">perc</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="hs-number">5</span></span><span>
 </span><span id="line-474"></span><span>
 </span><span id="line-475"></span><span class="hs-comment">-- Used in Constraint 1</span><span>
-</span><span id="line-476"></span><span id="tankLengthMin"><span class="annot"><span class="annottext">tankLengthMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#tankLengthMin"><span class="hs-identifier hs-var hs-var">tankLengthMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-476"></span><span id="tankLengthMin"><span class="annot"><span class="annottext">tankLengthMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#tankLengthMin"><span class="hs-identifier hs-var hs-var">tankLengthMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
 IsUnit u =&gt;
@@ -2406,17 +2402,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tankLength"><span class="hs-identifier hs-var">tankLength</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Literal
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">0.1</span></span><span>
 </span><span id="line-479"></span><span>
-</span><span id="line-480"></span><span id="tankLengthMax"><span class="annot"><span class="annottext">tankLengthMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#tankLengthMax"><span class="hs-identifier hs-var hs-var">tankLengthMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-480"></span><span id="tankLengthMax"><span class="annot"><span class="annottext">tankLengthMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#tankLengthMax"><span class="hs-identifier hs-var hs-var">tankLengthMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
 IsUnit u =&gt;
@@ -2430,53 +2424,45 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tankLength"><span class="hs-identifier hs-var">tankLength</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">50</span></span><span>
 </span><span id="line-483"></span><span>
-</span><span id="line-484"></span><span id="fracMinAux"><span class="annot"><span class="annottext">fracMinAux :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#fracMinAux"><span class="hs-identifier hs-var hs-var">fracMinAux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-484"></span><span id="fracMinAux"><span class="annot"><span class="annottext">fracMinAux :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#fracMinAux"><span class="hs-identifier hs-var hs-var">fracMinAux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="Drasil.SWHS.Unitals.html#fracMin"><span class="hs-identifier hs-var">fracMin</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><a href="Drasil.SWHS.Unitals.html#fracMin"><span class="hs-identifier hs-var">fracMin</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Literal
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">1.0e-6</span></span><span>
 </span><span id="line-485"></span><span>
-</span><span id="line-486"></span><span id="arMin"><span class="annot"><span class="annottext">arMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#arMin"><span class="hs-identifier hs-var hs-var">arMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-486"></span><span id="arMin"><span class="annot"><span class="annottext">arMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#arMin"><span class="hs-identifier hs-var hs-var">arMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="Drasil.SWHS.Unitals.html#aspectRatioMin"><span class="hs-identifier hs-var">aspectRatioMin</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><a href="Drasil.SWHS.Unitals.html#aspectRatioMin"><span class="hs-identifier hs-var">aspectRatioMin</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Expr
-forall r. ExprC r =&gt; Double -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Literal
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">0.01</span></span><span>
-</span><span id="line-487"></span><span id="arMax"><span class="annot"><span class="annottext">arMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#arMax"><span class="hs-identifier hs-var hs-var">arMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-487"></span><span id="arMax"><span class="annot"><span class="annottext">arMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#arMax"><span class="hs-identifier hs-var hs-var">arMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="Drasil.SWHS.Unitals.html#aspectRatioMax"><span class="hs-identifier hs-var">aspectRatioMax</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><a href="Drasil.SWHS.Unitals.html#aspectRatioMax"><span class="hs-identifier hs-var">aspectRatioMax</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span>
 </span><span id="line-488"></span><span>
 </span><span id="line-489"></span><span class="hs-comment">-- Used in Constraint 5</span><span>
-</span><span id="line-490"></span><span id="pcmDensityMin"><span class="annot"><span class="annottext">pcmDensityMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#pcmDensityMin"><span class="hs-identifier hs-var hs-var">pcmDensityMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-490"></span><span id="pcmDensityMin"><span class="annot"><span class="annottext">pcmDensityMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#pcmDensityMin"><span class="hs-identifier hs-var hs-var">pcmDensityMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2499,17 +2485,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensity"><span class="hs-identifier hs-var">pcmDensity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">densityU</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">500</span></span><span>
 </span><span id="line-493"></span><span>
-</span><span id="line-494"></span><span id="pcmDensityMax"><span class="annot"><span class="annottext">pcmDensityMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#pcmDensityMax"><span class="hs-identifier hs-var hs-var">pcmDensityMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-494"></span><span id="pcmDensityMax"><span class="annot"><span class="annottext">pcmDensityMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#pcmDensityMax"><span class="hs-identifier hs-var hs-var">pcmDensityMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2532,18 +2516,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensity"><span class="hs-identifier hs-var">pcmDensity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">densityU</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">20000</span></span><span>
 </span><span id="line-497"></span><span>
 </span><span id="line-498"></span><span class="hs-comment">-- Used in Constraint 7</span><span>
-</span><span id="line-499"></span><span id="htCapSPMin"><span class="annot"><span class="annottext">htCapSPMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapSPMin"><span class="hs-identifier hs-var hs-var">htCapSPMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-499"></span><span id="htCapSPMin"><span class="annot"><span class="annottext">htCapSPMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapSPMin"><span class="hs-identifier hs-var hs-var">htCapSPMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
 IsUnit u =&gt;
@@ -2557,17 +2539,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapSP"><span class="hs-identifier hs-var">htCapSP</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span>
 </span><span id="line-502"></span><span>
-</span><span id="line-503"></span><span id="htCapSPMax"><span class="annot"><span class="annottext">htCapSPMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapSPMax"><span class="hs-identifier hs-var hs-var">htCapSPMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-503"></span><span id="htCapSPMax"><span class="annot"><span class="annottext">htCapSPMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapSPMax"><span class="hs-identifier hs-var hs-var">htCapSPMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
 IsUnit u =&gt;
@@ -2581,18 +2561,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapSP"><span class="hs-identifier hs-var">htCapSP</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">4000</span></span><span>
 </span><span id="line-506"></span><span>
 </span><span id="line-507"></span><span class="hs-comment">-- Used in Constraint 8</span><span>
-</span><span id="line-508"></span><span id="htCapLPMin"><span class="annot"><span class="annottext">htCapLPMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapLPMin"><span class="hs-identifier hs-var hs-var">htCapLPMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-508"></span><span id="htCapLPMin"><span class="annot"><span class="annottext">htCapLPMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapLPMin"><span class="hs-identifier hs-var hs-var">htCapLPMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
 IsUnit u =&gt;
@@ -2606,17 +2584,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapLP"><span class="hs-identifier hs-var">htCapLP</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span>
 </span><span id="line-511"></span><span>
-</span><span id="line-512"></span><span id="htCapLPMax"><span class="annot"><span class="annottext">htCapLPMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapLPMax"><span class="hs-identifier hs-var hs-var">htCapLPMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-512"></span><span id="htCapLPMax"><span class="annot"><span class="annottext">htCapLPMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapLPMax"><span class="hs-identifier hs-var hs-var">htCapLPMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
 IsUnit u =&gt;
@@ -2630,18 +2606,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapLP"><span class="hs-identifier hs-var">htCapLP</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">5000</span></span><span>
 </span><span id="line-515"></span><span>
 </span><span id="line-516"></span><span class="hs-comment">-- Used in Constraint 9</span><span>
-</span><span id="line-517"></span><span id="htFusionMin"><span class="annot"><span class="annottext">htFusionMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var hs-var">htFusionMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-517"></span><span id="htFusionMin"><span class="annot"><span class="annottext">htFusionMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var hs-var">htFusionMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
 IsUnit u =&gt;
@@ -2655,17 +2629,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier hs-var">htFusion</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span> </span><span>
 </span><span id="line-520"></span><span>
-</span><span id="line-521"></span><span id="htFusionMax"><span class="annot"><span class="annottext">htFusionMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var hs-var">htFusionMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-521"></span><span id="htFusionMax"><span class="annot"><span class="annottext">htFusionMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var hs-var">htFusionMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
 IsUnit u =&gt;
@@ -2679,18 +2651,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier hs-var">htFusion</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1000000</span></span><span> </span><span>
 </span><span id="line-524"></span><span>
 </span><span id="line-525"></span><span class="hs-comment">-- Used in Constraint 10</span><span>
-</span><span id="line-526"></span><span id="coilSAMax"><span class="annot"><span class="annottext">coilSAMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var hs-var">coilSAMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-526"></span><span id="coilSAMax"><span class="annot"><span class="annottext">coilSAMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var hs-var">coilSAMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2710,18 +2680,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilSA"><span class="hs-identifier hs-var">coilSA</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">m_2</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100000</span></span><span>
 </span><span id="line-529"></span><span>
 </span><span id="line-530"></span><span class="hs-comment">-- Used in Constraint 12</span><span>
-</span><span id="line-531"></span><span id="wDensityMin"><span class="annot"><span class="annottext">wDensityMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#wDensityMin"><span class="hs-identifier hs-var hs-var">wDensityMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-531"></span><span id="wDensityMin"><span class="annot"><span class="annottext">wDensityMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#wDensityMin"><span class="hs-identifier hs-var hs-var">wDensityMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2744,17 +2712,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#wDensity"><span class="hs-identifier hs-var">wDensity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">densityU</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">950</span></span><span>
 </span><span id="line-534"></span><span>
-</span><span id="line-535"></span><span id="wDensityMax"><span class="annot"><span class="annottext">wDensityMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#wDensityMax"><span class="hs-identifier hs-var hs-var">wDensityMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-535"></span><span id="wDensityMax"><span class="annot"><span class="annottext">wDensityMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#wDensityMax"><span class="hs-identifier hs-var hs-var">wDensityMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2777,18 +2743,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#wDensity"><span class="hs-identifier hs-var">wDensity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">densityU</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1000</span></span><span>
 </span><span id="line-538"></span><span>  </span><span>
 </span><span id="line-539"></span><span class="hs-comment">-- Used in Constraint 13</span><span>
-</span><span id="line-540"></span><span id="htCapWMin"><span class="annot"><span class="annottext">htCapWMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapWMin"><span class="hs-identifier hs-var hs-var">htCapWMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-540"></span><span id="htCapWMin"><span class="annot"><span class="annottext">htCapWMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapWMin"><span class="hs-identifier hs-var hs-var">htCapWMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2809,17 +2773,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span> </span><span>
 </span><span id="line-543"></span><span>  </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">4170</span></span><span>
 </span><span id="line-544"></span><span>
-</span><span id="line-545"></span><span id="htCapWMax"><span class="annot"><span class="annottext">htCapWMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#htCapWMax"><span class="hs-identifier hs-var hs-var">htCapWMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-545"></span><span id="htCapWMax"><span class="annot"><span class="annottext">htCapWMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#htCapWMax"><span class="hs-identifier hs-var hs-var">htCapWMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2840,18 +2802,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span> </span><span>
 </span><span id="line-548"></span><span>  </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">4210</span></span><span>
 </span><span id="line-549"></span><span>
 </span><span id="line-550"></span><span class="hs-comment">-- Used in Constraint 14</span><span>
-</span><span id="line-551"></span><span id="coilHTCMin"><span class="annot"><span class="annottext">coilHTCMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#coilHTCMin"><span class="hs-identifier hs-var hs-var">coilHTCMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-551"></span><span id="coilHTCMin"><span class="annot"><span class="annottext">coilHTCMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#coilHTCMin"><span class="hs-identifier hs-var hs-var">coilHTCMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2877,17 +2837,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier hs-var">coilHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-555"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatTransferCoef</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">10</span></span><span>
 </span><span id="line-556"></span><span>
-</span><span id="line-557"></span><span id="coilHTCMax"><span class="annot"><span class="annottext">coilHTCMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#coilHTCMax"><span class="hs-identifier hs-var hs-var">coilHTCMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-557"></span><span id="coilHTCMax"><span class="annot"><span class="annottext">coilHTCMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#coilHTCMax"><span class="hs-identifier hs-var hs-var">coilHTCMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2913,18 +2871,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier hs-var">coilHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-561"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatTransferCoef</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">10000</span></span><span>
 </span><span id="line-562"></span><span>  </span><span>
 </span><span id="line-563"></span><span class="hs-comment">-- Used in Constraint 15</span><span>
-</span><span id="line-564"></span><span id="pcmHTCMin"><span class="annot"><span class="annottext">pcmHTCMin :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#pcmHTCMin"><span class="hs-identifier hs-var hs-var">pcmHTCMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-564"></span><span id="pcmHTCMin"><span class="annot"><span class="annottext">pcmHTCMin :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#pcmHTCMin"><span class="hs-identifier hs-var hs-var">pcmHTCMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2950,17 +2906,15 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier hs-var">pcmHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-568"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatTransferCoef</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">10</span></span><span>
 </span><span id="line-569"></span><span>
-</span><span id="line-570"></span><span id="pcmHTCMax"><span class="annot"><span class="annottext">pcmHTCMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#pcmHTCMax"><span class="hs-identifier hs-var hs-var">pcmHTCMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-570"></span><span id="pcmHTCMax"><span class="annot"><span class="annottext">pcmHTCMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#pcmHTCMax"><span class="hs-identifier hs-var hs-var">pcmHTCMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -2986,18 +2940,16 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier hs-var">pcmHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-574"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatTransferCoef</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">10000</span></span><span>
 </span><span id="line-575"></span><span>  </span><span>
 </span><span id="line-576"></span><span class="hs-comment">-- Used in Constraint 17</span><span>
-</span><span id="line-577"></span><span id="timeFinalMax"><span class="annot"><span class="annottext">timeFinalMax :: SimpleQDef
-</span><a href="Drasil.SWHS.Unitals.html#timeFinalMax"><span class="hs-identifier hs-var hs-var">timeFinalMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+</span><span id="line-577"></span><span id="timeFinalMax"><span class="annot"><span class="annottext">timeFinalMax :: ConstQDef
+</span><a href="Drasil.SWHS.Unitals.html#timeFinalMax"><span class="hs-identifier hs-var hs-var">timeFinalMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; UnitDefn -&gt; Space -&gt; UnitaryChunk
 forall u.
@@ -3018,10 +2970,10 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><a href="Drasil.SWHS.Unitals.html#timeFinal"><span class="hs-identifier hs-var">timeFinal</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">second</span></span><span> </span><span>
 </span><span id="line-580"></span><span>  </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">86400</span></span><span>
 </span><span id="line-581"></span><span>
 </span><span id="line-582"></span><span class="hs-comment">-- Labels</span><span>

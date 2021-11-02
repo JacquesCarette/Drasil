@@ -56,7 +56,7 @@ ModelKind ModelExpr
 -&gt; [Sentence]
 -&gt; TheoryModel
 </span><span class="hs-identifier hs-var">tmNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelQDef -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; QDefinition e -&gt; ModelKind e
+forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">ModelQDef
 </span><a href="Drasil.GamePhysics.TMods.html#newtonTLQD"><span class="hs-identifier hs-var">newtonTLQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
@@ -73,7 +73,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span id="line-36"></span><span id="newtonTLQD"><span class="annot"><span class="annottext">newtonTLQD :: ModelQDef
 </span><a href="Drasil.GamePhysics.TMods.html#newtonTLQD"><span class="hs-identifier hs-var hs-var">newtonTLQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; ModelQDef
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#force_1"><span class="hs-identifier hs-var">force_1</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -130,7 +130,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-50"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonLUGModel"><span class="hs-identifier hs-type">newtonLUGModel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelKind</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-51"></span><span id="newtonLUGModel"><span class="annot"><span class="annottext">newtonLUGModel :: ModelKind ModelExpr
 </span><a href="Drasil.GamePhysics.TMods.html#newtonLUGModel"><span class="hs-identifier hs-var hs-var">newtonLUGModel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; MultiDefn e -&gt; ModelKind e
+forall e. MultiDefn e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalRealm'</span></span><span> </span><span class="annot"><span class="annottext">(MultiDefn ModelExpr -&gt; ModelKind ModelExpr)
 -&gt; MultiDefn ModelExpr -&gt; ModelKind ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -139,7 +139,6 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 -&gt; NonEmpty (DefiningExpr ModelExpr)
 -&gt; MultiDefn ModelExpr
 forall e.
-Express e =&gt;
 QuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
@@ -151,9 +150,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
-forall e.
-Express e =&gt;
-String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
+forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonLUGviaDeriv&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -171,7 +168,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.GamePhysics.Unitals.html#mass_2"><span class="hs-identifier hs-var">mass_2</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -182,9 +179,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#dVect"><span class="hs-identifier hs-var">dVect</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
-forall e.
-Express e =&gt;
-String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
+forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonLUGviaForm&quot;</span></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -202,7 +197,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.GamePhysics.Unitals.html#mass_2"><span class="hs-identifier hs-var">mass_2</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -365,7 +360,7 @@ ModelKind ModelExpr
 -&gt; [Sentence]
 -&gt; TheoryModel
 </span><span class="hs-identifier hs-var">tmNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; ModelQDef -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; String -&gt; QDefinition e -&gt; ModelKind e
+forall e. String -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonSLR&quot;</span></span><span> </span><span class="annot"><span class="annottext">ModelQDef
 </span><a href="Drasil.GamePhysics.TMods.html#newtonSLRQD"><span class="hs-identifier hs-var">newtonSLRQD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-83"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
@@ -386,7 +381,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span id="line-87"></span><span id="newtonSLRQD"><span class="annot"><span class="annottext">newtonSLRQD :: ModelQDef
 </span><a href="Drasil.GamePhysics.TMods.html#newtonSLRQD"><span class="hs-identifier hs-var hs-var">newtonSLRQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; ModelQDef
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">torque</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP

@@ -88,10 +88,9 @@ digraph alltypes {
 		}
 		subgraph modelkindse{
 		ModelKindse	[shape=oval, color=darkviolet, label="ModelKindse"];
-		ModelKindse -> Express;
-		ModelKindse -> e;
 		ModelKindse -> RelationConcept;
 		ModelKindse -> ModelKinds;
+		ModelKindse -> e;
 		}
 	}
 	subgraph multidefn {
@@ -99,7 +98,7 @@ digraph alltypes {
 		DefiningExpre	[shape=oval, color=cyan3, label="DefiningExpre"];
 		DefiningExpre -> UID;
 		DefiningExpre -> Sentence;
-		DefiningExpre -> Expressee;
+		DefiningExpre -> e;
 		}
 		subgraph multidefne{
 		MultiDefne	[shape=oval, color=cyan3, label="MultiDefne"];

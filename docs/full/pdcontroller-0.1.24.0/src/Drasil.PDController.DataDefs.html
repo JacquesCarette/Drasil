@@ -47,9 +47,7 @@ forall a. Maybe a
 </span><span id="line-26"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddErrSigDefn"><span class="hs-identifier hs-type">ddErrSigDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-27"></span><span id="ddErrSigDefn"><span class="annot"><span class="annottext">ddErrSigDefn :: SimpleQDef
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSigDefn"><span class="hs-identifier hs-var hs-var">ddErrSigDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdProcessErrorFD"><span class="hs-identifier hs-var">qdProcessErrorFD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSigEqn"><span class="hs-identifier hs-var">ddErrSigEqn</span></a></span><span>
@@ -155,9 +153,7 @@ forall a. Maybe a
 </span><span id="line-51"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddPropCtrlDefn"><span class="hs-identifier hs-type">ddPropCtrlDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-52"></span><span id="ddPropCtrlDefn"><span class="annot"><span class="annottext">ddPropCtrlDefn :: SimpleQDef
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrlDefn"><span class="hs-identifier hs-var hs-var">ddPropCtrlDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdPropControlFD"><span class="hs-identifier hs-var">qdPropControlFD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrlEqn"><span class="hs-identifier hs-var">ddPropCtrlEqn</span></a></span><span>
@@ -237,9 +233,7 @@ forall a. Maybe a
 </span><span id="line-72"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlDefn"><span class="hs-identifier hs-type">ddDerivCtrlDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-73"></span><span id="ddDerivCtrlDefn"><span class="annot"><span class="annottext">ddDerivCtrlDefn :: SimpleQDef
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlDefn"><span class="hs-identifier hs-var hs-var">ddDerivCtrlDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdDerivativeControlFD"><span class="hs-identifier hs-var">qdDerivativeControlFD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddDerivCtrlEqn"><span class="hs-identifier hs-var">ddDerivCtrlEqn</span></a></span><span>
@@ -335,9 +329,7 @@ forall a. Maybe a
 </span><span id="line-95"></span><span class="annot"><a href="Drasil.PDController.DataDefs.html#ddCtrlVarDefn"><span class="hs-identifier hs-type">ddCtrlVarDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-96"></span><span id="ddCtrlVarDefn"><span class="annot"><span class="annottext">ddCtrlVarDefn :: SimpleQDef
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlVarDefn"><span class="hs-identifier hs-var hs-var">ddCtrlVarDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdCtrlVarFD"><span class="hs-identifier hs-var">qdCtrlVarFD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlEqn"><span class="hs-identifier hs-var">ddCtrlEqn</span></a></span><span>

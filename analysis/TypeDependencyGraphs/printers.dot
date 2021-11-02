@@ -79,6 +79,8 @@ digraph alltypes {
 	}
 	subgraph helpers {
 	}
+	subgraph literal {
+	}
 	subgraph modelexpr {
 	}
 	subgraph sentence {

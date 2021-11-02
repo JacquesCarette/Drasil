@@ -59,7 +59,7 @@ IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; QDefinition e -&gt; ModelKind e
+forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXQD"><span class="hs-identifier hs-var">velocityIXQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
@@ -74,7 +74,7 @@ forall a. a -&gt; Maybe a
 </span><span id="line-45"></span><span id="velocityIXQD"><span class="annot"><span class="annottext">velocityIXQD :: QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#velocityIXQD"><span class="hs-identifier hs-var hs-var">velocityIXQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">xVel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -181,7 +181,7 @@ IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; QDefinition e -&gt; ModelKind e
+forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYQD"><span class="hs-identifier hs-var">velocityIYQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
@@ -196,7 +196,7 @@ forall a. a -&gt; Maybe a
 </span><span id="line-72"></span><span id="velocityIYQD"><span class="annot"><span class="annottext">velocityIYQD :: QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#velocityIYQD"><span class="hs-identifier hs-var hs-var">velocityIYQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">yVel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -277,7 +277,7 @@ IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; QDefinition e -&gt; ModelKind e
+forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXQD"><span class="hs-identifier hs-var">accelerationIXQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
@@ -292,7 +292,7 @@ forall a. a -&gt; Maybe a
 </span><span id="line-93"></span><span id="accelerationIXQD"><span class="annot"><span class="annottext">accelerationIXQD :: QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIXQD"><span class="hs-identifier hs-var hs-var">accelerationIXQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">xAccel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -413,7 +413,7 @@ IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; QDefinition e -&gt; ModelKind e
+forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYQD"><span class="hs-identifier hs-var">accelerationIYQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
@@ -428,7 +428,7 @@ forall a. a -&gt; Maybe a
 </span><span id="line-122"></span><span id="accelerationIYQD"><span class="annot"><span class="annottext">accelerationIYQD :: QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#accelerationIYQD"><span class="hs-identifier hs-var hs-var">accelerationIYQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">yAccel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -524,7 +524,7 @@ IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MultiDefn ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; String -&gt; MultiDefn e -&gt; ModelKind e
+forall e. String -&gt; MultiDefn e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalRealmU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hForceOnPendulum&quot;</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#hForceOnPendulumMD"><span class="hs-identifier hs-var">hForceOnPendulumMD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-141"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
@@ -542,15 +542,14 @@ forall a. a -&gt; Maybe a
 -&gt; NonEmpty (DefiningExpr ModelExpr)
 -&gt; MultiDefn ModelExpr
 forall e.
-Express e =&gt;
 QuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679088253"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679088293"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679088251"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-145"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088253"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679088253"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679088291"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-145"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088293"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679088293"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -572,14 +571,12 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-147"></span><span>          </span><span id="local-6989586621679088251"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679088251"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-147"></span><span>          </span><span id="local-6989586621679088291"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679088291"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-148"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
-forall e.
-Express e =&gt;
-String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
+forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hForceOnPendulumViaComponent&quot;</span></span><span>
 </span><span id="line-149"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; DefiningExpr ModelExpr)
@@ -590,9 +587,7 @@ forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPendulum.Expressions.html#hForceOnPendulumViaComponent"><span class="hs-identifier hs-var">E.hForceOnPendulumViaComponent</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-150"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
-forall e.
-Express e =&gt;
-String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
+forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hForceOnPendulumViaAngle&quot;</span></span><span>
 </span><span id="line-151"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; DefiningExpr ModelExpr)
@@ -632,7 +627,7 @@ IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MultiDefn ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; String -&gt; MultiDefn e -&gt; ModelKind e
+forall e. String -&gt; MultiDefn e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalRealmU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;vForceOnPendulum&quot;</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#vForceOnPendulumMD"><span class="hs-identifier hs-var">vForceOnPendulumMD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-160"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
@@ -650,15 +645,14 @@ forall a. a -&gt; Maybe a
 -&gt; NonEmpty (DefiningExpr ModelExpr)
 -&gt; MultiDefn ModelExpr
 forall e.
-Express e =&gt;
 QuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679088241"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679088281"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679088240"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-164"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088241"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679088241"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679088280"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-164"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088281"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679088281"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -680,14 +674,12 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-166"></span><span>          </span><span id="local-6989586621679088240"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679088240"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-166"></span><span>          </span><span id="local-6989586621679088280"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679088280"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-167"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
-forall e.
-Express e =&gt;
-String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
+forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;vForceOnPendulumViaComponent&quot;</span></span><span>
 </span><span id="line-168"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; DefiningExpr ModelExpr)
@@ -698,9 +690,7 @@ forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span class="hs-identifier hs-var">express</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPendulum.Expressions.html#vForceOnPendulumViaComponent"><span class="hs-identifier hs-var">E.vForceOnPendulumViaComponent</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-169"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
-forall e.
-Express e =&gt;
-String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
+forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;vForceOnPendulumViaAngle&quot;</span></span><span>    </span><span>
 </span><span id="line-170"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; DefiningExpr ModelExpr)
@@ -741,7 +731,7 @@ IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; QDefinition ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; String -&gt; QDefinition e -&gt; ModelKind e
+forall e. String -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;angFrequencyGD&quot;</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyQD"><span class="hs-identifier hs-var">angFrequencyQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
@@ -757,7 +747,7 @@ forall a. a -&gt; Maybe a
 </span><span id="line-183"></span><span id="angFrequencyQD"><span class="annot"><span class="annottext">angFrequencyQD :: QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#angFrequencyQD"><span class="hs-identifier hs-var hs-var">angFrequencyQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">angularFrequency</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
@@ -997,7 +987,7 @@ IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; QDefinition ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; String -&gt; QDefinition e -&gt; ModelKind e
+forall e. String -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;periodPendGD&quot;</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#periodPendQD"><span class="hs-identifier hs-var">periodPendQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
@@ -1013,7 +1003,7 @@ forall a. a -&gt; Maybe a
 </span><span id="line-219"></span><span id="periodPendQD"><span class="annot"><span class="annottext">periodPendQD :: QDefinition ModelExpr
 </span><a href="Drasil.SglPendulum.GenDefs.html#periodPendQD"><span class="hs-identifier hs-var hs-var">periodPendQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">period</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP

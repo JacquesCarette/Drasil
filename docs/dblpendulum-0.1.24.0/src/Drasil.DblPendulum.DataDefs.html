@@ -36,9 +36,7 @@ forall a. Maybe a
 </span><span id="line-22"></span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#positionGQD"><span class="hs-identifier hs-type">positionGQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-23"></span><span id="positionGQD"><span class="annot"><span class="annottext">positionGQD :: ModelQDef
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionGQD"><span class="hs-identifier hs-var hs-var">positionGQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionGEqn"><span class="hs-identifier hs-var">positionGEqn</span></a></span><span>
@@ -70,9 +68,7 @@ forall a. Maybe a
 </span><span id="line-34"></span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#positionXQD_1"><span class="hs-identifier hs-type">positionXQD_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-35"></span><span id="positionXQD_1"><span class="annot"><span class="annottext">positionXQD_1 :: SimpleQDef
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionXQD_1"><span class="hs-identifier hs-var hs-var">positionXQD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#xPos_1"><span class="hs-identifier hs-var">xPos_1</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
@@ -135,9 +131,7 @@ forall a. Maybe a
 </span><span id="line-52"></span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#positionYQD_1"><span class="hs-identifier hs-type">positionYQD_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-53"></span><span id="positionYQD_1"><span class="annot"><span class="annottext">positionYQD_1 :: SimpleQDef
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionYQD_1"><span class="hs-identifier hs-var hs-var">positionYQD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#yPos_1"><span class="hs-identifier hs-var">yPos_1</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
@@ -202,9 +196,7 @@ forall a. Maybe a
 </span><span id="line-70"></span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#positionXQD_2"><span class="hs-identifier hs-type">positionXQD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-71"></span><span id="positionXQD_2"><span class="annot"><span class="annottext">positionXQD_2 :: SimpleQDef
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionXQD_2"><span class="hs-identifier hs-var hs-var">positionXQD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#xPos_2"><span class="hs-identifier hs-var">xPos_2</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
@@ -272,9 +264,7 @@ forall a. Maybe a
 </span><span id="line-88"></span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#positionYQD_2"><span class="hs-identifier hs-type">positionYQD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-89"></span><span id="positionYQD_2"><span class="annot"><span class="annottext">positionYQD_2 :: SimpleQDef
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionYQD_2"><span class="hs-identifier hs-var hs-var">positionYQD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#yPos_2"><span class="hs-identifier hs-var">yPos_2</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
@@ -342,9 +332,7 @@ forall a. Maybe a
 </span><span id="line-106"></span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#accelGQD"><span class="hs-identifier hs-type">accelGQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-107"></span><span id="accelGQD"><span class="annot"><span class="annottext">accelGQD :: ModelQDef
 </span><a href="Drasil.DblPendulum.DataDefs.html#accelGQD"><span class="hs-identifier hs-var hs-var">accelGQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">acceleration</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.DblPendulum.DataDefs.html#accelGEqn"><span class="hs-identifier hs-var">accelGEqn</span></a></span><span>
@@ -374,9 +362,7 @@ forall a. Maybe a
 </span><span id="line-118"></span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#forceGQD"><span class="hs-identifier hs-type">forceGQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-119"></span><span id="forceGQD"><span class="annot"><span class="annottext">forceGQD :: SimpleQDef
 </span><a href="Drasil.DblPendulum.DataDefs.html#forceGQD"><span class="hs-identifier hs-var hs-var">forceGQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr

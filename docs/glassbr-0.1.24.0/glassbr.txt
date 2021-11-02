@@ -81,16 +81,16 @@ probBr :: ConstrainedChunk
 probFail :: ConstrainedChunk
 pbTolfail :: ConstrainedChunk
 stressDistFac :: ConstrainedChunk
-specParamVals :: [SimpleQDef]
-dimMax :: SimpleQDef
-dimMin :: SimpleQDef
-arMax :: SimpleQDef
-cWeightMax :: SimpleQDef
-cWeightMin :: SimpleQDef
-sdMax :: SimpleQDef
-stressDistFacMin :: SimpleQDef
-stressDistFacMax :: SimpleQDef
-sdMin :: SimpleQDef
+specParamVals :: [ConstQDef]
+dimMax :: ConstQDef
+dimMin :: ConstQDef
+arMax :: ConstQDef
+cWeightMax :: ConstQDef
+cWeightMin :: ConstQDef
+sdMax :: ConstQDef
+stressDistFacMin :: ConstQDef
+stressDistFacMax :: ConstQDef
+sdMin :: ConstQDef
 symbols :: [UnitaryChunk]
 minThick :: UnitaryChunk
 sflawParamK :: UnitaryChunk
@@ -153,12 +153,12 @@ safeMessage :: ConceptChunk
 notSafe :: ConceptChunk
 bomb :: ConceptChunk
 explosion :: ConceptChunk
-constants :: [SimpleQDef]
-constantM :: SimpleQDef
-constantK :: SimpleQDef
-constantModElas :: SimpleQDef
-constantLoadDur :: SimpleQDef
-constantLoadSF :: SimpleQDef
+constants :: [ConstQDef]
+constantM :: ConstQDef
+constantK :: ConstQDef
+constantModElas :: ConstQDef
+constantLoadDur :: ConstQDef
+constantLoadSF :: ConstQDef
 sdVectorSent :: Sentence
 sdVector :: [UnitaryChunk]
 termsWithDefsOnly :: [ConceptChunk]
@@ -203,7 +203,7 @@ assumpGL :: ConceptInstance
 assumpBC :: ConceptInstance
 assumpRT :: ConceptInstance
 assumpLDFC :: ConceptInstance
-assumptionConstants :: [SimpleQDef]
+assumptionConstants :: [ConstQDef]
 assumptions :: [ConceptInstance]
 
 module Drasil.GlassBR.DataDefs
@@ -266,7 +266,7 @@ termsAndDescBullets :: Contents
 termsAndDescBulletsGlTySubSec :: [ItemType]
 termsAndDescBulletsLoadSubSec :: [ItemType]
 solChSpecSubsections :: [CI]
-auxiliaryConstants :: [SimpleQDef]
+auxiliaryConstants :: [ConstQDef]
 priorityNFReqs :: [ConceptChunk]
 startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 undIR :: [Sentence]

@@ -76,7 +76,7 @@ launSpeed :: ConstrConcept
 offset :: ConstrConcept
 targPos :: ConstrConcept
 message :: QuantityDict
-tol :: SimpleQDef
+tol :: ConstQDef
 
 module Drasil.Projectile.Expressions
 flightDur' :: PExpr

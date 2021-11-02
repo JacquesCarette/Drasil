@@ -173,11 +173,11 @@ ipPropGainUnc :: UncertQ
 ipDerGainUnc :: UncertQ
 ipStepTimeUnc :: UncertQ
 ipSimTimeUnc :: UncertQ
-odeAbsTolConst :: SimpleQDef
-odeRelTolConst :: SimpleQDef
+odeAbsTolConst :: ConstQDef
+odeRelTolConst :: ConstQDef
 dqdAbsTol :: DefinedQuantityDict
 dqdRelTol :: DefinedQuantityDict
-pidConstants :: [SimpleQDef]
+pidConstants :: [ConstQDef]
 pidDqdConstants :: [DefinedQuantityDict]
 
 module Drasil.PDController.TModel

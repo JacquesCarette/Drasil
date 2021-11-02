@@ -51,7 +51,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
@@ -65,7 +65,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-32"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
@@ -79,7 +79,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-33"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Output
@@ -88,7 +88,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Output
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-34"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
 forall a. a -&gt; Maybe a
@@ -99,7 +99,7 @@ forall a. a -&gt; Maybe a
 </span><span id="line-36"></span><span class="annot"><a href="Drasil.SglPendulum.IMods.html#angularDisplacementMK"><span class="hs-identifier hs-type">angularDisplacementMK</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelKind</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-37"></span><span id="angularDisplacementMK"><span class="annot"><span class="annottext">angularDisplacementMK :: ModelKind Expr
 </span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementMK"><span class="hs-identifier hs-var hs-var">angularDisplacementMK</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; QDefinition Expr -&gt; ModelKind Expr
-forall e. Express e =&gt; String -&gt; NP -&gt; QDefinition e -&gt; ModelKind e
+forall e. String -&gt; NP -&gt; QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel</span></span><span> </span><span class="annot"><span class="hs-string">&quot;angularDisplacementIM&quot;</span></span><span>
 </span><span id="line-38"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;calculation of angular displacement&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">QDefinition Expr
@@ -109,8 +109,7 @@ forall e. Express e =&gt; String -&gt; NP -&gt; QDefinition e -&gt; ModelKind e
 </span><span id="line-41"></span><span id="angularDisplacementFD"><span class="annot"><span class="annottext">angularDisplacementFD :: QDefinition Expr
 </span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementFD"><span class="hs-identifier hs-var hs-var">angularDisplacementFD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [UnitalChunk] -&gt; Expr -&gt; QDefinition Expr
 forall c i e.
-(Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i,
- Express e) =&gt;
+(Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) =&gt;
 c -&gt; [i] -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkFuncDefByQ</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span>
@@ -310,7 +309,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SglPendulum.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var">initialPendAngle</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;required&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence

@@ -17,6 +17,8 @@ digraph alltypes {
 	}
 	subgraph termodynamichs {
 	}
+	subgraph derivations {
+	}
 	subgraph pyicshs {
 	}
 	subgraph math {

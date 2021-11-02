@@ -13,7 +13,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span id="probConstr"><span class="annot"><span class="annottext">probConstr :: ConstraintE
 </span><a href="Data.Drasil.Constraints.html#probConstr"><span class="hs-identifier hs-var hs-var">probConstr</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
@@ -24,9 +24,9 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
 </span><span id="line-9"></span></pre></body></html>

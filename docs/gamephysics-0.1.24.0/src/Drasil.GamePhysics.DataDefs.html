@@ -64,9 +64,7 @@ forall a. Maybe a
 </span><span id="line-41"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMass"><span class="hs-identifier hs-type">ctrOfMass</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-42"></span><span id="ctrOfMass"><span class="annot"><span class="annottext">ctrOfMass :: ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMass"><span class="hs-identifier hs-var hs-var">ctrOfMass</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#posCM"><span class="hs-identifier hs-var">posCM</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#ctrOfMassEqn"><span class="hs-identifier hs-var">ctrOfMassEqn</span></a></span><span>
@@ -123,9 +121,7 @@ forall a. Maybe a
 </span><span id="line-69"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linDisp"><span class="hs-identifier hs-type">linDisp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-70"></span><span id="linDisp"><span class="annot"><span class="annottext">linDisp :: ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#linDisp"><span class="hs-identifier hs-var hs-var">linDisp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.linearDisplacement</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#dispEqn"><span class="hs-identifier hs-var">dispEqn</span></a></span><span>
@@ -176,9 +172,7 @@ forall a. Maybe a
 </span><span id="line-98"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linVel"><span class="hs-identifier hs-type">linVel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-99"></span><span id="linVel"><span class="annot"><span class="annottext">linVel :: ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#linVel"><span class="hs-identifier hs-var hs-var">linVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.linearVelocity</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#velEqn"><span class="hs-identifier hs-var">velEqn</span></a></span><span>
@@ -218,9 +212,7 @@ forall a. Maybe a
 </span><span id="line-116"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#linAcc"><span class="hs-identifier hs-type">linAcc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-117"></span><span id="linAcc"><span class="annot"><span class="annottext">linAcc :: ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#linAcc"><span class="hs-identifier hs-var hs-var">linAcc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.linearAccel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#accelEqn"><span class="hs-identifier hs-var">accelEqn</span></a></span><span>
@@ -260,9 +252,7 @@ forall a. Maybe a
 </span><span id="line-134"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angDisp"><span class="hs-identifier hs-type">angDisp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-135"></span><span id="angDisp"><span class="annot"><span class="annottext">angDisp :: ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#angDisp"><span class="hs-identifier hs-var hs-var">angDisp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.angularDisplacement</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#angDispEqn"><span class="hs-identifier hs-var">angDispEqn</span></a></span><span>
@@ -302,9 +292,7 @@ forall a. Maybe a
 </span><span id="line-152"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angVel"><span class="hs-identifier hs-type">angVel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-153"></span><span id="angVel"><span class="annot"><span class="annottext">angVel :: ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#angVel"><span class="hs-identifier hs-var hs-var">angVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.angularVelocity</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#angVelEqn"><span class="hs-identifier hs-var">angVelEqn</span></a></span><span>
@@ -344,9 +332,7 @@ forall a. Maybe a
 </span><span id="line-170"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#angAccel"><span class="hs-identifier hs-type">angAccel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-171"></span><span id="angAccel"><span class="annot"><span class="annottext">angAccel :: ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#angAccel"><span class="hs-identifier hs-var hs-var">angAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.angularAccel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#angAccelEqn"><span class="hs-identifier hs-var">angAccelEqn</span></a></span><span>
@@ -406,7 +392,7 @@ forall a. Maybe a
 </span><span id="line-198"></span><span id="chasles"><span class="annot"><span class="annottext">chasles :: SimpleQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#chasles"><span class="hs-identifier hs-var hs-var">chasles</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; SimpleQDef
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#velB"><span class="hs-identifier hs-var">velB</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -500,9 +486,7 @@ forall a. a -&gt; Maybe a
 </span><span id="line-217"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#impulseV"><span class="hs-identifier hs-type">impulseV</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-218"></span><span id="impulseV"><span class="annot"><span class="annottext">impulseV :: SimpleQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#impulseV"><span class="hs-identifier hs-var hs-var">impulseV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.impulseV</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GamePhysics.DataDefs.html#impulseVEqn"><span class="hs-identifier hs-var">impulseVEqn</span></a></span><span>
@@ -595,9 +579,7 @@ forall a. Maybe a
 </span><span id="line-248"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#reVelInColl"><span class="hs-identifier hs-type">reVelInColl</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-249"></span><span id="reVelInColl"><span class="annot"><span class="annottext">reVelInColl :: SimpleQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#reVelInColl"><span class="hs-identifier hs-var hs-var">reVelInColl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#initRelVel"><span class="hs-identifier hs-var">initRelVel</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GamePhysics.DataDefs.html#reVelInCollEqn"><span class="hs-identifier hs-var">reVelInCollEqn</span></a></span><span>
@@ -661,9 +643,7 @@ forall a. Maybe a
 </span><span id="line-268"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#coeffRestitution"><span class="hs-identifier hs-type">coeffRestitution</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-269"></span><span id="coeffRestitution"><span class="annot"><span class="annottext">coeffRestitution :: SimpleQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#coeffRestitution"><span class="hs-identifier hs-var hs-var">coeffRestitution</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><span class="hs-identifier hs-var">QP.restitutionCoef</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GamePhysics.DataDefs.html#coeffRestitutionEqn"><span class="hs-identifier hs-var">coeffRestitutionEqn</span></a></span><span>
@@ -721,7 +701,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">QP.restitutionCoef</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;results in an elastic collision&quot;</span></span><span class="hs-special">,</span><span>
@@ -732,7 +712,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">QP.restitutionCoef</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;results in an inelastic collision&quot;</span></span><span class="hs-special">,</span><span>
@@ -743,7 +723,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">QP.restitutionCoef</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;results in a totally inelastic collision&quot;</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
@@ -764,9 +744,7 @@ forall a. Maybe a
 </span><span id="line-288"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#kEnergy"><span class="hs-identifier hs-type">kEnergy</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-289"></span><span id="kEnergy"><span class="annot"><span class="annottext">kEnergy :: SimpleQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#kEnergy"><span class="hs-identifier hs-var hs-var">kEnergy</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.kEnergy</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GamePhysics.DataDefs.html#kEnergyEqn"><span class="hs-identifier hs-var">kEnergyEqn</span></a></span><span>
@@ -779,9 +757,9 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">QPP.mass</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -817,9 +795,7 @@ forall a. Maybe a
 </span><span id="line-302"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertia"><span class="hs-identifier hs-type">momentOfInertia</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-303"></span><span id="momentOfInertia"><span class="annot"><span class="annottext">momentOfInertia :: ModelQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertia"><span class="hs-identifier hs-var hs-var">momentOfInertia</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; ModelQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.momentOfInertia</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.GamePhysics.DataDefs.html#momentOfInertiaEqn"><span class="hs-identifier hs-var">momentOfInertiaEqn</span></a></span><span>
@@ -837,7 +813,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.GamePhysics.Unitals.html#massj"><span class="hs-identifier hs-var">massj</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -877,9 +853,7 @@ forall a. Maybe a
 </span><span id="line-319"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#potEnergy"><span class="hs-identifier hs-type">potEnergy</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-320"></span><span id="potEnergy"><span class="annot"><span class="annottext">potEnergy :: SimpleQDef
 </span><a href="Drasil.GamePhysics.DataDefs.html#potEnergy"><span class="hs-identifier hs-var hs-var">potEnergy</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
-c -&gt; e -&gt; QDefinition e
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.potEnergy</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GamePhysics.DataDefs.html#potEnergyEqn"><span class="hs-identifier hs-var">potEnergyEqn</span></a></span><span>

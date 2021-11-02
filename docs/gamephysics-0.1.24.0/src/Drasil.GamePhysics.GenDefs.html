@@ -83,7 +83,7 @@ ModelKind ModelExpr
 -&gt; [Sentence]
 -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; QDefinition e -&gt; ModelKind e
+forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.GamePhysics.GenDefs.html#accelGravityQD"><span class="hs-identifier hs-var">accelGravityQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
@@ -104,7 +104,7 @@ r -&gt; DecRef
 </span><span id="line-69"></span><span id="accelGravityQD"><span class="annot"><span class="annottext">accelGravityQD :: QDefinition ModelExpr
 </span><a href="Drasil.GamePhysics.GenDefs.html#accelGravityQD"><span class="hs-identifier hs-var hs-var">accelGravityQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.gravitationalAccel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -152,7 +152,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span>
 </span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -189,7 +189,7 @@ forall a. [[a]] -&gt; [a]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-forall r. ExprC r =&gt; [r]
+forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivEqns"><span class="hs-identifier hs-var">accelGravityDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-88"></span><span>
 </span><span id="line-89"></span><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivSentences"><span class="hs-identifier hs-type">accelGravityDerivSentences</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
@@ -484,7 +484,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#dVect"><span class="hs-identifier hs-var">dVect</span></a></span><span>
 </span><span id="line-139"></span><span>
-</span><span id="line-140"></span><span id="local-6989586621679090205"><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivEqns"><span class="hs-identifier hs-type">accelGravityDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679090205"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679090205"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-140"></span><span id="local-6989586621679090292"><span class="annot"><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivEqns"><span class="hs-identifier hs-type">accelGravityDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679090292"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679090292"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679090292"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-141"></span><span id="accelGravityDerivEqns"><span class="annot"><span class="annottext">accelGravityDerivEqns :: [r]
 </span><a href="Drasil.GamePhysics.GenDefs.html#accelGravityDerivEqns"><span class="hs-identifier hs-var hs-var">accelGravityDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -522,7 +522,7 @@ ModelKind ModelExpr
 -&gt; [Sentence]
 -&gt; GenDefn
 </span><span class="hs-identifier hs-var">gd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition ModelExpr -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; QDefinition e -&gt; ModelKind e
+forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.GamePhysics.GenDefs.html#impulseQD"><span class="hs-identifier hs-var">impulseQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
@@ -544,7 +544,7 @@ r -&gt; DecRef
 </span><span id="line-153"></span><span id="impulseQD"><span class="annot"><span class="annottext">impulseQD :: QDefinition ModelExpr
 </span><a href="Drasil.GamePhysics.GenDefs.html#impulseQD"><span class="hs-identifier hs-var hs-var">impulseQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e.
-(Quantity c, MayHaveUnit c, Express e) =&gt;
+(Quantity c, MayHaveUnit c) =&gt;
 c -&gt; NP -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.impulseS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -557,7 +557,7 @@ PExpr
 </span><a href="Drasil.GamePhysics.GenDefs.html#impulseExpr"><span class="hs-identifier hs-var hs-var">impulseExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; r
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
@@ -577,14 +577,14 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.GamePhysics.Unitals.html#normalVect"><span class="hs-identifier hs-var">normalVect</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GamePhysics.Unitals.html#massA"><span class="hs-identifier hs-var">massA</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -592,7 +592,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span>
 </span><span id="line-158"></span><span>  </span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -600,7 +600,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span>
 </span><span id="line-159"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -613,7 +613,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span>
 </span><span id="line-160"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r -&gt; r
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk

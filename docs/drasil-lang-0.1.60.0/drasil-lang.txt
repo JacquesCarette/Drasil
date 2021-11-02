@@ -9,6 +9,14 @@
 @package drasil-lang
 @version 0.1.60.0
 
+module Language.Drasil.Literal.Development
+data Literal
+[Int] :: Integer -> Literal
+[Str] :: String -> Literal
+[Dbl] :: Double -> Literal
+[ExactDbl] :: Integer -> Literal
+[Perc] :: Integer -> Integer -> Literal
+
 
 -- | Re-export functions and types related to <a>ModelExpr</a>
 module Language.Drasil.ModelExpr.Development
@@ -16,23 +24,11 @@ module Language.Drasil.ModelExpr.Development
 -- | Drasil expressions.
 data ModelExpr
 
--- | Turns a decimal value (<a>Double</a>) into an expression.
-[Dbl] :: Double -> ModelExpr
-
--- | Turns an integer into an expression.
-[Int] :: Integer -> ModelExpr
-
--- | Represents decimal values that are exact as integers.
-[ExactDbl] :: Integer -> ModelExpr
-
--- | Turns a string into an expression.
-[Str] :: String -> ModelExpr
+-- | Brings a literal into the expression language.
+[Lit] :: Literal -> ModelExpr
 
 -- | Introduce Space values into the expression language.
 [Spc] :: Space -> ModelExpr
-
--- | Turns two integers into a fraction (or percent).
-[Perc] :: Integer -> Integer -> ModelExpr
 
 -- | Takes an associative arithmetic operator with a list of expressions.
 [AssocA] :: AssocArithOper -> [ModelExpr] -> ModelExpr
@@ -242,20 +238,8 @@ module Language.Drasil.Expr.Development
 -- | Drasil expressions.
 data Expr
 
--- | Turns a decimal value (<a>Double</a>) into an expression.
-[Dbl] :: Double -> Expr
-
--- | Turns an integer into an expression.
-[Int] :: Integer -> Expr
-
--- | Represents decimal values that are exact as integers.
-[ExactDbl] :: Integer -> Expr
-
--- | Turns a string into an expression.
-[Str] :: String -> Expr
-
--- | Turns two integers into a fraction (or percent).
-[Perc] :: Integer -> Integer -> Expr
+-- | Brings a literal into the expression language.
+[Lit] :: Literal -> Expr
 
 -- | Takes an associative arithmetic operator with a list of expressions.
 [AssocA] :: AssocArithOper -> [Expr] -> Expr
@@ -1023,6 +1007,7 @@ module Language.Drasil
 -- | Drasil expressions.
 data Expr
 class ExprC r
+lit :: ExprC r => Literal -> r
 ($=) :: ExprC r => r -> r -> r
 ($!=) :: ExprC r => r -> r -> r
 
@@ -1120,21 +1105,6 @@ not_ :: ExprC r => r -> r
 -- | Smart constructor for indexing.
 idx :: ExprC r => r -> r -> r
 
--- | Smart constructor for integers.
-int :: ExprC r => Integer -> r
-
--- | Smart constructor for doubles.
-dbl :: ExprC r => Double -> r
-
--- | Smart constructor for exact doubles.
-exactDbl :: ExprC r => Integer -> r
-
--- | Smart constructor for strings.
-str :: ExprC r => String -> r
-
--- | Smart constructors for percents.
-perc :: ExprC r => Integer -> Integer -> r
-
 -- | Smart constructor for the summation, product, and integral functions
 --   over an interval.
 defint :: ExprC r => Symbol -> r -> r -> r -> r
@@ -1201,22 +1171,22 @@ infixr 9 $&&
 infixr 9 $||
 
 -- | Smart constructor for fractions.
-frac :: ExprC r => Integer -> Integer -> r
+frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
 
 -- | Smart constructor for rational expressions (only in 1/x form).
-recip_ :: ExprC r => r -> r
+recip_ :: (ExprC r, LiteralC r) => r -> r
 
 -- | Smart constructor to square a function.
-square :: ExprC r => r -> r
+square :: (ExprC r, LiteralC r) => r -> r
 
 -- | Smart constructor to half a function exactly.
-half :: ExprC r => r -> r
+half :: (ExprC r, LiteralC r) => r -> r
 
 -- | 1/2, as an expression.
-oneHalf :: ExprC r => r
+oneHalf :: (ExprC r, LiteralC r) => r
 
 -- | 1/3rd, as an expression.
-oneThird :: ExprC r => r
+oneThird :: (ExprC r, LiteralC r) => r
 
 -- | Similar to <a>apply</a>, but converts second argument into
 --   <a>Symbol</a>s.
@@ -1231,6 +1201,13 @@ data Completeness
 
 -- | A relation is just an expression (<a>Expr</a>).
 type Relation = Expr
+data Literal
+class LiteralC r
+int :: LiteralC r => Integer -> r
+str :: LiteralC r => String -> r
+dbl :: LiteralC r => Double -> r
+exactDbl :: LiteralC r => Integer -> r
+perc :: LiteralC r => Integer -> Integer -> r
 
 -- | Drasil expressions.
 data ModelExpr
@@ -1395,7 +1372,7 @@ getUnits :: IsUnit u => u -> [UID]
 class DefiningExpr c
 
 -- | Provides a <tt>Lens</tt> to the expression.
-defnExpr :: (DefiningExpr c, Express e) => Lens' (c e) e
+defnExpr :: DefiningExpr c => Lens' (c e) e
 
 -- | Data that can be expressed using <a>ModelExpr</a>.
 class Express c
@@ -1682,47 +1659,47 @@ data QDefinition e
 -- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>String</a>),
 --   term (<a>NP</a>), definition (<a>Sentence</a>), <a>Symbol</a>,
 --   <a>Space</a>, unit, and defining expression.
-fromEqn :: (Express e, IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
+fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
 
 -- | Same as <a>fromEqn</a>, but has no units.
-fromEqn' :: Express e => String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage.
-fromEqnSt :: (Express e, IsUnit u) => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> e -> QDefinition e
+fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> e -> QDefinition e
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage and has no units.
-fromEqnSt' :: Express e => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
+fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 
 -- | Same as <a>fromEqnSt'</a>, but takes a <a>String</a> instead of a
 --   <a>UID</a>.
-fromEqnSt'' :: Express e => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
+fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
-mkQDefSt :: Express e => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> e -> QDefinition e
+mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> e -> QDefinition e
 
 -- | Used to help make <a>QDefinition</a>s when <a>UID</a>, term, and
 --   <a>Symbol</a> come from the same source.
-mkQuantDef :: (Quantity c, MayHaveUnit c, Express e) => c -> e -> QDefinition e
+mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
 
 -- | Used to help make <a>QDefinition</a>s when <a>UID</a> and
 --   <a>Symbol</a> come from the same source, with the term separate.
-mkQuantDef' :: (Quantity c, MayHaveUnit c, Express e) => c -> NP -> e -> QDefinition e
+mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its
 --   defining equation.
-ec :: (Quantity c, MayHaveUnit c, Express e) => c -> e -> QDefinition e
+ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
 
 -- | Create a <a>QDefinition</a> function with a symbol, name, term, list
 --   of inputs, resultant units, and a defining Expr
-mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, IsUnit u, Express e) => f -> NP -> Sentence -> u -> [i] -> e -> QDefinition e
+mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, IsUnit u) => f -> NP -> Sentence -> u -> [i] -> e -> QDefinition e
 
 -- | Create a <a>QDefinition</a> function with a symbol, name, term, list
 --   of inputs, and a defining Expr
-mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, Express e) => f -> NP -> Sentence -> [i] -> e -> QDefinition e
+mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i) => f -> NP -> Sentence -> [i] -> e -> QDefinition e
 
 -- | Create a <a>QDefinition</a> functions using a symbol, list of inputs,
 --   and a defining Expr
-mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i, Express e) => c -> [i] -> e -> QDefinition e
+mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> e -> QDefinition e
 
 -- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit.
 class (Quantity c) => Unitary c
@@ -3212,6 +3189,9 @@ label :: String -> Symbol
 -- | Variable smart constructor, requires non-empty variables
 variable :: String -> Symbol
 
+-- | Commonly used type for QDefinitions containing Literals.
+type ConstQDef = QDefinition Literal
+
 -- | Commonly used type for QDefinitions containing Exprs.
 type SimpleQDef = QDefinition Expr
 
@@ -3219,4 +3199,4 @@ type SimpleQDef = QDefinition Expr
 type ModelQDef = QDefinition ModelExpr
 
 -- | Commonly used type for polymorphic Exprs.
-type PExpr = forall r. ExprC r => r
+type PExpr = forall r. (ExprC r, LiteralC r) => r

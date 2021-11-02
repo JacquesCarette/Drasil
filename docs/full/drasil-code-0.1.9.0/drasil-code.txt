@@ -561,7 +561,7 @@ qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q) => q Expr -> C
 
 -- | Constructs a <a>CodeDefinition</a> where the underlying
 --   <a>CodeChunk</a> is for a variable.
-qtov :: SimpleQDef -> CodeDefinition
+qtov :: CanGenCode e => QDefinition e -> CodeDefinition
 
 -- | Constructs a <a>CodeDefinition</a> for an ODE.
 odeDef :: ODEInfo -> CodeDefinition

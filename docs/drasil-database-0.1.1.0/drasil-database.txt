@@ -159,7 +159,7 @@ vars :: ModelExpr -> ChunkDB -> [QuantityDict]
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => {_sys :: a, _kind :: b, _authors :: [c], _purpose :: d, _quants :: [e], _concepts :: [f], _instModels :: [InstanceModel], _datadefs :: [DataDefinition], _configFiles :: [String], _inputs :: [h], _outputs :: [i], _defSequence :: [Block SimpleQDef], _constraints :: [j], _constants :: [SimpleQDef], _sysinfodb :: ChunkDB, _usedinfodb :: ChunkDB, refdb :: ReferenceDB} -> SystemInformation
+[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => {_sys :: a, _kind :: b, _authors :: [c], _purpose :: d, _quants :: [e], _concepts :: [f], _instModels :: [InstanceModel], _datadefs :: [DataDefinition], _configFiles :: [String], _inputs :: [h], _outputs :: [i], _defSequence :: [Block SimpleQDef], _constraints :: [j], _constants :: [ConstQDef], _sysinfodb :: ChunkDB, _usedinfodb :: ChunkDB, refdb :: ReferenceDB} -> SystemInformation
 
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a

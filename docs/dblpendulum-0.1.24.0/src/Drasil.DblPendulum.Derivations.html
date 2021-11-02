@@ -26,9 +26,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionGQD"><span class="hs-identifier hs-var">positionGQD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelQDef -&gt; Getting ModelExpr ModelQDef ModelExpr -&gt; ModelExpr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ModelExpr ModelQDef ModelExpr
-forall (c :: * -&gt; *) e.
-(DefiningExpr c, Express e) =&gt;
-Lens' (c e) e
+forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span>
 </span><span id="line-20"></span><span id="velXDerivEqn2_1"><span class="annot"><span class="annottext">velXDerivEqn2_1 :: ModelExpr
 </span><a href="Drasil.DblPendulum.Derivations.html#velXDerivEqn2_1"><span class="hs-identifier hs-var hs-var">velXDerivEqn2_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
@@ -85,9 +83,7 @@ forall c. Express c =&gt; c -&gt; ModelExpr
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionYQD_1"><span class="hs-identifier hs-var">positionYQD_1</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Getting Expr SimpleQDef Expr -&gt; Expr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr SimpleQDef Expr
-forall (c :: * -&gt; *) e.
-(DefiningExpr c, Express e) =&gt;
-Lens' (c e) e
+forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">)</span><span>
 </span><span id="line-26"></span><span id="velYDerivEqn3_1"><span class="annot"><span class="annottext">velYDerivEqn3_1 :: ModelExpr
 </span><a href="Drasil.DblPendulum.Derivations.html#velYDerivEqn3_1"><span class="hs-identifier hs-var hs-var">velYDerivEqn3_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
@@ -148,9 +144,7 @@ forall c. Express c =&gt; c -&gt; ModelExpr
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionXQD_2"><span class="hs-identifier hs-var">positionXQD_2</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Getting Expr SimpleQDef Expr -&gt; Expr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr SimpleQDef Expr
-forall (c :: * -&gt; *) e.
-(DefiningExpr c, Express e) =&gt;
-Lens' (c e) e
+forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">)</span><span>
 </span><span id="line-32"></span><span id="velXDerivEqn3_2"><span class="annot"><span class="annottext">velXDerivEqn3_2 :: ModelExpr
 </span><a href="Drasil.DblPendulum.Derivations.html#velXDerivEqn3_2"><span class="hs-identifier hs-var hs-var">velXDerivEqn3_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
@@ -178,9 +172,7 @@ forall c. Express c =&gt; c -&gt; ModelExpr
 </span><a href="Drasil.DblPendulum.DataDefs.html#positionYQD_2"><span class="hs-identifier hs-var">positionYQD_2</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; Getting Expr SimpleQDef Expr -&gt; Expr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr SimpleQDef Expr
-forall (c :: * -&gt; *) e.
-(DefiningExpr c, Express e) =&gt;
-Lens' (c e) e
+forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">)</span><span>
 </span><span id="line-36"></span><span id="velYDerivEqn3_2"><span class="annot"><span class="annottext">velYDerivEqn3_2 :: ModelExpr
 </span><a href="Drasil.DblPendulum.Derivations.html#velYDerivEqn3_2"><span class="hs-identifier hs-var hs-var">velYDerivEqn3_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
@@ -210,9 +202,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><a href="Drasil.DblPendulum.DataDefs.html#accelGQD"><span class="hs-identifier hs-var">accelGQD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelQDef -&gt; Getting ModelExpr ModelQDef ModelExpr -&gt; ModelExpr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ModelExpr ModelQDef ModelExpr
-forall (c :: * -&gt; *) e.
-(DefiningExpr c, Express e) =&gt;
-Lens' (c e) e
+forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span>
 </span><span id="line-42"></span><span id="accelXDerivEqn3_1"><span class="annot"><span class="annottext">accelXDerivEqn3_1 :: ModelExpr
 </span><a href="Drasil.DblPendulum.Derivations.html#accelXDerivEqn3_1"><span class="hs-identifier hs-var hs-var">accelXDerivEqn3_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr

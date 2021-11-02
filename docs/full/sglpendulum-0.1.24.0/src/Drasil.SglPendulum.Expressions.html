@@ -52,7 +52,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SglPendulum.Expressions.html#accelerationIXExpr"><span class="hs-identifier hs-var hs-var">accelerationIXExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -89,7 +89,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-21"></span><span id="accelerationIYExpr"><span class="annot"><span class="annottext">accelerationIYExpr :: Expr
 </span><a href="Drasil.SglPendulum.Expressions.html#accelerationIYExpr"><span class="hs-identifier hs-var hs-var">accelerationIYExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -206,7 +206,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-39"></span><span class="annot"><a href="Drasil.SglPendulum.Expressions.html#periodPendExpr"><span class="hs-identifier hs-type">periodPendExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-40"></span><span id="periodPendExpr"><span class="annot"><span class="annottext">periodPendExpr :: Expr
 </span><a href="Drasil.SglPendulum.Expressions.html#periodPendExpr"><span class="hs-identifier hs-var hs-var">periodPendExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr

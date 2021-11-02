@@ -1,9 +1,7 @@
 digraph expr{
 Expr	[shape=oval, color=darkviolet, label="Expr"];
-Expr -> Double;
+Expr -> Literal;
 Expr -> Expr;
-Expr -> Integer;
-Expr -> String;
 Expr -> AssocArithOper;
 Expr -> AssocBoolOper;
 Expr -> UID;

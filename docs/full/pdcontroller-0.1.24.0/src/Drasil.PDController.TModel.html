@@ -48,7 +48,7 @@ ModelKind ModelExpr
 -&gt; [Sentence]
 -&gt; TheoryModel
 </span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; RelationConcept -&gt; ModelKind e
+forall e. RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
 </span><a href="Drasil.PDController.TModel.html#laplaceRC"><span class="hs-identifier hs-var">laplaceRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-24"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict -&gt; QuantityDict
@@ -193,7 +193,7 @@ ModelKind ModelExpr
 -&gt; [Sentence]
 -&gt; TheoryModel
 </span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; RelationConcept -&gt; ModelKind e
+forall e. RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
 </span><a href="Drasil.PDController.TModel.html#invlaplaceRC"><span class="hs-identifier hs-var">invlaplaceRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-56"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict -&gt; QuantityDict
@@ -302,7 +302,7 @@ ModelKind ModelExpr
 -&gt; [Sentence]
 -&gt; TheoryModel
 </span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
-forall e. Express e =&gt; RelationConcept -&gt; ModelKind e
+forall e. RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
 </span><a href="Drasil.PDController.TModel.html#tmSOSystemRC"><span class="hs-identifier hs-var">tmSOSystemRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-86"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
@@ -352,7 +352,7 @@ String -&gt; NP -&gt; Sentence -&gt; e -&gt; RelationConcept
 </span><span id="line-101"></span><span id="soSystemRel"><span class="annot"><span class="annottext">soSystemRel :: Relation
 </span><a href="Drasil.PDController.TModel.html#soSystemRel"><span class="hs-identifier hs-var hs-var">soSystemRel</span></a></span></span><span>
 </span><span id="line-102"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Relation
-forall r. ExprC r =&gt; Integer -&gt; r
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span>
 </span><span id="line-103"></span><span>    </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -362,7 +362,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">mass</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation
-forall r. ExprC r =&gt; r -&gt; r
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Relation
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict

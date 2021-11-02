@@ -1,5 +1,5 @@
 digraph pexpr{
 PExpr	[shape=oval, color=red2, label="PExpr"];
-PExpr -> ExprCr;
+PExpr -> ExprCrLiteralCr;
 PExpr -> r;
 }

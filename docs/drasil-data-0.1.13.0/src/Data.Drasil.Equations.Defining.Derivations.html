@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Equations.Defining.Derivations</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ExprC</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">LiteralC</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ModelExpr</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Math.html"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.Math.html#unitVectj"><span class="hs-identifier">unitVectj</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier">acceleration</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier">gravitationalAccel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier">weight</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QPP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#density"><span class="hs-identifier">density</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier">mass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier">specWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier">vol</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- * Weight equation derivation</span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivAccelEqn"><span class="hs-identifier hs-type">weightDerivAccelEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivNewtonEqn"><span class="hs-identifier hs-type">weightDerivNewtonEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivReplaceMassEqn"><span class="hs-identifier hs-type">weightDerivReplaceMassEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivSpecWeightEqn"><span class="hs-identifier hs-type">weightDerivSpecWeightEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-11"></span><span id="weightDerivNewtonEqn"><span class="annot"><span class="annottext">weightDerivNewtonEqn :: ModelExpr
+</span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivNewtonEqn"><span class="hs-identifier hs-var hs-var">weightDerivNewtonEqn</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier hs-var">QPP.mass</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span id="weightDerivReplaceMassEqn"><span class="annot"><span class="annottext">weightDerivReplaceMassEqn :: ModelExpr
+</span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivReplaceMassEqn"><span class="hs-identifier hs-var hs-var">weightDerivReplaceMassEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#density"><span class="hs-identifier hs-var">QPP.density</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier hs-var">QPP.vol</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span id="weightDerivSpecWeightEqn"><span class="annot"><span class="annottext">weightDerivSpecWeightEqn :: ModelExpr
+</span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivSpecWeightEqn"><span class="hs-identifier hs-var hs-var">weightDerivSpecWeightEqn</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier hs-var">QPP.vol</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier hs-var">QPP.specWeight</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span id="weightDerivAccelEqn"><span class="annot"><span class="annottext">weightDerivAccelEqn :: ModelExpr
+</span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivAccelEqn"><span class="hs-identifier hs-var hs-var">weightDerivAccelEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-var">QP.acceleration</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">vec2D</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
+forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Data.Drasil.Quantities.Math.html#unitVectj"><span class="hs-identifier hs-var">QM.unitVectj</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span></pre></body></html>

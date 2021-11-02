@@ -990,6 +990,9 @@ defaultConfiguration :: PrintingConfiguration
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingInformation
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingConfiguration
 
+module Language.Drasil.Printing.Import.Literal
+literal :: Literal -> PrintingInformation -> Expr
+
 
 -- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr
@@ -1142,6 +1145,7 @@ expr :: Expr -> PrintingInformation -> Expr
 
 -- | Translate <a>CodeExpr</a>s to printable layout AST <tt>Expr</tt>s.
 codeExpr :: CodeExpr -> PrintingInformation -> Expr
+literal :: Literal -> PrintingInformation -> Expr
 
 -- | Translate Exprs to printable layout AST.
 modelExpr :: ModelExpr -> PrintingInformation -> Expr

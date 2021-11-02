@@ -58,7 +58,7 @@ eBalanceOnWtrRC =
     (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water") 
     (tempW ^. defn) 
       where c = balWtrExpr
-            coe = [exactDbl 1, exactDbl 0]
+            coe = [Just (exactDbl 1), Nothing]
 
 balWtrExpr :: PExpr
 balWtrExpr = recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time)

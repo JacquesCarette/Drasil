@@ -43,7 +43,9 @@ imPDRC
       (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
         where c = neg (sy qdSetPointTD) `mulRe` sy qdPropGain
-              coe = [exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]
+              coe = [Just (exactDbl 1), 
+                     Just (exactDbl 1 `addRe` sy qdDerivGain), 
+                     Just (exactDbl 20 `addRe` sy qdPropGain)]
 
 imDeriv :: Derivation
 imDeriv

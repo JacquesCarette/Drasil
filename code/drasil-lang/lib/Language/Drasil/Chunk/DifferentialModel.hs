@@ -19,6 +19,7 @@ import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
 import Language.Drasil.Expr.Class (ExprC(mulRe, addRe, exactDbl, sy))
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
+import Data.Maybe (isJust, fromJust)
 
 {-
   checked 1 how to build the coefficients 
@@ -39,7 +40,7 @@ import Language.Drasil.Chunk.Quantity (qw)
 data DifferentialModel = Linear {
                                   _indepVar :: UnitalChunk, -- often time
                                   _depVar :: ConstrConcept, -- opProcessVariable in PDController
-                                  _coefficients :: [Expr],
+                                  _coefficients :: [Maybe Expr],
                                   _constant :: Expr,
                                   _conc :: ConceptChunk
                                 }
@@ -66,18 +67,25 @@ instance Express       DifferentialModel where express d = formStdODE d
 formStdODE :: DifferentialModel -> ModelExpr
 formStdODE d = equiv $ (addCoes d `addRe` express (d ^. constant)) : [exactDbl 0]
 
+-- | Construct a form of ODE with constant on the rhs
 formConODE :: DifferentialModel -> ModelExpr
 formConODE d = equiv $ addCoes d : [express (d ^. constant)] 
 
+{-
+  orderList is a list contain the highest order to zero oder
+  First zip coefficients with orderList -> filter Nothing ->
+  combine tuple to ModelExpr in the map -> add list ModelExpr
+-}
 addCoes :: DifferentialModel -> ModelExpr
 addCoes d = foldr1 addRe (
-                          zipWith mulRe (map express (d ^.coefficients))
-                                        [nthderiv (toInteger n) (sy (qw (d ^. depVar))) (d ^. indepVar)
-                                        | n <- reverse [0..(length (d ^. coefficients) - 1)]]
+                          map (\x -> express (fromJust(fst x)) `mulRe` snd x)
+                            (filter (isJust.fst) (zip (d ^.coefficients) orderList))
                           )
+            where orderList = [nthderiv (toInteger n) (sy (qw (d ^. depVar))) (d ^. indepVar)
+                              | n <- reverse [0..(length (d ^. coefficients) - 1)]]
 
 -- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), DepVar ('ModelExpr'),
 -- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').
-makeLinear :: UnitalChunk -> ConstrConcept -> [Expr] -> Expr -> String -> NP -> Sentence -> DifferentialModel
+makeLinear :: UnitalChunk -> ConstrConcept -> [Maybe Expr] -> Expr -> String -> NP -> Sentence -> DifferentialModel
 makeLinear dmIndepVar dmDepVar dmCoeff dmConst dmID dmTerm dmDefn =
   Linear dmIndepVar dmDepVar dmCoeff dmConst (dccWDS dmID dmTerm dmDefn)

@@ -153,10 +153,6 @@ bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 weave :: [[a]] -> [a]
 weave = concat . transpose
 
--- | Interweaves two lists together with new line in between.
---weave' :: [[a]] -> [a]
---weave' a = intercalate "\n" (transpose a)
-
 -- | Get a unit symbol if there is one.
 unwrap :: Maybe UnitDefn -> Sentence
 unwrap (Just a) = Sy $ usymb a

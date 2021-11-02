@@ -31,11 +31,11 @@ import qualified Language.Drasil.Development as D (uid)
 --     * 'FunctionalModel's represent quantity-resulting function definitions.
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds e where
-  DEModel               :: Express e => RelationConcept -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
-  EquationalConstraints :: Express e => ConstraintSet e -> ModelKinds e
-  EquationalModel       :: Express e => QDefinition e   -> ModelKinds e
-  EquationalRealm       :: Express e => MultiDefn e     -> ModelKinds e
-  OthModel              :: Express e => RelationConcept -> ModelKinds e -- TODO: Remove (after having removed all instances of it).
+  DEModel               :: RelationConcept -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
+  EquationalConstraints :: ConstraintSet e -> ModelKinds e
+  EquationalModel       :: QDefinition e   -> ModelKinds e
+  EquationalRealm       :: MultiDefn e     -> ModelKinds e
+  OthModel              :: RelationConcept -> ModelKinds e -- TODO: Remove (after having removed all instances of it).
 
 -- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
 data ModelKind e = MK {
@@ -47,51 +47,51 @@ data ModelKind e = MK {
 makeLenses ''ModelKind
 
 -- | Smart constructor for 'DEModel's
-deModel :: Express e => String -> NP -> RelationConcept -> ModelKind e
+deModel :: String -> NP -> RelationConcept -> ModelKind e
 deModel u n rc = MK (DEModel rc) (D.uid u) n
 
 -- | Smart constructor for 'DEModel's, deriving UID+Term from the 'RelationConcept'
-deModel' :: Express e => RelationConcept -> ModelKind e
+deModel' :: RelationConcept -> ModelKind e
 deModel' rc = MK (DEModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'
-equationalConstraints :: Express e => String -> NP -> ConstraintSet e -> ModelKind e
+equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
 equationalConstraints u n qs = MK (EquationalConstraints qs) (D.uid u) n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
-equationalConstraints' :: Express e => ConstraintSet e -> ModelKind e
+equationalConstraints' :: ConstraintSet e -> ModelKind e
 equationalConstraints' qs = MK (EquationalConstraints qs) (qs ^. uid) (qs ^. term)
 
 -- | Smart constructor for 'EquationalModel's
-equationalModel :: Express e => String -> NP -> QDefinition e -> ModelKind e
+equationalModel :: String -> NP -> QDefinition e -> ModelKind e
 equationalModel u n qd = MK (EquationalModel qd) (D.uid u) n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
-equationalModel' :: Express e => QDefinition e -> ModelKind e
+equationalModel' :: QDefinition e -> ModelKind e
 equationalModel' qd = MK (EquationalModel qd) (qd ^. uid) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving Term from the 'QDefinition'
-equationalModelU :: Express e => String -> QDefinition e -> ModelKind e
+equationalModelU :: String -> QDefinition e -> ModelKind e
 equationalModelU u qd = MK (EquationalModel qd) (D.uid u) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving UID from the 'QDefinition'
-equationalModelN :: Express e => NP -> QDefinition e -> ModelKind e
+equationalModelN :: NP -> QDefinition e -> ModelKind e
 equationalModelN n qd = MK (EquationalModel qd) (qd ^. uid) n
 
 -- | Smart constructor for 'EquationalRealm's
-equationalRealm :: Express e => String -> NP -> MultiDefn e -> ModelKind e
+equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 equationalRealm u n md = MK (EquationalRealm md) (D.uid u) n
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
-equationalRealm' :: Express e => MultiDefn e -> ModelKind e
+equationalRealm' :: MultiDefn e -> ModelKind e
 equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's
-equationalRealmU :: Express e => String -> MultiDefn e -> ModelKind e
+equationalRealmU :: String -> MultiDefn e -> ModelKind e
 equationalRealmU u md = MK (EquationalRealm md) (D.uid u) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID from the 'MultiDefn'
-equationalRealmN :: Express e => NP -> MultiDefn e -> ModelKind e
+equationalRealmN :: NP -> MultiDefn e -> ModelKind e
 equationalRealmN n md = MK (EquationalRealm md) (md ^. uid) n
 
 -- | Smart constructor for 'OthModel's
@@ -99,7 +99,7 @@ othModel :: String -> NP -> RelationConcept -> ModelKind Expr
 othModel u n rc = MK (OthModel rc) (D.uid u) n
 
 -- | Smart constructor for 'OthModel's, deriving UID+Term from the 'RelationConcept'
-othModel' :: Express e => RelationConcept -> ModelKind e
+othModel' :: RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Finds the 'UID' of the 'ModelKinds'.
@@ -111,9 +111,10 @@ instance Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
 instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
-instance Express e => ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
+instance ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
 -- | Rewrites the underlying model using 'ModelExpr'
-instance Express e => Express       (ModelKinds e) where express = elimMk (to express) (to express) (to express) (to express)
+instance Express e => Express (ModelKinds e) where
+  express = elimMk (to express) (to express) (to express) (to express)
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
@@ -126,9 +127,10 @@ instance Idea          (ModelKind e) where getA    = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
 instance Definition    (ModelKind e) where defn    = mk . defn
 -- | Finds the domain of the 'ModelKind'.
-instance Express e => ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
+instance ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
 -- | Rewrites the underlying model using 'ModelExpr'
-instance Express e => Express       (ModelKind e) where express = express . (^. mk)
+instance Express e => Express (ModelKind e) where
+  express = express . (^. mk)
 
 
 -- | Retrieve internal data from ModelKinds

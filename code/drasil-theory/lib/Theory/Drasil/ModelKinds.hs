@@ -103,13 +103,13 @@ othModel' :: Express e => RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Finds the 'UID' of the 'ModelKinds'.
-instance Express e => HasUID        (ModelKinds e) where uid     = lensMk uid uid uid uid
+instance HasUID        (ModelKinds e) where uid     = lensMk uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
-instance Express e => NamedIdea     (ModelKinds e) where term    = lensMk term term term term
+instance NamedIdea     (ModelKinds e) where term    = lensMk term term term term
 -- | Finds the idea of the 'ModelKinds'.
-instance Express e => Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA)
+instance Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
-instance Express e => Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn
+instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
 instance Express e => ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
 -- | Rewrites the underlying model using 'ModelExpr'
@@ -122,9 +122,9 @@ instance HasUID        (ModelKind e) where uid     = mkUid
 -- | Finds the term ('NP') of the 'ModelKind'.
 instance NamedIdea     (ModelKind e) where term    = mkTerm
 -- | Finds the idea of the 'ModelKind'.
-instance Express e => Idea          (ModelKind e) where getA    = getA . (^. mk)
+instance Idea          (ModelKind e) where getA    = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
-instance Express e => Definition    (ModelKind e) where defn    = mk . defn
+instance Definition    (ModelKind e) where defn    = mk . defn
 -- | Finds the domain of the 'ModelKind'.
 instance Express e => ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
 -- | Rewrites the underlying model using 'ModelExpr'

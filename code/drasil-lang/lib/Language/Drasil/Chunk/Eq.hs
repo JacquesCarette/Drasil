@@ -32,28 +32,27 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)
 
 data QDefinition e where
-  QD :: Express e => DefinedQuantityDict -> [UID] -> e -> QDefinition e
+  QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
 
-qdQua :: Express e => Lens' (QDefinition e) DefinedQuantityDict
+qdQua :: Lens' (QDefinition e) DefinedQuantityDict
 qdQua = lens (\(QD qua _ _) -> qua) (\(QD _ ins e) qua' -> QD qua' ins e)
 
-qdInputs :: Express e => Lens' (QDefinition e) [UID]
+qdInputs :: Lens' (QDefinition e) [UID]
 qdInputs = lens (\(QD _ ins _) -> ins) (\(QD qua _ e) ins' -> QD qua ins' e)
 
-qdExpr :: Express e => Lens' (QDefinition e) e
+qdExpr :: Lens' (QDefinition e) e
 qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
 
-instance Express e => HasUID        (QDefinition e) where uid = qdQua . uid
-instance Express e => NamedIdea     (QDefinition e) where term = qdQua . term
-instance Express e => Idea          (QDefinition e) where getA = getA . (^. qdQua)
-instance Express e => HasSpace      (QDefinition e) where typ = qdQua . typ
-instance Express e => HasSymbol     (QDefinition e) where symbol = symbol . (^. qdQua)
-instance Express e => Definition    (QDefinition e) where defn = qdQua . defn
-instance Express e => Quantity      (QDefinition e) where
-instance Express e => Eq            (QDefinition e) where a == b = a ^. uid == b ^. uid
-instance Express e => MayHaveUnit   (QDefinition e) where getUnit = getUnit . view qdQua
-instance DefiningExpr  QDefinition where
-  defnExpr = qdExpr
+instance HasUID        (QDefinition e) where uid = qdQua . uid
+instance NamedIdea     (QDefinition e) where term = qdQua . term
+instance Idea          (QDefinition e) where getA = getA . (^. qdQua)
+instance HasSpace      (QDefinition e) where typ = qdQua . typ
+instance HasSymbol     (QDefinition e) where symbol = symbol . (^. qdQua)
+instance Definition    (QDefinition e) where defn = qdQua . defn
+instance Quantity      (QDefinition e) where
+instance Eq            (QDefinition e) where a == b = a ^. uid == b ^. uid
+instance MayHaveUnit   (QDefinition e) where getUnit = getUnit . view qdQua
+instance DefiningExpr QDefinition where defnExpr = qdExpr
 instance Express e => Express       (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where

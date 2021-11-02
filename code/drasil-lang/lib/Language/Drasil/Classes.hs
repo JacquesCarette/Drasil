@@ -168,7 +168,7 @@ class UnitEq u where
 
 class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
-  defnExpr :: Express e => Lens' (c e) e
+  defnExpr :: Lens' (c e) e
 
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

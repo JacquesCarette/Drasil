@@ -76,12 +76,8 @@ prec1VN _ = 230
 
 -- | eprec - `ModelExpr` precedence.
 mePrec :: ModelExpr -> Int
-mePrec Int{}                  = 500
-mePrec Dbl{}                  = 500
-mePrec ExactDbl{}             = 500
+mePrec Lit{}                  = 500
 mePrec Spc{}                  = 500
-mePrec Str{}                  = 500
-mePrec Perc{}                 = 500
 mePrec (AssocA op _)          = precA op
 mePrec (AssocB op _)          = precB op
 mePrec C{}                    = 500

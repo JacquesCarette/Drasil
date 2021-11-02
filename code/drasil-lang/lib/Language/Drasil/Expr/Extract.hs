@@ -12,11 +12,7 @@ eNames :: Expr -> [UID]
 eNames (AssocA _ l)          = concatMap eNames l
 eNames (AssocB _ l)          = concatMap eNames l
 eNames (C c)                 = [c]
-eNames Int{}                 = []
-eNames Dbl{}                 = []
-eNames ExactDbl{}            = []
-eNames Str{}                 = []
-eNames Perc{}                = []
+eNames Lit{}                 = []
 eNames (FCall f x ns)        = f : concatMap eNames x ++ map fst ns ++ 
                               concatMap (eNames . snd) ns
 eNames (Case _ ls)           = concatMap (eNames . fst) ls ++ concatMap (eNames . snd) ls
@@ -48,11 +44,7 @@ eNames' :: Expr -> [UID]
 eNames' (AssocA _ l)          = concatMap eNames' l
 eNames' (AssocB _ l)          = concatMap eNames' l
 eNames' (C c)                 = [c]
-eNames' Int{}                 = []
-eNames' Dbl{}                 = []
-eNames' ExactDbl{}            = []
-eNames' Str{}                 = []
-eNames' Perc{}                = []
+eNames' Lit{}                 = []
 eNames' (FCall _ x ns)        = concatMap eNames' x ++ map fst ns ++ 
                                concatMap (eNames .snd) ns
 eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++ 

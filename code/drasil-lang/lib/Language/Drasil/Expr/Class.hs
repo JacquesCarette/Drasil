@@ -165,8 +165,6 @@ class ExprC r where
   
   -- | Smart constructor for the summation, product, and integral functions over an interval.
   defint, defsum, defprod :: Symbol -> r -> r -> r -> r
-  -- | Smart constructor for the summation, product, and integral functions over all Real numbers.
-  intAll, sumAll, prodAll :: Symbol -> r -> r
   
   -- | Smart constructor for 'real interval' membership.
   realInterval :: HasUID c => c -> RealInterval r r -> r
@@ -367,19 +365,12 @@ instance ExprC Expr where
   
   -- | Integrate over some expression with bounds (∫).
   defint v low high = Operator AddRe (BoundedDD v Continuous low high)
-  -- | Integrate over some expression (∫).
-  intAll v = Operator AddRe (AllDD v Continuous)
   
   -- | Sum over some expression with bounds (∑).
   defsum v low high = Operator AddRe (BoundedDD v Discrete low high)
-  -- | Sum over some expression (∑).
-  sumAll v = Operator AddRe (AllDD v Discrete)
   
   -- | Product over some expression with bounds (∏).
   defprod v low high = Operator MulRe (BoundedDD v Discrete low high)
-  -- | Product over some expression (∏).
-  prodAll v = Operator MulRe (AllDD v Discrete)
-  -- TODO: Above only does for Reals
   
   -- | Smart constructor for 'real interval' membership.
   realInterval c = RealI (c ^. uid)
@@ -577,19 +568,12 @@ instance ExprC M.ModelExpr where
 
   -- | Integrate over some expression with bounds (∫).
   defint v low high = M.Operator M.AddRe (BoundedDD v Continuous low high)
-  -- | Integrate over some expression (∫).
-  intAll v = M.Operator M.AddRe (AllDD v Continuous)
 
   -- | Sum over some expression with bounds (∑).
   defsum v low high = M.Operator M.AddRe (BoundedDD v Discrete low high)
-  -- | Sum over some expression (∑).
-  sumAll v = M.Operator M.AddRe (AllDD v Discrete)
 
   -- | Product over some expression with bounds (∏).
   defprod v low high = M.Operator M.MulRe (BoundedDD v Discrete low high)
-  -- | Product over some expression (∏).
-  prodAll v = M.Operator M.MulRe (AllDD v Discrete)
-  -- TODO: Above only does for Reals
 
   -- | Smart constructor for 'real interval' membership.
   realInterval c = M.RealI (c ^. uid)

@@ -36,14 +36,14 @@ createLayout' sm = map (cel sm 0)
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
+sec sm depth x@(Section _ titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let refr = P.S (refAdd x) in
   T.HDiv [concat (replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) refr
 
 cel :: PrintingInformation -> Int -> Section -> T.LayoutObj
-cel sm depth x@(Section titleLb contents _) = 
+cel sm depth x@(Section depth' titleLb contents _) = 
   let refr = P.S (refAdd x) in
   T.Cell (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) 

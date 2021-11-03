@@ -49,108 +49,108 @@ tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
   solCharSpec, assumpt, thModel, genDefn, dataDefn, inModel, datCon, propCorSol,
   require, nonfuncReq, funcReq, likeChg, unlikeChg, traceyMandG, valsOfAuxCons,
   reference, appendix, offShelfSol, scpOfTheProj, prodUCTable, indPRCase,
-  termogy :: [Contents] -> [Section] -> Section
+  termogy :: Int -> [Contents] -> [Section] -> Section
 
 -- | Table of Contents section.
-tOfCont       cs ss = section (titleize' Doc.tOfCont)                   cs ss tOfContLabel
+tOfCont       d cs ss = section d (titleize' Doc.tOfCont)                  cs ss tOfContLabel
 
 -- | Reference Material section.
-refMat        cs ss = section (titleize Doc.refMat)                    cs ss refMatLabel
+refMat        d cs ss = section d (titleize Doc.refMat)                    cs ss refMatLabel
 -- | Table of Units section.
-tOfUnit       cs ss = section (titleize' Doc.tOfUnit)                  cs ss tOfUnitLabel
+tOfUnit       d cs ss = section d (titleize' Doc.tOfUnit)                  cs ss tOfUnitLabel
 -- | Table of Symbols section.
-tOfSymb       cs ss = section (titleize' Doc.tOfSymb)                  cs ss tOfSymbLabel
+tOfSymb       d cs ss = section d (titleize' Doc.tOfSymb)                  cs ss tOfSymbLabel
 -- | Table of Abbreviations and Acronyms section.
-tOfAbbAcc     cs ss = section (titleize' Doc.abbAcc)                   cs ss tOfAbbAccLabel
+tOfAbbAcc     d cs ss = section d (titleize' Doc.abbAcc)                   cs ss tOfAbbAccLabel
 
 -- | Introduction section.
-intro         cs ss = section (titleize Doc.introduction)              cs ss introLabel
+intro         d cs ss = section d (titleize Doc.introduction)              cs ss introLabel
 -- | Purpose of Document section.
-prpsOfDoc     cs ss = section (titleize Doc.prpsOfDoc)                 cs ss docPurposeLabel
+prpsOfDoc     d cs ss = section d (titleize Doc.prpsOfDoc)                 cs ss docPurposeLabel
 -- | Scope of Requirements section.
-scpOfReq      cs ss = section (titleize' Doc.scpOfReq)                 cs ss reqsScopeLabel
+scpOfReq      d cs ss = section d (titleize' Doc.scpOfReq)                 cs ss reqsScopeLabel
 -- | Characteristics of Intended Reader section.
-charOfIR      cs ss = section (titleize' Doc.charOfIR)                 cs ss readerCharsLabel
+charOfIR      d cs ss = section d (titleize' Doc.charOfIR)                 cs ss readerCharsLabel
 -- | Organization of Document section.
-orgOfDoc      cs ss = section (titleize Doc.orgOfDoc)                  cs ss docOrgLabel
+orgOfDoc      d cs ss = section d (titleize Doc.orgOfDoc)                  cs ss docOrgLabel
 
 -- | Stakeholders section.
-stakeholder   cs ss = section (titleize' Doc.stakeholder)              cs ss stakeholderLabel
+stakeholder   d cs ss = section d (titleize' Doc.stakeholder)              cs ss stakeholderLabel
 -- | The Customer section.
-theCustomer   cs ss = section (titleizeNP $ the Doc.customer)          cs ss customerLabel
+theCustomer   d cs ss = section d (titleizeNP $ the Doc.customer)          cs ss customerLabel
 -- | The Client section.
-theClient     cs ss = section (titleizeNP $ the Doc.client)            cs ss clientLabel
+theClient     d cs ss = section d (titleizeNP $ the Doc.client)            cs ss clientLabel
 
 -- | General System Description section.
-genSysDes     cs ss = section (titleize Doc.generalSystemDescription)  cs ss genSysDescLabel
+genSysDes     d cs ss = section d (titleize Doc.generalSystemDescription)  cs ss genSysDescLabel
 -- | System Context section.
-sysCont       cs ss = section (titleize Doc.sysCont)                   cs ss sysContextLabel
+sysCont       d cs ss = section d (titleize Doc.sysCont)                   cs ss sysContextLabel
 -- | User Characteristics section.
-userChar      cs ss = section (titleize' Doc.userCharacteristic)       cs ss userCharsLabel
+userChar      d cs ss = section d (titleize' Doc.userCharacteristic)       cs ss userCharsLabel
 -- | System Constraints section.
-sysCon        cs ss = section (titleize' Doc.systemConstraint)         cs ss sysConstraintsLabel
+sysCon        d cs ss = section d (titleize' Doc.systemConstraint)         cs ss sysConstraintsLabel
 
 -- | Specific System Description section.
-specSysDes    cs ss = section (titleize Doc.specificsystemdescription) cs ss specSystDescLabel
+specSysDes    d cs ss = section d (titleize Doc.specificsystemdescription) cs ss specSystDescLabel
 
 -- | Problem Description section.
-probDesc      cs ss = section (titleize Doc.problemDescription)        cs ss probDescLabel
+probDesc      d cs ss = section d (titleize Doc.problemDescription)        cs ss probDescLabel
 -- | Terminology and Definitions section.
-termAndDefn   cs ss = section (titleize' Doc.termAndDef)               cs ss termDefsLabel
+termAndDefn   d cs ss = section d (titleize' Doc.termAndDef)               cs ss termDefsLabel
 -- | Physical System Description section.
-physSyst      cs ss = section (titleize Doc.physSyst)                  cs ss physSystLabel
+physSyst      d cs ss = section d (titleize Doc.physSyst)                  cs ss physSystLabel
 -- | Goal Statement section.
-goalStmt      cs ss = section (titleize' Doc.goalStmt)                 cs ss goalStmtLabel
+goalStmt      d cs ss = section d (titleize' Doc.goalStmt)                 cs ss goalStmtLabel
 
 -- | Solution Characteristics Specification section.
-solCharSpec   cs ss = section (titleize Doc.solutionCharSpec)          cs ss solCharSpecLabel
+solCharSpec   d cs ss = section d (titleize Doc.solutionCharSpec)          cs ss solCharSpecLabel
 -- | Assumptions section.
-assumpt       cs ss = section (titleize' Doc.assumption)               cs ss assumptLabel
+assumpt       d cs ss = section d (titleize' Doc.assumption)               cs ss assumptLabel
 -- | Theoretical Models section.
-thModel       cs ss = section (titleize' Doc.thModel)                  cs ss thModelLabel
+thModel       d cs ss = section d (titleize' Doc.thModel)                  cs ss thModelLabel
 -- | General Definitions section.
-genDefn       cs ss = section (titleize' Doc.genDefn)                  cs ss genDefnLabel
+genDefn       d cs ss = section d (titleize' Doc.genDefn)                  cs ss genDefnLabel
 -- | Data Definitions section.
-dataDefn      cs ss = section (titleize' Doc.dataDefn)                 cs ss dataDefnLabel
+dataDefn      d cs ss = section d (titleize' Doc.dataDefn)                 cs ss dataDefnLabel
 -- | Instance Models section.
-inModel       cs ss = section (titleize' Doc.inModel)                  cs ss inModelLabel
+inModel       d cs ss = section d (titleize' Doc.inModel)                  cs ss inModelLabel
 -- | Data Constraints section.
-datCon        cs ss = section (titleize' Doc.datumConstraint)          cs ss datConLabel
+datCon        d cs ss = section d (titleize' Doc.datumConstraint)          cs ss datConLabel
 -- | Properties of a Correct Solution section.
-propCorSol    cs ss = section (titleize' Doc.propOfCorSol)             cs ss corSolPropsLabel
+propCorSol    d cs ss = section d (titleize' Doc.propOfCorSol)             cs ss corSolPropsLabel
 
 -- | Requirements section.
-require       cs ss = section (titleize' Doc.requirement)              cs ss requirementsLabel
+require       d cs ss = section d (titleize' Doc.requirement)              cs ss requirementsLabel
 -- | Non-Functional Requirements section.
-nonfuncReq    cs ss = section (titleize' Doc.nonfunctionalRequirement) cs ss nonfuncReqLabel
+nonfuncReq    d cs ss = section d (titleize' Doc.nonfunctionalRequirement) cs ss nonfuncReqLabel
 -- | Functional Requirements section.
-funcReq       cs ss = section (titleize' Doc.functionalRequirement)    cs ss funcReqLabel
+funcReq       d cs ss = section d (titleize' Doc.functionalRequirement)    cs ss funcReqLabel
 
 -- | Likely Changes section.
-likeChg       cs ss = section (titleize' Doc.likelyChg)                cs ss likeChgLabel
+likeChg       d cs ss = section d (titleize' Doc.likelyChg)                cs ss likeChgLabel
 -- | Unlikely Changes section.
-unlikeChg     cs ss = section (titleize' Doc.unlikelyChg)              cs ss unlikeChgLabel
+unlikeChg     d cs ss = section d (titleize' Doc.unlikelyChg)              cs ss unlikeChgLabel
 
 -- | Traceablilty Matrices and Graphs section.
-traceyMandG   cs ss = section (titleize' Doc.traceyMandG)              cs ss traceMatricesLabel
+traceyMandG   d cs ss = section d (titleize' Doc.traceyMandG)              cs ss traceMatricesLabel
 -- | Values of Auxiliary Constants section.
-valsOfAuxCons cs ss = section (titleize Doc.consVals)                  cs ss valsOfAuxConsLabel
+valsOfAuxCons d cs ss = section d (titleize Doc.consVals)                  cs ss valsOfAuxConsLabel
 -- | References section.
-reference     cs ss = section (titleize' Doc.reference)                cs ss referenceLabel
+reference     d cs ss = section d (titleize' Doc.reference)                cs ss referenceLabel
 -- | Appendix section.
-appendix      cs ss = section (titleize Doc.appendix)                  cs ss appendixLabel
+appendix      d cs ss = section d (titleize Doc.appendix)                  cs ss appendixLabel
 -- | Off-the-Shelf Solutions section.
-offShelfSol   cs ss = section (titleize' Doc.offShelfSolution)         cs ss offShelfSolnsLabel
+offShelfSol   d cs ss = section d (titleize' Doc.offShelfSolution)         cs ss offShelfSolnsLabel
 
 -- Unused
 -- | Scope of the Project section.
-scpOfTheProj  cs ss = section (atStart (Doc.scpOfTheProj titleize))    cs ss projScopeLabel
+scpOfTheProj  d cs ss = section d (atStart (Doc.scpOfTheProj titleize))      cs ss projScopeLabel
 -- | Product Use Case Table section.
-prodUCTable   cs ss = section (titleize Doc.prodUCTable)               cs ss useCaseTableLabel
+prodUCTable   d cs ss = section d (titleize Doc.prodUCTable)                 cs ss useCaseTableLabel
 -- | Individual Product Use Case section.
-indPRCase     cs ss = section (titleize' Doc.indPRCase)                cs ss indPRCaseLabel
+indPRCase     d cs ss = section d (titleize' Doc.indPRCase)                  cs ss indPRCaseLabel
 -- | Terminology section.
-termogy       cs ss = section (titleize Doc.terminology)               cs ss terminologyLabel
+termogy       d cs ss = section d (titleize Doc.terminology)                 cs ss terminologyLabel
 
 --Labels--
 -- | Collections all 'Section' 'Reference's.

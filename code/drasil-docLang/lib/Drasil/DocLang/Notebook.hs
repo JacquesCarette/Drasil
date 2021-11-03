@@ -16,31 +16,31 @@ import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, ve
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
 intro, prpsOfDoc, body, review, mainIdea, motion, hormotion, vermotion, methAndAnls,
-  coorSyst, kinematic, procForAnls, summary, appendix, reference, example :: [Contents] -> Section
+  coorSyst, kinematic, procForAnls, summary, appendix, reference, example :: Int -> [Contents] -> Section
   
-intro       cs = section' (titleize Doc.introduction)      cs introLabel
-prpsOfDoc   cs = section' (titleize Doc.prpsOfDoc)         cs docPurposeLabel
+intro       d cs = section' d (titleize Doc.introduction)     cs introLabel
+prpsOfDoc   d cs = section' d (titleize Doc.prpsOfDoc)        cs docPurposeLabel
 
-body        cs = section' (titleize Doc.body)              cs bodyLabel
-review      cs = section' (titleize Doc.review)            cs reviewLabel
+body        d cs = section' d (titleize Doc.body)             cs bodyLabel
+review      d cs = section' d (titleize Doc.review)           cs reviewLabel
 
-mainIdea    cs = section' (titleize Doc.mainIdea)          cs mainIdeaLabel
-motion      cs = section' (titleize P.motion)              cs motionLabel
-hormotion   cs = section' (titleize P.horizontalMotion)    cs hormotionLabel
-vermotion   cs = section' (titleize P.verticalMotion)      cs vermotionLabel
+mainIdea    d cs = section' d (titleize Doc.mainIdea)         cs mainIdeaLabel
+motion      d cs = section' d (titleize P.motion)             cs motionLabel
+hormotion   d cs = section' d (titleize P.horizontalMotion)   cs hormotionLabel
+vermotion   d cs = section' d (titleize P.verticalMotion)     cs vermotionLabel
 
-methAndAnls cs = section' (titleize' Doc.methAndAnls)      cs methsAndanlsLabel
+methAndAnls d cs = section' d (titleize' Doc.methAndAnls)     cs methsAndanlsLabel
 
-summary     cs = section' (titleize Doc.summary)           cs summaryLabel
+summary     d cs = section' d (titleize Doc.summary)          cs summaryLabel
 
-procForAnls cs = section'  (titleize Doc.procForAnls)      cs anlsProcLabel
-coorSyst    cs = section'  (titleize Doc.coordinateSystem) cs coorSystLabel
-kinematic   cs = section'  (titleize P.kinematics)         cs kinematicLabel
+procForAnls d cs = section' d (titleize Doc.procForAnls)     cs anlsProcLabel
+coorSyst    d cs = section' d (titleize Doc.coordinateSystem) cs coorSystLabel
+kinematic   d cs = section' d (titleize P.kinematics)         cs kinematicLabel
 
-appendix    cs = section' (titleize Doc.appendix)          cs appendixLabel
+appendix    d cs = section' d (titleize Doc.appendix)         cs appendixLabel
 
-reference   cs = section' (titleize' Doc.reference)        cs referenceLabel
-example     cs = section' (titleize Doc.example)           cs exampleLabel
+reference   d cs = section' d (titleize' Doc.reference)       cs referenceLabel
+example     d cs = section' d (titleize Doc.example)          cs exampleLabel
 
 --Labels--
 sectionReferences :: [Reference]

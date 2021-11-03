@@ -1,0 +1,113 @@
+\documentclass{article}
+
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\begin{document}
+\pagestyle{empty}
+
+
+% Define block styles
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{theoModel} = [draw, ellipse, fill = red!20, node distance = 3cm, minimum height = 4em]
+\tikzstyle{instModel} = [draw, ellipse, fill = green!20, node distance = 3cm, minimum height = 4em]
+\tikzstyle{dataDefn} = [draw, ellipse, fill = blue!20, node distance = 3cm, minimum height = 4em]
+\tikzstyle{unital} = [draw, ellipse, fill = black!10, node distance = 3cm, minimum height = 4em]
+
+% IM:isSafePb
+\begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[node distance = 2cm, auto, align=center]
+      % NODES
+      \node [instModel] (im) {
+          { \Large \textbf{IM:isSafePb} } \\
+          \textit{Equational} \\
+          $\mathit{is\_safePb} = P_b < P_{btol}$
+        };
+      \node [theoModel, above of = im] (tm) {
+          { \Large \textbf{TM:isSafeProb} } \\
+          \textit{Equational} \\
+          $\mathit{is\_safeProb} = P_f < P_{ftol}$
+        };
+      \node [dataDefn, below of = im] (ddPb) {
+          { \Large \textbf{DD:probOfBreak} } \\
+          $P_b = 1 - e^{-B}$
+        };
+      \node [dataDefn, below of = ddPb] (ddB) {
+          { \Large \textbf{DD:riskFun} } \\
+          $B = \frac{k}{(ab)^{m-1}} \cdot{} (EH^2)^m \cdot{} LDF \cdot{} e^J$
+        };
+      \node [dataDefn, below of = ddB] (dds1) {\textbf{...}};
+      \node [dataDefn, right of = dds1] (dds2) {\textbf{...}};
+      \node [dataDefn, left of = dds1] (dds3) {\textbf{...}};
+      \node [unital, above of = tm] (unIsSafeProb) {$\mathit{is\_safeProb}$};
+      \node [unital, right of = unIsSafeProb] (unPf) {$P_f$};
+      \node [unital, right of = unPf] (unPftol) {$P_{ftol}$};
+      \node [unital, right of = ddPb, node distance = 8cm] (unPb) {$P_b$};
+      \node [unital, above of = unPb, node distance = 6cm] (unIsSafePb) {$\mathit{is\_safePb}$};
+      \node [unital, right of = im, node distance = 8cm] (unPbtol) {$P_{btol}$};
+      \node [unital, below of = unPb] (unB) {$B$};
+      \node [unital, below of = dds1] (uns1) {$...$};
+      \node [unital, below of = dds2] (uns2) {$...$};
+      \node [unital, below of = dds3] (uns3) {$...$};
+      \node [unital, right of = dds2] (uns4) {$...$};
+      \node [unital, below of = uns4] (uns5) {$...$};
+      
+      % EDGES BETWEEN NODES
+      \path [line] (tm) -- node {ground (to instance)} (im);
+      \path [line] (ddPb) -- (im);
+      \path [line] (ddB) -- (ddPb);
+      
+      % EDGES BETWEEN UNITALS TO NODES
+      %% to TM:isSafeProb
+      \path [line] (unIsSafeProb) -- (tm);
+      \path [line] (unPf) -- (tm);
+      \path [line] (unPftol) -- (tm);
+      %% to IM:isSafePb
+      \path [line] (unPb) -- (im);
+      \path [line] (unPbtol) -- (im);
+      \path [line] (unIsSafePb) -- (im);
+      %% to ddPb
+      \path [line] (unPb) -- (ddPb);
+      \path [line] (unB) -- (ddPb);
+      %% to ddB
+      \path [line] (unB) -- (ddB);
+      \path [line] (dds1) -- (ddB);
+      \path [line] (dds2) -- (ddB);
+      \path [line] (dds3) -- (ddB);
+      
+      % to ...s
+      \path [line] (uns1) -- (dds1);
+      \path [line] (uns2) -- (dds2);
+      \path [line] (uns3) -- (dds3);
+      \path [line] (uns5) -- (dds2);
+      \path [line] (uns5) -- (dds1);
+      \path [line] (uns1) -- (dds3);
+      \path [line] (uns4) -- (dds2);
+    \end{tikzpicture}
+    \caption{All knowledge necessary to reasonably build up IM:isSafePb such that we can generate software that calculates, and documents that describe the construction.}
+    \label{fig:IM:isSafePb}
+\end{figure}
+
+% simple test
+\begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[node distance = 2cm, auto]
+      % NODES
+      \node [instModel] (im) {\Large Instance Model};
+      \node [theoModel, above of = im] (tm) {\Large Theory Model};
+      \node [dataDefn, below of = im] (dd) {\Large Data Definition};
+      \node [unital, below of = dd] (un1) {\Large Unital 1};
+      \node [unital, right of = un1] (un2) {\Large Unital 2};
+      
+      % EDGES
+      \path [line] (tm) -- (im);
+      \path [line] (dd) -- (im);
+      \path [line] (un1) -- (dd);
+      \path [line] (un2) -- (dd);
+    \end{tikzpicture}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
+
+\end{document}

@@ -1,20 +1,26 @@
-\documentclass[sigconf]{acmart}
+\documentclass[sigconf, authorversion, nonacm]{acmart}
 
 \settopmatter{printacmref=false}
 
+% \makeatletter
+% \def\@copyrightspace{\relax}
+% \makeatother
+
+% \setcopyright{none} 
+
 \begin{document}
 
-\title{Scientifically Assessing and Improving Productivity for Scientific Software Development}
+\title{Long-Term Productivity Based on Science, not Preference}
 
 \author{Spencer Smith}
 \orcid{0000-0002-0760-0987}
 \affiliation{
   \department{Computing and Software}
-  \streetaddress{1280 Main Street West}
+  %\streetaddress{1280 Main Street West}
   \institution{McMaster University}
-  \city{Hamilton}
-  \state{Ontario}
-  \postcode{L8S 4L8}
+  %\city{Hamilton}
+  %\state{Ontario}
+  %\postcode{L8S 4L8}
   \country{Canada}}
 \email{smiths@mcmaster.ca}
 
@@ -22,17 +28,109 @@
 \orcid{0000-0001-8993-9804}
 \affiliation{
   \department{Computing and Software}
-  \streetaddress{1280 Main Street West}
+  %\streetaddress{1280 Main Street West}
   \institution{McMaster University}
-  \city{Hamilton}
-  \state{Ontario}
-  \postcode{L8S 4L8}
+  %\city{Hamilton}
+  %\state{Ontario}
+  %\postcode{L8S 4L8}
   \country{Canada}}
 \email{carette@mcmaster.ca}
 
 \maketitle
 
-blurb
+Our goal is to identify inhibitors and catalysts for productive long-term
+scientific software development.  The inhibitors and catalysts could take the
+form of processes, tools, techniques, and software artifacts (such as
+requirements, specifications, user manual, unit tests, system tests, usability
+tests, build scripts, READMEs, license documents, process documents, and code).
+The effort (time) invested in catalysts will pay off in the long-term, while 
+inhibitors will have minimal (possibly negative) benefits relative to their
+cost.
+
+If developers are surveyed on inhibitors and catalysts, their answers will be as
+varied as the education and experiential backgrounds of the respondents. Their
+responses will be well-meaning, but they will undoubtedly come with problems and
+biases.  For instance, developers may be guilty of the \emph{sunk cost fallacy},
+promoting a technology that they have invested considerable hours in learning,
+even if the current costs outweigh the benefits. As another example, developers
+are known to typically not produce proper requirements
+specifications~\cite{HeatonAndCarver2015}. If they don't recommend requirements
+documentation, that isn't proof that this kind of documentation is an inhibitor.
+Another perceived inhibitor is meetings~\cite{cite}, even though some meetings
+are very useful in the long-term.  The trick is to know which meetings are
+useful, and which are not.  As these examples illustrate, we need to take
+developer and personal preference out of the development process and instead
+pick the artifacts/processes/tools that have a long-term impact.  We need to use
+a scientific approach based on unambiguous definitions, empirical evidence,
+hypothesis testing and rigorous processes.
+
+\section{Building Blocks}
+
+A scientific approach requires a solid foundation.  A scientific basis built on
+unambiguous definitions of software qualities, including definitions for the
+qualities of reliability, sustainability, reproducibility and productivity
+(along the lines of our quality definitions paper).  
+
+- Give the qualities of the definitions we are looking for - okay to not be
+measurable.  
+
+It is still too early to give a directly measurable definitions of qualities. We
+thus settle on a definition that can at least allow us to reason about each
+quality.  Scientific computing (the heart of much research software) is our
+model: its definition of (forward) error requires knowing the, usually unknown,
+true answer.
+
+- Focus on definition of productivity, using our long-term productivity for
+long-term impact paper~\cite{SmithAndCarette2020arXiv}. 
+
+As a starting point, here is our conceptual formula for productivity:
+
+$$ I = \int_{0}^{T} H(t)\ dt $$
+$$ O = \int_{0}^{T} \sum_{c \in C} S_c(t) K_c(t)\ dt $$
+$$P = O / I$$ 
+
+\noindent where $P$ is productivity, $I$ is the inputs, $O$ is the outputs, $0$
+is the time the project started, $T$ is the time \emph{in the future} where we
+want to take stock, $H$ is the total number of hours available by all personnel,
+$C$ represents different classes of users (external as well as internal), $S$ is
+satisfaction and $K$ is \emph{practical knowledge}.  Thus productivity is
+measured in ``satisfying reusable knowledge per hour.''
+
+\section{Measuring Productivity}
+
+Interpretation of equation from previous section.
+
+Measuring the impact of interventions on productivity (somewhat related to SOP
+work and Olu’s work, but not something we’ve explored too much to date)
+
+return on investment = (net program benefits / program costs) x 100
+
+We adapt the standard definition of productivity [5], where inputs are labour,
+but adjust the outputs to be knowledge and user satisfaction, where user
+satisfaction acts as a proxy for effective quality. This explicit emphasis on
+all knowledge produced, rather than just the operationalizable knowledge (aka
+code) implies that human-reusable knowledge, i.e. documentation, is crucial.
+This is why the long-lived context is important.
+
+\section{Current State of the Practice}
+
+Understanding the current state of the practice, including finding a methodology
+to assess the state of practice (SOP work) 
+
+Understanding the gap between what is recommended and what is practiced (Olu’s
+work) 
+
+\section{What Artifacts?}
+
+Determining what documentation should be produced based on what is necessary for
+an assurance case argument for reliability (my work on assurance cases) 
+
+\section{What Process?}
+
+Removing the drudgery of document generation and maintenance via generation
+(Drasil) 
+
+\section{Concluding Remarks}
 
 %% Bibliography
 \bibliographystyle{ACM-Reference-Format}

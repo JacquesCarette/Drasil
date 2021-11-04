@@ -62,7 +62,7 @@ mkSRS
        IntroProg introPara (phrase pidControllerSystem)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec introDocOrg IDict.dataDefn (SRS.inModel [] [])
+          IOrgSec introDocOrg IDict.dataDefn (SRS.inModel 0 [] [])
             (S "The instance model referred as" +:+ refS imPD +:+
                S "provides an"
                +:+ titleize ode +:+ sParen (short ode)

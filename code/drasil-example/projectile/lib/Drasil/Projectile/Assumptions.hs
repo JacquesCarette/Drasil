@@ -93,4 +93,4 @@ timeStartZeroDesc = atStart time +:+. S "starts at zero"
 gravAccelValueDesc :: Sentence
 gravAccelValueDesc = atStartNP (the acceleration) +:+ S "due to" +:+
   phrase gravity +:+ S "is assumed to have the" +:+ phrase value +:+ 
-  S "provided in the section for" +:+. namedRef (SRS.valsOfAuxCons [] []) (titleize consVals)
+  S "provided in the section for" +:+. namedRef (SRS.valsOfAuxCons 0 [] []) (titleize consVals)

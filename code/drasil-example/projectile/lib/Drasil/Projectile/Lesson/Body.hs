@@ -26,7 +26,7 @@ import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overview
 import Drasil.Projectile.Lesson.Review (reviewContextP1, reviewEqns, reviewContextP2)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
   motionContextP2, horMotion, verMotion, summary)
-import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq, horMotionAna, verMotionAna)
+--import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq, horMotionAna, verMotionAna)
 
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si

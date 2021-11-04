@@ -124,7 +124,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
-     IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
+     IOrgSec orgDocIntro inModel (SRS.inModel 0 [] []) orgDocEnd
     ],
   GSDSec $ GSDProg
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]

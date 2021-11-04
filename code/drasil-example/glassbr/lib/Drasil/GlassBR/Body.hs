@@ -92,7 +92,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc glassBR Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel 2 [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg
       [Client glassBR $ phraseNP (a_ company)
@@ -208,7 +208,7 @@ undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
   (map refS [astm2009, astm2012, astm2016]) `S.in_`
-  namedRef (SRS.reference ([]::[Contents]) ([]::[Section])) (plural reference)]
+  namedRef (SRS.reference 0 ([]::[Contents]) ([]::[Section])) (plural reference)]
 
 scope :: Sentence
 scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
@@ -265,7 +265,7 @@ sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
   S "Ensure required" +:+ 
-  namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption))
+  namedRef (SRS.assumpt 0 [] []) (pluralNP (combineNINI software assumption))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 

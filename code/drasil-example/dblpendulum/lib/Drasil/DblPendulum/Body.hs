@@ -65,7 +65,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel 0 [] []) EmptyS],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
@@ -216,7 +216,7 @@ sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ Doc.variable),
   S "Ensure required" +:+
-  namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
+  namedRef (SRS.assumpt 0 ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+. phrase software]
 

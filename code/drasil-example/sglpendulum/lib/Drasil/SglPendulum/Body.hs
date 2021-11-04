@@ -65,7 +65,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel 0 [] []) EmptyS],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],

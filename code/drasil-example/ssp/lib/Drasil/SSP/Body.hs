@@ -101,7 +101,7 @@ mkSRS = [TableOfContents,
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd
+    , IOrgSec orgSecStart inModel (SRS.inModel 0 [] []) orgSecEnd
     ],
     --FIXME: issue #235
   GSDSec $ GSDProg
@@ -263,7 +263,7 @@ sysCtxUsrResp = [S "Provide" +:+ phraseNP (the input_) +:+ S "data related to" +
   S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
   S "required by" +:+ short ssp,
   S "Ensure that consistent units are used for" +:+ pluralNP (combineNINI input_ variable),
-  S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption)) 
+  S "Ensure required" +:+ namedRef (SRS.assumpt 0 [] []) (pluralNP (combineNINI software assumption)) 
   +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
   phrase user +:+ S "is applying the" +:+ phrase software]
   
@@ -272,7 +272,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
   S "point" +:+ phrase number,
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical `S.and_` S "other" +:+ namedRef (SRS.datCon [] []) (plural datumConstraint),
+  phrase physical `S.and_` S "other" +:+ namedRef (SRS.datCon 0 [] []) (plural datumConstraint),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
@@ -367,7 +367,7 @@ physSysFbd :: Contents
 physSysFbd = foldlSP [atStartNP' (NP.a_ (fbd `ofThe` force)), S "acting on a",
   phrase slice `S.is` S "displayed in" +:+. refS figForceActing, S "The specific",
   pluralNP (force `and_PP` symbol_), S "will be discussed in detail in",
-  refS (SRS.genDefn [] []) `S.and_` refS (SRS.dataDefn [] [])]
+  refS (SRS.genDefn 0 [] []) `S.and_` refS (SRS.dataDefn 0 [] [])]
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $

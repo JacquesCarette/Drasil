@@ -18,7 +18,7 @@ stakeholderIntro = foldlSP [S "This", phrase section_,
 
 -- | Constructor for making a client. Takes in the system name and details regarding the client for the specific program.
 tClientF :: (Idea a) => a -> Sentence ->  Section
-tClientF kWord details = SRS.theClient [clientIntro kWord details] []
+tClientF kWord details = SRS.theClient 1 [clientIntro kWord details] []
 
 -- | General clients introduction. Takes in the system name and details regarding the client for the specific program.
 clientIntro :: (Idea a) => a -> Sentence -> Contents
@@ -29,7 +29,7 @@ clientIntro kWord  details = foldlSP [atStartNP $ the client,
 
 -- | Constructor for making a customer. Takes in the system name.
 tCustomerF :: (Idea a) => a -> Section
-tCustomerF kWord = SRS.theCustomer [customerIntro kWord] []
+tCustomerF kWord = SRS.theCustomer 1 [customerIntro kWord] []
 
 -- | General customer introduction. Takes in the system name.
 customerIntro :: (Idea a) => a -> Contents

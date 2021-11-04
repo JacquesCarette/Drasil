@@ -30,7 +30,7 @@ import Data.Bifunctor (bimap)
 
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section
-reqF = SRS.require [reqIntro]
+reqF = SRS.require 0 [reqIntro]
 
 -- | Prepends a 'ConceptInstance' referencing an input-value table to a list of other 'ConceptInstance's.
 -- For listing input requirements.
@@ -63,11 +63,11 @@ inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
 
 -- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
 fReqF :: [Contents] -> Section
-fReqF listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
+fReqF listOfFReqs = SRS.funcReq 1 (fReqIntro : listOfFReqs) []
 
 -- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
 nfReqF :: [Contents] -> Section
-nfReqF nfrs = SRS.nonfuncReq (nfReqIntro : nfrs) []
+nfReqF nfrs = SRS.nonfuncReq 1 (nfReqIntro : nfrs) []
 
 -- | General 'Sentence' for use in the Requirements section introduction.
 reqIntroStart :: Sentence

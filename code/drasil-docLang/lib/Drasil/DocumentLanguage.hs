@@ -143,12 +143,12 @@ fillSecAndLC dd si = si2
     si2 = set sysinfodb chkdb2 si
     -- Helper and finder functions
     findAllSec :: Section -> [Section]
-    findAllSec s@(Section _ cs _) = s : concatMap findAllSubSec cs
+    findAllSec s@(Section _ _ cs _) = s : concatMap findAllSubSec cs
     findAllSubSec :: SecCons -> [Section]
     findAllSubSec (Sub s) = findAllSec s
     findAllSubSec _ = []
     findAllLC :: Section -> [LabelledContent]
-    findAllLC (Section _ cs _) = concatMap findLCSecCons cs
+    findAllLC (Section _ _ cs _) = concatMap findLCSecCons cs
     findLCSecCons :: SecCons -> [LabelledContent]
     findLCSecCons (Sub s) = findAllLC s
     findLCSecCons (Con (LlC lblcons)) = [lblcons]
@@ -194,7 +194,7 @@ dRefToRef r = map ref $ r ^. getDecRefs
 
 -- | Recursively find all references in a section (meant for getting at 'LabelledContent').
 findAllRefs :: Section -> [Reference]
-findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
+findAllRefs (Section _ _ cs r) = r: concatMap findRefSecCons cs
   where
     findRefSecCons :: SecCons -> [Reference]
     findRefSecCons (Sub s) = findAllRefs s
@@ -254,7 +254,7 @@ mkSections si dd = map doit dd
 
 -- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
+mkToC dd = SRS.tOfCont 0 [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 
@@ -263,12 +263,12 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
+mkRefSec si dd (RefProg c l) = SRS.refMat 0 [c] (map (mkSubRef si) l)
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
     mkSubRef SI {_sysinfodb = db} (TUnits' con f) =
-        SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
+        SRS.tOfUnit 1 [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
     -- FIXME: _quants = v should be removed from this binding and symbols should
     -- be acquired solely through document traversal, however #1658. If we do
     -- just the doc traversal here, then we lose some symbols which only appear
@@ -277,7 +277,7 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
     -- missing a `Concept`.
     mkSubRef SI {_quants = v, _sysinfodb = cdb} (TSymb con) =
-      SRS.tOfSymb 
+      SRS.tOfSymb 1
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational) 
@@ -286,12 +286,12 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      SRS.tOfAbbAcc [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
+      SRS.tOfAbbAcc 1 [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = SRS.tOfSymb [tsIntro c,
+mkTSymb v f c = SRS.tOfSymb 1 [tsIntro c,
   LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] 
@@ -316,7 +316,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro _ (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
-      Intro.charIntRdrF sys assumed topic asset (SRS.userChar [] [])
+      Intro.charIntRdrF sys assumed topic asset (SRS.userChar 1 [] [])
     mkSubIntro _ (IOrgSec i b s t) = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
@@ -324,7 +324,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
 
 -- | Helper for making the Stakeholders section.
 mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
+mkStkhldrSec (StkhldrProg l) = SRS.stakeholder 0 [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
     mkSubs (Client kWrd details) = Stk.tClientF kWrd details
@@ -334,7 +334,7 @@ mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSu
 
 -- | Helper for making the General System Description section.
 mkGSDSec :: GSDSec -> Section
-mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
+mkGSDSec (GSDProg l) = SRS.genSysDes 0 [GSD.genSysIntro] $ map mkSubs l
    where
      mkSubs :: GSDSub -> Section
      mkSubs (SysCntxt cs)            = GSD.sysContxt cs
@@ -362,7 +362,7 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] $
+  SRS.solCharSpec 1 [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
@@ -383,10 +383,10 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs intro fields gs' _) =
       SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
       concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
     mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' (Assumptions ci) =
       SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
@@ -410,7 +410,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg 0 (intro : mkEnumSimpleD c) []
   where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
                 plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
 
@@ -418,7 +418,7 @@ mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg 0 (intro : mkEnumSimpleD c) []
   where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
                 plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
 
@@ -437,7 +437,7 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
 
 -- | Helper for making the Off-the-Shelf Solutions section.
 mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
-mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs [] 
+mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol 0 cs [] 
 
 -- ** Auxiliary Constants
 
@@ -449,10 +449,10 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 -- | Helper for making the References section.
 mkBib :: BibRef -> Section
-mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
+mkBib bib = SRS.reference 0 [UlC $ ulcc (Bib bib)] []
 
 -- ** Appendix
 
 -- | Helper for making the Appendix section.
 mkAppndxSec :: AppndxSec -> Section
-mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
+mkAppndxSec (AppndxProg cs) = SRS.appendix 0 cs []

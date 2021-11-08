@@ -4,7 +4,8 @@ import Language.Drasil (dRefInfo, (+:+), ch, eS, atStartNP, refS, sParen,
   sC, phrase, nounPhraseSP, qw, RefInfo(RefNote), NounPhrase(..),
   ModelExprC(..), ExprC(..), PExpr, Definition(..), MayHaveUnit(..),
   Sentence(..), ModelExpr, Inclusive(..), RealInterval(..), Derivation,
-  makeRC, mkDerivName, RelationConcept, recip_, apply1, LiteralC(..))
+  makeRC, mkDerivName, RelationConcept, recip_, apply1, LiteralC(..),
+  DifferentialModel, makeLinear, ($*), Degree (D))
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel')
 import Utils.Drasil
     ( foldlSent, weave, foldlSentCol, substitute, unwrap )

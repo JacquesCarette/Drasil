@@ -35,17 +35,17 @@ imPD
 imPDRC :: DifferentialModel
 imPDRC
   = makeLinear
-      time 
-      opProcessVariable 
-      coe 
-      c 
-      "imPDRC" 
+      time
+      opProcessVariable
+      coe
+      c
+      "imPDRC"
       (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
         where c = neg (sy qdSetPointTD) `mulRe` sy qdPropGain
-              coe = [Just (exactDbl 1), 
-                     Just (exactDbl 1 `addRe` sy qdDerivGain), 
-                     Just (exactDbl 20 `addRe` sy qdPropGain)]
+              coe = [exactDbl 1 $* D 2,
+                     (exactDbl 1 `addRe` sy qdDerivGain) $* D 1,
+                     (exactDbl 20 `addRe` sy qdPropGain) $* D 0]
 
 imDeriv :: Derivation
 imDeriv

@@ -4,7 +4,7 @@ import Language.Drasil (dRefInfo, (+:+), ch, eS, atStartNP, refS, sParen,
   sC, phrase, nounPhraseSP, qw, RefInfo(RefNote), NounPhrase(..),
   ExprC(..), PExpr, Definition(..), MayHaveUnit(..),
   Sentence(..), Inclusive(..), RealInterval(..), Derivation,
-  mkDerivName, recip_, apply1, DifferentialModel, makeLinear)
+  mkDerivName, recip_, apply1, DifferentialModel, makeLinear, Degree (D), ($*))
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel')
 import Utils.Drasil
     ( foldlSent, weave, foldlSentCol, substitute, unwrap )
@@ -58,7 +58,7 @@ eBalanceOnWtrRC =
     (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water") 
     (tempW ^. defn) 
       where c = balWtrExpr
-            coe = [Just (exactDbl 1), Nothing]
+            coe = [exactDbl 1 $* D 1]
 
 balWtrExpr :: PExpr
 balWtrExpr = recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time)

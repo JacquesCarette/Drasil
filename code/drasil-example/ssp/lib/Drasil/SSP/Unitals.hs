@@ -495,25 +495,25 @@ index = dqd' (dcc "index" (nounPhraseSP "index")
   "a number representing a single slice")
   (const lI) Natural Nothing 
 
---FIXME: possibly move to Language/Drasil/Expr.hs
-indx1 :: (ExprC r, Quantity a) => a -> r
+-- FIXME: move to drasil-lang
+indx1 :: (ExprC r, LiteralC r, Quantity a) => a -> r
 indx1 a = idx (sy a) (int 1)
 
 indxn :: (ExprC r, Quantity a) => a -> r
 indxn a = idx (sy a) (sy numbSlices)
 
-inxi, inxiP1, inxiM1 :: (ExprC r, Quantity e) => e -> r
+inxi, inxiP1, inxiM1 :: (ExprC r, LiteralC r, Quantity e) => e -> r
 inxiP1 e = inx e 1
 inxi   e = inx e 0
 inxiM1 e = inx e (-1)
 
-inx :: (ExprC r, Quantity e) => e -> Integer -> r
+inx :: (ExprC r, LiteralC r, Quantity e) => e -> Integer -> r
 inx e n 
   | n < 0     = idx (sy e) (sy index $- int (-n))
   | n == 0    = idx (sy e) (sy index)
   | otherwise = idx (sy e) (sy index `addI` int n)
 
-sum1toN :: ExprC r => r -> r
+sum1toN :: (ExprC r, LiteralC r) => r -> r
 sum1toN = defsum (eqSymb index) (int 1) (sy numbSlices)
 
 -- Labels

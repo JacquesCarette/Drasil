@@ -3,8 +3,10 @@
 -- | The Drasil Expression language 
 module Language.Drasil.Expr.Lang where
 
-import Language.Drasil.Space (DomainDesc, RealInterval)
+import Language.Drasil.Literal.Lang (Literal(..))
+import Language.Drasil.Space (DiscreteDomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
+import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- * Expression Types
 
@@ -78,16 +80,8 @@ data Completeness = Complete | Incomplete
 
 -- | Drasil expressions.
 data Expr where
-  -- | Turns a decimal value ('Double') into an expression.
-  Dbl      :: Double -> Expr
-  -- | Turns an integer into an expression.
-  Int      :: Integer -> Expr
-  -- | Represents decimal values that are exact as integers.
-  ExactDbl :: Integer -> Expr 
-  -- | Turns a string into an expression.
-  Str      :: String -> Expr
-  -- | Turns two integers into a fraction (or percent).
-  Perc     :: Integer -> Integer -> Expr
+  -- | Brings a literal into the expression language.
+  Lit :: Literal -> Expr
   -- | Takes an associative arithmetic operator with a list of expressions.
   AssocA   :: AssocArithOper -> [Expr] -> Expr
   -- | Takes an associative boolean operator with a list of expressions.
@@ -134,15 +128,18 @@ data Expr where
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+  Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq Expr where
-  Dbl a               == Dbl b               =   a == b
-  Int a               == Int b               =   a == b
-  Str a               == Str b               =   a == b
+  Lit (Int l)         == Lit (Int r)         =  l == r
+  Lit (Str l)         == Lit (Str r)         =  l == r
+  Lit (Dbl l)         == Lit (Dbl r)         =  l == r
+  Lit (ExactDbl l)    == Lit (ExactDbl r)    =  l == r
+  Lit (Perc l1 l2)    == Lit (Perc r1 r2)    =  l1 == r1 && l2 == r2
+  -- Lit a               == Lit b               =   a == b -- TODO: When we have typed expressions, I think this will be possible.
   AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
   AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
   C a                 == C b                 =   a == b
@@ -188,3 +185,10 @@ instance Eq Expr where
 --   a / b = ArithBinaryOp Frac a b
 --   fromRational r = ArithBinaryOp Frac (fromInteger $ numerator   r)
 --                                       (fromInteger $ denominator r)
+
+instance LiteralC Expr where
+  int = Lit . int
+  str = Lit . str
+  dbl = Lit . dbl
+  exactDbl = Lit . exactDbl
+  perc l r = Lit $ perc l r

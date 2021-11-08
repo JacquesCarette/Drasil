@@ -5,31 +5,18 @@ import Language.Drasil
 import Utils.Drasil (foldlSent, getTandS)
 import qualified Utils.Drasil.Sentence as S (is, of_, the_ofThe)
 
-import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, time,
-  force, gravitationalAccel, height, weight, velocity, position)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
-  mass, specWeight, vol)
+  force, height, velocity, position)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass, specWeight, vol)
 import Data.Drasil.Concepts.Documentation (body, constant)
 
 ------------------------------------------------------------------------------------------------------
 -- * Equations
 
-weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
-  weightDerivSpecWeightEqn,
-  newtonSLEqn, hsPressureEqn, speedEqn :: PExpr
-
+weightEqn, newtonSLEqn, hsPressureEqn, speedEqn :: ExprC r => r
 newtonSLEqn               = sy QPP.mass `mulRe` sy QP.acceleration
-
 weightEqn                 = sy QPP.vol `mulRe` sy QPP.specWeight
-weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitationalAccel)
-weightDerivReplaceMassEqn = sy QP.weight $= mulRe (sy QPP.density) (sy QPP.vol `mulRe` sy QP.gravitationalAccel)
-weightDerivSpecWeightEqn  = sy QP.weight $= mulRe (sy QPP.vol) (sy QPP.specWeight)
-
-weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (sy QP.gravitationalAccel `mulRe` sy QM.unitVectj)
-
 hsPressureEqn             = sy QPP.specWeight `mulRe` sy QP.height
-
 speedEqn                  = norm (sy QP.velocity)
 
 velocityEqn, accelerationEqn :: ModelExpr

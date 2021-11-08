@@ -53,6 +53,9 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
+-- TODO: Should the website be using a ``SystemInformation''? This is primarily for the SmithEtAl template.
+--       It seems like the website is primarily that functions on a chunkdb.
+
 -- | System information.
 si :: FolderLocation -> SystemInformation
 si fl = SI {
@@ -69,7 +72,7 @@ si fl = SI {
     _outputs     = [] :: [QuantityDict],
     _defSequence = [] :: [Block SimpleQDef],
     _constraints = [] :: [ConstrainedChunk],
-    _constants   = [] :: [SimpleQDef],
+    _constants   = [] :: [ConstQDef],
     _sysinfodb   = symbMap fl,
     _usedinfodb  = usedDB,
     refdb        = rdb [] []

@@ -6,8 +6,10 @@ module Language.Drasil.ModelExpr.Lang where
 import Prelude hiding (sqrt)
 
 import Language.Drasil.Expr.Lang (Completeness)
+import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
+import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
 
@@ -79,19 +81,12 @@ data DerivType = Part | Total
 
 -- | Drasil expressions.
 data ModelExpr where
-  -- | Turns a decimal value ('Double') into an expression.
-  Dbl       :: Double -> ModelExpr
-  -- | Turns an integer into an expression.
-  Int       :: Integer -> ModelExpr
-  -- | Represents decimal values that are exact as integers.
-  ExactDbl  :: Integer -> ModelExpr
-  -- | Turns a string into an expression.
-  Str       :: String -> ModelExpr
+  -- | Brings a literal into the expression language.
+  Lit       :: Literal -> ModelExpr
+
   -- | Introduce Space values into the expression language.
   Spc       :: Space -> ModelExpr
 
-  -- | Turns two integers into a fraction (or percent).
-  Perc      :: Integer -> Integer -> ModelExpr
   -- | Takes an associative arithmetic operator with a list of expressions.
   AssocA    :: AssocArithOper -> [ModelExpr] -> ModelExpr
   -- | Takes an associative boolean operator with a list of expressions.
@@ -146,7 +141,7 @@ data ModelExpr where
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DomainDesc ModelExpr ModelExpr -> ModelExpr -> ModelExpr
+  Operator :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
   
@@ -180,9 +175,8 @@ type Variable = String
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq ModelExpr where
-  Dbl a               == Dbl b               =   a == b
-  Int a               == Int b               =   a == b
-  Str a               == Str b               =   a == b
+  Lit l              == Lit r                =  l == r
+  -- Lit a               == Lit b               =   a == b -- TODO: When we have typed expressions, I think this will be possible.
   AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
   AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
   Deriv a t1 b c      == Deriv d t2 e f      =   a == d && t1 == t2 && b == e && c == f
@@ -209,3 +203,10 @@ instance Eq ModelExpr where
 --   a / b = ArithBinaryOp Frac a b
 --   fromRational r = ArithBinaryOp Frac (fromInteger $ numerator   r)
 --                                       (fromInteger $ denominator r)
+
+instance LiteralC ModelExpr where
+  int = Lit . int
+  str = Lit . str
+  dbl = Lit . dbl
+  exactDbl = Lit . exactDbl
+  perc l r = Lit $ perc l r

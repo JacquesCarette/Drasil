@@ -1,21 +1,29 @@
+{-# LANGUAGE GADTs #-}
 module Language.Drasil.Code.Expr.Convert (
-    expr, realInterval, constraint
+    expr, realInterval, constraint,
+    CanGenCode(..)
 ) where
 
 import qualified Language.Drasil as L
 import qualified Language.Drasil.Expr.Development as LD
-
-import Data.Bifunctor (Bifunctor(bimap, second))
+import qualified Language.Drasil.Literal.Development as LL
 
 import Language.Drasil.Code.Expr
 
+import Data.Bifunctor (Bifunctor(bimap, second))
+
+class CanGenCode e where
+    toCodeExpr :: e -> CodeExpr
+
+instance CanGenCode LL.Literal where
+    toCodeExpr = Lit
+
+instance CanGenCode LD.Expr where
+    toCodeExpr = expr
+
 -- | Render an algebraic expression into our code expression language.
 expr :: LD.Expr -> CodeExpr
-expr (LD.Dbl d) = Dbl d
-expr (LD.Int i) = Int i
-expr (LD.ExactDbl i) = ExactDbl i
-expr (LD.Str s) = Str s
-expr (LD.Perc n d) = Perc n d
+expr (LD.Lit l) = Lit l
 expr (LD.AssocA ao es) = AssocA (assocArithOp ao) $ map expr es
 expr (LD.AssocB bo es) = AssocB (assocBoolOp bo) $ map expr es
 expr (LD.C u) = C u
@@ -47,9 +55,8 @@ constraint :: L.ConstraintE -> L.Constraint CodeExpr
 constraint (L.Range r ri) = L.Range r (realInterval ri)
 
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
-renderDomainDesc :: L.DomainDesc L.Expr L.Expr -> L.DomainDesc CodeExpr CodeExpr
+renderDomainDesc :: L.DiscreteDomainDesc L.Expr L.Expr -> L.DiscreteDomainDesc CodeExpr CodeExpr
 renderDomainDesc (L.BoundedDD s t l r) = L.BoundedDD s t (expr l) (expr r)
-renderDomainDesc (L.AllDD s t) = L.AllDD s t
 
 arithBinOp :: LD.ArithBinOp -> ArithBinOp
 arithBinOp LD.Frac = Frac

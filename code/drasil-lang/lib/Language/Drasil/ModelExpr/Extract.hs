@@ -13,12 +13,8 @@ meNames (AssocA _ l)          = concatMap meNames l
 meNames (AssocB _ l)          = concatMap meNames l
 meNames (Deriv _ _ a b)       = b : meNames a
 meNames (C c)                 = [c]
-meNames Int{}                 = []
-meNames Dbl{}                 = []
-meNames ExactDbl{}            = []
+meNames Lit{}                 = []
 meNames Spc{}                 = []
-meNames Str{}                 = []
-meNames Perc{}                = []
 meNames (FCall f x ns)        = f : concatMap meNames x ++ map fst ns ++ 
                               concatMap (meNames . snd) ns
 meNames (Case _ ls)           = concatMap (meNames . fst) ls ++ concatMap (meNames . snd) ls
@@ -54,12 +50,8 @@ meNames' (AssocA _ l)          = concatMap meNames' l
 meNames' (AssocB _ l)          = concatMap meNames' l
 meNames' (Deriv _ _ a b)       = b : meNames' a
 meNames' (C c)                 = [c]
-meNames' Int{}                 = []
-meNames' Dbl{}                 = []
-meNames' ExactDbl{}            = []
+meNames' Lit{}                 = []
 meNames' Spc{}                 = []
-meNames' Str{}                 = []
-meNames' Perc{}                = []
 meNames' (FCall _ x ns)        = concatMap meNames' x ++ map fst ns ++ 
                                concatMap (meNames .snd) ns
 meNames' (Case _ ls)           = concatMap (meNames' . fst) ls ++ 

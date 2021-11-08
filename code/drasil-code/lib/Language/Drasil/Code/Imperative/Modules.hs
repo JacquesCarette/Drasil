@@ -403,11 +403,8 @@ printConstraint c = do
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
 printExpr :: (OOProg r) => CodeExpr -> ChunkDB -> [MSStatement r]
-printExpr (Dbl _)      _ = []
-printExpr (ExactDbl _) _ = []
-printExpr (Int _)      _ = []
-printExpr (Str _)      _ = []
-printExpr e           db = [printStr $ " (" ++ render (codeExprDoc db Implementation Linear e) ++ ")"]
+printExpr Lit{} _  = []
+printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db Implementation Linear e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => ScopeTag -> 

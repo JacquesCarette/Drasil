@@ -17,6 +17,10 @@ module Language.Drasil (
   , apply1, apply2
   , Completeness, Relation
 
+  -- ** Literals Language
+  , Literal
+  , LiteralC(..)
+
   -- ** Expression Modelling Language 
   -- | Defines display-related expression functions. Used in models.
 
@@ -216,8 +220,10 @@ module Language.Drasil (
   -- | Used for rendering mathematical symbols in Drasil.
 
   -- Language.Drasil.Space
-  , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
-  , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
+  , Space(..)
+  , RealInterval(..), Inclusive(..)
+  , DomainDesc(..), RTopology(..), ContinuousDomainDesc, DiscreteDomainDesc
+  , getActorName, getInnerSpace
   -- Language.Drasil.Symbol
   , Decoration, Symbol
   -- Language.Drasil.UnitLang
@@ -232,7 +238,7 @@ module Language.Drasil (
   , label, variable
 
   -- * Type Synonyms
-  , SimpleQDef, ModelQDef
+  , ConstQDef, SimpleQDef, ModelQDef
   , PExpr
 ) where
 
@@ -240,6 +246,8 @@ import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, 
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2)
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
+import Language.Drasil.Literal.Class (LiteralC(..))
+import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
 import Language.Drasil.Document (section, fig, figWithWidth
@@ -314,7 +322,8 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
-  RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
+  RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
+  getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
@@ -324,7 +333,7 @@ import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable)
-import Language.Drasil.Synonyms (SimpleQDef, ModelQDef, PExpr)
+import Language.Drasil.Synonyms (ConstQDef, SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc (mkTable)
 import Language.Drasil.People (People, Person, person, HasName(..),

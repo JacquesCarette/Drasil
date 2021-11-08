@@ -9,7 +9,7 @@ import Language.Drasil (plural, (+:), dRefInfo, eS', (+:+), ch, eqSymb,
   sParen, sC, phrase, shortname', makeURI, nounPhraseSP, dccWDS, dRef,
   qw, RefInfo(Page), HasSpace(typ), ModelExprC(..), HasSymbol(..), ExprC(..),
   Definition(..), Reference, Express(..), Sentence(S, (:+:), E), ModelQDef,
-  ConceptChunk, ModelExpr, apply1)
+  ConceptChunk, ModelExpr, apply1, LiteralC(..))
 import Control.Lens ((^.))
 import Theory.Drasil (ConstraintSet, mkConstraintSet,
   TheoryModel, tm, equationalModel', equationalConstraints',

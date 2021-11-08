@@ -181,7 +181,7 @@ symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
   iyPos, ixVel, iyVel, position, scalarPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
 
-constants :: [SimpleQDef]
+constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]
 
 inputs :: [QuantityDict]

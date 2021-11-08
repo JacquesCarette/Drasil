@@ -1,5 +1,5 @@
-{-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
+
 -- | Defines types and functions for creating mult-definitions.
 module Theory.Drasil.MultiDefn (
   -- * Types
@@ -24,7 +24,7 @@ data DefiningExpr e = DefiningExpr {
   _deUid  :: UID,            -- ^ UID
   _cd     :: [UID],          -- ^ Concept domain
   _rvDesc :: Sentence,       -- ^ Defining description/statement
-  _expr   :: Express e => e  -- ^ Defining expression
+  _expr   :: e  -- ^ Defining expression
 }
 makeLenses ''DefiningExpr
 
@@ -39,29 +39,29 @@ data MultiDefn e = MultiDefn {
     _rUid  :: UID,                                      -- ^ UID
     _qd    :: QuantityDict,                             -- ^ Underlying quantity it defines
     _rDesc :: Sentence,                                 -- ^ Defining description/statement
-    _rvs   :: Express e => NE.NonEmpty (DefiningExpr e) -- ^ All possible/omitted ways we can define the related quantity
+    _rvs   :: NE.NonEmpty (DefiningExpr e) -- ^ All possible/omitted ways we can define the related quantity
            -- TODO: Why is this above constraint redundant according to the smart constructors?
 }
 makeLenses ''MultiDefn
 
 
-instance HasUID        (MultiDefn e) where uid      = rUid
-instance HasSymbol     (MultiDefn e) where symbol   = symbol . (^. qd)
-instance NamedIdea     (MultiDefn e) where term     = qd . term
-instance Idea          (MultiDefn e) where getA     = getA . (^. qd)
-instance HasSpace      (MultiDefn e) where typ      = qd . typ
+instance HasUID        (MultiDefn e) where uid     = rUid
+instance HasSymbol     (MultiDefn e) where symbol  = symbol . (^. qd)
+instance NamedIdea     (MultiDefn e) where term    = qd . term
+instance Idea          (MultiDefn e) where getA    = getA . (^. qd)
+instance HasSpace      (MultiDefn e) where typ     = qd . typ
 instance Quantity      (MultiDefn e) where
-instance MayHaveUnit   (MultiDefn e) where getUnit  = getUnit . view qd
+instance MayHaveUnit   (MultiDefn e) where getUnit = getUnit . view qd
 -- | The concept domain of a MultiDefn is the union of the concept domains of the underlying variants.
-instance Express e => ConceptDomain (MultiDefn e) where cdom     = foldr1 union . NE.toList . NE.map (^. cd) . (^. rvs)
-instance Definition    (MultiDefn e) where defn     = rDesc
+instance ConceptDomain (MultiDefn e) where cdom    = foldr1 union . NE.toList . NE.map (^. cd) . (^. rvs)
+instance Definition    (MultiDefn e) where defn    = rDesc
 -- | The complete Relation of a MultiDefn is defined as the quantity and the related expressions being equal
 --   e.g., `q $= a $= b $= ... $= z`
-instance Express e => Express       (MultiDefn e) where
+instance Express e => Express (MultiDefn e) where
   express q = equiv $ sy q : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment. First argument is the 'String' to become a 'UID'.
-mkMultiDefn :: Express e => String -> QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefn :: String -> QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefn u q s des
   | length des == dupsRemovedLen = MultiDefn (D.uid u) q s des
   | otherwise                    = error $
@@ -70,20 +70,20 @@ mkMultiDefn u q s des
 
 -- Should showUID be used here?
 -- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'QuantityDict'.
-mkMultiDefnForQuant :: Express e => QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefnForQuant :: QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefnForQuant q = mkMultiDefn (showUID q) q
 
 -- | Smart constructor for 'DefiningExpr's.
-mkDefiningExpr :: Express e => String -> [UID] -> Sentence -> e -> DefiningExpr e
+mkDefiningExpr :: String -> [UID] -> Sentence -> e -> DefiningExpr e
 mkDefiningExpr u = DefiningExpr (D.uid u)
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr'.
-multiDefnGenQD :: Express e => MultiDefn e -> DefiningExpr e -> QDefinition e
+multiDefnGenQD :: MultiDefn e -> DefiningExpr e -> QDefinition e
 multiDefnGenQD md de = mkQDefSt (md ^. qd . uid) (md ^. term) (md ^. defn)
                                 (symbol md) (md ^. typ) (getUnit md) (de ^. expr)
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr' (by 'UID').
-multiDefnGenQDByUID :: Express e => MultiDefn e -> UID -> QDefinition e
+multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
 multiDefnGenQDByUID md u | length matches == 1 = multiDefnGenQD md matched
                          | otherwise           = error $ "Invalid UID for multiDefn QD generation; " ++ show u
   where matches = NE.filter (\x -> x ^. uid == u) (md ^. rvs)

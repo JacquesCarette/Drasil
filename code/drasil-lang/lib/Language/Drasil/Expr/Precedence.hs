@@ -72,11 +72,7 @@ prec1VN _ = 230
 
 -- | eprec - "Expression" precedence.
 eprec :: Expr -> Int
-eprec Int{}                  = 500
-eprec Dbl{}                  = 500
-eprec ExactDbl{}             = 500
-eprec Str{}                  = 500
-eprec Perc{}                 = 500
+eprec Lit{}                  = 500
 eprec (AssocA op _)          = precA op
 eprec (AssocB op _)          = precB op
 eprec C{}                    = 500

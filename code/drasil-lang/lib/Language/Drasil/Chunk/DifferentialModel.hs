@@ -20,9 +20,10 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (ExprC(mulRe, addRe, exactDbl, sy))
+import Language.Drasil.Expr.Class (mulRe, addRe, sy)
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
+import Language.Drasil.Literal.Class (exactDbl)
 
 newtype Degree = D{
                     _order :: Int

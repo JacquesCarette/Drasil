@@ -61,7 +61,7 @@ eBalanceOnWtrRC =
             coe = [exactDbl 1 $* D 1]
 
 balWtrExpr :: PExpr
-balWtrExpr = recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time)
+balWtrExpr = neg (recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time))
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [

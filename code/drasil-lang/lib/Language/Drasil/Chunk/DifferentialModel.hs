@@ -2,8 +2,8 @@
 module Language.Drasil.Chunk.DifferentialModel (
     -- * Chunk Type
     DifferentialModel,
+    -- * Input Language
     Degree (D),
-    CoeffDeriv,
     ($*),
     -- * Constructors
     makeLinear
@@ -38,8 +38,8 @@ makeLenses ''CoeffDeriv
 ($*) = CD
 
 data DifferentialModel = Linear {
-                                  _indepVar :: UnitalChunk, -- often time
-                                  _depVar :: ConstrConcept, -- opProcessVariable in PDController
+                                  _indepVar :: UnitalChunk,
+                                  _depVar :: ConstrConcept,
                                   _coefficients :: [CoeffDeriv],
                                   _constant :: Expr,
                                   _conc :: ConceptChunk

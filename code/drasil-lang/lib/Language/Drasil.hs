@@ -94,7 +94,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC, addRelToCC
   -- Language.Drasil.Chunk.DifferentialModel
-  , DifferentialModel, makeLinear
+  , DifferentialModel, Degree(D), CoeffDeriv, ($*), makeLinear
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Quantity
   , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar', implVarUID, implVarUID'
@@ -294,7 +294,8 @@ import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
-import Language.Drasil.Chunk.DifferentialModel(DifferentialModel, makeLinear)
+import Language.Drasil.Chunk.DifferentialModel(DifferentialModel, Degree(D), 
+  CoeffDeriv, ($*), makeLinear)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
   ucStaged, ucs, ucs', ucsWS, ucuc, ucw)

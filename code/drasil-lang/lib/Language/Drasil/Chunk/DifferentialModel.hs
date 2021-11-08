@@ -2,8 +2,12 @@
 module Language.Drasil.Chunk.DifferentialModel (
     -- * Chunk Type
     DifferentialModel,
+    Degree (D),
+    CoeffDeriv,
+    ($*),
     -- * Constructors
-    makeLinear) where
+    makeLinear
+    ) where
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
@@ -19,28 +23,24 @@ import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
 import Language.Drasil.Expr.Class (ExprC(mulRe, addRe, exactDbl, sy))
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
-import Data.Maybe (isJust, fromJust)
 
-{-
-  checked 1 how to build the coefficients 
-  checked 2 auto constr relation when coeff and const were given
-  3 integrate ODEInfo, build ODEInfo
+newtype Degree = D{
+                    _order :: Int
+                  }
+makeLenses ''Degree
 
-  data ODEInfo = ODEInfo {
-    indepVar :: CodeVarChunk, -- | Independent variable. 
-    depVar :: CodeVarChunk, -- | Dependent variable.
-    otherVars :: [CodeVarChunk], -- | Other variables in the ODE.
-    tInit :: CodeExpr,
-    tFinal :: CodeExpr,
-    initVal :: CodeExpr, -- | Initial value of an ODE.
-    odeSyst :: [CodeExpr], -- | ODE equations.
-    odeOpts :: ODEOptions 
--}
+data CoeffDeriv = CD{
+                      _coefficient :: Expr,
+                      _degree :: Degree
+                    }
+makeLenses ''CoeffDeriv
+($*) :: Expr -> Degree -> CoeffDeriv
+($*) = CD
 
 data DifferentialModel = Linear {
                                   _indepVar :: UnitalChunk, -- often time
                                   _depVar :: ConstrConcept, -- opProcessVariable in PDController
-                                  _coefficients :: [Maybe Expr],
+                                  _coefficients :: [CoeffDeriv],
                                   _constant :: Expr,
                                   _conc :: ConceptChunk
                                 }
@@ -69,23 +69,25 @@ formStdODE d = equiv $ (addCoes d `addRe` express (d ^. constant)) : [exactDbl 0
 
 -- | Construct a form of ODE with constant on the rhs
 formConODE :: DifferentialModel -> ModelExpr
-formConODE d = equiv $ addCoes d : [express (d ^. constant)] 
+formConODE d = equiv $ addCoes d : [express (d ^. constant)]
 
-{-
-  orderList is a list contain the highest order to zero oder
-  First zip coefficients with orderList -> filter Nothing ->
-  combine tuple to ModelExpr in the map -> add list ModelExpr
--}
+-- | Add coefficients together by restructuring each CoeffDeriv
 addCoes :: DifferentialModel -> ModelExpr
-addCoes d = foldr1 addRe (
-                          map (\x -> express (fromJust(fst x)) `mulRe` snd x)
-                            (filter (isJust.fst) (zip (d ^.coefficients) orderList))
-                          )
-            where orderList = [nthderiv (toInteger n) (sy (qw (d ^. depVar))) (d ^. indepVar)
-                              | n <- reverse [0..(length (d ^. coefficients) - 1)]]
+addCoes d = foldr1 addRe 
+            (
+            map(\x -> 
+                  express (x ^. coefficient)
+                  `mulRe`
+                  nthderiv 
+                    (toInteger (x ^. (degree . order))) 
+                    (sy (qw (d ^. depVar))) 
+                    (d ^. indepVar)
+               )
+               (d ^. coefficients)
+            )
 
 -- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), DepVar ('ModelExpr'),
 -- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').
-makeLinear :: UnitalChunk -> ConstrConcept -> [Maybe Expr] -> Expr -> String -> NP -> Sentence -> DifferentialModel
+makeLinear :: UnitalChunk -> ConstrConcept -> [CoeffDeriv] -> Expr -> String -> NP -> Sentence -> DifferentialModel
 makeLinear dmIndepVar dmDepVar dmCoeff dmConst dmID dmTerm dmDefn =
   Linear dmIndepVar dmDepVar dmCoeff dmConst (dccWDS dmID dmTerm dmDefn)

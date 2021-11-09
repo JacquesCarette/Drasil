@@ -25,23 +25,39 @@ import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (exactDbl)
 
+{-
+  Input Language minic mathematic equation
+  e.g. exactDbl 1 $* D 1, 
+  exactDbl 1 is coefficient term, D 1 is the first derivative
+-}
 newtype Degree = D{
                     _order :: Int
                   }
 makeLenses ''Degree
 
 data CoeffDeriv = CD{
-                      _coefficient :: Expr,
+                      _coeff :: Expr,
                       _degree :: Degree
                     }
 makeLenses ''CoeffDeriv
+
 ($*) :: Expr -> Degree -> CoeffDeriv
 ($*) = CD
+
+-- | Internal data representation for coefficients and degrees
+data CoeffDeriv' = CD'{
+                        _coeff' :: Expr,
+                        _degree' :: Int
+                      }
+makeLenses ''CoeffDeriv'
+
+makeCD' :: CoeffDeriv -> CoeffDeriv'
+makeCD' c = CD' (c ^. coeff) (c ^. (degree . order))
 
 data DifferentialModel = Linear {
                                   _indepVar :: UnitalChunk,
                                   _depVar :: ConstrConcept,
-                                  _coefficients :: [CoeffDeriv],
+                                  _coefficients :: [CoeffDeriv'],
                                   _constant :: Expr,
                                   _conc :: ConceptChunk
                                 }
@@ -74,14 +90,14 @@ formStdODE d = equiv $ (addCoes d `addRe` express (d ^. constant)) : [exactDbl 0
 
 -- | Add coefficients together by restructuring each CoeffDeriv
 addCoes :: DifferentialModel -> ModelExpr
-addCoes d = foldr1 addRe 
+addCoes d = foldr1 addRe
             (
-            map(\x -> 
-                  express (x ^. coefficient)
+            map(\x ->
+                  express (x ^. coeff')
                   `mulRe`
-                  nthderiv 
-                    (toInteger (x ^. (degree . order))) 
-                    (sy (qw (d ^. depVar))) 
+                  nthderiv
+                    (toInteger (x ^. degree'))
+                    (sy (qw (d ^. depVar)))
                     (d ^. indepVar)
                )
                (d ^. coefficients)
@@ -91,4 +107,4 @@ addCoes d = foldr1 addRe
 -- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').
 makeLinear :: UnitalChunk -> ConstrConcept -> [CoeffDeriv] -> Expr -> String -> NP -> Sentence -> DifferentialModel
 makeLinear dmIndepVar dmDepVar dmCoeff dmConst dmID dmTerm dmDefn =
-  Linear dmIndepVar dmDepVar dmCoeff dmConst (dccWDS dmID dmTerm dmDefn)
+  Linear dmIndepVar dmDepVar (map makeCD' dmCoeff) dmConst (dccWDS dmID dmTerm dmDefn)

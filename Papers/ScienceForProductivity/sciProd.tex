@@ -12,40 +12,39 @@
 
 \title{Long-Term Productivity Based on Science, not Preference}
 
-\author{Spencer Smith}
+\author{Spencer Smith and Jacques Carette}
 \orcid{0000-0002-0760-0987}
 \affiliation{
-  \department{Computing and Software}
+  \department{Computing and Software, McMaster University, Canada}
   %\streetaddress{1280 Main Street West}
-  \institution{McMaster University}
+  %\institution{McMaster University}
   %\city{Hamilton}
   %\state{Ontario}
   %\postcode{L8S 4L8}
-  \country{Canada}}
-\email{smiths@mcmaster.ca}
+  %\country{Canada}
+  }
+\email{smiths@mcmaster.ca and carette@mcmaster.ca}
 
-\author{Jacques Carette}
-\orcid{0000-0001-8993-9804}
-\affiliation{
-  \department{Computing and Software}
-  %\streetaddress{1280 Main Street West}
-  \institution{McMaster University}
-  %\city{Hamilton}
-  %\state{Ontario}
-  %\postcode{L8S 4L8}
-  \country{Canada}}
-\email{carette@mcmaster.ca}
+% \author{Jacques Carette}
+% \orcid{0000-0001-8993-9804}
+% \affiliation{
+%   \department{Computing and Software}
+%   %\streetaddress{1280 Main Street West}
+%   \institution{McMaster University}
+%   %\city{Hamilton}
+%   %\state{Ontario}
+%   %\postcode{L8S 4L8}
+%   \country{Canada}}
+% \email{carette@mcmaster.ca}
 
 \maketitle
 
 Our goal is to identify inhibitors and catalysts for productive long-term
 scientific software development.  The inhibitors and catalysts could take the
-form of processes, tools, techniques, and software artifacts (such as
-requirements, specifications, user manual, unit tests, system tests, usability
-tests, build scripts, READMEs, license documents, process documents, and code).
-The effort (time) invested in catalysts will pay off in the long-term, while 
-inhibitors will have minimal (possibly negative) benefits relative to their
-cost.
+form of processes, tools, techniques, and software artifacts (such as user
+manuals, unit tests, design documents and code). The effort (time) invested in
+catalysts will pay off in the long-term, while inhibitors will take up
+resources, but instead of helping may actually lower product quality.
 
 If developers are surveyed on inhibitors and catalysts, their answers will be as
 varied as the education and experiential backgrounds of the respondents. Their
@@ -53,35 +52,54 @@ responses will be well-meaning, but they will undoubtedly come with problems and
 biases.  For instance, developers may be guilty of the \emph{sunk cost fallacy},
 promoting a technology that they have invested considerable hours in learning,
 even if the current costs outweigh the benefits. As another example, developers
-are known to typically not produce proper requirements
-specifications~\cite{HeatonAndCarver2015}. If they don't recommend requirements
-documentation, that isn't proof that this kind of documentation is an inhibitor.
-Another perceived inhibitor is meetings~\cite{cite}, even though some meetings
-are very useful in the long-term.  The trick is to know which meetings are
-useful, and which are not.  As these examples illustrate, we need to take
-developer and personal preference out of the development process and instead
-pick the artifacts/processes/tools that have a long-term impact.  We need to use
-a scientific approach based on unambiguous definitions, empirical evidence,
-hypothesis testing and rigorous processes.
+may recommend against proper requirements, but this lack of support doesn't
+imply requirements are an inhibitor, only that current practice doesn't promote
+this kind of documentation~\cite{HeatonAndCarver2015}. Another perceived
+inhibitor is time spent in meetings. For instance, departmental retreats can be
+unpopular because of a lack of short-term benefits, but relationship building
+and strategic decision making may provide significant future rewards. The
+difficult trick is to know which meetings are useful, and which are not.  As
+these examples illustrate, we need to take developer and personal preference out
+of the development process and instead pick the artifacts/processes/tools that
+have a long-term impact.  We need to use a scientific approach based on
+unambiguous definitions, empirical evidence, hypothesis testing and rigorous
+processes.
 
 \section{Building Blocks}
 
-A scientific approach requires a solid foundation.  A scientific basis built on
-unambiguous definitions of software qualities, including definitions for the
-qualities of reliability, sustainability, reproducibility and productivity
-(along the lines of our quality definitions paper).  
+A scientific approach requires a solid foundation.  The building blocks for
+scientific discourse is an unambiguous language for communicating concepts,
+formulating hypotheses, planning data collection, and analyzing models and
+theories.  To start with, we need to classify the software under discussion.
+Likely dimensions for classification include the following: general purpose
+scientific tools versus special purpose physical models, scientific domain, open
+source versus commercial software, project maturity, project size, and level of
+safety criticality.
 
-- Give the qualities of the definitions we are looking for - okay to not be
-measurable.  
+Another important language component is defining what we hope to achieve in
+terms of scientific software quality. Qualities that need to be unambiguously
+defined include reliability, sustainability, reproducibility and productivity.
+Software engineers have frequently attempted to define quality since the
+1970s~\cite{McCallEtAl1977}, but the definitions aren't usually specific to
+scientific software (as shown by the confusion between precision and accuracy is
+the ISO/IEC definitions~\cite{ISO9126}). Moreover, the definitions often focus
+on measurability, where the first priority should be conceptual clarity,
+analogous to the unmeasurable, but conceptually clear, definition of (forward)
+error, which requires knowing the, usually unknown, true answer.
 
-It is still too early to give a directly measurable definitions of qualities. We
-thus settle on a definition that can at least allow us to reason about each
-quality.  Scientific computing (the heart of much research software) is our
-model: its definition of (forward) error requires knowing the, usually unknown,
-true answer.
+For each relevant quality we recommend collecting as many distinct instances of
+the definition as possible.  Once all the definitions are collected, they can be
+assessed against the following criteria (based on~\citet{IEEE1998}):
+completeness, consistency, modifiability, traceability, unambiguity and
+abstractness. The understanding gained from this systematic survey and analysis
+can then be used to propose a new set of quality definitions that allow for
+reasoning about quality.
 
-- Focus on definition of productivity, using our long-term productivity for
-long-term impact paper~\cite{SmithAndCarette2020arXiv}. 
+\section{Productivity}
+
+- an example and an important quality. - Focus on definition of productivity,
+using our long-term productivity for long-term impact
+paper~\cite{SmithAndCarette2020arXiv}. 
 
 As a starting point, here is our conceptual formula for productivity:
 
@@ -96,7 +114,7 @@ $C$ represents different classes of users (external as well as internal), $S$ is
 satisfaction and $K$ is \emph{practical knowledge}.  Thus productivity is
 measured in ``satisfying reusable knowledge per hour.''
 
-\section{Measuring Productivity}
+\section{Measuring}
 
 Interpretation of equation from previous section.
 
@@ -112,25 +130,38 @@ all knowledge produced, rather than just the operationalizable knowledge (aka
 code) implies that human-reusable knowledge, i.e. documentation, is crucial.
 This is why the long-lived context is important.
 
-\section{Current State of the Practice}
+\section{State of the Practice}
 
-Understanding the current state of the practice, including finding a methodology
+Understanding the state of the practice, including finding a methodology
 to assess the state of practice (SOP work) 
 
 Understanding the gap between what is recommended and what is practiced (Olu’s
 work) 
 
-\section{What Artifacts?}
+Research questions.
 
+\section{Artifacts}
+
+- potential artifacts: such as requirements, specifications, user manual, unit
+tests, system tests, usability tests, build scripts, APIs, READMEs, license
+documents, process documents, and code
+
+- measuring the value of all of the artifacts - what do they contribute? (Output)
 Determining what documentation should be produced based on what is necessary for
 an assurance case argument for reliability (my work on assurance cases) 
 
-\section{What Process?}
+\section{Production Methods}
 
-Removing the drudgery of document generation and maintenance via generation
-(Drasil) 
+- how do you produce the valued artifacts productively - how minimize cost in
+hours (Input) Removing the drudgery of document generation and maintenance via
+generation (Drasil) - de-syncronized artifacts - how measure that on knowledge -
+keep knowledge and artifacts in-sync.
+- de-sync as an inhibitor - maybe generative methods can solve
+- sprinkle in idea
 
 \section{Concluding Remarks}
+
+- ROI
 
 %% Bibliography
 \bibliographystyle{ACM-Reference-Format}

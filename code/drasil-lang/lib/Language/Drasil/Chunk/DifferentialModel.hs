@@ -61,7 +61,7 @@ instance ConceptDomain DifferentialModel where cdom = cdom . view conc
 -- | Finds the domain of the 'ConceptChunk' used to make the 'DifferentialModel'.
 -- | Convert the 'DifferentialModel' into the model expression language.
 -- | Set Canonical form of ODE to Zero, e.g. ax0 + bx1 + cx2 + .... + c = 0
-instance Express       DifferentialModel where express d = formStdODE d
+instance Express       DifferentialModel where express = formStdODE
 
 -- | Construct a Canonical form of ODE, e.g. ax0 + bx1 + cx2 + .... + c
 -- | x0 is the highest order, x1 is the second higest order, and so on. The c is the constant.

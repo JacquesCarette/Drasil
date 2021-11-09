@@ -69,8 +69,8 @@ formStdODE :: DifferentialModel -> ModelExpr
 formStdODE d = equiv $ (addCoes d `addRe` express (d ^. constant)) : [exactDbl 0]
 
 -- | Construct a form of ODE with constant on the rhs
-formConODE :: DifferentialModel -> ModelExpr
-formConODE d = equiv $ addCoes d : [express (d ^. constant)]
+-- formConODE :: DifferentialModel -> ModelExpr
+-- formConODE d = equiv $ addCoes d : [express (d ^. constant)]
 
 -- | Add coefficients together by restructuring each CoeffDeriv
 addCoes :: DifferentialModel -> ModelExpr

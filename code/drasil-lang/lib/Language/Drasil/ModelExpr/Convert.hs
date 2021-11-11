@@ -74,11 +74,7 @@ vvnBinOp :: E.VVNBinOp -> VVNBinOp
 vvnBinOp E.Dot = Dot
 
 expr :: E.Expr -> ModelExpr
-expr (E.Dbl d) = Dbl d
-expr (E.Int i) = Int i
-expr (E.ExactDbl i) = ExactDbl i
-expr (E.Str s) = Str s
-expr (E.Perc n d) = Perc n d
+expr (E.Lit a) = Lit a
 expr (E.AssocA ao es) = AssocA (assocArithOper ao) $ map expr es
 expr (E.AssocB bo es) = AssocB (assocBoolOper bo) $ map expr es
 expr (E.C u) = C u

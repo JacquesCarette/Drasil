@@ -4,7 +4,7 @@ import Language.Drasil (dRefInfo, (+:+), ch, eS, atStartNP, refS, sParen,
   sC, phrase, nounPhraseSP, qw, RefInfo(RefNote), NounPhrase(..),
   ModelExprC(..), ExprC(..), PExpr, Definition(..), MayHaveUnit(..),
   Sentence(..), ModelExpr, Inclusive(..), RealInterval(..), Derivation,
-  makeRC, mkDerivName, RelationConcept, recip_, apply1)
+  makeRC, mkDerivName, RelationConcept, recip_, apply1, LiteralC(..))
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts

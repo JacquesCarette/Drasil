@@ -51,7 +51,7 @@ data SystemInformation where
   , _outputs     :: [i]
   , _defSequence :: [Block SimpleQDef]
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  , _constants   :: [SimpleQDef]
+  , _constants   :: [ConstQDef]
   , _sysinfodb   :: ChunkDB
   , _usedinfodb  :: ChunkDB
   , refdb        :: ReferenceDB

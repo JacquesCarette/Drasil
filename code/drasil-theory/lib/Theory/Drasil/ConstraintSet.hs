@@ -1,5 +1,4 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
-{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 
 -- | Defines types used in models and theories.
 module Theory.Drasil.ConstraintSet (
@@ -16,7 +15,7 @@ import qualified Data.List.NonEmpty as NE
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet e = CL {
     _con  :: ConceptChunk,
-    _invs :: Express e => NE.NonEmpty e
+    _invs :: NE.NonEmpty e
 }
 makeLenses ''ConstraintSet
 
@@ -36,5 +35,5 @@ instance Express e => Express (ConstraintSet e) where
     express = foldr1 ($&&) . map express . NE.toList . (^. invs)
 
 -- | Smart constructor for building ConstraintSets
-mkConstraintSet :: Express e => ConceptChunk -> NE.NonEmpty e -> ConstraintSet e
+mkConstraintSet :: ConceptChunk -> NE.NonEmpty e -> ConstraintSet e
 mkConstraintSet = CL

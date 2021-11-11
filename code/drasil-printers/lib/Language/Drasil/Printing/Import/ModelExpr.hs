@@ -3,22 +3,23 @@
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
 
-import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..), RTopology(..), Special(..))
+-- TODO: tighten exports
+import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
+  RTopology(..), Special(..), LiteralC(int))
 import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.Literal.Development (Literal(..))
 import Language.Drasil.ModelExpr.Development
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
-  PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
 
 import Control.Lens ((^.))
 import Data.List (intersperse)
-import Numeric (floatToDigits)
 
+import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
 import Language.Drasil.Printing.Import.Symbol (symbol)
-import Language.Drasil.Printing.Import.Helpers
-    (digitsProcess, lookupC, parens, processExpo)
+import Language.Drasil.Printing.Import.Helpers (lookupC, parens)
 
 -- | Helper that adds parenthesis to a display expression where appropriate.
 modelExpr' :: PrintingInformation -> Int -> ModelExpr -> P.Expr
@@ -35,8 +36,9 @@ mkBOp sm o a b = P.Row [modelExpr a sm, P.MO o, modelExpr b sm]
 
 -- | Helper for properly rendering negation of expressions.
 neg' :: ModelExpr -> Bool
-neg' (Dbl     _)            = True
-neg' (Int     _)            = True
+neg' (Lit (Dbl _))          = True
+neg' (Lit (Int _))          = True
+neg' (Lit (ExactDbl _))     = True
 neg' Operator{}             = True
 neg' (AssocA MulI _)        = True
 neg' (AssocA MulRe _)       = True
@@ -107,17 +109,7 @@ eop sm MulRe = eopMuls sm
 
 -- | Translate Exprs to printable layout AST.
 modelExpr :: ModelExpr -> PrintingInformation -> P.Expr
-modelExpr (Dbl d)                    sm = case sm ^. getSetting of
-  Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
-     (fst $ processExpo $ snd $ floatToDigits 10 d) 0
-     (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
-  Scientific  ->  P.Dbl d
-modelExpr (Int i)                     _ = P.Int i
-modelExpr (ExactDbl d)                _ = P.Int d
-modelExpr (Str s)                     _ = P.Str s
-modelExpr (Perc a b)                 sm = P.Row [modelExpr (Dbl val) sm, P.MO P.Perc]
-  where
-    val = fromIntegral a / (10 ** fromIntegral (b - 2))
+modelExpr (Lit l)                    sm = literal l sm
 modelExpr (AssocB And l)             sm = assocExpr P.And (precB And) l sm
 modelExpr (AssocB Or l)              sm = assocExpr P.Or (precB Or) l sm
 modelExpr (AssocB Equivalence l)     sm = assocExpr P.Eq (precB Equivalence) l sm
@@ -193,12 +185,12 @@ assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm 
 -- | Helper for rendering printable expressions.
 mulExpr ::  [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
-  (a, Int _)      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, ExactDbl _) ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Dbl _)      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Int _))      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (ExactDbl _)) ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Dbl _))      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
   (a, _)          ->  [modelExpr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [modelExpr' sm (precA o) hd]
-mulExpr []           o sm = [modelExpr' sm (precA o) (Int 1)]
+mulExpr []           o sm = [modelExpr' sm (precA o) (int 1)]
 
 
 -- | Helper that adds parenthesis to the first expression. The second expression

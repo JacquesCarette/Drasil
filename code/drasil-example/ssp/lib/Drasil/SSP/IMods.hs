@@ -91,12 +91,12 @@ fctSftyDerivSentences2 = map foldlSentCol [fctSftyDerivSentence11,
   fctSftyDerivSentence15, fctSftyDerivSentence16, fctSftyDerivSentence17,
   fctSftyDerivSentence18, fctSftyDerivSentence19]
 
-fctSftyDerivEqns1 :: ExprC r => [r]
+fctSftyDerivEqns1 :: (ExprC r, LiteralC r) => [r]
 fctSftyDerivEqns1 = [fctSftyDerivEqn1, fctSftyDerivEqn2, fctSftyDerivEqn3,
   fctSftyDerivEqn4, fctSftyDerivEqn5, fctSftyDerivEqn6, fctSftyDerivEqn7,
   fctSftyDerivEqn8, fctSftyDerivEqn9, fctSftyDerivEqn10a]
 
-fctSftyDerivEqns2 :: ExprC r => [r]
+fctSftyDerivEqns2 :: (ExprC r, LiteralC r) => [r]
 fctSftyDerivEqns2 = [fctSftyDerivEqn11, fctSftyDerivEqn12, fctSftyDerivEqn13,
   fctSftyDerivEqn14, fctSftyDerivEqn15, fctSftyDerivEqn16, fctSftyDerivEqn17,
   fctSftyDerivEqn18, sy fs $= fctSftyExpr]
@@ -432,7 +432,7 @@ nrmShrDerivationSentences :: [Sentence]
 nrmShrDerivationSentences = map foldlSentCol [nrmShrDerivSentence1,
   nrmShrDerivSentence2, nrmShrDerivSentence3, nrmShrDerivSentence4]
 
-nrmShrDerivEqns :: ExprC r => [r]
+nrmShrDerivEqns :: (ExprC r, LiteralC r) => [r]
 nrmShrDerivEqns = [nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3,
   nrmShrDerivEqn4]
 
@@ -578,7 +578,7 @@ intrSlcDerivationSentences :: [Sentence]
 intrSlcDerivationSentences = map foldlSentCol [intrSlcDerivSentence1,
   intrSlcDerivSentence2]
 
-intrSlcDerivEqns :: ExprC r => [r]
+intrSlcDerivEqns :: (ExprC r, LiteralC r) => [r]
 intrSlcDerivEqns = [fctSftyDerivEqn9, intrSlcDerivEqn]
 
 intrSlcDerivEqn :: PExpr

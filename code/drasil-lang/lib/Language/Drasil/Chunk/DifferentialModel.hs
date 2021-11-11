@@ -75,8 +75,7 @@ formStdODE d = equiv $ (addCoes d `addRe` express (d ^. constant)) : [exactDbl 0
 
 -- | Add coefficients together by restructuring each CoeffDeriv
 addCoes :: DifferentialModel -> ModelExpr
-addCoes d = foldr1 addRe
-            (
+addCoes d = foldr1 addRe $
             map(\x ->
                   express (x ^. coeff)
                   `mulRe`
@@ -86,7 +85,6 @@ addCoes d = foldr1 addRe
                     (d ^. indepVar)
                )
                (d ^. coefficients)
-            )
 
 -- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), DepVar ('ModelExpr'),
 -- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').

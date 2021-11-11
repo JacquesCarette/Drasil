@@ -53,13 +53,11 @@ eBalanceOnWtrRC =
   makeLinear
     time 
     tempW
-    coe
-    c
+    [exactDbl 1 $* D 1]
+    balWtrExpr
     "eBalanceOnWtrRC" 
     (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water") 
-    (tempW ^. defn) 
-      where c = balWtrExpr
-            coe = [exactDbl 1 $* D 1]
+    (tempW ^. defn)
 
 balWtrExpr :: PExpr
 balWtrExpr = neg (recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time))

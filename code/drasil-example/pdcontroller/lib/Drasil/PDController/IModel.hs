@@ -37,9 +37,9 @@ imPDRC
   = makeLinear
       time
       opProcessVariable
-      [exactDbl 1 $* D 2,
-      (exactDbl 1 `addRe` sy qdDerivGain) $* D 1,
-      (exactDbl 20 `addRe` sy qdPropGain) $* D 0]
+      [exactDbl 1 $* 2,
+      (exactDbl 1 `addRe` sy qdDerivGain) $* 1,
+      (exactDbl 20 `addRe` sy qdPropGain) $* 0]
       (neg (sy qdSetPointTD) `mulRe` sy qdPropGain)
       "imPDRC"
       (nounPhraseSP "Computation of the Process Variable as a function of time")

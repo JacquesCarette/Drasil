@@ -3,7 +3,6 @@ module Language.Drasil.Chunk.DifferentialModel (
     -- * Chunk Type
     DifferentialModel,
     -- * Input Language
-    Degree (D),
     ($*),
     -- * Constructors
     makeLinear
@@ -27,37 +26,23 @@ import Language.Drasil.Literal.Class (exactDbl)
 
 {-
   Input Language minic mathematic equation
-  e.g. exactDbl 1 $* D 1, 
-  exactDbl 1 is coefficient term, D 1 is the first derivative
+  e.g. exactDbl 1 $* 1, 
+  exactDbl 1 is coefficient term, 1 is the first derivative
 -}
-newtype Degree = D{
-                    _order :: Int
-                  }
-makeLenses ''Degree
 
 data CoeffDeriv = CD{
                       _coeff :: Expr,
-                      _degree :: Degree
+                      _degree :: Int
                     }
 makeLenses ''CoeffDeriv
 
-($*) :: Expr -> Degree -> CoeffDeriv
+($*) :: Expr -> Int -> CoeffDeriv
 ($*) = CD
-
--- | Internal data representation for coefficients and degrees
-data CoeffDeriv' = CD'{
-                        _coeff' :: Expr,
-                        _degree' :: Int
-                      }
-makeLenses ''CoeffDeriv'
-
-makeCD' :: CoeffDeriv -> CoeffDeriv'
-makeCD' c = CD' (c ^. coeff) (c ^. (degree . order))
 
 data DifferentialModel = Linear {
                                   _indepVar :: UnitalChunk,
                                   _depVar :: ConstrConcept,
-                                  _coefficients :: [CoeffDeriv'],
+                                  _coefficients :: [CoeffDeriv],
                                   _constant :: Expr,
                                   _conc :: ConceptChunk
                                 }
@@ -93,10 +78,10 @@ addCoes :: DifferentialModel -> ModelExpr
 addCoes d = foldr1 addRe
             (
             map(\x ->
-                  express (x ^. coeff')
+                  express (x ^. coeff)
                   `mulRe`
                   nthderiv
-                    (toInteger (x ^. degree'))
+                    (toInteger (x ^. degree))
                     (sy (qw (d ^. depVar)))
                     (d ^. indepVar)
                )
@@ -107,4 +92,4 @@ addCoes d = foldr1 addRe
 -- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').
 makeLinear :: UnitalChunk -> ConstrConcept -> [CoeffDeriv] -> Expr -> String -> NP -> Sentence -> DifferentialModel
 makeLinear dmIndepVar dmDepVar dmCoeff dmConst dmID dmTerm dmDefn =
-  Linear dmIndepVar dmDepVar (map makeCD' dmCoeff) dmConst (dccWDS dmID dmTerm dmDefn)
+  Linear dmIndepVar dmDepVar dmCoeff dmConst (dccWDS dmID dmTerm dmDefn)

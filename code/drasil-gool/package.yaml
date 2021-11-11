@@ -26,6 +26,7 @@ library:
   source-dirs: lib
   exposed-modules:
   - GOOL.Drasil
+  - GOOL.Drasil.LanguageRenderer
   when:
   - condition: false
     other-modules: Paths_drasil_gool

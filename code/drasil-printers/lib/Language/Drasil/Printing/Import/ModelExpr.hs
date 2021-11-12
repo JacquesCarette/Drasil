@@ -118,8 +118,8 @@ modelExpr (Lit l)                    sm = literal l sm
 modelExpr (AssocB And l)             sm = assocExpr P.And (precB And) l sm
 modelExpr (AssocB Or l)              sm = assocExpr P.Or (precB Or) l sm
 modelExpr (AssocB Equivalence l)     sm = assocExpr P.Eq (precB Equivalence) l sm
-modelExpr (AssocA AddI l)            sm = assocExpr P.Add (precA AddI) l sm
-modelExpr (AssocA AddRe l)           sm = assocExpr P.Add (precA AddRe) l sm
+modelExpr (AssocA AddI l)            sm = P.Row $ addExpr l AddI sm
+modelExpr (AssocA AddRe l)           sm = P.Row $ addExpr l AddRe sm
 modelExpr (AssocA MulI l)            sm = P.Row $ mulExpr l MulI sm
 modelExpr (AssocA MulRe l)           sm = P.Row $ mulExpr l MulRe sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
@@ -190,12 +190,23 @@ assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm prec) exprs
 
 -- | Helper for rendering printable expressions.
+addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
+addExpr exprs o sm = addExprFilter (map (modelExpr' sm (precA o)) exprs)
+
+-- | Add add symbol only when the second Expr is not negation 
+addExprFilter :: [P.Expr] -> [P.Expr]
+addExprFilter [] = []
+addExprFilter [x] = [x]
+addExprFilter (x1:P.Row[P.MO P.Neg, x2]:xs) = x1 : addExprFilter (P.Row[P.MO P.Neg, x2] : xs)
+addExprFilter (x:xs) = x : P.MO P.Add : addExprFilter xs
+
+-- | Helper for rendering printable expressions.
 mulExpr ::  [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
   (a, Lit (Int _))      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
   (a, Lit (ExactDbl _)) ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
   (a, Lit (Dbl _))      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, _)          ->  [modelExpr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
+  (a, _)                ->  [modelExpr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [modelExpr' sm (precA o) hd]
 mulExpr []           o sm = [modelExpr' sm (precA o) (int 1)]
 

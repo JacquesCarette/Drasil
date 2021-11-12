@@ -16,7 +16,7 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 -- | Creates the Case Study Section.
 caseStudySec :: Section
 caseStudySec = 
-  section (S caseStudiesTitle) -- Title
+  section 0 (S caseStudiesTitle) -- Title
   [mkParagraph $ S caseStudiesDesc, mkFig (makeTabRef "CaseStudy") mkCaseTable,
     mkParagraph $ S legendIntro, UlC $ ulcc caseStudyLegend] -- Contents
   [] $ makeSecRef "CaseStudy" $ S caseStudiesTitle -- Section Reference

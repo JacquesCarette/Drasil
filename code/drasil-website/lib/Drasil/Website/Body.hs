@@ -113,7 +113,7 @@ web = commonIdea "website" (cn "website") "web" []
 -- | Header section creator.
 headerSec :: Section
 headerSec = 
-  section EmptyS -- No title
+  section 0 EmptyS -- No title
   [LlC imageContent] -- Contents
   [] $ makeSecRef "Header" $ S "Header" -- Section reference
 
@@ -138,7 +138,7 @@ imagePath = "./images/Icon.png"
 
 -- | Create the footer section.
 footer :: FolderLocation -> Section
-footer _ = section EmptyS [mkParagraph copyrightInfo] [] $ makeSecRef "Footer" $ S "Footer"
+footer _ = section 0 EmptyS [mkParagraph copyrightInfo] [] $ makeSecRef "Footer" $ S "Footer"
 
 -- | 'footer' contents.
 copyrightInfo :: Sentence

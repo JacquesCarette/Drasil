@@ -9,7 +9,7 @@ import Language.Drasil
 -- | Creates the Haddock documentation for all of Drasil.
 docsSec :: FilePath -> Section
 docsSec path = 
-  section haddockDocsTitle -- Title
+  section 0 haddockDocsTitle -- Title
   [mkParagraph $ haddockDocsDesc path] -- Contents 
   [] $ makeSecRef "Documentation" $ S "Documentation" -- Section Reference
 

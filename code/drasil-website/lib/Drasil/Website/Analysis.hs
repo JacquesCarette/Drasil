@@ -21,7 +21,7 @@ import Language.Drasil
 --    * Package Dependency Graphs (structure of modules within each @drasil-@ package)
 analysisSec :: FilePath -> FilePath -> FilePath -> FilePath -> [String] -> Section
 analysisSec analysisPath typePath clsIPath graphPath pkgs = 
-    section drasilAnalysisTitle -- Section title
+    section 0 drasilAnalysisTitle -- Section title
     [mkParagraph analysisIntro] -- Section introduction
     [dataTableSec analysisPath, tableOfGraphsSec typePath clsIPath pkgs,
       graphSec graphPath $ map ("drasil-" ++) pkgs] -- Subsections
@@ -58,7 +58,7 @@ analysisRefs analysisPath typePath clsIPath graphPath pkgs =
 -- | Data Table subsection.
 dataTableSec :: FilePath -> Section
 dataTableSec path = 
-  section dataTableTitle -- Title
+  section 1 dataTableTitle -- Title
   [mkParagraph $ dataTableDesc path] -- Contents
   [] $ makeSecRef "DataTable" $ S "DataTable" -- Section reference
 
@@ -98,7 +98,7 @@ dataTableCSVRef path = makeURI "dataTableCSV" (path ++ "ClassInstDep/DataTable.c
 -- | Table of Graphs section. Contains a table for Type dependencies and Class-Instance relations.
 tableOfGraphsSec :: FilePath -> FilePath -> [String] -> Section
 tableOfGraphsSec typePath clsIPath pkgs = 
-  section tableOfGraphsTitle -- Title
+  section 1 tableOfGraphsTitle -- Title
   [mkParagraph tableOfTypeGraphsDesc, mkTypeGraphTable typePath pkgs,
     mkParagraph tableOfClassIGraphsDesc, mkClassInstTable clsIPath pkgs] -- Contents
   [] $ makeSecRef "TypeAndClassGraphs" $ S "TypeAndClassGraphs" -- Section reference
@@ -179,7 +179,7 @@ classIGraphRef = makeTabRef "ClassInstGraphs"
 -- | Creates the Package Dependency Graphs section.
 graphSec :: FilePath -> [String] -> Section
 graphSec path pkgs = 
-  section packDepGraphTitle -- Title
+  section 1 packDepGraphTitle -- Title
   (mkParagraph (S graphSecIntro) : displayGraphs ++ listOfLinkedGraphs) -- Contents
   [] $ makeSecRef "DependencyGraphs" $ S "Dependency Graphs" -- Section Reference
   where

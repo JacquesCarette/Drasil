@@ -132,7 +132,7 @@ showLang l = show l
 -- | Example section function generator. Makes a list of examples and generated artifacts.
 exampleSec :: FilePath -> FilePath -> Section
 exampleSec codePth srsDoxPth = 
-  section exampleTitle -- Title
+  section 0 exampleTitle -- Title
   [mkParagraph exampleIntro, UlC $ ulcc $ fullExList codePth srsDoxPth] -- Contents
   [] $ makeSecRef "Examples" $ S "Examples" -- Section reference
 

@@ -11,7 +11,7 @@ import Utils.Drasil
 -- | Creates the introduction section.
 introSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Section
 introSec csRef docRef analysisSecRef repoRef wikiRef = 
-  section (S "Introduction") -- Title
+  section 0 (S "Introduction") -- Title
   (map mkParagraph [introParagraph1 repoRef wikiRef, introParagraph2 csRef docRef analysisSecRef]) -- Contents
   [] $ makeSecRef "Introduction" $ S "Introduction" -- Section reference
 

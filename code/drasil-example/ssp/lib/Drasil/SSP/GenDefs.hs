@@ -8,6 +8,7 @@ import Prelude hiding (sin, cos, tan)
 import qualified Data.List.NonEmpty as NE
 import Language.Drasil
 import Theory.Drasil
+import Utils.Drasil (weave)
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Language.Drasil.Sentence.Combinators as S

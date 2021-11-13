@@ -16,10 +16,10 @@ module Utils.Drasil.Misc (
   bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
   tAndDOnly, tAndDWAcc, tAndDWSym,
-  weave, zipSentList
+  zipSentList
   ) where
 
-import Language.Drasil.Chunk.Concept ( ConceptChunk )
+import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
 import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
 import Language.Drasil.Chunk.Unital ( UnitalChunk )
 import Language.Drasil.Classes
@@ -40,7 +40,7 @@ import Language.Drasil.Document.Core
 import Language.Drasil.Expr.Class ( ExprC(sy) )
 import Language.Drasil.ModelExpr.Class ( ModelExprC(isIn) )
 import Language.Drasil.ModelExpr.Lang ( ModelExpr )
-import Language.Drasil.NounPhrase ( NP )
+import Language.Drasil.NounPhrase.Core ( NP )
 import Language.Drasil.Reference ( refS, namedRef )
 import Language.Drasil.Sentence
     ( Sentence(S, Percent, (:+:), Sy, EmptyS),
@@ -185,10 +185,6 @@ bulletFlat = Bullet . noRefs . map Flat
 -- The first argument is the headers of the 'Nested' lists.
 bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
-
--- | Interweaves two lists together @[[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]@.
-weave :: [[a]] -> [a]
-weave = concat . transpose
 
 -- | Get a unit symbol if there is one.
 unwrap :: Maybe UnitDefn -> Sentence

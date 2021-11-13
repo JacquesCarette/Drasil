@@ -4,6 +4,7 @@ module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil
+import Utils.Drasil (weave)
 import Utils.Drasil.Concepts
 import qualified Language.Drasil.Sentence.Combinators as S
 

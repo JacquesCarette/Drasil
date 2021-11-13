@@ -283,7 +283,7 @@ module Language.Drasil (
   bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
   tAndDOnly, tAndDWAcc, tAndDWSym,
-  weave, zipSentList,
+  zipSentList,
 ) where
 
 import Utils.Drasil.Contents

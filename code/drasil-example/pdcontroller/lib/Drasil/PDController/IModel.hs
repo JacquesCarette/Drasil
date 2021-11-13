@@ -10,6 +10,7 @@ import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, deModel')
+import Utils.Drasil (weave)
 import Utils.Drasil.Concepts
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.PDController.Unitals

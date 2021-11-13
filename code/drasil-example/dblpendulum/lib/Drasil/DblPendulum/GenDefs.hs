@@ -7,6 +7,7 @@ import Prelude hiding (cos, sin, sqrt)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
+import Utils.Drasil (weave)
 import Theory.Drasil
 import Utils.Drasil.Concepts
 import qualified Language.Drasil.Sentence.Combinators as S

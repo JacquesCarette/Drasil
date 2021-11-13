@@ -10,6 +10,7 @@ import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs,
     equationalModel', equationalModelU, equationalRealmU,
     MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
+import Utils.Drasil (weave)
 import Utils.Drasil.Concepts
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Utils.Drasil.NounPhrase as NP

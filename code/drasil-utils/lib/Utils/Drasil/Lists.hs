@@ -1,7 +1,7 @@
 -- | Functions for working with lists.
 module Utils.Drasil.Lists where
 
-import Data.List (nub, sort)
+import Data.List
 
 -- | Replaces all elements of a target list that belong to a provided "bad"
 --   input list.
@@ -17,3 +17,7 @@ xs `subsetOf` ys = all (`elem` ys) xs
 -- | Sort a list, removing all duplicates
 nubSort :: Ord a => [a] -> [a]
 nubSort = nub . sort
+
+-- | Interweaves two lists together @[[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]@.
+weave :: [[a]] -> [a]
+weave = concat . transpose

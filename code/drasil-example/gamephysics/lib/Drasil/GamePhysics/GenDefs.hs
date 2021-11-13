@@ -4,6 +4,7 @@ module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD) wher
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (GenDefn, gd, equationalModel')
+import Utils.Drasil (weave)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)

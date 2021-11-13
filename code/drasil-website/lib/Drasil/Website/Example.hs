@@ -4,7 +4,6 @@ module Drasil.Website.Example where
 import Language.Drasil hiding (E)
 import Database.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
-import Utils.Drasil
 import Data.Char (toLower, isSpace)
 
 import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)

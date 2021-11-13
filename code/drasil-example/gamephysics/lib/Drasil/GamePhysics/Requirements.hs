@@ -2,9 +2,8 @@
 module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil hiding (organization)
-import Utils.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS (solCharSpec)
 import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_, 

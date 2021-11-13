@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
   primaryClass, auxClass, fApp, ctorCall, fAppInOut
 ) where
 
-import Language.Drasil
+import Language.Drasil hiding (List)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   AuxiliarySym(..))

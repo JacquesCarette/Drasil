@@ -4,10 +4,9 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
 
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
   constant, practice, reference, scenario, system, value)

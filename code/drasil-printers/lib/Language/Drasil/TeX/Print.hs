@@ -12,7 +12,6 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L
 import qualified Language.Drasil.ShortHands as LD (cDelta)
 import qualified Language.Drasil.Display as LD
-import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -287,7 +286,7 @@ spec a@(s :+: t) = s' <> t'
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
 spec (E ex) = toMath $ pExpr ex
-spec (S s)  = either error (pure . text . concatMap escapeChars) $ checkValidStr s invalid
+spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
     escapeChars '_' = "\\_"
@@ -510,7 +509,7 @@ showBibTeX  _ (Month        m) = showFieldRaw "month" (bibTeXMonth m)
 showBibTeX  _ (Note         n) = showField "note" n
 showBibTeX  _ (Number       n) = showField "number" (wrapS n)
 showBibTeX  _ (Organization o) = showField "organization" o
-showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ foldNums "--" p)
+showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ L.foldNums "--" p)
 showBibTeX  _ (Publisher    p) = showField "publisher" p
 showBibTeX  _ (School       s) = showField "school" s
 showBibTeX  _ (Series       s) = showField "series" s

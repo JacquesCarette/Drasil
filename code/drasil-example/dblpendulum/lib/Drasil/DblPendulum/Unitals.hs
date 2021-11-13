@@ -4,7 +4,7 @@ import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst, requirement, srs, typUnc)

@@ -21,7 +21,6 @@ import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle,
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Label.Type (LblType(Citation))
-import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
 import qualified Language.Drasil.UID.Core as UID (uid, showUID)
@@ -62,7 +61,9 @@ instance HasRefAddress Citation where getRefAdd = Citation . UID.showUID
 
 -- | Smart constructor which implicitly uses EntryID as chunk id.
 cite :: CitationKind -> [CiteField] -> String -> Citation
-cite x y z = let s = noSpaces z in Cite x y (UID.uid s) (shortname' (S s))
+cite ck cfs n
+  | ' ' `elem` n = error "Citation names may not contain spaces." -- TODO: Why not?
+  | otherwise    = Cite ck cfs (UID.uid n) (shortname' (S n))
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

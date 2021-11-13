@@ -35,11 +35,24 @@ module Utils.Drasil.Concepts (
   compoundNCPS, compoundNCPSPP, compoundNCGenP,
   combineNINP, combineNPNI, combineNINI) where
 
-import Language.Drasil
-import qualified Language.Drasil.Development as D
+import Language.Drasil.Chunk.NamedIdea ( NamedChunk, ncUID )
+import Language.Drasil.Classes ( Idea, NamedIdea(..) )
+import Language.Drasil.Development.Sentence ( phrase, plural )
+import Language.Drasil.NounPhrase
+    ( NP,
+      CapitalizationRule(CapWords, Replace, CapFirst),
+      NounPhrase(phraseNP, pluralNP),
+      nounPhrase'',
+      compoundPhrase,
+      compoundPhrase'',
+      compoundPhrase''' )
+import Language.Drasil.Sentence ( Sentence(S), (+:+) )
+import Language.Drasil.UID.Core ( (+++!) )
+import qualified Language.Drasil.NounPhrase as D
+    ( NounPhrase(pluralNP, phraseNP) )
 import Control.Lens ((^.))
 
-import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA,
+import qualified Language.Drasil.Sentence.Combinators as S (and_, andIts, andThe, of_, ofA,
   ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe, isThe)
 
 

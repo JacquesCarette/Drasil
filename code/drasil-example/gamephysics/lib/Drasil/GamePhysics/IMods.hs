@@ -4,9 +4,9 @@ module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil
-import Utils.Drasil
+import Utils.Drasil (weave)
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)

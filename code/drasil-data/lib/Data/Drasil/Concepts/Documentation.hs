@@ -2,7 +2,6 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil hiding (organization, year, label, variable)
-import Utils.Drasil
 import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Math (graph, unit_)

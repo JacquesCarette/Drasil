@@ -3,7 +3,7 @@ module Drasil.Template.Body where
 import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 

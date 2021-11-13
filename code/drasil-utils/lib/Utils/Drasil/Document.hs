@@ -13,4 +13,4 @@ indent = nest 4
 
 -- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
-indentList = vcat . map indent
+indentList = vcat . map indent  -- TODO: Isn't this just `indent . vcat`? This would be a bit more efficient too

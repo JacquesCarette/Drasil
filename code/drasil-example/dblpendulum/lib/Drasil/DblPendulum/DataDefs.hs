@@ -2,7 +2,7 @@ module Drasil.DblPendulum.DataDefs where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
 import Drasil.DblPendulum.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)

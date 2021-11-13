@@ -1,6 +1,7 @@
 module Drasil.Projectile.Lesson.Motion where
 
 import Data.List
+import Utils.Drasil (weave)
 
 import qualified Drasil.DocLang.Notebook as NB (summary, hormotion, vermotion)
 
@@ -16,9 +17,8 @@ import qualified Data.Drasil.Quantities.Physics as QP (ixDist, iyDist, iSpeed, i
 import Data.Drasil.Concepts.Documentation (coordinateSystem)
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
 
 motionContextP1, motionContextP2 :: Contents

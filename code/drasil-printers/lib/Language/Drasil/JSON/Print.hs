@@ -14,7 +14,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.Helpers (sqbrac)
+import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
@@ -24,7 +24,7 @@ import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
 import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
- tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI)
+ tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv)
 
 -- | Generate a python notebook document (using json).
 genJSON :: PrintingInformation -> L.Document -> Doc
@@ -101,21 +101,22 @@ pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 
 
--- | Renders expressions in the HTML (called by multiple functions)
+-- | Renders expressions in the JSON (called by multiple functions)
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr (Int i)        = text $ show i
 pExpr (Str s)        = doubleQuotes $ text s
+pExpr (Div n d)      = mkDiv "frac" (pExpr n) (pExpr d)
 pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
-pExpr (Sub e)        = text "_" <> pExpr e
-pExpr (Sup e)        = text "^" <> pExpr e
+pExpr (Sub e)        = unders <> pExpr e
+pExpr (Sup e)        = hat <> pExpr e
 pExpr (Over Hat s)   = pExpr s <> text "&#770;"
 pExpr (MO o)         = text $ pOps o
 pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
-pExpr (Font Bold e)  = pExpr e 
+pExpr (Font Bold e)  = pExpr e
 --pExpr (Font Bold e)  = bold $ pExpr e -- used before
 --pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- HTML used
 --pExpr (Spc Thin)     = text "&#8239;" -- HTML used

@@ -9,10 +9,9 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst, 
-  ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
-  constAccelV, speed)
-
+import Data.Drasil.Quantities.Physics (gravitationalAccelConst,
+  ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, 
+  velocity, acceleration, constAccelV, speed)
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)
 
 flightDur', iyPos, yConstAccel, iSpeed :: PExpr
@@ -61,7 +60,7 @@ velocityXY     = sy velocity     $= vec2D (sy xVel)           (sy yVel)
 accelerationXY = sy acceleration $= vec2D (sy xAccel)         (sy yAccel)
 constAccelXY   = sy constAccelV  $= vec2D (sy QP.xConstAccel) (sy QP.yConstAccel)
 
--- Expressions for lesson
+-- Expressions for Lesson
 lcrectVel, lcrectPos, lcrectNoTime :: LabelledContent
 lcrectVel = lbldExpr (sy speed $= speed') (makeEqnRef "rectVel")
 lcrectPos = lbldExpr (sy scalarPos $= scalarPos') (makeEqnRef "rectPos")

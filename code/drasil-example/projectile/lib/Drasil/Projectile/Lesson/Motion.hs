@@ -1,6 +1,5 @@
 module Drasil.Projectile.Lesson.Motion where
 
-import Data.List
 import Utils.Drasil (weave)
 
 import qualified Drasil.DocLang.Notebook as NB (summary, hormotion, vermotion)

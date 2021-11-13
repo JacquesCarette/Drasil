@@ -68,8 +68,6 @@ module Language.Drasil (
   , Referable(..)
   -- Language.Drasil.Classes
   , HasReference(getReferences)
-  -- Language.Drasil.Classes.Document
-  , HasCitation(getCitations)
   -- *** Programming-related
   , Callable
   , IsArgumentName
@@ -142,6 +140,7 @@ module Language.Drasil (
   -- *** Citations
   -- Language.Drasil.Chunk.Citation
   , EntryID, Citation, BibRef
+  , HasCitation(getCitations)
   , HasFields(getFields)
   -- accessors
   , citeID, citeKind
@@ -317,17 +316,12 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, Callable, 
   IsArgumentName, Express(..))
-import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
-  -- Types
     Citation, EntryID, BibRef
-    -- Accessors
+  , HasCitation(..)
   , citeID, citeKind
-    -- CiteFields smart constructors
-      -- People -> CiteField
-    -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis

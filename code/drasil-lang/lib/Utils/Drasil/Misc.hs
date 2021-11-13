@@ -24,7 +24,6 @@ import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
 import Language.Drasil.Chunk.Unital ( UnitalChunk )
 import Language.Drasil.Classes
     ( HasUnitSymbol(usymb),
-      HasUncertainty,
       Quantity,
       Concept,
       Definition(defn),
@@ -55,7 +54,7 @@ import Language.Drasil.Sentence
       capSent )
 import Language.Drasil.Space ( Space(DiscreteD, DiscreteS) )
 import Language.Drasil.Symbol.Helpers ( eqSymb )
-import Language.Drasil.Uncertainty ( uncVal, uncPrec )
+import Language.Drasil.Uncertainty
 import Language.Drasil.Symbol ( compsy )
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)

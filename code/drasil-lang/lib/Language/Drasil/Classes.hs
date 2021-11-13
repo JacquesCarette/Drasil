@@ -15,7 +15,6 @@ module Language.Drasil.Classes (
   , HasUnitSymbol(usymb)
   , HasReasVal(reasVal)
   , Constrained(constraints)
-  , HasUncertainty(unc)  
   , Callable
   , IsArgumentName
   , HasAdditionalNotes(getNotes)
@@ -44,7 +43,6 @@ import Language.Drasil.Reference (Reference)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID, HasUID)
-import Language.Drasil.Uncertainty.Core (Uncertainty)
 
 import Control.Lens (Lens')
 
@@ -129,12 +127,8 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 --   uncert :: Lens' c (Uncertainty)
 --   replaced with HasUncertainty
 
--- | HasUncertainty is just a chunk with some uncertainty associated to it.
--- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
-class HasUncertainty c where
-  -- | Provides the 'Lens' to an 'Uncertainty'.
-  unc  :: Lens' c Uncertainty
-
+-- TODO: This looks like it should be moved into drasil-code/?-base
+--       ...but, Dr. Carette also mentioned these are dubious, maybe we should remove it?
 -- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
 

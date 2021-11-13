@@ -56,7 +56,6 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , Quantity
   , HasReasVal(reasVal)
-  , HasUncertainty(unc)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
   , HasDerivation(derivations)
@@ -130,9 +129,8 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
-  -- Language.Drasil.Uncertainty.Core
-  , Uncertainty, uncty
   -- Language.Drasil.Uncertainty
+  , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
   -- ** Referencing
   -- Language.Drasil.Label.Type
@@ -317,7 +315,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ),
-  DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
+  DefiningExpr(defnExpr), Quantity, Callable, 
   IsArgumentName, Express(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
@@ -387,8 +385,7 @@ import Language.Drasil.People (People, Person, person, HasName(..),
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)
 
 import Language.Drasil.UnitLang (USymb(US))
-import Language.Drasil.Uncertainty.Core(Uncertainty, uncty)
-import Language.Drasil.Uncertainty(defaultUncrt, uncVal, uncPrec, exact)
+import Language.Drasil.Uncertainty
 
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)

@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, c
 import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty (unc))
+  IsUnit, Constrained(constraints), HasReasVal(reasVal))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr)
@@ -20,7 +20,7 @@ import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Uncertainty.Core (Uncertainty)
+import Language.Drasil.Uncertainty
 import Language.Drasil.UID (HasUID(..))
 
 import Control.Lens ((^.), makeLenses, view)

@@ -29,8 +29,7 @@ import Language.Drasil.Classes
       Concept,
       Definition(defn),
       NamedIdea(..) )
-import Language.Drasil.Classes.Core
-    ( Referable, HasSymbol, HasUID )
+import Language.Drasil.Classes.Core ( Referable, HasSymbol )
 import Language.Drasil.Classes.Core2 ( HasShortName )
 import Language.Drasil.Development.Sentence
     ( short, atStart, titleize, phrase, plural )
@@ -60,6 +59,7 @@ import Language.Drasil.Uncertainty ( uncVal, uncPrec )
 import Language.Drasil.Symbol ( compsy )
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
+import Language.Drasil.UID ( HasUID )
 
 import Control.Lens ((^.))
 

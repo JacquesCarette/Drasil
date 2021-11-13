@@ -3,7 +3,6 @@
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
-import qualified Language.Drasil.Development as D (uid)
 import Database.Drasil hiding (cdb)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -101,7 +100,7 @@ checkUID t si
   | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = t
   | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = t
   | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = t
-  | t `elem` map  (^. uid) (citeDB si) = D.uid ""
+  | t `elem` map  (^. uid) (citeDB si) = mkUid ""
   | otherwise = error $ show t ++ "Caught."
   where s = _sysinfodb si
 
@@ -184,7 +183,7 @@ traceyGraphGetRefs :: String -> [Reference]
 traceyGraphPath :: String -> String -> String
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
-traceGUIDs = map D.uid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
+traceGUIDs = map mkUid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
 traceyGraphPaths ex = map (\x -> resourcePath ++ map toLower (filter (not.isSpace) ex) ++ "/" ++ x ++ ".svg") traceGFiles
 traceyGraphGetRefs ex = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs (traceyGraphPaths $ map toLower $ filter (not.isSpace) ex)
 -- for actual use in creating the graph figures

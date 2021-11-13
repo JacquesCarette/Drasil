@@ -47,7 +47,7 @@ import Language.Drasil.NounPhrase
       compoundPhrase'',
       compoundPhrase''' )
 import Language.Drasil.Sentence ( Sentence(S), (+:+) )
-import Language.Drasil.UID.Core ( (+++!) )
+import Language.Drasil.UID ( (+++!) )
 import qualified Language.Drasil.NounPhrase as D
     ( NounPhrase(pluralNP, phraseNP) )
 import Control.Lens ((^.))

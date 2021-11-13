@@ -1,4 +1,4 @@
-{-# Language TypeFamilies, PostfixOperators #-}
+{-# Language PostfixOperators #-}
 -- | Miscellaneous utility functions for use throughout Drasil.
 module Utils.Drasil.Misc (
   -- * Reference-related Functions

@@ -1,4 +1,3 @@
-{-# Language TypeFamilies #-}
 -- | Contains functions to create the concept related chunk types found in "Language.Drasil.Chunk.Concept.Core".
 module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks

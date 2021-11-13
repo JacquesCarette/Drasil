@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies, ConstraintKinds, ConstrainedClassMethods #-}
+{-# LANGUAGE ConstraintKinds #-}
 
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (

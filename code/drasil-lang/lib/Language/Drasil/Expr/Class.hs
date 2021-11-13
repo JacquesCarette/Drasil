@@ -13,35 +13,38 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr.Lang
+import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
-import Language.Drasil.Classes.Core (HasSymbol, HasUID(..))
+import Language.Drasil.Classes.Core (HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
 import qualified Language.Drasil.ModelExpr.Lang as M
+import Language.Drasil.Literal.Class (LiteralC(..))
+import Language.Drasil.UID (HasUID(..))
 
 -- TODO: figure out which ones can be moved outside of the ExprC class
 
 -- | Smart constructor for fractions.
-frac :: ExprC r => Integer -> Integer -> r
+frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
 frac n d = exactDbl n $/ exactDbl d
 
 -- | Smart constructor for rational expressions (only in 1/x form).
-recip_ :: ExprC r => r -> r
+recip_ :: (ExprC r, LiteralC r) => r -> r
 recip_ denom = exactDbl 1 $/ denom
 
 -- | Smart constructor to square a function.
-square :: ExprC r => r -> r
+square :: (ExprC r, LiteralC r) => r -> r
 square x = x $^ exactDbl 2
 
 -- | Smart constructor to half a function exactly.
-half :: ExprC r => r -> r
+half :: (ExprC r, LiteralC r) => r -> r
 half x = x $/ exactDbl 2
 
 -- | 1/2, as an expression.
-oneHalf :: ExprC r => r
+oneHalf :: (ExprC r, LiteralC r) => r
 oneHalf = frac 1 2
 
 -- | 1/3rd, as an expression.
-oneThird :: ExprC r => r
+oneThird :: (ExprC r, LiteralC r) => r
 oneThird = frac 1 3
 
 -- | Similar to 'apply', but converts second argument into 'Symbol's.
@@ -60,6 +63,8 @@ class ExprC r where
   infixr 9 $&&
   infixr 9 $||
   
+  lit :: Literal -> r
+
   -- * Binary Operators
   
   ($=), ($!=) :: r -> r -> r
@@ -148,21 +153,6 @@ class ExprC r where
   -- | Smart constructor for indexing.
   idx :: r -> r -> r
   
-  -- | Smart constructor for integers.
-  int :: Integer -> r
-  
-  -- | Smart constructor for doubles.
-  dbl :: Double -> r
-  
-  -- | Smart constructor for exact doubles.
-  exactDbl :: Integer -> r
-  
-  -- | Smart constructor for strings.
-  str :: String -> r
-  
-  -- | Smart constructors for percents.
-  perc :: Integer -> Integer -> r
-  
   -- | Smart constructor for the summation, product, and integral functions over an interval.
   defint, defsum, defprod :: Symbol -> r -> r -> r -> r
   
@@ -217,6 +207,8 @@ class ExprC r where
   sy :: (HasUID c, HasSymbol c) => c -> r
 
 instance ExprC Expr where
+  lit = Lit
+
   -- | Smart constructor for equating two expressions.
   ($=)  = EqBinaryOp Eq
   -- | Smart constructor for showing that two expressions are not equal.
@@ -236,36 +228,36 @@ instance ExprC Expr where
   ($.) = VVNBinaryOp Dot
   
   -- | Add two expressions (Integers).
-  addI l (Int 0) = l
-  addI (Int 0) r = r
+  addI l (Lit (Int 0)) = l
+  addI (Lit (Int 0)) r = r
   addI (AssocA AddI l) (AssocA AddI r) = AssocA AddI (l ++ r)
   addI (AssocA AddI l) r = AssocA AddI (l ++ [r])
   addI l (AssocA AddI r) = AssocA AddI (l : r)
   addI l r = AssocA AddI [l, r]
   
   -- | Add two expressions (Real numbers).
-  addRe l (Dbl 0)      = l
-  addRe (Dbl 0) r      = r
-  addRe l (ExactDbl 0) = l
-  addRe (ExactDbl 0) r = r
+  addRe l (Lit (Dbl 0))= l
+  addRe (Lit(Dbl 0)) r      = r
+  addRe l (Lit (ExactDbl 0)) = l
+  addRe (Lit (ExactDbl 0)) r = r
   addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
   addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
   addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
   addRe l r = AssocA AddRe [l, r]
   
   -- | Multiply two expressions (Integers).
-  mulI l (Int 1) = l
-  mulI (Int 1) r = r
+  mulI l (Lit (Int 1)) = l
+  mulI (Lit (Int 1)) r = r
   mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
   mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
   mulI l (AssocA MulI r) = AssocA MulI (l : r)
   mulI l r = AssocA MulI [l, r]
   
   -- | Multiply two expressions (Real numbers).
-  mulRe l (Dbl 1)      = l
-  mulRe (Dbl 1) r      = r
-  mulRe l (ExactDbl 1) = l
-  mulRe (ExactDbl 1) r = r
+  mulRe l (Lit (Dbl 1))      = l
+  mulRe (Lit (Dbl 1)) r      = r
+  mulRe l (Lit (ExactDbl 1)) = l
+  mulRe (Lit (ExactDbl 1)) r = r
   mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
   mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
   mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)
@@ -348,21 +340,6 @@ instance ExprC Expr where
   -- | Smart constructor for indexing.
   idx = LABinaryOp Index
   
-  -- | Smart constructor for integers.
-  int = Int
-  
-  -- | Smart constructor for doubles.
-  dbl = Dbl
-  
-  -- | Smart constructor for exact doubles.
-  exactDbl = ExactDbl
-  
-  -- | Smart constructor for strings.
-  str = Str
-  
-  -- | Smart constructors for percents.
-  perc = Perc
-  
   -- | Integrate over some expression with bounds (∫).
   defint v low high = Operator AddRe (BoundedDD v Continuous low high)
   
@@ -402,7 +379,7 @@ instance ExprC Expr where
   -- >>> dgnl2x2 1 2
   -- [ [1, 0],
   --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
+  dgnl2x2 a  = m2x2 a (int 0) (int 0)
   
   -- Some helper functions to do function application
   
@@ -420,6 +397,8 @@ instance ExprC Expr where
   sy x = C (x ^. uid)
   
 instance ExprC M.ModelExpr where
+  lit = M.Lit
+
   -- | Smart constructor for equating two expressions.
   ($=)  = M.EqBinaryOp M.Eq
   -- | Smart constructor for showing that two expressions are not equal.
@@ -439,36 +418,36 @@ instance ExprC M.ModelExpr where
   ($.) = M.VVNBinaryOp M.Dot
 
   -- | Add two expressions (Integers).
-  addI l (M.Int 0) = l
-  addI (M.Int 0) r = r
+  addI l (M.Lit (Int 0)) = l
+  addI (M.Lit (Int 0)) r = r
   addI (M.AssocA M.AddI l) (M.AssocA M.AddI r) = M.AssocA M.AddI (l ++ r)
   addI (M.AssocA M.AddI l) r = M.AssocA M.AddI (l ++ [r])
   addI l (M.AssocA M.AddI r) = M.AssocA M.AddI (l : r)
   addI l r = M.AssocA M.AddI [l, r]
 
   -- | Add two expressions (Real numbers).
-  addRe l (M.Dbl 0)      = l
-  addRe (M.Dbl 0) r      = r
-  addRe l (M.ExactDbl 0) = l
-  addRe (M.ExactDbl 0) r = r
+  addRe l (M.Lit (Dbl 0))      = l
+  addRe (M.Lit (Dbl 0)) r      = r
+  addRe l (M.Lit (ExactDbl 0)) = l
+  addRe (M.Lit (ExactDbl 0)) r = r
   addRe (M.AssocA M.AddRe l) (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l ++ r)
   addRe (M.AssocA M.AddRe l) r = M.AssocA M.AddRe (l ++ [r])
   addRe l (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l : r)
   addRe l r = M.AssocA M.AddRe [l, r]
 
   -- | Multiply two expressions (Integers).
-  mulI l (M.Int 1) = l
-  mulI (M.Int 1) r = r
+  mulI l (M.Lit (Int 1)) = l
+  mulI (M.Lit (Int 1)) r = r
   mulI (M.AssocA M.MulI l) (M.AssocA M.MulI r) = M.AssocA M.MulI (l ++ r)
   mulI (M.AssocA M.MulI l) r = M.AssocA M.MulI (l ++ [r])
   mulI l (M.AssocA M.MulI r) = M.AssocA M.MulI (l : r)
   mulI l r = M.AssocA M.MulI [l, r]
 
   -- | Multiply two expressions (Real numbers).
-  mulRe l (M.Dbl 1)      = l
-  mulRe (M.Dbl 1) r      = r
-  mulRe l (M.ExactDbl 1) = l
-  mulRe (M.ExactDbl 1) r = r
+  mulRe l (M.Lit (Dbl 1))      = l
+  mulRe (M.Lit (Dbl 1)) r      = r
+  mulRe l (M.Lit (ExactDbl 1)) = l
+  mulRe (M.Lit (ExactDbl 1)) r = r
   mulRe (M.AssocA M.MulRe l) (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l ++ r)
   mulRe (M.AssocA M.MulRe l) r = M.AssocA M.MulRe (l ++ [r])
   mulRe l (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l : r)
@@ -551,21 +530,6 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for indexing.
   idx = M.LABinaryOp M.Index
 
-  -- | Smart constructor for integers.
-  int = M.Int
-
-  -- | Smart constructor for doubles.
-  dbl = M.Dbl
-
-  -- | Smart constructor for exact doubles.
-  exactDbl = M.ExactDbl
-
-  -- | Smart constructor for strings.
-  str = M.Str
-
-  -- | Smart constructors for percents.
-  perc = M.Perc
-
   -- | Integrate over some expression with bounds (∫).
   defint v low high = M.Operator M.AddRe (BoundedDD v Continuous low high)
 
@@ -605,7 +569,7 @@ instance ExprC M.ModelExpr where
   -- >>> dgnl2x2 1 2
   -- [ [1, 0],
   --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (M.Int 0) (M.Int 0)
+  dgnl2x2 a  = m2x2 a (int 0) (int 0)
 
   -- Some helper functions to do function application
 

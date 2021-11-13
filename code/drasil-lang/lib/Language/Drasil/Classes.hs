@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies, ConstraintKinds, ConstrainedClassMethods #-}
+{-# LANGUAGE ConstraintKinds #-}
 
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (
@@ -33,7 +33,7 @@ module Language.Drasil.Classes (
 
 -- some classes are so 'core' that they are defined elswhere
 -- also helps with cycles...
-import Language.Drasil.Classes.Core (HasSymbol, HasUID)
+import Language.Drasil.Classes.Core (HasSymbol)
 
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
@@ -45,7 +45,7 @@ import Language.Drasil.Reference (Reference)
 import Language.Drasil.DecoratedReference(DecRef)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID, HasUID)
 import Language.Drasil.Uncertainty.Core (Uncertainty)
 
 import Control.Lens (Lens')
@@ -168,7 +168,7 @@ class UnitEq u where
 
 class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
-  defnExpr :: Express e => Lens' (c e) e
+  defnExpr :: Lens' (c e) e
 
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

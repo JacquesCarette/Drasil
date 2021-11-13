@@ -6,9 +6,9 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD,
 import Language.Drasil
 
 import Theory.Drasil
-import Utils.Drasil
+import Utils.Drasil (weave)
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)

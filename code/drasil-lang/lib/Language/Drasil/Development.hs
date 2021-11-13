@@ -5,9 +5,9 @@ module Language.Drasil.Development (
   -- Sentence.Extract
   , sdep, lnames, lnames'
   -- * UID
-  , uid, showUID
+  , showUID
   ) where
 
 import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))
 import Language.Drasil.Sentence.Extract (sdep, lnames, lnames')
-import Language.Drasil.UID.Core (uid, showUID)
+import Language.Drasil.UID (showUID)

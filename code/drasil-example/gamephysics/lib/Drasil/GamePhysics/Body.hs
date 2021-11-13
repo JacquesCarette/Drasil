@@ -6,9 +6,8 @@ import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
 import Theory.Drasil (qdEFromDD)
-import Utils.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,

@@ -8,8 +8,8 @@ module Language.Drasil.Chunk.Concept.Core(
   , sDom)
   where
 
-import Language.Drasil.Classes.Core (HasUID(uid),
-  HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd),
+  Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), CommonIdea(abrv))
@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type (LblType(RP), name, raw, (+::+), defer)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName)
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID, HasUID(..))
 
 import Control.Lens (makeLenses, (^.), view)
 

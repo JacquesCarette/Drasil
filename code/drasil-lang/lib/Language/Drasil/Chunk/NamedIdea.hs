@@ -6,9 +6,7 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Constructors
   nc, ncUID, nw, mkIdea, mkIdeaUID) where
 
-import Language.Drasil.UID (UID)
-import qualified Language.Drasil.UID.Core as UID (uid)
-import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.UID
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses)
 
@@ -34,11 +32,11 @@ instance NamedIdea NamedChunk where term = np
 instance Idea      NamedChunk where getA _ = Nothing
 
 -- TODO: Add in function to check UIDs (see #2788).
--- TODO: Any contructor that takes in a UID should be built off of this one so that
+-- TODO: Any constructor that takes in a UID should be built off of this one so that
 -- the UID may be checked by the first TODO.
 -- | 'NamedChunk' constructor, takes a 'String' for its 'UID' and a term.
 nc :: String -> NP -> NamedChunk
-nc s = NC (UID.uid s)
+nc s = NC (mkUid s)
 
 -- | Similar to 'nc', but takes in the 'UID' in the form of a 'UID' rather than a 'String'.
 ncUID :: UID -> NP -> NamedChunk
@@ -76,4 +74,4 @@ mkIdeaUID s np' = IdeaDict (ncUID s np')
 -- an 'Idea' and places its 'UID' and 'NP' into an 'IdeaDict' with
 -- 'Nothing' for an abbreviation.
 nw :: Idea c => c -> IdeaDict
-nw c = IdeaDict (NC (c^.uid) (c^.term)) (getA c)
+nw c = IdeaDict (NC (c ^. uid) (c ^. term)) (getA c)

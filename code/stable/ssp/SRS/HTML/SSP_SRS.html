@@ -3295,8 +3295,8 @@
                       <th>Equation</th>
                       <td>
                         \[\symbf{f}=\begin{cases}
-                                    1, & const_f\\
-                                    \sin\left(π \frac{{\symbf{x}_{\text{slip},i}}-{\symbf{x}_{\text{slip},0}}}{{\symbf{x}_{\text{slip},n}}-{\symbf{x}_{\text{slip},0}}}\right), & \neg{}const_f
+                                    1, & \mathit{const\_f}\\
+                                    \sin\left(π \frac{{\symbf{x}_{\text{slip},i}}-{\symbf{x}_{\text{slip},0}}}{{\symbf{x}_{\text{slip},n}}-{\symbf{x}_{\text{slip},0}}}\right), & \neg{}\mathit{const\_f}
                                     \end{cases}\]
                       </td>
                     </tr>
@@ -4043,7 +4043,7 @@
                       <td>
                         \[{\symbf{C}_{\text{num},i}}=\begin{cases}
                                                      {\symbf{b}}_{1} \left({\symbf{G}}_{1}+{\symbf{H}}_{1}\right) \tan\left({\symbf{α}}_{1}\right), & i=1\\
-                                                     {\symbf{b}}_{i} \left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\symbf{α}}_{i}\right)+\symbf{h} -\left(2\right) {\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+                                                     {\symbf{b}}_{i} \left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\symbf{α}}_{i}\right)+\symbf{h} -2 {\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
                                                      {\symbf{b}}_{n} \left({\symbf{G}}_{n-1}+{\symbf{H}}_{n-1}\right) \tan\left({\symbf{α}}_{n-1}\right), & i=n
                                                      \end{cases}\]
                       </td>
@@ -4348,7 +4348,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{{F_{\text{S}}}^{\text{min}}}=Υ\left({\symbf{x}_{\text{slope}}},{\symbf{y}_{\text{slope}}},{\symbf{x}_{\text{wt}}},{\symbf{y}_{\text{wt}}},c',φ',{γ_{\text{dry}}},{γ_{\text{sat}}},{γ_{w}},const_f\right)\]
+                        \[{{F_{\text{S}}}^{\text{min}}}=Υ\left({\symbf{x}_{\text{slope}}},{\symbf{y}_{\text{slope}}},{\symbf{x}_{\text{wt}}},{\symbf{y}_{\text{wt}}},c',φ',{γ_{\text{dry}}},{γ_{\text{sat}}},{γ_{w}},\mathit{const\_f}\right)\]
                       </td>
                     </tr>
                     <tr>

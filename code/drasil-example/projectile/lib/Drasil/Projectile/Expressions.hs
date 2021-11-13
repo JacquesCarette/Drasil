@@ -7,7 +7,6 @@ module Drasil.Projectile.Expressions where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Utils.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst,

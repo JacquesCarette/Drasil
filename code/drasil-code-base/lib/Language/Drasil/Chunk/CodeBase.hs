@@ -10,7 +10,7 @@ import Database.Drasil (ChunkDB, symbResolve)
 import Language.Drasil.Code.Expr (CodeExpr)
 import Language.Drasil.Code.Expr.Extract (eDep, eDep')
 
-import Utils.Drasil.Strings (toPlainName)
+import Utils.Drasil (toPlainName)
 
 import Data.List (nub)
 

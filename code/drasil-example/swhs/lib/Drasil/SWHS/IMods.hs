@@ -2,12 +2,12 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
+import Utils.Drasil (weave)
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
   equationalModel, ModelKind)
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens((^.))
 
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,

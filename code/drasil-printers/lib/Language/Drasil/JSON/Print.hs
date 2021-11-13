@@ -4,10 +4,8 @@ module Language.Drasil.JSON.Print(genJSON) where
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
-import Utils.Drasil (checkValidStr)
 
-import qualified Language.Drasil as L (DType(Data, Theory, Instance, General), 
-  MaxWidthPercent, Document, special)
+import qualified Language.Drasil as L
 
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
@@ -88,7 +86,7 @@ print = foldr (($$) . printLO) empty
 pSpec :: Spec -> Doc
 pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
 pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
+pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"

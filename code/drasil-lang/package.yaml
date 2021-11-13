@@ -13,6 +13,7 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - split
+- Decimal
 - unicode-names >= 3.2.0.0
 
 ghc-options:
@@ -26,8 +27,15 @@ library:
   - Language.Drasil.Development
   - Language.Drasil.Display
   - Language.Drasil.Expr.Development
+  - Language.Drasil.Literal.Development
   - Language.Drasil.ModelExpr.Development
+  - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands
+  - Utils.Drasil.Concepts
+  - Utils.Drasil.Contents
+  - Utils.Drasil.Fold
+  - Utils.Drasil.Misc
+  - Utils.Drasil.NounPhrase
   when:
   - condition: false
     other-modules: Paths_drasil_lang

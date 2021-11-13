@@ -1,4 +1,3 @@
-{-# Language TypeFamilies #-}
 -- | Contains functions to create the concept related chunk types found in "Language.Drasil.Chunk.Concept.Core".
 module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
@@ -10,7 +9,6 @@ module Language.Drasil.Chunk.Concept (
   ConceptInstance, cic
   ) where
 
-import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Idea, Definition(defn), ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.CommonIdea (commonIdea)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict),
@@ -19,6 +17,7 @@ import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
+import Language.Drasil.UID (HasUID(uid))
 
 import Control.Lens ((^.))
 

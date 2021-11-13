@@ -3,7 +3,6 @@ module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs) where
 --A list of likely and unlikely changes for GlassBR
 
 import Language.Drasil hiding (variable)
-import Utils.Drasil
 import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,

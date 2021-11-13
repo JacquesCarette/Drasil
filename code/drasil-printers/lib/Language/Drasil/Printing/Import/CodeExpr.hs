@@ -4,22 +4,21 @@
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
 import Language.Drasil (DomainDesc(..), Inclusive(..),
-  RTopology(..), RealInterval(..), UID )
+  RTopology(..), RealInterval(..), UID, LiteralC (int))
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.CodeExpr (dbl)
 import Language.Drasil.Code.Expr.Development
+import Language.Drasil.Literal.Development
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
-  PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
 
 import Language.Drasil.Printing.Import.Helpers
-    (digitsProcess, lookupC, parens, processExpo)
+    (lookupC, parens)
+import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
 
 import Control.Lens ((^.))
 import Data.List (intersperse)
-import Numeric (floatToDigits)
 
 
 -- | Helper that creates an expression row given printing information, an operator, and an expression.
@@ -37,8 +36,9 @@ expr' s p e = fence $ codeExpr e s
 
 -- | Helper for properly rendering negation of expressions.
 neg' :: CodeExpr -> Bool
-neg' (Dbl     _)            = True
-neg' (Int     _)            = True
+neg' (Lit (Dbl _))          = True
+neg' (Lit (Int _))          = True
+neg' (Lit (ExactDbl _))     = True
 neg' Operator{}             = True
 neg' (AssocA MulI _)        = True
 neg' (AssocA MulRe _)       = True
@@ -108,17 +108,7 @@ eop sm MulRe = eopMuls sm
 
 -- | Translate 'CodeExpr's to printable layout AST 'Expr's.
 codeExpr :: CodeExpr -> PrintingInformation -> P.Expr
-codeExpr (Dbl d)                  sm = case sm ^. getSetting of
-  Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
-     (fst $ processExpo $ snd $ floatToDigits 10 d) 0
-     (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
-  Scientific  ->  P.Dbl d
-codeExpr (Int i)                   _ = P.Int i
-codeExpr (ExactDbl d)              _ = P.Int d
-codeExpr (Str s)                   _ = P.Str s
-codeExpr (Perc a b)               sm = P.Row [codeExpr (dbl val) sm, P.MO P.Perc]
-  where
-    val = fromIntegral a / (10 ** fromIntegral (b - 2))
+codeExpr (Lit l)                  sm = literal l sm
 codeExpr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 codeExpr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 codeExpr (AssocA AddI l)          sm = assocExpr P.Add (precA AddI) l sm
@@ -183,12 +173,12 @@ assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec)
 -- | Helper for rendering printable expressions.
 mulExpr ::  [CodeExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
-  (a, Int _)      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, ExactDbl _) ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Dbl _)      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Int _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (ExactDbl _)) ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Dbl _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
   (a, _)          ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [expr' sm (precA o) hd]
-mulExpr []           o sm = [expr' sm (precA o) (Int 1)]
+mulExpr []           o sm = [expr' sm (precA o) (int 1)]
 
 
 -- | Helper that adds parenthesis to the first expression. The second expression

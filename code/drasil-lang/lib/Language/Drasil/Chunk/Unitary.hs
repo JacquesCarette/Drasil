@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Unitary (
   -- * Constructors
   mkUnitary, unitary, unitary', unit_symb) where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, usymb, Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
@@ -16,6 +16,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.UID (HasUID(..))
 
 import Control.Lens ((^.), makeLenses)
 

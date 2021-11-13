@@ -9,10 +9,9 @@ import Theory.Drasil (qdEFromDD)
 
 import Prelude hiding (sin, cos, tan)
 import Data.Maybe (mapMaybe)
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, document, effect, endUser, environment,

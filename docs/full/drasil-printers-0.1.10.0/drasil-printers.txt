@@ -568,56 +568,6 @@ indent :: Doc -> Doc
 makeCases :: [(Expr, Expr)] -> (Expr -> Doc) -> Doc
 
 
--- | Defines helper functions for creating jupyter notebooks.
-module Language.Drasil.JSON.Helpers
-data Variation
-Class :: Variation
-Id :: Variation
-
--- | Table row tag wrapper
-tr :: Doc -> Doc
-
--- | Table cell tag wrapper
-td :: Doc -> Doc
-
--- | Figure tag wrapper
-figure :: Doc -> Doc
-
--- | List tag wrapper
-li :: Doc -> Doc
-
--- | Paragraph in list tag wrapper
-pa :: Doc -> Doc
-ba :: Doc -> Doc
-
--- | Ordered list tag wrapper
-ol :: [String] -> Doc -> Doc
-
--- | Unordered list tag wrapper
-ul :: [String] -> Doc -> Doc
-
--- | Table tag wrapper
-table :: [String] -> Doc -> Doc
-nbformat :: Doc -> Doc
-wrap :: String -> [String] -> Doc -> Doc
-wrap' :: String -> [String] -> Doc -> Doc
-wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
-refwrap :: Doc -> Doc -> Doc
-refID :: Doc -> Doc
-
--- | Helper for setting up links to references
-reflink :: String -> Doc -> Doc
-
--- | Helper for setting up links to external URIs
-reflinkURI :: String -> Doc -> Doc
-
--- | Helper for setting up figures
-image :: Doc -> Doc -> MaxWidthPercent -> Doc
-h :: Int -> Doc
-stripnewLine :: String -> Doc
-makeMetadata :: Doc
-
-
 -- | Defines types used for printing citations.
 module Language.Drasil.Printing.Citation
 
@@ -813,6 +763,60 @@ sufx :: Int -> String
 
 -- | Similar to <a>sufx</a> but used on any sized <a>Int</a>.
 sufxer :: Int -> String
+
+
+-- | Defines helper functions for creating jupyter notebooks.
+module Language.Drasil.JSON.Helpers
+data Variation
+Class :: Variation
+Id :: Variation
+
+-- | Table row tag wrapper
+tr :: Doc -> Doc
+
+-- | Table cell tag wrapper
+td :: Doc -> Doc
+
+-- | Figure tag wrapper
+figure :: Doc -> Doc
+
+-- | List tag wrapper
+li :: Doc -> Doc
+
+-- | Paragraph in list tag wrapper
+pa :: Doc -> Doc
+ba :: Doc -> Doc
+
+-- | Ordered list tag wrapper
+ol :: [String] -> Doc -> Doc
+
+-- | Unordered list tag wrapper
+ul :: [String] -> Doc -> Doc
+
+-- | Table tag wrapper
+table :: [String] -> Doc -> Doc
+nbformat :: Doc -> Doc
+wrap :: String -> [String] -> Doc -> Doc
+wrap' :: String -> [String] -> Doc -> Doc
+wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
+refwrap :: Doc -> Doc -> Doc
+refID :: Doc -> Doc
+
+-- | Helper for setting up links to references
+reflink :: String -> Doc -> Doc
+
+-- | Helper for setting up links to external URIs
+reflinkURI :: String -> Doc -> Doc
+
+-- | Helper for setting up figures
+image :: Doc -> Doc -> MaxWidthPercent -> Doc
+h :: Int -> Doc
+
+-- | Curly braces.
+br :: Doc -> Doc
+mkDiv :: String -> Doc -> Doc -> Doc
+stripnewLine :: String -> Doc
+makeMetadata :: Doc
 
 
 -- | Printing helpers.

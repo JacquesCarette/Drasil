@@ -664,6 +664,8 @@ impulseV :: ConceptChunk
 isotropy :: ConceptChunk
 ixPos :: ConceptChunk
 ixVel :: ConceptChunk
+ixSpeed :: ConceptChunk
+iySpeed :: ConceptChunk
 iyPos :: ConceptChunk
 iyVel :: ConceptChunk
 joint :: ConceptChunk
@@ -805,6 +807,8 @@ gravitationalConst :: UnitalChunk
 height :: UnitalChunk
 iPos :: UnitalChunk
 iSpeed :: UnitalChunk
+ixSpeed :: UnitalChunk
+iySpeed :: UnitalChunk
 iVel :: UnitalChunk
 impulseS :: UnitalChunk
 impulseV :: UnitalChunk
@@ -830,8 +834,6 @@ weight :: UnitalChunk
 xAccel :: UnitalChunk
 xConstAccel :: UnitalChunk
 xDist :: UnitalChunk
-ixDist :: UnitalChunk
-iyDist :: UnitalChunk
 xPos :: UnitalChunk
 xVel :: UnitalChunk
 yAccel :: UnitalChunk

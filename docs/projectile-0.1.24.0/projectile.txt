@@ -115,6 +115,9 @@ horMotionDeriv :: [ModelExpr]
 horMotionEqn1 :: ModelExpr
 horMotionEqn2 :: ModelExpr
 verMotionDeriv :: [ModelExpr]
+verMotionEqn1 :: ModelExpr
+verMotionEqn2 :: ModelExpr
+verMotionEqn3 :: ModelExpr
 
 module Drasil.Projectile.Lesson.Motion
 motionContextP1 :: Contents

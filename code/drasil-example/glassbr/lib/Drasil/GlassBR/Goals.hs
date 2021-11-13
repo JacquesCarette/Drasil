@@ -1,7 +1,6 @@
 module Drasil.GlassBR.Goals (goals, willBreakGS) where
 
 import Language.Drasil
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom, userInput)

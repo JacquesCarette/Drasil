@@ -17,7 +17,6 @@ import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
 import Data.Maybe (fromMaybe)
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose)
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 import Data.Char (isSpace, toLower)
 

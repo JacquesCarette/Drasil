@@ -11,7 +11,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (yVel)
 import Drasil.Projectile.Concepts (projectile)
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil
 
 import qualified Utils.Drasil.Sentence as S
 

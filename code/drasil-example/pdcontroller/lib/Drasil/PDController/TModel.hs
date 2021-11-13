@@ -9,7 +9,6 @@ import Drasil.PDController.References
 import Language.Drasil
 import qualified Language.Drasil as DrasilLang
 import Theory.Drasil (TheoryModel, tm, othModel')
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.Citations(laplaceWiki)

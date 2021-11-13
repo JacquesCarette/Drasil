@@ -4,7 +4,6 @@ module Drasil.Projectile.GenDefs (genDefns, posVecGD) where
 import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, equationalModel')
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 

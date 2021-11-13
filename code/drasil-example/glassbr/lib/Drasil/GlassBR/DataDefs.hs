@@ -9,7 +9,6 @@ import Language.Drasil.Code (asVC')
 import Prelude hiding (log, exp, sqrt)
 import Theory.Drasil (DataDefinition, ddE)
 import Database.Drasil (Block(Parallel))
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (datum, user)

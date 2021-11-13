@@ -3,7 +3,6 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) wher
 import Prelude hiding (exp)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC, equationalModelN)
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.SI_Units

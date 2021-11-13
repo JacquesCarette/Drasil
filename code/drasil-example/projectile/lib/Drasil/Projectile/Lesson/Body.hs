@@ -7,7 +7,6 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 -- TODO: Add export parameters in a module

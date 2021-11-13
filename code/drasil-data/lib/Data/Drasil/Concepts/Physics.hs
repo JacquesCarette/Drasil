@@ -5,7 +5,6 @@ module Data.Drasil.Concepts.Physics where
 import Language.Drasil hiding (space)
 import qualified Utils.Drasil.Sentence as S
 import qualified Utils.Drasil.NounPhrase as NP
-import Utils.Drasil
 import Utils.Drasil.Concepts
 
 import Data.Drasil.Domains (mathematics, physics)

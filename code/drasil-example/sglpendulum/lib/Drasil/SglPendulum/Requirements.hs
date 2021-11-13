@@ -1,7 +1,6 @@
 module Drasil.SglPendulum.Requirements where
 
 import Language.Drasil
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.Concepts.Documentation (funcReqDom, output_, value)
 import Drasil.SglPendulum.IMods (angularDisplacementIM)

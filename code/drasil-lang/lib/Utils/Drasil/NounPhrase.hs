@@ -32,7 +32,12 @@ module Utils.Drasil.NounPhrase (
   -- ** Other Combinators
   with) where
 
-import Language.Drasil
+import Language.Drasil.NounPhrase
+    ( NP,
+      CapitalizationRule(CapWords, CapFirst),
+      NounPhrase(phraseNP, pluralNP),
+      nounPhrase'' )
+import Language.Drasil.Sentence ( Sentence(S), (+:+) )
 import qualified Utils.Drasil.Sentence as S
 
 

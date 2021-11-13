@@ -24,7 +24,6 @@ module Drasil.Sections.SpecificSystemDescription (
 
 import Language.Drasil hiding (variable)
 import Language.Drasil.Development (showUID)
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S

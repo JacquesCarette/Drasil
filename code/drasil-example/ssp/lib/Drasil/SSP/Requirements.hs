@@ -1,7 +1,6 @@
 module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
 
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 

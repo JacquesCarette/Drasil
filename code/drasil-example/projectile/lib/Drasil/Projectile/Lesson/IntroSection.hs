@@ -3,7 +3,6 @@ module Drasil.Projectile.Lesson.IntroSection where
 import Data.Drasil.Concepts.Physics (force, motion)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 
-import Utils.Drasil (foldlSP, foldlSP_, foldlSent, enumBulletU)
 import qualified Utils.Drasil.Sentence as S
 import Language.Drasil
 

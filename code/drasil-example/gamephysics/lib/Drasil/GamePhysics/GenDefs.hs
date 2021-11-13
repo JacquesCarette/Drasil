@@ -2,7 +2,6 @@
 module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD) where
 
 import Language.Drasil
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 import Theory.Drasil (GenDefn, gd, equationalModel')
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,

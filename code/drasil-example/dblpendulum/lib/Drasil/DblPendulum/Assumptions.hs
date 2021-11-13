@@ -3,7 +3,6 @@ module Drasil.DblPendulum.Assumptions (twoDMotion, cartSys, cartSysR,
   yAxisDir, startOriginSingle, startOriginDouble, firstPend, secondPend, assumpSingle, assumpDouble) where
     
 import Language.Drasil
-import Utils.Drasil (foldlSent)
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 

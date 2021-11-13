@@ -13,7 +13,14 @@ module Utils.Drasil.Fold (
   foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList
   ) where
 
-import Language.Drasil
+import Language.Drasil.Classes ( Express(express), Quantity )
+import Language.Drasil.Constraint
+    ( Constraint(Range), ConstraintE )
+import Language.Drasil.Document ( mkParagraph )
+import Language.Drasil.Document.Core ( Contents )
+import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
+import Language.Drasil.Sentence
+    ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
 import qualified Utils.Drasil.Sentence as S (and_, or_)
 
 -- | Fold helper function that applies f to all but the last element, applies g to

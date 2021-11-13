@@ -15,7 +15,9 @@ module Utils.Drasil.Sentence (
   -- * Other Combinators
   of_, ofA, or_, are, in_, is, defnAs, denotes, versus, wrt) where
 
-import Language.Drasil
+import Language.Drasil.Classes ( NamedIdea )
+import Language.Drasil.Development.Sentence ( titleize, titleize' )
+import Language.Drasil.Sentence ( Sentence(S), (+:+) )
 
 
 sentHelper :: String -> Sentence -> Sentence -> Sentence

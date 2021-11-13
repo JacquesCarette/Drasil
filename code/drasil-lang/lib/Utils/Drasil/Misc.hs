@@ -19,8 +19,45 @@ module Utils.Drasil.Misc (
   weave, zipSentList
   ) where
 
-import Language.Drasil
-import Language.Drasil.Display
+import Language.Drasil.Chunk.Concept ( ConceptChunk )
+import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
+import Language.Drasil.Chunk.Unital ( UnitalChunk )
+import Language.Drasil.Classes
+    ( HasUnitSymbol(usymb),
+      HasUncertainty,
+      Quantity,
+      Concept,
+      Definition(defn),
+      NamedIdea(..) )
+import Language.Drasil.Classes.Core
+    ( Referable, HasSymbol, HasUID )
+import Language.Drasil.Classes.Core2 ( HasShortName )
+import Language.Drasil.Development.Sentence
+    ( short, atStart, titleize, phrase, plural )
+import Language.Drasil.Document ( Section )
+import Language.Drasil.Document.Core
+    ( ItemType(..), ListType(Bullet) )
+import Language.Drasil.Expr.Class ( ExprC(sy) )
+import Language.Drasil.ModelExpr.Class ( ModelExprC(isIn) )
+import Language.Drasil.ModelExpr.Lang ( ModelExpr )
+import Language.Drasil.NounPhrase ( NP )
+import Language.Drasil.Reference ( refS, namedRef )
+import Language.Drasil.Sentence
+    ( Sentence(S, Percent, (:+:), Sy, EmptyS),
+      eS,
+      ch,
+      sParen,
+      sDash,
+      (+:+),
+      sC,
+      (+:+.),
+      (!.),
+      (+:),
+      capSent )
+import Language.Drasil.Space ( Space(DiscreteD, DiscreteS) )
+import Language.Drasil.Symbol.Helpers ( eqSymb )
+import Language.Drasil.Uncertainty ( uncVal, uncPrec )
+import Language.Drasil.Symbol ( compsy )
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
 import qualified Utils.Drasil.Sentence as S (are, in_, is, toThe)
 

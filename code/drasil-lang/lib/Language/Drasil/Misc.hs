@@ -1,5 +1,5 @@
 -- | A collection of 'String'-handling routines as well as one for making tables.
-module Language.Drasil.Misc(mkTable, repUnd) where
+module Language.Drasil.Misc (mkTable, repUnd) where
 
 {- |
   Create a table body (not including header row) by applying the given

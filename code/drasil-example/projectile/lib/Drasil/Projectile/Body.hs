@@ -2,7 +2,6 @@ module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI) w
 
 import Language.Drasil
 import Drasil.SRSDocument
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S

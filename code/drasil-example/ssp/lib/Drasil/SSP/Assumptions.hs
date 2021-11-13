@@ -2,7 +2,6 @@
 module Drasil.SSP.Assumptions where
 
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S

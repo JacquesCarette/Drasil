@@ -3,7 +3,6 @@ module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
 import Theory.Drasil
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Citations (velocityWiki, accelerationWiki)

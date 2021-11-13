@@ -5,7 +5,6 @@ import Data.Drasil.Concepts.Documentation
 
 import Drasil.PDController.Concepts
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
 
 gsdSysContextFig :: LabelledContent

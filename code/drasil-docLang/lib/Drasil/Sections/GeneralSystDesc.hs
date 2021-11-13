@@ -2,7 +2,6 @@
 module Drasil.Sections.GeneralSystDesc where
 
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (interface, system, environment,

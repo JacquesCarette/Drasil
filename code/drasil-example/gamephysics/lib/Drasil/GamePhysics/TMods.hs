@@ -5,7 +5,6 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Theory.Drasil
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.GamePhysics.Assumptions (assumpOD)

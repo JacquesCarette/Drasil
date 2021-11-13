@@ -5,7 +5,6 @@ import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
 import Theory.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Drasil.DocLang.SRS (propCorSol)

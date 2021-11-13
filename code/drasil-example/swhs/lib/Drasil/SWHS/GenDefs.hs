@@ -3,7 +3,6 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 

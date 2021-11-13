@@ -5,7 +5,6 @@ import Prelude hiding (cos, sin)
 
 import Language.Drasil
 import Theory.Drasil
-import Utils.Drasil (foldlSentCol, weave)
 import qualified Utils.Drasil.Sentence as S
 import Drasil.DblPendulum.Expressions (angularAccelExpr_1, angularAccelExpr_2,
   forceDerivExpr1, forceDerivExpr2,

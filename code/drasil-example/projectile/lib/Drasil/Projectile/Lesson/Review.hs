@@ -5,7 +5,6 @@ import qualified Drasil.Projectile.Expressions as E (lcrectVel, lcrectPos, lcrec
 import Drasil.Projectile.Concepts (projectile)
 import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 reviewContent :: [Contents]

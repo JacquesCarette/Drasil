@@ -1,7 +1,6 @@
 module Drasil.Projectile.Concepts where
 
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 

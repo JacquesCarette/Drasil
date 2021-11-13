@@ -2,7 +2,6 @@
 module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (algorithm, dataStruct, inParam)

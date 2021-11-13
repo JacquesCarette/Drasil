@@ -16,7 +16,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (ixDist, iyDist, iSpeed, i
 import Data.Drasil.Concepts.Documentation (coordinateSystem)
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.SI_Units (s_2)

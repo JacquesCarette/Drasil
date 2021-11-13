@@ -240,7 +240,7 @@ module Language.Drasil (
   , PExpr,
 
 
-  -- TODO: REMOVE ALL OF THE BELOW
+  -- TODO: START: REMOVE ALL OF THE BELOW
 
   -- * Content
   -- | From "Utils.Drasil.Contents".
@@ -284,6 +284,8 @@ module Language.Drasil (
   mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
   tAndDOnly, tAndDWAcc, tAndDWSym,
   zipSentList,
+
+  -- TODO: END
 ) where
 
 import Utils.Drasil.Contents
@@ -312,7 +314,6 @@ import Language.Drasil.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)
 import Language.Drasil.Classes.Core (HasSymbol(symbol),
   HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
-import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
@@ -366,7 +367,7 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
       -- Month -> CiteField
   , month)
 import Language.Drasil.NounPhrase
-import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
+import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace)

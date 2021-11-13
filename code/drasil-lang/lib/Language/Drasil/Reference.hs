@@ -7,8 +7,8 @@ module Language.Drasil.Reference (
   ref, refS, namedRef, complexRef, namedComplexRef
   ) where
 
-import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd))
-import Language.Drasil.Classes.Core2 (HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasRefAddress(..))
+import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
 import Language.Drasil.Label.Type (LblType(..))
 import Language.Drasil.ShortName (ShortName)

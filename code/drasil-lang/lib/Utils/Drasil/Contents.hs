@@ -4,13 +4,14 @@ module Utils.Drasil.Contents (
   -- * List Creation Functions
   enumBullet, enumBulletU, enumSimple,
   enumSimpleU, mkEnumSimpleD,
+
   -- * Displaying Expressions
   lbldExpr, unlbldExpr
-  ) where
+) where
 
 import Language.Drasil.Classes ( Definition(..) )
 import Language.Drasil.Classes.Core ( Referable(refAdd) )
-import Language.Drasil.Classes.Core2 ( HasShortName(..) )
+import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Document ( llcc, ulcc )
 import Language.Drasil.Document.Core
     ( LabelledContent,

@@ -3,7 +3,7 @@
 module Language.Drasil.Document where
 
 import Language.Drasil.Classes.Core (getRefAdd, HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
-import Language.Drasil.Classes.Core2 (HasShortName(shortname))
+import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Document.Core
 import Language.Drasil.Label.Type (prepend, LblType(RP, URI), getAdd)
 import Language.Drasil.Misc (repUnd)

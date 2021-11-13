@@ -10,7 +10,7 @@ module Language.Drasil.Chunk.Concept.Core(
 
 import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd),
   Referable(refAdd, renderRef))
-import Language.Drasil.Classes.Core2 (HasShortName(shortname))
+import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Chunk.CommonIdea (CI)

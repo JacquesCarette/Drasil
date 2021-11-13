@@ -30,7 +30,7 @@ import Language.Drasil.Classes
       Definition(defn),
       NamedIdea(..) )
 import Language.Drasil.Classes.Core ( Referable, HasSymbol )
-import Language.Drasil.Classes.Core2 ( HasShortName )
+import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Development.Sentence
     ( short, atStart, titleize, phrase, plural )
 import Language.Drasil.Document ( Section )
@@ -233,10 +233,12 @@ maybeExpanded a = likelyFrame a (S "expanded")
 -- Returns of the form: "@term (abbreviation) - termDefinition@".
 tAndDWAcc :: Concept s => s -> ItemType
 tAndDWAcc temp = Flat $ atStart temp +:+. (sParen (short temp) `sDash` capSent (temp ^. defn))
+
 -- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
 -- Returns of the form: "@term (symbol) - termDefinition@".
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ atStart tD +:+. (sParen (ch sym) `sDash` capSent (tD ^. defn))
+
 -- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
 -- Returns of the form: "@term - termDefinition@".
 tAndDOnly :: Concept s => s -> ItemType

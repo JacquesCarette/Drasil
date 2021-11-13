@@ -16,9 +16,7 @@ module Language.Drasil.Misc(mkTable, repUnd) where
   
 -}
 mkTable :: [a -> b] -> [a] -> [[b]]
-mkTable _     []  = []
-mkTable []     _  = error "Attempting to make table without data"
-mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
+mkTable fs = map (\x -> map ($ x) fs)
 
 -- | Replace underscores in a string with periods (@.@).
 repUnd :: String -> String

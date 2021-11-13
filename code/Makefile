@@ -309,6 +309,7 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 #----------------------------------------------------------------------------------#
 
 graphs: $(GRAPH_PACKAGES) ##@Analysis Generate all module dependency graphs.
+	- echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
 	
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot

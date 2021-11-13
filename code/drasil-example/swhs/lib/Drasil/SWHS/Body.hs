@@ -6,7 +6,7 @@ import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Control.Lens ((^.))

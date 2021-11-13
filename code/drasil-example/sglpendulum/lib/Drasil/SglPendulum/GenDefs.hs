@@ -13,7 +13,7 @@ import Theory.Drasil (GenDefn, gdNoRefs,
 import Utils.Drasil (weave)
 import Utils.Drasil.Concepts
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Utils.Drasil.NounPhrase as NP
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, direction, angle)

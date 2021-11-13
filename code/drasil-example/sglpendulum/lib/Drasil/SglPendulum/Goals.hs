@@ -4,7 +4,7 @@
  import Language.Drasil
  import Utils.Drasil.Concepts
  import qualified Language.Drasil.Sentence.Combinators as S
- import qualified Utils.Drasil.NounPhrase as NP
+ import qualified Language.Drasil.NounPhrase.Combinators as NP
 
  import Data.Drasil.Concepts.Documentation (goalStmtDom)
  import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (mass, len)

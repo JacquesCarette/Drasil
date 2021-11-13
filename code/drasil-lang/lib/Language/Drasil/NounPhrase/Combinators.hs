@@ -11,7 +11,7 @@
 --
 -- This module should be used as a qualified import (usually as @NP@),
 -- as many function names clash with those in Concepts.hs and Sentence.hs.
-module Utils.Drasil.NounPhrase (
+module Language.Drasil.NounPhrase.Combinators (
   -- * General Combinator Helper Functions
   insertString, prependString, insertSent, prependSent,
   -- * Prepositions
@@ -30,7 +30,8 @@ module Utils.Drasil.NounPhrase (
   -- ** \"Of\" Combinators
   of_, of_PS, of_Gen, of_GenGen,
   -- ** Other Combinators
-  with) where
+  with
+) where
 
 import Language.Drasil.NounPhrase
     ( NP,
@@ -46,13 +47,16 @@ import qualified Language.Drasil.Sentence.Combinators as S
 -- @(phraseNP t1) +:+ S s +:+ (pluralNP t2)@.
 insertString :: String -> NP -> NP -> NP 
 insertString s t1 t2 = nounPhrase'' (phraseNP t1 +:+ S s +:+ phraseNP t2) (phraseNP t1 +:+ S s +:+ pluralNP t2) CapFirst CapWords
+
 -- | Helper function that prepends a 'String' to a 'NP'.
 prependString :: String -> NP -> NP
 prependString s t1 = nounPhrase'' (S s +:+ phraseNP t1) (S s +:+ pluralNP t1) CapFirst CapWords
+
 -- | Helper function that places a 'Sentence' in between two 'NP's. Plural case is
 -- @(phraseNP t1) +:+ s +:+ (pluralNP t2)@.
 insertSent :: Sentence -> NP -> NP -> NP
 insertSent s t1 t2 = nounPhrase'' (phraseNP t1 +:+ s +:+ phraseNP t2) (phraseNP t1 +:+ s +:+ pluralNP t2) CapFirst CapWords
+
 -- | Helper function that prepends a 'Sentence' to a 'NP'.
 prependSent :: Sentence -> NP -> NP
 prependSent s t1 = nounPhrase'' (s +:+ phraseNP t1) (s +:+ pluralNP t1) CapFirst CapWords

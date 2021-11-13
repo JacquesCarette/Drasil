@@ -29,11 +29,11 @@ library:
   - Language.Drasil.Expr.Development
   - Language.Drasil.Literal.Development
   - Language.Drasil.ModelExpr.Development
+  - Language.Drasil.NounPhrase.Combinators
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands
   - Utils.Drasil.Concepts
   - Utils.Drasil.Fold
-  - Utils.Drasil.NounPhrase
   when:
   - condition: false
     other-modules: Paths_drasil_lang

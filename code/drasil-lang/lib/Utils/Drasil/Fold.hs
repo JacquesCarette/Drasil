@@ -21,7 +21,7 @@ import Language.Drasil.Document.Core ( Contents )
 import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
 import Language.Drasil.Sentence
     ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
-import qualified Utils.Drasil.Sentence as S (and_, or_)
+import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
 
 -- | Fold helper function that applies f to all but the last element, applies g to
 -- last element and the accumulator.

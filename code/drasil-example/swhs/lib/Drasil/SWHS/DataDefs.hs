@@ -3,7 +3,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 import Language.Drasil
 import Theory.Drasil (DataDefinition, ddE, ddENoRefs)
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Thermodynamics (heat)

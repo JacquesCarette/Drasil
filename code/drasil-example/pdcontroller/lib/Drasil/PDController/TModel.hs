@@ -10,7 +10,7 @@ import Language.Drasil
 import qualified Language.Drasil as DrasilLang
 import Theory.Drasil (TheoryModel, tm, othModel')
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Citations(laplaceWiki)
 import Drasil.PDController.Unitals
 

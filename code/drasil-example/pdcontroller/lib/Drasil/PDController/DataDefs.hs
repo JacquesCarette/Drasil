@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Math (equation)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, ddE)
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 dataDefinitions :: [DataDefinition]
 dataDefinitions = [ddErrSig, ddPropCtrl, ddDerivCtrl, ddCtrlVar]

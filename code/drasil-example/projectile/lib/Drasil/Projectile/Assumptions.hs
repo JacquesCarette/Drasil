@@ -6,7 +6,7 @@ module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
 import Language.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 

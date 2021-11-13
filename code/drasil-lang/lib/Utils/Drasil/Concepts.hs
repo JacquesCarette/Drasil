@@ -52,7 +52,7 @@ import qualified Language.Drasil.NounPhrase as D
     ( NounPhrase(pluralNP, phraseNP) )
 import Control.Lens ((^.))
 
-import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA,
+import qualified Language.Drasil.Sentence.Combinators as S (and_, andIts, andThe, of_, ofA,
   ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe, isThe)
 
 

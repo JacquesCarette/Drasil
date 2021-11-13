@@ -5,7 +5,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Theory.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dVect, force_1, force_2,

@@ -38,7 +38,7 @@ import Language.Drasil.NounPhrase
       NounPhrase(phraseNP, pluralNP),
       nounPhrase'' )
 import Language.Drasil.Sentence ( Sentence(S), (+:+) )
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 
 --Maybe move these to a separate Drasil.NounPhrase section

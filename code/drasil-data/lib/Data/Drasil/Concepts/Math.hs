@@ -5,7 +5,7 @@ import Language.Drasil hiding (number, norm)
 import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Utils.Drasil.Concepts
 
 -- | Collects all math-related concepts.

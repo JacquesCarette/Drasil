@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Documentation (coordinateSystem)
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
 
 motionContextP1, motionContextP2 :: Contents

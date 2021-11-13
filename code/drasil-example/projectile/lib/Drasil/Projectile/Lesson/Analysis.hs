@@ -12,7 +12,7 @@ import Drasil.Projectile.Concepts (projectile)
 import Language.Drasil
 import Language.Drasil.ShortHands
 
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Projectile.Derivations (horMotionEqn1, horMotionEqn2)
 

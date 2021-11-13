@@ -3,7 +3,7 @@ module Drasil.Sections.Stakeholders (stakeholderIntro, tClientF, tCustomerF) whe
 
 import Language.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Documentation (client, customer, endUser, interest,

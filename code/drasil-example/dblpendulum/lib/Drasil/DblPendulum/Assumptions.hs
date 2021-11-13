@@ -4,7 +4,7 @@ module Drasil.DblPendulum.Assumptions (twoDMotion, cartSys, cartSysR,
     
 import Language.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)

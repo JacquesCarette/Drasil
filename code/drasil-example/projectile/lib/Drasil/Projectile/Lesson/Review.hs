@@ -5,7 +5,7 @@ import qualified Drasil.Projectile.Expressions as E (lcrectVel, lcrectPos, lcrec
 import Drasil.Projectile.Concepts (projectile)
 import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 reviewContent :: [Contents]
 reviewContent = [reviewContextP1, LlC E.lcrectVel, LlC E.lcrectPos, LlC E.lcrectNoTime, reviewEqns, reviewContextP2]

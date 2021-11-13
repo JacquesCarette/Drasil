@@ -59,7 +59,7 @@ import Language.Drasil.Symbol.Helpers ( eqSymb )
 import Language.Drasil.Uncertainty ( uncVal, uncPrec )
 import Language.Drasil.Symbol ( compsy )
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
-import qualified Utils.Drasil.Sentence as S (are, in_, is, toThe)
+import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 
 import Control.Lens ((^.))
 

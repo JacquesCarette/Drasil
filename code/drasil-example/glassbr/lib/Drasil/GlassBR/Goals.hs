@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Goals (goals, willBreakGS) where
 
 import Language.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom, userInput)
 import Data.Drasil.Concepts.Thermodynamics (degree_')

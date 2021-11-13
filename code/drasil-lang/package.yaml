@@ -29,13 +29,13 @@ library:
   - Language.Drasil.Expr.Development
   - Language.Drasil.Literal.Development
   - Language.Drasil.ModelExpr.Development
+  - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands
   - Utils.Drasil.Concepts
   - Utils.Drasil.Contents
   - Utils.Drasil.Fold
   - Utils.Drasil.Misc
   - Utils.Drasil.NounPhrase
-  - Utils.Drasil.Sentence
   when:
   - condition: false
     other-modules: Paths_drasil_lang

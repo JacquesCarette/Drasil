@@ -3,7 +3,7 @@ module Drasil.Projectile.Lesson.IntroSection where
 import Data.Drasil.Concepts.Physics (force, motion)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil
 
 introContext :: Contents

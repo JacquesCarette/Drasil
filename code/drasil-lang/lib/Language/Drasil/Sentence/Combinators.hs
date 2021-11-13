@@ -4,7 +4,7 @@
 -- denote those meant for use at the start of a sentence (capitalizes the first word).
 -- This module should be used as a qualified import (usually as @S@),
 -- as many function names clash with those in Concepts.hs and NounPhrase.hs.
-module Utils.Drasil.Sentence (
+module Language.Drasil.Sentence.Combinators (
   -- * \"And\" Combinators
   and_, andIts, andThe,
   -- * \"The\" Combinators

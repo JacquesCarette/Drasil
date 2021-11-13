@@ -214,6 +214,11 @@ module Language.Drasil (
   , mkFig
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
+
+  -- | Language.Drasil.Document.Contents
+  , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD
+  , lbldExpr, unlbldExpr
+
   -- * Symbols, Stages, Spaces
   -- | Used for rendering mathematical symbols in Drasil.
 
@@ -241,11 +246,6 @@ module Language.Drasil (
 
 
   -- TODO: START: REMOVE ALL OF THE BELOW
-
-  -- * Content
-  -- | From "Utils.Drasil.Contents".
-  enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD,
-  lbldExpr, unlbldExpr,
 
   -- * Fold-type utilities.
   -- | From "Utils.Drasil.Fold". Defines many general fold functions
@@ -288,7 +288,6 @@ module Language.Drasil (
   -- TODO: END
 ) where
 
-import Utils.Drasil.Contents
 import Utils.Drasil.Fold
 import Utils.Drasil.Misc
 
@@ -309,6 +308,8 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
+import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr
+  , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)

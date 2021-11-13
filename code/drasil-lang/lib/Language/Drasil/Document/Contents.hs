@@ -1,6 +1,6 @@
 -- | General functions that are useful in manipulating some Drasil types into
 -- printable 'Contents'.
-module Utils.Drasil.Contents (
+module Language.Drasil.Document.Contents (
   -- * List Creation Functions
   enumBullet, enumBulletU, enumSimple,
   enumSimpleU, mkEnumSimpleD,
@@ -11,7 +11,7 @@ module Utils.Drasil.Contents (
 
 import Language.Drasil.Classes ( Definition(..) )
 import Language.Drasil.Classes.Core ( Referable(refAdd) )
-import Language.Drasil.ShortName (HasShortName(..))
+import Language.Drasil.ShortName (HasShortName(..), getSentSN)
 import Language.Drasil.Document ( llcc, ulcc )
 import Language.Drasil.Document.Core
     ( LabelledContent,
@@ -23,7 +23,6 @@ import Language.Drasil.Document.Core
 import Language.Drasil.ModelExpr.Lang ( ModelExpr )
 import Language.Drasil.Reference ( Reference )
 import Language.Drasil.Sentence ( Sentence )
-import Language.Drasil.ShortName ( getSentSN )
 import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
 
 import Control.Lens ((^.))

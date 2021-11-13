@@ -242,13 +242,13 @@ dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 gTF           = dqdNoUnit glTyFac (variable "GTF") Real
 
 isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
-  (variable "is-safePb")   Boolean
+  (variable "isSafePb")   Boolean
 isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
-  (variable "is-safeProb") Boolean
+  (variable "isSafeProb") Boolean
 isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance safety requirement")
-  (variable "is-safeLR")   Boolean
+  (variable "isSafeLR")   Boolean
 isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
-  (variable "is-safeLoad") Boolean
+  (variable "isSafeLoad") Boolean
 
 lDurFac       = vc'' loadDurFactor (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real

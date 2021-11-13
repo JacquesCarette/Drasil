@@ -169,10 +169,10 @@ public class Calculations {
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return 3 second load equivalent resistance safety requirement
     */
-    public static boolean func_is_safeLR(double LR, double q) throws IOException {
+    public static boolean func_isSafeLR(double LR, double q) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_is_safeLR called with inputs: {");
+        outfile.println("function func_isSafeLR called with inputs: {");
         outfile.print("  LR = ");
         outfile.print(LR);
         outfile.println(", ");
@@ -205,10 +205,10 @@ public class Calculations {
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
         \return probability of glass breakage safety requirement
     */
-    public static boolean func_is_safePb(InputParameters inParams, double P_b) throws IOException {
+    public static boolean func_isSafePb(InputParameters inParams, double P_b) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_is_safePb called with inputs: {");
+        outfile.println("function func_isSafePb called with inputs: {");
         outfile.print("  inParams = ");
         outfile.print("Instance of InputParameters object");
         outfile.println(", ");

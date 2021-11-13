@@ -63,22 +63,6 @@ Also take a look at the Documentation section of the [Drasil Wiki](https://githu
 See the 
 [Analysis of the Drasil Framework](https://jacquescarette.github.io/Drasil/#Sec:Analysis) for more information on which chunk types are instances of which classes.
 
--------------------------------------------------
-### Building Up-to-Date Documentation
--------------------------------------------------
-
-To build the documentation for Drasil, simply type `make docs`.
-It will build 2 variants of the Haddock documentation; a normal external 
-documentation set, and an internal documentation set with all modules fully exposed.
-
-Upon completion, you should receive several messages stating the Haddock for certain
-packages has been updated, as well as directory locations for the related generated Haddock docs.
-
-The generated Haddock documentation will be placed inside of a newly created `code/docs/` folder.
-You should open up the `code/docs/index.html` file with your web browser if you'd like to view 
-the external documentation set. Alternatively, if you would like to view the internal documentation set,
-you should instead open the `code/docs/full/index.html` file.
-
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
@@ -98,9 +82,12 @@ you should instead open the `code/docs/full/index.html` file.
 **drasil-data**
   - Contains the current common-knowledge base for Drasil
 
+**drasil-database**
+* Contains the database for Drasil
+
 **drasil-docLang**
   - Contains the document language for Drasil
-  
+
 **drasil-example**
   - Contains the currently implemented examples
 
@@ -109,7 +96,7 @@ you should instead open the `code/docs/full/index.html` file.
 
 **drasil-gool**
   - Contains GOOL, a Generic Object-Oriented Language
-  
+
 **drasil-lang**
   - Contains the base for the Drasil language
 
@@ -125,15 +112,18 @@ you should instead open the `code/docs/full/index.html` file.
 **drasil-utils**
   - Contains utilities used throughout Drasil
 
+**drasil-website**
+- Contains all of the necessary code to generate the [Drasil website](https://jacquescarette.github.io/Drasil/).
+
 **scripts**
   - Contains all Drasil-related scripts for compiling and deploying Drasil
-  
+
 **stable**
   - Contains the (currently) expected output for each of the examples
 
 countCommand.txt
   - A text file containing instructions on how to count all unique words 
-  within a file using bash commands
+    within a file using bash commands
 
 .hlint.yaml
   - Used by HLint
@@ -149,6 +139,6 @@ README.md
 
 shell.nix
   - Installs Drasil development requirements (for use with nix)
-  
+
 stack.yaml
   - Used by Stack

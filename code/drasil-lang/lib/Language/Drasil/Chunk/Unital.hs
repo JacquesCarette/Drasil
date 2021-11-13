@@ -11,7 +11,7 @@ import Control.Lens (makeLenses, view, (^.))
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', tempdqdWr')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
@@ -21,6 +21,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Stages (Stage)
+import Language.Drasil.UID (HasUID(..))
 
 -- | Similar to a `DefinedQuantityDict`, UnitalChunks are concepts
 -- with quantities that must have a unit definition.

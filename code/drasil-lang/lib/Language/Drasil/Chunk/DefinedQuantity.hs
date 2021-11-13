@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   dqd, dqdNoUnit, dqd',
   dqdQd, dqdWr, tempdqdWr') where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
@@ -17,6 +17,7 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.UID (HasUID(uid))
 
 import Control.Lens ((^.), makeLenses, view)
 

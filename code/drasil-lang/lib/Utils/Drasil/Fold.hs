@@ -1,4 +1,3 @@
-{-# Language TypeFamilies #-}
 -- | Folding-related functions and types.
 module Utils.Drasil.Fold (
   -- * English-related Datatypes

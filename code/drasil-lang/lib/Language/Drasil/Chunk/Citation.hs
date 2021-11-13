@@ -14,7 +14,7 @@ module Language.Drasil.Chunk.Citation (
 
 import Language.Drasil.People (People)
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
@@ -22,8 +22,7 @@ import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle,
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Label.Type (LblType(Citation))
 import Language.Drasil.ShortName (ShortName, shortname')
-import Language.Drasil.UID (UID)
-import qualified Language.Drasil.UID.Core as UID (uid, showUID)
+import Language.Drasil.UID (UID, HasUID(..), showUID, mkUid)
 
 import Control.Lens (makeLenses)
 
@@ -54,16 +53,16 @@ instance HasShortName Citation where shortname = sn
 instance HasFields    Citation where getFields = fields
 -- | Gets the reference information of a 'Citation'.
 instance Referable    Citation where
-  refAdd    = UID.showUID -- Citation UID should be unique as a reference address.
+  refAdd    = showUID -- Citation UID should be unique as a reference address.
   renderRef = Citation . refAdd -- Get the alternate form of reference address.
 -- | Gets the reference address of a 'Citation'.
-instance HasRefAddress Citation where getRefAdd = Citation . UID.showUID
+instance HasRefAddress Citation where getRefAdd = Citation . showUID
 
 -- | Smart constructor which implicitly uses EntryID as chunk id.
 cite :: CitationKind -> [CiteField] -> String -> Citation
 cite ck cfs n
   | ' ' `elem` n = error "Citation names may not contain spaces." -- TODO: Why not?
-  | otherwise    = Cite ck cfs (UID.uid n) (shortname' (S n))
+  | otherwise    = Cite ck cfs (mkUid n) (shortname' (S n))
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

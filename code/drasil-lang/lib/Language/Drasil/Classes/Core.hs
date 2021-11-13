@@ -1,23 +1,14 @@
-{-# Language TypeFamilies #-}
 -- | Defining the core classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes.Core (
-    HasUID(uid)
-  , HasRefAddress(getRefAdd)
+    HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
   , Referable(refAdd, renderRef)
   ) where
 
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID
 import Language.Drasil.Label.Type (LblType)
-
-import Control.Lens (Lens')
-
--- | The most basic item: having a unique identifier key, here a UID.
-class HasUID c where
-  -- | Provides a /unique/ id for internal Drasil use.
-  uid :: Lens' c UID
 
 -- | A HasSymbol is anything which has a 'Symbol'.
 class HasSymbol c where

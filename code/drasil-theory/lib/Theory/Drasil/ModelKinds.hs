@@ -17,10 +17,10 @@ import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
 import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
-  RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..), UID)
+  RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
+  UID, mkUid)
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
-import qualified Language.Drasil.Development as D (uid)
 
 -- | Models can be of different kinds: 
 --
@@ -40,7 +40,7 @@ data ModelKinds e where
 -- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
 data ModelKind e = MK {
   _mk     :: ModelKinds e,
-  _mkUid  :: UID,
+  _mkUID  :: UID,
   _mkTerm :: NP
 }
 
@@ -48,7 +48,7 @@ makeLenses ''ModelKind
 
 -- | Smart constructor for 'DEModel's
 deModel :: String -> NP -> RelationConcept -> ModelKind e
-deModel u n rc = MK (DEModel rc) (D.uid u) n
+deModel u n rc = MK (DEModel rc) (mkUid u) n
 
 -- | Smart constructor for 'DEModel's, deriving UID+Term from the 'RelationConcept'
 deModel' :: RelationConcept -> ModelKind e
@@ -56,7 +56,7 @@ deModel' rc = MK (DEModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'
 equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
-equationalConstraints u n qs = MK (EquationalConstraints qs) (D.uid u) n
+equationalConstraints u n qs = MK (EquationalConstraints qs) (mkUid u) n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
 equationalConstraints' :: ConstraintSet e -> ModelKind e
@@ -64,7 +64,7 @@ equationalConstraints' qs = MK (EquationalConstraints qs) (qs ^. uid) (qs ^. ter
 
 -- | Smart constructor for 'EquationalModel's
 equationalModel :: String -> NP -> QDefinition e -> ModelKind e
-equationalModel u n qd = MK (EquationalModel qd) (D.uid u) n
+equationalModel u n qd = MK (EquationalModel qd) (mkUid u) n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
 equationalModel' :: QDefinition e -> ModelKind e
@@ -72,7 +72,7 @@ equationalModel' qd = MK (EquationalModel qd) (qd ^. uid) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving Term from the 'QDefinition'
 equationalModelU :: String -> QDefinition e -> ModelKind e
-equationalModelU u qd = MK (EquationalModel qd) (D.uid u) (qd ^. term)
+equationalModelU u qd = MK (EquationalModel qd) (mkUid u) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving UID from the 'QDefinition'
 equationalModelN :: NP -> QDefinition e -> ModelKind e
@@ -80,7 +80,7 @@ equationalModelN n qd = MK (EquationalModel qd) (qd ^. uid) n
 
 -- | Smart constructor for 'EquationalRealm's
 equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
-equationalRealm u n md = MK (EquationalRealm md) (D.uid u) n
+equationalRealm u n md = MK (EquationalRealm md) (mkUid u) n
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
 equationalRealm' :: MultiDefn e -> ModelKind e
@@ -88,7 +88,7 @@ equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's
 equationalRealmU :: String -> MultiDefn e -> ModelKind e
-equationalRealmU u md = MK (EquationalRealm md) (D.uid u) (md ^. term)
+equationalRealmU u md = MK (EquationalRealm md) (mkUid u) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID from the 'MultiDefn'
 equationalRealmN :: NP -> MultiDefn e -> ModelKind e
@@ -96,7 +96,7 @@ equationalRealmN n md = MK (EquationalRealm md) (md ^. uid) n
 
 -- | Smart constructor for 'OthModel's
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
-othModel u n rc = MK (OthModel rc) (D.uid u) n
+othModel u n rc = MK (OthModel rc) (mkUid u) n
 
 -- | Smart constructor for 'OthModel's, deriving UID+Term from the 'RelationConcept'
 othModel' :: RelationConcept -> ModelKind e
@@ -119,7 +119,7 @@ instance Express e => Express (ModelKinds e) where
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
 -- | Finds the 'UID' of the 'ModelKind'.
-instance HasUID        (ModelKind e) where uid     = mkUid
+instance HasUID        (ModelKind e) where uid     = mkUID
 -- | Finds the term ('NP') of the 'ModelKind'.
 instance NamedIdea     (ModelKind e) where term    = mkTerm
 -- | Finds the idea of the 'ModelKind'.

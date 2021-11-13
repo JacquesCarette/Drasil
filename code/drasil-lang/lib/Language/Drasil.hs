@@ -83,7 +83,7 @@ module Language.Drasil (
   -- Similar types are grouped together.
   
   -- *** Basic types
-  , UID
+  , UID, mkUid
   -- Language.Drasil.Chunk.NamedIdea
   , (+++), (+++.), (+++!)
   , NamedChunk, nc, ncUID, IdeaDict , mkIdea
@@ -307,10 +307,10 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
-import Language.Drasil.Unicode -- all of it
-import Language.Drasil.UID (UID)
-import Language.Drasil.UID.Core ((+++), (+++.), (+++!))
-import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
+import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
+import Language.Drasil.UID
+    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)
+import Language.Drasil.Classes.Core (HasSymbol(symbol),
   HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),

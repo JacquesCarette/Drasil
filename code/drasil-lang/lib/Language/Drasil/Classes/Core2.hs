@@ -1,4 +1,3 @@
-{-# Language TypeFamilies #-}
 -- | Defining the core classes which represent knowledge-about-knowledge.
 -- For now, shortname must be here to avoid import cycles.
 module Language.Drasil.Classes.Core2 (HasShortName(shortname)) where

@@ -325,7 +325,7 @@ analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasi
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
-	@echo "Analysis complete. Please see 'analysis/' folder."
+	@echo "Analysis complete. Please see '$(ANALYSIS_FOLDER)' folder."
 
 convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs.
 	@echo "Building dependency graphs in Dot and Circo formats. This may take a few minutes."
@@ -339,7 +339,7 @@ convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
-	@echo "Dependency graphs built."
+	@echo "Dependency graphs built, check your '$(TYPEGRAPH_FOLDER)' and '$(CLASSINST_GRAPH_FOLDER)' folders."
 
 #---------------------------------------#
 #--- HLint and Haddock Documentation ---#

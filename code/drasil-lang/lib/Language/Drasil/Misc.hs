@@ -1,5 +1,5 @@
 -- | A collection of 'String'-handling routines as well as one for making tables.
-module Language.Drasil.Misc(mkTable, noSpaces, repUnd) where
+module Language.Drasil.Misc(mkTable, repUnd) where
 
 {- |
   Create a table body (not including header row) by applying the given
@@ -19,12 +19,6 @@ mkTable :: [a -> b] -> [a] -> [[b]]
 mkTable _     []  = []
 mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
-
--- | Returns the given string if it doesn't contain spaces and throws an error if it does.
-noSpaces :: String -> String
-noSpaces s
-  | ' ' `notElem` s = s
-  | otherwise          = error "String has at least one space in it."
 
 -- | Replace underscores in a string with periods (@.@).
 repUnd :: String -> String

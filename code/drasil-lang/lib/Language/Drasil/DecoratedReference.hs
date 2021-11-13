@@ -3,23 +3,31 @@
 module Language.Drasil.DecoratedReference (
   -- * Type
   DecRef(..),
+  -- * Class
+  HasDecRef(..),
   -- * Constructors
-  dRef, dRefInfo) where
+  dRef, dRefInfo
+) where
 
 import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Reference (Reference, ref)
 import Language.Drasil.Classes.Core (HasRefAddress(..))
 import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.UID (HasUID(..))
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLenses, Lens')
 
 
 -- | For holding a 'Reference' that is decorated with extra information (ex. page numbers, equation sources, etc.).
 data DecRef = DR {
-  _rf :: Reference,
+  _rf     :: Reference,
   refInfo :: RefInfo
 }
 makeLenses ''DecRef
+
+-- | A class that contains a list of decorated references ('DecRef's).
+class HasDecRef c where
+  -- | Provides a 'Lens' to the 'DecRef's.
+  getDecRefs :: Lens' c [DecRef]
 
 -- | Equal if 'UID's are equal.
 instance Eq            DecRef where a == b = (a ^. uid) == (b ^. uid)

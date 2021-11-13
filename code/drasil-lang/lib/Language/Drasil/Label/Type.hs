@@ -15,7 +15,10 @@ import Language.Drasil.UID (UID)
 -- An RP is a decorated internal reference.
 -- Citation is a citation.
 -- URI is for URLs and other external links.
-data LblType = RP IRefProg String | Citation String | URI String
+data LblType =
+    RP IRefProg String
+  | Citation String
+  | URI String
 
 -- | Created for different forms of references. Used in 'LblType'. 
 data IRefProg =

@@ -24,14 +24,13 @@ module Language.Drasil.Classes (
   , UnitEq(uniteq)
     -- ** References
   , HasReference(getReferences)
-  , HasDecRef(getDecRefs)
     -- ** Expr and expressions
   , Express(express)
   , HasDerivation(derivations)
   , DefiningExpr(defnExpr)
   ) where
 
--- some classes are so 'core' that they are defined elswhere
+-- some classes are so 'core' that they are defined elsewhere
 -- also helps with cycles...
 import Language.Drasil.Classes.Core (HasSymbol)
 
@@ -42,7 +41,6 @@ import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Reference (Reference)
-import Language.Drasil.DecoratedReference(DecRef)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID, HasUID)
@@ -64,6 +62,8 @@ class NamedIdea c => Idea c where
   --Get Abbreviation/Acronym? These might need to be separated 
   --depending on contexts, but for now I don't see a problem with it.
 
+-- TODO: I was thinking of splitting QDefinitions into Definitions with 2 type variables
+--       Can we change this name from "Definition" to anything else? "NaturalDefinition"?
 -- | Defines a chunk.
 class Definition c where
   -- | Provides (a 'Lens' to) the definition for a chunk.
@@ -94,11 +94,6 @@ class HasSpace c where
 class HasReference c where
   -- | Provides a 'Lens' to the 'Reference's.
   getReferences :: Lens' c [Reference]
-
--- | A class that contains a list of decorated references ('DecRef's).
-class HasDecRef c where
-  -- | Provides a 'Lens' to the 'DecRef's.
-  getDecRefs :: Lens' c [DecRef]
 
 -- | A class that might have a 'Derivation'.
 class HasDerivation c where

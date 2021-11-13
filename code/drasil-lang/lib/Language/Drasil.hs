@@ -67,11 +67,8 @@ module Language.Drasil (
   -- Language.Drasil.Classes.Core
   , HasRefAddress(getRefAdd)
   , Referable(..)
-  -- Language.Drasil.Classes.Core2
-  , HasShortName(shortname)
   -- Language.Drasil.Classes
   , HasReference(getReferences)
-  , HasDecRef(getDecRefs)
   -- Language.Drasil.Classes.Document
   , HasCitation(getCitations)
   , HasFields(getFields)
@@ -144,7 +141,7 @@ module Language.Drasil (
   -- Language.Drasil.Reference
   , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
   -- Language.Drasil.Decorated Reference
-  , DecRef(refInfo), dRefInfo, dRef
+  , DecRef(refInfo), dRefInfo, dRef, HasDecRef(..)
   -- *** Citations
   -- Language.Drasil.Chunk.Citation
   , EntryID, Citation, BibRef
@@ -195,7 +192,7 @@ module Language.Drasil (
   , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
   , titleize, titleize', short
   -- Language.Drasil.ShortName
-  , ShortName, shortname', getSentSN
+  , ShortName, shortname', getSentSN, HasShortName(..)
   -- Language.Drasil.Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
   -- * Basic Document Language
@@ -319,7 +316,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), HasDerivation(derivations), 
-  HasReference(getReferences), HasDecRef(getDecRefs), HasSpace(typ),
+  HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
   IsArgumentName, Express(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
@@ -376,7 +373,7 @@ import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitaliza
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS)
-import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef)
+import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
 import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,

@@ -70,7 +70,6 @@ module Language.Drasil (
   , HasReference(getReferences)
   -- Language.Drasil.Classes.Document
   , HasCitation(getCitations)
-  , HasFields(getFields)
   -- *** Programming-related
   , Callable
   , IsArgumentName
@@ -143,6 +142,7 @@ module Language.Drasil (
   -- *** Citations
   -- Language.Drasil.Chunk.Citation
   , EntryID, Citation, BibRef
+  , HasFields(getFields)
   -- accessors
   , citeID, citeKind
   -- smart constructors
@@ -317,7 +317,6 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, Callable, 
   IsArgumentName, Express(..))
-import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
 import Language.Drasil.Data.Date (Month(..))
@@ -351,16 +350,13 @@ import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
   ucStaged, ucs, ucs', ucsWS, ucuc, ucw)
 import Language.Drasil.Chunk.Unitary
-import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
+import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
+  , HasFields(getFields)
   , author, editor
-      -- Sentence -> CiteField
   , address, bookTitle, howPublished, howPublishedU, institution, journal, note
   , organization, publisher, school, series, title, typeField
-      -- Int -> CiteField
   , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
   , pages
-      -- Month -> CiteField
   , month)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))

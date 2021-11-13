@@ -3,11 +3,11 @@ module Language.Drasil.Classes.Core (
     HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
   , Referable(refAdd, renderRef)
-  ) where
+) where
 
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.UID
+import Language.Drasil.UID (HasUID)
 import Language.Drasil.Label.Type (LblType)
 
 -- | A HasSymbol is anything which has a 'Symbol'.

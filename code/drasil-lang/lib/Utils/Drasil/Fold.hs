@@ -38,6 +38,7 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 
+-- TODO: This looks like it should be moved to wherever uses it, it's too specific.
 -- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
 foldConstraints _ [] = EmptyS

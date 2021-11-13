@@ -16,9 +16,9 @@ import Language.Drasil.People (People)
 
 import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.ShortName (HasShortName(shortname))
-import Language.Drasil.Classes.Citations (HasFields(getFields))
-import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
-  year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
+import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField,
+  author, chapter, pages, editor, bookTitle, title, 
+  year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Label.Type (LblType(Citation))
 import Language.Drasil.ShortName (ShortName, shortname')

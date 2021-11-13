@@ -95,15 +95,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac512aab767367713afd01243a2b97448"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calculations.html#ac512aab767367713afd01243a2b97448">func_LR</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> inParams, double NFL)</td></tr>
 <tr class="memdesc:ac512aab767367713afd01243a2b97448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)  <a href="class_calculations.html#ac512aab767367713afd01243a2b97448">More...</a><br /></td></tr>
 <tr class="separator:ac512aab767367713afd01243a2b97448"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12870c3cb814f28368585d10fb50e356"><td class="memItemLeft" align="right" valign="top">static Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calculations.html#a12870c3cb814f28368585d10fb50e356">func_is_safeLR</a> (double LR, double q)</td></tr>
-<tr class="memdesc:a12870c3cb814f28368585d10fb50e356"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates 3 second load equivalent resistance safety requirement.  <a href="class_calculations.html#a12870c3cb814f28368585d10fb50e356">More...</a><br /></td></tr>
-<tr class="separator:a12870c3cb814f28368585d10fb50e356"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc927bedaa17247c6edcfd3e94e90a9c"><td class="memItemLeft" align="right" valign="top">static Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calculations.html#adc927bedaa17247c6edcfd3e94e90a9c">func_isSafeLR</a> (double LR, double q)</td></tr>
+<tr class="memdesc:adc927bedaa17247c6edcfd3e94e90a9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates 3 second load equivalent resistance safety requirement.  <a href="class_calculations.html#adc927bedaa17247c6edcfd3e94e90a9c">More...</a><br /></td></tr>
+<tr class="separator:adc927bedaa17247c6edcfd3e94e90a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01b6dab1d913572efef50527c0f16a92"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calculations.html#a01b6dab1d913572efef50527c0f16a92">func_P_b</a> (double B)</td></tr>
 <tr class="memdesc:a01b6dab1d913572efef50527c0f16a92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)  <a href="class_calculations.html#a01b6dab1d913572efef50527c0f16a92">More...</a><br /></td></tr>
 <tr class="separator:a01b6dab1d913572efef50527c0f16a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a989f9734d458d205ab7fd9f95d17ac62"><td class="memItemLeft" align="right" valign="top">static Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calculations.html#a989f9734d458d205ab7fd9f95d17ac62">func_is_safePb</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> inParams, double P_b)</td></tr>
-<tr class="memdesc:a989f9734d458d205ab7fd9f95d17ac62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates probability of glass breakage safety requirement.  <a href="class_calculations.html#a989f9734d458d205ab7fd9f95d17ac62">More...</a><br /></td></tr>
-<tr class="separator:a989f9734d458d205ab7fd9f95d17ac62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85bb4252177e2ce1356367f4ab140c96"><td class="memItemLeft" align="right" valign="top">static Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calculations.html#a85bb4252177e2ce1356367f4ab140c96">func_isSafePb</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> inParams, double P_b)</td></tr>
+<tr class="memdesc:a85bb4252177e2ce1356367f4ab140c96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates probability of glass breakage safety requirement.  <a href="class_calculations.html#a85bb4252177e2ce1356367f4ab140c96">More...</a><br /></td></tr>
+<tr class="separator:a85bb4252177e2ce1356367f4ab140c96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a927b554943c628e24b4ce671efe81fab"></a>
@@ -152,8 +152,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a12870c3cb814f28368585d10fb50e356"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a12870c3cb814f28368585d10fb50e356">&#9670;&nbsp;</a></span>func_is_safeLR()</h2>
+<a id="adc927bedaa17247c6edcfd3e94e90a9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc927bedaa17247c6edcfd3e94e90a9c">&#9670;&nbsp;</a></span>func_isSafeLR()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,7 +162,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static Boolean Calculations.func_is_safeLR </td>
+          <td class="memname">static Boolean Calculations.func_isSafeLR </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>LR</em>, </td>
@@ -198,8 +198,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a989f9734d458d205ab7fd9f95d17ac62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a989f9734d458d205ab7fd9f95d17ac62">&#9670;&nbsp;</a></span>func_is_safePb()</h2>
+<a id="a85bb4252177e2ce1356367f4ab140c96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85bb4252177e2ce1356367f4ab140c96">&#9670;&nbsp;</a></span>func_isSafePb()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,7 +208,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static Boolean Calculations.func_is_safePb </td>
+          <td class="memname">static Boolean Calculations.func_isSafePb </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_input_parameters.html">InputParameters</a>&#160;</td>
           <td class="paramname"><em>inParams</em>, </td>

@@ -1,25 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SglPendulum.Requirements</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-2"></span><span>
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">funcReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">output_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">value</span></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.IMods.html"><span class="hs-identifier">Drasil.SglPendulum.IMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html"><span class="hs-identifier">Drasil.SglPendulum.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier">pendDisplacementAngle</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">angularDisplacement</span></span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPendulum.Requirements</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">verifyInptValsDesc</span></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-comment">--Functional Requirements--</span><span>
-</span><span id="line-13"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#funcReqs"><span class="hs-identifier hs-type">funcReqs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-14"></span><span id="funcReqs"><span class="annot"><span class="annottext">funcReqs :: [ConceptInstance]
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">funcReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">output_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">value</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.IMods.html"><span class="hs-identifier">Drasil.SglPendulum.IMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html"><span class="hs-identifier">Drasil.SglPendulum.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html#lenRod"><span class="hs-identifier">lenRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier">pendDisplacementAngle</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">angularDisplacement</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPendulum.Requirements</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">verifyInptValsDesc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-comment">--Functional Requirements--</span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#funcReqs"><span class="hs-identifier hs-type">funcReqs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-13"></span><span id="funcReqs"><span class="annot"><span class="annottext">funcReqs :: [ConceptInstance]
 </span><a href="Drasil.SglPendulum.Requirements.html#funcReqs"><span class="hs-identifier hs-var hs-var">funcReqs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#verifyInptVals"><span class="hs-identifier hs-var">verifyInptVals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#calcAngPos"><span class="hs-identifier hs-var">calcAngPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#outputValues"><span class="hs-identifier hs-var">outputValues</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-15"></span><span>
-</span><span id="line-16"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#verifyInptVals"><span class="hs-identifier hs-type">verifyInptVals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#calcAngPos"><span class="hs-identifier hs-type">calcAngPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#outputValues"><span class="hs-identifier hs-type">outputValues</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span id="verifyInptVals"><span class="annot"><span class="annottext">verifyInptVals :: ConceptInstance
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#verifyInptVals"><span class="hs-identifier hs-type">verifyInptVals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#calcAngPos"><span class="hs-identifier hs-type">calcAngPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#outputValues"><span class="hs-identifier hs-type">outputValues</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span id="verifyInptVals"><span class="annot"><span class="annottext">verifyInptVals :: ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#verifyInptVals"><span class="hs-identifier hs-var hs-var">verifyInptVals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -27,7 +26,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;verifyInptVals&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">verifyInptValsDesc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Verify-Input-Values&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">funcReqDom</span></span><span>
-</span><span id="line-19"></span><span id="calcAngPos"><span class="annot"><span class="annottext">calcAngPos :: ConceptInstance
+</span><span id="line-18"></span><span id="calcAngPos"><span class="annot"><span class="annottext">calcAngPos :: ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#calcAngPos"><span class="hs-identifier hs-var hs-var">calcAngPos</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -35,7 +34,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;calcAngPos&quot;</span></span><span>   </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPendulum.Requirements.html#calcAngPosDesc"><span class="hs-identifier hs-var">calcAngPosDesc</span></a></span><span>   </span><span class="annot"><span class="hs-string">&quot;Calculate-Angular-Position-Of-Mass&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">funcReqDom</span></span><span>
-</span><span id="line-20"></span><span id="outputValues"><span class="annot"><span class="annottext">outputValues :: ConceptInstance
+</span><span id="line-19"></span><span id="outputValues"><span class="annot"><span class="annottext">outputValues :: ConceptInstance
 </span><a href="Drasil.SglPendulum.Requirements.html#outputValues"><span class="hs-identifier hs-var hs-var">outputValues</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -43,9 +42,9 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;outputValues&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPendulum.Requirements.html#outputValuesDesc"><span class="hs-identifier hs-var">outputValuesDesc</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Output-Values&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">funcReqDom</span></span><span>
-</span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#calcAngPosDesc"><span class="hs-identifier hs-type">calcAngPosDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#outputValuesDesc"><span class="hs-identifier hs-type">outputValuesDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-23"></span><span id="calcAngPosDesc"><span class="annot"><span class="annottext">calcAngPosDesc :: Sentence
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#calcAngPosDesc"><span class="hs-identifier hs-type">calcAngPosDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Requirements.html#outputValuesDesc"><span class="hs-identifier hs-type">outputValuesDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-22"></span><span id="calcAngPosDesc"><span class="annot"><span class="annottext">calcAngPosDesc :: Sentence
 </span><a href="Drasil.SglPendulum.Requirements.html#calcAngPosDesc"><span class="hs-identifier hs-var hs-var">calcAngPosDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Calculate the following&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -53,7 +52,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span>
-</span><span id="line-24"></span><span>    </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-23"></span><span>    </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">angularDisplacement</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -61,7 +60,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPendulum.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-25"></span><span>    </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-24"></span><span>    </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
@@ -70,7 +69,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-26"></span><span id="outputValuesDesc"><span class="annot"><span class="annottext">outputValuesDesc :: Sentence
+</span><span id="line-25"></span><span id="outputValuesDesc"><span class="annot"><span class="annottext">outputValuesDesc :: Sentence
 </span><a href="Drasil.SglPendulum.Requirements.html#outputValuesDesc"><span class="hs-identifier hs-var hs-var">outputValuesDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -87,4 +86,4 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><a href="Drasil.SglPendulum.IMods.html#angularDisplacementIM"><span class="hs-identifier hs-var">angularDisplacementIM</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-27"></span></pre></body></html>
+</span><span id="line-26"></span></pre></body></html>

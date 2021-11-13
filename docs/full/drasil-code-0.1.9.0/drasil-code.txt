@@ -124,7 +124,7 @@ pcAuto :: CodeIdea c => c -> ParameterChunk
 
 -- | Constructs a pass-by-value parameter.
 pcVal :: CodeIdea c => c -> ParameterChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Parameter.ParameterChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Parameter.ParameterChunk
@@ -567,7 +567,7 @@ qtov :: CanGenCode e => QDefinition e -> CodeDefinition
 odeDef :: ODEInfo -> CodeDefinition
 auxExprs :: Lens' CodeDefinition [CodeExpr]
 defType :: Lens' CodeDefinition DefinitionType
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.CodeDefinition.CodeDefinition
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.CodeDefinition.CodeDefinition

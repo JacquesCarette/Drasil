@@ -1,15 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- Contains a function that removes special characters from a string.</span><span>
-</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Utils.Drasil.Strings</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-3"></span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html"><span class="hs-identifier">Utils.Drasil.Lists</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier">replaceAll</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Utils.Drasil.Strings</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-3"></span><span>    </span><span class="annot"><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier">toPlainName</span></a></span><span>
+</span><span id="line-4"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-5"></span><span>
-</span><span id="line-6"></span><span class="hs-comment">-- TODO: This can probably become a bit more comprehensive,</span><span>
-</span><span id="line-7"></span><span class="hs-comment">-- anything other than a-z, A-Z, or 0-9 could probably be replaced.</span><span>
-</span><span id="line-8"></span><span>
-</span><span id="line-9"></span><span class="hs-comment">-- | Replace occurences of special characters (@&quot;,~`-=!@#$%^&amp;*+[]\\;'/|\&quot;&lt;&gt;? &quot;@) with underscores (@&quot;_&quot;@).</span><span>
-</span><span id="line-10"></span><span class="annot"><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier hs-type">toPlainName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-11"></span><span id="toPlainName"><span class="annot"><span class="annottext">toPlainName :: String -&gt; String
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html"><span class="hs-identifier">Utils.Drasil.Lists</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier">replaceAll</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-comment">-- | Replace occurences of special characters (@&quot;,~`-=!@#$%^&amp;*+[]\\;'/|\&quot;&lt;&gt;? &quot;@) with underscores (@&quot;_&quot;@).</span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- </span><span>
+</span><span id="line-10"></span><span class="hs-comment">--   TODO: This can probably become a bit more comprehensive,</span><span>
+</span><span id="line-11"></span><span class="hs-comment">--   anything other than a-z, A-Z, or 0-9 could probably be replaced.</span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier hs-type">toPlainName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-13"></span><span id="toPlainName"><span class="annot"><span class="annottext">toPlainName :: String -&gt; String
 </span><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier hs-var hs-var">toPlainName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Char -&gt; String -&gt; String
 forall a. Eq a =&gt; [a] -&gt; a -&gt; [a] -&gt; [a]
 </span><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier hs-var">replaceAll</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;,~`-=!@#$%^&amp;*+[]\\;'/|\&quot;&lt;&gt;? &quot;</span></span><span> </span><span class="annot"><span class="hs-char">'_'</span></span><span>
-</span><span id="line-12"></span></pre></body></html>
+</span><span id="line-14"></span></pre></body></html>

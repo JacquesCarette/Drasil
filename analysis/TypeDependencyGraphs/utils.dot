@@ -1,36 +1,9 @@
 digraph alltypes {
-	subgraph concepts {
-	}
-	subgraph contents {
-	}
 	subgraph document {
 	}
 	subgraph englihs {
 	}
-	subgraph fold {
-		subgraph enumtype{
-		EnumType	[shape=oval, color=darkviolet, label="EnumType"];
-		}
-		subgraph wraptype{
-		WrapType	[shape=oval, color=darkviolet, label="WrapType"];
-		}
-		subgraph septype{
-		SepType	[shape=oval, color=darkviolet, label="SepType"];
-		}
-		subgraph foldtype{
-		FoldType	[shape=oval, color=darkviolet, label="FoldType"];
-		FoldType -> SepType;
-		FoldType -> FoldType;
-		FoldType -> Sentence;
-		}
-	}
 	subgraph litss {
-	}
-	subgraph mics {
-	}
-	subgraph nounpraehs {
-	}
-	subgraph sentence {
 	}
 	subgraph strings {
 	}

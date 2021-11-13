@@ -98,7 +98,7 @@ varResolve :: ChunkDB -> UID -> CodeVarChunk
 -- | Make a <a>CodeFuncChunk</a> from a <a>UID</a> in the <a>ChunkDB</a>.
 funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.CodeBase.CodeFuncChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeBase.CodeFuncChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.CodeBase.CodeFuncChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.CodeBase.CodeFuncChunk
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.CodeBase.CodeFuncChunk
@@ -107,7 +107,7 @@ instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeBase.CodeFun
 instance Language.Drasil.Classes.Callable Language.Drasil.Chunk.CodeBase.CodeFuncChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.CodeBase.CodeFuncChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.CodeBase.CodeVarChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeBase.CodeVarChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.CodeBase.CodeVarChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.CodeBase.CodeVarChunk
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.CodeBase.CodeVarChunk
@@ -115,7 +115,7 @@ instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.CodeBase.C
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeBase.CodeVarChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.CodeBase.CodeVarChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.CodeBase.CodeChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeBase.CodeChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.CodeBase.CodeChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.CodeBase.CodeChunk
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.CodeBase.CodeChunk

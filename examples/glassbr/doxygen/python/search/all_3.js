@@ -2,8 +2,8 @@ var searchData=
 [
   ['find_5',['find',['../_interpolation_8py.html#a0dd103f98ef8b0ffdf976b95441ade66',1,'Interpolation']]],
   ['func_5fb_6',['func_B',['../_calculations_8py.html#a8a998101446a1e422825df6203a83e3b',1,'Calculations']]],
-  ['func_5fis_5fsafelr_7',['func_is_safeLR',['../_calculations_8py.html#a40d7e363f0a08db4d86cead4c47b6fa7',1,'Calculations']]],
-  ['func_5fis_5fsafepb_8',['func_is_safePb',['../_calculations_8py.html#a3472ad83e776adeeaf1e6e03dd0dc0a6',1,'Calculations']]],
+  ['func_5fissafelr_7',['func_isSafeLR',['../_calculations_8py.html#aa5fd9e783f389d88c650e44408585f4b',1,'Calculations']]],
+  ['func_5fissafepb_8',['func_isSafePb',['../_calculations_8py.html#a8b98efb7b0d762d5dcc8f85103f637b0',1,'Calculations']]],
   ['func_5fj_9',['func_J',['../_calculations_8py.html#a913be202aadb18f98a4fdba7c839ac9b',1,'Calculations']]],
   ['func_5fj_5ftol_10',['func_J_tol',['../_calculations_8py.html#a3d35708e5627a6d642d04478880bf3a9',1,'Calculations']]],
   ['func_5flr_11',['func_LR',['../_calculations_8py.html#a3aabdf4a35a1b03305f27a4e1bec99d0',1,'Calculations']]],

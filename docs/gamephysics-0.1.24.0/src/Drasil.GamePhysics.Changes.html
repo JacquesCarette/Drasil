@@ -4,32 +4,31 @@
 </span><span id="line-4"></span><span class="hs-comment">--A list of likely and unlikely changes for GamePhysics</span><span>
 </span><span id="line-5"></span><span>
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Doc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">library</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">likeChgDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unlikeChgDom</span></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">CM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ode</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">constraint</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Computation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">algorithm</span></span><span class="hs-special">)</span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">CP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">collision</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">damping</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">joint</span></span><span class="hs-special">)</span><span>
-</span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html"><span class="hs-identifier">Drasil.GamePhysics.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCT"><span class="hs-identifier">assumpCT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpDI"><span class="hs-identifier">assumpDI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJI"><span class="hs-identifier">assumpCAJI</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-comment">---------------------</span><span>
-</span><span id="line-18"></span><span class="hs-comment">--  LIKELY CHANGES --</span><span>
-</span><span id="line-19"></span><span class="hs-comment">---------------------</span><span>
-</span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt1"><span class="hs-identifier hs-type">likelyChangesStmt1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt2"><span class="hs-identifier hs-type">likelyChangesStmt2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt3"><span class="hs-identifier hs-type">likelyChangesStmt3</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-22"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt4"><span class="hs-identifier hs-type">likelyChangesStmt4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-23"></span><span>
-</span><span id="line-24"></span><span class="hs-comment">--these statements look like they could be parametrized</span><span>
-</span><span id="line-25"></span><span id="likelyChangesStmt1"><span class="annot"><span class="annottext">likelyChangesStmt1 :: Sentence
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Doc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">library</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">likeChgDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unlikeChgDom</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">CM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ode</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">constraint</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Computation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">algorithm</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">CP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">collision</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">damping</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">joint</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html"><span class="hs-identifier">Drasil.GamePhysics.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCT"><span class="hs-identifier">assumpCT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpDI"><span class="hs-identifier">assumpDI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJI"><span class="hs-identifier">assumpCAJI</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-comment">---------------------</span><span>
+</span><span id="line-17"></span><span class="hs-comment">--  LIKELY CHANGES --</span><span>
+</span><span id="line-18"></span><span class="hs-comment">---------------------</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt1"><span class="hs-identifier hs-type">likelyChangesStmt1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt2"><span class="hs-identifier hs-type">likelyChangesStmt2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt3"><span class="hs-identifier hs-type">likelyChangesStmt3</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt4"><span class="hs-identifier hs-type">likelyChangesStmt4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="hs-comment">--these statements look like they could be parametrized</span><span>
+</span><span id="line-24"></span><span id="likelyChangesStmt1"><span class="annot"><span class="annottext">likelyChangesStmt1 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt1"><span class="hs-identifier hs-var hs-var">likelyChangesStmt1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;internal&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 </span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">CM.ode</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">:+:</span></span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;-solving&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -38,14 +37,14 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;used by the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">library</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`maybeChanged`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in the future&quot;</span></span><span>
-</span><span id="line-28"></span><span>
-</span><span id="line-29"></span><span id="likelyChangesStmt2"><span class="annot"><span class="annottext">likelyChangesStmt2 :: Sentence
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span id="likelyChangesStmt2"><span class="annot"><span class="annottext">likelyChangesStmt2 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt2"><span class="hs-identifier hs-var hs-var">likelyChangesStmt2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
 forall x.
 (HasShortName x, Referable x) =&gt;
@@ -58,15 +57,15 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">library</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`maybeExpanded`</span></span><span>
-</span><span id="line-30"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-29"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to deal with edge-to-edge and vertex-to-vertex&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CP.collision</span></span><span class="hs-special">)</span><span>
-</span><span id="line-32"></span><span>
-</span><span id="line-33"></span><span id="likelyChangesStmt3"><span class="annot"><span class="annottext">likelyChangesStmt3 :: Sentence
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span id="likelyChangesStmt3"><span class="annot"><span class="annottext">likelyChangesStmt3 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt3"><span class="hs-identifier hs-var hs-var">likelyChangesStmt3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
 forall x.
 (HasShortName x, Referable x) =&gt;
@@ -79,14 +78,14 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">library</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`maybeExpanded`</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to include motion with&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CP.damping</span></span><span class="hs-special">)</span><span>
-</span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span id="likelyChangesStmt4"><span class="annot"><span class="annottext">likelyChangesStmt4 :: Sentence
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span id="likelyChangesStmt4"><span class="annot"><span class="annottext">likelyChangesStmt4 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt4"><span class="hs-identifier hs-var hs-var">likelyChangesStmt4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
 forall x.
 (HasShortName x, Referable x) =&gt;
@@ -99,7 +98,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">library</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`maybeExpanded`</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to include&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -109,10 +108,10 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CM.constraint</span></span><span class="hs-special">)</span><span>
-</span><span id="line-38"></span><span>
-</span><span id="line-39"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#lcVODES"><span class="hs-identifier hs-type">lcVODES</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#lcEC"><span class="hs-identifier hs-type">lcEC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#lcID"><span class="hs-identifier hs-type">lcID</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#lcIJC"><span class="hs-identifier hs-type">lcIJC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span id="lcVODES"><span class="annot"><span class="annottext">lcVODES :: ConceptInstance
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#lcVODES"><span class="hs-identifier hs-type">lcVODES</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#lcEC"><span class="hs-identifier hs-type">lcEC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#lcID"><span class="hs-identifier hs-type">lcID</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#lcIJC"><span class="hs-identifier hs-type">lcIJC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span id="lcVODES"><span class="annot"><span class="annottext">lcVODES :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#lcVODES"><span class="hs-identifier hs-var hs-var">lcVODES</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -120,7 +119,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lcVODES&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt1"><span class="hs-identifier hs-var">likelyChangesStmt1</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Variable-ODE-Solver&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
-</span><span id="line-42"></span><span id="lcEC"><span class="annot"><span class="annottext">lcEC :: ConceptInstance
+</span><span id="line-41"></span><span id="lcEC"><span class="annot"><span class="annottext">lcEC :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#lcEC"><span class="hs-identifier hs-var hs-var">lcEC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -128,7 +127,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lcEC&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt2"><span class="hs-identifier hs-var">likelyChangesStmt2</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Expanded-Collisions&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
-</span><span id="line-43"></span><span id="lcID"><span class="annot"><span class="annottext">lcID :: ConceptInstance
+</span><span id="line-42"></span><span id="lcID"><span class="annot"><span class="annottext">lcID :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#lcID"><span class="hs-identifier hs-var hs-var">lcID</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -136,7 +135,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lcID&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt3"><span class="hs-identifier hs-var">likelyChangesStmt3</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Include-Dampening&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
-</span><span id="line-44"></span><span id="lcIJC"><span class="annot"><span class="annottext">lcIJC :: ConceptInstance
+</span><span id="line-43"></span><span id="lcIJC"><span class="annot"><span class="annottext">lcIJC :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#lcIJC"><span class="hs-identifier hs-var hs-var">lcIJC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -144,41 +143,41 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lcIJC&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChangesStmt4"><span class="hs-identifier hs-var">likelyChangesStmt4</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Include-Joints-Constraints&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
-</span><span id="line-45"></span><span>
-</span><span id="line-46"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChgs"><span class="hs-identifier hs-type">likelyChgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span id="likelyChgs"><span class="annot"><span class="annottext">likelyChgs :: [ConceptInstance]
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#likelyChgs"><span class="hs-identifier hs-type">likelyChgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-46"></span><span id="likelyChgs"><span class="annot"><span class="annottext">likelyChgs :: [ConceptInstance]
 </span><a href="Drasil.GamePhysics.Changes.html#likelyChgs"><span class="hs-identifier hs-var hs-var">likelyChgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#lcVODES"><span class="hs-identifier hs-var">lcVODES</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#lcEC"><span class="hs-identifier hs-var">lcEC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#lcID"><span class="hs-identifier hs-var">lcID</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#lcIJC"><span class="hs-identifier hs-var">lcIJC</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-48"></span><span>
-</span><span id="line-49"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-50"></span><span class="hs-comment">--UNLIKELY CHANGES --</span><span>
-</span><span id="line-51"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt1"><span class="hs-identifier hs-type">unlikelyChangesStmt1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt2"><span class="hs-identifier hs-type">unlikelyChangesStmt2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt3"><span class="hs-identifier hs-type">unlikelyChangesStmt3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt4"><span class="hs-identifier hs-type">unlikelyChangesStmt4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-54"></span><span>
-</span><span id="line-55"></span><span id="unlikelyChangesStmt1"><span class="annot"><span class="annottext">unlikelyChangesStmt1 :: Sentence
+</span><span id="line-47"></span><span>
+</span><span id="line-48"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-49"></span><span class="hs-comment">--UNLIKELY CHANGES --</span><span>
+</span><span id="line-50"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt1"><span class="hs-identifier hs-type">unlikelyChangesStmt1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt2"><span class="hs-identifier hs-type">unlikelyChangesStmt2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt3"><span class="hs-identifier hs-type">unlikelyChangesStmt3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt4"><span class="hs-identifier hs-type">unlikelyChangesStmt4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span id="unlikelyChangesStmt1"><span class="annot"><span class="annottext">unlikelyChangesStmt1 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt1"><span class="hs-identifier hs-var hs-var">unlikelyChangesStmt1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The goal of the system is to simulate the interactions of rigid bodies&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span>
-</span><span id="line-56"></span><span id="unlikelyChangesStmt2"><span class="annot"><span class="annottext">unlikelyChangesStmt2 :: Sentence
+</span><span id="line-55"></span><span id="unlikelyChangesStmt2"><span class="annot"><span class="annottext">unlikelyChangesStmt2 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt2"><span class="hs-identifier hs-var hs-var">unlikelyChangesStmt2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;There will always be a source of input data external to the software&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span>
-</span><span id="line-57"></span><span id="unlikelyChangesStmt3"><span class="annot"><span class="annottext">unlikelyChangesStmt3 :: Sentence
+</span><span id="line-56"></span><span id="unlikelyChangesStmt3"><span class="annot"><span class="annottext">unlikelyChangesStmt3 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt3"><span class="hs-identifier hs-var hs-var">unlikelyChangesStmt3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;A Cartesian Coordinate system is used&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span>
-</span><span id="line-58"></span><span id="unlikelyChangesStmt4"><span class="annot"><span class="annottext">unlikelyChangesStmt4 :: Sentence
+</span><span id="line-57"></span><span id="unlikelyChangesStmt4"><span class="annot"><span class="annottext">unlikelyChangesStmt4 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt4"><span class="hs-identifier hs-var hs-var">unlikelyChangesStmt4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;All objects are rigid bodies&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span>
-</span><span id="line-59"></span><span>
-</span><span id="line-60"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucSRB"><span class="hs-identifier hs-type">ucSRB</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucEI"><span class="hs-identifier hs-type">ucEI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucCCS"><span class="hs-identifier hs-type">ucCCS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucORB"><span class="hs-identifier hs-type">ucORB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span id="ucSRB"><span class="annot"><span class="annottext">ucSRB :: ConceptInstance
+</span><span id="line-58"></span><span>
+</span><span id="line-59"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucSRB"><span class="hs-identifier hs-type">ucSRB</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucEI"><span class="hs-identifier hs-type">ucEI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucCCS"><span class="hs-identifier hs-type">ucCCS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucORB"><span class="hs-identifier hs-type">ucORB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span><span id="ucSRB"><span class="annot"><span class="annottext">ucSRB :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#ucSRB"><span class="hs-identifier hs-var hs-var">ucSRB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -186,7 +185,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ucSRB&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt1"><span class="hs-identifier hs-var">unlikelyChangesStmt1</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Simulate-Rigid-Bodies&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
-</span><span id="line-63"></span><span id="ucEI"><span class="annot"><span class="annottext">ucEI :: ConceptInstance
+</span><span id="line-62"></span><span id="ucEI"><span class="annot"><span class="annottext">ucEI :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#ucEI"><span class="hs-identifier hs-var hs-var">ucEI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -194,7 +193,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ucEI&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt2"><span class="hs-identifier hs-var">unlikelyChangesStmt2</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;External-Input&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
-</span><span id="line-64"></span><span id="ucCCS"><span class="annot"><span class="annottext">ucCCS :: ConceptInstance
+</span><span id="line-63"></span><span id="ucCCS"><span class="annot"><span class="annottext">ucCCS :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#ucCCS"><span class="hs-identifier hs-var hs-var">ucCCS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -202,7 +201,7 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ucCCS&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt3"><span class="hs-identifier hs-var">unlikelyChangesStmt3</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Cartesian-Coordinate-System&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
-</span><span id="line-65"></span><span id="ucORB"><span class="annot"><span class="annottext">ucORB :: ConceptInstance
+</span><span id="line-64"></span><span id="ucORB"><span class="annot"><span class="annottext">ucORB :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#ucORB"><span class="hs-identifier hs-var hs-var">ucORB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -210,12 +209,12 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ucORB&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt4"><span class="hs-identifier hs-var">unlikelyChangesStmt4</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Objects-Rigid-Bodies&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
-</span><span id="line-66"></span><span>  </span><span>
-</span><span id="line-67"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChgs"><span class="hs-identifier hs-type">unlikelyChgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-68"></span><span id="unlikelyChgs"><span class="annot"><span class="annottext">unlikelyChgs :: [ConceptInstance]
+</span><span id="line-65"></span><span>  </span><span>
+</span><span id="line-66"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#unlikelyChgs"><span class="hs-identifier hs-type">unlikelyChgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-67"></span><span id="unlikelyChgs"><span class="annot"><span class="annottext">unlikelyChgs :: [ConceptInstance]
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChgs"><span class="hs-identifier hs-var hs-var">unlikelyChgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#ucSRB"><span class="hs-identifier hs-var">ucSRB</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#ucEI"><span class="hs-identifier hs-var">ucEI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#ucCCS"><span class="hs-identifier hs-var">ucCCS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GamePhysics.Changes.html#ucORB"><span class="hs-identifier hs-var">ucORB</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-69"></span></pre></body></html>
+</span><span id="line-68"></span></pre></body></html>

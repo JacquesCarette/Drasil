@@ -259,8 +259,7 @@ digraph alltypes {
 	subgraph print {
 		subgraph openclose{
 		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
-		OpenClose -> Expr;
-		OpenClose -> D;
+		OpenClose -> String;
 		}
 		subgraph fieldwrap{
 		FieldWrap	[shape=oval, color=darkviolet, label="FieldWrap"];

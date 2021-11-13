@@ -477,11 +477,11 @@ digraph alltypes {
 		PluralForm -> Sentence;
 		}
 	}
+	subgraph combinators {
+	}
 	subgraph extract {
 	}
 	subgraph helpers {
-	}
-	subgraph core {
 	}
 	subgraph ast {
 		subgraph uri{
@@ -789,6 +789,31 @@ digraph alltypes {
 		}
 	}
 	subgraph drails {
+	}
+	subgraph concepts {
+	}
+	subgraph contents {
+	}
+	subgraph fold {
+		subgraph enumtype{
+		EnumType	[shape=oval, color=darkviolet, label="EnumType"];
+		}
+		subgraph wraptype{
+		WrapType	[shape=oval, color=darkviolet, label="WrapType"];
+		}
+		subgraph septype{
+		SepType	[shape=oval, color=darkviolet, label="SepType"];
+		}
+		subgraph foldtype{
+		FoldType	[shape=oval, color=darkviolet, label="FoldType"];
+		FoldType -> SepType;
+		FoldType -> FoldType;
+		FoldType -> Sentence;
+		}
+	}
+	subgraph mics {
+	}
+	subgraph nounpraehs {
 	}
 	subgraph domains {
 	}
@@ -2329,8 +2354,7 @@ digraph alltypes {
 	subgraph print {
 		subgraph openclose{
 		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
-		OpenClose -> Expr;
-		OpenClose -> D;
+		OpenClose -> String;
 		}
 		subgraph fieldwrap{
 		FieldWrap	[shape=oval, color=darkviolet, label="FieldWrap"];
@@ -4072,38 +4096,11 @@ digraph alltypes {
 	}
 	subgraph generate {
 	}
-	subgraph concepts {
-	}
-	subgraph contents {
-	}
 	subgraph document {
 	}
 	subgraph englihs {
 	}
-	subgraph fold {
-		subgraph enumtype{
-		EnumType	[shape=oval, color=darkviolet, label="EnumType"];
-		}
-		subgraph wraptype{
-		WrapType	[shape=oval, color=darkviolet, label="WrapType"];
-		}
-		subgraph septype{
-		SepType	[shape=oval, color=darkviolet, label="SepType"];
-		}
-		subgraph foldtype{
-		FoldType	[shape=oval, color=darkviolet, label="FoldType"];
-		FoldType -> SepType;
-		FoldType -> FoldType;
-		FoldType -> Sentence;
-		}
-	}
 	subgraph litss {
-	}
-	subgraph mics {
-	}
-	subgraph nounpraehs {
-	}
-	subgraph sentence {
 	}
 	subgraph strings {
 	}

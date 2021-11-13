@@ -2,23 +2,22 @@
 </span><span id="line-2"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Goals.html#pcmEnergyGS"><span class="hs-identifier">pcmEnergyGS</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
-</span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">goalStmtDom</span></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html"><span class="hs-identifier">Drasil.SWHS.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempW"><span class="hs-identifier">tempW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier">tempPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#watE"><span class="hs-identifier">watE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmE"><span class="hs-identifier">pcmE</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#goals"><span class="hs-identifier hs-type">goals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-13"></span><span id="goals"><span class="annot"><span class="annottext">goals :: [ConceptInstance]
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">goalStmtDom</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html"><span class="hs-identifier">Drasil.SWHS.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempW"><span class="hs-identifier">tempW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier">tempPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#watE"><span class="hs-identifier">watE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmE"><span class="hs-identifier">pcmE</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#goals"><span class="hs-identifier hs-type">goals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-12"></span><span id="goals"><span class="annot"><span class="annottext">goals :: [ConceptInstance]
 </span><a href="Drasil.SWHS.Goals.html#goals"><span class="hs-identifier hs-var hs-var">goals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Goals.html#waterTempGS"><span class="hs-identifier hs-var">waterTempGS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Goals.html#pcmTempGS"><span class="hs-identifier hs-var">pcmTempGS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Goals.html#waterEnergyGS"><span class="hs-identifier hs-var">waterEnergyGS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Goals.html#pcmEnergyGS"><span class="hs-identifier hs-var">pcmEnergyGS</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#waterTempGS"><span class="hs-identifier hs-type">waterTempGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-16"></span><span id="waterTempGS"><span class="annot"><span class="annottext">waterTempGS :: ConceptInstance
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#waterTempGS"><span class="hs-identifier hs-type">waterTempGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-15"></span><span id="waterTempGS"><span class="annot"><span class="annottext">waterTempGS :: ConceptInstance
 </span><a href="Drasil.SWHS.Goals.html#waterTempGS"><span class="hs-identifier hs-var hs-var">waterTempGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -27,11 +26,11 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 forall varTerm. NamedIdea varTerm =&gt; varTerm -&gt; Sentence
 </span><a href="Drasil.SWHS.Goals.html#goalState"><span class="hs-identifier hs-var">goalState</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SWHS.Unitals.html#tempW"><span class="hs-identifier hs-var">tempW</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Predict-Water-Temperature&quot;</span></span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">goalStmtDom</span></span><span>
-</span><span id="line-18"></span><span>
-</span><span id="line-19"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#pcmTempGS"><span class="hs-identifier hs-type">pcmTempGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-20"></span><span id="pcmTempGS"><span class="annot"><span class="annottext">pcmTempGS :: ConceptInstance
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#pcmTempGS"><span class="hs-identifier hs-type">pcmTempGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-19"></span><span id="pcmTempGS"><span class="annot"><span class="annottext">pcmTempGS :: ConceptInstance
 </span><a href="Drasil.SWHS.Goals.html#pcmTempGS"><span class="hs-identifier hs-var hs-var">pcmTempGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -40,11 +39,11 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 forall varTerm. NamedIdea varTerm =&gt; varTerm -&gt; Sentence
 </span><a href="Drasil.SWHS.Goals.html#goalState"><span class="hs-identifier hs-var">goalState</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier hs-var">tempPCM</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Predict-PCM-Temperature&quot;</span></span><span> </span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">goalStmtDom</span></span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#waterEnergyGS"><span class="hs-identifier hs-type">waterEnergyGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-24"></span><span id="waterEnergyGS"><span class="annot"><span class="annottext">waterEnergyGS :: ConceptInstance
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#waterEnergyGS"><span class="hs-identifier hs-type">waterEnergyGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-23"></span><span id="waterEnergyGS"><span class="annot"><span class="annottext">waterEnergyGS :: ConceptInstance
 </span><a href="Drasil.SWHS.Goals.html#waterEnergyGS"><span class="hs-identifier hs-var hs-var">waterEnergyGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -53,11 +52,11 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 forall varTerm. NamedIdea varTerm =&gt; varTerm -&gt; Sentence
 </span><a href="Drasil.SWHS.Goals.html#goalState"><span class="hs-identifier hs-var">goalState</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SWHS.Unitals.html#watE"><span class="hs-identifier hs-var">watE</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Predict-Water-Energy&quot;</span></span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">goalStmtDom</span></span><span>
-</span><span id="line-26"></span><span>
-</span><span id="line-27"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#pcmEnergyGS"><span class="hs-identifier hs-type">pcmEnergyGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-28"></span><span id="pcmEnergyGS"><span class="annot"><span class="annottext">pcmEnergyGS :: ConceptInstance
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.SWHS.Goals.html#pcmEnergyGS"><span class="hs-identifier hs-type">pcmEnergyGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-27"></span><span id="pcmEnergyGS"><span class="annot"><span class="annottext">pcmEnergyGS :: ConceptInstance
 </span><a href="Drasil.SWHS.Goals.html#pcmEnergyGS"><span class="hs-identifier hs-var hs-var">pcmEnergyGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
 forall c.
 Concept c =&gt;
@@ -66,19 +65,19 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 forall varTerm. NamedIdea varTerm =&gt; varTerm -&gt; Sentence
 </span><a href="Drasil.SWHS.Goals.html#goalState"><span class="hs-identifier hs-var">goalState</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SWHS.Unitals.html#pcmE"><span class="hs-identifier hs-var">pcmE</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Predict-PCM-Energy&quot;</span></span><span> </span><span>
-</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">goalStmtDom</span></span><span>
-</span><span id="line-30"></span><span>
-</span><span id="line-31"></span><span id="local-6989586621679115110"><span class="annot"><a href="Drasil.SWHS.Goals.html#goalState"><span class="hs-identifier hs-type">goalState</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679115110"><span class="hs-identifier hs-type">varTerm</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679115110"><span class="hs-identifier hs-type">varTerm</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
-</span><span id="line-32"></span><span id="goalState"><span class="annot"><span class="annottext">goalState :: varTerm -&gt; Sentence
-</span><a href="Drasil.SWHS.Goals.html#goalState"><span class="hs-identifier hs-var hs-var">goalState</span></a></span></span><span> </span><span id="local-6989586621679115092"><span class="annot"><span class="annottext">varTerm :: varTerm
-</span><a href="#local-6989586621679115092"><span class="hs-identifier hs-var">varTerm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span id="local-6989586621679115148"><span class="annot"><a href="Drasil.SWHS.Goals.html#goalState"><span class="hs-identifier hs-type">goalState</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679115148"><span class="hs-identifier hs-type">varTerm</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679115148"><span class="hs-identifier hs-type">varTerm</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
+</span><span id="line-31"></span><span id="goalState"><span class="annot"><span class="annottext">goalState :: varTerm -&gt; Sentence
+</span><a href="Drasil.SWHS.Goals.html#goalState"><span class="hs-identifier hs-var hs-var">goalState</span></a></span></span><span> </span><span id="local-6989586621679115130"><span class="annot"><span class="annottext">varTerm :: varTerm
+</span><a href="#local-6989586621679115130"><span class="hs-identifier hs-var">varTerm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Predict the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">varTerm -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">varTerm
-</span><a href="#local-6989586621679115092"><span class="hs-identifier hs-var">varTerm</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679115130"><span class="hs-identifier hs-var">varTerm</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;over&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk

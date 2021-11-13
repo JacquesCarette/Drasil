@@ -79,10 +79,6 @@ module Language.Drasil.Misc
 --   </pre>
 mkTable :: [a -> b] -> [a] -> [[b]]
 
--- | Returns the given string if it doesn't contain spaces and throws an
---   error if it does.
-noSpaces :: String -> String
-
 -- | Replace underscores in a string with periods (<tt>.</tt>).
 repUnd :: String -> String
 
@@ -320,9 +316,28 @@ module Language.Drasil.UID
 -- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
 --   into our database of information. We use a newtype wrapper to make
 --   sure we are only using <a>UID</a>s where desired.
-newtype UID
-UID :: String -> UID
-[uidToStr] :: UID -> String
+data UID
+
+-- | The most basic item: having a unique identifier key, here a UID.
+class HasUID c
+
+-- | Provides a <i>unique</i> id for internal Drasil use.
+uid :: HasUID c => Lens' c UID
+
+-- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
+mkUid :: String -> UID
+
+-- | For when we need to modify a UID. We first take the base chunk's UID
+--   and then append a suffix to it.
+(+++) :: HasUID a => a -> String -> UID
+
+-- | For when we need to append something to a UID.
+(+++.) :: UID -> String -> UID
+(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
+
+-- | Grabs the UID from something that has a UID and displays it as a
+--   String.
+showUID :: HasUID a => a -> String
 instance GHC.Classes.Ord Language.Drasil.UID.UID
 instance GHC.Classes.Eq Language.Drasil.UID.UID
 instance GHC.Show.Show Language.Drasil.UID.UID
@@ -1757,12 +1772,6 @@ compsy :: Symbol -> Symbol -> Ordering
 -- | Defining the core classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes.Core
 
--- | The most basic item: having a unique identifier key, here a UID.
-class HasUID c
-
--- | Provides a <i>unique</i> id for internal Drasil use.
-uid :: HasUID c => Lens' c UID
-
 -- | Members must have a reference address.
 class HasRefAddress b
 
@@ -1784,23 +1793,6 @@ refAdd :: Referable s => s -> String
 
 -- | Alternate form of reference.
 renderRef :: Referable s => s -> LblType
-
-module Language.Drasil.UID.Core
-
--- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
-uid :: String -> UID
-
--- | For when we need to modify a UID. We first take the base chunk's UID
---   and then append a suffix to it.
-(+++) :: HasUID a => a -> String -> UID
-
--- | For when we need to append something to a UID.
-(+++.) :: UID -> String -> UID
-(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
-
--- | Grabs the UID from something that has a UID and displays it as a
---   String.
-showUID :: HasUID a => a -> String
 
 
 -- | Routines to help with Symbols and Stages.
@@ -2595,7 +2587,7 @@ complexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sen
 --   <a>RefInfo</a>.
 namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
 instance GHC.Classes.Eq Language.Drasil.Reference.Reference
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Reference.Reference
+instance Language.Drasil.UID.HasUID Language.Drasil.Reference.Reference
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Reference.Reference
 instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Reference.Reference
 
@@ -2879,9 +2871,6 @@ lnames :: Sentence -> [UID]
 -- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
 
--- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
-uid :: String -> UID
-
 -- | Grabs the UID from something that has a UID and displays it as a
 --   String.
 showUID :: HasUID a => a -> String
@@ -2924,7 +2913,7 @@ dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
 --   reference information (<a>RefInfo</a>).
 dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
 instance GHC.Classes.Eq Language.Drasil.DecoratedReference.DecRef
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.DecoratedReference.DecRef
+instance Language.Drasil.UID.HasUID Language.Drasil.DecoratedReference.DecRef
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.DecoratedReference.DecRef
 instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.DecoratedReference.DecRef
 
@@ -3058,7 +3047,7 @@ cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Cit
 -- | Unpublished citation requires author, title, and note. Optional fields
 --   can be month and year. Implicitly uses the EntryID as the chunk id.
 cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Classes.Citations.HasFields Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Citation.Citation
@@ -3184,7 +3173,7 @@ prependLabel :: RawContent -> IRefProg
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.UID.HasUID Language.Drasil.Document.Core.LabelledContent
 instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Document.Core.LabelledContent
@@ -3311,7 +3300,7 @@ makeEqnRef' :: UID -> Reference
 -- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
 --   <a>String</a>.
 makeURI' :: UID -> String -> ShortName -> Reference
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Section
+instance Language.Drasil.UID.HasUID Language.Drasil.Document.Section
 instance GHC.Classes.Eq Language.Drasil.Document.Section
 instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Document.Section
 instance Language.Drasil.Classes.Core.Referable Language.Drasil.Document.Section
@@ -3644,10 +3633,10 @@ applyWithNamedArgs :: (ExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName 
 
 -- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
 sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
+infixr 9 $&&
 infixl 7 $/
 infixr 8 $^
 infixr 4 $=
-infixr 9 $&&
 infixr 9 $||
 
 -- | Smart constructor for fractions.
@@ -3734,6 +3723,108 @@ short :: (Idea c, HasUID c) => c -> Sentence
 introduceAbb :: Idea n => n -> Sentence
 
 
+-- | Defines various sentence level combinators that may be based in
+--   English and not necessarily have a conceptual link. See the
+--   <a>Wiki</a> for more information. There are also <tt>C</tt> variants
+--   to each combinator to denote those meant for use at the start of a
+--   sentence (capitalizes the first word). This module should be used as a
+--   qualified import (usually as <tt>S</tt>), as many function names clash
+--   with those in Concepts.hs and NounPhrase.hs.
+module Language.Drasil.Sentence.Combinators
+
+-- | Inserts the word "and" between two Sentences.
+and_ :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "and its" between two Sentences.
+andIts :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "and the" between two Sentences.
+andThe :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "from the" between two Sentences.
+fromThe :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "in the" between two Sentences.
+inThe :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "on the" between two Sentences.
+onThe :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "to the" between two Sentences.
+toThe :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "is the" between two Sentences.
+isThe :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "of the" between two Sentences.
+ofThe :: Sentence -> Sentence -> Sentence
+
+-- | Same as <a>ofThe</a>, but inserts "the" at the beginning of the
+--   Sentence.
+the_ofThe :: Sentence -> Sentence -> Sentence
+
+-- | Same as <a>the_ofThe</a>, except first "the" is capitalized.
+the_ofTheC :: Sentence -> Sentence -> Sentence
+
+-- | Prepends "the" and inserts "of a given" between two Sentences.
+the_ofGiv :: Sentence -> Sentence -> Sentence
+
+-- | Same as <tt>ofGiv</tt>, except first "the" is capitalized.
+the_ofGivC :: Sentence -> Sentence -> Sentence
+
+-- | Prepends "The" and inserts "is expected to have" between two
+--   Sentences.
+the_isExpctdToHvC :: Sentence -> Sentence -> Sentence
+
+-- | Similar to <a>for</a>, but used for titles and first <a>NamedIdea</a>
+--   is pluralized.
+forTPS :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+
+-- | Similar to <tt>forTTPS</tt>, but both <a>NamedIdea</a>s are
+--   pluralized.
+forTPP :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+
+-- | Inserts the word "for" between two Sentences.
+for :: Sentence -> Sentence -> Sentence
+
+-- | Similar to <a>for</a>, but both terms are <a>titleize</a>d.
+forT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+
+-- | Similar to <tt>forTT</tt>, but takes two arguments (for capitalization
+--   or pluralization) to apply to the two terms respectively.
+forGen :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
+
+-- | Inserts the word "of" between two Sentences.
+of_ :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "of a" between two Sentences.
+ofA :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the word "or" between two Sentences.
+or_ :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the word "are" between two Sentences.
+are :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the word "in" between two Sentences.
+in_ :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the word "is" between two Sentences.
+is :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "defined as" between two Sentences.
+defnAs :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "denotes the" between two Sentences.
+denotes :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the word "versus" between two Sentences.
+versus :: Sentence -> Sentence -> Sentence
+
+-- | Inserts the words "with respect to" between two Sentences.
+wrt :: Sentence -> Sentence -> Sentence
+
+
 -- | The lowest level of chunks in Drasil. It all starts with an identifier
 --   and a term.
 module Language.Drasil.Chunk.NamedIdea
@@ -3779,11 +3870,11 @@ mkIdea :: String -> NP -> Maybe String -> IdeaDict
 --   <a>String</a>.
 mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.NamedChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.NamedIdea.NamedChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedIdea.NamedChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.NamedIdea.NamedChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.NamedIdea.NamedChunk
 
@@ -3819,7 +3910,7 @@ getAccStr :: CI -> String
 
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
 prependAbrv :: CommonIdea c => c -> String -> String
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
@@ -3861,7 +3952,7 @@ ConInst :: ConceptChunk -> String -> ShortName -> ConceptInstance
 --   than one.
 sDom :: [UID] -> UID
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptInstance
@@ -3870,14 +3961,14 @@ instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Chunk.Concep
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Concept.Core.CommonConcept
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Concept.Core.ConceptChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptChunk
@@ -3960,14 +4051,14 @@ module Language.Drasil.Chunk.Relation
 --   equation so that we know its behaviour.
 data RelationConcept
 
--- | Create a <a>RelationConcept</a> from a given <a>UID</a>, term
+-- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
 --   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
 makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 
 -- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
---   a <a>Concept</a>, new <a>UID</a> and relation.
+--   a <a>Concept</a>, new <tt>UID</tt> and relation.
 addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
 instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Relation.RelationConcept
@@ -4092,7 +4183,7 @@ getCu :: UnitEquation -> [UID]
 --   them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering
 instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.UnitEquation
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UnitDefn.UnitDefn
@@ -4163,7 +4254,7 @@ vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 -- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
 --   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Quantity.QuantityDict
@@ -4204,7 +4295,7 @@ unitary' :: IsUnit u => String -> NP -> (Stage -> Symbol) -> u -> Space -> Unita
 -- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
 --   to the symbols of the chunk itself.
 unit_symb :: Unitary c => c -> USymb
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Unitary.UnitaryChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Unitary.UnitaryChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Unitary.UnitaryChunk
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Unitary.UnitaryChunk
@@ -4226,7 +4317,7 @@ NA :: QuantityDict -> NamedArgument
 
 -- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.NamedArgument.NamedArgument
@@ -4274,7 +4365,7 @@ dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 -- | Temporary projection constructor, not to be used outside
 --   <tt>drasil-lang</tt>.
 tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
@@ -4333,7 +4424,7 @@ ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
 
 -- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
 ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Unital.UnitalChunk
@@ -4397,7 +4488,7 @@ mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpac
 -- | Create a <a>QDefinition</a> functions using a symbol, list of inputs,
 --   and a defining Expr
 mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> e -> QDefinition e
-instance Language.Drasil.Classes.Core.HasUID (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.UID.HasUID (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Classes.NamedIdea (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Classes.Idea (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Classes.HasSpace (Language.Drasil.Chunk.Eq.QDefinition e)
@@ -4490,7 +4581,7 @@ cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constrain
 -- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
 --   <a>Stage</a>.
 cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Constrained.ConstrConcept
@@ -4503,7 +4594,7 @@ instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.Co
 instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Constrained.ConstrainedChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Constrained.ConstrainedChunk
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Constrained.ConstrainedChunk
@@ -4560,7 +4651,7 @@ uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -
 --   or an <a>UncertainChunk</a>.
 uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertQ
@@ -4573,7 +4664,7 @@ instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuant
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
@@ -4584,6 +4675,519 @@ instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuan
 instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance Language.Drasil.Classes.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+
+
+-- | Defines various chunk combinators. The full naming scheme can be found
+--   in the <a>Wiki</a>. For convenience, here is a summary:
+--   
+--   <ul>
+--   <li>Combinators that conflict with haskell-native functions have an
+--   underscore appended.</li>
+--   <li>Default plural case for combinators will be first term singular,
+--   second term plural.</li>
+--   <li><tt>P</tt> and <tt>S</tt> denote the plural case of the combinator
+--   when it does not follow the above default.</li>
+--   <li><tt>Gen</tt> denotes the general function case.</li>
+--   <li>Although this should eventually be phased out, <tt>T</tt> denotes
+--   a combinator meant for use with titles.</li>
+--   <li><tt>NI</tt> and <tt>NP</tt> denote whether something must be a
+--   part of the <a>NamedIdea</a> or <a>NounPhrase</a> class.</li>
+--   </ul>
+module Utils.Drasil.Concepts
+
+-- | Prepends "the" to a <a>NamedIdea</a>.
+the :: NamedIdea t => t -> NP
+
+-- | A customizable version of <a>the</a>. The given function is applied to
+--   both singular and plural cases.
+theGen :: (t -> Sentence) -> t -> NP
+
+-- | Prepends "a" to a <a>NamedIdea</a> (similar to <a>the</a>).
+a_ :: NamedIdea c => c -> NP
+
+-- | Customizable version of <tt>a</tt>.
+a_Gen :: (c -> Sentence) -> c -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "and" between their terms. Plural case is <tt>(phrase t1) "and"
+--   (plural t2)</tt>.
+and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "and" between their terms. Plural case is <tt>(plural t1) "and"
+--   (phrase t2)</tt>.
+and_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "and" between their terms. Plural case is <tt>(plural t1) "and"
+--   (plural t2)</tt>.
+and_PP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Customizable <a>and_</a> combinator (takes two title case
+--   capitalization rules and two <tt>NamedIdeas</tt>).
+and_TGen :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+
+-- | Customizable <a>and_</a> combinator. Both plural and singular cases
+--   are dermined by the two given functions
+and_Gen :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "and its" between their terms. Plural case is <tt>(phrase t1) "and
+--   its" (plural t2)</tt>.
+andIts :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "and the" between their terms. Plural case is <tt>(phrase t1) "and
+--   the" (plural t2)</tt>.
+andThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "of" between their terms. Plural case is <tt>(phrase t1) "of" (plural
+--   t2)</tt>.
+of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a> but second argument is a <a>NounPhrase</a>.
+of_NINP :: (NamedIdea c, NounPhrase d) => c -> d -> NP
+
+-- | Same as <a>of_</a> but first argument is a <a>NounPhrase</a> and
+--   plural case is <tt>(plural t1) "of" (phrase t2)</tt>.
+of_PSNPNI :: (NounPhrase c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a>, except plural case is <tt>(plural t1) "of" (phrase
+--   t2)</tt>.
+of_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_PS</a>, except combining <a>Sentence</a> piece is "of
+--   a".
+ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>ofA</a>, except phrase case is <tt>(plural t1) "of a"
+--   (phrase t2)</tt>.
+ofAPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a>, except combining <a>Sentence</a> piece is "of
+--   the". Plural case is <tt>(phrase t1) <a>ofThe</a> (plural t2)</tt>.
+ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>ofThe</a>, except plural case is <tt>(plural t1)
+--   <a>ofThe</a> (phrase t2)</tt>.
+ofThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>ofThe</a>, except prepends "the".
+the_ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>the_ofThe</a>, except plural case is <tt>(plural t1)
+--   <a>the_ofThe</a> (phrase t2)</tt>
+the_ofThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a>, except combining Sentence piece is "on the".
+onThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>onThe</a>, except plural case is (plural t1) S.onThe
+--   (phrase t2)
+onThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>onThe</a>, except plural case is (plural t1) S.onThe
+--   (plural t2)
+onThePP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in the" between their terms. Plural case is <tt>(phrase t1) "in the"
+--   (plural t2)</tt>.
+inThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
+--   (phrase t2)</tt>.
+inThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
+--   (plural t2)</tt>.
+inThePP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "is the" between their terms. Plural case is <tt>(phrase t1) "is the"
+--   (plural t2)</tt>.
+isThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "to the" between their terms. Plural case is <tt>(phrase t1) "to the"
+--   (plural t2)</tt>.
+toThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "for" between their terms. Plural case is <tt>(phrase t1) "for"
+--   (plural t2)</tt>.
+for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Similar to <a>for</a>, but takes two functions that determine the
+--   <tt>titleCase</tt>.
+forTGen :: (NamedIdea c, Idea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "in" between their terms. Plural case is <tt>(phrase t1) "in" (plural
+--   t2)</tt>.
+in_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>in_</a>, except plural case is <tt>(plural t1) "in" (phrase
+--   t2)</tt>.
+in_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in a" between their terms. Plural case is <tt>(phrase t1) "in a"
+--   (plural t2)</tt>.
+inA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "is" between their terms. Plural case is <tt>(phrase t1) "is" (plural
+--   t2)</tt>.
+is :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Case with "T1s with T2", as opposed to "T1 with T2", i.e. singular
+--   case is <tt>(plural t1) "with" (phrase t2)</tt> while the plural case
+--   pluralizes the first.
+with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Combinator for combining two <tt>NamedIdeas</tt>s into a
+--   <a>NamedChunk</a>. Plural case only makes second term plural. See
+--   <a>compoundPhrase</a> for more on plural behaviour. <i>Does not
+--   preserve abbreviations</i>.
+compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+
+-- | Similar to <a>compoundNC</a> but both terms are pluralized for plural
+--   case.
+compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+
+-- | Similar to <a>compoundNC</a>, except plural cases are customizable.
+compoundNCGen :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+
+-- | Similar to <a>compoundNC</a>, except for plural case, where first
+--   parameter gets pluralized while second one stays singular.
+compoundNCPS :: NamedChunk -> NamedChunk -> NamedChunk
+
+-- | Similar to <a>compoundNCGenP</a> but sets first parameter function to
+--   plural.
+compoundNCPSPP :: NamedChunk -> NamedChunk -> NamedChunk
+
+-- | Similar to <a>compoundNC</a>, but takes a function that is applied to
+--   the first term (eg. <tt>short</tt> or <a>plural</a>).
+compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
+
+-- | Helper function that combines a <a>NamedIdea</a> and a <a>NP</a>
+--   without any words in between. Plural case is <tt>(phrase t1) +:+
+--   (pluralNP t2)</tt>.
+combineNINP :: NamedIdea c => c -> NP -> NP
+
+-- | Similar to <a>combineNINP</a> but takes in a <a>NP</a> first and a
+--   <a>NamedIdea</a> second.
+combineNPNI :: NamedIdea c => NP -> c -> NP
+
+-- | Similar to <a>combineNINP</a> but takes two <a>NamedIdea</a>s.
+combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+
+-- | Folding-related functions and types.
+module Utils.Drasil.Fold
+
+-- | Type that helps determine enumeration method. Can use either numbers,
+--   uppercase letters, or lowercase letters.
+data EnumType
+Numb :: EnumType
+Upper :: EnumType
+Lower :: EnumType
+
+-- | Type to help wrap a sentence with parenthesis or to add a period at
+--   the end.
+data WrapType
+Parens :: WrapType
+Period :: WrapType
+
+-- | Type to help separate words with commas or semicolons.
+data SepType
+Comma :: SepType
+SemiCol :: SepType
+
+-- | Type to help fold differently between listed items, or if there are
+--   options (ex. using "and" or "or" at the end of a list of words).
+data FoldType
+List :: FoldType
+Options :: FoldType
+
+-- | Helper for formatting a list of constraints.
+foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+
+-- | Creates a list of elements with "enumerators" in "wrappers" using
+--   foldlList.
+foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Creates a list of elements separated by a "separator", ending with
+--   "and" or "or".
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
+foldlSP :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
+foldlSP_ :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
+foldlSPCol :: [Sentence] -> Contents
+
+-- | Partial function application of <a>foldle</a> for sentences
+--   specifically. Folds with spaces and adds a period (".") at the end.
+foldlSent :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but does not add a period.
+foldlSent_ :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but ends with colon.
+foldlSentCol :: [Sentence] -> Sentence
+
+-- | Folds a list of elements separated by commas, including the last
+--   element.
+foldlsC :: [Sentence] -> Sentence
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
+--   13").
+foldNums :: String -> [Int] -> Sentence
+
+-- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
+--   "13"]).
+numList :: String -> [Int] -> [String]
+
+
+-- | Miscellaneous utility functions for use throughout Drasil.
+module Utils.Drasil.Misc
+
+-- | Output is of the form "<tt>reference - sentence</tt>".
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+
+-- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
+--   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
+definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
+
+-- | Same as <a>definedIn</a>, but allows for additional information to be
+--   appended to the <a>Sentence</a>.
+definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
+
+-- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
+--   <tt>reference</tt>" (no <a>HasSymbol</a>).
+definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Takes a <tt>Symbol</tt> and its <tt>Reference</tt> (does not append a
+--   period at the end!). Outputs as "<tt>symbol</tt> is defined in
+--   <tt>source</tt>".
+definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+
+-- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
+--   "expression (source)".
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
+
+-- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
+--   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
+--   <tt>symbol</tt>:".
+fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+
+-- | Wraps "from <tt>reference</tt>" in parentheses.
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Similar to <a>fromSource</a> but takes a list of references instead of
+--   one.
+fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
+
+-- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
+fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
+
+-- | Appends "following <tt>reference</tt>" to the end of a
+--   <a>Sentence</a>.
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+
+-- | Takes a list and a <a>Section</a>, then generates a list of that
+--   section's reference to match the length of the list.
+makeListRef :: [a] -> Section -> [Sentence]
+
+-- | Converts input to a <a>Sentence</a> and appends %.
+addPercent :: Show a => a -> Sentence
+
+-- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
+displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
+
+-- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
+displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
+
+-- | Prepends the word <a>Equation</a> to an <a>Int</a>.
+eqN :: Int -> Sentence
+
+-- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
+--   <a>Left</a> with error message if there is an invalid <a>Char</a> in
+--   <a>String</a>, else <a>Right</a> with <a>String</a>.
+checkValidStr :: String -> String -> Either String String
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using
+--   the Force F in...".
+getTandS :: Quantity a => a -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeChanged :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeExpanded :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeWOVerb :: Sentence -> Sentence -> Sentence
+
+-- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
+--   Showing the Connections Between <tt>contents</tt>".
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+
+-- | Takes a list of <a>Referable</a>s and <tt>Symbol</tt>s and outputs as
+--   a Sentence "By substituting <tt>symbols</tt>, this can be written
+--   as:".
+substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
+
+-- | Extracts the typical uncertainty to be displayed from something that
+--   has an uncertainty.
+typUncr :: HasUncertainty c => c -> Sentence
+
+-- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
+--   <tt>chunkDefinition</tt>".
+underConsidertn :: ConceptChunk -> Sentence
+
+-- | Get a unit symbol if there is one.
+unwrap :: Maybe UnitDefn -> Sentence
+
+-- | Apply a binary function to the terms of two named ideas, instead of to
+--   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
+--   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+
+-- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
+bulletFlat :: [Sentence] -> ListType
+
+-- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
+--   The first argument is the headers of the <a>Nested</a> lists.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+
+-- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
+--   of reference as a <a>String</a> and a <a>Sentence</a> containing the
+--   full reference. Wraps the full reference in parenthesis.
+itemRefToSent :: String -> Sentence -> Sentence
+
+-- | Makes a traceability matrix from a list of row titles, a list of rows
+--   of "checked" columns, and a list of columns.
+makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+
+-- | Zip helper function enumerates abbreviations and zips it with list of
+--   <a>ItemType</a>:
+--   
+--   <ul>
+--   <li>s - the number from which the enumeration should start from
+--   (<a>Integer</a>),</li>
+--   <li>t - the title of the list (<a>Sentence</a>),</li>
+--   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
+--   </ul>
+mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
+
+-- | Helper for making a table from a columns.
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+
+-- | Converts lists of simple <a>ItemType</a>s into a list which may be
+--   used in <tt>Contents</tt> but is not directly referable.
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
+
+-- | Create a list in the pattern of "The __ are refined to the __". Note:
+--   Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+
+-- | Sorts a list of <tt>HasSymbols</tt> by <tt>Symbol</tt>.
+sortBySymbol :: HasSymbol a => [a] -> [a]
+
+-- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
+--   tuple.
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term -
+--   termDefinition</tt>".
+tAndDOnly :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (abbreviation) -
+--   termDefinition</tt>".
+tAndDWAcc :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (symbol) -
+--   termDefinition</tt>".
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+
+-- | Distributes a list of Sentences by prepending individual Sentences
+--   once to an existing list of Sentences.
+--   
+--   For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
+--   [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
+--   </pre>
+zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
+
+
+-- | General functions that are useful in manipulating some Drasil types
+--   into printable <a>Contents</a>.
+module Utils.Drasil.Contents
+
+-- | Creates a bulleted list.
+enumBullet :: Reference -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumBullet</a> but unlabelled.
+enumBulletU :: [Sentence] -> Contents
+
+-- | Currently Unused. Creates a simple bulleted list that labels things
+--   with a title and number:
+--   
+--   <ul>
+--   <li>lb - Reference,</li>
+--   <li>s - start index for the enumeration,</li>
+--   <li>t - title of the list,</li>
+--   <li>l - list to be enumerated.</li>
+--   </ul>
+--   
+--   For example, if we want to create a list of data definitions, we could
+--   call the function as follows:
+--   
+--   <pre>
+--   enumSimple _ 2 (S "DD") [def1, def2, ...]
+--   </pre>
+--   
+--   And the resulting <a>LabelledContent</a> would be rendered as:
+--   
+--   <ul>
+--   <li>DD2: def1</li>
+--   <li>DD3: def2</li>
+--   <li>DD4: def3 ...</li>
+--   </ul>
+enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumSimple</a> but unlabelled.
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
+
+-- | Convenience function for transforming referable concepts into a
+--   bulleted list. Used in drasil-docLang in making the assumptions,
+--   goals, and requirements sections. Output is of the kind <tt>Concept
+--   Name: definition of concept</tt>.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+
+-- | Displays a given expression and attaches a <a>Reference</a> to it.
+lbldExpr :: ModelExpr -> Reference -> LabelledContent
+
+-- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
+--   <a>Reference</a>).
+unlbldExpr :: ModelExpr -> Contents
 
 
 -- | The Drasil language, including expressions, chunks, sentences,
@@ -4751,10 +5355,10 @@ applyWithNamedArgs :: (ExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName 
 
 -- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
 sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
+infixr 9 $&&
 infixl 7 $/
 infixr 8 $^
 infixr 4 $=
-infixr 9 $&&
 infixr 9 $||
 
 -- | Smart constructor for fractions.
@@ -5022,6 +5626,9 @@ class (HasSymbol c) => IsArgumentName c
 --   sure we are only using <a>UID</a>s where desired.
 data UID
 
+-- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
+mkUid :: String -> UID
+
 -- | For when we need to modify a UID. We first take the base chunk's UID
 --   and then append a suffix to it.
 (+++) :: HasUID a => a -> String -> UID
@@ -5168,12 +5775,12 @@ cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 --   equation so that we know its behaviour.
 data RelationConcept
 
--- | Create a <a>RelationConcept</a> from a given <a>UID</a>, term
+-- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
 --   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
 makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 
 -- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
---   a <a>Concept</a>, new <a>UID</a> and relation.
+--   a <a>Concept</a>, new <tt>UID</tt> and relation.
 addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
 
 -- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
@@ -6787,3 +7394,429 @@ type ModelQDef = QDefinition ModelExpr
 
 -- | Commonly used type for polymorphic Exprs.
 type PExpr = forall r. (ExprC r, LiteralC r) => r
+
+-- | Creates a bulleted list.
+enumBullet :: Reference -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumBullet</a> but unlabelled.
+enumBulletU :: [Sentence] -> Contents
+
+-- | Currently Unused. Creates a simple bulleted list that labels things
+--   with a title and number:
+--   
+--   <ul>
+--   <li>lb - Reference,</li>
+--   <li>s - start index for the enumeration,</li>
+--   <li>t - title of the list,</li>
+--   <li>l - list to be enumerated.</li>
+--   </ul>
+--   
+--   For example, if we want to create a list of data definitions, we could
+--   call the function as follows:
+--   
+--   <pre>
+--   enumSimple _ 2 (S "DD") [def1, def2, ...]
+--   </pre>
+--   
+--   And the resulting <a>LabelledContent</a> would be rendered as:
+--   
+--   <ul>
+--   <li>DD2: def1</li>
+--   <li>DD3: def2</li>
+--   <li>DD4: def3 ...</li>
+--   </ul>
+enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumSimple</a> but unlabelled.
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
+
+-- | Convenience function for transforming referable concepts into a
+--   bulleted list. Used in drasil-docLang in making the assumptions,
+--   goals, and requirements sections. Output is of the kind <tt>Concept
+--   Name: definition of concept</tt>.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+
+-- | Displays a given expression and attaches a <a>Reference</a> to it.
+lbldExpr :: ModelExpr -> Reference -> LabelledContent
+
+-- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
+--   <a>Reference</a>).
+unlbldExpr :: ModelExpr -> Contents
+
+-- | Type that helps determine enumeration method. Can use either numbers,
+--   uppercase letters, or lowercase letters.
+data EnumType
+Numb :: EnumType
+Upper :: EnumType
+Lower :: EnumType
+
+-- | Type to help wrap a sentence with parenthesis or to add a period at
+--   the end.
+data WrapType
+Parens :: WrapType
+Period :: WrapType
+
+-- | Type to help separate words with commas or semicolons.
+data SepType
+Comma :: SepType
+SemiCol :: SepType
+
+-- | Type to help fold differently between listed items, or if there are
+--   options (ex. using "and" or "or" at the end of a list of words).
+data FoldType
+List :: FoldType
+Options :: FoldType
+
+-- | Helper for formatting a list of constraints.
+foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+
+-- | Creates a list of elements with "enumerators" in "wrappers" using
+--   foldlList.
+foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Creates a list of elements separated by a "separator", ending with
+--   "and" or "or".
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
+foldlSP :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
+foldlSP_ :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
+foldlSPCol :: [Sentence] -> Contents
+
+-- | Partial function application of <a>foldle</a> for sentences
+--   specifically. Folds with spaces and adds a period (".") at the end.
+foldlSent :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but does not add a period.
+foldlSent_ :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but ends with colon.
+foldlSentCol :: [Sentence] -> Sentence
+
+-- | Folds a list of elements separated by commas, including the last
+--   element.
+foldlsC :: [Sentence] -> Sentence
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
+--   13").
+foldNums :: String -> [Int] -> Sentence
+
+-- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
+--   "13"]).
+numList :: String -> [Int] -> [String]
+
+-- | Output is of the form "<tt>reference - sentence</tt>".
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+
+-- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
+--   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
+definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
+
+-- | Same as <a>definedIn</a>, but allows for additional information to be
+--   appended to the <a>Sentence</a>.
+definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
+
+-- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
+--   <tt>reference</tt>" (no <a>HasSymbol</a>).
+definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Takes a <tt>Symbol</tt> and its <tt>Reference</tt> (does not append a
+--   period at the end!). Outputs as "<tt>symbol</tt> is defined in
+--   <tt>source</tt>".
+definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+
+-- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
+--   "expression (source)".
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
+
+-- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
+--   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
+--   <tt>symbol</tt>:".
+fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+
+-- | Wraps "from <tt>reference</tt>" in parentheses.
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Similar to <a>fromSource</a> but takes a list of references instead of
+--   one.
+fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
+
+-- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
+fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
+
+-- | Appends "following <tt>reference</tt>" to the end of a
+--   <a>Sentence</a>.
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+
+-- | Takes a list and a <a>Section</a>, then generates a list of that
+--   section's reference to match the length of the list.
+makeListRef :: [a] -> Section -> [Sentence]
+
+-- | Converts input to a <a>Sentence</a> and appends %.
+addPercent :: Show a => a -> Sentence
+
+-- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
+displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
+
+-- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
+displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
+
+-- | Prepends the word <a>Equation</a> to an <a>Int</a>.
+eqN :: Int -> Sentence
+
+-- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
+--   <a>Left</a> with error message if there is an invalid <a>Char</a> in
+--   <a>String</a>, else <a>Right</a> with <a>String</a>.
+checkValidStr :: String -> String -> Either String String
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using
+--   the Force F in...".
+getTandS :: Quantity a => a -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeChanged :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeExpanded :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeWOVerb :: Sentence -> Sentence -> Sentence
+
+-- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
+--   Showing the Connections Between <tt>contents</tt>".
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+
+-- | Takes a list of <a>Referable</a>s and <tt>Symbol</tt>s and outputs as
+--   a Sentence "By substituting <tt>symbols</tt>, this can be written
+--   as:".
+substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
+
+-- | Extracts the typical uncertainty to be displayed from something that
+--   has an uncertainty.
+typUncr :: HasUncertainty c => c -> Sentence
+
+-- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
+--   <tt>chunkDefinition</tt>".
+underConsidertn :: ConceptChunk -> Sentence
+
+-- | Get a unit symbol if there is one.
+unwrap :: Maybe UnitDefn -> Sentence
+
+-- | Apply a binary function to the terms of two named ideas, instead of to
+--   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
+--   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+
+-- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
+bulletFlat :: [Sentence] -> ListType
+
+-- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
+--   The first argument is the headers of the <a>Nested</a> lists.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+
+-- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
+--   of reference as a <a>String</a> and a <a>Sentence</a> containing the
+--   full reference. Wraps the full reference in parenthesis.
+itemRefToSent :: String -> Sentence -> Sentence
+
+-- | Makes a traceability matrix from a list of row titles, a list of rows
+--   of "checked" columns, and a list of columns.
+makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+
+-- | Zip helper function enumerates abbreviations and zips it with list of
+--   <a>ItemType</a>:
+--   
+--   <ul>
+--   <li>s - the number from which the enumeration should start from
+--   (<a>Integer</a>),</li>
+--   <li>t - the title of the list (<a>Sentence</a>),</li>
+--   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
+--   </ul>
+mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
+
+-- | Helper for making a table from a columns.
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+
+-- | Converts lists of simple <a>ItemType</a>s into a list which may be
+--   used in <tt>Contents</tt> but is not directly referable.
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
+
+-- | Create a list in the pattern of "The __ are refined to the __". Note:
+--   Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+
+-- | Sorts a list of <tt>HasSymbols</tt> by <tt>Symbol</tt>.
+sortBySymbol :: HasSymbol a => [a] -> [a]
+
+-- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
+--   tuple.
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term -
+--   termDefinition</tt>".
+tAndDOnly :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (abbreviation) -
+--   termDefinition</tt>".
+tAndDWAcc :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (symbol) -
+--   termDefinition</tt>".
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+
+-- | Distributes a list of Sentences by prepending individual Sentences
+--   once to an existing list of Sentences.
+--   
+--   For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
+--   [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
+--   </pre>
+zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
+
+
+-- | Defines various NounPhrase-level combinators. These hold more
+--   information than those of the Sentence level but may not necessarily
+--   have a conceptual link. See the <a>Wiki</a> for more information and
+--   details about the naming process for combinators. A summary of the
+--   function naming scheme is as follows:
+--   
+--   <ul>
+--   <li>Combinators that conflict with haskell-native functions have an
+--   underscore appended.</li>
+--   <li>Default plural case for combinators will be first term singular,
+--   second term plural.</li>
+--   <li><tt>P</tt> and <tt>S</tt> denote the plural case of the combinator
+--   when it does not follow the above default.</li>
+--   <li><tt>Gen</tt> denotes the general function case.</li>
+--   </ul>
+--   
+--   This module should be used as a qualified import (usually as
+--   <tt>NP</tt>), as many function names clash with those in Concepts.hs
+--   and Sentence.hs.
+module Utils.Drasil.NounPhrase
+
+-- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
+--   Plural case is <tt>(phraseNP t1) +:+ S s +:+ (pluralNP t2)</tt>.
+insertString :: String -> NP -> NP -> NP
+
+-- | Helper function that prepends a <a>String</a> to a <a>NP</a>.
+prependString :: String -> NP -> NP
+
+-- | Helper function that places a <a>Sentence</a> in between two
+--   <a>NP</a>s. Plural case is <tt>(phraseNP t1) +:+ s +:+ (pluralNP
+--   t2)</tt>.
+insertSent :: Sentence -> NP -> NP -> NP
+
+-- | Helper function that prepends a <a>Sentence</a> to a <a>NP</a>.
+prependSent :: Sentence -> NP -> NP
+
+-- | Prepends "the" to a <a>NP</a>.
+the :: NP -> NP
+
+-- | Similar to <a>the</a>, but accepts a function that determines the
+--   plural case.
+theGen :: (NP -> Sentence) -> NP -> NP
+
+-- | Prepends "a" to a <a>NP</a>.
+a_ :: NP -> NP
+
+-- | Similar to <tt>a</tt>, but accepts a function that determines the
+--   plural case.
+a_Gen :: (NP -> Sentence) -> NP -> NP
+
+-- | Inserts "and" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "and" +:+ (pluralNP t2)</tt>.
+and_ :: NP -> NP -> NP
+
+-- | Same as <a>and_</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>and_</a> (phraseNP t2)</tt>.
+and_PS :: NP -> NP -> NP
+
+-- | Same as <a>and_</a>, but takes two functions for the plural case.
+and_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Same as <a>and_</a>, but takes two functions for the singular case and
+--   two for the plural case.
+and_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "and the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "and the" +:+ (pluralNP t2)</tt>.
+andThe :: NP -> NP -> NP
+
+-- | Inserts "of the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
+ofThe :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
+--   <a>ofThe</a> (phraseNP t2)</tt>.
+ofThePS :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but accepts two functions for the plural
+--   case.
+ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "in the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "in the" +:+ (pluralNP t2)</tt>.
+inThe :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
+--   <a>inThe</a> (phraseNP t2)</tt>.
+inThePS :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but accepts two functions for the plural
+--   case.
+inTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Prepends "the" and inserts "of the". Plural case is <tt>"the" +:+
+--   (phraseNP t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
+the_ofThe :: NP -> NP -> NP
+
+-- | Similar to <a>the_ofThe</a>, but the plural case is now <tt> S "the"
+--   +:+ (pluralNP t1) <a>ofThe</a> (phraseNP t2)</tt>.
+the_ofThePS :: NP -> NP -> NP
+
+-- | Similar to <tt>the_ofThe'</tt>, but takes two functions for the plural
+--   case.
+the_ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "for" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "for" +:+ (pluralNP t2)</tt>.
+for :: NP -> NP -> NP
+
+-- | Same as <a>for</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>for</a> (phraseNP t2)</tt>.
+forPS :: NP -> NP -> NP
+
+-- | Same as <tt>for'</tt>, but takes two functions for the plural case.
+forGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "of" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "of" +:+ (pluralNP t2)</tt>.
+of_ :: NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>of_</a> (phraseNP t2)</tt>.
+of_PS :: NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but takes two functions for the plural case.
+of_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but takes two functions for the singular case and
+--   two for the plural case.
+of_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "with" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "with" +:+ (pluralNP t2)</tt>.
+with :: NP -> NP -> NP

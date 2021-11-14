@@ -306,8 +306,7 @@ import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)
-import Language.Drasil.Classes.Core (HasSymbol(symbol),
-  HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), HasDerivation(derivations), 
@@ -370,7 +369,7 @@ import Language.Drasil.Misc (mkTable)
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)
-import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)
+import Language.Drasil.Label.Type hiding (name)
 
 import Language.Drasil.UnitLang (USymb(US))
 import Language.Drasil.Uncertainty

@@ -3,12 +3,13 @@
 
 -- | Contains chunks related to adding an expression to a quantitative concept. 
 module Language.Drasil.Chunk.Eq (
-  -- * Chunk Type
+  -- * Types
   QDefinition,
-  -- * Constructor
+  -- * Constructors
   fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
-  mkFuncDef, mkFuncDef', mkFuncDefByQ) where
+  mkFuncDef, mkFuncDef', mkFuncDefByQ
+) where
 
 import Control.Lens ((^.), view, lens, Lens')
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)

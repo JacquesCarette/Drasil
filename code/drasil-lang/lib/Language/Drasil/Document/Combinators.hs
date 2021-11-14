@@ -28,7 +28,6 @@ import Language.Drasil.Classes
       Concept,
       Definition(defn),
       NamedIdea(..) )
-import Language.Drasil.Classes.Core ( Referable, HasSymbol )
 import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Development.Sentence
     ( short, atStart, titleize, phrase, plural )
@@ -59,12 +58,14 @@ import Language.Drasil.Symbol ( compsy )
 import Language.Drasil.Sentence.Fold
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 import Language.Drasil.UID ( HasUID )
+import Language.Drasil.Label.Type
 
 import Control.Lens ((^.))
 
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.Function (on)
 import Data.List (sortBy, transpose)
+import Language.Drasil.Classes.Core (HasSymbol)
 
 -- | Sorts a list of 'HasSymbols' by 'Symbol'.
 sortBySymbol :: HasSymbol a => [a] -> [a]

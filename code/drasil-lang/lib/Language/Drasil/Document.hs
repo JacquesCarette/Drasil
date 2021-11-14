@@ -2,14 +2,15 @@
 -- | Document Description Language.
 module Language.Drasil.Document where
 
-import Language.Drasil.Classes.Core (getRefAdd, HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
-import Language.Drasil.ShortName (HasShortName(..))
-import Language.Drasil.Document.Core
-import Language.Drasil.Label.Type (prepend, LblType(RP, URI), getAdd)
+import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
+  LabelledContent(LblC), RawContent(Figure, Paragraph),
+  Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent )
+import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
+  Referable(..), HasRefAddress(..) )
 import Language.Drasil.Misc (repUnd)
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
-import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID, HasUID(..), (+++.), mkUid)
 
 import Control.Lens ((^.), makeLenses, view)
@@ -27,8 +28,8 @@ data Partition = Sections
 
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').
-data Section = Section 
-             { tle  :: Title 
+data Section = Section
+             { tle  :: Title
              , cons :: [SecCons]
              , _lab :: Reference
              }
@@ -43,7 +44,7 @@ data Section = Section
 
 data SecHeader = SecHeader Title Reference
 data Content   = Content   Contents
--} 
+-}
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
 -- | 'Section's are equal if 'UID's are equal.
@@ -75,7 +76,7 @@ data ShowTableOfContents = ToC | NoToC
 -- | Manually removes the first section of a document (table of contents section).
 -- temp fix for Notebook (see if we need this in notebook later)
 checkToC :: Document -> Document
-checkToC (Document t a toC sc) = 
+checkToC (Document t a toC sc) =
   case toC of
     ToC -> Document t a toC $ drop 1 sc
     _   -> Document t a toC sc

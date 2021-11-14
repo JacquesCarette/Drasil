@@ -10,7 +10,6 @@ module Language.Drasil.Document.Contents (
 ) where
 
 import Language.Drasil.Classes ( Definition(..) )
-import Language.Drasil.Classes.Core ( Referable(refAdd) )
 import Language.Drasil.ShortName (HasShortName(..), getSentSN)
 import Language.Drasil.Document ( llcc, ulcc )
 import Language.Drasil.Document.Core
@@ -24,6 +23,7 @@ import Language.Drasil.ModelExpr.Lang ( ModelExpr )
 import Language.Drasil.Reference ( Reference )
 import Language.Drasil.Sentence ( Sentence )
 import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
+import Language.Drasil.Label.Type ( Referable(refAdd) )
 
 import Control.Lens ((^.))
 

@@ -16,13 +16,12 @@ module Language.Drasil.Chunk.Citation (
 
 import Language.Drasil.People (People)
 
-import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField,
   author, chapter, pages, editor, bookTitle, title,
   year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Label.Type (LblType(Citation))
+import Language.Drasil.Label.Type (LblType(Citation), Referable(..), HasRefAddress(..))
 import Language.Drasil.UID (UID, HasUID(..), showUID, mkUid)
 
 import Control.Lens (makeLenses, Lens')

@@ -13,7 +13,7 @@ module Language.Drasil.Sentence (
   sentenceSymb, sentenceTerm) where
 
 import Language.Drasil.UID (HasUID(..), UID)
-import Language.Drasil.Classes.Core (HasSymbol)
+import Language.Drasil.Symbol (HasSymbol)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.Symbol (Symbol)

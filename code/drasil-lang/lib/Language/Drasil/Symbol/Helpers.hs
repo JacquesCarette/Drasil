@@ -7,7 +7,7 @@ import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
 import Data.List.Split (splitOn)
 
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import Language.Drasil.Stages (Stage(Equational,Implementation))
 

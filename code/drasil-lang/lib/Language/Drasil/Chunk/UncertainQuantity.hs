@@ -9,7 +9,7 @@ module Language.Drasil.Chunk.UncertainQuantity (
  
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, cuc', cnstrw, cvc)
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))

@@ -31,7 +31,7 @@ module Language.Drasil.Classes (
 
 -- some classes are so 'core' that they are defined elsewhere
 -- also helps with cycles...
-import Language.Drasil.Classes.Core (HasSymbol)
+import Language.Drasil.Symbol (HasSymbol)
 
 import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
 import Language.Drasil.Constraint (ConstraintE)

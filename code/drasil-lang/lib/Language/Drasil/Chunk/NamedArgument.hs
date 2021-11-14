@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.NamedArgument (
   -- * Constructor
   narg) where
 
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasSpace(typ), 
   Quantity, IsArgumentName)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw)

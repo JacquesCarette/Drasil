@@ -42,7 +42,7 @@ module Language.Drasil (
   -- | Contains many of the classes used in Drasil, along with their methods.
 
   -- *** Chunk-related
-  -- Language.Drasil.Classes.Core
+  -- Language.Drasil.Symbol
   , HasUID(uid)
   , HasSymbol(symbol)
   -- Language.Drasil.Classes
@@ -63,7 +63,7 @@ module Language.Drasil (
   , DefiningExpr(defnExpr)
   , Express(express)
   -- *** References
-  -- Language.Drasil.Classes.Core
+  -- Language.Drasil.Symbol
   , HasRefAddress(getRefAdd)
   , Referable(..)
   -- Language.Drasil.Classes
@@ -306,7 +306,7 @@ import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), HasDerivation(derivations), 

@@ -11,7 +11,7 @@ import Control.Lens (makeLenses, view, (^.))
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', tempdqdWr')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)

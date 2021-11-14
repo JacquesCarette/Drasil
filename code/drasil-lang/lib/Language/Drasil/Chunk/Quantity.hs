@@ -9,7 +9,7 @@ module Language.Drasil.Chunk.Quantity (
 
 import Control.Lens ((^.),makeLenses,view)
 
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasSpace(typ), Quantity, Express(..))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, mkIdea, nc, ncUID, mkIdeaUID)

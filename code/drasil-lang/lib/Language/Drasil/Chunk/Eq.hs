@@ -14,7 +14,7 @@ module Language.Drasil.Chunk.Eq (
 import Control.Lens ((^.), view, lens, Lens')
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
   ConceptDomain(cdom), Express(express))

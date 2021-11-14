@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   dqd, dqdNoUnit, dqd',
   dqdQd, dqdWr, tempdqdWr') where
 
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)

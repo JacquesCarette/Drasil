@@ -6,7 +6,7 @@ import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 import Control.Lens ((^.))
 
 import Language.Drasil.UID (HasUID(..))
-import Language.Drasil.Classes.Core (HasSymbol)
+import Language.Drasil.Symbol (HasSymbol)
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..), DerivType(..),
   SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..), AssocArithOper(..))
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), Space)

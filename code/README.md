@@ -63,11 +63,28 @@ Also take a look at the Documentation section of the [Drasil Wiki](https://githu
 See the 
 [Analysis of the Drasil Framework](https://jacquescarette.github.io/Drasil/#Sec:Analysis) for more information on which chunk types are instances of which classes.
 
+-------------------------------------------------
+### Building Up-to-Date Documentation
+-------------------------------------------------
+
+To build the documentation for Drasil, simply type `make docs`. It will build 1 variant of the Haddock documentation; an internal documentation set with all modules fully exposed. 
+
+Noticeably, when we run `FULL=1 make docs`, it builds 2 variants of the Haddock documentation; a normal external documentation set, and an internal documentation set with all modules fully exposed.
+
+Upon completion, you should receive several messages stating the Haddock for certain
+packages has been updated, as well as directory locations for the related generated Haddock docs.
+
+The generated Haddock documentation will be placed inside of a newly created `code/docs/` folder.
+You should open up the `code/docs/index.html` file with your web browser if you'd like to view 
+the external documentation set. Alternatively, if you would like to view the internal documentation set,
+you should instead open the `code/docs/full/index.html` file.
+
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
 **datafiles**
+
   - Contains additional "helper" files for each of the examples
 
 **drasil-build**

@@ -28,7 +28,7 @@ module Drasil.DocLang.SRS (
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,

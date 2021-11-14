@@ -3,7 +3,7 @@ module Drasil.SSP.Changes (likelyChgs, unlikelyChgs) where
 -- A list of likely and unlikely changes for the SSP example
 
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)

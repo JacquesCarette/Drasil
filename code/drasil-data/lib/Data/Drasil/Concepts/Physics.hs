@@ -5,7 +5,7 @@ module Data.Drasil.Concepts.Physics where
 import Language.Drasil hiding (space)
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NounPhrase.Combinators as NP
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)

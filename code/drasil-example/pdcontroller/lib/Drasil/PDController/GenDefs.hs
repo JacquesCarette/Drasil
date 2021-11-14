@@ -9,7 +9,7 @@ import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, othModel')
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Citations ( pidWiki )
 import Drasil.PDController.Unitals

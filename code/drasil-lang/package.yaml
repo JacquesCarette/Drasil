@@ -1,11 +1,11 @@
-name:                drasil-lang
-version:             0.1.60.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
-maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - Language SubPackage
-github:              JacquesCarette/Drasil
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+name:        drasil-lang
+version:     0.1.60.0
+author:      "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:  "Jacques Carette"
+synopsis:	   A framework for code and document generation for scientific software - Language SubPackage
+github:      JacquesCarette/Drasil
+homepage:    https://jacquescarette.github.io/Drasil/
+description: Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 extra-source-files: []
 
@@ -25,6 +25,7 @@ library:
   source-dirs: lib
   exposed-modules:
   - Language.Drasil
+  - Language.Drasil.Chunk.Concept.NamedCombinators
   - Language.Drasil.Development
   - Language.Drasil.Display
   - Language.Drasil.Expr.Development
@@ -33,7 +34,6 @@ library:
   - Language.Drasil.NounPhrase.Combinators
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands
-  - Utils.Drasil.Concepts
   when:
   - condition: false
     other-modules: Paths_drasil_lang

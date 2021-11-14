@@ -9,7 +9,7 @@ import qualified Data.List.NonEmpty as NE
 import Language.Drasil
 import Theory.Drasil
 import Utils.Drasil (weave)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.DocLang.SRS as SRS (physSyst)

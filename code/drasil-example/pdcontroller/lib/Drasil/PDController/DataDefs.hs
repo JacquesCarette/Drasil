@@ -9,7 +9,7 @@ import Drasil.PDController.TModel
 import Data.Drasil.Concepts.Math (equation)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, ddE)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 dataDefinitions :: [DataDefinition]

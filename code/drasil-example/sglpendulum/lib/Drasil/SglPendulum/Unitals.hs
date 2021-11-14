@@ -2,7 +2,7 @@ module Drasil.SglPendulum.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)

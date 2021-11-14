@@ -16,7 +16,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, ixSpeed, iySpeed,
 import Data.Drasil.Concepts.Documentation (coordinateSystem)
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
 

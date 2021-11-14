@@ -11,7 +11,7 @@ import Theory.Drasil (GenDefn, gdNoRefs,
     equationalModel', equationalModelU, equationalRealmU,
     MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
 import Utils.Drasil (weave)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 

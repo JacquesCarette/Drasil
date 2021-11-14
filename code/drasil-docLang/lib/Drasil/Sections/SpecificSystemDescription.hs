@@ -24,7 +24,7 @@ module Drasil.Sections.SpecificSystemDescription (
 
 import Language.Drasil hiding (variable)
 import Language.Drasil.Development (showUID)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 

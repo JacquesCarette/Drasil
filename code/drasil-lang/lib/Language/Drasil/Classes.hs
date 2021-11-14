@@ -46,6 +46,7 @@ import Language.Drasil.UID (UID, HasUID)
 
 import Control.Lens (Lens')
 
+-- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as 
 -- being worthy of naming.
 class HasUID c => NamedIdea c where

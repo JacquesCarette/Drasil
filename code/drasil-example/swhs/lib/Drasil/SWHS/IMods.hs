@@ -5,7 +5,7 @@ import Language.Drasil
 import Utils.Drasil (weave)
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
   equationalModel, ModelKind)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens((^.))

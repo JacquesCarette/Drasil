@@ -6,7 +6,7 @@ import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)

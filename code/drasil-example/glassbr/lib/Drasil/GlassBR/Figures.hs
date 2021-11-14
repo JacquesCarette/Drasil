@@ -3,7 +3,7 @@ module Drasil.GlassBR.Figures where
 import Control.Lens((^.))
 
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,

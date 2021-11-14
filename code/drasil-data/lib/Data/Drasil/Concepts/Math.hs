@@ -6,7 +6,7 @@ import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]

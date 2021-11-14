@@ -2,7 +2,7 @@ module Drasil.SWHS.Assumptions where --all of this file is exported
 
 import Language.Drasil
 import Control.Lens ((^.))
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 

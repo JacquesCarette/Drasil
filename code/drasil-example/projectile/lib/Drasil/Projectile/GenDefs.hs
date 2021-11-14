@@ -5,7 +5,7 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, equationalModel')
 import Utils.Drasil (weave)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)

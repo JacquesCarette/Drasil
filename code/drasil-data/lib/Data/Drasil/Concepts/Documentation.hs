@@ -2,7 +2,7 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil hiding (organization, year, label, variable)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Math (graph, unit_)
 import Data.Drasil.Domains (documentc, softEng)

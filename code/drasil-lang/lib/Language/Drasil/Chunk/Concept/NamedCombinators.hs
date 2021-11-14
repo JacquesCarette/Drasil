@@ -8,7 +8,7 @@
 --    * @Gen@ denotes the general function case.
 --    * Although this should eventually be phased out, @T@ denotes a combinator meant for use with titles.
 --    * @NI@ and @NP@ denote whether something must be a part of the 'NamedIdea' or 'NounPhrase' class.
-module Utils.Drasil.Concepts (
+module Language.Drasil.Chunk.Concept.NamedCombinators (
   -- * Prepositions
   -- ** \"The\" Combinators
   the, theGen,

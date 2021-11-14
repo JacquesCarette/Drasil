@@ -2,7 +2,7 @@ module Drasil.DblPendulum.Requirements where
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,

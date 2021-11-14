@@ -3,7 +3,6 @@ module Language.Drasil.Printing.Import.Sentence where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Database.Drasil (ChunkDB, defResolve, refResolve, refTable)
-import Utils.Drasil (foldNums, checkValidStr)
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation

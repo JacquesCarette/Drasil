@@ -6,7 +6,6 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
 
 likelyChgs :: [ConceptInstance]

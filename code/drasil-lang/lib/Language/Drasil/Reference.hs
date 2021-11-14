@@ -7,12 +7,12 @@ module Language.Drasil.Reference (
   ref, refS, namedRef, complexRef, namedComplexRef
   ) where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd))
+import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
 import Language.Drasil.Label.Type (LblType(..))
 import Language.Drasil.ShortName (ShortName)
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID, HasUID(..))
 
 import Control.Lens ((^.), makeLenses)
 

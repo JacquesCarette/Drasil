@@ -6,9 +6,8 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (kilogram)
 import Drasil.PDController.Concepts
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 assumptions :: [ConceptInstance]
 assumptions

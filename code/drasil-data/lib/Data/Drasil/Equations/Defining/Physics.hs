@@ -2,8 +2,7 @@
 module Data.Drasil.Equations.Defining.Physics where
 
 import Language.Drasil
-import Utils.Drasil (foldlSent, getTandS)
-import qualified Utils.Drasil.Sentence as S (is, of_, the_ofThe)
+import qualified Language.Drasil.Sentence.Combinators as S (is, of_, the_ofThe)
 
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, time,
   force, height, velocity, position)

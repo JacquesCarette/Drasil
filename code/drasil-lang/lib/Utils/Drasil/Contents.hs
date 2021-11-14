@@ -8,7 +8,21 @@ module Utils.Drasil.Contents (
   lbldExpr, unlbldExpr
   ) where
 
-import Language.Drasil
+import Language.Drasil.Classes ( Definition(..) )
+import Language.Drasil.Classes.Core ( Referable(refAdd) )
+import Language.Drasil.Classes.Core2 ( HasShortName(..) )
+import Language.Drasil.Document ( llcc, ulcc )
+import Language.Drasil.Document.Core
+    ( LabelledContent,
+      RawContent(Enumeration, EqnBlock),
+      Contents(UlC),
+      ListTuple,
+      ItemType(Flat),
+      ListType(Simple) )
+import Language.Drasil.ModelExpr.Lang ( ModelExpr )
+import Language.Drasil.Reference ( Reference )
+import Language.Drasil.Sentence ( Sentence )
+import Language.Drasil.ShortName ( getSentSN )
 import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
 
 import Control.Lens ((^.))

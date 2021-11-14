@@ -5,8 +5,7 @@ module Drasil.DocumentLanguage.TraceabilityMatrix where
 import Language.Drasil
 import Database.Drasil(ChunkDB, SystemInformation, UMap, _sysinfodb, asOrderedList,
   conceptinsTable, defResolve, refbyTable, traceTable, traceLookup)
-import Utils.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
   item, reference, traceyMatrix)

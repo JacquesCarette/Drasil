@@ -3,7 +3,7 @@ module Drasil.SglPendulum.DataDefs (dataDefs, positionIY, positionIX, angFrequen
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddENoRefs)
 import Drasil.SglPendulum.Figures (figMotion)

@@ -12,9 +12,8 @@ module Drasil.Sections.Requirements (
   ) where
 
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,

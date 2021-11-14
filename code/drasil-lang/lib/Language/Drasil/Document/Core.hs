@@ -4,7 +4,8 @@ module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
+import Language.Drasil.UID (HasUID(..))
+import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd),
   Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)

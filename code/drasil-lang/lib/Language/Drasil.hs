@@ -83,7 +83,7 @@ module Language.Drasil (
   -- Similar types are grouped together.
   
   -- *** Basic types
-  , UID
+  , UID, mkUid
   -- Language.Drasil.Chunk.NamedIdea
   , (+++), (+++.), (+++!)
   , NamedChunk, nc, ncUID, IdeaDict , mkIdea
@@ -237,8 +237,58 @@ module Language.Drasil (
 
   -- * Type Synonyms
   , ConstQDef, SimpleQDef, ModelQDef
-  , PExpr
+  , PExpr,
+
+
+  -- TODO: REMOVE ALL OF THE BELOW
+
+  -- * Content
+  -- | From "Utils.Drasil.Contents".
+  enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD,
+  lbldExpr, unlbldExpr,
+
+  -- * Fold-type utilities.
+  -- | From "Utils.Drasil.Fold". Defines many general fold functions
+  -- for use with Drasil-related types.
+
+  -- ** Folding Options as Types
+  EnumType(..), WrapType(..), SepType(..), FoldType(..),
+
+  -- ** Folding functions
+  -- *** Expression-related
+  foldConstraints,
+
+  -- *** Sentence-related
+  foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
+  foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
+  
+  -- * Misc. utilities
+  -- | From "Utils.Drasil.Misc". General sorting functions, useful combinators,
+  -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
+  
+  -- ** Reference-related functions
+  -- | Attach a 'Reference' and a 'Sentence' in different ways.
+  chgsStart, definedIn, definedIn', definedIn'', definedIn''',
+  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows,
+  makeListRef,
+
+  -- ** Sentence-related functions
+  -- | See Reference-related functions as well.
+  addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet,
+  eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded,
+  maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
+  unwrap, fterms,
+
+  -- ** List-related functions
+  bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
+  mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
+  tAndDOnly, tAndDWAcc, tAndDWSym,
+  zipSentList,
 ) where
+
+import Utils.Drasil.Contents
+import Utils.Drasil.Fold
+import Utils.Drasil.Misc
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.Expr.Class (ExprC(..),
@@ -257,10 +307,10 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
-import Language.Drasil.Unicode -- all of it
-import Language.Drasil.UID (UID)
-import Language.Drasil.UID.Core ((+++), (+++.), (+++!))
-import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
+import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
+import Language.Drasil.UID
+    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)
+import Language.Drasil.Classes.Core (HasSymbol(symbol),
   HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),

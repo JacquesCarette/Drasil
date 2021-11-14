@@ -7,11 +7,11 @@ import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
   distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel, gravitationalConst,
-  height, iPos, iSpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel,
+  height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel,
   kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, potEnergy,
   pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
-  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel,
-  yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, frequency, chgMomentum)
+  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, 
+  yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, frequency, chgMomentum)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
@@ -25,10 +25,10 @@ physicscon :: [UnitalChunk]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   chgInVelocity, constAccel, constAccelV, displacement, distance, energy, frequency,
   fSpeed, fVel, force, gravitationalAccel, gravitationalConst, height, iPos,
-  iSpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy,
+  iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
-  weight, xAccel, xConstAccel, xDist, ixDist, iyDist, xPos, xVel, yAccel, yConstAccel, yDist,
+  weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension,
   angularFrequency, period, frequency, chgMomentum]
 
@@ -36,14 +36,13 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
-  gravitationalAccel, gravitationalConst, height, iPos, iSpeed, iVel, impulseS,
-  impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy, linearAccel, linearDisplacement,
-  linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
-  scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
-  ixDist, iyDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, 
-  moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, period, 
-  frequency, chgMomentum :: UnitalChunk
-
+  gravitationalAccel, gravitationalConst, height, iPos, iSpeed, ixSpeed, iySpeed,
+  iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy, linearAccel, 
+  linearDisplacement, linearVelocity, momentOfInertia, position, potEnergy, 
+  pressure, scalarAccel, scalarPos, speed, time, torque, velocity, weight, xAccel, 
+  xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos, 
+  yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
+  period, frequency, chgMomentum :: UnitalChunk
 
 acceleration         = uc CP.acceleration (vec lA) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU
@@ -94,9 +93,6 @@ fOfGravity           = uc CP.fOfGravity (sub (vec cF) (vec lG)) newton
 xDist = uc CP.xDist (subX lR) metre
 yDist = uc CP.yDist (subY lR) metre
 
-ixDist = uc CP.xDist (sup lX initial) metre
-iyDist = uc CP.yDist (sup lY initial) metre
-
 iPos = uc CP.iPos (sup lP initial) metre
 xPos = uc CP.xPos (subX lP) metre
 yPos = uc CP.yPos (subY lP) metre
@@ -106,6 +102,9 @@ iyPos = uc CP.iyPos (sup (subY lP) initial) metre
 
 fSpeed = uc CP.fSpeed (sup lV final) velU
 iSpeed = uc CP.iSpeed (sup lV initial) velU
+
+ixSpeed = uc CP.ixSpeed (sub lU initial) velU -- temporary use for avoiding having too many superscripts
+iySpeed = uc CP.iySpeed (sub lW initial) velU -- temporary use for avoiding having too many superscripts
 
 fVel = uc CP.fVel (sup (vec lV) final) velU
 iVel = uc CP.iVel (sup (vec lV) initial) velU

@@ -1,10 +1,9 @@
 module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 

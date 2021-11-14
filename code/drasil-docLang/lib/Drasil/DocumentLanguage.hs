@@ -22,7 +22,6 @@ import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
 import Language.Drasil.Display (compsy)
-import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,

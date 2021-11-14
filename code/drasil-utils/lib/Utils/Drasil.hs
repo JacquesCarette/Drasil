@@ -12,6 +12,7 @@ module Utils.Drasil (
   -- * Lists
   -- | From "Utils.Drasil.Lists". General functions involving lists.
   replaceAll, subsetOf, nubSort, weave,
+  foldle, foldle1,
 
   -- ** Strings
   toPlainName

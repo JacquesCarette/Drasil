@@ -21,22 +21,7 @@ import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
 import Language.Drasil.Sentence
     ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
 import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
-
--- | Fold helper function that applies f to all but the last element, applies g to
--- last element and the accumulator.
-foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
-foldle _ _ z []     = z
-foldle _ g z [x]    = g z x
-foldle f g z [x,y]  = g (f z x) y
-foldle f g z (x:xs) = foldle f g (f z x) xs
-
--- | Fold helper function that applies f to all but last element, applies g to last
--- element and accumulator without starting value, does not work for empty list.
-foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
-foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
-foldle1 _ _ [x]      = x
-foldle1 _ g [x,y]    = g x y
-foldle1 f g (x:y:xs) = foldle f g (f x y) xs
+import Utils.Drasil
 
 -- TODO: This looks like it should be moved to wherever uses it, it's too specific.
 -- | Helper for formatting a list of constraints.
@@ -77,11 +62,14 @@ foldlsC [] = EmptyS
 foldlsC xs = foldl1 sC xs
 
 -- | Type that helps determine enumeration method. Can use either numbers, uppercase letters, or lowercase letters.
-data EnumType = Numb   | Upper   | Lower 
+data EnumType = Numb   | Upper   | Lower
+
 -- | Type to help wrap a sentence with parenthesis or to add a period at the end.
 data WrapType = Parens | Period
+
 -- | Type to help separate words with commas or semicolons.
 data SepType  = Comma  | SemiCol
+
 -- | Type to help fold differently between listed items, or if there are options (ex. using "and" or "or" at the end of a list of words).
 data FoldType = List   | Options
 

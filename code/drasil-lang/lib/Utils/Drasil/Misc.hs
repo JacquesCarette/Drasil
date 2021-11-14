@@ -17,7 +17,7 @@ module Utils.Drasil.Misc (
   mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
   tAndDOnly, tAndDWAcc, tAndDWSym,
   zipSentList
-  ) where
+) where
 
 import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
 import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )

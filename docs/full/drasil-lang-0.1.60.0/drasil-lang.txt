@@ -218,6 +218,12 @@ Proceedings :: CitationKind
 TechReport :: CitationKind
 Unpublished :: CitationKind
 
+-- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
+class HasFields c
+
+-- | Provides a <tt>Lens</tt> to <a>CiteField</a>s.
+getFields :: HasFields c => Lens' c [CiteField]
+
 -- | Smart field constructor for a <a>CiteField</a>.
 author :: People -> CiteField
 
@@ -285,16 +291,6 @@ pages :: [Int] -> CiteField
 
 -- | Smart field constructor for a <a>CiteField</a>.
 month :: Month -> CiteField
-
-
--- | Defining classes that represent knowledge about Citations.
-module Language.Drasil.Classes.Citations
-
--- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
-class HasFields c
-
--- | Provides a <tt>Lens</tt> to <a>CiteField</a>s.
-getFields :: HasFields c => Lens' c [CiteField]
 
 
 -- | Stages used for displaying symbols.
@@ -371,6 +367,22 @@ RConcat :: IRefProg -> IRefProg -> IRefProg
 -- | The <tt>Symbol</tt> to insert the <tt>ShortName</tt> directly.
 Name :: IRefProg
 
+-- | Members must have a reference address.
+class HasRefAddress b
+
+-- | Provides the ability to hold a reference address.
+getRefAdd :: HasRefAddress b => b -> LblType
+
+-- | Members of this class have the ability to be referenced.
+class (HasUID s, HasRefAddress s) => Referable s
+
+-- | The referencing address (what we're linking to). Only visible in the
+--   source (tex/html).
+refAdd :: Referable s => s -> String
+
+-- | Alternate form of reference.
+renderRef :: Referable s => s -> LblType
+
 -- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
 getAdd :: LblType -> String
 
@@ -427,10 +439,18 @@ NA :: Port
 
 
 -- | Defines uncertainty types and functions.
-module Language.Drasil.Uncertainty.Core
+module Language.Drasil.Uncertainty
 
 -- | Something that may contain an uncertainty value and a precision value.
 data Uncertainty
+
+-- | HasUncertainty is just a chunk with some uncertainty associated to it.
+--   This uncertainty is represented as a decimal value between 0 and 1
+--   (percentage).
+class HasUncertainty c
+
+-- | Provides the <tt>Lens</tt> to an <a>Uncertainty</a>.
+unc :: HasUncertainty c => Lens' c Uncertainty
 uncert :: Lens' Uncertainty (Maybe Double)
 prec :: Lens' Uncertainty (Maybe Int)
 
@@ -439,6 +459,15 @@ uncty :: Double -> Maybe Int -> Uncertainty
 
 -- | Smart constructor for exact values (no uncertainty).
 exact :: Uncertainty
+
+-- | The default uncertainty is set to 0.1.
+defaultUncrt :: Uncertainty
+
+-- | Accessor for uncertainty value from something that has an uncertainty.
+uncVal :: HasUncertainty x => x -> Double
+
+-- | Accessor for precision value from something that has an uncertainty.
+uncPrec :: HasUncertainty x => x -> Maybe Int
 
 
 -- | Special type for unicode characters.
@@ -540,6 +569,12 @@ Concat :: [Symbol] -> Symbol
 -- | Placeholder for when a symbol is not needed.
 Empty :: Symbol
 
+-- | A HasSymbol is anything which has a <a>Symbol</a>.
+class HasSymbol c
+
+-- | Provides the <a>Symbol</a> for a particular stage of generation.
+symbol :: HasSymbol c => c -> Stage -> Symbol
+
 -- | The default compare function that sorts all the lower case symbols
 --   after the upper case ones.
 --   
@@ -562,6 +597,60 @@ instance GHC.Classes.Ord Language.Drasil.Symbol.Decoration
 instance GHC.Classes.Eq Language.Drasil.Symbol.Decoration
 instance GHC.Base.Semigroup Language.Drasil.Symbol.Symbol
 instance GHC.Base.Monoid Language.Drasil.Symbol.Symbol
+
+
+-- | Routines to help with Symbols and Stages.
+module Language.Drasil.Symbol.Helpers
+
+-- | Helper function for getting a symbol in the Equational Stage.
+eqSymb :: HasSymbol q => q -> Symbol
+
+-- | Helper function for getting a symbol in the Implementation Stage.
+codeSymb :: HasSymbol q => q -> Symbol
+
+-- | Finds if a <a>Stage</a> symbol is real or Empty. True if real.
+hasStageSymbol :: HasSymbol q => q -> Stage -> Bool
+
+-- | Helper for creating a symbol with Unicode in it.
+autoStage :: Symbol -> Stage -> Symbol
+
+-- | Helper for creating a symbol with a hat ("^") atop it.
+hat :: Symbol -> Symbol
+
+-- | Helper for creating a Vector symbol.
+prime :: Symbol -> Symbol
+
+-- | Helper for creating a symbol that depends on the stage.
+staged :: Symbol -> Symbol -> Stage -> Symbol
+
+-- | Helper for creating a symbol with a subscript to the right. Arguments:
+--   Base symbol, then subscripted symbol.
+sub :: Symbol -> Symbol -> Symbol
+
+-- | Helper for a common case of subscript, with a string Arguments: Base
+--   symbol, then subscript <a>String</a>.
+subStr :: Symbol -> String -> Symbol
+
+-- | Helper for creating a symbol with a superscript to the right.
+--   Arguments: Base symbol, then superscripted symbol.
+sup :: Symbol -> Symbol -> Symbol
+
+-- | Helper for autoStage that applies unicodeString to all <a>Symbol</a>s
+--   with <a>String</a>s.
+unicodeConv :: Symbol -> Symbol
+
+-- | Helper for creating a symbol with a superscript on the left side of
+--   the symbol. Arguments: Base symbol, then superscripted symbol.
+upperLeft :: Symbol -> Symbol -> Symbol
+
+-- | Helper for creating a Vector symbol.
+vec :: Symbol -> Symbol
+
+-- | Label smart constructor, requires non-empty labels
+label :: String -> Symbol
+
+-- | Variable smart constructor, requires non-empty variables
+variable :: String -> Symbol
 
 
 -- | Number space types and functions.
@@ -614,6 +703,12 @@ Continuous :: RTopology
 Discrete :: RTopology
 type DiscreteDomainDesc a b = DomainDesc 'Discrete a b
 type ContinuousDomainDesc a b = DomainDesc 'Continuous a b
+
+-- | HasSpace is anything which has a <a>Space</a>.
+class HasSpace c
+
+-- | Provides a <tt>Lens</tt> to the <a>Space</a>.
+typ :: HasSpace c => Lens' c Space
 
 -- | Gets the name of an <a>Actor</a>.
 getActorName :: Space -> String
@@ -1665,190 +1760,6 @@ isPhysC :: Constraint e -> Bool
 isSfwrC :: Constraint e -> Bool
 
 
--- | Re-export display-related functions and types to simplify external
---   use.
-module Language.Drasil.Display
-
--- | Decorations on symbols/characters such as hats or Vector
---   representations (determines bolding, italics, etc).
-data Decoration
-
--- | Places a <tt>^</tt> on top of a symbol.
-Hat :: Decoration
-
--- | Makes a symbol bold.
-Vector :: Decoration
-
--- | Appends a <tt>'</tt> to a symbol.
-Prime :: Decoration
-
--- | Prepends a <tt>Δ</tt> to a symbol.
-Delta :: Decoration
-
--- | Places <tt>||</tt> before and after a symbol.
-Magnitude :: Decoration
-
--- | A <a>Symbol</a> is actually going to be a graphical description of
---   what gets rendered as a (unique) symbol. This is actually NOT based on
---   semantics at all, but just a description of how things look.
---   
---   Symbols can be:
---   
---   <ul>
---   <li><tt><a>Variable</a></tt> (string such as "x" that represent a
---   value that can vary)</li>
---   <li><tt><a>Label</a></tt> (strings such as "max" or "target" that
---   represent a single idea)</li>
---   <li><tt><a>Special</a></tt> characters (ex. unicode)</li>
---   <li><tt>Decorated</tt> symbols using <a>Atop</a></li>
---   <li><tt>Concatenations</tt> of symbols, including subscripts and
---   superscripts</li>
---   <li><tt><a>Empty</a></tt>! (this is to give this a monoid-like
---   flavour)</li>
---   </ul>
-data Symbol
-
--- | Basic variable name creation.
-Variable :: String -> Symbol
-
--- | For when symbols need more context, but we don't want to add a new
---   variable name. For example, <tt>v_f</tt> may be encoded as <tt>Concat
---   [variable "v", label "f"]</tt>.
-Label :: String -> Symbol
-
--- | For using numbers in Symbols.
-Integ :: Int -> Symbol
-
--- | For now, special characters are the degree and partial differentiation
---   symbols. These should eventually move elsewhere and the <a>Special</a>
---   type removed.
-Special :: Special -> Symbol
-
--- | Used to decorate symbols. For things like vectors (which need to be
---   bold), primes, magnitudes, etc. See <a>Decoration</a> for more
---   details.
-Atop :: Decoration -> Symbol -> Symbol
-
--- | Order of Symbols: upleft lowleft upright lowright base. Ex:
---   
---   <pre>
---   Corners [1]   [2]   [3]   [4]   [5]
---   </pre>
---   
---   <pre>
---   Visually:  [1]   [3]
---   
---                 [5]
---   
---              [2]   [4]
---   </pre>
-Corners :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
-
--- | Concatentation of two symbols: <tt>[s1, s2] -&gt; s1s2</tt>
-Concat :: [Symbol] -> Symbol
-
--- | Placeholder for when a symbol is not needed.
-Empty :: Symbol
-
--- | The default compare function that sorts all the lower case symbols
---   after the upper case ones.
---   
---   Comparation is used twice for each <tt>Atomic</tt> case, once for
---   making sure they are the same letter, once for case sensitive. As far
---   as this comparison is considered, <tt>Δ</tt> is a "decoration" and
---   ignored unless the compared symbols are the exact same, in which case
---   it is ordered after the undecorated symbol.
---   
---   Superscripts and subscripts are ordered after the base symbols
---   (because they add additional context to a symbol). For example:
---   `v_f^{AB}` (expressed in LaTeX notation for clarity), where
---   <tt>v_f</tt> is a final velocity, and the `^{AB}` adds context that it
---   is the final velocity between points <tt>A</tt> and <tt>B</tt>. In
---   these cases, the sorting of `v_f^{AB}` should be following
---   <tt>v_f</tt> as it is logical to place it with its parent concept.
-compsy :: Symbol -> Symbol -> Ordering
-
-
--- | Defining the core classes which represent knowledge-about-knowledge.
-module Language.Drasil.Classes.Core
-
--- | Members must have a reference address.
-class HasRefAddress b
-
--- | Provides the ability to hold a reference address.
-getRefAdd :: HasRefAddress b => b -> LblType
-
--- | A HasSymbol is anything which has a <a>Symbol</a>.
-class HasSymbol c
-
--- | Provides the <a>Symbol</a> for a particular stage of generation.
-symbol :: HasSymbol c => c -> Stage -> Symbol
-
--- | Members of this class have the ability to be referenced.
-class (HasUID s, HasRefAddress s) => Referable s
-
--- | The referencing address (what we're linking to). Only visible in the
---   source (tex/html).
-refAdd :: Referable s => s -> String
-
--- | Alternate form of reference.
-renderRef :: Referable s => s -> LblType
-
-
--- | Routines to help with Symbols and Stages.
-module Language.Drasil.Symbol.Helpers
-
--- | Helper function for getting a symbol in the Equational Stage.
-eqSymb :: HasSymbol q => q -> Symbol
-
--- | Helper function for getting a symbol in the Implementation Stage.
-codeSymb :: HasSymbol q => q -> Symbol
-
--- | Finds if a <a>Stage</a> symbol is real or Empty. True if real.
-hasStageSymbol :: HasSymbol q => q -> Stage -> Bool
-
--- | Helper for creating a symbol with Unicode in it.
-autoStage :: Symbol -> Stage -> Symbol
-
--- | Helper for creating a symbol with a hat ("^") atop it.
-hat :: Symbol -> Symbol
-
--- | Helper for creating a Vector symbol.
-prime :: Symbol -> Symbol
-
--- | Helper for creating a symbol that depends on the stage.
-staged :: Symbol -> Symbol -> Stage -> Symbol
-
--- | Helper for creating a symbol with a subscript to the right. Arguments:
---   Base symbol, then subscripted symbol.
-sub :: Symbol -> Symbol -> Symbol
-
--- | Helper for a common case of subscript, with a string Arguments: Base
---   symbol, then subscript <a>String</a>.
-subStr :: Symbol -> String -> Symbol
-
--- | Helper for creating a symbol with a superscript to the right.
---   Arguments: Base symbol, then superscripted symbol.
-sup :: Symbol -> Symbol -> Symbol
-
--- | Helper for autoStage that applies unicodeString to all <a>Symbol</a>s
---   with <a>String</a>s.
-unicodeConv :: Symbol -> Symbol
-
--- | Helper for creating a symbol with a superscript on the left side of
---   the symbol. Arguments: Base symbol, then superscripted symbol.
-upperLeft :: Symbol -> Symbol -> Symbol
-
--- | Helper for creating a Vector symbol.
-vec :: Symbol -> Symbol
-
--- | Label smart constructor, requires non-empty labels
-label :: String -> Symbol
-
--- | Variable smart constructor, requires non-empty variables
-variable :: String -> Symbol
-
-
 -- | Alphabet of capital/lowercase English letters as symbols.
 module Language.Drasil.ShortHands
 
@@ -2327,6 +2238,110 @@ prodAll :: ModelExprC r => Symbol -> r -> r
 instance Language.Drasil.ModelExpr.Class.ModelExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 
 
+-- | Re-export display-related functions and types to simplify external
+--   use.
+module Language.Drasil.Display
+
+-- | Decorations on symbols/characters such as hats or Vector
+--   representations (determines bolding, italics, etc).
+data Decoration
+
+-- | Places a <tt>^</tt> on top of a symbol.
+Hat :: Decoration
+
+-- | Makes a symbol bold.
+Vector :: Decoration
+
+-- | Appends a <tt>'</tt> to a symbol.
+Prime :: Decoration
+
+-- | Prepends a <tt>Δ</tt> to a symbol.
+Delta :: Decoration
+
+-- | Places <tt>||</tt> before and after a symbol.
+Magnitude :: Decoration
+
+-- | A <a>Symbol</a> is actually going to be a graphical description of
+--   what gets rendered as a (unique) symbol. This is actually NOT based on
+--   semantics at all, but just a description of how things look.
+--   
+--   Symbols can be:
+--   
+--   <ul>
+--   <li><tt><a>Variable</a></tt> (string such as "x" that represent a
+--   value that can vary)</li>
+--   <li><tt><a>Label</a></tt> (strings such as "max" or "target" that
+--   represent a single idea)</li>
+--   <li><tt><a>Special</a></tt> characters (ex. unicode)</li>
+--   <li><tt>Decorated</tt> symbols using <a>Atop</a></li>
+--   <li><tt>Concatenations</tt> of symbols, including subscripts and
+--   superscripts</li>
+--   <li><tt><a>Empty</a></tt>! (this is to give this a monoid-like
+--   flavour)</li>
+--   </ul>
+data Symbol
+
+-- | Basic variable name creation.
+Variable :: String -> Symbol
+
+-- | For when symbols need more context, but we don't want to add a new
+--   variable name. For example, <tt>v_f</tt> may be encoded as <tt>Concat
+--   [variable "v", label "f"]</tt>.
+Label :: String -> Symbol
+
+-- | For using numbers in Symbols.
+Integ :: Int -> Symbol
+
+-- | For now, special characters are the degree and partial differentiation
+--   symbols. These should eventually move elsewhere and the <a>Special</a>
+--   type removed.
+Special :: Special -> Symbol
+
+-- | Used to decorate symbols. For things like vectors (which need to be
+--   bold), primes, magnitudes, etc. See <a>Decoration</a> for more
+--   details.
+Atop :: Decoration -> Symbol -> Symbol
+
+-- | Order of Symbols: upleft lowleft upright lowright base. Ex:
+--   
+--   <pre>
+--   Corners [1]   [2]   [3]   [4]   [5]
+--   </pre>
+--   
+--   <pre>
+--   Visually:  [1]   [3]
+--   
+--                 [5]
+--   
+--              [2]   [4]
+--   </pre>
+Corners :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
+
+-- | Concatentation of two symbols: <tt>[s1, s2] -&gt; s1s2</tt>
+Concat :: [Symbol] -> Symbol
+
+-- | Placeholder for when a symbol is not needed.
+Empty :: Symbol
+
+-- | The default compare function that sorts all the lower case symbols
+--   after the upper case ones.
+--   
+--   Comparation is used twice for each <tt>Atomic</tt> case, once for
+--   making sure they are the same letter, once for case sensitive. As far
+--   as this comparison is considered, <tt>Δ</tt> is a "decoration" and
+--   ignored unless the compared symbols are the exact same, in which case
+--   it is ordered after the undecorated symbol.
+--   
+--   Superscripts and subscripts are ordered after the base symbols
+--   (because they add additional context to a symbol). For example:
+--   `v_f^{AB}` (expressed in LaTeX notation for clarity), where
+--   <tt>v_f</tt> is a final velocity, and the `^{AB}` adds context that it
+--   is the final velocity between points <tt>A</tt> and <tt>B</tt>. In
+--   these cases, the sorting of `v_f^{AB}` should be following
+--   <tt>v_f</tt> as it is logical to place it with its parent concept.
+compsy :: Symbol -> Symbol -> Ordering
+
+
 -- | Language for defining and manipulating units.
 module Language.Drasil.UnitLang
 
@@ -2518,23 +2533,19 @@ module Language.Drasil.ShortName
 newtype ShortName
 ShortNm :: Sentence -> ShortName
 
+-- | A <a>ShortName</a> is the text to be displayed for a link.
+--   
+--   Used for referencing within a document that can include symbols and
+--   whatnot if required. Visible in the typeset documents (pdf).
+class HasShortName s
+shortname :: HasShortName s => s -> ShortName
+
 -- | Pulls the short form (as a <a>Sentence</a>) out of a <a>ShortName</a>.
 getSentSN :: ShortName -> Sentence
 
 -- | Smart constructor for making a <a>Sentence</a> into a
 --   <a>ShortName</a>.
 shortname' :: Sentence -> ShortName
-
-
--- | Defining the core classes which represent knowledge-about-knowledge.
---   For now, shortname must be here to avoid import cycles.
-module Language.Drasil.Classes.Core2
-
--- | A <a>ShortName</a> is the text to be displayed for a link. Used for
---   referencing within a document that can include symbols and whatnot if
---   required. Visible in the typeset documents (pdf).
-class HasShortName s
-shortname :: HasShortName s => s -> ShortName
 
 
 -- | Extract various kinds of UIDs from a Sentence. Used in conjunction
@@ -2564,6 +2575,12 @@ module Language.Drasil.Reference
 data Reference
 Reference :: UID -> LblType -> ShortName -> Reference
 
+-- | A class that contains a list of <a>Reference</a>s.
+class HasReference c
+
+-- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
+getReferences :: HasReference c => Lens' c [Reference]
+
 -- | Projector function that creates a <a>Reference</a> from something
 --   <tt>Referable</tt>.
 ref :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Reference
@@ -2588,8 +2605,8 @@ complexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sen
 namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
 instance GHC.Classes.Eq Language.Drasil.Reference.Reference
 instance Language.Drasil.UID.HasUID Language.Drasil.Reference.Reference
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Reference.Reference
-instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Reference.Reference
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Reference.Reference
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Reference.Reference
 
 
 -- | Noun phrases are used to hold terms with knowledge of proper
@@ -2647,6 +2664,75 @@ SelfPlur :: PluralRule
 
 -- | Apply the given function to the noun phrase to get the plural.
 IrregPlur :: (String -> String) -> PluralRule
+
+
+-- | The lowest level of chunks in Drasil. It all starts with an identifier
+--   and a term.
+module Language.Drasil.Chunk.NamedIdea
+
+-- | Used for anything worth naming. Note that a <a>NamedChunk</a> does not
+--   have an acronym/abbreviation as that's a <tt>CommonIdea</tt>, which
+--   has its own representation. Contains a <a>UID</a> and a term that we
+--   can capitalize or pluralize (<a>NP</a>).
+--   
+--   Ex. Anything worth naming must start out somewhere. Before we can
+--   assign equations and values and symbols to something like the arm of a
+--   pendulum, we must first give it a name.
+data NamedChunk
+
+-- | <a>IdeaDict</a> is the canonical dictionary associated to an
+--   <a>Idea</a>. Contains a <a>NamedChunk</a> that could have an
+--   abbreviation (<a>Maybe</a> <a>String</a>).
+--   
+--   Ex. The project name "Double Pendulum" may have the abbreviation
+--   <a>DblPendulum</a>.
+data IdeaDict
+
+-- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
+--   as being worthy of naming.
+class HasUID c => NamedIdea c
+
+-- | Lens to the term (a noun phrase).
+term :: NamedIdea c => Lens' c NP
+
+-- | An <a>Idea</a> is the combination of a <a>NamedIdea</a> and a
+--   <tt>CommonIdea</tt>. In other words, it <i>may</i> have an
+--   acronym/abbreviation.
+class NamedIdea c => Idea c
+
+-- | Gets the acronym/abbreviation.
+getA :: Idea c => c -> Maybe String
+
+-- | <a>NamedChunk</a> constructor, takes a <a>String</a> for its
+--   <a>UID</a> and a term.
+nc :: String -> NP -> NamedChunk
+
+-- | Similar to <a>nc</a>, but takes in the <a>UID</a> in the form of a
+--   <a>UID</a> rather than a <a>String</a>.
+ncUID :: UID -> NP -> NamedChunk
+
+-- | Historical name: nw comes from 'named wrapped' from when
+--   <a>NamedIdea</a> exported <a>getA</a> (now in <a>Idea</a>). But there
+--   are no more wrappers, instead we have explicit dictionaries. Unwraps
+--   an <a>Idea</a> and places its <a>UID</a> and <a>NP</a> into an
+--   <a>IdeaDict</a> with <a>Nothing</a> for an abbreviation.
+nw :: Idea c => c -> IdeaDict
+
+-- | <a>IdeaDict</a> constructor, takes a <a>UID</a>, <a>NP</a>, and an
+--   abbreviation in the form of <a>Maybe</a> <a>String</a>.
+mkIdea :: String -> NP -> Maybe String -> IdeaDict
+
+-- | Same as <a>mkIdea</a> but takes a <a>UID</a> rather than a
+--   <a>String</a>.
+mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
+instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.NamedChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedIdea.NamedChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedIdea.NamedChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedIdea.NamedChunk
 
 module Language.Drasil.NounPhrase
 class NounPhrase n
@@ -2863,6 +2949,7 @@ pluralNP :: NounPhrase n => n -> PluralForm
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
+shortdep :: Sentence -> [UID]
 
 -- | Generic traverse of all positions that could lead to <i>reference</i>
 --   <a>UID</a>s from <a>Sentence</a>s.
@@ -2885,6 +2972,12 @@ module Language.Drasil.Derivation
 data Derivation
 Derivation :: Sentence -> [Sentence] -> Derivation
 
+-- | A class that might have a <a>Derivation</a>.
+class HasDerivation c
+
+-- | Provides a <tt>Lens</tt> to a possible derivation.
+derivations :: HasDerivation c => Lens' c (Maybe Derivation)
+
 -- | Smart constructor for creating a <a>Derivation</a>.
 mkDeriv :: Sentence -> [Sentence] -> Derivation
 
@@ -2906,6 +2999,12 @@ DR :: Reference -> RefInfo -> DecRef
 [_rf] :: DecRef -> Reference
 [refInfo] :: DecRef -> RefInfo
 
+-- | A class that contains a list of decorated references (<a>DecRef</a>s).
+class HasDecRef c
+
+-- | Provides a <tt>Lens</tt> to the <a>DecRef</a>s.
+getDecRefs :: HasDecRef c => Lens' c [DecRef]
+
 -- | Same as <a>ref</a>, but for <a>DecRef</a> instead of <a>Reference</a>.
 dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
 
@@ -2914,8 +3013,8 @@ dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
 dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
 instance GHC.Classes.Eq Language.Drasil.DecoratedReference.DecRef
 instance Language.Drasil.UID.HasUID Language.Drasil.DecoratedReference.DecRef
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.DecoratedReference.DecRef
-instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.DecoratedReference.DecRef
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.DecoratedReference.DecRef
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.DecoratedReference.DecRef
 
 
 -- | Defines the chunk type to hold citations.
@@ -2937,6 +3036,12 @@ type BibRef = [Citation]
 
 -- | A <a>String</a> that should contain no spaces.
 type EntryID = String
+
+-- | Some documents, as well as some pieces of knowledge, have citations.
+class HasCitation c
+
+-- | Provides a <tt>Lens</tt> to the citations.
+getCitations :: HasCitation c => Lens' c [Citation]
 citeID :: Lens' Citation UID
 citeKind :: Lens' Citation CitationKind
 
@@ -3048,10 +3153,10 @@ cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Cit
 --   can be month and year. Implicitly uses the EntryID as the chunk id.
 cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
 instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Citations.HasFields Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Data.Citation.HasFields Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Citation.Citation
 
 
 -- | Contains types and functions common to aspects of generating
@@ -3175,9 +3280,9 @@ instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
 instance Language.Drasil.UID.HasUID Language.Drasil.Document.Core.LabelledContent
 instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Classes.Core.Referable Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Core.LabelledContent
 
 
 -- | Document Description Language.
@@ -3302,19 +3407,9 @@ makeEqnRef' :: UID -> Reference
 makeURI' :: UID -> String -> ShortName -> Reference
 instance Language.Drasil.UID.HasUID Language.Drasil.Document.Section
 instance GHC.Classes.Eq Language.Drasil.Document.Section
-instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Document.Section
-instance Language.Drasil.Classes.Core.Referable Language.Drasil.Document.Section
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Document.Section
-
-
--- | Defining classes that represent knowledge about Documents.
-module Language.Drasil.Classes.Document
-
--- | Some documents, as well as some pieces of knowledge, have citations.
-class HasCitation c
-
--- | Provides a <tt>Lens</tt> to the citations.
-getCitations :: HasCitation c => Lens' c [Citation]
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Section
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Section
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Section
 
 
 -- | Defining all the classes which represent knowledge-about-knowledge.
@@ -3328,7 +3423,7 @@ class HasUID c => NamedIdea c
 term :: NamedIdea c => Lens' c NP
 
 -- | An <a>Idea</a> is the combination of a <a>NamedIdea</a> and a
---   <a>CommonIdea</a>. In other words, it <i>may</i> have an
+--   <tt>CommonIdea</tt>. In other words, it <i>may</i> have an
 --   acronym/abbreviation.
 class NamedIdea c => Idea c
 
@@ -3361,17 +3456,11 @@ class ConceptDomain c
 --   should not be exported beyond that.
 cdom :: ConceptDomain c => c -> [UID]
 
--- | A Quantity is an <a>Idea</a> with a <a>Space</a> and a
+-- | A Quantity is an <a>Idea</a> with a <tt>Space</tt> and a
 --   <tt>Symbol</tt>. In theory, it should also restrict to being a part of
 --   <tt>MayHaveUnit</tt>, but that causes all sorts of import cycles (or
 --   lots of orphans).
 class (Idea c, HasSpace c, HasSymbol c) => Quantity c
-
--- | HasSpace is anything which has a <a>Space</a>.
-class HasSpace c
-
--- | Provides a <tt>Lens</tt> to the <a>Space</a>.
-typ :: HasSpace c => Lens' c Space
 
 -- | Some chunks store a unit symbol.
 class HasUnitSymbol u
@@ -3391,14 +3480,6 @@ class Constrained c
 
 -- | Provides a <tt>Lens</tt> to the <tt>Constraint</tt>s.
 constraints :: Constrained c => Lens' c [ConstraintE]
-
--- | HasUncertainty is just a chunk with some uncertainty associated to it.
---   This uncertainty is represented as a decimal value between 0 and 1
---   (percentage).
-class HasUncertainty c
-
--- | Provides the <tt>Lens</tt> to an <a>Uncertainty</a>.
-unc :: HasUncertainty c => Lens' c Uncertainty
 
 -- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
@@ -3429,50 +3510,16 @@ class UnitEq u
 -- | Provides the <tt>Lens</tt> to a unit definition.
 uniteq :: UnitEq u => Lens' u UDefn
 
--- | A class that contains a list of <a>Reference</a>s.
-class HasReference c
-
--- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
-getReferences :: HasReference c => Lens' c [Reference]
-
--- | A class that contains a list of decorated references (<a>DecRef</a>s).
-class HasDecRef c
-
--- | Provides a <tt>Lens</tt> to the <a>DecRef</a>s.
-getDecRefs :: HasDecRef c => Lens' c [DecRef]
-
 -- | Data that can be expressed using <a>ModelExpr</a>.
 class Express c
 express :: Express c => c -> ModelExpr
-
--- | A class that might have a <a>Derivation</a>.
-class HasDerivation c
-
--- | Provides a <tt>Lens</tt> to a possible derivation.
-derivations :: HasDerivation c => Lens' c (Maybe Derivation)
 class DefiningExpr c
 
--- | Provides a <tt>Lens</tt> to the expression.
+-- | Provides a <tt>Lens</tt> to the expression. TODO: Well, technically,
+--   <tt>e</tt> doesn't need to be an "expression" of any sorts. It just
+--   needs to be _something_, and it would have approximately have same
+--   meaning.
 defnExpr :: DefiningExpr c => Lens' (c e) e
-
-
--- | Uncertainty functions.
-module Language.Drasil.Uncertainty
-
--- | The default uncertainty is set to 0.1.
-defaultUncrt :: Uncertainty
-
--- | Accessor for uncertainty value from something that has an uncertainty.
-uncVal :: HasUncertainty x => x -> Double
-
--- | Accessor for precision value from something that has an uncertainty.
-uncPrec :: HasUncertainty x => x -> Maybe Int
-
--- | Smart constructor for values with uncertainty.
-uncty :: Double -> Maybe Int -> Uncertainty
-
--- | Smart constructor for exact values (no uncertainty).
-exact :: Uncertainty
 
 module Language.Drasil.Expr.Class
 class ExprC r
@@ -3825,856 +3872,210 @@ versus :: Sentence -> Sentence -> Sentence
 wrt :: Sentence -> Sentence -> Sentence
 
 
--- | The lowest level of chunks in Drasil. It all starts with an identifier
---   and a term.
-module Language.Drasil.Chunk.NamedIdea
+-- | Folding-related functions and types.
+module Language.Drasil.Sentence.Fold
 
--- | Used for anything worth naming. Note that a <a>NamedChunk</a> does not
---   have an acronym/abbreviation as that's a <tt>CommonIdea</tt>, which
---   has its own representation. Contains a <a>UID</a> and a term that we
---   can capitalize or pluralize (<a>NP</a>).
+-- | Type that helps determine enumeration method. Can use either numbers,
+--   uppercase letters, or lowercase letters.
+data EnumType
+Numb :: EnumType
+Upper :: EnumType
+Lower :: EnumType
+
+-- | Type to help wrap a sentence with parenthesis or to add a period at
+--   the end.
+data WrapType
+Parens :: WrapType
+Period :: WrapType
+
+-- | Type to help separate words with commas or semicolons.
+data SepType
+Comma :: SepType
+SemiCol :: SepType
+
+-- | Type to help fold differently between listed items, or if there are
+--   options (ex. using "and" or "or" at the end of a list of words).
+data FoldType
+List :: FoldType
+Options :: FoldType
+
+-- | Helper for formatting a list of constraints.
+foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+
+-- | Creates a list of elements with "enumerators" in "wrappers" using
+--   foldlList.
+foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Creates a list of elements separated by a "separator", ending with
+--   "and" or "or".
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
+foldlSP :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
+foldlSP_ :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
+foldlSPCol :: [Sentence] -> Contents
+
+-- | Partial function application of <a>foldle</a> for sentences
+--   specifically. Folds with spaces and adds a period (".") at the end.
+foldlSent :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but does not add a period.
+foldlSent_ :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but ends with colon.
+foldlSentCol :: [Sentence] -> Sentence
+
+-- | Folds a list of elements separated by commas, including the last
+--   element.
+foldlsC :: [Sentence] -> Sentence
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
+--   13").
+foldNums :: String -> [Int] -> Sentence
+
+-- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
+--   "13"]).
+numList :: String -> [Int] -> [String]
+
+
+-- | Defines various NounPhrase-level combinators. These hold more
+--   information than those of the Sentence level but may not necessarily
+--   have a conceptual link. See the <a>Wiki</a> for more information and
+--   details about the naming process for combinators. A summary of the
+--   function naming scheme is as follows:
 --   
---   Ex. Anything worth naming must start out somewhere. Before we can
---   assign equations and values and symbols to something like the arm of a
---   pendulum, we must first give it a name.
-data NamedChunk
-
--- | <a>IdeaDict</a> is the canonical dictionary associated to an
---   <a>Idea</a>. Contains a <a>NamedChunk</a> that could have an
---   abbreviation (<a>Maybe</a> <a>String</a>).
+--   <ul>
+--   <li>Combinators that conflict with haskell-native functions have an
+--   underscore appended.</li>
+--   <li>Default plural case for combinators will be first term singular,
+--   second term plural.</li>
+--   <li><tt>P</tt> and <tt>S</tt> denote the plural case of the combinator
+--   when it does not follow the above default.</li>
+--   <li><tt>Gen</tt> denotes the general function case.</li>
+--   </ul>
 --   
---   Ex. The project name "Double Pendulum" may have the abbreviation
---   <a>DblPendulum</a>.
-data IdeaDict
+--   This module should be used as a qualified import (usually as
+--   <tt>NP</tt>), as many function names clash with those in Concepts.hs
+--   and Sentence.hs.
+module Language.Drasil.NounPhrase.Combinators
 
--- | <a>NamedChunk</a> constructor, takes a <a>String</a> for its
---   <a>UID</a> and a term.
-nc :: String -> NP -> NamedChunk
+-- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
+--   Plural case is <tt>(phraseNP t1) +:+ S s +:+ (pluralNP t2)</tt>.
+insertString :: String -> NP -> NP -> NP
 
--- | Similar to <a>nc</a>, but takes in the <a>UID</a> in the form of a
---   <a>UID</a> rather than a <a>String</a>.
-ncUID :: UID -> NP -> NamedChunk
+-- | Helper function that prepends a <a>String</a> to a <a>NP</a>.
+prependString :: String -> NP -> NP
 
--- | Historical name: nw comes from 'named wrapped' from when
---   <a>NamedIdea</a> exported <a>getA</a> (now in <a>Idea</a>). But there
---   are no more wrappers, instead we have explicit dictionaries. Unwraps
---   an <a>Idea</a> and places its <a>UID</a> and <a>NP</a> into an
---   <a>IdeaDict</a> with <a>Nothing</a> for an abbreviation.
-nw :: Idea c => c -> IdeaDict
+-- | Helper function that places a <a>Sentence</a> in between two
+--   <a>NP</a>s. Plural case is <tt>(phraseNP t1) +:+ s +:+ (pluralNP
+--   t2)</tt>.
+insertSent :: Sentence -> NP -> NP -> NP
 
--- | <a>IdeaDict</a> constructor, takes a <a>UID</a>, <a>NP</a>, and an
---   abbreviation in the form of <a>Maybe</a> <a>String</a>.
-mkIdea :: String -> NP -> Maybe String -> IdeaDict
+-- | Helper function that prepends a <a>Sentence</a> to a <a>NP</a>.
+prependSent :: Sentence -> NP -> NP
 
--- | Same as <a>mkIdea</a> but takes a <a>UID</a> rather than a
---   <a>String</a>.
-mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
-instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.NamedChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedIdea.NamedChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.NamedIdea.NamedChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.NamedIdea.NamedChunk
+-- | Prepends "the" to a <a>NP</a>.
+the :: NP -> NP
 
+-- | Similar to <a>the</a>, but accepts a function that determines the
+--   plural case.
+theGen :: (NP -> Sentence) -> NP -> NP
 
--- | Contains the common idea type and respective constructors.
-module Language.Drasil.Chunk.CommonIdea
+-- | Prepends "a" to a <a>NP</a>.
+a_ :: NP -> NP
 
--- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
---   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation
---   (<a>String</a>), and a domain ([<a>UID</a>]). It is similar to
---   <a>NamedChunk</a> and <a>IdeaDict</a> in the sense that these are for
---   things worth naming, but this type also carries an abbreviation and
---   related domains of knowledge.
---   
---   Ex. The term "Operating System" has the abbreviation <a>OS</a> and
---   comes from the domain of computer science.
-data CI
+-- | Similar to <tt>a</tt>, but accepts a function that determines the
+--   plural case.
+a_Gen :: (NP -> Sentence) -> NP -> NP
 
--- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
---   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
---   ([<a>UID</a>]).
-commonIdea :: String -> NP -> String -> [UID] -> CI
+-- | Inserts "and" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "and" +:+ (pluralNP t2)</tt>.
+and_ :: NP -> NP -> NP
 
--- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
---   (often a domain).
-commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
+-- | Same as <a>and_</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>and_</a> (phraseNP t2)</tt>.
+and_PS :: NP -> NP -> NP
 
--- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
-getAcc :: CI -> Sentence
+-- | Same as <a>and_</a>, but takes two functions for the plural case.
+and_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Get abbreviation in <a>String</a> form from a <a>CI</a>.
-getAccStr :: CI -> String
+-- | Same as <a>and_</a>, but takes two functions for the singular case and
+--   two for the plural case.
+and_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
-prependAbrv :: CommonIdea c => c -> String -> String
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CommonIdea.CI
+-- | Inserts "and the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "and the" +:+ (pluralNP t2)</tt>.
+andThe :: NP -> NP -> NP
 
+-- | Inserts "of the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
+ofThe :: NP -> NP -> NP
 
--- | Define concept-related chunks. A concept is usually something that has
---   a term, definition, and comes from some domain of knowledge.
-module Language.Drasil.Chunk.Concept.Core
+-- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
+--   <a>ofThe</a> (phraseNP t2)</tt>.
+ofThePS :: NP -> NP -> NP
 
--- | The ConceptChunk datatype records a concept that contains an idea
---   (<a>IdeaDict</a>), a definition (<a>Sentence</a>), and an associated
---   domain of knowledge ([<a>UID</a>]).
---   
---   Ex. The concept of <a>Accuracy</a> may be defined as the quality or
---   state of being correct or precise.
-data ConceptChunk
-ConDict :: IdeaDict -> Sentence -> [UID] -> ConceptChunk
+-- | Similar to <a>ofThe</a>, but accepts two functions for the plural
+--   case.
+ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Contains a common idea (<a>CI</a>) with a definition
---   (<a>Sentence</a>). Similar to <a>ConceptChunk</a>, but must have an
---   abbreviation.
-data CommonConcept
-ComConDict :: CI -> Sentence -> CommonConcept
+-- | Inserts "in the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "in the" +:+ (pluralNP t2)</tt>.
+inThe :: NP -> NP -> NP
 
--- | Contains a <a>ConceptChunk</a>, reference address, and a
---   <a>ShortName</a>. It is a concept that can be referred to, or rather,
---   a instance of where a concept is applied. Often used in Goal
---   Statements, Assumptions, Requirements, etc.
---   
---   Ex. Something like the assumption that gravity is 9.81 m/s. When we
---   write our equations, we can then link this assumption so that we do
---   not have to explicitly define that assumption when needed to verify
---   our work.
-data ConceptInstance
-ConInst :: ConceptChunk -> String -> ShortName -> ConceptInstance
+-- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
+--   <a>inThe</a> (phraseNP t2)</tt>.
+inThePS :: NP -> NP -> NP
 
--- | Check if something has one domain. Throws an error if there is more
---   than one.
-sDom :: [UID] -> UID
-instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Concept.Core.ConceptChunk
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptChunk
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.ConceptChunk
+-- | Similar to <a>ofThe</a>, but accepts two functions for the plural
+--   case.
+inTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
+-- | Prepends "the" and inserts "of the". Plural case is <tt>"the" +:+
+--   (phraseNP t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
+the_ofThe :: NP -> NP -> NP
 
--- | Contains functions to create the concept related chunk types found in
---   <a>Language.Drasil.Chunk.Concept.Core</a>.
-module Language.Drasil.Chunk.Concept
+-- | Similar to <a>the_ofThe</a>, but the plural case is now <tt> S "the"
+--   +:+ (pluralNP t1) <a>ofThe</a> (phraseNP t2)</tt>.
+the_ofThePS :: NP -> NP -> NP
 
--- | The ConceptChunk datatype records a concept that contains an idea
---   (<a>IdeaDict</a>), a definition (<a>Sentence</a>), and an associated
---   domain of knowledge ([<a>UID</a>]).
---   
---   Ex. The concept of <a>Accuracy</a> may be defined as the quality or
---   state of being correct or precise.
-data ConceptChunk
+-- | Similar to <tt>the_ofThe'</tt>, but takes two functions for the plural
+--   case.
+the_ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Smart constructor for creating concept chunks given a <tt>UID</tt>,
---   <tt>NounPhrase</tt> (<a>NP</a>) and definition (as a <a>String</a>).
---   
---   Concept domain tagging is not yet implemented in this constructor.
-dcc :: String -> NP -> String -> ConceptChunk
+-- | Inserts "for" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "for" +:+ (pluralNP t2)</tt>.
+for :: NP -> NP -> NP
 
--- | Similar to <a>dcc</a>, except the definition takes a <a>Sentence</a>.
-dccWDS :: String -> NP -> Sentence -> ConceptChunk
+-- | Same as <a>for</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>for</a> (phraseNP t2)</tt>.
+forPS :: NP -> NP -> NP
 
--- | Constructor for projecting an idea into a <a>ConceptChunk</a>. Takes
---   the definition of the <a>ConceptChunk</a> as a <a>String</a>. Does not
---   allow concept domain tagging.
-cc :: Idea c => c -> String -> ConceptChunk
+-- | Same as <tt>for'</tt>, but takes two functions for the plural case.
+forGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Same as <a>cc</a>, except definition is a <a>Sentence</a>.
-cc' :: Idea c => c -> Sentence -> ConceptChunk
-
--- | Similar to <a>cc'</a>, but allows explicit domain tagging.
-ccs :: (Idea c, Concept d) => c -> Sentence -> [d] -> ConceptChunk
-
--- | For projecting out to the <a>ConceptChunk</a> data-type.
-cw :: Concept c => c -> ConceptChunk
-
--- | Contains a common idea (<a>CI</a>) with a definition
---   (<a>Sentence</a>). Similar to <a>ConceptChunk</a>, but must have an
---   abbreviation.
-data CommonConcept
-
--- | Identical to <a>dcc</a>, but takes an abbreviation (<a>String</a>) and
---   returns a <a>CommonConcept</a> instead.
-dcc' :: String -> NP -> String -> String -> CommonConcept
-
--- | Similar to <a>dcc</a>, except the definition is a <a>Sentence</a>,
---   takes an abbreviation (<a>String</a>) and returns a
---   <a>CommonConcept</a> instead.
-dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
-
--- | Contains a <a>ConceptChunk</a>, reference address, and a
---   <a>ShortName</a>. It is a concept that can be referred to, or rather,
---   a instance of where a concept is applied. Often used in Goal
---   Statements, Assumptions, Requirements, etc.
---   
---   Ex. Something like the assumption that gravity is 9.81 m/s. When we
---   write our equations, we can then link this assumption so that we do
---   not have to explicitly define that assumption when needed to verify
---   our work.
-data ConceptInstance
-
--- | Constructor for a <a>ConceptInstance</a>. Takes in the Reference
---   Address (<a>String</a>), a definition (<a>Sentence</a>), a short name
---   (<a>String</a>), and a domain (for explicit tagging).
-cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
-
-
--- | For adding a relation (expression) to a concept.
-module Language.Drasil.Chunk.Relation
-
--- | For a concept (<a>ConceptChunk</a>) that also has a <tt>Relation</tt>
---   (<a>ModelExpr</a>) attached.
---   
---   Ex. We can describe a pendulum arm and then apply an associated
---   equation so that we know its behaviour.
-data RelationConcept
-
--- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
---   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
-makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
-
--- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
---   a <a>Concept</a>, new <tt>UID</tt> and relation.
-addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
-instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Relation.RelationConcept
-
-
--- | For defining units built from a concept.
-module Language.Drasil.Chunk.UnitDefn
-
--- | Types may contain a unit (<a>UnitDefn</a>).
-class MayHaveUnit u
-getUnit :: MayHaveUnit u => u -> Maybe UnitDefn
-
--- | Units are <a>Idea</a>s with a <a>Definition</a> which store a unit
---   symbol. They must also be explicitly declared to be instances of
---   IsUnit.
-class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u
-
--- | Holds units as a list of <a>UID</a>.
-getUnits :: IsUnit u => u -> [UID]
-
--- | Temporary class to make sure chunks have a unit (in order to
---   eventually get rid of <a>MayHaveUnit</a>).
-class TempHasUnit u
-findUnit :: TempHasUnit u => u -> UnitDefn
-
--- | For defining units. It has a <a>ConceptChunk</a> (that defines what
---   kind of unit it is), a unit symbol, maybe another (when it is a
---   synonym), perhaps a definition, and a list of <a>UID</a> of the units
---   that make up the definition.
---   
---   Ex. Meter is a unit of length defined by the symbol (m).
-data UnitDefn
-UD :: ConceptChunk -> UnitSymbol -> [UID] -> UnitDefn
-[_vc] :: UnitDefn -> ConceptChunk
-[_cas] :: UnitDefn -> UnitSymbol
-[_cu] :: UnitDefn -> [UID]
-
--- | Create a derived unit chunk from a concept and a unit equation.
-makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
-
--- | Smart constructor for new derived units from existing units.
-newUnit :: String -> UnitEquation -> UnitDefn
-
--- | Uses self-plural term.
---   
---   Create a derived unit chunk from a <a>UID</a>, term (<a>String</a>),
---   definition, <a>Symbol</a>, and unit equation.
-derUC :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
-
--- | Uses term that pluralizes by adding "s" to the end.
---   
---   Create a derived unit chunk from a <a>UID</a>, term (<a>String</a>),
---   definition, <a>Symbol</a>, and unit equation.
-derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
-
--- | Create a derived unit chunk from a <a>UID</a>, term (<a>NP</a>),
---   definition, <a>Symbol</a>, and unit equation.
-derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-
--- | Smart constructor for a "fundamental" unit.
-fund :: String -> String -> String -> UnitDefn
-
--- | Variant of the <a>fund</a>, useful for degree.
-fund' :: String -> String -> Symbol -> UnitDefn
-
--- | Create a <tt>SI_Unit</tt> with two <a>Symbol</a> representations. The
---   created <a>NP</a> is self-plural.
-derCUC :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
-
--- | Similar to <a>derCUC</a>, but the created <a>NP</a> has the
---   <tt>AddS</tt> plural rule.
-derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
-
--- | Create a derived unit chunk from a <a>UID</a>, term (<a>NP</a>),
---   definition, <a>Symbol</a>, and unit equation.
-derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
-
--- | For allowing lists to mix together chunks that are units by projecting
---   them into a <a>UnitDefn</a>. For now, this only works on
---   <a>UnitDefn</a>s.
-unitWrapper :: IsUnit u => u -> UnitDefn
-
--- | Combinator for raising a unit to a power.
-(^:) :: UnitDefn -> Integer -> UnitEquation
-
--- | Combinator for dividing one unit by another.
-(/:) :: UnitDefn -> UnitDefn -> UnitEquation
-
--- | Combinator for multiplying two units together.
-(*:) :: UnitDefn -> UnitDefn -> UnitEquation
-
--- | Combinator for multiplying a unit and a symbol.
-(*$) :: UnitDefn -> UnitEquation -> UnitEquation
-
--- | Combinator for dividing a unit and a symbol.
-(/$) :: UnitDefn -> UnitEquation -> UnitEquation
-
--- | Combinator for mulitiplying two unit equations.
-(^$) :: UnitEquation -> UnitEquation -> UnitEquation
-
--- | Combinator for scaling one unit by some number.
-scale :: IsUnit s => Double -> s -> UDefn
-
--- | Combinator for shifting one unit by some number.
-shift :: IsUnit s => Double -> s -> UDefn
-
--- | Generates a default unit symbol.
-fromUDefn :: UDefn -> USymb
-
--- | Helper for fundamental unit concept chunk creation. Uses the same
---   <a>String</a> for the identifier, term, and definition.
-unitCon :: String -> ConceptChunk
-
--- | Get a list of <a>UID</a> of the units that make up the
---   <a>UnitEquation</a>.
-getCu :: UnitEquation -> [UID]
-
--- | We don't want an Ord on units, but this still allows us to compare
---   them.
-compUnitDefn :: UnitDefn -> UnitDefn -> Ordering
-instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.UnitEquation
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UnitDefn.UnitDefn
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.UnitDefn.UnitDefn
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.UnitDefn.UnitDefn
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UnitDefn.UnitDefn
-instance GHC.Classes.Eq Language.Drasil.Chunk.UnitDefn.UnitDefn
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UnitDefn.UnitDefn
-instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.UnitDefn
-instance Language.Drasil.Classes.IsUnit Language.Drasil.Chunk.UnitDefn.UnitDefn
-
-
--- | Defines chunks that add quantities to an idea. Similar to
---   <tt>DefinedQuantityDict</tt>.
-module Language.Drasil.Chunk.Quantity
-
--- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
---   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from
---   <a>Stage</a> -&gt; <a>Symbol</a>, and <a>Maybe</a> a <a>UnitDefn</a>.
---   
---   Ex. A pendulum arm does not necessarily have to be defined as a
---   concept before we assign a space (Real numbers), a symbol (l), or
---   units (cm, m, etc.).
-data QuantityDict
-
--- | Makes a <a>QuantityDict</a> from an <a>Idea</a>, <a>Symbol</a>, and
---   <a>Space</a>. <a>Symbol</a> is implementation-only.
-codeVC :: Idea c => c -> Symbol -> Space -> QuantityDict
-
--- | Makes a variable that is implementation-only.
-implVar :: String -> NP -> Space -> Symbol -> QuantityDict
-
--- | Similar to <a>implVar</a> but allows specification of abbreviation and
---   unit.
-implVar' :: String -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
-
--- | Similar to <a>implVar</a> but takes in a <a>UID</a> rather than a
---   <a>String</a>.
-implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
-
--- | Similar to <a>implVar'</a> but takes in a <a>UID</a> rather than a
---   <a>String</a>.
-implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
-
--- | Make a <a>QuantityDict</a> from a <a>UID</a>, <a>NP</a>,
---   <a>Symbol</a>, <a>Space</a>, <a>Maybe</a> <a>UnitDefn</a>, and an
---   abbreviation (<a>Maybe</a> <a>String</a>).
-mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
-
--- | Similar to <a>mkQuant</a>, but the abbreviation is moved to the third
---   argument (<a>Maybe</a> <a>String</a>), and the <a>Symbol</a> is now
---   dependent on <a>Stage</a>.
-mkQuant' :: String -> NP -> Maybe String -> Space -> (Stage -> Symbol) -> Maybe UnitDefn -> QuantityDict
-
--- | Smart constructor for a <a>QuantityDict</a> from another
---   <a>Quantity</a> with units.
-qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
-
--- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
---   <a>Symbol</a>, and <a>Space</a>.
-vc :: String -> NP -> Symbol -> Space -> QuantityDict
-
--- | Creates a <a>QuantityDict</a> from an <a>Idea</a>, <a>Symbol</a>, and
---   <a>Space</a>.
-vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
-
--- | Similar to <a>vc</a>, but creates a <a>QuantityDict</a> from something
---   that knows about <a>Stage</a>s.
-vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
-
--- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
---   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
-vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Quantity.QuantityDict
-instance GHC.Classes.Eq Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Quantity.QuantityDict
-
-
--- | Defines chunks to add units to a quantity. Similar to
---   <tt>UnitalChunk</tt>.
-module Language.Drasil.Chunk.Unitary
-
--- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit.
-class (Quantity c) => Unitary c
-unit :: Unitary c => c -> UnitDefn
-
--- | UnitaryChunks are for ideas with quantities that must have units.
---   Contains a <a>QuantityDict</a> and a <a>UnitDefn</a>.
---   
---   Ex. A pendulum arm is an idea associated with a symbol (l) and units
---   (cm, m, etc.).
-data UnitaryChunk
-
--- | Makes a <a>UnitaryChunk</a> from a quantity with a unit.
-mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk
-
--- | Builds the <a>QuantityDict</a> part from the <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, and <a>Space</a>. Assumes there's no
---   abbreviation.
-unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-
--- | Same as <a>unitary</a> but with a <a>Symbol</a> that changes based on
---   the <a>Stage</a>.
-unitary' :: IsUnit u => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
-
--- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
---   to the symbols of the chunk itself.
-unit_symb :: Unitary c => c -> USymb
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unitary.UnitaryChunk
-
-
--- | Named arguments used in generating code.
-module Language.Drasil.Chunk.NamedArgument
-
--- | Any quantity can be a named argument (wrapper for
---   <a>QuantityDict</a>), but with more of a focus on generating code
---   arguments.
-newtype NamedArgument
-NA :: QuantityDict -> NamedArgument
-[_qtd] :: NamedArgument -> QuantityDict
-
--- | Smart constructor for <a>NamedArgument</a> .
-narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedArgument.NamedArgument
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.NamedArgument.NamedArgument
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.NamedArgument.NamedArgument
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.NamedArgument.NamedArgument
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.NamedArgument.NamedArgument
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.NamedArgument.NamedArgument
-instance Language.Drasil.Classes.IsArgumentName Language.Drasil.Chunk.NamedArgument.NamedArgument
-instance GHC.Classes.Eq Language.Drasil.Chunk.NamedArgument.NamedArgument
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.NamedArgument.NamedArgument
-
-
--- | Contains types that define quantities from concepts. Similar to
---   <tt>QuantityDict</tt>.
-module Language.Drasil.Chunk.DefinedQuantity
-
--- | DefinedQuantityDict is the combination of a <a>Concept</a> and a
---   <a>Quantity</a>. Contains a <a>ConceptChunk</a>, a <a>Symbol</a>
---   dependent on <a>Stage</a>, a <a>Space</a>, and maybe a
---   <a>UnitDefn</a>. Used when we want to assign a quantity to a concept.
---   Includes the space, symbol, and units for that quantity.
---   
---   Ex. A pendulum arm can be defined as a concept with a symbol (l),
---   space (Real numbers), and units (cm, m, etc.).
-data DefinedQuantityDict
-
--- | Smart constructor that creates a DefinedQuantityDict with a
---   <a>ConceptChunk</a>, a <a>Symbol</a> independent of <a>Stage</a>, a
---   <a>Space</a>, and a unit.
-dqd :: IsUnit u => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
-
--- | Similar to <a>dqd</a>, but without any units.
-dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
-
--- | Similar to <a>dqd</a>, but the <a>Symbol</a> is now dependent on the
---   <a>Stage</a>.
-dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
-
--- | When we want to merge a quantity and a concept. This is suspicious.
-dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
-
--- | When the input already has all the necessary information. A
---   <tt>projection</tt> operator from some a type with instances of listed
---   classes to a <a>DefinedQuantityDict</a>.
-dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-
--- | Temporary projection constructor, not to be used outside
---   <tt>drasil-lang</tt>.
-tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
-
-
--- | Defines chunks to add units to a quantity. Similar to
---   <tt>UnitaryChunk</tt>.
-module Language.Drasil.Chunk.Unital
-
--- | Similar to a <a>DefinedQuantityDict</a>, UnitalChunks are concepts
---   with quantities that must have a unit definition. Contains
---   <a>DefinedQuantityDict</a>s and a <a>UnitDefn</a>.
---   
---   Ex. A pendulum arm is a tangible object with a symbol (l) and units
---   (cm, m, etc.).
-data UnitalChunk
-UC :: DefinedQuantityDict -> UnitDefn -> UnitalChunk
-[_defq'] :: UnitalChunk -> DefinedQuantityDict
-[_uni] :: UnitalChunk -> UnitDefn
-
--- | Creates a <a>UnitalChunk</a> in the same way as <a>uc'</a>, but with a
---   <a>Sentence</a> for the definition instead of a <a>String</a>.
-makeUCWDS :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
-
--- | Used to create a <a>UnitalChunk</a> from a <a>Concept</a>,
---   <a>Symbol</a>, and <tt>Unit</tt>. Assumes the <a>Space</a> is Real.
-uc :: (Concept c, IsUnit u) => c -> Symbol -> u -> UnitalChunk
-
--- | Similar to <a>uc</a>, except it builds the <a>Concept</a> portion of
---   the <a>UnitalChunk</a> from a given <tt>UID</tt>, term, and definition
---   (which are the first three arguments).
-uc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> UnitalChunk
-
--- | Similar to <a>uc'</a>, but <a>Symbol</a> is dependent on the
---   <a>Stage</a>.
-ucStaged :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> UnitalChunk
-
--- | Similar to <a>uc'</a>, but does not assume the <a>Space</a>.
-ucs :: IsUnit u => String -> NP -> String -> Symbol -> Space -> u -> UnitalChunk
-
--- | Similar to <a>uc</a> but does not assume the <a>Space</a>.
-ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
-
--- | Similar to <a>ucs</a>, but uses a <a>Sentence</a> for description.
-ucsWS :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
-
--- | Attach units to a chunk that has a symbol and definition.
-ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
-
--- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
-ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.Chunk.UnitDefn.TempHasUnit Language.Drasil.Chunk.Unital.UnitalChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.Unital.UnitalChunk
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Unital.UnitalChunk
-
-
--- | Contains chunks related to adding an expression to a quantitative
---   concept.
-module Language.Drasil.Chunk.Eq
-data QDefinition e
-
--- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>String</a>),
---   term (<a>NP</a>), definition (<a>Sentence</a>), <a>Symbol</a>,
---   <a>Space</a>, unit, and defining expression.
-fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
-
--- | Same as <a>fromEqn</a>, but has no units.
-fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
-
--- | Same as <a>fromEqn</a>, but symbol depends on stage.
-fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> e -> QDefinition e
-
--- | Same as <a>fromEqn</a>, but symbol depends on stage and has no units.
-fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
-
--- | Same as <a>fromEqnSt'</a>, but takes a <a>String</a> instead of a
---   <a>UID</a>.
-fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
-
--- | Wrapper for fromEqnSt and fromEqnSt'
-mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> e -> QDefinition e
-
--- | Used to help make <a>QDefinition</a>s when <a>UID</a>, term, and
---   <a>Symbol</a> come from the same source.
-mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-
--- | Used to help make <a>QDefinition</a>s when <a>UID</a> and
---   <a>Symbol</a> come from the same source, with the term separate.
-mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e
-
--- | Smart constructor for QDefinitions. Requires a quantity and its
---   defining equation.
-ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-
--- | Create a <a>QDefinition</a> function with a symbol, name, term, list
---   of inputs, resultant units, and a defining Expr
-mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, IsUnit u) => f -> NP -> Sentence -> u -> [i] -> e -> QDefinition e
-
--- | Create a <a>QDefinition</a> function with a symbol, name, term, list
---   of inputs, and a defining Expr
-mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i) => f -> NP -> Sentence -> [i] -> e -> QDefinition e
-
--- | Create a <a>QDefinition</a> functions using a symbol, list of inputs,
---   and a defining Expr
-mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> e -> QDefinition e
-instance Language.Drasil.UID.HasUID (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Classes.NamedIdea (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Classes.Idea (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Classes.HasSpace (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Classes.Core.HasSymbol (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Classes.Definition (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Classes.Quantity (Language.Drasil.Chunk.Eq.QDefinition e)
-instance GHC.Classes.Eq (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Classes.DefiningExpr Language.Drasil.Chunk.Eq.QDefinition
-instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Classes.ConceptDomain (Language.Drasil.Chunk.Eq.QDefinition e)
-
-
--- | Parameterized types, at times, deserve their own names.
-module Language.Drasil.Synonyms
-
--- | Commonly used type for QDefinitions containing Literals.
-type ConstQDef = QDefinition Literal
-
--- | Commonly used type for QDefinitions containing Exprs.
-type SimpleQDef = QDefinition Expr
-
--- | Commonly used type for QDefinitions containing ModelExprs.
-type ModelQDef = QDefinition ModelExpr
-
--- | Commonly used type for polymorphic Exprs.
-type PExpr = forall r. (ExprC r, LiteralC r) => r
-
-
--- | Add constraints and a reasonable value to chunks that are quantities.
-module Language.Drasil.Chunk.Constrained
-
--- | ConstrainedChunks are symbolic quantities (<a>QuantityDict</a>) with
---   <tt>Constraint</tt>s and maybe a typical value (<a>Maybe</a>
---   <a>Expr</a>).
---   
---   Ex. Measuring the length of a pendulum would have some reasonable
---   value (between 1 cm and 2 m) and the constraint that the length cannot
---   be a negative value.
-data ConstrainedChunk
-ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
-[_qd] :: ConstrainedChunk -> QuantityDict
-[_constr] :: ConstrainedChunk -> [ConstraintE]
-[_reasV] :: ConstrainedChunk -> Maybe Expr
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <tt>Constraint</tt>s,
---   and an <a>Expr</a>.
-cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
---   <a>Maybe</a> <a>Expr</a> (Similar to <a>cuc</a> but no units).
-cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
-
--- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
---   <a>ConstrConcept</a>, <tt>UncertainChunk</tt>, or an <tt>UncertQ</tt>.
-cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
-
--- | ConstrConcepts are conceptual symbolic quantities
---   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
---   reasonable value (no units!). Similar to <a>ConstrainedChunk</a> but
---   includes a definition and domain.
---   
---   Ex. Measuring the length of a pendulum arm could be a concept that has
---   some reasonable value (between 1 cm and 2 m) and the constraint that
---   the length cannot be a negative value.
-data ConstrConcept
-ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrConcept
-[_defq] :: ConstrConcept -> DefinedQuantityDict
-[_constr'] :: ConstrConcept -> [ConstraintE]
-[_reasV'] :: ConstrConcept -> Maybe Expr
-
--- | Similar to <a>cnstrw</a>, but types must also have a <a>Concept</a>.
-cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
-
--- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
---   <tt>Constraint</tt>s and an <a>Expr</a>.
-constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> Expr -> ConstrConcept
-
--- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
---   to <a>Nothing</a>.
-constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), description (<a>String</a>), <a>Symbol</a>, unit,
---   <a>Space</a>, <tt>Constraint</tt>s, and an <a>Expr</a>.
-cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-
--- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
---   <a>Stage</a>.
-cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrConcept
-instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrainedChunk
-
-
--- | For adding an uncertainty value to quantities with constraints.
-module Language.Drasil.Chunk.UncertainQuantity
-
--- | UncertQs are conceptual symbolic quantities with constraints and an
---   <a>Uncertainty</a>. Contains a <a>ConstrConcept</a> and an
---   <a>Uncertainty</a>.
---   
---   Ex. Measuring the length of a pendulum arm may be recorded with an
---   uncertainty value.
-data UncertQ
-
--- | UncertainChunk is a symbolic quantity with constraints, a typical
---   value, and an uncertainty. Contains a <a>ConstrainedChunk</a> and an
---   <a>Uncertainty</a>.
---   
---   Ex. Measuring the length of a pendulum arm may be recorded with an
---   uncertainty value.
-data UncertainChunk
-UCh :: ConstrainedChunk -> Uncertainty -> UncertainChunk
-[_conc] :: UncertainChunk -> ConstrainedChunk
-[_unc'] :: UncertainChunk -> Uncertainty
-
--- | Smart constructor that requires a <a>Quantity</a>, a percentage, and a
---   typical value with an <a>Uncertainty</a>.
-uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
-
--- | Uncertainty quantity (<a>uq</a>) but with a constraint.
-uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
-
--- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
-uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
-
--- | Smart constructor that can project to an <a>UncertainChunk</a> (also
---   given an <a>Uncertainty</a>).
-uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertainChunk
-
--- | Creates an uncertain variable chunk. Takes <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constrains</tt>,
---   <a>Expr</a>, and <a>Uncertainty</a>.
-uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
-
--- | Projection function into an <a>UncertainChunk</a> from <a>UncertQ</a>
---   or an <a>UncertainChunk</a>.
-uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+-- | Inserts "of" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "of" +:+ (pluralNP t2)</tt>.
+of_ :: NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>of_</a> (phraseNP t2)</tt>.
+of_PS :: NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but takes two functions for the plural case.
+of_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but takes two functions for the singular case and
+--   two for the plural case.
+of_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "with" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "with" +:+ (pluralNP t2)</tt>.
+with :: NP -> NP -> NP
 
 
 -- | Defines various chunk combinators. The full naming scheme can be found
@@ -4693,7 +4094,7 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Uncert
 --   <li><tt>NI</tt> and <tt>NP</tt> denote whether something must be a
 --   part of the <a>NamedIdea</a> or <a>NounPhrase</a> class.</li>
 --   </ul>
-module Utils.Drasil.Concepts
+module Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- | Prepends "the" to a <a>NamedIdea</a>.
 the :: NamedIdea t => t -> NP
@@ -4887,78 +4288,568 @@ combineNPNI :: NamedIdea c => NP -> c -> NP
 combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 
--- | Folding-related functions and types.
-module Utils.Drasil.Fold
+-- | Contains the common idea type and respective constructors.
+module Language.Drasil.Chunk.CommonIdea
 
--- | Type that helps determine enumeration method. Can use either numbers,
---   uppercase letters, or lowercase letters.
-data EnumType
-Numb :: EnumType
-Upper :: EnumType
-Lower :: EnumType
+-- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
+--   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation
+--   (<a>String</a>), and a domain ([<a>UID</a>]). It is similar to
+--   <a>NamedChunk</a> and <a>IdeaDict</a> in the sense that these are for
+--   things worth naming, but this type also carries an abbreviation and
+--   related domains of knowledge.
+--   
+--   Ex. The term "Operating System" has the abbreviation <a>OS</a> and
+--   comes from the domain of computer science.
+data CI
 
--- | Type to help wrap a sentence with parenthesis or to add a period at
---   the end.
-data WrapType
-Parens :: WrapType
-Period :: WrapType
+-- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
+--   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
+--   ([<a>UID</a>]).
+commonIdea :: String -> NP -> String -> [UID] -> CI
 
--- | Type to help separate words with commas or semicolons.
-data SepType
-Comma :: SepType
-SemiCol :: SepType
+-- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
+--   (often a domain).
+commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 
--- | Type to help fold differently between listed items, or if there are
---   options (ex. using "and" or "or" at the end of a list of words).
-data FoldType
-List :: FoldType
-Options :: FoldType
+-- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
+getAcc :: CI -> Sentence
 
--- | Helper for formatting a list of constraints.
-foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+-- | Get abbreviation in <a>String</a> form from a <a>CI</a>.
+getAccStr :: CI -> String
 
--- | Creates a list of elements with "enumerators" in "wrappers" using
---   foldlList.
-foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+-- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
+prependAbrv :: CommonIdea c => c -> String -> String
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CommonIdea.CI
 
--- | Creates a list of elements separated by a "separator", ending with
---   "and" or "or".
-foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
 
--- | Fold sentences then turns into content using <a>foldlSent</a>.
-foldlSP :: [Sentence] -> Contents
+-- | Define concept-related chunks. A concept is usually something that has
+--   a term, definition, and comes from some domain of knowledge.
+module Language.Drasil.Chunk.Concept.Core
 
--- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
-foldlSP_ :: [Sentence] -> Contents
+-- | The ConceptChunk datatype records a concept that contains an idea
+--   (<a>IdeaDict</a>), a definition (<a>Sentence</a>), and an associated
+--   domain of knowledge ([<a>UID</a>]).
+--   
+--   Ex. The concept of <a>Accuracy</a> may be defined as the quality or
+--   state of being correct or precise.
+data ConceptChunk
+ConDict :: IdeaDict -> Sentence -> [UID] -> ConceptChunk
 
--- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
-foldlSPCol :: [Sentence] -> Contents
+-- | Contains a common idea (<a>CI</a>) with a definition
+--   (<a>Sentence</a>). Similar to <a>ConceptChunk</a>, but must have an
+--   abbreviation.
+data CommonConcept
+ComConDict :: CI -> Sentence -> CommonConcept
 
--- | Partial function application of <a>foldle</a> for sentences
---   specifically. Folds with spaces and adds a period (".") at the end.
-foldlSent :: [Sentence] -> Sentence
+-- | Contains a <a>ConceptChunk</a>, reference address, and a
+--   <a>ShortName</a>. It is a concept that can be referred to, or rather,
+--   a instance of where a concept is applied. Often used in Goal
+--   Statements, Assumptions, Requirements, etc.
+--   
+--   Ex. Something like the assumption that gravity is 9.81 m/s. When we
+--   write our equations, we can then link this assumption so that we do
+--   not have to explicitly define that assumption when needed to verify
+--   our work.
+data ConceptInstance
+ConInst :: ConceptChunk -> String -> ShortName -> ConceptInstance
 
--- | <a>foldlSent</a> but does not add a period.
-foldlSent_ :: [Sentence] -> Sentence
+-- | Check if something has one domain. Throws an error if there is more
+--   than one.
+sDom :: [UID] -> UID
+instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.CommonConcept
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.CommonConcept
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Concept.Core.CommonConcept
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.CommonConcept
+instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.CommonConcept
+instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Concept.Core.ConceptChunk
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptChunk
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.ConceptChunk
 
--- | <a>foldlSent</a> but ends with colon.
-foldlSentCol :: [Sentence] -> Sentence
 
--- | Folds a list of elements separated by commas, including the last
---   element.
-foldlsC :: [Sentence] -> Sentence
+-- | Contains functions to create the concept related chunk types found in
+--   <a>Language.Drasil.Chunk.Concept.Core</a>.
+module Language.Drasil.Chunk.Concept
 
--- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
---   13").
-foldNums :: String -> [Int] -> Sentence
+-- | The ConceptChunk datatype records a concept that contains an idea
+--   (<a>IdeaDict</a>), a definition (<a>Sentence</a>), and an associated
+--   domain of knowledge ([<a>UID</a>]).
+--   
+--   Ex. The concept of <a>Accuracy</a> may be defined as the quality or
+--   state of being correct or precise.
+data ConceptChunk
 
--- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
---   "13"]).
-numList :: String -> [Int] -> [String]
+-- | Smart constructor for creating concept chunks given a <tt>UID</tt>,
+--   <tt>NounPhrase</tt> (<a>NP</a>) and definition (as a <a>String</a>).
+--   
+--   Concept domain tagging is not yet implemented in this constructor.
+dcc :: String -> NP -> String -> ConceptChunk
+
+-- | Similar to <a>dcc</a>, except the definition takes a <a>Sentence</a>.
+dccWDS :: String -> NP -> Sentence -> ConceptChunk
+
+-- | Constructor for projecting an idea into a <a>ConceptChunk</a>. Takes
+--   the definition of the <a>ConceptChunk</a> as a <a>String</a>. Does not
+--   allow concept domain tagging.
+cc :: Idea c => c -> String -> ConceptChunk
+
+-- | Same as <a>cc</a>, except definition is a <a>Sentence</a>.
+cc' :: Idea c => c -> Sentence -> ConceptChunk
+
+-- | Similar to <a>cc'</a>, but allows explicit domain tagging.
+ccs :: (Idea c, Concept d) => c -> Sentence -> [d] -> ConceptChunk
+
+-- | For projecting out to the <a>ConceptChunk</a> data-type.
+cw :: Concept c => c -> ConceptChunk
+
+-- | Contains a common idea (<a>CI</a>) with a definition
+--   (<a>Sentence</a>). Similar to <a>ConceptChunk</a>, but must have an
+--   abbreviation.
+data CommonConcept
+
+-- | Identical to <a>dcc</a>, but takes an abbreviation (<a>String</a>) and
+--   returns a <a>CommonConcept</a> instead.
+dcc' :: String -> NP -> String -> String -> CommonConcept
+
+-- | Similar to <a>dcc</a>, except the definition is a <a>Sentence</a>,
+--   takes an abbreviation (<a>String</a>) and returns a
+--   <a>CommonConcept</a> instead.
+dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
+
+-- | Contains a <a>ConceptChunk</a>, reference address, and a
+--   <a>ShortName</a>. It is a concept that can be referred to, or rather,
+--   a instance of where a concept is applied. Often used in Goal
+--   Statements, Assumptions, Requirements, etc.
+--   
+--   Ex. Something like the assumption that gravity is 9.81 m/s. When we
+--   write our equations, we can then link this assumption so that we do
+--   not have to explicitly define that assumption when needed to verify
+--   our work.
+data ConceptInstance
+
+-- | Constructor for a <a>ConceptInstance</a>. Takes in the Reference
+--   Address (<a>String</a>), a definition (<a>Sentence</a>), a short name
+--   (<a>String</a>), and a domain (for explicit tagging).
+cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
+
+
+-- | For adding a relation (expression) to a concept.
+module Language.Drasil.Chunk.Relation
+
+-- | For a concept (<a>ConceptChunk</a>) that also has a <tt>Relation</tt>
+--   (<a>ModelExpr</a>) attached.
+--   
+--   Ex. We can describe a pendulum arm and then apply an associated
+--   equation so that we know its behaviour.
+data RelationConcept
+
+-- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
+--   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
+makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
+
+-- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
+--   a <a>Concept</a>, new <tt>UID</tt> and relation.
+addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
+instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Relation.RelationConcept
+
+
+-- | For defining units built from a concept.
+module Language.Drasil.Chunk.UnitDefn
+
+-- | Types may contain a unit (<a>UnitDefn</a>).
+class MayHaveUnit u
+getUnit :: MayHaveUnit u => u -> Maybe UnitDefn
+
+-- | Units are <a>Idea</a>s with a <a>Definition</a> which store a unit
+--   symbol. They must also be explicitly declared to be instances of
+--   IsUnit.
+class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u
+
+-- | Holds units as a list of <a>UID</a>.
+getUnits :: IsUnit u => u -> [UID]
+
+-- | Temporary class to make sure chunks have a unit (in order to
+--   eventually get rid of <a>MayHaveUnit</a>).
+class TempHasUnit u
+findUnit :: TempHasUnit u => u -> UnitDefn
+
+-- | For defining units. It has a <a>ConceptChunk</a> (that defines what
+--   kind of unit it is), a unit symbol, maybe another (when it is a
+--   synonym), perhaps a definition, and a list of <a>UID</a> of the units
+--   that make up the definition.
+--   
+--   Ex. Meter is a unit of length defined by the symbol (m).
+data UnitDefn
+UD :: ConceptChunk -> UnitSymbol -> [UID] -> UnitDefn
+[_vc] :: UnitDefn -> ConceptChunk
+[_cas] :: UnitDefn -> UnitSymbol
+[_cu] :: UnitDefn -> [UID]
+
+-- | Create a derived unit chunk from a concept and a unit equation.
+makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
+
+-- | Smart constructor for new derived units from existing units.
+newUnit :: String -> UnitEquation -> UnitDefn
+
+-- | Uses self-plural term.
+--   
+--   Create a derived unit chunk from a <a>UID</a>, term (<a>String</a>),
+--   definition, <a>Symbol</a>, and unit equation.
+derUC :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
+
+-- | Uses term that pluralizes by adding "s" to the end.
+--   
+--   Create a derived unit chunk from a <a>UID</a>, term (<a>String</a>),
+--   definition, <a>Symbol</a>, and unit equation.
+derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
+
+-- | Create a derived unit chunk from a <a>UID</a>, term (<a>NP</a>),
+--   definition, <a>Symbol</a>, and unit equation.
+derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
+
+-- | Smart constructor for a "fundamental" unit.
+fund :: String -> String -> String -> UnitDefn
+
+-- | Variant of the <a>fund</a>, useful for degree.
+fund' :: String -> String -> Symbol -> UnitDefn
+
+-- | Create a <tt>SI_Unit</tt> with two <a>Symbol</a> representations. The
+--   created <a>NP</a> is self-plural.
+derCUC :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
+
+-- | Similar to <a>derCUC</a>, but the created <a>NP</a> has the
+--   <tt>AddS</tt> plural rule.
+derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
+
+-- | Create a derived unit chunk from a <a>UID</a>, term (<a>NP</a>),
+--   definition, <a>Symbol</a>, and unit equation.
+derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
+
+-- | For allowing lists to mix together chunks that are units by projecting
+--   them into a <a>UnitDefn</a>. For now, this only works on
+--   <a>UnitDefn</a>s.
+unitWrapper :: IsUnit u => u -> UnitDefn
+
+-- | Combinator for raising a unit to a power.
+(^:) :: UnitDefn -> Integer -> UnitEquation
+
+-- | Combinator for dividing one unit by another.
+(/:) :: UnitDefn -> UnitDefn -> UnitEquation
+
+-- | Combinator for multiplying two units together.
+(*:) :: UnitDefn -> UnitDefn -> UnitEquation
+
+-- | Combinator for multiplying a unit and a symbol.
+(*$) :: UnitDefn -> UnitEquation -> UnitEquation
+
+-- | Combinator for dividing a unit and a symbol.
+(/$) :: UnitDefn -> UnitEquation -> UnitEquation
+
+-- | Combinator for mulitiplying two unit equations.
+(^$) :: UnitEquation -> UnitEquation -> UnitEquation
+
+-- | Combinator for scaling one unit by some number.
+scale :: IsUnit s => Double -> s -> UDefn
+
+-- | Combinator for shifting one unit by some number.
+shift :: IsUnit s => Double -> s -> UDefn
+
+-- | Generates a default unit symbol.
+fromUDefn :: UDefn -> USymb
+
+-- | Helper for fundamental unit concept chunk creation. Uses the same
+--   <a>String</a> for the identifier, term, and definition.
+unitCon :: String -> ConceptChunk
+
+-- | Get a list of <a>UID</a> of the units that make up the
+--   <a>UnitEquation</a>.
+getCu :: UnitEquation -> [UID]
+
+-- | We don't want an Ord on units, but this still allows us to compare
+--   them.
+compUnitDefn :: UnitDefn -> UnitDefn -> Ordering
+instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.UnitEquation
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance GHC.Classes.Eq Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance Language.Drasil.Classes.IsUnit Language.Drasil.Chunk.UnitDefn.UnitDefn
+
+
+-- | Defines chunks that add quantities to an idea. Similar to
+--   <tt>DefinedQuantityDict</tt>.
+module Language.Drasil.Chunk.Quantity
+
+-- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
+--   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from
+--   <a>Stage</a> -&gt; <a>Symbol</a>, and <a>Maybe</a> a <a>UnitDefn</a>.
+--   
+--   Ex. A pendulum arm does not necessarily have to be defined as a
+--   concept before we assign a space (Real numbers), a symbol (l), or
+--   units (cm, m, etc.).
+data QuantityDict
+
+-- | Makes a <a>QuantityDict</a> from an <a>Idea</a>, <a>Symbol</a>, and
+--   <a>Space</a>. <a>Symbol</a> is implementation-only.
+codeVC :: Idea c => c -> Symbol -> Space -> QuantityDict
+
+-- | Makes a variable that is implementation-only.
+implVar :: String -> NP -> Space -> Symbol -> QuantityDict
+
+-- | Similar to <a>implVar</a> but allows specification of abbreviation and
+--   unit.
+implVar' :: String -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
+
+-- | Similar to <a>implVar</a> but takes in a <a>UID</a> rather than a
+--   <a>String</a>.
+implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
+
+-- | Similar to <a>implVar'</a> but takes in a <a>UID</a> rather than a
+--   <a>String</a>.
+implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
+
+-- | Make a <a>QuantityDict</a> from a <a>UID</a>, <a>NP</a>,
+--   <a>Symbol</a>, <a>Space</a>, <a>Maybe</a> <a>UnitDefn</a>, and an
+--   abbreviation (<a>Maybe</a> <a>String</a>).
+mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
+
+-- | Similar to <a>mkQuant</a>, but the abbreviation is moved to the third
+--   argument (<a>Maybe</a> <a>String</a>), and the <a>Symbol</a> is now
+--   dependent on <a>Stage</a>.
+mkQuant' :: String -> NP -> Maybe String -> Space -> (Stage -> Symbol) -> Maybe UnitDefn -> QuantityDict
+
+-- | Smart constructor for a <a>QuantityDict</a> from another
+--   <a>Quantity</a> with units.
+qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
+
+-- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
+--   <a>Symbol</a>, and <a>Space</a>.
+vc :: String -> NP -> Symbol -> Space -> QuantityDict
+
+-- | Creates a <a>QuantityDict</a> from an <a>Idea</a>, <a>Symbol</a>, and
+--   <a>Space</a>.
+vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
+
+-- | Similar to <a>vc</a>, but creates a <a>QuantityDict</a> from something
+--   that knows about <a>Stage</a>s.
+vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
+
+-- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
+--   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
+vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Quantity.QuantityDict
+instance GHC.Classes.Eq Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Quantity.QuantityDict
+
+
+-- | Defines chunks to add units to a quantity. Similar to
+--   <tt>UnitalChunk</tt>.
+module Language.Drasil.Chunk.Unitary
+
+-- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit.
+class (Quantity c) => Unitary c
+unit :: Unitary c => c -> UnitDefn
+
+-- | UnitaryChunks are for ideas with quantities that must have units.
+--   Contains a <a>QuantityDict</a> and a <a>UnitDefn</a>.
+--   
+--   Ex. A pendulum arm is an idea associated with a symbol (l) and units
+--   (cm, m, etc.).
+data UnitaryChunk
+
+-- | Makes a <a>UnitaryChunk</a> from a quantity with a unit.
+mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk
+
+-- | Builds the <a>QuantityDict</a> part from the <tt>UID</tt>, term
+--   (<a>NP</a>), <a>Symbol</a>, and <a>Space</a>. Assumes there's no
+--   abbreviation.
+unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
+
+-- | Same as <a>unitary</a> but with a <a>Symbol</a> that changes based on
+--   the <a>Stage</a>.
+unitary' :: IsUnit u => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
+
+-- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
+--   to the symbols of the chunk itself.
+unit_symb :: Unitary c => c -> USymb
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unitary.UnitaryChunk
+
+
+-- | Named arguments used in generating code.
+module Language.Drasil.Chunk.NamedArgument
+
+-- | Any quantity can be a named argument (wrapper for
+--   <a>QuantityDict</a>), but with more of a focus on generating code
+--   arguments.
+newtype NamedArgument
+NA :: QuantityDict -> NamedArgument
+[_qtd] :: NamedArgument -> QuantityDict
+
+-- | Smart constructor for <a>NamedArgument</a> .
+narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Classes.IsArgumentName Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance GHC.Classes.Eq Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.NamedArgument.NamedArgument
+
+
+-- | Contains types that define quantities from concepts. Similar to
+--   <tt>QuantityDict</tt>.
+module Language.Drasil.Chunk.DefinedQuantity
+
+-- | DefinedQuantityDict is the combination of a <a>Concept</a> and a
+--   <a>Quantity</a>. Contains a <a>ConceptChunk</a>, a <a>Symbol</a>
+--   dependent on <a>Stage</a>, a <a>Space</a>, and maybe a
+--   <a>UnitDefn</a>. Used when we want to assign a quantity to a concept.
+--   Includes the space, symbol, and units for that quantity.
+--   
+--   Ex. A pendulum arm can be defined as a concept with a symbol (l),
+--   space (Real numbers), and units (cm, m, etc.).
+data DefinedQuantityDict
+
+-- | Smart constructor that creates a DefinedQuantityDict with a
+--   <a>ConceptChunk</a>, a <a>Symbol</a> independent of <a>Stage</a>, a
+--   <a>Space</a>, and a unit.
+dqd :: IsUnit u => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
+
+-- | Similar to <a>dqd</a>, but without any units.
+dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
+
+-- | Similar to <a>dqd</a>, but the <a>Symbol</a> is now dependent on the
+--   <a>Stage</a>.
+dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
+
+-- | When we want to merge a quantity and a concept. This is suspicious.
+dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
+
+-- | When the input already has all the necessary information. A
+--   <tt>projection</tt> operator from some a type with instances of listed
+--   classes to a <a>DefinedQuantityDict</a>.
+dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
+
+-- | Temporary projection constructor, not to be used outside
+--   <tt>drasil-lang</tt>.
+tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+
+
+-- | Defines chunks to add units to a quantity. Similar to
+--   <tt>UnitaryChunk</tt>.
+module Language.Drasil.Chunk.Unital
+
+-- | Similar to a <a>DefinedQuantityDict</a>, UnitalChunks are concepts
+--   with quantities that must have a unit definition. Contains
+--   <a>DefinedQuantityDict</a>s and a <a>UnitDefn</a>.
+--   
+--   Ex. A pendulum arm is a tangible object with a symbol (l) and units
+--   (cm, m, etc.).
+data UnitalChunk
+UC :: DefinedQuantityDict -> UnitDefn -> UnitalChunk
+[_defq'] :: UnitalChunk -> DefinedQuantityDict
+[_uni] :: UnitalChunk -> UnitDefn
+
+-- | Creates a <a>UnitalChunk</a> in the same way as <a>uc'</a>, but with a
+--   <a>Sentence</a> for the definition instead of a <a>String</a>.
+makeUCWDS :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
+
+-- | Used to create a <a>UnitalChunk</a> from a <a>Concept</a>,
+--   <a>Symbol</a>, and <tt>Unit</tt>. Assumes the <a>Space</a> is Real.
+uc :: (Concept c, IsUnit u) => c -> Symbol -> u -> UnitalChunk
+
+-- | Similar to <a>uc</a>, except it builds the <a>Concept</a> portion of
+--   the <a>UnitalChunk</a> from a given <tt>UID</tt>, term, and definition
+--   (which are the first three arguments).
+uc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> UnitalChunk
+
+-- | Similar to <a>uc'</a>, but <a>Symbol</a> is dependent on the
+--   <a>Stage</a>.
+ucStaged :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> UnitalChunk
+
+-- | Similar to <a>uc'</a>, but does not assume the <a>Space</a>.
+ucs :: IsUnit u => String -> NP -> String -> Symbol -> Space -> u -> UnitalChunk
+
+-- | Similar to <a>uc</a> but does not assume the <a>Space</a>.
+ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
+
+-- | Similar to <a>ucs</a>, but uses a <a>Sentence</a> for description.
+ucsWS :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
+
+-- | Attach units to a chunk that has a symbol and definition.
+ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
+
+-- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
+ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.Chunk.UnitDefn.TempHasUnit Language.Drasil.Chunk.Unital.UnitalChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Unital.UnitalChunk
 
 
 -- | Miscellaneous utility functions for use throughout Drasil.
-module Utils.Drasil.Misc
+module Language.Drasil.Document.Combinators
 
 -- | Output is of the form "<tt>reference - sentence</tt>".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
@@ -4975,7 +4866,7 @@ definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sen
 --   <tt>reference</tt>" (no <a>HasSymbol</a>).
 definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
 
--- | Takes a <tt>Symbol</tt> and its <tt>Reference</tt> (does not append a
+-- | Takes a <a>Symbol</a> and its <tt>Reference</tt> (does not append a
 --   period at the end!). Outputs as "<tt>symbol</tt> is defined in
 --   <tt>source</tt>".
 definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
@@ -5044,9 +4935,8 @@ maybeWOVerb :: Sentence -> Sentence -> Sentence
 --   Showing the Connections Between <tt>contents</tt>".
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 
--- | Takes a list of <a>Referable</a>s and <tt>Symbol</tt>s and outputs as
---   a Sentence "By substituting <tt>symbols</tt>, this can be written
---   as:".
+-- | Takes a list of <a>Referable</a>s and <a>Symbol</a>s and outputs as a
+--   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
 
 -- | Extracts the typical uncertainty to be displayed from something that
@@ -5103,7 +4993,7 @@ noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 --   Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
 
--- | Sorts a list of <tt>HasSymbols</tt> by <tt>Symbol</tt>.
+-- | Sorts a list of <tt>HasSymbols</tt> by <a>Symbol</a>.
 sortBySymbol :: HasSymbol a => [a] -> [a]
 
 -- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
@@ -5139,7 +5029,7 @@ zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
 
 -- | General functions that are useful in manipulating some Drasil types
 --   into printable <a>Contents</a>.
-module Utils.Drasil.Contents
+module Language.Drasil.Document.Contents
 
 -- | Creates a bulleted list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent
@@ -5188,6 +5078,244 @@ lbldExpr :: ModelExpr -> Reference -> LabelledContent
 -- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
 --   <a>Reference</a>).
 unlbldExpr :: ModelExpr -> Contents
+
+
+-- | Contains chunks related to adding an expression to a quantitative
+--   concept.
+module Language.Drasil.Chunk.Eq
+data QDefinition e
+
+-- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>String</a>),
+--   term (<a>NP</a>), definition (<a>Sentence</a>), <a>Symbol</a>,
+--   <a>Space</a>, unit, and defining expression.
+fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
+
+-- | Same as <a>fromEqn</a>, but has no units.
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
+
+-- | Same as <a>fromEqn</a>, but symbol depends on stage.
+fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> e -> QDefinition e
+
+-- | Same as <a>fromEqn</a>, but symbol depends on stage and has no units.
+fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
+
+-- | Same as <a>fromEqnSt'</a>, but takes a <a>String</a> instead of a
+--   <a>UID</a>.
+fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
+
+-- | Wrapper for fromEqnSt and fromEqnSt'
+mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> e -> QDefinition e
+
+-- | Used to help make <a>QDefinition</a>s when <a>UID</a>, term, and
+--   <a>Symbol</a> come from the same source.
+mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
+
+-- | Used to help make <a>QDefinition</a>s when <a>UID</a> and
+--   <a>Symbol</a> come from the same source, with the term separate.
+mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e
+
+-- | Smart constructor for QDefinitions. Requires a quantity and its
+--   defining equation.
+ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
+
+-- | Create a <a>QDefinition</a> function with a symbol, name, term, list
+--   of inputs, resultant units, and a defining Expr
+mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, IsUnit u) => f -> NP -> Sentence -> u -> [i] -> e -> QDefinition e
+
+-- | Create a <a>QDefinition</a> function with a symbol, name, term, list
+--   of inputs, and a defining Expr
+mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i) => f -> NP -> Sentence -> [i] -> e -> QDefinition e
+
+-- | Create a <a>QDefinition</a> functions using a symbol, list of inputs,
+--   and a defining Expr
+mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> e -> QDefinition e
+instance Language.Drasil.UID.HasUID (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Chunk.NamedIdea.Idea (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Space.HasSpace (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Symbol.HasSymbol (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Classes.Definition (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Classes.Quantity (Language.Drasil.Chunk.Eq.QDefinition e)
+instance GHC.Classes.Eq (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Classes.DefiningExpr Language.Drasil.Chunk.Eq.QDefinition
+instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Classes.ConceptDomain (Language.Drasil.Chunk.Eq.QDefinition e)
+
+
+-- | Parameterized types, at times, deserve their own names.
+module Language.Drasil.Synonyms
+
+-- | Commonly used type for QDefinitions containing Literals.
+type ConstQDef = QDefinition Literal
+
+-- | Commonly used type for QDefinitions containing Exprs.
+type SimpleQDef = QDefinition Expr
+
+-- | Commonly used type for QDefinitions containing ModelExprs.
+type ModelQDef = QDefinition ModelExpr
+
+-- | Commonly used type for polymorphic Exprs.
+type PExpr = forall r. (ExprC r, LiteralC r) => r
+
+
+-- | Add constraints and a reasonable value to chunks that are quantities.
+module Language.Drasil.Chunk.Constrained
+
+-- | ConstrainedChunks are symbolic quantities (<a>QuantityDict</a>) with
+--   <tt>Constraint</tt>s and maybe a typical value (<a>Maybe</a>
+--   <a>Expr</a>).
+--   
+--   Ex. Measuring the length of a pendulum would have some reasonable
+--   value (between 1 cm and 2 m) and the constraint that the length cannot
+--   be a negative value.
+data ConstrainedChunk
+ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
+[_qd] :: ConstrainedChunk -> QuantityDict
+[_constr] :: ConstrainedChunk -> [ConstraintE]
+[_reasV] :: ConstrainedChunk -> Maybe Expr
+
+-- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
+--   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <tt>Constraint</tt>s,
+--   and an <a>Expr</a>.
+cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
+
+-- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
+--   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
+--   <a>Maybe</a> <a>Expr</a> (Similar to <a>cuc</a> but no units).
+cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
+
+-- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
+--   <a>ConstrConcept</a>, <tt>UncertainChunk</tt>, or an <tt>UncertQ</tt>.
+cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
+
+-- | ConstrConcepts are conceptual symbolic quantities
+--   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
+--   reasonable value (no units!). Similar to <a>ConstrainedChunk</a> but
+--   includes a definition and domain.
+--   
+--   Ex. Measuring the length of a pendulum arm could be a concept that has
+--   some reasonable value (between 1 cm and 2 m) and the constraint that
+--   the length cannot be a negative value.
+data ConstrConcept
+ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrConcept
+[_defq] :: ConstrConcept -> DefinedQuantityDict
+[_constr'] :: ConstrConcept -> [ConstraintE]
+[_reasV'] :: ConstrConcept -> Maybe Expr
+
+-- | Similar to <a>cnstrw</a>, but types must also have a <a>Concept</a>.
+cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
+
+-- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
+--   <tt>Constraint</tt>s and an <a>Expr</a>.
+constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> Expr -> ConstrConcept
+
+-- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
+--   to <a>Nothing</a>.
+constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
+
+-- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
+--   (<a>NP</a>), description (<a>String</a>), <a>Symbol</a>, unit,
+--   <a>Space</a>, <tt>Constraint</tt>s, and an <a>Expr</a>.
+cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+
+-- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
+--   <a>Stage</a>.
+cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrConcept
+instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrainedChunk
+
+
+-- | For adding an uncertainty value to quantities with constraints.
+module Language.Drasil.Chunk.UncertainQuantity
+
+-- | UncertQs are conceptual symbolic quantities with constraints and an
+--   <a>Uncertainty</a>. Contains a <a>ConstrConcept</a> and an
+--   <a>Uncertainty</a>.
+--   
+--   Ex. Measuring the length of a pendulum arm may be recorded with an
+--   uncertainty value.
+data UncertQ
+
+-- | UncertainChunk is a symbolic quantity with constraints, a typical
+--   value, and an uncertainty. Contains a <a>ConstrainedChunk</a> and an
+--   <a>Uncertainty</a>.
+--   
+--   Ex. Measuring the length of a pendulum arm may be recorded with an
+--   uncertainty value.
+data UncertainChunk
+UCh :: ConstrainedChunk -> Uncertainty -> UncertainChunk
+[_conc] :: UncertainChunk -> ConstrainedChunk
+[_unc'] :: UncertainChunk -> Uncertainty
+
+-- | Smart constructor that requires a <a>Quantity</a>, a percentage, and a
+--   typical value with an <a>Uncertainty</a>.
+uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
+
+-- | Uncertainty quantity (<a>uq</a>) but with a constraint.
+uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
+
+-- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
+uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
+
+-- | Smart constructor that can project to an <a>UncertainChunk</a> (also
+--   given an <a>Uncertainty</a>).
+uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertainChunk
+
+-- | Creates an uncertain variable chunk. Takes <tt>UID</tt>, term
+--   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constrains</tt>,
+--   <a>Expr</a>, and <a>Uncertainty</a>.
+uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
+
+-- | Projection function into an <a>UncertainChunk</a> from <a>UncertQ</a>
+--   or an <a>UncertainChunk</a>.
+uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 
 
 -- | The Drasil language, including expressions, chunks, sentences,
@@ -5469,7 +5597,7 @@ class HasUID c => NamedIdea c
 term :: NamedIdea c => Lens' c NP
 
 -- | An <a>Idea</a> is the combination of a <a>NamedIdea</a> and a
---   <a>CommonIdea</a>. In other words, it <i>may</i> have an
+--   <tt>CommonIdea</tt>. In other words, it <i>may</i> have an
 --   acronym/abbreviation.
 class NamedIdea c => Idea c
 
@@ -5514,7 +5642,7 @@ class HasUnitSymbol u
 -- | Provides the ability to hold a unit symbol (<a>USymb</a>).
 usymb :: HasUnitSymbol u => u -> USymb
 
--- | A Quantity is an <a>Idea</a> with a <a>Space</a> and a
+-- | A Quantity is an <a>Idea</a> with a <tt>Space</tt> and a
 --   <tt>Symbol</tt>. In theory, it should also restrict to being a part of
 --   <tt>MayHaveUnit</tt>, but that causes all sorts of import cycles (or
 --   lots of orphans).
@@ -5525,14 +5653,6 @@ class HasReasVal c
 
 -- | Provides a <tt>Lens</tt> to the possible reasonable value.
 reasVal :: HasReasVal c => Lens' c (Maybe Expr)
-
--- | HasUncertainty is just a chunk with some uncertainty associated to it.
---   This uncertainty is represented as a decimal value between 0 and 1
---   (percentage).
-class HasUncertainty c
-
--- | Provides the <tt>Lens</tt> to an <a>Uncertainty</a>.
-unc :: HasUncertainty c => Lens' c Uncertainty
 
 -- | The Constrained class is a <a>Quantity</a> that has value constraints.
 --   It does not enforce <a>Quantity</a> at this point.
@@ -5562,7 +5682,10 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u
 getUnits :: IsUnit u => u -> [UID]
 class DefiningExpr c
 
--- | Provides a <tt>Lens</tt> to the expression.
+-- | Provides a <tt>Lens</tt> to the expression. TODO: Well, technically,
+--   <tt>e</tt> doesn't need to be an "expression" of any sorts. It just
+--   needs to be _something_, and it would have approximately have same
+--   meaning.
 defnExpr :: DefiningExpr c => Lens' (c e) e
 
 -- | Data that can be expressed using <a>ModelExpr</a>.
@@ -5585,35 +5708,11 @@ refAdd :: Referable s => s -> String
 -- | Alternate form of reference.
 renderRef :: Referable s => s -> LblType
 
--- | A <a>ShortName</a> is the text to be displayed for a link. Used for
---   referencing within a document that can include symbols and whatnot if
---   required. Visible in the typeset documents (pdf).
-class HasShortName s
-shortname :: HasShortName s => s -> ShortName
-
 -- | A class that contains a list of <a>Reference</a>s.
 class HasReference c
 
 -- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
 getReferences :: HasReference c => Lens' c [Reference]
-
--- | A class that contains a list of decorated references (<a>DecRef</a>s).
-class HasDecRef c
-
--- | Provides a <tt>Lens</tt> to the <a>DecRef</a>s.
-getDecRefs :: HasDecRef c => Lens' c [DecRef]
-
--- | Some documents, as well as some pieces of knowledge, have citations.
-class HasCitation c
-
--- | Provides a <tt>Lens</tt> to the citations.
-getCitations :: HasCitation c => Lens' c [Citation]
-
--- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
-class HasFields c
-
--- | Provides a <tt>Lens</tt> to <a>CiteField</a>s.
-getFields :: HasFields c => Lens' c [CiteField]
 
 -- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
@@ -6235,6 +6334,14 @@ data Uncertainty
 -- | Smart constructor for values with uncertainty.
 uncty :: Double -> Maybe Int -> Uncertainty
 
+-- | HasUncertainty is just a chunk with some uncertainty associated to it.
+--   This uncertainty is represented as a decimal value between 0 and 1
+--   (percentage).
+class HasUncertainty c
+
+-- | Provides the <tt>Lens</tt> to an <a>Uncertainty</a>.
+unc :: HasUncertainty c => Lens' c Uncertainty
+
 -- | The default uncertainty is set to 0.1.
 defaultUncrt :: Uncertainty
 
@@ -6317,6 +6424,12 @@ dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRe
 -- | Same as <a>ref</a>, but for <a>DecRef</a> instead of <a>Reference</a>.
 dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
 
+-- | A class that contains a list of decorated references (<a>DecRef</a>s).
+class HasDecRef c
+
+-- | Provides a <tt>Lens</tt> to the <a>DecRef</a>s.
+getDecRefs :: HasDecRef c => Lens' c [DecRef]
+
 -- | A <a>String</a> that should contain no spaces.
 type EntryID = String
 
@@ -6333,6 +6446,18 @@ data Citation
 
 -- | A list of <a>Citation</a>s.
 type BibRef = [Citation]
+
+-- | Some documents, as well as some pieces of knowledge, have citations.
+class HasCitation c
+
+-- | Provides a <tt>Lens</tt> to the citations.
+getCitations :: HasCitation c => Lens' c [Citation]
+
+-- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
+class HasFields c
+
+-- | Provides a <tt>Lens</tt> to <a>CiteField</a>s.
+getFields :: HasFields c => Lens' c [CiteField]
 citeID :: Lens' Citation UID
 citeKind :: Lens' Citation CitationKind
 
@@ -6745,11 +6870,6 @@ sDash :: Sentence -> Sentence -> Sentence
 
 -- | Helper for wrapping <a>Sentence</a>s in parentheses.
 sParen :: Sentence -> Sentence
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <tt>Symbol</tt>.
-sdep :: Sentence -> [UID]
-shortdep :: Sentence -> [UID]
 class NounPhrase n
 
 -- | Retrieves singular form of term. Ex. "the quick brown fox".
@@ -7009,6 +7129,13 @@ shortname' :: Sentence -> ShortName
 -- | Pulls the short form (as a <a>Sentence</a>) out of a <a>ShortName</a>.
 getSentSN :: ShortName -> Sentence
 
+-- | A <a>ShortName</a> is the text to be displayed for a link.
+--   
+--   Used for referencing within a document that can include symbols and
+--   whatnot if required. Visible in the typeset documents (pdf).
+class HasShortName s
+shortname :: HasShortName s => s -> ShortName
+
 -- | Derivations are an ordered list of sentences and expressions. They are
 --   rendered in order as paragraphs and equation blocks to display the
 --   derivation.
@@ -7024,6 +7151,72 @@ mkDerivName :: Sentence -> [Sentence] -> Derivation
 
 -- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
 mkDerivNoHeader :: [Sentence] -> Derivation
+
+-- | Type that helps determine enumeration method. Can use either numbers,
+--   uppercase letters, or lowercase letters.
+data EnumType
+Numb :: EnumType
+Upper :: EnumType
+Lower :: EnumType
+
+-- | Type to help wrap a sentence with parenthesis or to add a period at
+--   the end.
+data WrapType
+Parens :: WrapType
+Period :: WrapType
+
+-- | Type to help separate words with commas or semicolons.
+data SepType
+Comma :: SepType
+SemiCol :: SepType
+
+-- | Type to help fold differently between listed items, or if there are
+--   options (ex. using "and" or "or" at the end of a list of words).
+data FoldType
+List :: FoldType
+Options :: FoldType
+
+-- | Helper for formatting a list of constraints.
+foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+
+-- | Creates a list of elements with "enumerators" in "wrappers" using
+--   foldlList.
+foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Creates a list of elements separated by a "separator", ending with
+--   "and" or "or".
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
+foldlSP :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
+foldlSP_ :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
+foldlSPCol :: [Sentence] -> Contents
+
+-- | Partial function application of <a>foldle</a> for sentences
+--   specifically. Folds with spaces and adds a period (".") at the end.
+foldlSent :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but does not add a period.
+foldlSent_ :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but ends with colon.
+foldlSentCol :: [Sentence] -> Sentence
+
+-- | Folds a list of elements separated by commas, including the last
+--   element.
+foldlsC :: [Sentence] -> Sentence
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
+--   13").
+foldNums :: String -> [Int] -> Sentence
+
+-- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
+--   "13"]).
+numList :: String -> [Int] -> [String]
 
 -- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
 --   and <a>Section</a>s which hold the contents of the document.
@@ -7226,6 +7419,229 @@ makeEqnRef' :: UID -> Reference
 --   <a>String</a>.
 makeURI' :: UID -> String -> ShortName -> Reference
 
+-- | Creates a bulleted list.
+enumBullet :: Reference -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumBullet</a> but unlabelled.
+enumBulletU :: [Sentence] -> Contents
+
+-- | Currently Unused. Creates a simple bulleted list that labels things
+--   with a title and number:
+--   
+--   <ul>
+--   <li>lb - Reference,</li>
+--   <li>s - start index for the enumeration,</li>
+--   <li>t - title of the list,</li>
+--   <li>l - list to be enumerated.</li>
+--   </ul>
+--   
+--   For example, if we want to create a list of data definitions, we could
+--   call the function as follows:
+--   
+--   <pre>
+--   enumSimple _ 2 (S "DD") [def1, def2, ...]
+--   </pre>
+--   
+--   And the resulting <a>LabelledContent</a> would be rendered as:
+--   
+--   <ul>
+--   <li>DD2: def1</li>
+--   <li>DD3: def2</li>
+--   <li>DD4: def3 ...</li>
+--   </ul>
+enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
+
+-- | Same as <a>enumSimple</a> but unlabelled.
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
+
+-- | Convenience function for transforming referable concepts into a
+--   bulleted list. Used in drasil-docLang in making the assumptions,
+--   goals, and requirements sections. Output is of the kind <tt>Concept
+--   Name: definition of concept</tt>.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+
+-- | Displays a given expression and attaches a <a>Reference</a> to it.
+lbldExpr :: ModelExpr -> Reference -> LabelledContent
+
+-- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
+--   <a>Reference</a>).
+unlbldExpr :: ModelExpr -> Contents
+
+-- | Output is of the form "<tt>reference - sentence</tt>".
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+
+-- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
+--   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
+definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
+
+-- | Same as <a>definedIn</a>, but allows for additional information to be
+--   appended to the <a>Sentence</a>.
+definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
+
+-- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
+--   <tt>reference</tt>" (no <a>HasSymbol</a>).
+definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Takes a <a>Symbol</a> and its <tt>Reference</tt> (does not append a
+--   period at the end!). Outputs as "<tt>symbol</tt> is defined in
+--   <tt>source</tt>".
+definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+
+-- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
+--   "expression (source)".
+eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
+
+-- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
+--   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
+--   <tt>symbol</tt>:".
+fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+
+-- | Wraps "from <tt>reference</tt>" in parentheses.
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Similar to <a>fromSource</a> but takes a list of references instead of
+--   one.
+fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
+
+-- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
+fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
+
+-- | Appends "following <tt>reference</tt>" to the end of a
+--   <a>Sentence</a>.
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+
+-- | Takes a list and a <a>Section</a>, then generates a list of that
+--   section's reference to match the length of the list.
+makeListRef :: [a] -> Section -> [Sentence]
+
+-- | Converts input to a <a>Sentence</a> and appends %.
+addPercent :: Show a => a -> Sentence
+
+-- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
+displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
+
+-- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
+displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
+
+-- | Prepends the word <a>Equation</a> to an <a>Int</a>.
+eqN :: Int -> Sentence
+
+-- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
+--   <a>Left</a> with error message if there is an invalid <a>Char</a> in
+--   <a>String</a>, else <a>Right</a> with <a>String</a>.
+checkValidStr :: String -> String -> Either String String
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using
+--   the Force F in...".
+getTandS :: Quantity a => a -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeChanged :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeExpanded :: Sentence -> Sentence -> Sentence
+
+-- | Helper functions for making likely change statements. Uses form
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
+maybeWOVerb :: Sentence -> Sentence -> Sentence
+
+-- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
+--   Showing the Connections Between <tt>contents</tt>".
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+
+-- | Takes a list of <a>Referable</a>s and <a>Symbol</a>s and outputs as a
+--   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
+substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
+
+-- | Extracts the typical uncertainty to be displayed from something that
+--   has an uncertainty.
+typUncr :: HasUncertainty c => c -> Sentence
+
+-- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
+--   <tt>chunkDefinition</tt>".
+underConsidertn :: ConceptChunk -> Sentence
+
+-- | Get a unit symbol if there is one.
+unwrap :: Maybe UnitDefn -> Sentence
+
+-- | Apply a binary function to the terms of two named ideas, instead of to
+--   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
+--   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+
+-- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
+bulletFlat :: [Sentence] -> ListType
+
+-- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
+--   The first argument is the headers of the <a>Nested</a> lists.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+
+-- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
+--   of reference as a <a>String</a> and a <a>Sentence</a> containing the
+--   full reference. Wraps the full reference in parenthesis.
+itemRefToSent :: String -> Sentence -> Sentence
+
+-- | Makes a traceability matrix from a list of row titles, a list of rows
+--   of "checked" columns, and a list of columns.
+makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+
+-- | Zip helper function enumerates abbreviations and zips it with list of
+--   <a>ItemType</a>:
+--   
+--   <ul>
+--   <li>s - the number from which the enumeration should start from
+--   (<a>Integer</a>),</li>
+--   <li>t - the title of the list (<a>Sentence</a>),</li>
+--   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
+--   </ul>
+mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
+
+-- | Helper for making a table from a columns.
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+
+-- | Converts lists of simple <a>ItemType</a>s into a list which may be
+--   used in <tt>Contents</tt> but is not directly referable.
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
+
+-- | Create a list in the pattern of "The __ are refined to the __". Note:
+--   Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+
+-- | Sorts a list of <tt>HasSymbols</tt> by <a>Symbol</a>.
+sortBySymbol :: HasSymbol a => [a] -> [a]
+
+-- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
+--   tuple.
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term -
+--   termDefinition</tt>".
+tAndDOnly :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (abbreviation) -
+--   termDefinition</tt>".
+tAndDWAcc :: Concept s => s -> ItemType
+
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (symbol) -
+--   termDefinition</tt>".
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+
+-- | Distributes a list of Sentences by prepending individual Sentences
+--   once to an existing list of Sentences.
+--   
+--   For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
+--   [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
+--   </pre>
+zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
+
 -- | The difference kinds of spaces that may exist. This type holds
 --   numerical spaces (such as the set of integers, rationals, etc.), a
 --   space for booleans, a space for characters, dimensional spaces
@@ -7394,429 +7810,3 @@ type ModelQDef = QDefinition ModelExpr
 
 -- | Commonly used type for polymorphic Exprs.
 type PExpr = forall r. (ExprC r, LiteralC r) => r
-
--- | Creates a bulleted list.
-enumBullet :: Reference -> [Sentence] -> LabelledContent
-
--- | Same as <a>enumBullet</a> but unlabelled.
-enumBulletU :: [Sentence] -> Contents
-
--- | Currently Unused. Creates a simple bulleted list that labels things
---   with a title and number:
---   
---   <ul>
---   <li>lb - Reference,</li>
---   <li>s - start index for the enumeration,</li>
---   <li>t - title of the list,</li>
---   <li>l - list to be enumerated.</li>
---   </ul>
---   
---   For example, if we want to create a list of data definitions, we could
---   call the function as follows:
---   
---   <pre>
---   enumSimple _ 2 (S "DD") [def1, def2, ...]
---   </pre>
---   
---   And the resulting <a>LabelledContent</a> would be rendered as:
---   
---   <ul>
---   <li>DD2: def1</li>
---   <li>DD3: def2</li>
---   <li>DD4: def3 ...</li>
---   </ul>
-enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
-
--- | Same as <a>enumSimple</a> but unlabelled.
-enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
-
--- | Convenience function for transforming referable concepts into a
---   bulleted list. Used in drasil-docLang in making the assumptions,
---   goals, and requirements sections. Output is of the kind <tt>Concept
---   Name: definition of concept</tt>.
-mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
-
--- | Displays a given expression and attaches a <a>Reference</a> to it.
-lbldExpr :: ModelExpr -> Reference -> LabelledContent
-
--- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
---   <a>Reference</a>).
-unlbldExpr :: ModelExpr -> Contents
-
--- | Type that helps determine enumeration method. Can use either numbers,
---   uppercase letters, or lowercase letters.
-data EnumType
-Numb :: EnumType
-Upper :: EnumType
-Lower :: EnumType
-
--- | Type to help wrap a sentence with parenthesis or to add a period at
---   the end.
-data WrapType
-Parens :: WrapType
-Period :: WrapType
-
--- | Type to help separate words with commas or semicolons.
-data SepType
-Comma :: SepType
-SemiCol :: SepType
-
--- | Type to help fold differently between listed items, or if there are
---   options (ex. using "and" or "or" at the end of a list of words).
-data FoldType
-List :: FoldType
-Options :: FoldType
-
--- | Helper for formatting a list of constraints.
-foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
-
--- | Creates a list of elements with "enumerators" in "wrappers" using
---   foldlList.
-foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-
--- | Creates a list of elements separated by a "separator", ending with
---   "and" or "or".
-foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
-
--- | Fold sentences then turns into content using <a>foldlSent</a>.
-foldlSP :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
-foldlSP_ :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
-foldlSPCol :: [Sentence] -> Contents
-
--- | Partial function application of <a>foldle</a> for sentences
---   specifically. Folds with spaces and adds a period (".") at the end.
-foldlSent :: [Sentence] -> Sentence
-
--- | <a>foldlSent</a> but does not add a period.
-foldlSent_ :: [Sentence] -> Sentence
-
--- | <a>foldlSent</a> but ends with colon.
-foldlSentCol :: [Sentence] -> Sentence
-
--- | Folds a list of elements separated by commas, including the last
---   element.
-foldlsC :: [Sentence] -> Sentence
-
--- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
---   13").
-foldNums :: String -> [Int] -> Sentence
-
--- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
---   "13"]).
-numList :: String -> [Int] -> [String]
-
--- | Output is of the form "<tt>reference - sentence</tt>".
-chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
-
--- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
---   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
-definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
-
--- | Same as <a>definedIn</a>, but allows for additional information to be
---   appended to the <a>Sentence</a>.
-definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
-
--- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
---   <tt>reference</tt>" (no <a>HasSymbol</a>).
-definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
-
--- | Takes a <tt>Symbol</tt> and its <tt>Reference</tt> (does not append a
---   period at the end!). Outputs as "<tt>symbol</tt> is defined in
---   <tt>source</tt>".
-definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
-
--- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
---   "expression (source)".
-eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
-
--- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
---   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
---   <tt>symbol</tt>:".
-fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
-
--- | Wraps "from <tt>reference</tt>" in parentheses.
-fromSource :: (Referable r, HasShortName r) => r -> Sentence
-
--- | Similar to <a>fromSource</a> but takes a list of references instead of
---   one.
-fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
-
--- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
-fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
-
--- | Appends "following <tt>reference</tt>" to the end of a
---   <a>Sentence</a>.
-follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
-
--- | Takes a list and a <a>Section</a>, then generates a list of that
---   section's reference to match the length of the list.
-makeListRef :: [a] -> Section -> [Sentence]
-
--- | Converts input to a <a>Sentence</a> and appends %.
-addPercent :: Show a => a -> Sentence
-
--- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
-displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-
--- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
-displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
-
--- | Prepends the word <a>Equation</a> to an <a>Int</a>.
-eqN :: Int -> Sentence
-
--- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
---   <a>Left</a> with error message if there is an invalid <a>Char</a> in
---   <a>String</a>, else <a>Right</a> with <a>String</a>.
-checkValidStr :: String -> String -> Either String String
-
--- | Used when you want to say a term followed by its symbol. ex. "...using
---   the Force F in...".
-getTandS :: Quantity a => a -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeChanged :: Sentence -> Sentence -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeExpanded :: Sentence -> Sentence -> Sentence
-
--- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
-maybeWOVerb :: Sentence -> Sentence -> Sentence
-
--- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
---   Showing the Connections Between <tt>contents</tt>".
-showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
-
--- | Takes a list of <a>Referable</a>s and <tt>Symbol</tt>s and outputs as
---   a Sentence "By substituting <tt>symbols</tt>, this can be written
---   as:".
-substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
-
--- | Extracts the typical uncertainty to be displayed from something that
---   has an uncertainty.
-typUncr :: HasUncertainty c => c -> Sentence
-
--- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
---   <tt>chunkDefinition</tt>".
-underConsidertn :: ConceptChunk -> Sentence
-
--- | Get a unit symbol if there is one.
-unwrap :: Maybe UnitDefn -> Sentence
-
--- | Apply a binary function to the terms of two named ideas, instead of to
---   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
---   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-
--- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
-bulletFlat :: [Sentence] -> ListType
-
--- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
---   The first argument is the headers of the <a>Nested</a> lists.
-bulletNested :: [Sentence] -> [ListType] -> ListType
-
--- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
---   of reference as a <a>String</a> and a <a>Sentence</a> containing the
---   full reference. Wraps the full reference in parenthesis.
-itemRefToSent :: String -> Sentence -> Sentence
-
--- | Makes a traceability matrix from a list of row titles, a list of rows
---   of "checked" columns, and a list of columns.
-makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
-
--- | Zip helper function enumerates abbreviations and zips it with list of
---   <a>ItemType</a>:
---   
---   <ul>
---   <li>s - the number from which the enumeration should start from
---   (<a>Integer</a>),</li>
---   <li>t - the title of the list (<a>Sentence</a>),</li>
---   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
---   </ul>
-mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-
--- | Helper for making a table from a columns.
-mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
-
--- | Converts lists of simple <a>ItemType</a>s into a list which may be
---   used in <tt>Contents</tt> but is not directly referable.
-noRefs :: [ItemType] -> [(ItemType, Maybe String)]
-
--- | Create a list in the pattern of "The __ are refined to the __". Note:
---   Order matters!
-refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-
--- | Sorts a list of <tt>HasSymbols</tt> by <tt>Symbol</tt>.
-sortBySymbol :: HasSymbol a => [a] -> [a]
-
--- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
---   tuple.
-sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term -
---   termDefinition</tt>".
-tAndDOnly :: Concept s => s -> ItemType
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term (abbreviation) -
---   termDefinition</tt>".
-tAndDWAcc :: Concept s => s -> ItemType
-
--- | Helpful combinators for making <a>Sentence</a>s into Terminologies
---   with Definitions. Returns of the form: "<tt>term (symbol) -
---   termDefinition</tt>".
-tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-
--- | Distributes a list of Sentences by prepending individual Sentences
---   once to an existing list of Sentences.
---   
---   For example:
---   
---   <pre>
---   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S "Hello"], [S "World"], [S "Hello", S "World"]]
---   [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
---   </pre>
-zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
-
-
--- | Defines various NounPhrase-level combinators. These hold more
---   information than those of the Sentence level but may not necessarily
---   have a conceptual link. See the <a>Wiki</a> for more information and
---   details about the naming process for combinators. A summary of the
---   function naming scheme is as follows:
---   
---   <ul>
---   <li>Combinators that conflict with haskell-native functions have an
---   underscore appended.</li>
---   <li>Default plural case for combinators will be first term singular,
---   second term plural.</li>
---   <li><tt>P</tt> and <tt>S</tt> denote the plural case of the combinator
---   when it does not follow the above default.</li>
---   <li><tt>Gen</tt> denotes the general function case.</li>
---   </ul>
---   
---   This module should be used as a qualified import (usually as
---   <tt>NP</tt>), as many function names clash with those in Concepts.hs
---   and Sentence.hs.
-module Utils.Drasil.NounPhrase
-
--- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
---   Plural case is <tt>(phraseNP t1) +:+ S s +:+ (pluralNP t2)</tt>.
-insertString :: String -> NP -> NP -> NP
-
--- | Helper function that prepends a <a>String</a> to a <a>NP</a>.
-prependString :: String -> NP -> NP
-
--- | Helper function that places a <a>Sentence</a> in between two
---   <a>NP</a>s. Plural case is <tt>(phraseNP t1) +:+ s +:+ (pluralNP
---   t2)</tt>.
-insertSent :: Sentence -> NP -> NP -> NP
-
--- | Helper function that prepends a <a>Sentence</a> to a <a>NP</a>.
-prependSent :: Sentence -> NP -> NP
-
--- | Prepends "the" to a <a>NP</a>.
-the :: NP -> NP
-
--- | Similar to <a>the</a>, but accepts a function that determines the
---   plural case.
-theGen :: (NP -> Sentence) -> NP -> NP
-
--- | Prepends "a" to a <a>NP</a>.
-a_ :: NP -> NP
-
--- | Similar to <tt>a</tt>, but accepts a function that determines the
---   plural case.
-a_Gen :: (NP -> Sentence) -> NP -> NP
-
--- | Inserts "and" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "and" +:+ (pluralNP t2)</tt>.
-and_ :: NP -> NP -> NP
-
--- | Same as <a>and_</a>, but plural case is now <tt>(pluralNP t1)
---   <a>and_</a> (phraseNP t2)</tt>.
-and_PS :: NP -> NP -> NP
-
--- | Same as <a>and_</a>, but takes two functions for the plural case.
-and_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Same as <a>and_</a>, but takes two functions for the singular case and
---   two for the plural case.
-and_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "and the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "and the" +:+ (pluralNP t2)</tt>.
-andThe :: NP -> NP -> NP
-
--- | Inserts "of the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
-ofThe :: NP -> NP -> NP
-
--- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
---   <a>ofThe</a> (phraseNP t2)</tt>.
-ofThePS :: NP -> NP -> NP
-
--- | Similar to <a>ofThe</a>, but accepts two functions for the plural
---   case.
-ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "in the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "in the" +:+ (pluralNP t2)</tt>.
-inThe :: NP -> NP -> NP
-
--- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
---   <a>inThe</a> (phraseNP t2)</tt>.
-inThePS :: NP -> NP -> NP
-
--- | Similar to <a>ofThe</a>, but accepts two functions for the plural
---   case.
-inTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Prepends "the" and inserts "of the". Plural case is <tt>"the" +:+
---   (phraseNP t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
-the_ofThe :: NP -> NP -> NP
-
--- | Similar to <a>the_ofThe</a>, but the plural case is now <tt> S "the"
---   +:+ (pluralNP t1) <a>ofThe</a> (phraseNP t2)</tt>.
-the_ofThePS :: NP -> NP -> NP
-
--- | Similar to <tt>the_ofThe'</tt>, but takes two functions for the plural
---   case.
-the_ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "for" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "for" +:+ (pluralNP t2)</tt>.
-for :: NP -> NP -> NP
-
--- | Same as <a>for</a>, but plural case is now <tt>(pluralNP t1)
---   <a>for</a> (phraseNP t2)</tt>.
-forPS :: NP -> NP -> NP
-
--- | Same as <tt>for'</tt>, but takes two functions for the plural case.
-forGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "of" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "of" +:+ (pluralNP t2)</tt>.
-of_ :: NP -> NP -> NP
-
--- | Same as <a>of_</a>, but plural case is now <tt>(pluralNP t1)
---   <a>of_</a> (phraseNP t2)</tt>.
-of_PS :: NP -> NP -> NP
-
--- | Same as <a>of_</a>, but takes two functions for the plural case.
-of_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Same as <a>of_</a>, but takes two functions for the singular case and
---   two for the plural case.
-of_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "with" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "with" +:+ (pluralNP t2)</tt>.
-with :: NP -> NP -> NP

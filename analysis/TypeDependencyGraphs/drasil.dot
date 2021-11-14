@@ -18,6 +18,8 @@ digraph alltypes {
 		ConceptInstance -> ShortName;
 		}
 	}
+	subgraph namedcombinators {
+	}
 	subgraph citation {
 		subgraph citation{
 		Citation	[shape=oval, color=cyan3, label="Citation"];
@@ -151,14 +153,6 @@ digraph alltypes {
 		UnitaryChunk -> UnitDefn;
 		}
 	}
-	subgraph citations {
-	}
-	subgraph core {
-	}
-	subgraph core2 {
-	}
-	subgraph document {
-	}
 	subgraph citation {
 		subgraph citefield{
 		CiteField	[shape=oval, color=darkviolet, label="CiteField"];
@@ -182,6 +176,10 @@ digraph alltypes {
 		}
 	}
 	subgraph sentence {
+	}
+	subgraph combinators {
+	}
+	subgraph contents {
 	}
 	subgraph core {
 		subgraph labelledcontent{
@@ -460,6 +458,8 @@ digraph alltypes {
 	}
 	subgraph precedence {
 	}
+	subgraph combinators {
+	}
 	subgraph core {
 		subgraph capitalizationrule{
 		CapitalizationRule	[shape=oval, color=darkviolet, label="CapitalizationRule"];
@@ -480,6 +480,23 @@ digraph alltypes {
 	subgraph combinators {
 	}
 	subgraph extract {
+	}
+	subgraph fold {
+		subgraph enumtype{
+		EnumType	[shape=oval, color=darkviolet, label="EnumType"];
+		}
+		subgraph wraptype{
+		WrapType	[shape=oval, color=darkviolet, label="WrapType"];
+		}
+		subgraph septype{
+		SepType	[shape=oval, color=darkviolet, label="SepType"];
+		}
+		subgraph foldtype{
+		FoldType	[shape=oval, color=darkviolet, label="FoldType"];
+		FoldType -> SepType;
+		FoldType -> FoldType;
+		FoldType -> Sentence;
+		}
 	}
 	subgraph helpers {
 	}
@@ -532,13 +549,6 @@ digraph alltypes {
 		Host -> String;
 		}
 	}
-	subgraph core {
-		subgraph uncertainty{
-		Uncertainty	[shape=oval, color=cyan3, label="Uncertainty"];
-		Uncertainty -> MaybeDouble;
-		Uncertainty -> MaybeInt;
-		}
-	}
 	subgraph clasess {
 		subgraph conceptc{
 		Conceptc	[shape=oval, color=red2, label="Conceptc"];
@@ -574,7 +584,6 @@ digraph alltypes {
 		subgraph derivation{
 		Derivation	[shape=oval, color=darkviolet, label="Derivation"];
 		Derivation -> Sentence;
-		Derivation -> Derivation;
 		}
 	}
 	subgraph development {
@@ -765,6 +774,11 @@ digraph alltypes {
 		}
 	}
 	subgraph uncertainty {
+		subgraph uncertainty{
+		Uncertainty	[shape=oval, color=cyan3, label="Uncertainty"];
+		Uncertainty -> MaybeDouble;
+		Uncertainty -> MaybeInt;
+		}
 	}
 	subgraph unicode {
 		subgraph special{
@@ -789,31 +803,6 @@ digraph alltypes {
 		}
 	}
 	subgraph drails {
-	}
-	subgraph concepts {
-	}
-	subgraph contents {
-	}
-	subgraph fold {
-		subgraph enumtype{
-		EnumType	[shape=oval, color=darkviolet, label="EnumType"];
-		}
-		subgraph wraptype{
-		WrapType	[shape=oval, color=darkviolet, label="WrapType"];
-		}
-		subgraph septype{
-		SepType	[shape=oval, color=darkviolet, label="SepType"];
-		}
-		subgraph foldtype{
-		FoldType	[shape=oval, color=darkviolet, label="FoldType"];
-		FoldType -> SepType;
-		FoldType -> FoldType;
-		FoldType -> Sentence;
-		}
-	}
-	subgraph mics {
-	}
-	subgraph nounpraehs {
 	}
 	subgraph domains {
 	}

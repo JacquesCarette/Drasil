@@ -43,6 +43,15 @@ nubSort :: Ord a => [a] -> [a]
 --   [a,d,b,e,c,f]</tt>.
 weave :: [[a]] -> [a]
 
+-- | Fold helper function that applies f to all but the last element,
+--   applies g to last element and the accumulator.
+foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
+
+-- | Fold helper function that applies f to all but last element, applies g
+--   to last element and accumulator without starting value, does not work
+--   for empty list.
+foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
+
 -- | Replace occurences of special characters
 --   (<tt>",~`-=!</tt>#$%^&amp;*+[]\;'/|"&lt;&gt;? "<tt>) with underscores
 --   (</tt>"_"@).

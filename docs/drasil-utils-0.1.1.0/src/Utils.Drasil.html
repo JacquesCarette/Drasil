@@ -12,60 +12,14 @@
 </span><span id="line-12"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Lists</span></span><span>
 </span><span id="line-13"></span><span>  </span><span class="annot"><span class="hs-comment">-- | From &quot;Utils.Drasil.Lists&quot;. General functions involving lists.</span></span><span>
 </span><span id="line-14"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier">replaceAll</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html#subsetOf"><span class="hs-identifier">subsetOf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html#nubSort"><span class="hs-identifier">nubSort</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html#weave"><span class="hs-identifier">weave</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-15"></span><span>
-</span><span id="line-16"></span><span>  </span><span class="annot"><span class="hs-comment">-- ** Strings</span></span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier">toPlainName</span></a></span><span>
-</span><span id="line-18"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html"><span class="hs-identifier">Utils.Drasil.Document</span></a></span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.English.html"><span class="hs-identifier">Utils.Drasil.English</span></a></span><span>
-</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html"><span class="hs-identifier">Utils.Drasil.Lists</span></a></span><span>
-</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Strings.html"><span class="hs-identifier">Utils.Drasil.Strings</span></a></span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="hs-comment">{-
-
-
-  -- * Content
-  -- | From &quot;Utils.Drasil.Contents&quot;.
-  enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD,
-  lbldExpr, unlbldExpr,
-
-  -- * Fold-type utilities.
-  -- | From &quot;Utils.Drasil.Fold&quot;. Defines many general fold functions
-  -- for use with Drasil-related types.
-
-  -- ** Folding Options as Types
-  EnumType(..), WrapType(..), SepType(..), FoldType(..),
-
-  -- ** Folding functions
-  -- *** Expression-related
-  foldConstraints,
-
-  -- *** Sentence-related
-  foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
-  foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
-  
-  -- * Misc. utilities
-  -- | From &quot;Utils.Drasil.Misc&quot;. General sorting functions, useful combinators,
-  -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
-  
-  -- ** Reference-related functions
-  -- | Attach a 'Reference' and a 'Sentence' in different ways.
-  chgsStart, definedIn, definedIn', definedIn'', definedIn''',
-  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows,
-  makeListRef,
-
-  -- ** Sentence-related functions
-  -- | See Reference-related functions as well.
-  addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet,
-  eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded,
-  maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  unwrap, fterms,
-
-  -- ** List-related functions
-  bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
-  tAndDOnly, tAndDWAcc, tAndDWSym,
-  weave, zipSentList,
--}</span><span>
-</span><span id="line-71"></span></pre></body></html>
+</span><span id="line-15"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Lists.html#foldle"><span class="hs-identifier">foldle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html#foldle1"><span class="hs-identifier">foldle1</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="hs-comment">-- ** Strings</span></span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier">toPlainName</span></a></span><span>
+</span><span id="line-19"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html"><span class="hs-identifier">Utils.Drasil.Document</span></a></span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.English.html"><span class="hs-identifier">Utils.Drasil.English</span></a></span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Lists.html"><span class="hs-identifier">Utils.Drasil.Lists</span></a></span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.Drasil.Strings.html"><span class="hs-identifier">Utils.Drasil.Strings</span></a></span><span>
+</span><span id="line-25"></span></pre></body></html>

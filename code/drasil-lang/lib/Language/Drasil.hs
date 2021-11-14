@@ -308,8 +308,7 @@ import Language.Drasil.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)
 import Language.Drasil.Classes.Core (HasSymbol(symbol),
   HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
+import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ),

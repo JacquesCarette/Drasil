@@ -33,33 +33,18 @@ module Language.Drasil.Classes (
 -- also helps with cycles...
 import Language.Drasil.Classes.Core (HasSymbol)
 
+import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
-import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (UID, HasUID)
+import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens')
-
--- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
--- | A NamedIdea is a 'term' that we've identified (has a 'UID') as 
--- being worthy of naming.
-class HasUID c => NamedIdea c where
-  -- | Lens to the term (a noun phrase).
-  term :: Lens' c NP
-
--- | An 'Idea' is the combination of a 'NamedIdea' and a 'CommonIdea'.
--- In other words, it /may/ have an acronym/abbreviation.
-class NamedIdea c => Idea c where
-  -- | Gets the acronym/abbreviation.
-  getA :: c -> Maybe String
-  --Get Abbreviation/Acronym? These might need to be separated 
-  --depending on contexts, but for now I don't see a problem with it.
 
 -- TODO: I was thinking of splitting QDefinitions into Definitions with 2 type variables
 --       Can we change this name from "Definition" to anything else? "NaturalDefinition"?

@@ -45,8 +45,8 @@ motionContextP2
        S "These equations can be applied for both the", phrase verticalMotion `S.andThe`
        phrase horizontalMotion :+: S ", as follows:"]
 
-horMotion, verMotion, summary :: Section
-horMotion = NB.hormotion 1 [intro, equations, concl]
+horMotion, verMotion, summary :: [Contents]
+horMotion = [intro, equations, concl]
   where intro = foldlSP_ [
                   S "For", phrase projMotion +:+ S "the", phrase acceleration, 
                   S "in the horizontal direction is and equal to zero" +:+. 
@@ -58,7 +58,7 @@ horMotion = NB.hormotion 1 [intro, equations, concl]
                   S "always remains constant during" +:+. phrase motion,
                   S "In addition to knowing this, we have one more equation"]
                 
-verMotion = NB.vermotion 1 [intro, equations, concl] 
+verMotion = [intro, equations, concl] 
   where intro = foldlSP_ [
                   S "Since the positive", phrase yAxis, S "is directed upward, the", phrase acceleration,
                   S "in the vertical direction is" +:+. eS (sy QP.yAccel $= neg (sy QP.gravitationalAccel)), motionSent]
@@ -68,7 +68,7 @@ verMotion = NB.vermotion 1 [intro, equations, concl]
                   phrase time +:+ eS (sy QP.time), S "between the first two equations, and therefore only ",
                   S "two of the above three equations are independent of one another"]
 
-summary = NB.summary 1 [smmryCon]
+summary = [smmryCon]
   where smmryCon = foldlSP [
                   S "In addition to knowing that the horizontal component of", phrase velocity,
                   S "is constant [Hibbler doesn't say this, but it seems necessary for completeness],",

@@ -16,7 +16,6 @@ import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.UID (HasUID(..))
 import Control.Lens ((^.), makeLenses, Lens')
 
-
 -- | For holding a 'Reference' that is decorated with extra information (ex. page numbers, equation sources, etc.).
 data DecRef = DR {
   _rf     :: Reference,

@@ -7,12 +7,16 @@ module Language.Drasil.Space (
   Space(..), 
   RealInterval(..), Inclusive(..),
   DomainDesc(..), RTopology(..), DiscreteDomainDesc, ContinuousDomainDesc,
+  -- * Class
+  HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction) where
+  getActorName, getInnerSpace, mkFunction
+) where
 
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil.Symbol (Symbol)
+import Control.Lens (Lens')
 
 -- FIXME: These need to be spaces and not just types.
 
@@ -37,6 +41,11 @@ data Space =
   | Function (NE.NonEmpty Primitive) Primitive
   | Void
   deriving (Eq, Show)
+
+-- | HasSpace is anything which has a 'Space'.
+class HasSpace c where
+  -- | Provides a 'Lens' to the 'Space'.
+  typ      :: Lens' c Space
 
 type Primitive = Space
 

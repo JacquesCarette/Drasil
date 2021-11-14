@@ -9,12 +9,12 @@ module Language.Drasil.Chunk.DefinedQuantity (
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
-  Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
+  Definition(defn), ConceptDomain(cdom), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
-import Language.Drasil.Space (Space)
+import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (HasUID(uid))
 

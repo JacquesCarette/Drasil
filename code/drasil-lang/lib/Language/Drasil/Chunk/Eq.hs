@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDe
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
+  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity,
   ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
@@ -26,7 +26,7 @@ import Language.Drasil.Expr.Class (ExprC(apply, sy))
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Space (mkFunction, Space)
+import Language.Drasil.Space (mkFunction, Space, Space, HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (UID, HasUID(..))

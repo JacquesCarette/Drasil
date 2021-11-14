@@ -10,12 +10,12 @@ module Language.Drasil.Chunk.Quantity (
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  HasSpace(typ), Quantity, Express(..))
+  Quantity, Express(..))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, mkIdea, nc, ncUID, mkIdeaUID)
 import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Space (Space)
+import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Symbol
 import Language.Drasil.UID (UID, HasUID(..))

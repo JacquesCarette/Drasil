@@ -83,6 +83,7 @@ module Language.Drasil (
   , nw -- bad name (historical)
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdea, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
+
   -- *** Concepts
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, CommonConcept, ConceptInstance, sDom
@@ -90,6 +91,7 @@ module Language.Drasil (
   , dcc, dcc', dccWDS, dccWDS', cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC, addRelToCC
+
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Quantity
   , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar', implVarUID, implVarUID'
@@ -115,6 +117,7 @@ module Language.Drasil (
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
+
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
   , ConstraintReason(..), Constraint(..), ConstraintE
@@ -129,6 +132,7 @@ module Language.Drasil (
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
+
   -- ** Referencing
   -- Language.Drasil.Label.Type
   , getAdd, prepend
@@ -137,6 +141,7 @@ module Language.Drasil (
   , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
   -- Language.Drasil.Decorated Reference
   , DecRef(refInfo), dRefInfo, dRef, HasDecRef(..)
+
   -- *** Citations
   -- Language.Drasil.Chunk.Citation
   , EntryID, Citation, BibRef
@@ -228,6 +233,29 @@ module Language.Drasil (
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD
   , lbldExpr, unlbldExpr
 
+  -- * Document combinators
+  -- | From "Language.Drasil.Document.Combinators". General sorting functions, useful combinators,
+  -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
+  
+  -- ** Reference-related functions
+  -- | Attach a 'Reference' and a 'Sentence' in different ways.
+  , chgsStart, definedIn, definedIn', definedIn'', definedIn'''
+  , eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows
+  , makeListRef
+
+  -- ** Sentence-related functions
+  -- | See Reference-related functions as well.
+  , addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet
+  , eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded
+  , maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn
+  , unwrap, fterms
+
+  -- ** List-related functions
+  , bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList
+  , mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple
+  , tAndDOnly, tAndDWAcc, tAndDWSym
+  , zipSentList
+
   -- * Symbols, Stages, Spaces
   -- | Used for rendering mathematical symbols in Drasil.
 
@@ -251,40 +279,11 @@ module Language.Drasil (
 
   -- * Type Synonyms
   , ConstQDef, SimpleQDef, ModelQDef
-  , PExpr,
-
-
-  -- TODO: START: REMOVE ALL OF THE BELOW
-
-  -- * Misc. utilities
-  -- | From "Utils.Drasil.Misc". General sorting functions, useful combinators,
-  -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
-  
-  -- ** Reference-related functions
-  -- | Attach a 'Reference' and a 'Sentence' in different ways.
-  chgsStart, definedIn, definedIn', definedIn'', definedIn''',
-  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows,
-  makeListRef,
-
-  -- ** Sentence-related functions
-  -- | See Reference-related functions as well.
-  addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet,
-  eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded,
-  maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  unwrap, fterms,
-
-  -- ** List-related functions
-  bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
-  tAndDOnly, tAndDWAcc, tAndDWSym,
-  zipSentList,
-
-  -- TODO: END
+  , PExpr
 ) where
 
-import Utils.Drasil.Misc
-
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
+
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2)
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
@@ -303,6 +302,7 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
+import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)

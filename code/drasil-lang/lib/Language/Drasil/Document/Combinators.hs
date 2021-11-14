@@ -1,6 +1,6 @@
 {-# Language PostfixOperators #-}
 -- | Miscellaneous utility functions for use throughout Drasil.
-module Utils.Drasil.Misc (
+module Language.Drasil.Document.Combinators (
   -- * Reference-related Functions
   -- | Attach a 'Reference' and a 'Sentence' in different ways.
   chgsStart, definedIn, definedIn', definedIn'', definedIn''',

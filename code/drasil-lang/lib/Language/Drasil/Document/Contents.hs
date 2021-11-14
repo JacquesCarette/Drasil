@@ -23,7 +23,7 @@ import Language.Drasil.Document.Core
 import Language.Drasil.ModelExpr.Lang ( ModelExpr )
 import Language.Drasil.Reference ( Reference )
 import Language.Drasil.Sentence ( Sentence )
-import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
+import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
 
 import Control.Lens ((^.))
 

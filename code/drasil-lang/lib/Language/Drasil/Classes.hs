@@ -20,8 +20,6 @@ module Language.Drasil.Classes (
     -- the unsorted rest
   , IsUnit(udefn, getUnits)
   , UnitEq(uniteq)
-    -- ** References
-  , HasReference(getReferences)
     -- ** Expr and expressions
   , Express(express)
   , HasDerivation(derivations)
@@ -38,7 +36,6 @@ import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
-import Language.Drasil.Reference (Reference)
 import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
@@ -73,11 +70,6 @@ class ConceptDomain c where
 type Concept c = (Idea c, Definition c, ConceptDomain c)
 -- TODO: Would the below make this a bit better to work with?
 --        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
-
--- | A class that contains a list of 'Reference's.
-class HasReference c where
-  -- | Provides a 'Lens' to the 'Reference's.
-  getReferences :: Lens' c [Reference]
 
 -- | A class that might have a 'Derivation'.
 class HasDerivation c where

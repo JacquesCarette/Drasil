@@ -3,7 +3,8 @@ module Drasil.DocumentLanguage.Notebook.NBDecl where
 
 import qualified Drasil.DocumentLanguage.Notebook.Core as NB (ApndxSec(..), NBDesc, DocSection(..), 
   IntrodSec(..), InPurposeSub(..), BodySec(..), SmmrySec(..),
-  ReviewSub(..), MainIdeaSub(..), MethsAnlsSub(..), ExampleSub(..))
+  ReviewSub(..), MainIdeaSub(..), SupportSS1(..), SupportSS2(..), SupportSS3(..),
+  MethsAnlsSub(..), ExampleSub(..))
 
 import Database.Drasil (SystemInformation)
 
@@ -18,6 +19,9 @@ data NbSection = IntrodSec NB.IntrodSec
                 | BodySec NB.BodySec
                 | ReviewSub NB.ReviewSub
                 | MainIdeaSub NB.MainIdeaSub
+                | SupportSS1 NB.SupportSS1
+                | SupportSS2 NB.SupportSS2
+                | SupportSS3 NB.SupportSS3
                 | MethsAnlsSub NB.MethsAnlsSub
                 | ExampleSub NB.ExampleSub
                 | SmmrySec NB.SmmrySec
@@ -35,6 +39,9 @@ mkNBDesc _ = map sec where
   sec (BodySec bs)      = NB.BodySec bs  
   sec (ReviewSub r)     = NB.ReviewSub r
   sec (MainIdeaSub mi)  = NB.MainIdeaSub mi
+  sec (SupportSS1 ss1)  = NB.SupportSS1 ss1 
+  sec (SupportSS2 ss2)  = NB.SupportSS2 ss2  
+  sec (SupportSS3 ss3)  = NB.SupportSS3 ss3
   sec (MethsAnlsSub ma) = NB.MethsAnlsSub ma 
   sec (ExampleSub e)    = NB.ExampleSub e  
   sec (SmmrySec ss)     = NB.SmmrySec ss

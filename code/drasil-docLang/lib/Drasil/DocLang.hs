@@ -24,10 +24,12 @@ module Drasil.DocLang (
   -- *** Types
   -- Drasil.DocumentLanguage.Notebook.NBDecl
   NBDecl, NbSection(BibSec, IntrodSec, BodySec, 
-  ReviewSub, MainIdeaSub, MethsAnlsSub, ExampleSub, ApndxSec, SmmrySec),
+  ReviewSub, MainIdeaSub, SupportSS1, SupportSS2, SupportSS3,
+  MethsAnlsSub, ExampleSub, ApndxSec, SmmrySec),
   -- Drasil.DocumentLanguage.Notebook.Core
   IntrodSec(..), InPurposeSub(..), BodySec(..), 
-  ReviewSub(..), MainIdeaSub(..), MethsAnlsSub(..), ExampleSub(..), ApndxSec(..), SmmrySec(..),
+  ReviewSub(..), MainIdeaSub(..), SupportSS1(..), SupportSS2(..), SupportSS3(..),
+  MethsAnlsSub(..), ExampleSub(..), ApndxSec(..), SmmrySec(..),
   -- *** Functions
   -- Drasil.DocumentLanguage.Notebook.DocumentLanguage
   mkNb,
@@ -80,10 +82,11 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
 import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), InPurposeSub(..), BodySec(..), 
-  ReviewSub(..), MainIdeaSub(..), MethsAnlsSub(..), ExampleSub(..), ApndxSec(..), SmmrySec(..))
+  ReviewSub(..), MainIdeaSub(..),  SupportSS1(..), SupportSS2(..), SupportSS3(..),
+  MethsAnlsSub(..), ExampleSub(..), ApndxSec(..), SmmrySec(..))
 import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)
 import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(BibSec, IntrodSec, BodySec, 
-  ReviewSub, MainIdeaSub, MethsAnlsSub, ExampleSub, ApndxSec, SmmrySec))
+  ReviewSub, MainIdeaSub, SupportSS1, SupportSS2, SupportSS3, MethsAnlsSub, ExampleSub, ApndxSec, SmmrySec))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 --import Drasil.DocumentLanguage.TraceabilityMatrix

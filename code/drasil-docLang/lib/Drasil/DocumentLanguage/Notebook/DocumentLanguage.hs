@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.Notebook.DocumentLanguage(mkNb) where
 import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, mkNBDesc)
 import Drasil.DocumentLanguage.Notebook.Core (ApndxSec(..), NBDesc, DocSection(..), 
   IntrodSec(..), InPurposeSub(..), BodySec(..), ReviewSub(..), MainIdeaSub(..),
-  MethsAnlsSub(..), ExampleSub(..), SmmrySec(..))
+  SupportSS1(..), SupportSS2(..), SupportSS3(..), MethsAnlsSub(..), ExampleSub(..), SmmrySec(..))
 
 import Language.Drasil
 
@@ -14,7 +14,8 @@ import Database.Drasil(SystemInformation(SI), _authors, _kind, _sys, citeDB)
 
 import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summary)
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)
-import qualified Drasil.NBSections.Body as Body (reviewSec, mainIdeaSec, mthdAndanls, exampleSec)
+import qualified Drasil.NBSections.Body as Body (reviewSec, mainIdeaSec, supportSS1,
+  supportSS2, supportSS3, mthdAndanls, exampleSec)
 
 -- | Creates a notebook from a document description and system information.
 mkNb :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
@@ -34,6 +35,9 @@ mkSections si = map doit
     doit (BodySec bs)        = mkBodySec bs
     doit (ReviewSub rs)      = mkReviewSub rs
     doit (MainIdeaSub mis)   = mkMainIdeaSub mis
+    doit (SupportSS1 ss1)    = mkSupportSS1 ss1
+    doit (SupportSS2 ss2)    = mkSupportSS2 ss2
+    doit (SupportSS3 ss3)    = mkSupportSS3 ss3
     doit (MethsAnlsSub mas)  = mkMethAnlSub mas   
     doit (ExampleSub es)     = mkExpSub es  
     doit (SmmrySec ss)       = mkSmmrySec ss
@@ -61,6 +65,15 @@ mkReviewSub (ReviewProg cntnts) = Body.reviewSec cntnts
 
 mkMainIdeaSub :: MainIdeaSub -> Section
 mkMainIdeaSub (MainIdeaProg cntnts) = Body.mainIdeaSec cntnts
+
+mkSupportSS1 :: SupportSS1 -> Section
+mkSupportSS1 (SupportSS1Prog cntnts) = Body.supportSS1 cntnts
+
+mkSupportSS2 :: SupportSS2 -> Section
+mkSupportSS2 (SupportSS2Prog cntnts) = Body.supportSS2 cntnts   
+
+mkSupportSS3 :: SupportSS3 -> Section
+mkSupportSS3 (SupportSS3Prog cntnts) = Body.supportSS3 cntnts
 
 mkMethAnlSub :: MethsAnlsSub -> Section
 mkMethAnlSub (MethsAnlsProg cntnts) = Body.mthdAndanls cntnts

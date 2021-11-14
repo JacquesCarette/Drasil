@@ -3,7 +3,7 @@ module Drasil.GlassBR.Unitals where --whole file is used
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Prelude hiding (log)
 

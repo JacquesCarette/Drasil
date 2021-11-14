@@ -4,8 +4,8 @@ module Data.Drasil.Concepts.Physics where
 --  up with a better one.
 import Language.Drasil hiding (space)
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Utils.Drasil.NounPhrase as NP
-import Utils.Drasil.Concepts
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)

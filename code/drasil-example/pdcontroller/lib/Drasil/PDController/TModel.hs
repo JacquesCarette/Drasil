@@ -9,7 +9,7 @@ import Drasil.PDController.References
 import Language.Drasil
 import qualified Language.Drasil as DrasilLang
 import Theory.Drasil (TheoryModel, tm, othModel')
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Citations(laplaceWiki)
 import Drasil.PDController.Unitals

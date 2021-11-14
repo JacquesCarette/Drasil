@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Unitals where
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..), Decoration(Magnitude))
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)

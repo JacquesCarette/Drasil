@@ -5,7 +5,7 @@ import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
-import Utils.Drasil.Concepts (the)
+import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)

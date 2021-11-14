@@ -4,7 +4,7 @@ import Data.Drasil.Citations (smithLai2005)
 
 import Drasil.PDController.Concepts
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence

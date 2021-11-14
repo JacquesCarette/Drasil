@@ -1,7 +1,7 @@
 module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
 
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.DocLang (mkInputPropsTable)

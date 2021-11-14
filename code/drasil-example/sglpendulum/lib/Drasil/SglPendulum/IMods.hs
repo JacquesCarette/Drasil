@@ -6,9 +6,9 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil
 import Utils.Drasil (weave)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Utils.Drasil.NounPhrase as NP
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Data.Drasil.Quantities.Physics (gravitationalAccel,
          angularAccel, momentOfInertia,
          time, angularDisplacement, angularFrequency, torque, angularDisplacement, time)

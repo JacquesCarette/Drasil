@@ -20,7 +20,7 @@ import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, 
 import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, dataDefnTable,
   insmodelTable, theoryModelTable)
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
 generateTraceTable :: SystemInformation -> LabelledContent

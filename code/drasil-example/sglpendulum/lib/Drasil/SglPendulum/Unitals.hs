@@ -2,8 +2,8 @@ module Drasil.SglPendulum.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, degree, radian)

@@ -4,7 +4,7 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
 import Language.Drasil
 import Utils.Drasil (weave)
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)

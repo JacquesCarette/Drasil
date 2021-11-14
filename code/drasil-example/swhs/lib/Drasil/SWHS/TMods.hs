@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 import Theory.Drasil (ConstraintSet, mkConstraintSet,
   TheoryModel, tm, equationalModel', equationalConstraints',
   ModelKind, equationalModel)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (system)

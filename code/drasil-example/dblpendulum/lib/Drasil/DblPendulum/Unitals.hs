@@ -3,7 +3,7 @@ module Drasil.DblPendulum.Unitals where
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)

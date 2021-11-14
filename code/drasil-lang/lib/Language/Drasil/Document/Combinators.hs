@@ -1,6 +1,6 @@
 {-# Language PostfixOperators #-}
 -- | Miscellaneous utility functions for use throughout Drasil.
-module Utils.Drasil.Misc (
+module Language.Drasil.Document.Combinators (
   -- * Reference-related Functions
   -- | Attach a 'Reference' and a 'Sentence' in different ways.
   chgsStart, definedIn, definedIn', definedIn'', definedIn''',
@@ -17,20 +17,18 @@ module Utils.Drasil.Misc (
   mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
   tAndDOnly, tAndDWAcc, tAndDWSym,
   zipSentList
-  ) where
+) where
 
 import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
 import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
 import Language.Drasil.Chunk.Unital ( UnitalChunk )
 import Language.Drasil.Classes
     ( HasUnitSymbol(usymb),
-      HasUncertainty,
       Quantity,
       Concept,
       Definition(defn),
       NamedIdea(..) )
-import Language.Drasil.Classes.Core ( Referable, HasSymbol )
-import Language.Drasil.Classes.Core2 ( HasShortName )
+import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Development.Sentence
     ( short, atStart, titleize, phrase, plural )
 import Language.Drasil.Document ( Section )
@@ -55,11 +53,12 @@ import Language.Drasil.Sentence
       capSent )
 import Language.Drasil.Space ( Space(DiscreteD, DiscreteS) )
 import Language.Drasil.Symbol.Helpers ( eqSymb )
-import Language.Drasil.Uncertainty ( uncVal, uncPrec )
-import Language.Drasil.Symbol ( compsy )
-import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
+import Language.Drasil.Uncertainty
+import Language.Drasil.Symbol
+import Language.Drasil.Sentence.Fold
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 import Language.Drasil.UID ( HasUID )
+import Language.Drasil.Label.Type
 
 import Control.Lens ((^.))
 
@@ -233,10 +232,12 @@ maybeExpanded a = likelyFrame a (S "expanded")
 -- Returns of the form: "@term (abbreviation) - termDefinition@".
 tAndDWAcc :: Concept s => s -> ItemType
 tAndDWAcc temp = Flat $ atStart temp +:+. (sParen (short temp) `sDash` capSent (temp ^. defn))
+
 -- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
 -- Returns of the form: "@term (symbol) - termDefinition@".
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ atStart tD +:+. (sParen (ch sym) `sDash` capSent (tD ^. defn))
+
 -- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
 -- Returns of the form: "@term - termDefinition@".
 tAndDOnly :: Concept s => s -> ItemType

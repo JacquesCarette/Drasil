@@ -5,11 +5,10 @@ module Language.Drasil.Document.Core where
 import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.UID (HasUID(..))
-import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd),
-  Referable(refAdd, renderRef))
-import Language.Drasil.Classes.Core2 (HasShortName(shortname))
+import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Label.Type (LblType(RP), IRefProg, prepend, getAdd)
+import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
+  LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
 

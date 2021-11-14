@@ -3,7 +3,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
 import Utils.Drasil (weave)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens ((^.))
 

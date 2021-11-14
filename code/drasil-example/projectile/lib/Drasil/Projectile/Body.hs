@@ -2,8 +2,8 @@ module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI) w
 
 import Language.Drasil
 import Drasil.SRSDocument
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)

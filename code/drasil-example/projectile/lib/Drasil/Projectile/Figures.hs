@@ -1,7 +1,7 @@
 module Drasil.Projectile.Figures (figLaunch) where
 
 import Language.Drasil
-import Utils.Drasil.Concepts (the)
+import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 
 import Data.Drasil.Concepts.Documentation (physicalSystem)
 

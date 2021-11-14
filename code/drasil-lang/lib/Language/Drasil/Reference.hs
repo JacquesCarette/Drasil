@@ -3,18 +3,18 @@
 module Language.Drasil.Reference (
   -- * Type
   Reference(Reference),
+  -- * Class
+  HasReference(..),
   -- * Constructors
   ref, refS, namedRef, complexRef, namedComplexRef
-  ) where
+) where
 
-import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd))
-import Language.Drasil.Classes.Core2 (HasShortName(shortname))
+import Language.Drasil.Label.Type (LblType, HasRefAddress(..))
+import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
-import Language.Drasil.Label.Type (LblType(..))
-import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID, HasUID(..))
 
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLenses, Lens')
 
 -- | A Reference contains the identifier ('UID'), a reference address ('LblType'),
 -- a human-readable shortname ('ShortName'), and any extra information about the reference ('RefInfo').
@@ -23,6 +23,11 @@ data Reference = Reference
   ,  ra :: LblType
   ,  sn :: ShortName}
 makeLenses ''Reference
+
+-- | A class that contains a list of 'Reference's.
+class HasReference c where
+  -- | Provides a 'Lens' to the 'Reference's.
+  getReferences :: Lens' c [Reference]
 
 -- | Equal if 'UID's are equal.
 instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)

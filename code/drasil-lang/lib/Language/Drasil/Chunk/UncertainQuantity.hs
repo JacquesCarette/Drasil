@@ -9,18 +9,17 @@ module Language.Drasil.Chunk.UncertainQuantity (
  
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, cuc', cnstrw, cvc)
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
+import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
-  Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty (unc))
+  Definition(defn), ConceptDomain(cdom), Concept, Quantity,
+  IsUnit, Constrained(constraints), HasReasVal(reasVal))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Space (Space)
-import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Uncertainty.Core (Uncertainty)
+import Language.Drasil.Space (Space, HasSpace(..))
+import Language.Drasil.Uncertainty
 import Language.Drasil.UID (HasUID(..))
 
 import Control.Lens ((^.), makeLenses, view)

@@ -3,8 +3,8 @@ module Drasil.SSP.Unitals where --export all of it
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SSP.Defs (fsConcept)

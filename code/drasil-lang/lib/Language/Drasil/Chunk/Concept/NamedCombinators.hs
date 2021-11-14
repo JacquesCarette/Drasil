@@ -8,7 +8,7 @@
 --    * @Gen@ denotes the general function case.
 --    * Although this should eventually be phased out, @T@ denotes a combinator meant for use with titles.
 --    * @NI@ and @NP@ denote whether something must be a part of the 'NamedIdea' or 'NounPhrase' class.
-module Utils.Drasil.Concepts (
+module Language.Drasil.Chunk.Concept.NamedCombinators (
   -- * Prepositions
   -- ** \"The\" Combinators
   the, theGen,
@@ -354,8 +354,6 @@ a_ t = nounPhrase'' (S "a" +:+ phrase t) (S "a" +:+ plural t) CapFirst CapWords
 a_Gen :: (c -> Sentence) -> c -> NP
 a_Gen f t = nounPhrase'' (S "a" +:+ f t) (S "a" +:+ f t) CapFirst CapWords
 
-
-
 -- | Combinator for combining two 'NamedIdeas's into a 'NamedChunk'. 
 -- Plural case only makes second term plural. 
 -- See 'compoundPhrase' for more on plural behaviour.
@@ -396,9 +394,11 @@ compoundNCPSPP = compoundNCGenP D.pluralNP
 -- Plural case is @(phrase t1) +:+ (pluralNP t2)@.
 combineNINP :: (NamedIdea c) => c -> NP -> NP
 combineNINP t1 t2 = nounPhrase'' (phrase t1 +:+ phraseNP t2) (phrase t1 +:+ pluralNP t2) CapFirst CapWords
+
 -- | Similar to 'combineNINP' but takes in a 'NP' first and a 'NamedIdea' second.
 combineNPNI :: (NamedIdea c) => NP -> c -> NP
 combineNPNI t1 t2 = nounPhrase'' (phraseNP t1 +:+ phrase t2) (phraseNP t1 +:+ plural t2) CapFirst CapWords
+
 -- | Similar to 'combineNINP' but takes two 'NamedIdea's.
 combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 combineNINI t1 t2 = nounPhrase'' (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapFirst CapWords

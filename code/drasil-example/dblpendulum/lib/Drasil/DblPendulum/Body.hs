@@ -6,8 +6,8 @@ import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
 
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)

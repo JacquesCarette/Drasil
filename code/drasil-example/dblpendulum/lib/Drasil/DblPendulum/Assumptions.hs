@@ -3,7 +3,7 @@ module Drasil.DblPendulum.Assumptions (twoDMotion, cartSys, cartSysR,
   yAxisDir, startOriginSingle, startOriginDouble, firstPend, secondPend, assumpSingle, assumpDouble) where
     
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumpDom) 

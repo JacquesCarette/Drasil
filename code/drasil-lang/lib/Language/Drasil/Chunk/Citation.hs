@@ -3,6 +3,8 @@
 module Language.Drasil.Chunk.Citation (
   -- * Types
   Citation, BibRef, EntryID,
+  -- * Class
+  HasCitation(..),
   -- * Accessors
   citeID, citeKind,
   -- * Citation smart constructors
@@ -10,21 +12,19 @@ module Language.Drasil.Chunk.Citation (
   cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP,
   cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis,
   cProceedings, cTechReport, cUnpublished
-  ) where
+) where
 
 import Language.Drasil.People (People)
 
-import Language.Drasil.Classes.Core (HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
-import Language.Drasil.Classes.Core2 (HasShortName(shortname))
-import Language.Drasil.Classes.Citations (HasFields(getFields))
-import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
-  year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
+import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField,
+  author, chapter, pages, editor, bookTitle, title,
+  year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Label.Type (LblType(Citation))
-import Language.Drasil.ShortName (ShortName, shortname')
+import Language.Drasil.Label.Type (LblType(Citation), Referable(..), HasRefAddress(..))
 import Language.Drasil.UID (UID, HasUID(..), showUID, mkUid)
 
-import Control.Lens (makeLenses)
+import Control.Lens (makeLenses, Lens')
 
 -- | A list of 'Citation's.
 type BibRef = [Citation]
@@ -39,11 +39,16 @@ type EntryID = String
 -- scientific computing software" would include the affiliated university, publishing year, and city.
 data Citation = Cite
   { _citeKind :: CitationKind
-  , _fields :: [CiteField]
-  , _citeID :: UID
-  ,  sn :: ShortName
+  , _fields   :: [CiteField]
+  , _citeID   :: UID
+  ,  sn       :: ShortName
   }
 makeLenses ''Citation
+
+-- | Some documents, as well as some pieces of knowledge, have citations.
+class HasCitation c where
+  -- | Provides a 'Lens' to the citations.
+  getCitations :: Lens' c [Citation]
 
 -- | Finds 'UID' of the 'Citation'.
 instance HasUID       Citation where uid       = citeID
@@ -68,7 +73,7 @@ cite ck cfs n
 -- Optional fields can be: volume, number, pages, month, and note.
 -- Implicitly uses the EntryID as the chunk id.
 cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-cArticle aut t journ yr opt = cite Article 
+cArticle aut t journ yr opt = cite Article
   (author aut : title t : journal journ : year yr : opt)
 
 -- | Book citation requires author or editor, title, publisher, year.
@@ -95,10 +100,10 @@ cBooklet t opt = cite Booklet (title t : opt)
 cInBookACP, cInBookECP :: People -> String -> Int -> [Int] ->
   String -> Int -> [CiteField] -> String -> Citation
 -- | InBook citation by author.
-cInBookACP auth t chap pgs pub yr opt = cite InBook 
+cInBookACP auth t chap pgs pub yr opt = cite InBook
   (author auth : chapter chap : pages pgs : stdFields t pub yr opt)
 -- | InBook citation by editor.
-cInBookECP ed t chap pgs pub yr opt = cite InBook 
+cInBookECP ed t chap pgs pub yr opt = cite InBook
   (editor ed : chapter chap : pages pgs : stdFields t pub yr opt)
 
 -- | InBook citation excluding page numbers.
@@ -106,10 +111,10 @@ cInBookAC, cInBookEC :: People -> String -> Int ->
   String -> Int -> [CiteField] -> String -> Citation
 
 -- | Otherwise identical to 'cInBookACP'.
-cInBookAC auth t chap pub yr opt = cite InBook 
+cInBookAC auth t chap pub yr opt = cite InBook
   (author auth : chapter chap : stdFields t pub yr opt)
 -- | Otherwise identical to 'cInBookECP'.
-cInBookEC ed t chap pub yr opt = cite InBook 
+cInBookEC ed t chap pub yr opt = cite InBook
   (editor ed : chapter chap : stdFields t pub yr opt)
 
 -- | InBook citation excluding chapter.
@@ -117,10 +122,10 @@ cInBookAP, cInBookEP :: People -> String -> [Int] ->
   String -> Int -> [CiteField] -> String -> Citation
 
 -- | Otherwise identical to 'cInBookACP'.
-cInBookAP auth t pgs pub yr opt = cite InBook 
+cInBookAP auth t pgs pub yr opt = cite InBook
   (author auth : pages pgs : stdFields t pub yr opt)
 -- | Otherwise identical to 'cInBookECP'.
-cInBookEP ed t pgs pub yr opt = cite InBook 
+cInBookEP ed t pgs pub yr opt = cite InBook
   (editor ed : pages pgs : stdFields t pub yr opt)
 
 -- | InCollection citation requires author, title, bookTitle, publisher, year.
@@ -129,7 +134,7 @@ cInBookEP ed t pgs pub yr opt = cite InBook
 -- Implicitly uses the EntryID as the chunk id.
 cInCollection :: People -> String -> String -> String -> Int ->
   [CiteField] -> String -> Citation
-cInCollection auth t bt pub yr opt = cite InCollection 
+cInCollection auth t bt pub yr opt = cite InCollection
   (author auth : bookTitle bt : stdFields t pub yr opt)
 
 -- | InProceedings citation requires author, title, bookTitle, year.
@@ -138,7 +143,7 @@ cInCollection auth t bt pub yr opt = cite InCollection
 -- Implicitly uses the EntryID as the chunk id.
 cInProceedings :: People -> String -> String -> Int ->
   [CiteField] -> String -> Citation
-cInProceedings auth t bt yr opt = cite InProceedings 
+cInProceedings auth t bt yr opt = cite InProceedings
   (author auth : title t : bookTitle bt : year yr : opt)
 
 -- | Manual (technical documentation) citation requires title.
@@ -176,14 +181,14 @@ cProceedings t yr opt = cite Proceedings (title t : year yr : opt)
 -- Optional fields can be type, number, address, month, and note.
 -- Implicitly uses the EntryID as the chunk id.
 cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-cTechReport auth t inst yr opt = cite TechReport 
+cTechReport auth t inst yr opt = cite TechReport
   (author auth : title t : institution inst : year yr : opt)
 
 -- | Unpublished citation requires author, title, and note.
 -- Optional fields can be month and year.
 -- Implicitly uses the EntryID as the chunk id.
 cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
-cUnpublished auth t n opt = cite Unpublished 
+cUnpublished auth t n opt = cite Unpublished
   (author auth : title t : note n : opt)
 
 -- | Helper function (do not export) for creating book reference.

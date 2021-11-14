@@ -3,7 +3,7 @@ module Drasil.PDController.Unitals where
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
 

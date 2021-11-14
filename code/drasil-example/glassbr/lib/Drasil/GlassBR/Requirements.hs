@@ -6,8 +6,8 @@ import Language.Drasil
 import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Theory.Drasil (DataDefinition)
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)

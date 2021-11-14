@@ -169,6 +169,7 @@ module Language.Drasil (
   , People, Person, person, HasName, name, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople
+
   -- * Sentences
   -- | Things like expressions and terms are displayed by using 'Sentence's.
   -- We also use 'NounPhrase's to record the proper pluralization and capitalization of terms.
@@ -190,9 +191,25 @@ module Language.Drasil (
   , ShortName, shortname', getSentSN, HasShortName(..)
   -- Language.Drasil.Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
+  
+  -- * Sentence Fold-type utilities.
+  -- | From "Utils.Drasil.Fold". Defines many general fold functions
+  -- for use with Drasil-related types.
+
+  -- ** Folding Options as Types
+  , EnumType(..), WrapType(..), SepType(..), FoldType(..)
+
+  -- ** Folding functions
+  -- *** Expression-related
+  , foldConstraints
+
+  -- *** Sentence-related
+  , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
+  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
+  
+  
   -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
-
   -- Language.Drasil.Document
   , Document(..), ShowTableOfContents(..), DType(..), Section(..)
   , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
@@ -239,21 +256,6 @@ module Language.Drasil (
 
   -- TODO: START: REMOVE ALL OF THE BELOW
 
-  -- * Fold-type utilities.
-  -- | From "Utils.Drasil.Fold". Defines many general fold functions
-  -- for use with Drasil-related types.
-
-  -- ** Folding Options as Types
-  EnumType(..), WrapType(..), SepType(..), FoldType(..),
-
-  -- ** Folding functions
-  -- *** Expression-related
-  foldConstraints,
-
-  -- *** Sentence-related
-  foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
-  foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
-  
   -- * Misc. utilities
   -- | From "Utils.Drasil.Misc". General sorting functions, useful combinators,
   -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
@@ -280,7 +282,6 @@ module Language.Drasil (
   -- TODO: END
 ) where
 
-import Utils.Drasil.Fold
 import Utils.Drasil.Misc
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -357,6 +358,7 @@ import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
+import Language.Drasil.Sentence.Fold
 import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS)
 import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
 import Language.Drasil.Symbol (Decoration, Symbol)

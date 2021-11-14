@@ -56,7 +56,7 @@ import Language.Drasil.Space ( Space(DiscreteD, DiscreteS) )
 import Language.Drasil.Symbol.Helpers ( eqSymb )
 import Language.Drasil.Uncertainty
 import Language.Drasil.Symbol ( compsy )
-import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
+import Language.Drasil.Sentence.Fold
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 import Language.Drasil.UID ( HasUID )
 

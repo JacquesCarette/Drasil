@@ -34,7 +34,6 @@ library:
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands
   - Utils.Drasil.Concepts
-  - Utils.Drasil.Fold
   when:
   - condition: false
     other-modules: Paths_drasil_lang

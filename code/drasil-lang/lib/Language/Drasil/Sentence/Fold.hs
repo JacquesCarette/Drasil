@@ -1,5 +1,5 @@
 -- | Folding-related functions and types.
-module Utils.Drasil.Fold (
+module Language.Drasil.Sentence.Fold (
   -- * English-related Datatypes
   -- | For help working with listing information in English. Allows the below functions
   -- to make different kinds of lists based on the options defined here.
@@ -10,7 +10,7 @@ module Utils.Drasil.Fold (
   -- ** Sentence-related
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol,
   foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList
-  ) where
+) where
 
 import Language.Drasil.Classes ( Express(express), Quantity )
 import Language.Drasil.Constraint

@@ -54,7 +54,7 @@ import Language.Drasil.Sentence
 import Language.Drasil.Space ( Space(DiscreteD, DiscreteS) )
 import Language.Drasil.Symbol.Helpers ( eqSymb )
 import Language.Drasil.Uncertainty
-import Language.Drasil.Symbol ( compsy )
+import Language.Drasil.Symbol
 import Language.Drasil.Sentence.Fold
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 import Language.Drasil.UID ( HasUID )
@@ -65,7 +65,6 @@ import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.Function (on)
 import Data.List (sortBy, transpose)
-import Language.Drasil.Symbol (HasSymbol)
 
 -- | Sorts a list of 'HasSymbols' by 'Symbol'.
 sortBySymbol :: HasSymbol a => [a] -> [a]

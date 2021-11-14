@@ -7,10 +7,10 @@ module Language.Drasil (
 
   -- ** Base Expression Language
   -- | Defines the expression types and common operators.
-  
+
   -- Language.Drasil.Expr
   Expr
-  , ExprC(..) 
+  , ExprC(..)
   , frac, recip_
   , square, half
   , oneHalf, oneThird
@@ -74,7 +74,7 @@ module Language.Drasil (
   -- ** Types
   -- | Contains helper functions and smart constructors for each type.
   -- Similar types are grouped together.
-  
+
   -- *** Basic types
   , UID, mkUid
   -- Language.Drasil.Chunk.NamedIdea
@@ -181,7 +181,7 @@ module Language.Drasil (
 
   -- Language.Drasil.Sentence
   , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
-  , ch, eS, eS', sC, sDash, sParen  
+  , ch, eS, eS', sC, sDash, sParen
   -- Language.Drasil.NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -196,7 +196,7 @@ module Language.Drasil (
   , ShortName, shortname', getSentSN, HasShortName(..)
   -- Language.Drasil.Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
-  
+
   -- * Sentence Fold-type utilities.
   -- | From "Utils.Drasil.Fold". Defines many general fold functions
   -- for use with Drasil-related types.
@@ -211,8 +211,8 @@ module Language.Drasil (
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
   , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
-  
-  
+
+
   -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
   -- Language.Drasil.Document
@@ -236,7 +236,7 @@ module Language.Drasil (
   -- * Document combinators
   -- | From "Language.Drasil.Document.Combinators". General sorting functions, useful combinators,
   -- and various functions to work with Drasil [Chunk](https://github.com/JacquesCarette/Drasil/wiki/Chunks) types.
-  
+
   -- ** Reference-related functions
   -- | Attach a 'Reference' and a 'Sentence' in different ways.
   , chgsStart, definedIn, definedIn', definedIn'', definedIn'''
@@ -306,12 +306,12 @@ import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid)
-import Language.Drasil.Symbol (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
-  IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
-  HasReasVal(reasVal), HasDerivation(derivations), 
+  IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
+  HasReasVal(reasVal), HasDerivation(derivations),
   HasReference(getReferences), HasSpace(typ),
-  DefiningExpr(defnExpr), Quantity, Callable, 
+  DefiningExpr(defnExpr), Quantity, Callable,
   IsArgumentName, Express(..))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
 import Language.Drasil.Data.Date (Month(..))
@@ -330,7 +330,7 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physc, sfwrc, isPhysC, isSfwrC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
@@ -338,7 +338,7 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc',
   ucStaged, ucs, ucs', ucsWS, ucuc, ucw)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
@@ -351,7 +351,7 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , month)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
-import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
+import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
@@ -359,15 +359,14 @@ import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitaliza
 import Language.Drasil.Sentence.Fold
 import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS)
 import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
-import Language.Drasil.Symbol (Decoration, Symbol)
-import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
+import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable)
 import Language.Drasil.Synonyms (ConstQDef, SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc (mkTable)
 import Language.Drasil.People (People, Person, person, HasName(..),
-  person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
+  person', personWM, personWM', mononym, name, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)
 import Language.Drasil.Label.Type hiding (name)
 

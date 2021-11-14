@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   dqd, dqdNoUnit, dqd',
   dqdQd, dqdWr, tempdqdWr') where
 
-import Language.Drasil.Symbol (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
@@ -16,7 +16,6 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
-import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (HasUID(uid))
 
 import Control.Lens ((^.), makeLenses, view)
@@ -31,7 +30,7 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _spa :: Space
                                , _unit' :: Maybe UnitDefn
                                }
-  
+
 makeLenses ''DefinedQuantityDict
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.

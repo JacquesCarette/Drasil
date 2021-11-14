@@ -14,7 +14,7 @@ module Language.Drasil.Chunk.Eq (
 import Control.Lens ((^.), view, lens, Lens')
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 
-import Language.Drasil.Symbol (HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
   ConceptDomain(cdom), Express(express))
@@ -29,7 +29,6 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (mkFunction, Space)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
-import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID, HasUID(..))
 
 data QDefinition e where

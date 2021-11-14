@@ -13,10 +13,9 @@ module Language.Drasil.Sentence (
   sentenceSymb, sentenceTerm) where
 
 import Language.Drasil.UID (HasUID(..), UID)
-import Language.Drasil.Symbol (HasSymbol)
+import Language.Drasil.Symbol (HasSymbol, Symbol)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ExprClasses (Express(express))
-import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 
 import Control.Lens ((^.))

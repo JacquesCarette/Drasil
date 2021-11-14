@@ -22,7 +22,6 @@ module Language.Drasil.Classes (
   , UnitEq(uniteq)
     -- ** Expr and expressions
   , Express(express)
-  , HasDerivation(derivations)
   , DefiningExpr(defnExpr)
   ) where
 
@@ -32,7 +31,6 @@ import Language.Drasil.Symbol (HasSymbol)
 
 import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
 import Language.Drasil.Constraint (ConstraintE)
-import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
@@ -70,11 +68,6 @@ class ConceptDomain c where
 type Concept c = (Idea c, Definition c, ConceptDomain c)
 -- TODO: Would the below make this a bit better to work with?
 --        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
-
--- | A class that might have a 'Derivation'.
-class HasDerivation c where
-  -- | Provides a 'Lens' to a possible derivation.
-  derivations :: Lens' c (Maybe Derivation)
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.

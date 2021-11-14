@@ -2,6 +2,7 @@
 module Language.Drasil.Derivation where
 
 import Language.Drasil.Sentence (Sentence(EmptyS, S), (+:))
+import Control.Lens (Lens')
 
 -- * Type
 
@@ -9,6 +10,13 @@ import Language.Drasil.Sentence (Sentence(EmptyS, S), (+:))
 -- They are rendered in order as paragraphs and equation blocks to display
 -- the derivation.
 data Derivation = Derivation Sentence [Sentence]
+
+-- * Class
+
+-- | A class that might have a 'Derivation'.
+class HasDerivation c where
+  -- | Provides a 'Lens' to a possible derivation.
+  derivations :: Lens' c (Maybe Derivation)
 
 -- * Functions
 

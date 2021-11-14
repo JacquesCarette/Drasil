@@ -309,10 +309,9 @@ import Language.Drasil.UID
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), HasDerivation(derivations),
-  DefiningExpr(defnExpr), Quantity, Callable,
+  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Callable,
   IsArgumentName, Express(..))
-import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
+import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, HasDerivation(..))
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
     Citation, EntryID, BibRef

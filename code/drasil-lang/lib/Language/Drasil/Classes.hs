@@ -106,6 +106,10 @@ class HasReasVal c where
 -- all sorts of import cycles (or lots of orphans).
 class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 
+-- TODO: potential alternative design for "Quantity"?
+--
+--      type Quantity2 = forall c. (Idea c, HasSpace c, HasSymbol c) => c
+
 --  An UncertainQuantity is just a Quantity with some uncertainty associated to it.
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
 --
@@ -113,7 +117,7 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 --   uncert :: Lens' c (Uncertainty)
 --   replaced with HasUncertainty
 
--- TODO: This looks like it should be moved into drasil-code/?-base
+-- TODO: This looks like it should be moved into drasil-code/?-base, it doesn't seem to be used enough atm.
 --       ...but, Dr. Carette also mentioned these are dubious, maybe we should remove it?
 -- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
@@ -143,7 +147,10 @@ class UnitEq u where
 
 class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
+  --   TODO: Well, technically, `e` doesn't need to be an "expression" of any sorts.
+  --         It just needs to be _something_, and it would have approximately have same meaning.
   defnExpr :: Lens' (c e) e
 
+-- TODO: This doesn't look like it's used yet.
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

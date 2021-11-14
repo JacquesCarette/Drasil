@@ -52,8 +52,8 @@ instance Definition    (QDefinition e) where defn = qdQua . defn
 instance Quantity      (QDefinition e) where
 instance Eq            (QDefinition e) where a == b = a ^. uid == b ^. uid
 instance MayHaveUnit   (QDefinition e) where getUnit = getUnit . view qdQua
-instance DefiningExpr QDefinition where defnExpr = qdExpr
-instance Express e => Express       (QDefinition e) where
+instance DefiningExpr   QDefinition    where defnExpr = qdExpr
+instance Express e => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
       f = case q ^. qdInputs of

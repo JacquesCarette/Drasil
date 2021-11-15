@@ -3,7 +3,6 @@ module Drasil.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb
 
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
-import Utils.Drasil
 
 import Data.List (nub, (\\))
 import Control.Lens (view)

@@ -3,19 +3,20 @@
 
 -- | Contains chunks related to adding an expression to a quantitative concept. 
 module Language.Drasil.Chunk.Eq (
-  -- * Chunk Type
+  -- * Types
   QDefinition,
-  -- * Constructor
+  -- * Constructors
   fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
-  mkFuncDef, mkFuncDef', mkFuncDefByQ) where
+  mkFuncDef, mkFuncDef', mkFuncDefByQ
+) where
 
 import Control.Lens ((^.), view, lens, Lens')
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
+  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity,
   ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
@@ -25,11 +26,10 @@ import Language.Drasil.Expr.Class (ExprC(apply, sy))
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Space (mkFunction, Space)
+import Language.Drasil.Space (mkFunction, Space, Space, HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
-import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID, HasUID(..))
 
 data QDefinition e where
   QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
@@ -52,8 +52,8 @@ instance Definition    (QDefinition e) where defn = qdQua . defn
 instance Quantity      (QDefinition e) where
 instance Eq            (QDefinition e) where a == b = a ^. uid == b ^. uid
 instance MayHaveUnit   (QDefinition e) where getUnit = getUnit . view qdQua
-instance DefiningExpr QDefinition where defnExpr = qdExpr
-instance Express e => Express       (QDefinition e) where
+instance DefiningExpr   QDefinition    where defnExpr = qdExpr
+instance Express e => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
       f = case q ^. qdInputs of

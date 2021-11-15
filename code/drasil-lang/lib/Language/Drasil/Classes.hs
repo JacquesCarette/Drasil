@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies, ConstraintKinds, ConstrainedClassMethods #-}
+{-# LANGUAGE ConstraintKinds #-}
 
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (
@@ -11,70 +11,51 @@ module Language.Drasil.Classes (
   , Definition(defn)
   , ConceptDomain(cdom)
   , Quantity
-  , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , HasReasVal(reasVal)
   , Constrained(constraints)
-  , HasUncertainty(unc)  
   , Callable
   , IsArgumentName
   , HasAdditionalNotes(getNotes)
     -- the unsorted rest
   , IsUnit(udefn, getUnits)
   , UnitEq(uniteq)
-    -- ** References
-  , HasReference(getReferences)
-  , HasDecRef(getDecRefs)
     -- ** Expr and expressions
   , Express(express)
-  , HasDerivation(derivations)
   , DefiningExpr(defnExpr)
   ) where
 
--- some classes are so 'core' that they are defined elswhere
+-- some classes are so 'core' that they are defined elsewhere
 -- also helps with cycles...
-import Language.Drasil.Classes.Core (HasSymbol, HasUID)
+import Language.Drasil.Symbol (HasSymbol)
 
+import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
 import Language.Drasil.Constraint (ConstraintE)
-import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
-import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Reference (Reference)
-import Language.Drasil.DecoratedReference(DecRef)
-import Language.Drasil.Space (Space)
+import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Uncertainty.Core (Uncertainty)
 
 import Control.Lens (Lens')
 
--- | A NamedIdea is a 'term' that we've identified (has a 'UID') as 
--- being worthy of naming.
-class HasUID c => NamedIdea c where
-  -- | Lens to the term (a noun phrase).
-  term :: Lens' c NP
-
--- | An 'Idea' is the combination of a 'NamedIdea' and a 'CommonIdea'.
--- In other words, it /may/ have an acronym/abbreviation.
-class NamedIdea c => Idea c where
-  -- | Gets the acronym/abbreviation.
-  getA :: c -> Maybe String
-  --Get Abbreviation/Acronym? These might need to be separated 
-  --depending on contexts, but for now I don't see a problem with it.
-
+-- TODO: conceptual typeclass?
+-- TODO: I was thinking of splitting QDefinitions into Definitions with 2 type variables
+--       Can we change this name from "Definition" to anything else? "NaturalDefinition"?
 -- | Defines a chunk.
 class Definition c where
   -- | Provides (a 'Lens' to) the definition for a chunk.
   defn :: Lens' c Sentence
 
+-- TODO: conceptual typeclass?
 -- Temporary hack to avoid loss of information
 -- | Records any additional notes needed to avoid losing information
 class HasAdditionalNotes c where
   -- | Provides a 'Lens' to the notes.
   getNotes :: Lens' c [Sentence]
 
+-- TODO: `drasil-database`-related typeclass? UIDs should be  moved to `drasil-database` too.
 -- | Some concepts have a domain (related information encoded in 'UID's to other chunks).
 class ConceptDomain c where
   -- | Provides Getter for the concept domain tags for a chunk
@@ -82,28 +63,11 @@ class ConceptDomain c where
   -- ^ /cdom/ should be exported for use by the
   -- Drasil framework, but should not be exported beyond that.
 
+-- TODO: conceptual type synonym?
 -- | Concepts are 'Idea's with definitions and domains.
 type Concept c = (Idea c, Definition c, ConceptDomain c)
-
--- | HasSpace is anything which has a 'Space'.
-class HasSpace c where
-  -- | Provides a 'Lens' to the 'Space'.
-  typ      :: Lens' c Space
-
--- | A class that contains a list of 'Reference's.
-class HasReference c where
-  -- | Provides a 'Lens' to the 'Reference's.
-  getReferences :: Lens' c [Reference]
-
--- | A class that contains a list of decorated references ('DecRef's).
-class HasDecRef c where
-  -- | Provides a 'Lens' to the 'DecRef's.
-  getDecRefs :: Lens' c [DecRef]
-
--- | A class that might have a 'Derivation'.
-class HasDerivation c where
-  -- | Provides a 'Lens' to a possible derivation.
-  derivations :: Lens' c (Maybe Derivation)
+-- TODO: Would the below make this a bit better to work with?
+--        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.
@@ -127,6 +91,10 @@ class HasReasVal c where
 -- all sorts of import cycles (or lots of orphans).
 class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 
+-- TODO: potential alternative design for "Quantity"?
+--
+--      type Quantity2 = forall c. (Idea c, HasSpace c, HasSymbol c) => c
+
 --  An UncertainQuantity is just a Quantity with some uncertainty associated to it.
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
 --
@@ -134,12 +102,8 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 --   uncert :: Lens' c (Uncertainty)
 --   replaced with HasUncertainty
 
--- | HasUncertainty is just a chunk with some uncertainty associated to it.
--- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
-class HasUncertainty c where
-  -- | Provides the 'Lens' to an 'Uncertainty'.
-  unc  :: Lens' c Uncertainty
-
+-- TODO: This looks like it should be moved into drasil-code/?-base, it doesn't seem to be used enough atm.
+--       ...but, Dr. Carette also mentioned these are dubious, maybe we should remove it?
 -- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
 
@@ -168,7 +132,10 @@ class UnitEq u where
 
 class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
+  --   TODO: Well, technically, `e` doesn't need to be an "expression" of any sorts.
+  --         It just needs to be _something_, and it would have approximately have same meaning.
   defnExpr :: Lens' (c e) e
 
+-- TODO: This doesn't look like it's used yet.
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

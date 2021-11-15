@@ -18,7 +18,7 @@ import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.CodeExpr (CodeExpr)
 import qualified Language.Drasil.CodeExpr as CE
 
-import Utils.Drasil.Strings (toPlainName)
+import Utils.Drasil (toPlainName)
 
 import Data.List ((\\), nub)
 

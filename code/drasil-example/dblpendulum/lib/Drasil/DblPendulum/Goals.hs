@@ -2,8 +2,8 @@
 module Drasil.DblPendulum.Goals (goals, goalsInputs) where
 
 import Language.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (mass, len)
 import Data.Drasil.Concepts.Physics (gravitationalConst, motion)

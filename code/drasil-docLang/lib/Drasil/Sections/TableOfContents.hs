@@ -4,7 +4,7 @@ module Drasil.Sections.TableOfContents (toToC, findToC) where
 
 import Language.Drasil
 import Drasil.DocumentLanguage.Core
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Drasil.DocLang.SRS as SRS
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)

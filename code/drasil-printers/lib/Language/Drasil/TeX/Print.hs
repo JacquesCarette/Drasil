@@ -10,9 +10,7 @@ import Numeric (showEFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L
-import qualified Language.Drasil.ShortHands as LD (cDelta)
 import qualified Language.Drasil.Display as LD
-import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -79,32 +77,6 @@ lo (Cell _) _               = empty
 print :: PrintingInformation -> [LayoutObj] -> D
 print sm = foldr (($+$) . (`lo` sm)) empty
 
------------------- Symbol ----------------------------
--- | Converts a symbol into a printable document form.
-symbol :: LD.Symbol -> D
-symbol (LD.Variable s) = pure $ text s
-symbol (LD.Label    s) = pure $ text s
-symbol (LD.Integ    n) = pure $ text $ show n
-symbol (LD.Special  s) = pure $ text $ unPL $ L.special s
-symbol (LD.Concat  sl) = foldl (<>) empty $ map symbol sl
---
--- handle the special cases first, then general case
-symbol (LD.Corners [] [] [x] [] s) = br $ symbol s <> pure hat <> br (symbol x)
-symbol (LD.Corners [] [] [] [x] s) = br $ symbol s <> pure unders <> br (symbol x)
-symbol (LD.Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbol (LD.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol LD.Corners{}                = error "rendering of Corners (general)"
-symbol (LD.Atop f s)               = sFormat f s
-symbol LD.Empty                    = empty
-
--- | Converts a decorated symbol into a printable document form.
-sFormat :: L.Decoration -> L.Symbol -> D
-sFormat LD.Hat       s = commandD "hat" (symbol s)
-sFormat LD.Vector    s = commandD "symbf" (symbol s)
-sFormat LD.Prime     s = symbol s <> pure (text "'")
-sFormat LD.Delta     s = symbol LD.cDelta <> symbol s
-sFormat LD.Magnitude s = fence Open Norm <> symbol s <> fence Open Norm
-
 -- | Determine wether braces and brackets are opening or closing.
 data OpenClose = Open | Close
 
@@ -112,6 +84,17 @@ data OpenClose = Open | Close
 ------------------ EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
+
+-- | Escape all special TeX characters.
+-- TODO: This function should be improved. It should escape all special
+--       TeX symbols that would affect rendering. For example, `_`
+--       turns the RHS of text into subscript, and `^` would turn it
+--       into superscript. This will need to be much more comprehensive.
+--       e.g., `%`, `&`, `#`, etc
+escapeIdentSymbols :: String -> String
+escapeIdentSymbols ('_':ss) = '\\' : '_' : escapeIdentSymbols ss
+escapeIdentSymbols (s:ss) = s : escapeIdentSymbols ss
+escapeIdentSymbols [] = []
 
 -- | Print an expression to a document.
 pExpr :: Expr -> D
@@ -123,7 +106,8 @@ pExpr (Case ps)      = mkEnv "cases" (cases ps)
 pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
-pExpr (Ident s)      = pure . text $ s
+pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
+pExpr (Ident s)      = commandD "mathit" (pure . text . escapeIdentSymbols $ s)
 pExpr (Label s)      = command "text" s
 pExpr (Spec s)       = pure . text $ unPL $ L.special s
 --pExpr (Gr g)         = unPL $ greek g
@@ -287,7 +271,7 @@ spec a@(s :+: t) = s' <> t'
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
 spec (E ex) = toMath $ pExpr ex
-spec (S s)  = either error (pure . text . concatMap escapeChars) $ checkValidStr s invalid
+spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
     escapeChars '_' = "\\_"
@@ -334,7 +318,7 @@ pUnit (L.US ls) = formatu t b
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (LD.Concat s) = foldl (<>) empty $ map p_symb s
-    p_symb n = let cn = symbolNeeds n in switch (const cn) $ symbol n
+    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pExpr $ I.symbol n
 
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------
@@ -510,7 +494,7 @@ showBibTeX  _ (Month        m) = showFieldRaw "month" (bibTeXMonth m)
 showBibTeX  _ (Note         n) = showField "note" n
 showBibTeX  _ (Number       n) = showField "number" (wrapS n)
 showBibTeX  _ (Organization o) = showField "organization" o
-showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ foldNums "--" p)
+showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ L.foldNums "--" p)
 showBibTeX  _ (Publisher    p) = showField "publisher" p
 showBibTeX  _ (School       s) = showField "school" s
 showBibTeX  _ (Series       s) = showField "series" s

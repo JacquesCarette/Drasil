@@ -11,14 +11,14 @@ import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
-import Language.Drasil.Classes.Core (HasSymbol, HasUID(..))
 import Language.Drasil.Classes (IsArgumentName)
 import qualified Language.Drasil.ModelExpr.Lang as M
 import Language.Drasil.Literal.Class (LiteralC(..))
+import Language.Drasil.UID (HasUID(..))
 
 -- TODO: figure out which ones can be moved outside of the ExprC class
 

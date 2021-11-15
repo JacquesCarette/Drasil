@@ -5,11 +5,11 @@ import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Classes.Core (HasSymbol, HasUID(..))
+import Language.Drasil.UID (HasUID(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..), DerivType(..),
   SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..), AssocArithOper(..))
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), Space)
-import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Symbol (Symbol, HasSymbol)
 
   
 -- | Helper for creating new smart constructors for Associative Binary

@@ -1,6 +1,5 @@
-{-# Language TypeFamilies #-}
 -- | Folding-related functions and types.
-module Utils.Drasil.Fold (
+module Language.Drasil.Sentence.Fold (
   -- * English-related Datatypes
   -- | For help working with listing information in English. Allows the below functions
   -- to make different kinds of lists based on the options defined here.
@@ -11,27 +10,20 @@ module Utils.Drasil.Fold (
   -- ** Sentence-related
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol,
   foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList
-  ) where
+) where
 
-import Language.Drasil
-import qualified Utils.Drasil.Sentence as S (and_, or_)
+import Language.Drasil.Classes ( Express(express), Quantity )
+import Language.Drasil.Constraint
+    ( Constraint(Range), ConstraintE )
+import Language.Drasil.Document ( mkParagraph )
+import Language.Drasil.Document.Core ( Contents )
+import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
+import Language.Drasil.Sentence
+    ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
+import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
+import Utils.Drasil
 
--- | Fold helper function that applies f to all but the last element, applies g to
--- last element and the accumulator.
-foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
-foldle _ _ z []     = z
-foldle _ g z [x]    = g z x
-foldle f g z [x,y]  = g (f z x) y
-foldle f g z (x:xs) = foldle f g (f z x) xs
-
--- | Fold helper function that applies f to all but last element, applies g to last
--- element and accumulator without starting value, does not work for empty list.
-foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
-foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
-foldle1 _ _ [x]      = x
-foldle1 _ g [x,y]    = g x y
-foldle1 f g (x:y:xs) = foldle f g (f x y) xs
-
+-- TODO: This looks like it should be moved to wherever uses it, it's too specific.
 -- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
 foldConstraints _ [] = EmptyS
@@ -70,11 +62,14 @@ foldlsC [] = EmptyS
 foldlsC xs = foldl1 sC xs
 
 -- | Type that helps determine enumeration method. Can use either numbers, uppercase letters, or lowercase letters.
-data EnumType = Numb   | Upper   | Lower 
+data EnumType = Numb   | Upper   | Lower
+
 -- | Type to help wrap a sentence with parenthesis or to add a period at the end.
 data WrapType = Parens | Period
+
 -- | Type to help separate words with commas or semicolons.
 data SepType  = Comma  | SemiCol
+
 -- | Type to help fold differently between listed items, or if there are options (ex. using "and" or "or" at the end of a list of words).
 data FoldType = List   | Options
 

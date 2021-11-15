@@ -2,6 +2,8 @@
 module Language.Drasil.Data.Citation (
   -- * Types
   CiteField(..), HP(..), CitationKind(..),
+  -- * Class
+  HasFields(..),
   -- * 'CiteField' Constructors
   -- ** 'People' -> 'CiteField'
   author, editor,
@@ -15,10 +17,11 @@ module Language.Drasil.Data.Citation (
   pages,
   -- ** 'Month' -> 'CiteField'
   month
-  ) where
+) where
 
 import Language.Drasil.People (People)
 import Language.Drasil.Data.Date (Month(..))
+import Control.Lens (Lens')
 
 -- | Fields used in citations.
 data CiteField = Address      String
@@ -42,6 +45,11 @@ data CiteField = Address      String
                | Type         String -- ^ BibTeX "type" field.
                | Volume       Int
                | Year         Int
+
+-- | 'Citation's should have a fields ('CiteField').
+class HasFields c where
+  -- | Provides a 'Lens' to 'CiteField's.
+  getFields :: Lens' c [CiteField]
 
 -- | How something is published. Necessary for URLs to work properly.
 data HP = URL String

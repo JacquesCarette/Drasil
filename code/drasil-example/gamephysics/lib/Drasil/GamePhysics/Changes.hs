@@ -4,8 +4,7 @@ module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 --A list of likely and unlikely changes for GamePhysics
 
 import Language.Drasil
-import Utils.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)

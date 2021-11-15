@@ -7,8 +7,7 @@ import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
 import Data.List.Split (splitOn)
 
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
-import Language.Drasil.Symbol (Symbol(..), Decoration(..))
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol(..), Decoration(..))
 import Language.Drasil.Stages (Stage(Equational,Implementation))
 
 -- | Helper for creating smart constructors for 'Symbol's.
@@ -71,7 +70,7 @@ prime = Atop Prime
 -- | Helper for creating a symbol that depends on the stage.
 staged :: Symbol -> Symbol -> Stage -> Symbol
 staged eqS _ Equational = eqS
-staged _ impS Implementation = impS 
+staged _ impS Implementation = impS
 
 -- | Helper for creating a symbol with Unicode in it.
 autoStage :: Symbol -> (Stage -> Symbol)

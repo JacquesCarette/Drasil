@@ -247,22 +247,22 @@
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is-safeLoad</em></td>
+                  <td><em>isSafeLoad</em></td>
                   <td>Load resistance safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is-safeLR</em></td>
+                  <td><em>isSafeLR</em></td>
                   <td>3 second load equivalent resistance safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is-safePb</em></td>
+                  <td><em>isSafePb</em></td>
                   <td>Probability of glass breakage safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is-safeProb</em></td>
+                  <td><em>isSafeProb</em></td>
                   <td>Probability of failure safety requirement</td>
                   <td>--</td>
                 </tr>
@@ -884,7 +884,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[is-safeProb={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}\]
+                        \[\mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -892,7 +892,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is-safeProb</em> is the probability of failure safety requirement (Unitless)
+                            <em>isSafeProb</em> is the probability of failure safety requirement (Unitless)
                           </li>
                           <li>
                             <em>P<sub>f</sub></em> is the probability of failure (Unitless)
@@ -907,7 +907,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safeProb</em>, the structure is considered safe.
+                          If <em>isSafeProb</em>, the structure is considered safe.
                         </p>
                       </td>
                     </tr>
@@ -937,14 +937,16 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[is-safeLoad=capacity\gt{}Load\]</td>
+                      <td>
+                        \[\mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is-safeLoad</em> is the load resistance safety requirement (Unitless)
+                            <em>isSafeLoad</em> is the load resistance safety requirement (Unitless)
                           </li>
                           <li>
                             <em>capacity</em> is the capacity or load resistance (<em>Pa</em>)
@@ -959,7 +961,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safeLoad</em>, the structure is considered safe.
+                          If <em>isSafeLoad</em>, the structure is considered safe.
                         </p>
                       </td>
                     </tr>
@@ -1012,7 +1014,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}\]
+                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}\]
                       </td>
                     </tr>
                     <tr>
@@ -1169,7 +1171,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[LDF=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}\]
+                        \[\mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1234,7 +1236,9 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[J=interpZ\left(\text{``SDF.txt''},AR,\hat{q}\right)\]</td>
+                      <td>
+                        \[J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1297,7 +1301,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[NFL=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
+                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1374,11 +1378,11 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[GTF=\begin{cases}
-                              1, & g=\text{``AN''}\\
-                              4, & g=\text{``FT''}\\
-                              2, & g=\text{``HS''}
-                              \end{cases}\]
+                        \[\mathit{GTF}=\begin{cases}
+                                       1, & g=\text{``AN''}\\
+                                       4, & g=\text{``FT''}\\
+                                       2, & g=\text{``HS''}
+                                       \end{cases}\]
                       </td>
                     </tr>
                     <tr>
@@ -1433,7 +1437,9 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}\]</td>
+                      <td>
+                        \[\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} \mathit{GTF}}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1515,7 +1521,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\hat{q}_{\text{tol}}}=interpY\left(\text{``SDF.txt''},AR,{J_{\text{tol}}}\right)\]
+                        \[{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1583,7 +1589,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)\]
+                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1670,7 +1676,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[SD=\sqrt{{SD_{\text{x}}}^{2}+{SD_{\text{y}}}^{2}+{SD_{\text{z}}}^{2}}\]
+                        \[\mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1723,7 +1729,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[AR=\frac{a}{b}\]</td>
+                      <td>\[\mathit{AR}=\frac{a}{b}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1782,7 +1788,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{w_{TNT}}=w TNT\]</td>
+                      <td>\[{w_{\mathit{TNT}}}=w \mathit{TNT}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1887,7 +1893,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[LR=NFL GTF LSF\]</td>
+                      <td>\[\mathit{LR}=\mathit{NFL} \mathit{GTF} \mathit{LSF}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1945,7 +1951,9 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[q=interpY\left(\text{``TSD.txt''},SD,{w_{TNT}}\right)\]</td>
+                      <td>
+                        \[q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2014,7 +2022,7 @@
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em>is-safePb</em></p></td>
+                      <td><p class="paragraph"><em>isSafePb</em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
@@ -2029,14 +2037,16 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[is-safePb={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}\]</td>
+                      <td>
+                        \[\mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is-safePb</em> is the probability of glass breakage safety requirement (Unitless)
+                            <em>isSafePb</em> is the probability of glass breakage safety requirement (Unitless)
                           </li>
                           <li>
                             <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
@@ -2051,7 +2061,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safePb</em>, the glass is considered safe. <em>is-safePb</em> and <em>is-safePb</em> (from <a href=#IM:isSafeLR>IM:isSafeLR</a>) are either both True or both False.
+                          If <em>isSafePb</em>, the glass is considered safe. <em>isSafePb</em> and <em>isSafePb</em> (from <a href=#IM:isSafeLR>IM:isSafeLR</a>) are either both True or both False.
                         </p>
                         <p class="paragraph">
                           <em>P<sub>b</sub></em> is defined in <a href=#DD:probOfBreak>DD:probOfBreak</a>.
@@ -2089,12 +2099,12 @@
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em>is-safeLR</em></p></td>
+                      <td><p class="paragraph"><em>isSafeLR</em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[LR\gt{}0\]
+                        \[\mathit{LR}\gt{}0\]
                         \[q\gt{}0\]
                       </td>
                     </tr>
@@ -2104,14 +2114,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[is-safeLR=LR\gt{}q\]</td>
+                      <td>\[\mathit{isSafeLR}=\mathit{LR}\gt{}q\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is-safeLR</em> is the 3 second load equivalent resistance safety requirement (Unitless)
+                            <em>isSafeLR</em> is the 3 second load equivalent resistance safety requirement (Unitless)
                           </li>
                           <li><em>LR</em> is the load resistance (<em>Pa</em>)</li>
                           <li><em>q</em> is the applied load (demand) (<em>Pa</em>)</li>
@@ -2122,7 +2132,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#IM:isSafePb>IM:isSafePb</a>) and <em>is-safeLR</em> are either both True or both False.
+                          If <em>isSafeLR</em>, the glass is considered safe. <em>isSafePb</em> (from <a href=#IM:isSafePb>IM:isSafePb</a>) and <em>isSafeLR</em> are either both True or both False.
                         </p>
                         <p class="paragraph">
                           <em>LR</em> is defined in <a href=#DD:calofCapacity>DD:calofCapacity</a> and is also called capacity.
@@ -2295,7 +2305,7 @@
               </p>
               <p>
                 <div id="checkGlassSafety">
-                  Check-Glass-Safety: If <em>is-safePb &and; is-safeLR</em> (from <a href=#TM:isSafeProb>TM:isSafeProb</a> and <a href=#TM:isSafeLoad>TM:isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
+                  Check-Glass-Safety: If <em>isSafePb &and; isSafeLR</em> (from <a href=#TM:isSafeProb>TM:isSafeProb</a> and <a href=#TM:isSafeLoad>TM:isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
                 </div>
               </p>
               <p>
@@ -2474,13 +2484,13 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em>is-safeLR</em></td>
+                  <td><em>isSafeLR</em></td>
                   <td>Safety Req-LR</td>
                   <td><a href=#IM:isSafeLR>IM:isSafeLR</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>is-safePb</em></td>
+                  <td><em>isSafePb</em></td>
                   <td>Safety Req-Pb</td>
                   <td><a href=#IM:isSafePb>IM:isSafePb</a></td>
                   <td>--</td>

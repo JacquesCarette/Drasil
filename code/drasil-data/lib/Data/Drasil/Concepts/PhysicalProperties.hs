@@ -2,7 +2,7 @@
 module Data.Drasil.Concepts.PhysicalProperties where
 
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (material_, property)
 import Data.Drasil.Concepts.Math (centre)

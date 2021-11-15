@@ -3,9 +3,8 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) wher
 import Prelude hiding (exp)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC, equationalModelN)
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity,
   pbTolUsr, qRef)

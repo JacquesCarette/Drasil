@@ -74,7 +74,7 @@ scientific tools versus special purpose physical models, scientific domain, open
 source versus commercial software, project maturity, project size, and level of
 safety criticality.
 
-Another important language component is defining what we hope to achieve in
+Another important building block is defining what we hope to achieve in
 terms of scientific software quality. Qualities that need to be unambiguously
 defined include reliability, sustainability, reproducibility and productivity.
 Software engineers have frequently attempted to define quality since the
@@ -112,11 +112,11 @@ $C$ represents different classes of users (external as well as internal), $S$ is
 satisfaction and $K$ is \emph{practical knowledge}.  Thus productivity is
 measured in ``satisfying reusable knowledge per hour.''  The equation can be
 applied to measure the productivity of a single developer or a group of
-developers. The equation can also be used to assess a given intervention, where
-an intervention is a process or an output intended to improve productivity.  An
-intervention process can be assessed to determine if it reduces $I$.  For
-outputs we can back calculate the inputs required to achieve the touted
-benefits.
+developers. Alternatively, the equation can also be used to assess a given
+intervention, where an intervention is a process or an output intended to
+improve productivity.  An intervention process can be assessed to determine if
+it reduces $I$.  For outputs, we can back calculate the inputs required to
+achieve the touted benefits.
 
 \section{Measuring}
 
@@ -185,21 +185,22 @@ developers will consider onboarding documents as catalysts.
 
 As we gain understanding on measures of productivity, those measures can be used
 to determine the state of the practice for different scientific software
-domains. We can measure $K$ and $S$ for existing artifacts. (Unfortunately, it
-is unlikely that records will be available for the corresponding $H$ values.)
-We can then potentially compare this to the $K$ and $S$ values for the artifacts
-recommended by software engineering textbooks.  The combined information can
-then be analyzed to determine how $K$ is distributed.  We know that knowledge
-will be duplicated.  The data will allow us to understand usability reasons
-(related to $S$) for the different views of the same knowledge.  Putting this
-all together, we hope researchers will find the most valuable $K$ and when and
-how it should appear in future artifacts for different classes of users.
+domains. We can estimate $K$ and $S$ for existing artifacts. (Unfortunately, it
+is unlikely that records will be available for the corresponding $H$ values.) We
+can then potentially compare real projects to the $K$ and $S$ values for the
+artifacts recommended by software engineering textbooks.  The combined
+information can then be analyzed to determine how $K$ is distributed.  We know
+that knowledge will be duplicated.  The data will allow us to understand
+usability reasons (related to $S$) for the different views of the same
+knowledge.  Putting this all together, we hope researchers will find the most
+valuable $K$ and when and how it should appear in future artifacts for different
+classes of users.
 
 % The goal is to invest effort in artifacts when the investment can be justified by the benefits.  
 Besides looking at $K$ and $S$, another way to judge the utility of
-documentation is to use the documentation necessary to make an assurance case.
-An assurance case~\cite{RinehartEtAl2015} presents an organized and explicit
-argument for correctness (or whatever other software quality is deemed
+documentation is to look at the documentation necessary to make an assurance
+case. An assurance case~\cite{RinehartEtAl2015} presents an organized and
+explicit argument for correctness (or whatever other software quality is deemed
 important) through a series of sub-arguments and evidence.  Documentation will
 be necessary, but through assurance cases the developers will only create the
 documentation that is relevant and necessary. %maybe remove this paragraph?
@@ -217,7 +218,7 @@ productivity by not producing documentation.  Of course, a better approach to
 improve productivity is to capture valuable knowledge in relevant documentation
 that is continually in sync with the code.
 
-In the future, an approach should be developed that synchronizes code and
+In the future, we recommend developing an approach that synchronizes code and
 documentation.  A promising approach is to generate all artifacts from a
 knowledge base~\cite{SzymczakEtAl2016}.  Using the understanding of artifacts
 gained from the work previously proposed, a generator can be taught to create

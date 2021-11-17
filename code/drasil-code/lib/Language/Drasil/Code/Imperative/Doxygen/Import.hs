@@ -12,7 +12,7 @@ import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
-import GOOL.Drasil.LanguageRenderer (dot)
+import Utils.Drasil.Document ((+:+.))
 
 -- | A 'Doc' that holds optimized choices for configuring doxygen files.
 type OptimizeChoice = Doc
@@ -20,9 +20,10 @@ type OptimizeChoice = Doc
 type ProjName = String
 
 -- | Renderings of values commonly used in the configuration file.
-yes, no :: Doc
+yes, no, defaultValSentence :: Doc
 yes = text "YES"
 no = text "NO"
+defaultValSentence = text "# The default value is: "
 
 -- | Converts a 'Verbosity' to a rendered value that can be used in a Doxygen
 -- configuration file.
@@ -32,11 +33,9 @@ verbosityToDoc Quiet = yes
 
 -- | Renderings of comments regarding the default tag values for various Doxygen settings.
 defNo, defYes :: Doc
-defNo = defaultVal no
-defYes = defaultVal yes
- 
-defaultVal :: Doc -> Doc
-defaultVal val = text "# The default value is: " <> val <> dot
+defNo = defaultValSentence +:+. no
+defYes = defaultValSentence +:+. yes
+
 
 -- | Renders a Doxygen configuration file.
 --

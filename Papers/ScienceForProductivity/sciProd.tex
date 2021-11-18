@@ -30,7 +30,7 @@
 \affiliation{
 %   \department{Computing and Software}
 %   %\streetaddress{1280 Main Street West}
-%   \institution{McMaster University}
+    \institution{McMaster University}
     \city{Hamilton}
 %   %\state{Ontario}
 %   %\postcode{L8S 4L8}
@@ -67,106 +67,98 @@ of development choices to make wise ones.}
 \section{Building Blocks}
 
 A scientific approach requires a solid foundation.  The building blocks for
-scientific discourse is an unambiguous language for communicating concepts,
+scientific discourse are: an unambiguous language for communicating concepts,
 formulating hypotheses, planning data collection, and analyzing models and
 theories.  To start with, we need to classify the software under discussion.
-Likely dimensions for classification include the following: general purpose
-scientific tools versus special purpose physical models, scientific domain, open
-source versus commercial software, project maturity, project size, and level of
-safety criticality.
+Likely dimensions include: general purpose scientific tools versus special
+purpose physical models, scientific domain, open source versus commercial
+software, project maturity, project size, and level of safety criticality.
 
-Another important building block is defining what we hope to achieve in
-terms of scientific software quality. Qualities that need to be unambiguously
-defined include reliability, sustainability, reproducibility and productivity.
-Software engineers have frequently attempted to define quality since the
-1970s~\cite{McCallEtAl1977}, but the definitions aren't usually specific to
-scientific software (as shown by the confusion between precision and accuracy is
-the ISO/IEC definitions~\cite{ISO9126}). Moreover, the definitions often focus
-on measurability, where the first priority should be conceptual clarity,
-analogous to the unmeasurable, but conceptually clear, definition of forward
-error, which requires knowing the (usually unknown) true answer.
+We also need to be precise about our software quality goals. Qualities
+such as reliability, sustainability, reproducibility and productivity need
+precise definitions. Attempts have been made since the
+1970s~\cite{McCallEtAl1977}, but the resulting definitions aren't usually
+specific to scientific software (as shown by the confusion between precision
+and accuracy is the ISO/IEC definitions~\cite{ISO9126}). Moreover, the
+definitions often focus on measurability, where the first priority should be
+conceptual clarity, analogous to the unmeasurable, but conceptually clear,
+definition of forward error, which requires knowing the (usually unknown) true
+answer.
 
-For each relevant quality we recommend collecting as many distinct instances of
-the definition as possible.  Once all the definitions are collected, they can be
+For each relevant quality we recommend collecting as many distinct
+definitions as possible.  Once collected, they can be
 assessed against the following criteria (based on~\citet{IEEE1998}):
 completeness, consistency, modifiability, traceability, unambiguity and
 abstractness. The understanding gained from this systematic survey and analysis
-can then be used to propose a new set of quality definitions that allow for
-reasoning about quality.
+can be used to either choose solid definitions, or proposed new ones.
+In all cases, the definitions should enable \emph{reasoning about quality}.
 
 \section{Productivity}
 
 Our definition of long-term productivity~\cite{SmithAndCarette2020arXiv}
-provides an example of how we envision quality definitions in the future.  The
-definition meets the criteria listed in the previous section.  Moreover, it
-provides a starting point for reasoning about improving productivity, as
-explored in subsequent sections.  We define productivity as:
+provides an example of our vision, and meets our criteria.
+We define productivity as:
 
 $$P = O / I$$ 
 $$ I = \int_{0}^{T} H(t)\ dt $$
-$$ O = \int_{0}^{T} \sum_{c \in C} S_c(t) K_c(t)\ dt $$
+$$ O = \int_{0}^{T} \sum_{c \in C} F(S_c(t), K_c(t))\ dt $$
 
 \noindent where $P$ is productivity, $I$ is the inputs, $O$ is the outputs, $0$
 is the time the project started, $T$ is the time \emph{in the future} where we
 want to take stock, $H$ is the total number of hours available by all personnel,
 $C$ represents different classes of users (external as well as internal), $S$ is
-satisfaction and $K$ is \emph{practical knowledge}.  Thus productivity is
-measured in ``satisfying reusable knowledge per hour.''  The equation can be
-applied to measure the productivity of a single developer or a group of
-developers. Alternatively, the equation can also be used to assess a given
-intervention, where an intervention is a process or an output intended to
-improve productivity.  An intervention process can be assessed to determine if
-it reduces $I$.  For outputs, we can back calculate the inputs required to
-achieve the touted benefits.
+\emph{user satisfaction} and $K$ is \emph{effective knowledge}, and $F$ is a
+weighing function that indicates ``value''.  Thus productivity is
+measured in ``value per year.''  and is a mixture of external and internal
+value produced. \emph{Value} should not be equated with money; measuring
+the productivity of free software development is just as important as for
+commercial software.
+
+While the most straightforward use of such a formula is to measure productivity
+of a team, it can also be used in ``what if'' scenarios to assist in planning
+interventions, i.e. changes intended to improve productivity.
+
+Measuring over too short a time-frame will assuredly give
+warped results. This leads some to argue that productivity shouldn't even
+be measured~\cite{Ko2019}.
 
 \section{Measuring}
 
 Proper science requires measurement.  We can only determine whether a given
-intervention is a catalyst or inhibitor by measuring its impact.  We can
-illustrate this via the above productivity equation.  Although it cannot be
-directly measured, examining the parts provides insight.
+intervention is a catalyst or inhibitor by measuring its impact.  Let us
+examine in more details the consequences of our proposed definition.
 
-The equation shows an integral over time to emphasize the time-frame.  Some
-developers may show short-term productivity, say by producing a poor design that
-repeats the same, or very similar, code in multiple places. However, long-term
-productivity should favour the developer that refactors the design by replacing
-the repeated code with a function. A productivity measure for knowledge workers
-cannot just focus on quantity, quality is at least as
-important~\cite{Drucker1999}.  The proposed definition captures this by
-combining knowledge with satisfaction.
+First, the time integrals emphasize that productivity is something that
+happens \emph{over time}. The most interesting kind of productivity is
+that of an organization over the span of years. Measuring over too short
+a time frame is one of the main sources of \emph{technical debt}%
+\cite{techdept} as it devalues planning, team work, being strategic, etc.
 
-The input $H$ is the number of hours worked.  Depending on the context, this
-will be the total hours worked by a developer, or the total hours required
-(possibly by multiple developers) to realize a given intervention (process or
-output).
+Secondly, as Drucker~\cite{Drucker1999} reminds us, quality is at least as
+important as quantity. Here we use a proxy for quality, namely
+\emph{user satisfaction}. It is important to note that unreleased products
+and unreleased features induce \textbf{no} user satisfaction. A broken
+product might be even worse, and produce negative satisfaction.
 
-The output depends on user satisfaction ($S$), where user satisfaction acts as a
-proxy for effective quality. How best to assess satisfaction should be studied
-in the future.  As a starting point, satisfaction can potentially be
-approximated with such measures as numbers of users, number of citations, number
-of forks of a repository, the number of ``stars'', surveys of existing users,
-number of mentions in the issue tracker, and experiments to measure usability.
+The input $H$ is the number of hours worked by the team, including managers
+and support staff, as appropriate. To optimize productivity, we want to
+make $I$, and thus $H$, \emph{small}. This is the raw input being applied,
+whether effective or not.
 
-Productivity means increasing the effective knowledge ($K$) delivered to users
-over time, at a lesser cost. As the knowledge produced will be used by different
-kinds of users (such as internal developers and external users), it is important
-to weigh the satisfaction of each class separately. This explicit emphasis on
-all knowledge produced, rather than just the operationalizable knowledge (aka
-code) implies that human-reusable knowledge, i.e. documentation, is crucial.
-This reinforces the importance of the long-lived context.  The best measure for
-knowledge is an area for future exploration.
+We use user satisfactor ($S$) as a proxy for effective quality. How to 
+measure this is left for future study. It can be approximated by measures
+such as numbers of users, number of citations, number
+of forks of a repository, number of ``stars'', surveys of existing users,
+number of mentions in the issue tracker, and usability experiments.
 
-% \section{State of the Practice}
-
-% Maybe remove this section?
-
-% Understanding the state of the practice, including finding a methodology
-% to assess the state of practice (SOP work).
-
-% Understanding the gap between what is recommended and what is practiced (Olu’s
-% work) 
-
-% Research questions.
+Probably the trickiest part is \emph{effective knowledge} ($K$). The idea
+is that while source code embodies operational knowledge that has the
+potential to directly lead to user satisfaction, a project usually also
+generates a lot of \emph{tacit knowledge} about design, including the
+rationale for various choices. This is the kind of knowledge that is lost
+when employees leave, and is the most costly to build and replace.
+In other words, human-reusable knowledge such as documentation factors in
+here.  The best measure for knowledge is an area for future exploration.
 
 \section{Artifacts}
 

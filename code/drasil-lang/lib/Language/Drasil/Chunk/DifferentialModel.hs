@@ -10,7 +10,7 @@ module Language.Drasil.Chunk.DifferentialModel (
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
-import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.UID (HasUID(uid))
 import Language.Drasil.Classes (Express(..),
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)

@@ -78,7 +78,13 @@ data Completeness = Complete | Incomplete
 
 -- ** Expr
 
--- | Drasil expressions.
+-- | 'Expr' is a subset of our commonly used mathematical expression language.
+--   All constructions of 'Expr' should have a total conversion into 'CodeExpr',
+--   and should be directly calculable, on their own, with a calculator.
+--   It should not require one to perform any kind of analysis or approximation
+--   in order to evaluate any construction.
+--
+--   It is the base expression language for both 'CodeExpr' and 'ModelExpr'.
 data Expr where
   -- | Brings a literal into the expression language.
   Lit :: Literal -> Expr
@@ -97,7 +103,7 @@ data Expr where
   --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
   FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
   -- | For multi-case expressions, each pair represents one case.
-  Case     :: Completeness -> [(Expr,Relation)] -> Expr
+  Case     :: Completeness -> [(Expr, Relation)] -> Expr
   -- | Represents a matrix of expressions.
   Matrix   :: [[Expr]] -> Expr
   

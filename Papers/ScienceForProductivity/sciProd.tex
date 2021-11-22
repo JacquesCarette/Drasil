@@ -160,7 +160,7 @@ when employees leave, and is the most costly to build and replace.
 In other words, human-reusable knowledge such as documentation factors in
 here.  The best measure for knowledge is an area for future exploration.
 
-\section{Artifacts}
+\section{Artifacts Produced}
 
 Software development typically produces many artifacts, such as
 requirements, specifications, user manual, unit
@@ -204,25 +204,31 @@ necessary.
 
 \section{Production Methods}
 
-The previous section focused on increasing $O$, but another way to improve
-productivity is to reduce $I$.  The production methods, or process, used to
-build software has a significant impact on $I$.  One of the likely reasons that
-developers focus on code, and code related artifacts (like testing files and
-build scripts), is that documentation is difficult to keep in sync as the
-project evolves over time.  Out of sync documentation is worse than no
-documentation; therefore, a case could be made that developers are ``improving''
-productivity by not producing documentation.  Of course, a better approach to
-improve productivity is to capture valuable knowledge in relevant documentation
-that is continually in sync with the code.
+One way to improve productivity is to waste less to on non-productive or
+counter-productive activities. That code is the most visible artifact that
+contributes user-value, along with with testing (because quality is an
+extremely important factor in user-value) explains the inordinate focus
+on just those artifacts. Furthermore, the de-emphasis on documentation, even to
+the extreme of some methodologies to have none, can feel like productivity
+improvements in the short term!  A better approach would be to capture
+knowledge in ways that keep this continuously synchronized between the
+various artifacts where it appears.
 
-In the future, we recommend developing an approach that synchronizes code and
-documentation.  A promising approach is to generate all artifacts from a
-knowledge base~\cite{SzymczakEtAl2016}.  Using the understanding of artifacts
-gained from the work previously proposed, a generator can be taught to create
-artifacts with satisfactory knowledge. Since the approach is generative,
-repetition of knowledge is fine.  This means that documents can be tailored to
-different classes of users, thus further improving productivity.  A generative
-approach can potentially produce high $S$ and high $K$, while reducing $H$.
+One promising approach is to generate all artifacts from a single
+knowledge base~\cite{SzymczakEtAl2016}.  This relies on a solid understanding
+of the contents of all of the artifacts present in the software engineering
+process. Our proof-of-concept shows that this is possible. As the artifacts
+are now generated, knowledge duplication is not a problem. Even better, the
+knowledge is synchronised-by-construction. Furthermore, it becomes easy to
+tailor artifacts, documentation as well as code, to different classes of
+``users''. 
+
+%Using the understanding of artifacts
+%gained from the work previously proposed, a generator can be taught to create
+%artifacts with satisfactory knowledge. Since the approach is generative,
+%repetition of knowledge is fine.  This means that documents can be tailored to
+%different classes of users, thus further improving productivity.  A generative
+%approach can potentially produce high $S$ and high $K$, while reducing $H$.
 
 \section{Concluding Remarks}
 
@@ -230,15 +236,15 @@ Our position is that decisions on processes, tools, techniques and software
 artifacts should be driven by science, not by personal preference.  Decisions
 should not be based on anecdotal evidence, gut instinct or the path of least
 resistance.  Moreover, decisions should vary depending on the users and the
-context.  In many cases this will mean that a longer term view should be
-adopted.  We need to use a scientific approach based on unambiguous definitions,
-empirical evidence, hypothesis testing and rigorous processes.
+context.  In most cases of interest, this means that a longer term view should
+be adopted.  We need to use a scientific approach based on unambiguous
+definitions, empirical evidence, hypothesis testing and rigorous processes.
 
-By developing an understanding of how input hours, satisfaction and knowledge
-are related to productivity, in the future we will be able to determine what
-interventions have the greatest return on investment.  We will be able to
-recommend software production methods and artifacts that justify their value
-because the output benefits are high compared to the required input resources.  
+By developing an understanding of where input hours are spent, what most
+contributes to user satisfaction, and how to leverage knowledge produced,
+we can determine what has the greatest return on investment.  We will be able
+to recommend software production processes that justify their value because the
+long-term output benefits are high compared to the required input resources.  
 
 % - version control can track individual programmers, what lines of code have
 %   been added and deleted.  link to productivity.

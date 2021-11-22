@@ -3,6 +3,7 @@
 module Database.Drasil.ChunkDB.GetChunk (ccss, ccss', combine, getIdeaDict, vars) where
 
 import Language.Drasil
+import Language.Drasil.Development
 import Language.Drasil.ModelExpr.Development (meDep)
 
 import Database.Drasil.ChunkDB (ChunkDB, defResolve, symbResolve, termResolve)

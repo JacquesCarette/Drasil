@@ -2,17 +2,16 @@
 -- | Document Description Language.
 module Language.Drasil.Document where
 
-import Language.Drasil.Classes.Core (HasUID(uid), getRefAdd, HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
-import Language.Drasil.Classes.Core2 (HasShortName(shortname))
-import Language.Drasil.Document.Core
-import Language.Drasil.Label.Type (prepend, LblType(RP, URI), getAdd)
+import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
+  LabelledContent(LblC), RawContent(Figure, Paragraph),
+  Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent )
+import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
+  Referable(..), HasRefAddress(..) )
 import Language.Drasil.Misc (repUnd)
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
-import Language.Drasil.ShortName (ShortName, shortname')
-import Language.Drasil.UID (UID)
-import qualified Language.Drasil.UID.Core as UID (uid)
-import Language.Drasil.UID.Core ((+++.))
+import Language.Drasil.UID (UID, HasUID(..), (+++.), mkUid)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -29,8 +28,8 @@ data Partition = Sections
 
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').
-data Section = Section 
-             { tle  :: Title 
+data Section = Section
+             { tle  :: Title
              , cons :: [SecCons]
              , _lab :: Reference
              }
@@ -45,7 +44,7 @@ data Section = Section
 
 data SecHeader = SecHeader Title Reference
 data Content   = Content   Contents
--} 
+-}
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
 -- | 'Section's are equal if 'UID's are equal.
@@ -77,7 +76,7 @@ data ShowTableOfContents = ToC | NoToC
 -- | Manually removes the first section of a document (table of contents section).
 -- temp fix for Notebook (see if we need this in notebook later)
 checkToC :: Document -> Document
-checkToC (Document t a toC sc) = 
+checkToC (Document t a toC sc) =
   case toC of
     ToC -> Document t a toC $ drop 1 sc
     _   -> Document t a toC sc
@@ -149,24 +148,24 @@ figWithWidth = Figure
 -- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).
 makeTabRef :: String -> Reference
-makeTabRef rs = Reference (UID.uid rs) (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
+makeTabRef rs = Reference (mkUid rs) (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a figure. Takes in the name of a figure (which will also be used for its shortname).
 makeFigRef :: String -> Reference
-makeFigRef rs = Reference (UID.uid rs) (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
+makeFigRef rs = Reference (mkUid rs) (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a section. Takes in the name of a section and a shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
-makeSecRef r s = Reference (UID.uid $ r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
+makeSecRef r s = Reference (mkUid $ r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
   (shortname' s)
 
 -- | Create a reference for a equation. Takes in the name of the equation (which will also be used for its shortname).
 makeEqnRef :: String -> Reference
-makeEqnRef rs = Reference (UID.uid rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs))
+makeEqnRef rs = Reference (mkUid rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a 'URI'. Takes in a 'UID' (as a 'String'), a reference address, and a shortname.
 makeURI :: String -> String -> ShortName -> Reference
-makeURI u r = Reference (UID.uid u) (URI r)
+makeURI u r = Reference (mkUid u) (URI r)
 
 -- | Variants of 'makeTabRef' that takes a 'UID' instead of a 'String'.
 makeTabRef' :: UID -> Reference

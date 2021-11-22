@@ -4,8 +4,7 @@ import Data.Drasil.Concepts.Documentation (goalStmtDom, physicalSystem)
 
 import Drasil.PDController.Concepts
 import Language.Drasil
-import Utils.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 sysProblemDesc :: Sentence
 sysProblemDesc

@@ -12,12 +12,8 @@ import Prelude hiding (print, (<>))
 import Data.List (sortBy)
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
-import Utils.Drasil (checkValidStr, numList)
 
-import qualified Language.Drasil as L (People, Person, 
-  CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  DType(Data, Theory, Instance, General),MaxWidthPercent,
-  Document, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
+import qualified Language.Drasil as L
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
@@ -136,7 +132,7 @@ pSpec (E e)  = em $ pExpr e
 -- pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
 -- pSpec (Sy s)    = printMath $ TeX.pUnit s
 pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
+pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
@@ -505,7 +501,7 @@ rendPeople' people = S . foldlList $ map rendPers (init people) ++  [rendPersL (
 
 -- | Organize a list of pages.
 foldPages :: [Int] -> Doc
-foldPages = text . foldlList . numList "&ndash;"
+foldPages = text . foldlList . L.numList "&ndash;"
 
 -- | Organize a list of people.
 foldPeople :: L.People -> Doc

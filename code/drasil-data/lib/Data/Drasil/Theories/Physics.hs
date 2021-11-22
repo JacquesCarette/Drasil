@@ -2,9 +2,9 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
+import Utils.Drasil (weave)
 import Theory.Drasil
-import Utils.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Citations (velocityWiki, accelerationWiki)
 import Data.Drasil.Concepts.Documentation (component, material_, value, constant)

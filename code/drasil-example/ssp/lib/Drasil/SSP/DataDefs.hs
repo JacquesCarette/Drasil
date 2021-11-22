@@ -6,8 +6,7 @@ module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, ddE)
-import Utils.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)

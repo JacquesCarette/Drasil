@@ -62,9 +62,9 @@ The symbols used in this document are summarized in the \hyperref[Table:ToS]{Tab
 \\
 \midrule
 \endhead
-$-∞$ & Negative Infinity & --
+$\mathit{-∞}$ & Negative Infinity & --
 \\
-$AbsTol$ & Absolute Tolerance & --
+$\mathit{AbsTol}$ & Absolute Tolerance & --
 \\
 ${C_{\text{s}}}$ & Control Variable in the frequency domain & --
 \\
@@ -90,7 +90,7 @@ ${K_{\text{p}}}$ & Proportional Gain & --
 \\
 $k$ & Stiffness coefficient of the spring & ${\text{s}}$
 \\
-$L⁻¹[F(s)]$ & Inverse Laplace Transform of a function & --
+$\mathit{L⁻¹[F(s)]}$ & Inverse Laplace Transform of a function & --
 \\
 $m$ & Mass & ${\text{kg}}$
 \\
@@ -100,7 +100,7 @@ ${R_{\text{s}}}$ & Set-Point in the frequency domain & --
 \\
 ${r_{\text{t}}}$ & Set-Point & --
 \\
-$RelTol$ & Relative Tolerance & --
+$\mathit{RelTol}$ & Relative Tolerance & --
 \\
 $s$ & Complex frequency-domain parameter & --
 \\
@@ -321,7 +321,7 @@ Label & Laplace Transform
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {F_{\text{s}}}=\int_{-∞}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt
+           {F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -354,12 +354,12 @@ Label & Inverse Laplace Transform
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {f_{\text{t}}}=L⁻¹[F(s)]
+           {f_{\text{t}}}=\mathit{L⁻¹[F(s)]}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${f_{\text{t}}}$ is the Function in the time domain (Unitless)}
-              \item{$L⁻¹[F(s)]$ is the Inverse Laplace Transform of a function (Unitless)}
+              \item{$\mathit{L⁻¹[F(s)]}$ is the Inverse Laplace Transform of a function (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & Inverse Laplace Transform of F(S). The Inverse Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (\cite{laplaceWiki}).

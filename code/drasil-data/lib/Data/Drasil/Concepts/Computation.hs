@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Computation where
 
 import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
   ConceptChunk, CI, NamedChunk, dccWDS)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
   quantity, type_, value, variable)

@@ -10,9 +10,9 @@ import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, newDEModel')
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Utils.Drasil (weave)
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.PDController.Unitals
 
 instanceModels :: [InstanceModel]

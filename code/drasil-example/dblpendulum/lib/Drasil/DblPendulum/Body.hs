@@ -6,10 +6,9 @@ import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
 
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)

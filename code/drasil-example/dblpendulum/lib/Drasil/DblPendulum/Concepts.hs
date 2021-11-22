@@ -4,7 +4,7 @@ import Language.Drasil
 import Data.Drasil.Domains (physics)
 import Data.Drasil.Concepts.Documentation (first, second_, object)
 import Data.Drasil.Theories.Physics (newtonSLRQD)
-import Utils.Drasil.Concepts (compoundNC)
+import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force, acceleration)
 
 

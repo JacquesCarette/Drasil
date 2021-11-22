@@ -1,15 +1,29 @@
 -- | General functions that are useful in manipulating some Drasil types into
 -- printable 'Contents'.
-module Utils.Drasil.Contents (
+module Language.Drasil.Document.Contents (
   -- * List Creation Functions
   enumBullet, enumBulletU, enumSimple,
   enumSimpleU, mkEnumSimpleD,
+
   -- * Displaying Expressions
   lbldExpr, unlbldExpr
-  ) where
+) where
 
-import Language.Drasil
-import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
+import Language.Drasil.Classes ( Definition(..) )
+import Language.Drasil.ShortName (HasShortName(..), getSentSN)
+import Language.Drasil.Document ( llcc, ulcc )
+import Language.Drasil.Document.Core
+    ( LabelledContent,
+      RawContent(Enumeration, EqnBlock),
+      Contents(UlC),
+      ListTuple,
+      ItemType(Flat),
+      ListType(Simple) )
+import Language.Drasil.ModelExpr.Lang ( ModelExpr )
+import Language.Drasil.Reference ( Reference )
+import Language.Drasil.Sentence ( Sentence )
+import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
+import Language.Drasil.Label.Type ( Referable(refAdd) )
 
 import Control.Lens ((^.))
 

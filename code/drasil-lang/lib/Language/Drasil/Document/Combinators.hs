@@ -1,6 +1,6 @@
-{-# Language TypeFamilies, PostfixOperators #-}
+{-# Language PostfixOperators #-}
 -- | Miscellaneous utility functions for use throughout Drasil.
-module Utils.Drasil.Misc (
+module Language.Drasil.Document.Combinators (
   -- * Reference-related Functions
   -- | Attach a 'Reference' and a 'Sentence' in different ways.
   chgsStart, definedIn, definedIn', definedIn'', definedIn''',
@@ -16,13 +16,49 @@ module Utils.Drasil.Misc (
   bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
   tAndDOnly, tAndDWAcc, tAndDWSym,
-  weave, zipSentList
-  ) where
+  zipSentList
+) where
 
-import Language.Drasil
-import Language.Drasil.Display
-import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
-import qualified Utils.Drasil.Sentence as S (are, in_, is, toThe)
+import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
+import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
+import Language.Drasil.Chunk.Unital ( UnitalChunk )
+import Language.Drasil.Classes
+    ( HasUnitSymbol(usymb),
+      Quantity,
+      Concept,
+      Definition(defn),
+      NamedIdea(..) )
+import Language.Drasil.ShortName (HasShortName(..))
+import Language.Drasil.Development.Sentence
+    ( short, atStart, titleize, phrase, plural )
+import Language.Drasil.Document ( Section )
+import Language.Drasil.Document.Core
+    ( ItemType(..), ListType(Bullet) )
+import Language.Drasil.Expr.Class ( ExprC(sy) )
+import Language.Drasil.ModelExpr.Class ( ModelExprC(isIn) )
+import Language.Drasil.ModelExpr.Lang ( ModelExpr )
+import Language.Drasil.NounPhrase.Core ( NP )
+import Language.Drasil.Reference ( refS, namedRef )
+import Language.Drasil.Sentence
+    ( Sentence(S, Percent, (:+:), Sy, EmptyS),
+      eS,
+      ch,
+      sParen,
+      sDash,
+      (+:+),
+      sC,
+      (+:+.),
+      (!.),
+      (+:),
+      capSent )
+import Language.Drasil.Space ( Space(DiscreteD, DiscreteS) )
+import Language.Drasil.Symbol.Helpers ( eqSymb )
+import Language.Drasil.Uncertainty
+import Language.Drasil.Symbol
+import Language.Drasil.Sentence.Fold
+import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
+import Language.Drasil.UID ( HasUID )
+import Language.Drasil.Label.Type
 
 import Control.Lens ((^.))
 
@@ -149,10 +185,6 @@ bulletFlat = Bullet . noRefs . map Flat
 bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 
--- | Interweaves two lists together @[[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]@.
-weave :: [[a]] -> [a]
-weave = concat . transpose
-
 -- | Get a unit symbol if there is one.
 unwrap :: Maybe UnitDefn -> Sentence
 unwrap (Just a) = Sy $ usymb a
@@ -200,10 +232,12 @@ maybeExpanded a = likelyFrame a (S "expanded")
 -- Returns of the form: "@term (abbreviation) - termDefinition@".
 tAndDWAcc :: Concept s => s -> ItemType
 tAndDWAcc temp = Flat $ atStart temp +:+. (sParen (short temp) `sDash` capSent (temp ^. defn))
+
 -- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
 -- Returns of the form: "@term (symbol) - termDefinition@".
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ atStart tD +:+. (sParen (ch sym) `sDash` capSent (tD ^. defn))
+
 -- | Helpful combinators for making 'Sentence's into Terminologies with Definitions.
 -- Returns of the form: "@term - termDefinition@".
 tAndDOnly :: Concept s => s -> ItemType

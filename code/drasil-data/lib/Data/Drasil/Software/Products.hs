@@ -2,7 +2,7 @@
 module Data.Drasil.Software.Products where
 
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (game, video, open, source)
 import Data.Drasil.Concepts.Computation (computer)

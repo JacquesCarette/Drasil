@@ -70,10 +70,10 @@ public class Control {
         outfile.Write(LR);
         outfile.WriteLine(" in module Control");
         outfile.Close();
-        Boolean is_safeLR = Calculations.func_is_safeLR(LR, q);
+        Boolean isSafeLR = Calculations.func_isSafeLR(LR, q);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'is_safeLR' assigned ");
-        outfile.Write(is_safeLR);
+        outfile.Write("var 'isSafeLR' assigned ");
+        outfile.Write(isSafeLR);
         outfile.WriteLine(" in module Control");
         outfile.Close();
         double P_b = Calculations.func_P_b(B);
@@ -82,12 +82,12 @@ public class Control {
         outfile.Write(P_b);
         outfile.WriteLine(" in module Control");
         outfile.Close();
-        Boolean is_safePb = Calculations.func_is_safePb(inParams, P_b);
+        Boolean isSafePb = Calculations.func_isSafePb(inParams, P_b);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'is_safePb' assigned ");
-        outfile.Write(is_safePb);
+        outfile.Write("var 'isSafePb' assigned ");
+        outfile.Write(isSafePb);
         outfile.WriteLine(" in module Control");
         outfile.Close();
-        OutputFormat.write_output(is_safePb, is_safeLR, P_b, J);
+        OutputFormat.write_output(isSafePb, isSafeLR, P_b, J);
     }
 }

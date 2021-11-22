@@ -2,8 +2,8 @@ module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
 import Data.Drasil.Domains (civilEng)
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
   likelyChg, physSyst, property, requirement, safety, srs, typUnc, unlikelyChg)

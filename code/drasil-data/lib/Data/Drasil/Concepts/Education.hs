@@ -2,7 +2,7 @@
 module Data.Drasil.Concepts.Education where
 
 import Language.Drasil hiding (year)
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (first, physics, second_, year)
 import Data.Drasil.Concepts.PhysicalProperties (solid)

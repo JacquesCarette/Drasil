@@ -211,6 +211,8 @@ MK :: ModelKinds e -> UID -> NP -> ModelKind e
 -- | Models can be of different kinds:
 --   
 --   <ul>
+--   <li><a>NewDEModel</a>s represent differential equations as
+--   <a>DifferentialModel</a>s</li>
 --   <li><a>DEModel</a>s represent differential equations as
 --   <a>RelationConcept</a>s</li>
 --   <li><tt>EquationalConstraint</tt>s represent invariants that will hold
@@ -227,11 +229,15 @@ MK :: ModelKinds e -> UID -> NP -> ModelKind e
 --   other kinds.</li>
 --   </ul>
 data ModelKinds e
+[NewDEModel] :: DifferentialModel -> ModelKinds e
 [DEModel] :: RelationConcept -> ModelKinds e
 [EquationalConstraints] :: ConstraintSet e -> ModelKinds e
 [EquationalModel] :: QDefinition e -> ModelKinds e
 [EquationalRealm] :: MultiDefn e -> ModelKinds e
 [OthModel] :: RelationConcept -> ModelKinds e
+
+-- | Smart constructor for <a>NewDEModel</a>s
+newDEModel :: String -> NP -> DifferentialModel -> ModelKind e
 
 -- | Smart constructor for <a>DEModel</a>s
 deModel :: String -> NP -> RelationConcept -> ModelKind e
@@ -247,6 +253,10 @@ equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>OthModel</a>s
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
+
+-- | Smart constructor for <a>NewDEModel</a>s, deriving UID+Term from the
+--   <a>DifferentialModel</a>
+newDEModel' :: DifferentialModel -> ModelKind e
 
 -- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>
@@ -284,13 +294,13 @@ equationalRealmU :: String -> MultiDefn e -> ModelKind e
 equationalRealmN :: NP -> MultiDefn e -> ModelKind e
 
 -- | Map into internal representations of ModelKinds
-setMk :: ModelKinds e -> Setter' RelationConcept a -> Setter' (ConstraintSet e) a -> Setter' (QDefinition e) a -> Setter' (MultiDefn e) a -> a -> ModelKinds e
+setMk :: ModelKinds e -> Setter' DifferentialModel a -> Setter' RelationConcept a -> Setter' (ConstraintSet e) a -> Setter' (QDefinition e) a -> Setter' (MultiDefn e) a -> a -> ModelKinds e
 
 -- | Retrieve internal data from ModelKinds
-elimMk :: Getter RelationConcept a -> Getter (ConstraintSet e) a -> Getter (QDefinition e) a -> Getter (MultiDefn e) a -> ModelKinds e -> a
+elimMk :: Getter DifferentialModel a -> Getter RelationConcept a -> Getter (ConstraintSet e) a -> Getter (QDefinition e) a -> Getter (MultiDefn e) a -> ModelKinds e -> a
 
 -- | Make a <tt>Lens</tt> for <a>ModelKinds</a>.
-lensMk :: forall e a. Lens' RelationConcept a -> Lens' (ConstraintSet e) a -> Lens' (QDefinition e) a -> Lens' (MultiDefn e) a -> Lens' (ModelKinds e) a
+lensMk :: forall e a. Lens' DifferentialModel a -> Lens' RelationConcept a -> Lens' (ConstraintSet e) a -> Lens' (QDefinition e) a -> Lens' (MultiDefn e) a -> Lens' (ModelKinds e) a
 
 -- | Extract a list of <a>QDefinition</a>s from a list of
 --   <a>ModelKinds</a>.
@@ -548,6 +558,9 @@ multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
 --   information from the IMs<i>TMs</i>GDs.
 data ModelKind e
 
+-- | Smart constructor for <a>NewDEModel</a>s
+newDEModel :: String -> NP -> DifferentialModel -> ModelKind e
+
 -- | Smart constructor for <a>DEModel</a>s
 deModel :: String -> NP -> RelationConcept -> ModelKind e
 
@@ -562,6 +575,10 @@ equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>OthModel</a>s
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
+
+-- | Smart constructor for <a>NewDEModel</a>s, deriving UID+Term from the
+--   <a>DifferentialModel</a>
+newDEModel' :: DifferentialModel -> ModelKind e
 
 -- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>

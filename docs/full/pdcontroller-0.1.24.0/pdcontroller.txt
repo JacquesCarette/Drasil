@@ -228,8 +228,7 @@ ddCtrlNote :: Sentence
 module Drasil.PDController.IModel
 instanceModels :: [InstanceModel]
 imPD :: InstanceModel
-imPDRC :: RelationConcept
-eqn :: ModelExpr
+imPDRC :: DifferentialModel
 imDeriv :: Derivation
 imDerivStmts :: [Sentence]
 imDerivEqns :: [ModelExpr]

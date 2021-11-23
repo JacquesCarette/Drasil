@@ -134,6 +134,9 @@ multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
 --   information from the IMs<i>TMs</i>GDs.
 data ModelKind e
 
+-- | Smart constructor for <a>NewDEModel</a>s
+newDEModel :: String -> NP -> DifferentialModel -> ModelKind e
+
 -- | Smart constructor for <a>DEModel</a>s
 deModel :: String -> NP -> RelationConcept -> ModelKind e
 
@@ -148,6 +151,10 @@ equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 
 -- | Smart constructor for <a>OthModel</a>s
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
+
+-- | Smart constructor for <a>NewDEModel</a>s, deriving UID+Term from the
+--   <a>DifferentialModel</a>
+newDEModel' :: DifferentialModel -> ModelKind e
 
 -- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
 --   <a>RelationConcept</a>

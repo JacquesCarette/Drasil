@@ -1029,7 +1029,7 @@ data ModelExpr
 -- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
 --   principal part of change -&gt; with respect to For example: Deriv Part
 --   y x1 would be (dy/dx1).
-[Deriv] :: DerivType -> ModelExpr -> UID -> ModelExpr
+[Deriv] :: Integer -> DerivType -> ModelExpr -> UID -> ModelExpr
 
 -- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
 --   Implicitly assumes that the chunk has a symbol.
@@ -1247,7 +1247,7 @@ data ModelExpr
 -- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
 --   principal part of change -&gt; with respect to For example: Deriv Part
 --   y x1 would be (dy/dx1).
-[Deriv] :: DerivType -> ModelExpr -> UID -> ModelExpr
+[Deriv] :: Integer -> DerivType -> ModelExpr -> UID -> ModelExpr
 
 -- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
 --   Implicitly assumes that the chunk has a symbol.
@@ -2211,6 +2211,14 @@ deriv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
 -- | Gets the derivative of an <a>ModelExpr</a> with respect to a
 --   <a>Symbol</a>.
 pderiv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
+
+-- | Gets the nthderivative of an <a>ModelExpr</a> with respect to a
+--   <a>Symbol</a>.
+nthderiv :: (ModelExprC r, HasUID c, HasSymbol c) => Integer -> r -> c -> r
+
+-- | Gets the nthderivative of an <a>ModelExpr</a> with respect to a
+--   <a>Symbol</a>.
+nthpderiv :: (ModelExprC r, HasUID c, HasSymbol c) => Integer -> r -> c -> r
 
 -- | One expression is "defined" by another.
 defines :: ModelExprC r => r -> r -> r
@@ -5317,6 +5325,23 @@ instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuant
 instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 
+module Language.Drasil.Chunk.DifferentialModel
+data DifferentialModel
+($*) :: Expr -> Int -> CoeffDeriv
+
+-- | Create a <a>DifferentialModel</a> from a given indepVar
+--   (<a>UnitalChunk</a>), DepVar (<a>ModelExpr</a>), | Coefficients
+--   ('[Expr]'), Constant (<a>Expr</a>), UID (<a>String</a>), term
+--   (<a>NP</a>), definition (<a>Sentence</a>).
+makeLinear :: UnitalChunk -> ConstrConcept -> [CoeffDeriv] -> Expr -> String -> NP -> Sentence -> DifferentialModel
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.DifferentialModel.DifferentialModel
+instance GHC.Classes.Eq Language.Drasil.Chunk.DifferentialModel.DifferentialModel
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DifferentialModel.DifferentialModel
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.DifferentialModel.DifferentialModel
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.DifferentialModel.DifferentialModel
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.DifferentialModel.DifferentialModel
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.DifferentialModel.DifferentialModel
+
 
 -- | The Drasil language, including expressions, chunks, sentences,
 --   references, classes, datatypes, and generally useful functions.
@@ -5543,6 +5568,14 @@ deriv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
 -- | Gets the derivative of an <a>ModelExpr</a> with respect to a
 --   <a>Symbol</a>.
 pderiv :: (ModelExprC r, HasUID c, HasSymbol c) => r -> c -> r
+
+-- | Gets the nthderivative of an <a>ModelExpr</a> with respect to a
+--   <a>Symbol</a>.
+nthderiv :: (ModelExprC r, HasUID c, HasSymbol c) => Integer -> r -> c -> r
+
+-- | Gets the nthderivative of an <a>ModelExpr</a> with respect to a
+--   <a>Symbol</a>.
+nthpderiv :: (ModelExprC r, HasUID c, HasSymbol c) => Integer -> r -> c -> r
 
 -- | One expression is "defined" by another.
 defines :: ModelExprC r => r -> r -> r
@@ -5881,6 +5914,14 @@ makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 -- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
 --   a <a>Concept</a>, new <tt>UID</tt> and relation.
 addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
+data DifferentialModel
+($*) :: Expr -> Int -> CoeffDeriv
+
+-- | Create a <a>DifferentialModel</a> from a given indepVar
+--   (<a>UnitalChunk</a>), DepVar (<a>ModelExpr</a>), | Coefficients
+--   ('[Expr]'), Constant (<a>Expr</a>), UID (<a>String</a>), term
+--   (<a>NP</a>), definition (<a>Sentence</a>).
+makeLinear :: UnitalChunk -> ConstrConcept -> [CoeffDeriv] -> Expr -> String -> NP -> Sentence -> DifferentialModel
 
 -- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
 --   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from

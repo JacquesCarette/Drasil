@@ -5,6 +5,7 @@ ModelExpr -> ModelExpr;
 ModelExpr -> Space;
 ModelExpr -> AssocArithOper;
 ModelExpr -> AssocBoolOper;
+ModelExpr -> Integer;
 ModelExpr -> DerivType;
 ModelExpr -> UID;
 ModelExpr -> Completeness;

@@ -88,9 +88,10 @@ digraph alltypes {
 		}
 		subgraph modelkindse{
 		ModelKindse	[shape=oval, color=darkviolet, label="ModelKindse"];
-		ModelKindse -> RelationConcept;
+		ModelKindse -> DifferentialModel;
 		ModelKindse -> ModelKinds;
 		ModelKindse -> e;
+		ModelKindse -> RelationConcept;
 		}
 	}
 	subgraph multidefn {

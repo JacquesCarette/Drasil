@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.NoPCM.IMods</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtr"><span class="hs-identifier">eBalanceOnWtr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.IMods.html#iMods"><span class="hs-identifier">iMods</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.IMods.html#instModIntro"><span class="hs-identifier">instModIntro</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-2"></span><span>
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">InstanceModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">im</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">qwC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">qwUC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">deModel'</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">InstanceModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">im</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">qwC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">qwUC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">newDEModel'</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">weave</span></span><span class="hs-special">)</span><span>
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
@@ -47,9 +47,9 @@
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><span class="hs-identifier hs-var">im</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind Expr
-forall e. RelationConcept -&gt; ModelKind e
-</span><span class="hs-identifier hs-var">deModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
+</span><span class="hs-identifier hs-var">im</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel -&gt; ModelKind Expr
+forall e. DifferentialModel -&gt; ModelKind e
+</span><span class="hs-identifier hs-var">newDEModel'</span></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrRC"><span class="hs-identifier hs-var">eBalanceOnWtrRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-38"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
@@ -105,45 +105,49 @@ forall a. a -&gt; Maybe a
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDeriv"><span class="hs-identifier hs-var">eBalanceOnWtrDeriv</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;eBalanceOnWtr&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.NoPCM.IMods.html#balWtrNotes"><span class="hs-identifier hs-var">balWtrNotes</span></a></span><span>
 </span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrRC"><span class="hs-identifier hs-type">eBalanceOnWtrRC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
-</span><span id="line-46"></span><span id="eBalanceOnWtrRC"><span class="annot"><span class="annottext">eBalanceOnWtrRC :: RelationConcept
-</span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrRC"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrRC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ModelExpr -&gt; RelationConcept
-forall e.
-Express e =&gt;
-String -&gt; NP -&gt; Sentence -&gt; e -&gt; RelationConcept
-</span><span class="hs-identifier hs-var">makeRC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;eBalanceOnWtrRC&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-45"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrRC"><span class="hs-identifier hs-type">eBalanceOnWtrRC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DifferentialModel</span></span><span> </span><span>
+</span><span id="line-46"></span><span id="eBalanceOnWtrRC"><span class="annot"><span class="annottext">eBalanceOnWtrRC :: DifferentialModel
+</span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrRC"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrRC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+-&gt; ConstrConcept
+-&gt; [CoeffDeriv]
+-&gt; Expr
+-&gt; String
+-&gt; NP
+-&gt; Sentence
+-&gt; DifferentialModel
+</span><span class="hs-identifier hs-var">makeLinear</span></span><span>
+</span><span id="line-48"></span><span>    </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span> </span><span>
+</span><span id="line-49"></span><span>    </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span>
+</span><span id="line-50"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Int -&gt; CoeffDeriv
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">]</span><span>
+</span><span id="line-51"></span><span>    </span><span class="annot"><span class="annottext">Expr
+PExpr
+</span><a href="Drasil.NoPCM.IMods.html#balWtrExpr"><span class="hs-identifier hs-var">balWtrExpr</span></a></span><span>
+</span><span id="line-52"></span><span>    </span><span class="annot"><span class="hs-string">&quot;eBalanceOnWtrRC&quot;</span></span><span> </span><span>
+</span><span id="line-53"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Energy balance on &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-47"></span><span>  </span><span class="annot"><span class="hs-string">&quot;water to find the temperature of the water&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;water to find the temperature of the water&quot;</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-54"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 -&gt; Getting Sentence ConstrConcept Sentence -&gt; Sentence
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Sentence ConstrConcept Sentence
 forall c. Definition c =&gt; Lens' c Sentence
-</span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="Drasil.NoPCM.IMods.html#balWtrRel"><span class="hs-identifier hs-var">balWtrRel</span></a></span><span>
-</span><span id="line-48"></span><span>  </span><span class="hs-comment">-- (mkLabelSame &quot;eBalnaceOnWtr&quot; (Def Instance))</span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#balWtrRel"><span class="hs-identifier hs-type">balWtrRel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-51"></span><span id="balWtrRel"><span class="annot"><span class="annottext">balWtrRel :: ModelExpr
-</span><a href="Drasil.NoPCM.IMods.html#balWtrRel"><span class="hs-identifier hs-var hs-var">balWtrRel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
-forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-PExpr
-</span><a href="Drasil.NoPCM.IMods.html#balWtrExpr"><span class="hs-identifier hs-var">balWtrExpr</span></a></span><span>
-</span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#balWtrExpr"><span class="hs-identifier hs-type">balWtrExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PExpr</span></span><span>
-</span><span id="line-54"></span><span id="balWtrExpr"><span class="annot"><span class="annottext">balWtrExpr :: r
+</span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#balWtrExpr"><span class="hs-identifier hs-type">balWtrExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PExpr</span></span><span>
+</span><span id="line-57"></span><span id="balWtrExpr"><span class="annot"><span class="annottext">balWtrExpr :: r
 </span><a href="Drasil.NoPCM.IMods.html#balWtrExpr"><span class="hs-identifier hs-var hs-var">balWtrExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r
+forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r -&gt; r
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -161,15 +165,15 @@ forall r f a.
 f -&gt; a -&gt; r
 </span><span class="hs-identifier hs-var">apply1</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#balWtrNotes"><span class="hs-identifier hs-type">balWtrNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-57"></span><span id="balWtrNotes"><span class="annot"><span class="annottext">balWtrNotes :: [Sentence]
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-58"></span><span>
+</span><span id="line-59"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#balWtrNotes"><span class="hs-identifier hs-type">balWtrNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-60"></span><span id="balWtrNotes"><span class="annot"><span class="annottext">balWtrNotes :: [Sentence]
 </span><a href="Drasil.NoPCM.IMods.html#balWtrNotes"><span class="hs-identifier hs-var hs-var">balWtrNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-58"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-61"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tauW</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -180,7 +184,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><span class="hs-identifier hs-var">balanceDecayRate</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-59"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-62"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The above&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -189,7 +193,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">water</span></span><span class="hs-special">,</span><span>
-</span><span id="line-60"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-63"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is in&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -212,7 +216,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-61"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-64"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn -&gt; Sentence
 </span><span class="hs-identifier hs-var">unwrap</span></span><span> </span><span class="annot"><span class="annottext">(Maybe UnitDefn -&gt; Sentence) -&gt; Maybe UnitDefn -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -224,7 +228,7 @@ forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-62"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-65"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn -&gt; Sentence
 </span><span class="hs-identifier hs-var">unwrap</span></span><span> </span><span class="annot"><span class="annottext">(Maybe UnitDefn -&gt; Sentence) -&gt; Maybe UnitDefn -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -236,7 +240,7 @@ forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-63"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-66"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn -&gt; Sentence
 </span><span class="hs-identifier hs-var">unwrap</span></span><span> </span><span class="annot"><span class="annottext">(Maybe UnitDefn -&gt; Sentence) -&gt; Maybe UnitDefn -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -250,7 +254,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">melting</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`and_`</span></span><span>
-</span><span id="line-64"></span><span>   </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-67"></span><span>   </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">boilPt</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">NP -&gt; ConceptChunk -&gt; NP
 forall c d. (NounPhrase c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_PSNPNI`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -263,12 +267,12 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.NoPCM.Assumptions.html#assumpWAL"><span class="hs-identifier hs-var">assumpWAL</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-65"></span><span>
-</span><span id="line-66"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-67"></span><span class="hs-comment">--    Derivation of eBalanceOnWtr           --</span><span>
-</span><span id="line-68"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-69"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDeriv"><span class="hs-identifier hs-type">eBalanceOnWtrDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-70"></span><span id="eBalanceOnWtrDeriv"><span class="annot"><span class="annottext">eBalanceOnWtrDeriv :: Derivation
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-70"></span><span class="hs-comment">--    Derivation of eBalanceOnWtr           --</span><span>
+</span><span id="line-71"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-72"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDeriv"><span class="hs-identifier hs-type">eBalanceOnWtrDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-73"></span><span id="eBalanceOnWtrDeriv"><span class="annot"><span class="annottext">eBalanceOnWtrDeriv :: Derivation
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDeriv"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDeriv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -278,7 +282,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">energy</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;balance on water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-71"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+</span><span id="line-74"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
 forall a. [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivSentences"><span class="hs-identifier hs-var">eBalanceOnWtrDerivSentences</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
@@ -286,9 +290,9 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.NoPCM.Derivations.html#eBalanceOnWtrDerivEqns"><span class="hs-identifier hs-var">eBalanceOnWtrDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-72"></span><span>
-</span><span id="line-73"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivSentences"><span class="hs-identifier hs-type">eBalanceOnWtrDerivSentences</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-74"></span><span id="eBalanceOnWtrDerivSentences"><span class="annot"><span class="annottext">eBalanceOnWtrDerivSentences :: [Sentence]
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivSentences"><span class="hs-identifier hs-type">eBalanceOnWtrDerivSentences</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-77"></span><span id="eBalanceOnWtrDerivSentences"><span class="annot"><span class="annottext">eBalanceOnWtrDerivSentences :: [Sentence]
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivSentences"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDerivSentences</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence -&gt; ConceptInstance -&gt; Sentence
 </span><span class="hs-identifier hs-var">eBalanceOnWtrDerivDesc1</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -299,13 +303,13 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">coilSA</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.NoPCM.Assumptions.html#assumpNIHGBW"><span class="hs-identifier hs-var">assumpNIHGBW</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivDesc2"><span class="hs-identifier hs-var">eBalanceOnWtrDerivDesc2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">eBalanceOnWtrDerivDesc3</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivDesc4"><span class="hs-identifier hs-var">eBalanceOnWtrDerivDesc4</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-76"></span><span>
-</span><span id="line-77"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivDesc2"><span class="hs-identifier hs-type">eBalanceOnWtrDerivDesc2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-78"></span><span id="eBalanceOnWtrDerivDesc2"><span class="annot"><span class="annottext">eBalanceOnWtrDerivDesc2 :: Sentence
+</span><span id="line-79"></span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivDesc2"><span class="hs-identifier hs-type">eBalanceOnWtrDerivDesc2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-81"></span><span id="eBalanceOnWtrDerivDesc2"><span class="annot"><span class="annottext">eBalanceOnWtrDerivDesc2 :: Sentence
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivDesc2"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDerivDesc2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Using&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; Sentence
@@ -315,28 +319,28 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><span class="hs-identifier hs-var">htFluxWaterFromCoil</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.for`</span></span><span>
-</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">htFluxC</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;this can be written as&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-80"></span><span>
-</span><span id="line-81"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivDesc4"><span class="hs-identifier hs-type">eBalanceOnWtrDerivDesc4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-82"></span><span id="eBalanceOnWtrDerivDesc4"><span class="annot"><span class="annottext">eBalanceOnWtrDerivDesc4 :: Sentence
+</span><span id="line-83"></span><span>
+</span><span id="line-84"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivDesc4"><span class="hs-identifier hs-type">eBalanceOnWtrDerivDesc4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-85"></span><span id="eBalanceOnWtrDerivDesc4"><span class="annot"><span class="annottext">eBalanceOnWtrDerivDesc4 :: Sentence
 </span><a href="Drasil.NoPCM.IMods.html#eBalanceOnWtrDerivDesc4"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDerivDesc4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DataDefinition] -&gt; Sentence
 forall r.
 (Referable r, HasShortName r, HasSymbol r) =&gt;
 [r] -&gt; Sentence
 </span><span class="hs-identifier hs-var">substitute</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
 </span><span class="hs-identifier hs-var">balanceDecayRate</span></span><span class="hs-special">]</span><span>
-</span><span id="line-83"></span><span>
-</span><span id="line-84"></span><span class="hs-comment">-----------</span><span>
-</span><span id="line-85"></span><span class="hs-comment">-- Intro --</span><span>
-</span><span id="line-86"></span><span class="hs-comment">-----------</span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#instModIntro"><span class="hs-identifier hs-type">instModIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-89"></span><span id="instModIntro"><span class="annot"><span class="annottext">instModIntro :: Sentence
+</span><span id="line-86"></span><span>
+</span><span id="line-87"></span><span class="hs-comment">-----------</span><span>
+</span><span id="line-88"></span><span class="hs-comment">-- Intro --</span><span>
+</span><span id="line-89"></span><span class="hs-comment">-----------</span><span>
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span class="annot"><a href="Drasil.NoPCM.IMods.html#instModIntro"><span class="hs-identifier hs-type">instModIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-92"></span><span id="instModIntro"><span class="annot"><span class="annottext">instModIntro :: Sentence
 </span><a href="Drasil.NoPCM.IMods.html#instModIntro"><span class="hs-identifier hs-var hs-var">instModIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -349,7 +353,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><span class="hs-identifier hs-var">waterTempGS</span></span><span class="hs-special">,</span><span>
-</span><span id="line-90"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is met by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
@@ -360,7 +364,7 @@ r -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">goal</span></span><span class="hs-special">,</span><span>
-</span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
@@ -372,4 +376,4 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
 </span><span class="hs-identifier hs-var">heatEInWtr</span></span><span class="hs-special">]</span><span>
-</span><span id="line-92"></span></pre></body></html>
+</span><span id="line-95"></span></pre></body></html>

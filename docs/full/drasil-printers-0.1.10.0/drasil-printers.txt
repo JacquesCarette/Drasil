@@ -1049,12 +1049,21 @@ eopMuls :: PrintingInformation -> DomainDesc t ModelExpr ModelExpr -> ModelExpr 
 -- | Helper function for translating <tt>EOperator</tt>s.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> Expr
 
+-- | Helper function for display nth derivative
+sup :: Integer -> [Expr]
+
 -- | Translate Exprs to printable layout AST.
 modelExpr :: ModelExpr -> PrintingInformation -> Expr
 
 -- | Common method of converting associative operations into printable
 --   layout AST.
 assocExpr :: Ops -> Int -> [ModelExpr] -> PrintingInformation -> Expr
+
+-- | Helper for rendering printable expressions.
+addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [Expr]
+
+-- | Add add symbol only when the second Expr is not negation
+addExprFilter :: [Expr] -> [Expr]
 
 -- | Helper for rendering printable expressions.
 mulExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [Expr]

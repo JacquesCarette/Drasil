@@ -70,6 +70,21 @@ digraph alltypes {
 		DefinedQuantityDict -> MaybeUnitDefn;
 		}
 	}
+	subgraph differentialmodel {
+		subgraph coeffderiv{
+		CoeffDeriv	[shape=oval, color=cyan3, label="CoeffDeriv"];
+		CoeffDeriv -> Expr;
+		CoeffDeriv -> Int;
+		}
+		subgraph differentialmodel{
+		DifferentialModel	[shape=oval, color=cyan3, label="DifferentialModel"];
+		DifferentialModel -> UnitalChunk;
+		DifferentialModel -> ConstrConcept;
+		DifferentialModel -> CoeffDeriv;
+		DifferentialModel -> Expr;
+		DifferentialModel -> ConceptChunk;
+		}
+	}
 	subgraph eq {
 		subgraph qdefinitione{
 		QDefinitione	[shape=oval, color=darkviolet, label="QDefinitione"];
@@ -431,6 +446,7 @@ digraph alltypes {
 		ModelExpr -> Space;
 		ModelExpr -> AssocArithOper;
 		ModelExpr -> AssocBoolOper;
+		ModelExpr -> Integer;
 		ModelExpr -> DerivType;
 		ModelExpr -> UID;
 		ModelExpr -> Completeness;
@@ -2515,9 +2531,10 @@ digraph alltypes {
 		}
 		subgraph modelkindse{
 		ModelKindse	[shape=oval, color=darkviolet, label="ModelKindse"];
-		ModelKindse -> RelationConcept;
+		ModelKindse -> DifferentialModel;
 		ModelKindse -> ModelKinds;
 		ModelKindse -> e;
+		ModelKindse -> RelationConcept;
 		}
 	}
 	subgraph multidefn {

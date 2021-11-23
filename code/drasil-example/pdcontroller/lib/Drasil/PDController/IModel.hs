@@ -9,7 +9,7 @@ import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, deModel')
+import Theory.Drasil (InstanceModel, im, qwC, newDEModel')
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -22,7 +22,7 @@ instanceModels = [imPD]
 
 imPD :: InstanceModel
 imPD
-  = im (deModel' imPDRC)
+  = im (newDEModel' imPDRC)
       [qwC qdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC qdPropGain $ UpFrom (Exc, exactDbl 0),
        qwC qdDerivGain $ UpFrom (Exc, exactDbl 0)]
       (qw qdProcessVariableTD)
@@ -32,20 +32,18 @@ imPD
       "pdEquationIM"
       []
 
-imPDRC :: RelationConcept
+imPDRC :: DifferentialModel
 imPDRC
-  = makeRC "imPDRC"
-      (nounPhraseSP
-         "Computation of the Process Variable as a function of time")
+  = makeLinear
+      time
+      opProcessVariable
+      [exactDbl 1 $* 2,
+      (exactDbl 1 `addRe` sy qdDerivGain) $* 1,
+      (exactDbl 20 `addRe` sy qdPropGain) $* 0]
+      (neg (sy qdSetPointTD) `mulRe` sy qdPropGain)
+      "imPDRC"
+      (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
-      eqn
-
-eqn :: ModelExpr
-eqn
-  = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
-      ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
-      `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableTD)
-      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0
 
 imDeriv :: Derivation
 imDeriv

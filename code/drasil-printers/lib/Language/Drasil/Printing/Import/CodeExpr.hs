@@ -111,8 +111,8 @@ codeExpr :: CodeExpr -> PrintingInformation -> P.Expr
 codeExpr (Lit l)                  sm = literal l sm
 codeExpr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 codeExpr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
-codeExpr (AssocA AddI l)          sm = assocExpr P.Add (precA AddI) l sm
-codeExpr (AssocA AddRe l)         sm = assocExpr P.Add (precA AddRe) l sm
+codeExpr (AssocA AddI l)          sm = P.Row $ addExpr l AddI sm
+codeExpr (AssocA AddRe l)         sm = P.Row $ addExpr l AddRe sm
 codeExpr (AssocA MulI l)          sm = P.Row $ mulExpr l MulI sm
 codeExpr (AssocA MulRe l)         sm = P.Row $ mulExpr l MulRe sm
 codeExpr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
@@ -171,12 +171,23 @@ assocExpr :: P.Ops -> Int -> [CodeExpr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
 -- | Helper for rendering printable expressions.
+addExpr :: [CodeExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
+addExpr exprs o sm = addExprFilter (map (expr' sm (precA o)) exprs)
+
+-- | Add add symbol only when the second Expr is not negation 
+addExprFilter :: [P.Expr] -> [P.Expr]
+addExprFilter [] = []
+addExprFilter [x] = [x]
+addExprFilter (x1:P.Row[P.MO P.Neg, x2]:xs) = x1 : addExprFilter (P.Row[P.MO P.Neg, x2] : xs)
+addExprFilter (x:xs) = x : P.MO P.Add : addExprFilter xs
+
+-- | Helper for rendering printable expressions.
 mulExpr ::  [CodeExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
   (a, Lit (Int _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
   (a, Lit (ExactDbl _)) ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
   (a, Lit (Dbl _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, _)          ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
+  (a, _)                ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [expr' sm (precA o) hd]
 mulExpr []           o sm = [expr' sm (precA o) (int 1)]
 

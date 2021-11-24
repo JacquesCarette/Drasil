@@ -25,6 +25,10 @@ type DocDesc = [DocSection]
 data DocSection = TableOfContents
                 | RefSec RefSec
                 | IntroSec IntroSec
+                | IPurposeSub IPurposeSub
+                | IScopeSub IScopeSub
+                | ICharSub ICharSub
+                | IOrgSub IOrgSub
                 | StkhldrSec StkhldrSec
                 | GSDSec GSDSec
                 | SSDSec SSDSec
@@ -101,19 +105,18 @@ data LFunc where
 
 -- | Introduction section. Contents are top level followed by a list of
 -- subsections.
-data IntroSec = IntroProg Sentence Sentence [IntroSub]
+data IntroSec = IntroProg Sentence Sentence
   -- ^ Temporary, will be modified once we've figured out more about the section.
 
 -- | Introduction subsections.
-data IntroSub where
-  -- | Describes purpose of the system.
-  IPurpose :: [Sentence] -> IntroSub
-  -- | Describes scope of the system.
-  IScope   :: Sentence -> IntroSub
-  -- | Describes characteristics of the system.
-  IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
-  -- | Organises the section.
-  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
+-- | Describes purpose of the system.
+newtype IPurposeSub = IPurposeProg [Sentence] 
+-- | Describes scope of the system.
+newtype IScopeSub = IScopeProg Sentence 
+-- | Describes characteristics of the system.
+data ICharSub = ICharProg [Sentence] [Sentence] [Sentence]
+-- | Organises the section.
+data IOrgSub = IOrgProg Sentence CI Section Sentence
 
 -- ** Stakeholders Section
 
@@ -251,7 +254,10 @@ data DLPlate f = DLPlate {
   docSec :: DocSection -> f DocSection,
   refSec :: RefSec -> f RefSec,
   introSec :: IntroSec -> f IntroSec,
-  introSub :: IntroSub -> f IntroSub,
+  iPurposeSub :: IPurposeSub -> f IPurposeSub,
+  iScopeSub :: IScopeSub -> f IScopeSub,
+  iCharSub :: ICharSub -> f ICharSub,
+  iOrgSub :: IOrgSub -> f IOrgSub,
   stkSec :: StkhldrSec -> f StkhldrSec,
   stkSub :: StkhldrSub -> f StkhldrSub,
   gsdSec :: GSDSec -> f GSDSec,
@@ -273,11 +279,15 @@ data DLPlate f = DLPlate {
 
 -- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds res intro intro' stk stk' gs gs' ss ss' pd pd' sc
+  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk stk' gs gs' ss ss' pd pd' sc
     rs rs' lcp ucp ts es acs aps where
     ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
     ds (IntroSec x) = IntroSec <$> introSec p x
+    ds (IPurposeSub x) = IPurposeSub <$> iPurposeSub p x
+    ds (IScopeSub x) = IScopeSub <$> iScopeSub p x
+    ds (ICharSub x) = ICharSub <$> iCharSub p x
+    ds (IOrgSub x) = IOrgSub <$> iOrgSub p x
     ds (StkhldrSec x) = StkhldrSec <$> stkSec p x
     ds (GSDSec x) = GSDSec <$> gsdSec p x
     ds (SSDSec x) = SSDSec <$> ssdSec p x
@@ -291,12 +301,11 @@ instance Multiplate DLPlate where
     ds Bibliography = pure Bibliography
 
     res (RefProg c x) = pure $ RefProg c x
-    intro (IntroProg s1 s2 progs) = IntroProg s1 s2 <$>
-      traverse (introSub p) progs
-    intro' (IPurpose s) = pure $ IPurpose s
-    intro' (IScope s) = pure $ IScope s
-    intro' (IChar s1 s2 s3) = pure $ IChar s1 s2 s3
-    intro' (IOrgSec s1 c sect s2) = pure $ IOrgSec s1 c sect s2
+    intro (IntroProg s1 s2) = pure $ IntroProg s1 s2 
+    ipurp (IPurposeProg s) = pure $ IPurposeProg s
+    iscope (IScopeProg s) = pure $ IScopeProg s
+    ichar (ICharProg s1 s2 s3) = pure $ ICharProg s1 s2 s3
+    iorg (IOrgProg s1 c sect s2) = pure $ IOrgProg s1 c sect s2
     stk (StkhldrProg progs) = StkhldrProg <$> traverse (stkSub p) progs
     stk' (Client c s) = pure $ Client c s
     stk' (Cstmr c) = pure (Cstmr c)
@@ -328,7 +337,8 @@ instance Multiplate DLPlate where
     es (OffShelfSolnsProg contents) = pure $ OffShelfSolnsProg contents
     acs (AuxConsProg ci qdef) = pure $ AuxConsProg ci qdef
     aps (AppndxProg con) = pure $ AppndxProg con
-  mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b introSub) (b stkSec)
+  mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b iPurposeSub) (b iScopeSub)
+    (b iCharSub) (b iOrgSub) (b stkSec)
     (b stkSub) (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
     (b scsSub) (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
     (b traceSec) (b offShelfSec) (b auxConsSec) (b appendSec)

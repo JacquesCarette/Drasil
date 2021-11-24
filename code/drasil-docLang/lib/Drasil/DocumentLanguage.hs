@@ -10,8 +10,8 @@ module Drasil.DocumentLanguage where
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
-  GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..),
-  PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
+  GSDSub(..), IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
+  LCsSec(..), LFunc(..), PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
@@ -309,16 +309,20 @@ mkTSymb v f c = SRS.tOfSymb 1 [tsIntro c,
 
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: SystemInformation -> IntroSec -> Section
-mkIntroSec si (IntroProg probIntro progDefn l) =
-  Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
-  where
-    mkSubIntro :: SystemInformation -> IntroSub -> Section
-    mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
-    mkSubIntro _ (IScope main) = Intro.scopeOfRequirements main
-    mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
-      Intro.charIntRdrF sys assumed topic asset (SRS.userChar 1 [] [])
-    mkSubIntro _ (IOrgSec i b s t) = Intro.orgSec i b s t
-    -- FIXME: s should be "looked up" using "b" once we have all sections being generated
+mkIntroSec si (IntroProg probIntro progDefn) = Intro.introductionSection probIntro progDefn
+
+mkIPurpSub :: IPurposeSub -> Section  
+mkIPurpSub (IPurposeProg intro) = Intro.purposeOfDoc intro
+
+mkIScopeSub :: IScopeSub -> Section  
+mkIScopeSub (IScopeProg main) = Intro.scopeOfRequirements main
+
+mkICharSub :: SystemInformation -> ICharSub -> Section  
+mkICharSub SI {_sys = sys} (ICharProg assumed topic asset) = Intro.charIntRdrF sys assumed topic asset (SRS.userChar 1 [])
+
+mkIOrgSub :: IOrgSub -> Section  
+mkIOrgSub (IOrgProg i b s t) = Intro.orgSec i b s t
+  -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- ** Stakeholders
 

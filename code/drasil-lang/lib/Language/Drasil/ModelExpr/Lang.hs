@@ -79,13 +79,9 @@ data SpaceBinOp = IsIn
 data DerivType = Part | Total
   deriving Eq
 
--- | 'ModelExpr' is an extended variant of 'Expr', containing all of our commonly
---   used mathematical constructions (including ones that we might not be able
---   to directly calculate ourselves).
---
---   It is primarily used for display and derivations. Should a 'ModelExpr' need
---   both a "calculable" and "display" component, then it should be contained
---   in a data-rich context that pushes out the 'ModelExpr' and 'CodeExpr' from it.
+-- | Expression language where all terms are supposed to have a meaning, but
+--   that meaning may not be that of a definite value. For example,
+--   specification expressions, especially with quantifiers, belong here.
 data ModelExpr where
   -- | Brings a literal into the expression language.
   Lit       :: Literal -> ModelExpr

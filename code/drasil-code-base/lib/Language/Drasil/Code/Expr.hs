@@ -63,10 +63,8 @@ data UFuncVN = Norm | Dim
 
 -- * CodeExpr
 
--- | A one-to-one clone of 'Expr', with extra OO/code-related functionality.
---
---   Specifically, it is intended to contain extra information and sit above
---   GOOL, which it should have a total conversion into.
+-- | Expression language where all terms also denote a term in GOOL
+--   (i.e. translation is total and meaning preserving).
 data CodeExpr where
   -- | Brings literals into the expression language.
   Lit      :: Literal -> CodeExpr

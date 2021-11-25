@@ -78,13 +78,9 @@ data Completeness = Complete | Incomplete
 
 -- ** Expr
 
--- | 'Expr' is a subset of our commonly used mathematical expression language.
---   All constructions of 'Expr' should have a total conversion into 'CodeExpr',
---   and should be directly calculable, on their own, with a calculator.
---   It should not require one to perform any kind of analysis or approximation
---   in order to evaluate any construction.
---
---   It is the base expression language for both 'CodeExpr' and 'ModelExpr'.
+-- | Expression language where all terms are supposed to be 'well understood'
+--   (i.e., have a definite meaning). Right now, this coincides with
+--   "having a definite value", but should not be restricted to that.
 data Expr where
   -- | Brings a literal into the expression language.
   Lit :: Literal -> Expr

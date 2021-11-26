@@ -79,7 +79,9 @@ data SpaceBinOp = IsIn
 data DerivType = Part | Total
   deriving Eq
 
--- | Drasil expressions.
+-- | Expression language where all terms are supposed to have a meaning, but
+--   that meaning may not be that of a definite value. For example,
+--   specification expressions, especially with quantifiers, belong here.
 data ModelExpr where
   -- | Brings a literal into the expression language.
   Lit       :: Literal -> ModelExpr

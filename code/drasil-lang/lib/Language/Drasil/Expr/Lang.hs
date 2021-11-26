@@ -78,7 +78,9 @@ data Completeness = Complete | Incomplete
 
 -- ** Expr
 
--- | Drasil expressions.
+-- | Expression language where all terms are supposed to be 'well understood'
+--   (i.e., have a definite meaning). Right now, this coincides with
+--   "having a definite value", but should not be restricted to that.
 data Expr where
   -- | Brings a literal into the expression language.
   Lit :: Literal -> Expr
@@ -97,7 +99,7 @@ data Expr where
   --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
   FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
   -- | For multi-case expressions, each pair represents one case.
-  Case     :: Completeness -> [(Expr,Relation)] -> Expr
+  Case     :: Completeness -> [(Expr, Relation)] -> Expr
   -- | Represents a matrix of expressions.
   Matrix   :: [[Expr]] -> Expr
   

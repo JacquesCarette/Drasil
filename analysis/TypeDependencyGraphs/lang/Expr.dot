@@ -6,7 +6,7 @@ Expr -> AssocArithOper;
 Expr -> AssocBoolOper;
 Expr -> UID;
 Expr -> Completeness;
-Expr -> ExprRelation;
+Expr -> Relation;
 Expr -> UFunc;
 Expr -> UFuncB;
 Expr -> UFuncVV;

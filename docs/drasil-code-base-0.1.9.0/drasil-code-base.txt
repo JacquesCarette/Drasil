@@ -128,7 +128,8 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeBa
 -- | Re-exporting modules
 module Language.Drasil.Code.Expr.Development
 
--- | A one-to-one clone of Expr, with extra OO/code-related functionality.
+-- | Expression language where all terms also denote a term in GOOL (i.e.
+--   translation is total and meaning preserving).
 data CodeExpr
 
 -- | Brings literals into the expression language.
@@ -349,7 +350,8 @@ constraint :: ConstraintE -> Constraint CodeExpr
 --   code generation.
 module Language.Drasil.CodeExpr
 
--- | A one-to-one clone of Expr, with extra OO/code-related functionality.
+-- | Expression language where all terms also denote a term in GOOL (i.e.
+--   translation is total and meaning preserving).
 data CodeExpr
 
 -- | Smart constructor for chunk symbols.

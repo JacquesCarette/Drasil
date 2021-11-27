@@ -21,10 +21,9 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   iOrgSub = Constant <$> \(IOrgProg _ _ s _) -> mSec [s],
   --gsdSec = Constant <$> \case
   --  (GSDProg _) -> mempty,
-  gsdSub = Constant <$> \case
-    (SysCntxt c) -> mCon c
-    (UsrChars c) -> mCon c
-    (SystCons c s) -> mCon c `mappend` mSec s,
+  sysCntxtSub = Constant <$> \(SysCntxtProg c) -> mCon c,
+  usrCharsSub = Constant <$> \(UsrCharsProg c) -> mCon c,
+  systConsSub = Constant <$> \(SystConsProg c) -> mCon c,
   pdSec = Constant <$> \(PDProg _ s _) -> mSec s,
   pdSub = Constant <$> \case
     (TermsAndDefs _ _) -> mempty

@@ -10,7 +10,8 @@ module Drasil.DocumentLanguage where
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
-  GSDSub(..), IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
+  SysCntxtSub(..), UsrCharsSub(..), SystConsSub(..),
+  IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
   LCsSec(..), LFunc(..), PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), ClientSub(..), CstmrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
@@ -340,12 +341,16 @@ mkCstmrSub (CstmrProg kWrd) = Stk.tCustomerF kWrd
 
 -- | Helper for making the General System Description section.
 mkGSDSec :: GSDSec -> Section
-mkGSDSec (GSDProg l) = SRS.genSysDes 0 [GSD.genSysIntro] $ map mkSubs l
-   where
-     mkSubs :: GSDSub -> Section
-     mkSubs (SysCntxt cs)            = GSD.sysContxt cs
-     mkSubs (UsrChars intro)         = GSD.usrCharsF intro
-     mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
+mkGSDSec (GSDProg _) = SRS.genSysDes 0 [GSD.genSysIntro] 
+
+mkSysCntxtSub :: SysCntxtSub -> Section
+mkSysCntxtSub (SysCntxtProg cs) = GSD.sysContxt cs
+
+mkUsrCharsSub :: UsrCharsSub -> Section
+mkUsrCharsSub (UsrCharsProg intro) = GSD.usrCharsF intro
+
+mkSystConsSub :: SystConsSub -> Section
+mkSystConsSub (SystConsProg cntnts) = GSD.systCon cntnts
 
 -- ** Specific System Description
 

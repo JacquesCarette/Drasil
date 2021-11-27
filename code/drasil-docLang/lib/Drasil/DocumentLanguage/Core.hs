@@ -33,6 +33,9 @@ data DocSection = TableOfContents
                 | ClientSub ClientSub 
                 | CstmrSub CstmrSub
                 | GSDSec GSDSec
+                | SysCntxtSub SysCntxtSub
+                | UsrCharsSub UsrCharsSub
+                | SystConsSub SystConsSub
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
@@ -134,16 +137,17 @@ newtype CstmrSub = CstmrProg CI
 -- ** General System Description Section
 
 -- | General System Description section (wraps 'GSDSub' subsections).
-newtype GSDSec = GSDProg [GSDSub]
+newtype GSDSec = GSDProg Sentence
 
 -- | General System Description subsections.
-data GSDSub where
-  -- | System context.
-  SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
-  -- | User characteristics.
-  UsrChars   :: [Contents] -> GSDSub 
-  -- | System constraints.
-  SystCons   :: [Contents] -> [Section] -> GSDSub 
+-- | System context.
+newtype SysCntxtSub = SysCntxtProg [Contents] --FIXME: partially automate
+-- | User characteristics.
+newtype UsrCharsSub = UsrCharsProg [Contents]  
+-- | System constraints. **used to be [Contents] [Section] 
+newtype SystConsSub = SystConsProg [Contents] 
+-- | General System Description subsections.
+
 
 -- ** Specific System Description Section
 
@@ -263,7 +267,9 @@ data DLPlate f = DLPlate {
   clientSub :: ClientSub -> f ClientSub,
   cstmrSub :: CstmrSub -> f CstmrSub,
   gsdSec :: GSDSec -> f GSDSec,
-  gsdSub :: GSDSub -> f GSDSub,
+  sysCntxtSub :: SysCntxtSub -> f SysCntxtSub,
+  usrCharsSub :: UsrCharsSub -> f UsrCharsSub,
+  systConsSub :: SystConsSub -> f SystConsSub,
   ssdSec :: SSDSec -> f SSDSec,
   ssdSub :: SSDSub -> f SSDSub,
   pdSec :: ProblemDescription -> f ProblemDescription,
@@ -281,8 +287,8 @@ data DLPlate f = DLPlate {
 
 -- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr gs gs' ss ss' pd pd' sc
-    rs rs' lcp ucp ts es acs aps where
+  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr gs  syscnt uschr syscon
+    ss ss' pd pd' sc rs rs' lcp ucp ts es acs aps where
     ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
     ds (IntroSec x) = IntroSec <$> introSec p x
@@ -294,6 +300,9 @@ instance Multiplate DLPlate where
     ds (ClientSub x) = ClientSub <$> clientSub p x
     ds (CstmrSub x) = CstmrSub <$> cstmrSub p x
     ds (GSDSec x) = GSDSec <$> gsdSec p x
+    ds (SysCntxtSub x) = SysCntxtSub <$> sysCntxtSub p x
+    ds (UsrCharsSub x) = UsrCharsSub <$> usrCharsSub p x
+    ds (SystConsSub x) = SystConsSub <$> systConsSub p x
     ds (SSDSec x) = SSDSec <$> ssdSec p x
     ds (ReqrmntSec x) = ReqrmntSec <$> reqSec p x
     ds (LCsSec x) = LCsSec <$> lcsSec p x
@@ -313,10 +322,10 @@ instance Multiplate DLPlate where
     stk (StkhldrProg s) = pure $ StkhldrProg s
     client (ClientProg c s) = pure $ ClientProg c s
     cstmr (CstmrProg c) = pure (CstmrProg c)
-    gs (GSDProg x) = GSDProg <$> traverse (gsdSub p) x
-    gs' (SysCntxt c) = pure $ SysCntxt c
-    gs' (UsrChars c) = pure $ UsrChars c
-    gs' (SystCons c s) = pure $ SystCons c s
+    gs (GSDProg s) = pure $ GSDProg s
+    syscnt (SysCntxtProg c) = pure $ SysCntxtProg c
+    uschr (UsrCharsProg c) = pure $ UsrCharsProg c
+    syscon (SystConsProg c) = pure $ SystConsProg c
     ss (SSDProg progs) = SSDProg <$> traverse (ssdSub p) progs
     ss' (SSDProblem prog) = SSDProblem <$> pdSec p prog
     ss' (SSDSolChSpec (SCSProg spec)) = SSDSolChSpec . SCSProg <$> traverse (scsSub p) spec
@@ -343,6 +352,7 @@ instance Multiplate DLPlate where
     aps (AppndxProg con) = pure $ AppndxProg con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b iPurposeSub) (b iScopeSub)
     (b iCharSub) (b iOrgSub) (b stkSec) (b clientSub) (b cstmrSub)
-    (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
+    (b gsdSec) (b sysCntxtSub) (b usrCharsSub) (b systConsSub) 
+    (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
     (b scsSub) (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
     (b traceSec) (b offShelfSec) (b auxConsSec) (b appendSec)

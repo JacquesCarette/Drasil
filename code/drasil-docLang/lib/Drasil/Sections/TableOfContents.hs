@@ -127,12 +127,16 @@ mktCstmrSub (CstmrProg _) = namedRef SRS.clientLabel $ titleizeNP $ the Doc.clie
 -- | Helper for creating the 'General System Description' section ToC entry
 mktGSDSec :: GSDSec -> ItemType
 mktGSDSec (GSDProg l) =
-  mkHeaderItem (namedRef SRS.genSysDescLabel $ titleize Doc.generalSystemDescription) $ map mktSub l
-  where
-    mktSub :: GSDSub -> Sentence
-    mktSub (SysCntxt _)   = namedRef SRS.sysContextLabel     $ titleize  Doc.sysCont
-    mktSub (UsrChars _)   = namedRef SRS.userCharsLabel      $ titleize' Doc.userCharacteristic
-    mktSub (SystCons _ _) = namedRef SRS.sysConstraintsLabel $ titleize' Doc.systemConstraint
+  mkHeaderItem (namedRef SRS.genSysDescLabel $ titleize Doc.generalSystemDescription) []
+
+mktSysCntxtSub :: SysCntxtSub -> Sentence
+mktSysCntxtSub (SysCntxtProg _) = namedRef SRS.sysContextLabel $ titleize  Doc.sysCont
+
+mktUsrCharsSub :: UsrCharsSub -> Sentence
+mktUsrCharsSub (UsrCharsProg _) = namedRef SRS.userCharsLabel $ titleize' Doc.userCharacteristic
+
+mktSystConsSub :: SystConsSub -> Sentence
+mktSystConsSub (SystConsProg _) = namedRef SRS.sysConstraintsLabel $ titleize' Doc.systemConstraint
 
 -- | Helper for creating the 'Specific System Description' section ToC entry
 mktSSDSec :: SSDSec -> ItemType

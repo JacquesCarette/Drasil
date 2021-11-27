@@ -18,9 +18,7 @@ secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
   ([Section] -> b) -> DLPlate (Constant b)
 secConPlate mCon mSec = preorderFold $ purePlate {
   refSec = Constant <$> \(RefProg c _) -> mCon [c],
-  introSub = Constant <$> \case
-    (IOrgSec _ _ s _) -> mSec [s]
-    _ -> mempty,
+  iOrgSub = Constant <$> \(IOrgProg _ _ s _) -> mSec [s],
   --gsdSec = Constant <$> \case
   --  (GSDProg _) -> mempty,
   gsdSub = Constant <$> \case
@@ -102,15 +100,13 @@ egetCon _ = []
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatMap getSec) $
   preorderFold $ purePlate {
-    introSec = Constant . f <$> \(IntroProg s1 s2 _) -> [s1, s2],
-    introSub = Constant . f <$> \case
-      (IPurpose s) -> s
-      (IScope s) -> [s]
-      (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec s1 _ _ s2) -> [s1, s2],
-    stkSub = Constant . f <$> \case
-      (Client _ s) -> [s]
-      (Cstmr _) -> [],
+    introSec = Constant . f <$> \(IntroProg s1 s2) -> [s1, s2],
+    iPurposeSub = Constant . f <$> \(IPurposeProg s) -> s,
+    iScopeSub = Constant . f <$> \(IScopeProg s) -> [s],
+    iCharSub = Constant . f <$> \(ICharProg s1 s2 s3) -> concat [s1, s2, s3],
+    iOrgSub = Constant . f <$> \(IOrgProg s1 _ _ s2) -> [s1, s2],
+    clientSub = Constant . f <$> \(ClientProg _ s) -> [s],
+    cstmrSub = Constant . f <$> \(CstmrProg _) -> [],
     pdSec = Constant . f <$> \(PDProg s _ _) -> [s],
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs

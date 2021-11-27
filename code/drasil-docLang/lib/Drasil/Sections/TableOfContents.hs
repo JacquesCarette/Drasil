@@ -98,23 +98,31 @@ mktRefSec (RefProg _ l) =
 
 -- | Helper for creating the 'Introduction' section ToC entry
 mktIntroSec :: IntroSec -> ItemType
-mktIntroSec (IntroProg _ _ l) =
-  mkHeaderItem (namedRef SRS.introLabel $ titleize Doc.introduction) $ map mktSubIntro l
-  where
-    mktSubIntro :: IntroSub -> Sentence
-    mktSubIntro (IPurpose _) = namedRef SRS.docPurposeLabel  $ titleize Doc.prpsOfDoc
-    mktSubIntro (IScope _)   = namedRef SRS.reqsScopeLabel   $ titleize' Doc.scpOfReq
-    mktSubIntro IChar {}     = namedRef SRS.readerCharsLabel $ titleize' Doc.charOfIR
-    mktSubIntro IOrgSec {}   = namedRef SRS.docOrgLabel      $ titleize Doc.orgOfDoc
+mktIntroSec (IntroProg _ _) =
+  mkHeaderItem (namedRef SRS.introLabel $ titleize Doc.introduction) []
+
+mktIPurpSub :: IPurposeSub -> Sentence  
+mktIPurpSub (IPurposeProg _) = namedRef SRS.docPurposeLabel $ titleize Doc.prpsOfDoc
+
+mktIScopeSub :: IScopeSub -> Sentence  
+mktIScopeSub (IScopeProg _) = namedRef SRS.reqsScopeLabel $ titleize' Doc.scpOfReq
+
+mktICharSub :: ICharSub -> Sentence  
+mktICharSub ICharProg {} = namedRef SRS.readerCharsLabel $ titleize' Doc.charOfIR
+
+mktIOrgSub :: IOrgSub -> Sentence  
+mktIOrgSub IOrgProg {} = namedRef SRS.docOrgLabel $ titleize Doc.orgOfDoc
 
 -- | Helper for creating the 'Stakeholders' section ToC entry
 mktStkhldrSec:: StkhldrSec -> ItemType
-mktStkhldrSec (StkhldrProg l) =
-  mkHeaderItem (namedRef SRS.stakeholderLabel $ titleize' Doc.stakeholder) $ map mktSub l
-  where
-    mktSub :: StkhldrSub -> Sentence
-    mktSub (Client _ _) = namedRef SRS.customerLabel $ titleizeNP $ the Doc.customer
-    mktSub (Cstmr _)    = namedRef SRS.clientLabel   $ titleizeNP $ the Doc.client
+mktStkhldrSec (StkhldrProg _) =
+  mkHeaderItem (namedRef SRS.stakeholderLabel $ titleize' Doc.stakeholder) []
+
+mktClientSub :: ClientSub -> Sentence
+mktClientSub (ClientProg _ _) = namedRef SRS.customerLabel $ titleizeNP $ the Doc.customer
+
+mktCstmrSub :: CstmrSub -> Sentence
+mktCstmrSub (CstmrProg _) = namedRef SRS.clientLabel $ titleizeNP $ the Doc.client
 
 -- | Helper for creating the 'General System Description' section ToC entry
 mktGSDSec :: GSDSec -> ItemType

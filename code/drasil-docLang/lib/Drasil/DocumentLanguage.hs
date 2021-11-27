@@ -12,7 +12,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(..), IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
   LCsSec(..), LFunc(..), PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
-  ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
+  ReqsSub(..), SCSSub(..), StkhldrSec(..), ClientSub(..), CstmrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
@@ -328,11 +328,13 @@ mkIOrgSub (IOrgProg i b s t) = Intro.orgSec i b s t
 
 -- | Helper for making the Stakeholders section.
 mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg l) = SRS.stakeholder 0 [Stk.stakeholderIntro] $ map mkSubs l
-  where
-    mkSubs :: StkhldrSub -> Section
-    mkSubs (Client kWrd details) = Stk.tClientF kWrd details
-    mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
+mkStkhldrSec (StkhldrProg l) = SRS.stakeholder 0 [Stk.stakeholderIntro]
+
+mkClientSub :: ClientSub -> Section
+mkClientSub (ClientProg kWrd details) = Stk.tClientF kWrd details
+
+mkCstmrSub :: CstmrSub -> Section
+mkCstmrSub (CstmrProg kWrd) = Stk.tCustomerF kWrd
 
 -- ** General System Description
 

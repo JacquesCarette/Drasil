@@ -30,6 +30,8 @@ data DocSection = TableOfContents
                 | ICharSub ICharSub
                 | IOrgSub IOrgSub
                 | StkhldrSec StkhldrSec
+                | ClientSub ClientSub 
+                | CstmrSub CstmrSub
                 | GSDSec GSDSec
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
@@ -121,14 +123,13 @@ data IOrgSub = IOrgProg Sentence CI Section Sentence
 -- ** Stakeholders Section
 
 -- | Stakeholders section (wraps stakeholders subsections 'StkhldrSub').
-newtype StkhldrSec = StkhldrProg [StkhldrSub]
+newtype StkhldrSec = StkhldrProg Sentence
 
 -- | Stakeholders subsections.
-data StkhldrSub where
-  -- | May have a client.
-  Client :: CI -> Sentence -> StkhldrSub 
-  -- | May have a customer.
-  Cstmr  :: CI -> StkhldrSub 
+-- | May have a client.
+data ClientSub = ClientProg CI Sentence
+-- | May have a customer.
+newtype CstmrSub = CstmrProg CI 
 
 -- ** General System Description Section
 
@@ -259,7 +260,8 @@ data DLPlate f = DLPlate {
   iCharSub :: ICharSub -> f ICharSub,
   iOrgSub :: IOrgSub -> f IOrgSub,
   stkSec :: StkhldrSec -> f StkhldrSec,
-  stkSub :: StkhldrSub -> f StkhldrSub,
+  clientSub :: ClientSub -> f ClientSub,
+  cstmrSub :: CstmrSub -> f CstmrSub,
   gsdSec :: GSDSec -> f GSDSec,
   gsdSub :: GSDSub -> f GSDSub,
   ssdSec :: SSDSec -> f SSDSec,
@@ -279,7 +281,7 @@ data DLPlate f = DLPlate {
 
 -- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk stk' gs gs' ss ss' pd pd' sc
+  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr gs gs' ss ss' pd pd' sc
     rs rs' lcp ucp ts es acs aps where
     ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
@@ -289,6 +291,8 @@ instance Multiplate DLPlate where
     ds (ICharSub x) = ICharSub <$> iCharSub p x
     ds (IOrgSub x) = IOrgSub <$> iOrgSub p x
     ds (StkhldrSec x) = StkhldrSec <$> stkSec p x
+    ds (ClientSub x) = ClientSub <$> clientSub p x
+    ds (CstmrSub x) = CstmrSub <$> cstmrSub p x
     ds (GSDSec x) = GSDSec <$> gsdSec p x
     ds (SSDSec x) = SSDSec <$> ssdSec p x
     ds (ReqrmntSec x) = ReqrmntSec <$> reqSec p x
@@ -306,9 +310,9 @@ instance Multiplate DLPlate where
     iscope (IScopeProg s) = pure $ IScopeProg s
     ichar (ICharProg s1 s2 s3) = pure $ ICharProg s1 s2 s3
     iorg (IOrgProg s1 c sect s2) = pure $ IOrgProg s1 c sect s2
-    stk (StkhldrProg progs) = StkhldrProg <$> traverse (stkSub p) progs
-    stk' (Client c s) = pure $ Client c s
-    stk' (Cstmr c) = pure (Cstmr c)
+    stk (StkhldrProg s) = pure $ StkhldrProg s
+    client (ClientProg c s) = pure $ ClientProg c s
+    cstmr (CstmrProg c) = pure (CstmrProg c)
     gs (GSDProg x) = GSDProg <$> traverse (gsdSub p) x
     gs' (SysCntxt c) = pure $ SysCntxt c
     gs' (UsrChars c) = pure $ UsrChars c
@@ -338,7 +342,7 @@ instance Multiplate DLPlate where
     acs (AuxConsProg ci qdef) = pure $ AuxConsProg ci qdef
     aps (AppndxProg con) = pure $ AppndxProg con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b iPurposeSub) (b iScopeSub)
-    (b iCharSub) (b iOrgSub) (b stkSec)
-    (b stkSub) (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
+    (b iCharSub) (b iOrgSub) (b stkSec) (b clientSub) (b cstmrSub)
+    (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
     (b scsSub) (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
     (b traceSec) (b offShelfSec) (b auxConsSec) (b appendSec)

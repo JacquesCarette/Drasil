@@ -16,17 +16,13 @@ import Data.Generics.Multiplate (foldFor, preorderFold, purePlate)
 -- | Creates a dependency plate for 'UID's.
 dependencyPlate :: DLPlate (Constant [(UID, [UID])])
 dependencyPlate = preorderFold $ purePlate {
-  pdSub = Constant <$> \case
-    (Goals _ c) -> getDependenciesOf [defs] c
-    _ -> [],
-  scsSub = Constant <$> \case
-    (Assumptions a) -> getDependenciesOf [defs] a
-    (TMs _ _ t)     -> getDependenciesOf [\x -> map (^. defn) (x ^. defined_quant) ++
-      map (^. defn) (x ^. operations), notes] t
-    (DDs _ _ d _) -> getDependenciesOf [derivs, notes] d
-    (GDs _ _ g _) -> getDependenciesOf [defs, derivs, notes] g
-    (IMs _ _ i _) -> getDependenciesOf [derivs, notes] i
-    _ -> [],
+  goals = Constant <$> \(GProg _ c) -> getDependenciesOf [defs] c,
+  assumptions = Constant <$> \(AssumpProg a) -> getDependenciesOf [defs] a,
+  tMs = Constant <$> \(TMProg _ _ t)     -> getDependenciesOf [\x -> map (^. defn) (x ^. defined_quant) ++
+    map (^. defn) (x ^. operations), notes] t,
+  dDs = Constant <$> \(DDProg _ _ d _) -> getDependenciesOf [derivs, notes] d,
+  gDs = Constant <$> \(GDProg _ _ g _) -> getDependenciesOf [defs, derivs, notes] g,
+  iMs = Constant <$> \(IMProg _ _ i _) -> getDependenciesOf [derivs, notes] i,
   reqSub = Constant . getDependenciesOf [defs] <$> \case
     (FReqsSub' c _) -> c
     (FReqsSub c _) -> c

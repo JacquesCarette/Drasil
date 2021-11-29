@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.Core where
 
 import Drasil.DocumentLanguage.Definitions (Fields)
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
+import Language.Drasil hiding (Manual, Verb, constraints) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 
@@ -37,6 +37,18 @@ data DocSection = TableOfContents
                 | UsrCharsSub UsrCharsSub
                 | SystConsSub SystConsSub
                 | SSDSec SSDSec
+                | ProblemDescription ProblemDescription 
+                | TermsAndDefs TermsAndDefs
+                | PhySysDesc PhySysDesc
+                | Goals Goals                
+                | SolChSpec SolChSpec 
+                | Assumptions Assumptions
+                | TMs TMs
+                | GDs GDs
+                | DDs DDs
+                | IMs IMs
+                | Constraints Constraints
+                | CorrSolnPpties CorrSolnPpties
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
                 | UCsSec UCsSec
@@ -152,51 +164,44 @@ newtype SystConsSub = SystConsProg [Contents]
 -- ** Specific System Description Section
 
 -- | Specific System Description section. Contains a list of subsections ('SSDSub').
-newtype SSDSec = SSDProg [SSDSub]
-
--- | Specific System Description subsections.
-data SSDSub where
-  -- | System description problems.
-  SSDProblem :: ProblemDescription -> SSDSub
-  -- | Solution characteristics specification.
-  SSDSolChSpec :: SolChSpec -> SSDSub
+newtype SSDSec = SSDProg Sentence
 
 -- | Problem Description section. Contains an intro or title,
 -- 'Section's, and problem description subsections ('PDSub').
-data ProblemDescription where
-  PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
+newtype ProblemDescription = PDProg Sentence
 
 -- | Problem Description subsections.
-data PDSub where
-  -- | Terms and definitions.
-  TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
-  -- | Physical system description.
-  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
-  -- | Goals.
-  Goals :: [Sentence] -> [ConceptInstance] -> PDSub
+-- | Terms and definitions.
+data TermsAndDefs where 
+  TDProg :: Concept c => Maybe Sentence -> [c] -> TermsAndDefs
+-- | Physical system description.
+data PhySysDesc where
+  PSDProg :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PhySysDesc
+-- | Goals.
+data Goals = GProg [Sentence] [ConceptInstance] 
 
 -- | Solution Characteristics Specification section. Contains a list of subsections ('SCSSub').
-data SolChSpec where
-  SCSProg :: [SCSSub] -> SolChSpec
+newtype SolChSpec = SCSProg Sentence
 
 -- | Solution Characteristics Specification subsections.
-data SCSSub where
-  -- | Assumptions.
-  Assumptions    :: [ConceptInstance] -> SCSSub
-  -- | Theory Models.
-  TMs            :: [Sentence] -> Fields  -> [TheoryModel] -> SCSSub
-  -- | General Definitions.
-  GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  -- | Data Definitions.
-  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub -- (FIXME: Need DD intro).
-  -- | Instance Models.
-  IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub 
-  --                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
-  --FIXME: Work in Progress ^
-  -- | Properties of a correct solution.
-  CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
+-- | Assumptions.
+newtype Assumptions = AssumpProg [ConceptInstance]
+-- | Theory Models.
+data TMs = TMProg [Sentence] Fields [TheoryModel] 
+-- | General Definitions.
+data GDs = GDProg [Sentence] Fields [GenDefn] DerivationDisplay
+-- | Data Definitions.
+data DDs = DDProg [Sentence] Fields [DataDefinition] DerivationDisplay -- (FIXME: Need DD intro).
+-- | Instance Models.
+data IMs = IMProg [Sentence] Fields [InstanceModel] DerivationDisplay
+-- | Constraints.
+data Constraints where
+  ConstProg :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> Constraints 
+--Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
+--FIXME: Work in Progress ^
+-- | Properties of a correct solution.
+data CorrSolnPpties where
+  CorrSolProg :: (Quantity c, Constrained c) => [c] -> [Contents] -> CorrSolnPpties
 
 -- | Choose whether to show or hide the derivation of an expression.
 data DerivationDisplay = ShowDerivation
@@ -271,10 +276,18 @@ data DLPlate f = DLPlate {
   usrCharsSub :: UsrCharsSub -> f UsrCharsSub,
   systConsSub :: SystConsSub -> f SystConsSub,
   ssdSec :: SSDSec -> f SSDSec,
-  ssdSub :: SSDSub -> f SSDSub,
-  pdSec :: ProblemDescription -> f ProblemDescription,
-  pdSub :: PDSub -> f PDSub,
-  scsSub :: SCSSub -> f SCSSub,
+  problemDescription  :: ProblemDescription  -> f ProblemDescription ,
+  termsAndDefs :: TermsAndDefs -> f TermsAndDefs,
+  phySysDesc :: PhySysDesc -> f PhySysDesc,
+  goals :: Goals -> f Goals,
+  solChSpec :: SolChSpec -> f SolChSpec,
+  assumptions :: Assumptions -> f Assumptions,
+  tMs :: TMs -> f TMs,
+  gDs :: GDs -> f GDs,
+  dDs :: DDs -> f DDs,
+  iMs :: IMs -> f IMs,
+  constraints :: Constraints -> f Constraints,
+  corrSolnPpties :: CorrSolnPpties -> f CorrSolnPpties,
   reqSec :: ReqrmntSec -> f ReqrmntSec,
   reqSub :: ReqsSub -> f ReqsSub,
   lcsSec :: LCsSec -> f LCsSec,
@@ -287,8 +300,8 @@ data DLPlate f = DLPlate {
 
 -- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr gs  syscnt uschr syscon
-    ss ss' pd pd' sc rs rs' lcp ucp ts es acs aps where
+  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr gs syscnt uschr syscon
+    ss pd td psd gl sc a tm gd dd im ct csp rs rs' lcp ucp ts es acs aps where
     ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
     ds (IntroSec x) = IntroSec <$> introSec p x
@@ -304,6 +317,18 @@ instance Multiplate DLPlate where
     ds (UsrCharsSub x) = UsrCharsSub <$> usrCharsSub p x
     ds (SystConsSub x) = SystConsSub <$> systConsSub p x
     ds (SSDSec x) = SSDSec <$> ssdSec p x
+    ds (ProblemDescription  x) = ProblemDescription  <$> problemDescription  p x
+    ds (TermsAndDefs x) = TermsAndDefs <$> termsAndDefs p x
+    ds (PhySysDesc x) = PhySysDesc <$> phySysDesc p x
+    ds (Goals x) = Goals <$> goals p x
+    ds (SolChSpec x) = SolChSpec <$> solChSpec p x
+    ds (Assumptions x) = Assumptions <$> assumptions p x
+    ds (TMs x) = TMs <$> tMs p x
+    ds (GDs x) = GDs <$> gDs p x
+    ds (DDs x) = DDs <$> dDs p x
+    ds (IMs x) = IMs <$> iMs p x
+    ds (Constraints x) = Constraints <$> constraints p x
+    ds (CorrSolnPpties x) = CorrSolnPpties <$> corrSolnPpties p x
     ds (ReqrmntSec x) = ReqrmntSec <$> reqSec p x
     ds (LCsSec x) = LCsSec <$> lcsSec p x
     ds (UCsSec x) = UCsSec <$> ucsSec p x
@@ -326,20 +351,19 @@ instance Multiplate DLPlate where
     syscnt (SysCntxtProg c) = pure $ SysCntxtProg c
     uschr (UsrCharsProg c) = pure $ UsrCharsProg c
     syscon (SystConsProg c) = pure $ SystConsProg c
-    ss (SSDProg progs) = SSDProg <$> traverse (ssdSub p) progs
-    ss' (SSDProblem prog) = SSDProblem <$> pdSec p prog
-    ss' (SSDSolChSpec (SCSProg spec)) = SSDSolChSpec . SCSProg <$> traverse (scsSub p) spec
-    pd (PDProg s sect progs) = PDProg s sect <$> traverse (pdSub p) progs
-    pd' (TermsAndDefs s cs) = pure $ TermsAndDefs s cs
-    pd' (Goals s ci) = pure $ Goals s ci
-    pd' (PhySysDesc nm s lc c) = pure $ PhySysDesc nm s lc c
-    sc (Assumptions c) = pure (Assumptions c)
-    sc (TMs s f t) = pure $ TMs s f t
-    sc (GDs s f g d) = pure $ GDs s f g d
-    sc (DDs s f dd d) = pure $ DDs s f dd d
-    sc (IMs s f i d) = pure $ IMs s f i d 
-    sc (Constraints s c) = pure $ Constraints s c
-    sc (CorrSolnPpties c cs) = pure $ CorrSolnPpties c cs
+    ss (SSDProg s) = pure $ SSDProg s
+    pd (PDProg s) = pure $ PDProg s
+    td (TDProg s cs) = pure $ TDProg s cs
+    psd (PSDProg nm s lc c) = pure $ PSDProg nm s lc c
+    gl (GProg s ci) = pure $ GProg s ci
+    sc (SCSProg s) = pure $ SCSProg s
+    a (AssumpProg c) = pure $ AssumpProg c
+    tm (TMProg s f t) = pure $ TMProg s f t
+    gd (GDProg s f g d) = pure $ GDProg s f g d
+    dd (DDProg s f dd d) = pure $ DDProg s f dd d
+    im (IMProg s f i d) = pure $ IMProg s f i d 
+    ct (ConstProg s c) = pure $ ConstProg s c
+    csp (CorrSolProg c cs) = pure $ CorrSolProg c cs
     rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
     rs' (FReqsSub ci con) = pure $ FReqsSub ci con
     rs' (FReqsSub' ci con) = pure $ FReqsSub' ci con
@@ -353,6 +377,7 @@ instance Multiplate DLPlate where
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b iPurposeSub) (b iScopeSub)
     (b iCharSub) (b iOrgSub) (b stkSec) (b clientSub) (b cstmrSub)
     (b gsdSec) (b sysCntxtSub) (b usrCharsSub) (b systConsSub) 
-    (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
-    (b scsSub) (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
+    (b ssdSec) (b problemDescription) (b termsAndDefs) (b phySysDesc) (b goals) 
+    (b solChSpec) (b assumptions) (b tMs) (b gDs) (b dDs) (b iMs) (b constraints) (b corrSolnPpties)
+    (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
     (b traceSec) (b offShelfSec) (b auxConsSec) (b appendSec)

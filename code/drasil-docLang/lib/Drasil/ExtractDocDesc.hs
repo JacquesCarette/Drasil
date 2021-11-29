@@ -6,7 +6,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate) where
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Language.Drasil hiding (Manual, Verb)
+import Language.Drasil hiding (Manual, Verb, constraints)
 import Theory.Drasil
 import Data.List(transpose)
 
@@ -24,15 +24,10 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   sysCntxtSub = Constant <$> \(SysCntxtProg c) -> mCon c,
   usrCharsSub = Constant <$> \(UsrCharsProg c) -> mCon c,
   systConsSub = Constant <$> \(SystConsProg c) -> mCon c,
-  pdSec = Constant <$> \(PDProg _ s _) -> mSec s,
-  pdSub = Constant <$> \case
-    (TermsAndDefs _ _) -> mempty
-    (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
-    (Goals _ _) -> mempty,
-  scsSub = Constant <$> \case
-    (Constraints _ c) -> mCon [inDataConstTbl c]
-    (CorrSolnPpties c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs
-    _ -> mempty,
+  --CHECK later: problemDescription  = Constant <$> \(PDProg _ s _) -> mSec s,
+  phySysDesc = Constant <$> \(PSDProg _ _ lc c) -> mCon [lc] `mappend` mCon c,
+  constraints = Constant <$> \(ConstProg _ c) -> mCon [inDataConstTbl c],
+  corrSolnPpties = Constant <$> \(CorrSolProg c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs,
   reqSub = Constant <$> \case
     (FReqsSub' _ c) -> mCon c
     (FReqsSub _ c) -> mCon c
@@ -45,12 +40,10 @@ secConPlate mCon mSec = preorderFold $ purePlate {
 exprPlate :: DLPlate (Constant [ModelExpr])
 exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon')
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
-  scsSub = Constant <$> \case
-    (TMs _ _ t)   -> goTM t
-    (DDs _ _ d _) -> go d
-    (GDs _ _ g _) -> go g
-    (IMs _ _ i _) -> go i
-    _ -> [],
+  tMs = Constant <$> \(TMProg _ _ t)   -> goTM t,
+  dDs = Constant <$> \(DDProg _ _ d _) -> go d,
+  gDs = Constant <$> \(GDProg _ _ g _) -> go g,
+  iMs = Constant <$> \(IMProg _ _ i _) -> go i,
   auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
   }) where
       go :: Express a => [a] -> [ModelExpr]
@@ -106,22 +99,21 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     iOrgSub = Constant . f <$> \(IOrgProg s1 _ _ s2) -> [s1, s2],
     clientSub = Constant . f <$> \(ClientProg _ s) -> [s],
     cstmrSub = Constant . f <$> \(CstmrProg _) -> [],
-    pdSec = Constant . f <$> \(PDProg s _ _) -> [s],
-    pdSub = Constant . f <$> \case
-      (TermsAndDefs Nothing cs) -> def cs
-      (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s _ _) -> s
-      (Goals s c) -> s ++ def c,
-    scsSub = Constant . f <$> \case
-      (Assumptions c) -> def c
-      (TMs s _ t) -> let r = mappend s . concatMap (\x -> def (x ^. operations) ++
-                             def (x ^. defined_quant) ++ notes [x] ++
-                             r (x ^. valid_context)) in r t
-      (DDs s _ d _) -> s ++ der d ++ notes d
-      (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
-      (IMs s _ d _) -> s ++ der d ++ notes d
-      (Constraints s _) -> [s]
-      (CorrSolnPpties _ _) -> [],
+    problemDescription  = Constant . f <$> \(PDProg s) -> [s],
+    termsAndDefs = Constant . f <$> \case
+      (TDProg Nothing cs) -> def cs
+      (TDProg (Just s) cs) -> s : def cs,
+    phySysDesc = Constant . f <$> \(PSDProg _ s _ _) -> s,
+    goals = Constant . f <$> \(GProg s c) -> s ++ def c,
+    assumptions = Constant . f <$> \(AssumpProg c) -> def c,
+    tMs = Constant . f <$> \(TMProg s _ t) -> let r = mappend s . concatMap (\x -> def (x ^. operations) ++
+                                                   def (x ^. defined_quant) ++ notes [x] ++
+                                                   r (x ^. valid_context)) in r t,
+    dDs = Constant . f <$> \(DDProg s _ d _) -> s ++ der d ++ notes d,
+    gDs = Constant . f <$> \(GDProg s _ d _) -> def d ++ s ++ der d ++ notes d,
+    iMs = Constant . f <$> \(IMProg s _ d _) -> s ++ der d ++ notes d,
+    constraints = Constant . f <$> \(ConstProg s _) -> [s],
+    corrSolnPpties = Constant . f <$> \(CorrSolProg _ _) -> [],
     reqSub = Constant . f <$> \case
       (FReqsSub' c _) -> def c
       (FReqsSub c _) -> def c

@@ -356,55 +356,72 @@ mkSystConsSub (SystConsProg cntnts) = GSD.systCon cntnts
 
 -- | Helper for making the Specific System Description section.
 mkSSDSec :: SystemInformation -> SSDSec -> Section
-mkSSDSec si (SSDProg l) =
-  SSD.specSysDescr $ map (mkSubSSD si) l
-  where
-    mkSubSSD :: SystemInformation -> SSDSub -> Section
-    mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
-    mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
+mkSSDSec si (SSDProg _) = SSD.specSysDescr 
+
+-- @@ where
+--    mkSubSSD :: SystemInformation -> SSDSub -> Section
+--    mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
+--    mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs @@
 
 -- | Helper for making the Specific System Description Problem section.
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
-mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
-  where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
-        mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
-        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
+mkSSDProb _ (PDProg prob) = SSD.probDescF prob
+
+mkTermsAndDefsSub :: TermsAndDefsSub -> Section
+mkTermsAndDefsSub (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
+
+mkPhySysDescSub :: PhySysDescSub -> Section
+mkPhySysDescSub (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+
+mkGoalsSub :: GoalsSub -> Section
+mkGoalsSub (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
-mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec 1 [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] $
-    map (mkSubSCS si) l
-  where
-    mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ _ [])      = error "There are no Theoretical Models"
-    mkSubSCS _ (GDs _ _ [] _)    = SSD.genDefnF []
-    mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ _ [] _)    = error "There are no Instance Models"
-    mkSubSCS si' (TMs intro fields ts) =
+mkSolChSpec si (SCSProg _) = SRS.solCharSpec 1 [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] 
+
+mkTMSub :: SystemInformation -> TMSub -> Section
+mkTMSub _ (TMs _ _ [])      = error "There are no Theoretical Models"
+mkTMSub si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
-    mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
-      where f e = [LlC $ ddefn fields si' e, derivation e]
-    mkSubSCS si' (DDs intro fields dds _) =
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map f dds
-      where f e = LlC $ ddefn fields si' e
-    mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
-      SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
-    mkSubSCS si' (GDs intro fields gs' _) =
-      SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
-    mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
-      concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
-    mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
-      map (LlC . instanceModel fields si') ims
-    mkSubSCS si' (Assumptions ci) =
-      SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
-    mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
-    mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
-    siSys :: SystemInformation -> IdeaDict
-    siSys SI {_sys = sys} = nw sys
+
+mkGDSub :: SystemInformation -> GDSub -> Section
+mkGDSub _ (GDs _ _ [] _)    = SSD.genDefnF []
+mkGDSub si' (GDs intro fields gs' ShowDerivation) =
+  SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
+mkGDSub si' (GDs intro fields gs' _) =
+  SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
+
+mkDDSub :: SystemInformation -> DDSub -> Section
+mkDDSub _ (DDs _ _ [] _) = error "There are no Data Definitions"
+mkDDSub si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+  SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
+  where f e = [LlC $ ddefn fields si' e, derivation e]
+mkDDSub si' (DDs intro fields dds _) =
+  SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map f dds
+  where f e = LlC $ ddefn fields si' e
+
+mkIMSub :: SystemInformation -> IMSub -> Section
+mkIMSub _ (IMs _ _ [] _)    = error "There are no Instance Models"
+mkIMSub si' (IMs intro fields ims ShowDerivation) =
+  SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
+  concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
+mkIMSub si' (IMs intro fields ims _) =
+  SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
+  map (LlC . instanceModel fields si') ims
+
+mkAssumpSub :: SystemInformation -> AssumpSub -> Section
+mkAssumpSub si' (Assumptions ci) =
+  SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
+    
+mkConstraintSub :: SystemInformation -> ConstraintSub -> Section
+mkConstraintSub _ (Constraints end cs)  = SSD.datConF end cs
+
+mkCorrSolnPptiesSub :: SystemInformation -> CorrSolnPptiesSub -> Section
+mkCorrSolnPptiesSub _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
+
+siSys :: SystemInformation -> IdeaDict
+siSys SI {_sys = sys} = nw sys
 
 -- ** Requirements
 

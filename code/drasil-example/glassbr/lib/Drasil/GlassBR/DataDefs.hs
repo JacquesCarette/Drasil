@@ -8,7 +8,7 @@ import Language.Drasil
 import Language.Drasil.Code (asVC')
 import Prelude hiding (log, exp, sqrt)
 import Theory.Drasil (DataDefinition, ddE)
-import Database.Drasil (Block(Parallel))
+import SysInfo.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (datum, user)

@@ -20,6 +20,7 @@ dependencies:
 - drasil-data
 - drasil-database
 - drasil-printers
+- drasil-sysinfo
 - drasil-theory
 - drasil-utils 
 

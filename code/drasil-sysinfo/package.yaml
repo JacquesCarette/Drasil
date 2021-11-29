@@ -1,8 +1,8 @@
-name:                drasil-printers
-version:             0.1.10.0
+name:                drasil-sysinfo
+version:             0.1.1.0
 author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
-synopsis:	     A framework for code and document generation for scientific software - Printers SubPackage
+synopsis:	     A framework for code and document generation for scientific software - SystemInformation SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
@@ -11,19 +11,12 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
 - pretty
+- lens
 - containers
-- directory
-- drasil-data
-- drasil-code-base
 - drasil-database
 - drasil-lang
-- drasil-sysinfo
 - drasil-theory
-- drasil-utils
-- json
-- split
 
 ghc-options:
 - -Wall
@@ -32,7 +25,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Language.Drasil.Printers
+  - SysInfo.Drasil
   when:
   - condition: false
-    other-modules: Paths_drasil_printers
+    other-modules: Paths_drasil_sysinfo

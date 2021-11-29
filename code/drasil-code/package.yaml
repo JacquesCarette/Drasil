@@ -24,6 +24,7 @@ dependencies:
 - drasil-gool
 - drasil-lang
 - drasil-printers
+- drasil-sysinfo
 - drasil-theory
 - drasil-utils
 

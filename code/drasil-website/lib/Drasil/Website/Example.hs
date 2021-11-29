@@ -2,7 +2,7 @@
 module Drasil.Website.Example where
 
 import Language.Drasil hiding (E)
-import Database.Drasil (SystemInformation(..))
+import SysInfo.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower, isSpace)
 

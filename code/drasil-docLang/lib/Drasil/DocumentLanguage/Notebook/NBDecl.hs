@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.Notebook.NBDecl where
 import qualified Drasil.DocumentLanguage.Notebook.Core as NB (ApndxSec(..), NBDesc, DocSection(..), 
   IntrodSec(..), BodySec(..), SmmrySec(..))
 
-import Database.Drasil (SystemInformation)
+import SysInfo.Drasil (SystemInformation)
 
 -- * Types
 

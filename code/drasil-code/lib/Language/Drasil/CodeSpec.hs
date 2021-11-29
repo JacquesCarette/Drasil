@@ -5,9 +5,8 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil
 import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
-import Database.Drasil (ChunkDB, SystemInformation(SI),
-  _authors, _constants, _constraints, _datadefs, _instModels,
-  _configFiles, _inputs, _outputs, _sys, _sysinfodb)
+import Database.Drasil
+import SysInfo.Drasil hiding (sysinfodb)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),

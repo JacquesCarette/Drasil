@@ -11,9 +11,8 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
-import Database.Drasil (ChunkDB, SystemInformation(SI), UMap, asOrderedList,
-  _inputs, _sysinfodb, conceptinsTable, dataDefnTable, gendefTable,
-  insmodelTable, theoryModelTable)
+import Database.Drasil
+import SysInfo.Drasil
 import Language.Drasil hiding (sec)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,

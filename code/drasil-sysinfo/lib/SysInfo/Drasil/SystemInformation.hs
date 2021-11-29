@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
 -- | Define types and functions related to creating a system information database.
-module Database.Drasil.SystemInformation(
+module SysInfo.Drasil.SystemInformation (
   -- * System Information
   -- ** Types
   SystemInformation(..), Block(..),
@@ -20,7 +20,7 @@ module Database.Drasil.SystemInformation(
 
 import Language.Drasil
 import Theory.Drasil
-import Database.Drasil.ChunkDB (ChunkDB)
+import Database.Drasil (ChunkDB)
 
 import Control.Lens ((^.), makeLenses)
 import Data.Function (on)

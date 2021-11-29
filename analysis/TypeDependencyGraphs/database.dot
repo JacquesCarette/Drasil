@@ -1,6 +1,4 @@
 digraph alltypes {
-	subgraph getcunkh {
-	}
 	subgraph cunkdbh {
 		subgraph chunkdb{
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
@@ -78,39 +76,6 @@ digraph alltypes {
 		subgraph referencemap{
 		ReferenceMap	[shape=oval, color=red2, label="ReferenceMap"];
 		ReferenceMap -> UMapReference;
-		}
-	}
-	subgraph syteminformations {
-		subgraph referencedb{
-		ReferenceDB	[shape=oval, color=cyan3, label="ReferenceDB"];
-		ReferenceDB -> ConceptMap;
-		}
-		subgraph systeminformation{
-		SystemInformation	[shape=oval, color=darkviolet, label="SystemInformation"];
-		SystemInformation -> CommonIdea;
-		SystemInformation -> a;
-		SystemInformation -> Idea;
-		SystemInformation -> b;
-		SystemInformation -> HasName;
-		SystemInformation -> c;
-		}
-		subgraph blocka{
-		Blocka	[shape=oval, color=darkviolet, label="Blocka"];
-		Blocka -> a;
-		Blocka -> SystemInformation;
-		Blocka -> BibRef;
-		}
-		subgraph refmapa{
-		RefMapa	[shape=oval, color=red2, label="RefMapa"];
-		RefMapa -> MapUIDaInt;
-		}
-		subgraph bibmap{
-		BibMap	[shape=oval, color=red2, label="BibMap"];
-		BibMap -> RefMapCitation;
-		}
-		subgraph conceptmap{
-		ConceptMap	[shape=oval, color=red2, label="ConceptMap"];
-		ConceptMap -> RefMapConceptInstance;
 		}
 	}
 	subgraph drails {

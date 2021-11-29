@@ -15,10 +15,6 @@ module Database.Drasil (
   , unitTable, traceTable, refbyTable
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
   , conceptinsTable, sectionTable, labelledcontentTable, refTable
-  -- ** Utility Helper Functions
-  -- ChunkDB.GetChunk
-  , ccss, ccss', combine, getIdeaDict, vars
 ) where
 
 import Database.Drasil.ChunkDB
-import Database.Drasil.ChunkDB.GetChunk

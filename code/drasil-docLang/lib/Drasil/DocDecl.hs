@@ -5,10 +5,11 @@ module Drasil.DocDecl where
 import Drasil.DocumentLanguage.Core (DocDesc)
 import Drasil.DocumentLanguage.Definitions (Fields)
 import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
-  IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), SSDSub(..),
-  ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
-  ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
-  AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
+  IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), 
+  ProblemDescription(..), SolChSpec(..), TermsAndDefs(..), PhySysDesc(..), Goals(..), 
+  Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..), 
+  ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), 
+  AuxConstntSec(..), AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
 import Database.Drasil (ChunkDB, SystemInformation(SI), UMap, asOrderedList,
@@ -32,7 +33,19 @@ data DocSection = TableOfContents                       -- ^ Table of Contents
                 | IntroSec DL.IntroSec                  -- ^ Introduction.
                 | StkhldrSec DL.StkhldrSec              -- ^ Stakeholders.
                 | GSDSec DL.GSDSec                      -- ^ General System Description.
-                | SSDSec SSDSec                         -- ^ Specific System Description.
+                | SSDSec DL.SSDSec                         -- ^ Specific System Description.
+                | ProblemDescription ProblemDescription 
+                | TermsAndDefs TermsAndDefs
+                | PhySysDesc PhySysDesc
+                | Goals Goals   
+                | SolChSpec SolChSpec 
+                | Assumptions Assumptions
+                | TMs TMs
+                | GDs GDs
+                | DDs DDs
+                | IMs IMs
+                | Constraints Constraints
+                | CorrSolnPpties CorrSolnPpties
                 | ReqrmntSec ReqrmntSec                 -- ^ Requirements.
                 | LCsSec                                -- ^ Likely Changes.
                 | UCsSec                                -- ^ Unlikely Changes.
@@ -42,52 +55,48 @@ data DocSection = TableOfContents                       -- ^ Table of Contents
                 | AppndxSec DL.AppndxSec                -- ^ Appendix.
                 | OffShelfSolnsSec DL.OffShelfSolnsSec  -- ^ Off the Shelf Solutions.
 
--- | Specific System Description section (wraps 'SSDSub' subsections).
-newtype SSDSec = SSDProg [SSDSub]
 
--- | Specific System Description subsections.
-data SSDSub where
-  -- | Problem description.
-  SSDProblem :: ProblemDescription -> SSDSub
-  -- | Solution characteristics.
-  SSDSolChSpec :: SolChSpec -> SSDSub
+-- | Specific System Description section (wraps 'SSDSub' subsections).
+--newtype SSDSec = SSDProg Sentence
 
 -- | Problem Description section.
-data ProblemDescription where
-  PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
+newtype ProblemDescription = PDProg Sentence
 
 -- | Problem Description subsections.
-data PDSub where
-  -- | Terms and Definitions.
-  TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
-  -- | Physical System Description.
-  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
-  -- | Goals.
-  Goals :: [Sentence] -> PDSub
+-- | Terms and Definitions.
+data TermsAndDefs where 
+  TDProg :: Concept c => Maybe Sentence -> [c] -> TermsAndDefs
+-- | Physical System Description.
+data PhySysDesc where
+  PSDProg :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PhySysDesc
+-- | Goals.
+newtype Goals = GProg [Sentence]
 
 -- | Solution Characteristics Specification section (wraps 'SCSSub' subsections).
-data SolChSpec where
-  SCSProg :: [SCSSub] -> SolChSpec
+newtype SolChSpec = SCSProg Sentence
 
 -- | Solution Characteristics Specification subsections.
-data SCSSub where
-  -- | Assumptions.
-  Assumptions    :: SCSSub
-  -- | Theory models.
-  TMs            :: [Sentence] -> Fields  -> SCSSub
-  -- | General definitions.
-  GDs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
-  -- | Data definitions.
-  DDs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
-  -- | Instance models.
-  IMs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
-  -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
-  -- | Properties of a correct solution.
-  CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
+-- | Assumptions.
+data Assumptions where AssumpProg :: Sentence -> Assumptions
+-- | Theory models.
+data TMs = TMProg [Sentence] Fields 
+-- | General definitions.
+data GDs = GDProg [Sentence] Fields DL.DerivationDisplay
+-- | Data definitions.
+data DDs = DDProg [Sentence] Fields DL.DerivationDisplay
+-- | Instance models.
+data IMs = IMProg [Sentence] Fields DL.DerivationDisplay
+-- | Constraints.
+data Constraints where
+  ConstProg :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> Constraints 
+-- | Properties of a correct solution.
+data CorrSolnPpties where
+  CorrSolProg :: (Quantity c, Constrained c) => [c] -> [Contents] -> CorrSolnPpties
+
 
 -- | Requirements section (wraps 'ReqsSub' subsections).
 newtype ReqrmntSec = ReqsProg [ReqsSub]
+
 
 -- | Requirements subsections.
 data ReqsSub where
@@ -109,7 +118,19 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec (IntroSec i) = DL.IntroSec i
   sec (StkhldrSec s) = DL.StkhldrSec s
   sec (GSDSec g) = DL.GSDSec g
-  sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ map ssdSec s
+  sec (SSDSec s) = DL.SSDSec s
+  sec (ProblemDescription (PDProg s)) = DL.ProblemDescription (DL.PDProg s)
+  sec (TermsAndDefs (TDProg s c)) = DL.TermsAndDefs (DL.TDProg s c)
+  sec (PhySysDesc (PSDProg i s lc c)) = DL.PhySysDesc (DL.PSDProg i s lc c)
+  sec (Goals (GProg s)) = DL.Goals $ DL.GProg s $ fromConcInsDB goalStmtDom
+  sec (SolChSpec (SCSProg s)) = DL.SolChSpec (DL.SCSProg s)
+  sec (Assumptions (AssumpProg _)) = DL.Assumptions $ DL.AssumpProg $ fromConcInsDB assumpDom
+  sec (TMs (TMProg s f)) = DL.TMs $ DL.TMProg s f $ allInDB theoryModelTable
+  sec (GDs (GDProg s f dd)) = DL.GDs $ DL.GDProg s f (allInDB gendefTable) dd
+  sec (DDs (DDProg s f dd)) = DL.DDs $ DL.DDProg s f (allInDB dataDefnTable) dd
+  sec (IMs (IMProg s f dd)) = DL.IMs $ DL.IMProg s f (allInDB insmodelTable) dd
+  sec (Constraints (ConstProg s c)) = DL.Constraints (DL.ConstProg s c)
+  sec (CorrSolnPpties (CorrSolProg c cs)) = DL.CorrSolnPpties (DL.CorrSolProg c cs)
   sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ map reqSec r
   sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
   sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
@@ -122,21 +143,6 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
   reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
-  ssdSec :: SSDSub -> DL.SSDSub
-  ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ map pdSub p
-  ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ map scsSub scs
-  pdSub :: PDSub -> DL.PDSub
-  pdSub (TermsAndDefs s c) = DL.TermsAndDefs s c
-  pdSub (PhySysDesc i s lc c) = DL.PhySysDesc i s lc c
-  pdSub (Goals s) = DL.Goals s $ fromConcInsDB goalStmtDom
-  scsSub :: SCSSub -> DL.SCSSub
-  scsSub Assumptions = DL.Assumptions $ fromConcInsDB assumpDom
-  scsSub (TMs s f) = DL.TMs s f $ allInDB theoryModelTable
-  scsSub (GDs s f dd) = DL.GDs s f (allInDB gendefTable) dd
-  scsSub (DDs s f dd) = DL.DDs s f (allInDB dataDefnTable) dd
-  scsSub (IMs s f dd) = DL.IMs s f (allInDB insmodelTable) dd
-  scsSub (Constraints s c) = DL.Constraints s c
-  scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
   expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
   expandFromDB f = f . asOrderedList . (db ^.)
   allInDB :: Getting (UMap a) ChunkDB (UMap a) -> [a]

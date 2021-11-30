@@ -5,28 +5,28 @@ digraph allvsall {
 	stiffnessCoeffSpring -> pwrPlant;
 	qdProcessErrorFD -> setPoint;
 	qdProcessErrorFD -> initialValue;
-	qdProcessErrorFD -> laplaceRC;
+	qdProcessErrorFD -> laplaceRCMK;
 	qdPropControlFD -> qdProcessErrorFD;
-	qdPropControlFD -> laplaceRC;
+	qdPropControlFD -> laplaceRCMK;
 	qdDerivativeControlFD -> unfilteredDerivative;
 	qdDerivativeControlFD -> qdProcessErrorFD;
-	qdDerivativeControlFD -> laplaceRC;
+	qdDerivativeControlFD -> laplaceRCMK;
 	qdCtrlVarFD -> decoupled;
 	qdCtrlVarFD -> parallelEq;
 	qdCtrlVarFD -> qdPropControlFD;
 	qdCtrlVarFD -> qdDerivativeControlFD;
-	tmSOSystemRC -> pwrPlantTxFnx;
-	gdPowerPlantRC -> externalDisturb;
-	gdPowerPlantRC -> massSpring;
-	gdPowerPlantRC -> dampingCoeffSpring;
-	gdPowerPlantRC -> stiffnessCoeffSpring;
-	gdPowerPlantRC -> laplaceRC;
-	gdPowerPlantRC -> tmSOSystemRC;
+	tmSOSystemRCMK -> pwrPlantTxFnx;
+	gdPowerPlantRCMK -> externalDisturb;
+	gdPowerPlantRCMK -> massSpring;
+	gdPowerPlantRCMK -> dampingCoeffSpring;
+	gdPowerPlantRCMK -> stiffnessCoeffSpring;
+	gdPowerPlantRCMK -> laplaceRCMK;
+	gdPowerPlantRCMK -> tmSOSystemRCMK;
 	imPDRC -> setPoint;
 	imPDRC -> qdProcessErrorFD;
 	imPDRC -> qdCtrlVarFD;
-	imPDRC -> invLaplaceRC;
-	imPDRC -> gdPowerPlantRC;
+	imPDRC -> invLaplaceRCMK;
+	imPDRC -> gdPowerPlantRCMK;
 	calculateValues -> imPDRC;
 	outputValues -> imPDRC;
 	likeChgPP -> massSpring;
@@ -61,20 +61,20 @@ digraph allvsall {
 	{qdProcessErrorFD, qdPropControlFD, qdDerivativeControlFD, qdCtrlVarFD}
 	}
 
-	laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
-	invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
-	tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
+	laplaceRCMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
+	invLaplaceRCMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
+	tmSOSystemRCMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
 
 	subgraph TM {
 	rank="same"
-	{laplaceRC, invLaplaceRC, tmSOSystemRC}
+	{laplaceRCMK, invLaplaceRCMK, tmSOSystemRCMK}
 	}
 
-	gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
+	gdPowerPlantRCMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
 
 	subgraph GD {
 	rank="same"
-	{gdPowerPlantRC}
+	{gdPowerPlantRCMK}
 	}
 
 	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];

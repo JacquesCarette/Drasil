@@ -18,7 +18,7 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
-  UID, DifferentialModel, mkUid)
+  UID, DifferentialModel, mkUid, (+++), (+++.))
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -74,43 +74,43 @@ equationalConstraints' qs = MK (EquationalConstraints qs) (qs ^. uid) (qs ^. ter
 
 -- | Smart constructor for 'EquationalModel's
 equationalModel :: String -> NP -> QDefinition e -> ModelKind e
-equationalModel u n qd = MK (EquationalModel qd) (mkUid u) n
+equationalModel u n qd = MK (EquationalModel qd) (mkUid u +++. "MK") n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
 equationalModel' :: QDefinition e -> ModelKind e
-equationalModel' qd = MK (EquationalModel qd) (qd ^. uid) (qd ^. term)
+equationalModel' qd = MK (EquationalModel qd) (qd +++ "MK") (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving Term from the 'QDefinition'
 equationalModelU :: String -> QDefinition e -> ModelKind e
-equationalModelU u qd = MK (EquationalModel qd) (mkUid u) (qd ^. term)
+equationalModelU u qd = MK (EquationalModel qd) (mkUid u +++. "MK") (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving UID from the 'QDefinition'
 equationalModelN :: NP -> QDefinition e -> ModelKind e
-equationalModelN n qd = MK (EquationalModel qd) (qd ^. uid) n
+equationalModelN n qd = MK (EquationalModel qd) (qd +++ "MK") n
 
 -- | Smart constructor for 'EquationalRealm's
 equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
-equationalRealm u n md = MK (EquationalRealm md) (mkUid u) n
+equationalRealm u n md = MK (EquationalRealm md) (mkUid u +++. "MK") n
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
 equationalRealm' :: MultiDefn e -> ModelKind e
-equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
+equationalRealm' md = MK (EquationalRealm md) (md +++ "MK") (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's
 equationalRealmU :: String -> MultiDefn e -> ModelKind e
-equationalRealmU u md = MK (EquationalRealm md) (mkUid u) (md ^. term)
+equationalRealmU u md = MK (EquationalRealm md) (mkUid u +++. "MK") (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID from the 'MultiDefn'
 equationalRealmN :: NP -> MultiDefn e -> ModelKind e
-equationalRealmN n md = MK (EquationalRealm md) (md ^. uid) n
+equationalRealmN n md = MK (EquationalRealm md) (md +++ "MK") n
 
 -- | Smart constructor for 'OthModel's
 othModel :: String -> NP -> RelationConcept -> ModelKind Expr
-othModel u n rc = MK (OthModel rc) (mkUid u) n
+othModel u n rc = MK (OthModel rc) (mkUid u +++. "MK") n
 
 -- | Smart constructor for 'OthModel's, deriving UID+Term from the 'RelationConcept'
 othModel' :: RelationConcept -> ModelKind e
-othModel' rc = MK (OthModel rc) (rc ^. uid) (rc ^. term)
+othModel' rc = MK (OthModel rc) (rc +++ "MK") (rc ^. term)
 
 -- | Finds the 'UID' of the 'ModelKinds'.
 instance HasUID        (ModelKinds e) where uid     = lensMk uid uid uid uid uid

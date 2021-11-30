@@ -1,26 +1,26 @@
 digraph allvsall {
-	v_x1 -> velocity;
-	v_x1 -> p_x1;
-	v_y1 -> velocity;
-	v_y1 -> p_y1;
-	v_x2 -> velocity;
-	v_x2 -> p_x2;
-	v_y2 -> velocity;
-	v_y2 -> p_y2;
-	angularAccelerationIM2 -> a_x1;
-	angularAccelerationIM2 -> a_y1;
-	angularAccelerationIM2 -> a_x2;
-	angularAccelerationIM2 -> a_y2;
-	angularAccelerationIM2 -> xForce1;
-	angularAccelerationIM2 -> yForce1;
-	angularAccelerationIM2 -> xForce2;
-	angularAccelerationIM2 -> yForce2;
-	angularAccelerationIM2 -> angularAccelerationIM1;
-	angularAccelerationIM2 -> angularAccelerationIM2;
-	calcAngPos -> angularAccelerationIM1;
-	calcAngPos -> angularAccelerationIM2;
-	outputValues -> angularAccelerationIM1;
-	outputValues -> angularAccelerationIM2;
+	v_x1MK -> velocity;
+	v_x1MK -> p_x1;
+	v_y1MK -> velocity;
+	v_y1MK -> p_y1;
+	v_x2MK -> velocity;
+	v_x2MK -> p_x2;
+	v_y2MK -> velocity;
+	v_y2MK -> p_y2;
+	angularAccelerationIM2MK -> a_x1MK;
+	angularAccelerationIM2MK -> a_y1MK;
+	angularAccelerationIM2MK -> a_x2MK;
+	angularAccelerationIM2MK -> a_y2MK;
+	angularAccelerationIM2MK -> xForce1MK;
+	angularAccelerationIM2MK -> yForce1MK;
+	angularAccelerationIM2MK -> xForce2MK;
+	angularAccelerationIM2MK -> yForce2MK;
+	angularAccelerationIM2MK -> angularAccelerationIM1MK;
+	angularAccelerationIM2MK -> angularAccelerationIM2MK;
+	calcAngPos -> angularAccelerationIM1MK;
+	calcAngPos -> angularAccelerationIM2MK;
+	outputValues -> angularAccelerationIM1MK;
+	outputValues -> angularAccelerationIM2MK;
 
 
 	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -49,39 +49,39 @@ digraph allvsall {
 	{velocity, p_x1, p_y1, p_x2, p_y2, acceleration, force}
 	}
 
-	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
-	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
-	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	accelerationTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	velocityTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+	newtonSLMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 
 	subgraph TM {
 	rank="same"
-	{accelerationTM, velocityTM, newtonSL}
+	{accelerationTMMK, velocityTMMK, newtonSLMK}
 	}
 
-	v_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX1"];
-	v_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY1"];
-	v_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX2"];
-	v_y2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY2"];
-	a_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX1"];
-	a_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY1"];
-	a_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX2"];
-	a_y2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY2"];
-	xForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce1"];
-	yForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce1"];
-	xForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce2"];
-	yForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce2"];
+	v_x1MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX1"];
+	v_y1MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY1"];
+	v_x2MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX2"];
+	v_y2MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY2"];
+	a_x1MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX1"];
+	a_y1MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY1"];
+	a_x2MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX2"];
+	a_y2MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY2"];
+	xForce1MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce1"];
+	yForce1MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce1"];
+	xForce2MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce2"];
+	yForce2MK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce2"];
 
 	subgraph GD {
 	rank="same"
-	{v_x1, v_y1, v_x2, v_y2, a_x1, a_y1, a_x2, a_y2, xForce1, yForce1, xForce2, yForce2}
+	{v_x1MK, v_y1MK, v_x2MK, v_y2MK, a_x1MK, a_y1MK, a_x2MK, a_y2MK, xForce1MK, yForce1MK, xForce2MK, yForce2MK}
 	}
 
-	angularAccelerationIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularAcceleration1"];
-	angularAccelerationIM2	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularAcceleration2"];
+	angularAccelerationIM1MK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularAcceleration1"];
+	angularAccelerationIM2MK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularAcceleration2"];
 
 	subgraph IM {
 	rank="same"
-	{angularAccelerationIM1, angularAccelerationIM2}
+	{angularAccelerationIM1MK, angularAccelerationIM2MK}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

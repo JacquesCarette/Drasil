@@ -24,15 +24,15 @@ digraph allvsall {
 	lResistance -> glassTypeFac;
 	demandq -> stdOffDist;
 	demandq -> eqTNTChar;
-	isSafePb -> probBr;
-	isSafePb -> isSafeLR;
-	isSafeLR -> lResistance;
-	isSafeLR -> demandq;
-	isSafeLR -> isSafePb;
+	isSafePbMK -> probBr;
+	isSafePbMK -> isSafeLRMK;
+	isSafeLRMK -> lResistance;
+	isSafeLRMK -> demandq;
+	isSafeLRMK -> isSafePbMK;
 	outputValsAndKnownValues -> inputValues;
 	outputValsAndKnownValues -> sysSetValsFollowingAssumps;
-	checkGlassSafety -> isSafeProb;
-	checkGlassSafety -> isSafeLoad;
+	checkGlassSafety -> isSafeProbMK;
+	checkGlassSafety -> isSafeLoadMK;
 	calcInternalBlastRisk -> assumpES;
 	varValsOfmkE -> assumpSV;
 	varValsOfmkE -> assumpLDFC;
@@ -77,20 +77,20 @@ digraph allvsall {
 	{riskFun, minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, probBr, lResistance, demandq}
 	}
 
-	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
-	isSafeLoad	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];
+	isSafeProbMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
+	isSafeLoadMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];
 
 	subgraph TM {
 	rank="same"
-	{isSafeProb, isSafeLoad}
+	{isSafeProbMK, isSafeLoadMK}
 	}
 
-	isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
-	isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
+	isSafePbMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
+	isSafeLRMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
 
 	subgraph IM {
 	rank="same"
-	{isSafePb, isSafeLR}
+	{isSafePbMK, isSafeLRMK}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

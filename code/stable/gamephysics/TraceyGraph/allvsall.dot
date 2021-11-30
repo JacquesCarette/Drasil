@@ -19,37 +19,37 @@ digraph allvsall {
 	potEnergy -> assumpOD;
 	potEnergy -> assumpDI;
 	momentOfInertia -> assumpOT;
-	newtonSLR -> assumpOD;
-	gravitationalAccel -> force;
-	impulseS -> assumpOT;
-	impulseS -> assumpOD;
-	impulseS -> assumpAD;
-	impulseS -> assumpCT;
-	accj -> assumpOT;
-	accj -> assumpOD;
-	accj -> assumpDI;
-	accj -> assumpCAJI;
-	accj -> p_CM;
-	accj -> linearDisplacement;
-	accj -> linearVelocity;
-	accj -> linearAcceleration;
-	accj -> newtonSL;
-	accj -> gravitationalAccel;
-	angAccj -> assumpOT;
-	angAccj -> assumpOD;
-	angAccj -> assumpAD;
-	angAccj -> angularDisplacement;
-	angAccj -> angularVelocity;
-	angAccj -> angularAcceleration;
-	angAccj -> newtonSLR;
-	col2DIM -> assumpOT;
-	col2DIM -> assumpOD;
-	col2DIM -> assumpAD;
-	col2DIM -> assumpCT;
-	col2DIM -> assumpDI;
-	col2DIM -> assumpCAJI;
-	col2DIM -> p_CM;
-	col2DIM -> impulseS;
+	newtonSLRMK -> assumpOD;
+	gravitationalAccelMK -> forceMK;
+	impulseSMK -> assumpOT;
+	impulseSMK -> assumpOD;
+	impulseSMK -> assumpAD;
+	impulseSMK -> assumpCT;
+	accjMK -> assumpOT;
+	accjMK -> assumpOD;
+	accjMK -> assumpDI;
+	accjMK -> assumpCAJI;
+	accjMK -> p_CM;
+	accjMK -> linearDisplacement;
+	accjMK -> linearVelocity;
+	accjMK -> linearAcceleration;
+	accjMK -> newtonSLMK;
+	accjMK -> gravitationalAccelMK;
+	angAccjMK -> assumpOT;
+	angAccjMK -> assumpOD;
+	angAccjMK -> assumpAD;
+	angAccjMK -> angularDisplacement;
+	angAccjMK -> angularVelocity;
+	angAccjMK -> angularAcceleration;
+	angAccjMK -> newtonSLRMK;
+	col2DIMMK -> assumpOT;
+	col2DIMMK -> assumpOD;
+	col2DIMMK -> assumpAD;
+	col2DIMMK -> assumpCT;
+	col2DIMMK -> assumpDI;
+	col2DIMMK -> assumpCAJI;
+	col2DIMMK -> p_CM;
+	col2DIMMK -> impulseSMK;
 	lcEC -> assumpCT;
 	lcID -> assumpDI;
 	lcIJC -> assumpCAJI;
@@ -89,31 +89,31 @@ digraph allvsall {
 	{p_CM, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
 	}
 
-	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
-	force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
-	force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
-	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+	newtonSLMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	force1MK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
+	forceMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
+	newtonSLRMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{newtonSL, force1, force, newtonSLR}
+	{newtonSLMK, force1MK, forceMK, newtonSLRMK}
 	}
 
-	gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
-	impulseS	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
+	gravitationalAccelMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
+	impulseSMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
 
 	subgraph GD {
 	rank="same"
-	{gravitationalAccel, impulseS}
+	{gravitationalAccelMK, impulseSMK}
 	}
 
-	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
-	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
-	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+	accjMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
+	angAccjMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
+	col2DIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{accj, angAccj, col2DIM}
+	{accjMK, angAccjMK, col2DIMMK}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];

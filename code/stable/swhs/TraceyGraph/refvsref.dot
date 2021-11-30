@@ -1,30 +1,30 @@
 digraph refvsref {
 	wVol -> tankVol;
 	meltFrac -> htFusion;
-	sensHeat -> latentHtETM;
-	latentHtETM -> meltFrac;
+	sensHeatMK -> latentHtETMMK;
+	latentHtETMMK -> meltFrac;
 	rocTempSimpRC -> consThermECS;
 	rocTempSimpRC -> rocTempSimpRC;
-	htFluxC -> nwtnCoolingTM;
-	htFluxP -> nwtnCoolingTM;
+	htFluxCMK -> nwtnCoolingTMMK;
+	htFluxPMK -> nwtnCoolingTMMK;
 	eBalanceOnWtrRC -> tauW;
 	eBalanceOnWtrRC -> eta;
 	eBalanceOnWtrRC -> rocTempSimpRC;
-	eBalanceOnWtrRC -> htFluxC;
-	eBalanceOnWtrRC -> htFluxP;
+	eBalanceOnWtrRC -> htFluxCMK;
+	eBalanceOnWtrRC -> htFluxPMK;
 	eBalanceOnWtrRC -> eBalanceOnWtrRC;
 	eBalanceOnWtrRC -> eBalanceOnPCMRC;
 	eBalanceOnPCMRC -> tauSP;
 	eBalanceOnPCMRC -> tauLP;
 	eBalanceOnPCMRC -> meltFrac;
 	eBalanceOnPCMRC -> rocTempSimpRC;
-	eBalanceOnPCMRC -> htFluxP;
+	eBalanceOnPCMRC -> htFluxPMK;
 	eBalanceOnPCMRC -> eBalanceOnWtrRC;
 	eBalanceOnPCMRC -> heatEInPCMRC;
-	heatEInWtrIM -> sensHeat;
+	heatEInWtrIMMK -> sensHeatMK;
 	heatEInPCMRC -> htFusion;
-	heatEInPCMRC -> sensHeat;
-	heatEInPCMRC -> latentHtETM;
+	heatEInPCMRC -> sensHeatMK;
+	heatEInPCMRC -> latentHtETMMK;
 
 
 	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
@@ -44,32 +44,32 @@ digraph refvsref {
 	}
 
 	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
-	sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
-	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	sensHeatMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
+	latentHtETMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
+	nwtnCoolingTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECS, sensHeat, latentHtETM, nwtnCoolingTM}
+	{consThermECS, sensHeatMK, latentHtETMMK, nwtnCoolingTMMK}
 	}
 
 	rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
-	htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
-	htFluxP	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxPCMFromWater"];
+	htFluxCMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
+	htFluxPMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxPCMFromWater"];
 
 	subgraph GD {
 	rank="same"
-	{rocTempSimpRC, htFluxC, htFluxP}
+	{rocTempSimpRC, htFluxCMK, htFluxPMK}
 	}
 
 	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	eBalanceOnPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
-	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	heatEInWtrIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 	heatEInPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, eBalanceOnPCMRC, heatEInWtrIM, heatEInPCMRC}
+	{eBalanceOnWtrRC, eBalanceOnPCMRC, heatEInWtrIMMK, heatEInPCMRC}
 	}
 
 }

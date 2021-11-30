@@ -8,50 +8,50 @@ digraph allvsall {
 	accelYGravity -> yAxisGravity;
 	ixVel -> speed;
 	iyVel -> speed;
-	projSpeed -> pointMass;
-	projSpeed -> timeStartZero;
-	projSpeed -> accelerationTM;
-	scalarPos -> pointMass;
-	scalarPos -> timeStartZero;
-	scalarPos -> velocityTM;
-	scalarPos -> projSpeed;
-	velocity -> twoDMotion;
-	velocity -> cartSyst;
-	velocity -> constAccel;
-	velocity -> timeStartZero;
-	velocity -> projSpeed;
-	position -> twoDMotion;
-	position -> cartSyst;
-	position -> constAccel;
-	position -> timeStartZero;
-	position -> scalarPos;
-	flightduration -> yAxisGravity;
-	flightduration -> launchOrigin;
-	flightduration -> targetXAxis;
-	flightduration -> posXDirection;
-	flightduration -> accelYGravity;
-	flightduration -> timeStartZero;
-	flightduration -> gravAccelValue;
-	flightduration -> iyVel;
-	flightduration -> position;
-	landingposition -> yAxisGravity;
-	landingposition -> launchOrigin;
-	landingposition -> posXDirection;
-	landingposition -> accelXZero;
-	landingposition -> gravAccelValue;
-	landingposition -> ixVel;
-	landingposition -> position;
-	landingposition -> flightduration;
-	offset -> posXDirection;
-	offset -> landingposition;
-	message -> posXDirection;
-	message -> offset;
-	calcValues -> flightduration;
-	calcValues -> landingposition;
-	calcValues -> offset;
-	calcValues -> message;
-	outputValues -> offset;
-	outputValues -> message;
+	projSpeedMK -> pointMass;
+	projSpeedMK -> timeStartZero;
+	projSpeedMK -> accelerationTMMK;
+	scalarPosMK -> pointMass;
+	scalarPosMK -> timeStartZero;
+	scalarPosMK -> velocityTMMK;
+	scalarPosMK -> projSpeedMK;
+	velocityMK -> twoDMotion;
+	velocityMK -> cartSyst;
+	velocityMK -> constAccel;
+	velocityMK -> timeStartZero;
+	velocityMK -> projSpeedMK;
+	positionMK -> twoDMotion;
+	positionMK -> cartSyst;
+	positionMK -> constAccel;
+	positionMK -> timeStartZero;
+	positionMK -> scalarPosMK;
+	flightdurationMK -> yAxisGravity;
+	flightdurationMK -> launchOrigin;
+	flightdurationMK -> targetXAxis;
+	flightdurationMK -> posXDirection;
+	flightdurationMK -> accelYGravity;
+	flightdurationMK -> timeStartZero;
+	flightdurationMK -> gravAccelValue;
+	flightdurationMK -> iyVel;
+	flightdurationMK -> positionMK;
+	landingpositionMK -> yAxisGravity;
+	landingpositionMK -> launchOrigin;
+	landingpositionMK -> posXDirection;
+	landingpositionMK -> accelXZero;
+	landingpositionMK -> gravAccelValue;
+	landingpositionMK -> ixVel;
+	landingpositionMK -> positionMK;
+	landingpositionMK -> flightdurationMK;
+	offsetMK -> posXDirection;
+	offsetMK -> landingpositionMK;
+	messageMK -> posXDirection;
+	messageMK -> offsetMK;
+	calcValues -> flightdurationMK;
+	calcValues -> landingpositionMK;
+	calcValues -> offsetMK;
+	calcValues -> messageMK;
+	outputValues -> offsetMK;
+	outputValues -> messageMK;
 
 
 	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -84,32 +84,32 @@ digraph allvsall {
 	{speed, ixVel, iyVel}
 	}
 
-	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
-	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+	accelerationTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	velocityTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
 
 	subgraph TM {
 	rank="same"
-	{accelerationTM, velocityTM}
+	{accelerationTMMK, velocityTMMK}
 	}
 
-	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
-	scalarPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
-	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
-	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
+	projSpeedMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
+	scalarPosMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
+	velocityMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
+	positionMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
 
 	subgraph GD {
 	rank="same"
-	{projSpeed, scalarPos, velocity, position}
+	{projSpeedMK, scalarPosMK, velocityMK, positionMK}
 	}
 
-	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
-	landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
-	offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
+	flightdurationMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
+	landingpositionMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
+	offsetMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
+	messageMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"
-	{flightduration, landingposition, offset, message}
+	{flightdurationMK, landingpositionMK, offsetMK, messageMK}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

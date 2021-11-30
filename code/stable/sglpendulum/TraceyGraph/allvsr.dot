@@ -1,6 +1,6 @@
 digraph allvsr {
-	calcAngPos -> angularDisplacementIM;
-	outputValues -> angularDisplacementIM;
+	calcAngPos -> angularDisplacementIMMK;
+	outputValues -> angularDisplacementIMMK;
 
 
 	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -25,35 +25,35 @@ digraph allvsr {
 	{ixPos, iyPos, frequency, angularFrequency, period}
 	}
 
-	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
-	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
-	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
-	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+	accelerationTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	velocityTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+	newtonSLMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	newtonSLRMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{accelerationTM, velocityTM, newtonSL, newtonSLR}
+	{accelerationTMMK, velocityTMMK, newtonSLMK, newtonSLRMK}
 	}
 
-	xVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIX"];
-	yVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIY"];
-	xScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIX"];
-	yScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIY"];
-	hForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hForceOnPendulum"];
-	vForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:vForceOnPendulum"];
-	angFrequencyGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:angFrequencyGD"];
-	periodPendGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:periodPend"];
+	xVelMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIX"];
+	yVelMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIY"];
+	xScalAccMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIX"];
+	yScalAccMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIY"];
+	hForceOnPendulumMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hForceOnPendulum"];
+	vForceOnPendulumMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:vForceOnPendulum"];
+	angFrequencyGDMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:angFrequencyGD"];
+	periodPendGDMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:periodPend"];
 
 	subgraph GD {
 	rank="same"
-	{xVel, yVel, xScalAcc, yScalAcc, hForceOnPendulum, vForceOnPendulum, angFrequencyGD, periodPendGD}
+	{xVelMK, yVelMK, xScalAccMK, yScalAccMK, hForceOnPendulumMK, vForceOnPendulumMK, angFrequencyGDMK, periodPendGDMK}
 	}
 
-	angularDisplacementIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
+	angularDisplacementIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
 
 	subgraph IM {
 	rank="same"
-	{angularDisplacementIM}
+	{angularDisplacementIMMK}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

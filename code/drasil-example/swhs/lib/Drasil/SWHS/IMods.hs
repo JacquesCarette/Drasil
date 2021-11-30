@@ -88,12 +88,13 @@ eBalanceOnWtrDeriv = mkDerivName (phraseNP (the energy) +:+ S "balance on water"
   (weave [eBalanceOnWtrDerivSentences, map eS eBalanceOnWtrDerivEqnsIM1])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
-eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 htTransEnd overAreas extraAssumps assumpNIHGBWP,
+eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 rocTempSimp htTransEnd overAreas extraAssumps assumpNIHGBWP,
   eBalanceOnWtrDerivDesc2, eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4,
   eBalanceOnWtrDerivDesc5, eBalanceOnWtrDerivDesc6, eBalanceOnWtrDerivDesc7 eq2]
 
-eBalanceOnWtrDerivDesc1 :: Sentence -> Sentence-> Sentence -> ConceptInstance -> Sentence
-eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
+eBalanceOnWtrDerivDesc1 :: (HasUID r, HasRefAddress r, HasShortName r) => r
+  -> Sentence -> Sentence-> Sentence -> ConceptInstance -> Sentence
+eBalanceOnWtrDerivDesc1 r htEnd oa ea htA = foldlSentCol [
   S "To find the", phrase rOfChng `S.of_` eS' tempW `sC`
   S "we look at the", phrase energy, S "balance on" +:+. phrase water, atStartNP (the vol),
   S "being considered" `S.isThe` phraseNP (vol `of_` water) `S.inThe`
@@ -105,7 +106,7 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
   sParen (refS assumpPIT), S "Since the", phrase assumption,
   S "is made that no internal heat is generated" +:+. (sParen (refS htA) `sC`
   eS (sy volHtGen $= exactDbl 0)), S "Therefore" `sC` phraseNP (the equation) `S.for`
-  refS rocTempSimp, S "can be written as"]
+  refS r, S "can be written as"]
 
 htTransEnd :: Sentence
 htTransEnd = foldlSent_ [S "and from the", phrase water, S "into the",
@@ -202,11 +203,12 @@ eBalanceOnPCMDeriv = mkDerivName (phraseNP (the energy) +:+
   ++ [eBalanceOnPCMDerivDesc5, eBalanceOnPCMDerivDesc6, eBalanceOnPCMDerivDesc7])
 
 eBalanceOnPCMDerivSentences :: [Sentence]
-eBalanceOnPCMDerivSentences = [eBalanceOnPCMDerivDesc1, eBalanceOnPCMDerivDesc2,
+eBalanceOnPCMDerivSentences = [eBalanceOnPCMDerivDesc1 rocTempSimp, eBalanceOnPCMDerivDesc2,
   eBalanceOnPCMDerivDesc3, eBalanceOnPCMDerivDesc4]
 
-eBalanceOnPCMDerivDesc1 :: Sentence
-eBalanceOnPCMDerivDesc1 = foldlSentCol [
+eBalanceOnPCMDerivDesc1 :: (HasUID r, HasRefAddress r, HasShortName r) => r
+  -> Sentence
+eBalanceOnPCMDerivDesc1 r = foldlSentCol [
   S "To find the", phrase rOfChng `S.of_` ch tempPCM `sC` S "we look at the",
   phrase energy, S "balance on the" +:+. getAcc phsChgMtrl, S "The", phrase vol,
   S "being considered" `S.isThe` phrase pcmVol +:+. sParen (ch pcmVol),
@@ -220,7 +222,7 @@ eBalanceOnPCMDerivDesc1 = foldlSentCol [
   S "There is no", phrase htFlux, phrase output_, S "from the" +:+. getAcc phsChgMtrl,
   S "Assuming no volumetric", phrase heat, S "generation per unit", phrase vol,
   sParen (refS assumpNIHGBWP) `sC` eS (sy volHtGen $= exactDbl 0) `sC`
-  S "the equation for", refS rocTempSimp, S "can be written as"]
+  S "the equation for", refS r, S "can be written as"]
 
 eBalanceOnPCMDerivDesc2 :: Sentence
 eBalanceOnPCMDerivDesc2 = foldlSentCol [S "Using", refS htFluxPCMFromWater `S.for`

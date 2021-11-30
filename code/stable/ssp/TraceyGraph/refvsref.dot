@@ -10,93 +10,93 @@ digraph refvsref {
 	Psi -> alpha_i;
 	Psi -> f_i;
 	Psi -> Phi;
-	effectiveStressTM -> sigma;
-	normForcEq -> alpha_i;
-	normForcEq -> beta_i;
-	normForcEq -> equilibriumCS;
-	normForcEq -> sliceWght;
-	normForcEq -> srfWtrF;
-	bsShrFEq -> alpha_i;
-	bsShrFEq -> beta_i;
-	bsShrFEq -> equilibriumCS;
-	bsShrFEq -> sliceWght;
-	bsShrFEq -> srfWtrF;
-	resShr -> l_bi;
-	resShr -> sigma;
-	resShr -> tau;
-	resShr -> mcShrSrgth;
-	mobShr -> l_bi;
-	mobShr -> factOfSafetyTM;
-	mobShr -> resShr;
-	effNormF -> sigma;
-	effNormF -> effectiveStressTM;
-	effNormF -> baseWtrF;
-	resShearWO -> H_i;
-	resShearWO -> alpha_i;
-	resShearWO -> beta_i;
-	resShearWO -> l_bi;
-	resShearWO -> sliceWght;
-	resShearWO -> baseWtrF;
-	resShearWO -> srfWtrF;
-	mobShearWO -> H_i;
-	mobShearWO -> alpha_i;
-	mobShearWO -> beta_i;
-	mobShearWO -> sliceWght;
-	mobShearWO -> srfWtrF;
-	X_i -> f_i;
+	effectiveStressTMMK -> sigma;
+	normForcEqMK -> alpha_i;
+	normForcEqMK -> beta_i;
+	normForcEqMK -> equilibriumCS;
+	normForcEqMK -> sliceWghtMK;
+	normForcEqMK -> srfWtrFMK;
+	bsShrFEqMK -> alpha_i;
+	bsShrFEqMK -> beta_i;
+	bsShrFEqMK -> equilibriumCS;
+	bsShrFEqMK -> sliceWghtMK;
+	bsShrFEqMK -> srfWtrFMK;
+	resShrMK -> l_bi;
+	resShrMK -> sigma;
+	resShrMK -> tau;
+	resShrMK -> mcShrSrgthMK;
+	mobShrMK -> l_bi;
+	mobShrMK -> factOfSafetyTMMK;
+	mobShrMK -> resShrMK;
+	effNormFMK -> sigma;
+	effNormFMK -> effectiveStressTMMK;
+	effNormFMK -> baseWtrFMK;
+	resShearWOMK -> H_i;
+	resShearWOMK -> alpha_i;
+	resShearWOMK -> beta_i;
+	resShearWOMK -> l_bi;
+	resShearWOMK -> sliceWghtMK;
+	resShearWOMK -> baseWtrFMK;
+	resShearWOMK -> srfWtrFMK;
+	mobShearWOMK -> H_i;
+	mobShearWOMK -> alpha_i;
+	mobShearWOMK -> beta_i;
+	mobShearWOMK -> sliceWghtMK;
+	mobShearWOMK -> srfWtrFMK;
+	X_iMK -> f_i;
 	momentEql -> alpha_i;
 	momentEql -> beta_i;
 	momentEql -> b_i;
 	momentEql -> h_i;
 	momentEql -> torque;
 	momentEql -> equilibriumCS;
-	momentEql -> weight;
-	momentEql -> sliceWght;
-	momentEql -> srfWtrF;
-	weight -> newtonSL;
-	sliceWght -> b_i;
-	sliceWght -> weight;
-	baseWtrF -> l_bi;
-	baseWtrF -> pressure;
-	baseWtrF -> baseWtrF;
-	srfWtrF -> l_si;
-	srfWtrF -> pressure;
-	srfWtrF -> srfWtrF;
-	FS -> Phi;
-	FS -> Psi;
-	FS -> normForcEq;
-	FS -> bsShrFEq;
-	FS -> mobShr;
-	FS -> resShearWO;
-	FS -> mobShearWO;
-	FS -> X_i;
-	FS -> FS;
-	FS -> nrmShrForIM;
-	FS -> intsliceFsRC;
-	nrmShrForIM -> X_i;
-	nrmShrForIM -> momentEql;
-	nrmShrForIM -> FS;
-	nrmShrForIM -> nrmShrForIM;
-	nrmShrForIM -> nrmShrForNumRC;
-	nrmShrForIM -> nrmShrForDenRC;
-	nrmShrForIM -> intsliceFsRC;
-	nrmShrForNumRC -> H_i;
-	nrmShrForNumRC -> alpha_i;
-	nrmShrForNumRC -> beta_i;
-	nrmShrForNumRC -> b_i;
-	nrmShrForNumRC -> h_i;
-	nrmShrForNumRC -> srfWtrF;
-	nrmShrForNumRC -> nrmShrForIM;
-	nrmShrForDenRC -> b_i;
-	nrmShrForDenRC -> f_i;
-	nrmShrForDenRC -> nrmShrForIM;
-	intsliceFsRC -> Phi;
-	intsliceFsRC -> Psi;
-	intsliceFsRC -> resShearWO;
-	intsliceFsRC -> mobShearWO;
-	intsliceFsRC -> FS;
-	intsliceFsRC -> nrmShrForIM;
-	intsliceFsRC -> intsliceFsRC;
+	momentEql -> weightMK;
+	momentEql -> sliceWghtMK;
+	momentEql -> srfWtrFMK;
+	weightMK -> newtonSLMK;
+	sliceWghtMK -> b_i;
+	sliceWghtMK -> weightMK;
+	baseWtrFMK -> l_bi;
+	baseWtrFMK -> pressureMK;
+	baseWtrFMK -> baseWtrFMK;
+	srfWtrFMK -> l_si;
+	srfWtrFMK -> pressureMK;
+	srfWtrFMK -> srfWtrFMK;
+	FSMK -> Phi;
+	FSMK -> Psi;
+	FSMK -> normForcEqMK;
+	FSMK -> bsShrFEqMK;
+	FSMK -> mobShrMK;
+	FSMK -> resShearWOMK;
+	FSMK -> mobShearWOMK;
+	FSMK -> X_iMK;
+	FSMK -> FSMK;
+	FSMK -> nrmShrForIMMK;
+	FSMK -> intsliceFsRCMK;
+	nrmShrForIMMK -> X_iMK;
+	nrmShrForIMMK -> momentEql;
+	nrmShrForIMMK -> FSMK;
+	nrmShrForIMMK -> nrmShrForIMMK;
+	nrmShrForIMMK -> nrmShrForNumRCMK;
+	nrmShrForIMMK -> nrmShrForDenRCMK;
+	nrmShrForIMMK -> intsliceFsRCMK;
+	nrmShrForNumRCMK -> H_i;
+	nrmShrForNumRCMK -> alpha_i;
+	nrmShrForNumRCMK -> beta_i;
+	nrmShrForNumRCMK -> b_i;
+	nrmShrForNumRCMK -> h_i;
+	nrmShrForNumRCMK -> srfWtrFMK;
+	nrmShrForNumRCMK -> nrmShrForIMMK;
+	nrmShrForDenRCMK -> b_i;
+	nrmShrForDenRCMK -> f_i;
+	nrmShrForDenRCMK -> nrmShrForIMMK;
+	intsliceFsRCMK -> Phi;
+	intsliceFsRCMK -> Psi;
+	intsliceFsRCMK -> resShearWOMK;
+	intsliceFsRCMK -> mobShearWOMK;
+	intsliceFsRCMK -> FSMK;
+	intsliceFsRCMK -> nrmShrForIMMK;
+	intsliceFsRCMK -> intsliceFsRCMK;
 
 
 	H_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:intersliceWtrF"];
@@ -122,47 +122,47 @@ digraph refvsref {
 	{H_i, alpha_i, beta_i, b_i, l_bi, l_si, h_i, sigma, tau, torque, f_i, Phi, Psi, F_xG, F_xH, hR, hL}
 	}
 
-	factOfSafetyTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:factOfSafety"];
+	factOfSafetyTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:factOfSafety"];
 	equilibriumCS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:equilibrium"];
-	mcShrSrgth	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:mcShrStrgth"];
-	effectiveStressTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:effStress"];
-	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	mcShrSrgthMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:mcShrStrgth"];
+	effectiveStressTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:effStress"];
+	newtonSLMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 
 	subgraph TM {
 	rank="same"
-	{factOfSafetyTM, equilibriumCS, mcShrSrgth, effectiveStressTM, newtonSL}
+	{factOfSafetyTMMK, equilibriumCS, mcShrSrgthMK, effectiveStressTMMK, newtonSLMK}
 	}
 
-	normForcEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normForcEq"];
-	bsShrFEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:bsShrFEq"];
-	resShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShr"];
-	mobShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShr"];
-	effNormF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:effNormF"];
-	resShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShearWO"];
-	mobShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShearWO"];
-	X_i	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normShrR"];
+	normForcEqMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normForcEq"];
+	bsShrFEqMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:bsShrFEq"];
+	resShrMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShr"];
+	mobShrMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShr"];
+	effNormFMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:effNormF"];
+	resShearWOMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShearWO"];
+	mobShearWOMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShearWO"];
+	X_iMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normShrR"];
 	momentEql	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:momentEql"];
-	weight	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:weight"];
-	sliceWght	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:sliceWght"];
-	pressure	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hsPressure"];
-	baseWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:baseWtrF"];
-	srfWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:srfWtrF"];
+	weightMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:weight"];
+	sliceWghtMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:sliceWght"];
+	pressureMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hsPressure"];
+	baseWtrFMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:baseWtrF"];
+	srfWtrFMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:srfWtrF"];
 
 	subgraph GD {
 	rank="same"
-	{normForcEq, bsShrFEq, resShr, mobShr, effNormF, resShearWO, mobShearWO, X_i, momentEql, weight, sliceWght, pressure, baseWtrF, srfWtrF}
+	{normForcEqMK, bsShrFEqMK, resShrMK, mobShrMK, effNormFMK, resShearWOMK, mobShearWOMK, X_iMK, momentEql, weightMK, sliceWghtMK, pressureMK, baseWtrFMK, srfWtrFMK}
 	}
 
-	FS	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:fctSfty"];
-	nrmShrForIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrFor"];
-	nrmShrForNumRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForNum"];
-	nrmShrForDenRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForDen"];
-	intsliceFsRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:intsliceFs"];
-	crtSlpIdIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:crtSlpId"];
+	FSMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:fctSfty"];
+	nrmShrForIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrFor"];
+	nrmShrForNumRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForNum"];
+	nrmShrForDenRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForDen"];
+	intsliceFsRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:intsliceFs"];
+	crtSlpIdIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:crtSlpId"];
 
 	subgraph IM {
 	rank="same"
-	{FS, nrmShrForIM, nrmShrForNumRC, nrmShrForDenRC, intsliceFsRC, crtSlpIdIM}
+	{FSMK, nrmShrForIMMK, nrmShrForNumRCMK, nrmShrForDenRCMK, intsliceFsRCMK, crtSlpIdIMMK}
 	}
 
 }

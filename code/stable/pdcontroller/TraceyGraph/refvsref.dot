@@ -1,17 +1,17 @@
 digraph refvsref {
-	qdProcessErrorFD -> laplaceRC;
+	qdProcessErrorFD -> laplaceRCMK;
 	qdPropControlFD -> qdProcessErrorFD;
-	qdPropControlFD -> laplaceRC;
+	qdPropControlFD -> laplaceRCMK;
 	qdDerivativeControlFD -> qdProcessErrorFD;
-	qdDerivativeControlFD -> laplaceRC;
+	qdDerivativeControlFD -> laplaceRCMK;
 	qdCtrlVarFD -> qdPropControlFD;
 	qdCtrlVarFD -> qdDerivativeControlFD;
-	gdPowerPlantRC -> laplaceRC;
-	gdPowerPlantRC -> tmSOSystemRC;
+	gdPowerPlantRCMK -> laplaceRCMK;
+	gdPowerPlantRCMK -> tmSOSystemRCMK;
 	imPDRC -> qdProcessErrorFD;
 	imPDRC -> qdCtrlVarFD;
-	imPDRC -> invLaplaceRC;
-	imPDRC -> gdPowerPlantRC;
+	imPDRC -> invLaplaceRCMK;
+	imPDRC -> gdPowerPlantRCMK;
 
 
 	qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];
@@ -24,20 +24,20 @@ digraph refvsref {
 	{qdProcessErrorFD, qdPropControlFD, qdDerivativeControlFD, qdCtrlVarFD}
 	}
 
-	laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
-	invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
-	tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
+	laplaceRCMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
+	invLaplaceRCMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
+	tmSOSystemRCMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
 
 	subgraph TM {
 	rank="same"
-	{laplaceRC, invLaplaceRC, tmSOSystemRC}
+	{laplaceRCMK, invLaplaceRCMK, tmSOSystemRCMK}
 	}
 
-	gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
+	gdPowerPlantRCMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
 
 	subgraph GD {
 	rank="same"
-	{gdPowerPlantRC}
+	{gdPowerPlantRCMK}
 	}
 
 	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];

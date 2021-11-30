@@ -36,7 +36,7 @@ genDefs = [rocTempSimp, htFluxWaterFromCoil, htFluxPCMFromWater]
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs (deModel' rocTempSimpRC) (Nothing :: Maybe UnitDefn)
-  (Just $ rocTempSimpDeriv rocTempDerivConsFlxSWHS
+  (Just $ rocTempSimpDeriv rocTempSimp rocTempDerivConsFlxSWHS
    [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
   "rocTempSimp" [{-Notes-}]
 
@@ -86,13 +86,15 @@ newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
 --  General Definitions Derivation  --
 --------------------------------------
 
-rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
-rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phraseNP (rOfChng `of_` temp))
-  (weave [rocTempSimpDerivSent s a, map eS rocTempSimpDerivEqns])
+rocTempSimpDeriv :: (HasUID r, HasRefAddress r, HasShortName r) => r
+ -> Sentence -> [ConceptInstance] -> Derivation
+rocTempSimpDeriv r s a = mkDerivName (S "simplified" +:+ phraseNP (rOfChng `of_` temp))
+  (weave [rocTempSimpDerivSent r s a, map eS rocTempSimpDerivEqns])
 
-rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
-rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,
-  rocTempDerivArbVol, rocTempDerivConsFlx s a, rocTempDerivDens]
+rocTempSimpDerivSent :: (HasUID r, HasRefAddress r, HasShortName r) => r
+ -> Sentence -> [ConceptInstance] -> [Sentence]
+rocTempSimpDerivSent r s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,
+  rocTempDerivArbVol, rocTempDerivConsFlx r s a, rocTempDerivDens]
 
 rocTempDerivInteg :: [Sentence]
 rocTempDerivInteg = [S "Integrating", refS consThermE, S "over a",
@@ -109,10 +111,11 @@ rocTempDerivArbVol :: [Sentence]
 rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol,
   atStartNP (the volHtGen), S "is assumed constant. Then", eqN 1, S "can be written as"]
 
-rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
-rocTempDerivConsFlx s assumps = [S "Where", 
+rocTempDerivConsFlx :: (HasUID r, HasRefAddress r, HasShortName r) => r
+ -> Sentence -> [ConceptInstance] -> [Sentence]
+rocTempDerivConsFlx r s assumps = [S "Where", 
   foldlList Comma List (map ch [htFluxIn, htFluxOut, inSA, outSA]),
-  S "are explained in" +:+. refS rocTempSimp, s, S "Assuming", 
+  S "are explained in" +:+. refS r, s, S "Assuming",  -- FIXME: refS r is a hack to share the rocTempSimpRC instance without causing friction between nopcm and swhs
   foldlList Comma List (map ch [density, QT.heatCapSpec, QT.temp]),
   S "are constant over the", phrase vol `sC` S "which is true in our case by",
   foldlList Comma List (map refS assumps) `sC` S "we have"]

@@ -1,18 +1,18 @@
 digraph refvsref {
 	ixVel -> speed;
 	iyVel -> speed;
-	projSpeed -> accelerationTM;
-	scalarPos -> velocityTM;
-	scalarPos -> projSpeed;
-	velocity -> projSpeed;
-	position -> scalarPos;
-	flightduration -> iyVel;
-	flightduration -> position;
-	landingposition -> ixVel;
-	landingposition -> position;
-	landingposition -> flightduration;
-	offset -> landingposition;
-	message -> offset;
+	projSpeedMK -> accelerationTMMK;
+	scalarPosMK -> velocityTMMK;
+	scalarPosMK -> projSpeedMK;
+	velocityMK -> projSpeedMK;
+	positionMK -> scalarPosMK;
+	flightdurationMK -> iyVel;
+	flightdurationMK -> positionMK;
+	landingpositionMK -> ixVel;
+	landingpositionMK -> positionMK;
+	landingpositionMK -> flightdurationMK;
+	offsetMK -> landingpositionMK;
+	messageMK -> offsetMK;
 
 
 	speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
@@ -24,32 +24,32 @@ digraph refvsref {
 	{speed, ixVel, iyVel}
 	}
 
-	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
-	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+	accelerationTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	velocityTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
 
 	subgraph TM {
 	rank="same"
-	{accelerationTM, velocityTM}
+	{accelerationTMMK, velocityTMMK}
 	}
 
-	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
-	scalarPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
-	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
-	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
+	projSpeedMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
+	scalarPosMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
+	velocityMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
+	positionMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
 
 	subgraph GD {
 	rank="same"
-	{projSpeed, scalarPos, velocity, position}
+	{projSpeedMK, scalarPosMK, velocityMK, positionMK}
 	}
 
-	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
-	landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
-	offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
+	flightdurationMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
+	landingpositionMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
+	offsetMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
+	messageMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"
-	{flightduration, landingposition, offset, message}
+	{flightdurationMK, landingpositionMK, offsetMK, messageMK}
 	}
 
 }

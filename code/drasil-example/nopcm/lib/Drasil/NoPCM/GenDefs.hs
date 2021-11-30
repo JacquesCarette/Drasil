@@ -14,5 +14,5 @@ genDefs = [rocTempSimp, htFluxWaterFromCoil]
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs (othModel' rocTempSimpRC) (Nothing :: Maybe UnitDefn)
-  (Just $ rocTempSimpDeriv EmptyS [assumpCWTAT, assumpDWCoW, assumpSHECoW])
+  (Just $ rocTempSimpDeriv rocTempSimp EmptyS [assumpCWTAT, assumpDWCoW, assumpSHECoW])
   "rocTempSimp" [{-Notes-}]

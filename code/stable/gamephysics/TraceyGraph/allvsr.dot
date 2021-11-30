@@ -35,31 +35,31 @@ digraph allvsr {
 	{p_CM, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
 	}
 
-	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
-	force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
-	force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
-	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+	newtonSLMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	force1MK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
+	forceMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
+	newtonSLRMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{newtonSL, force1, force, newtonSLR}
+	{newtonSLMK, force1MK, forceMK, newtonSLRMK}
 	}
 
-	gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
-	impulseS	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
+	gravitationalAccelMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
+	impulseSMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
 
 	subgraph GD {
 	rank="same"
-	{gravitationalAccel, impulseS}
+	{gravitationalAccelMK, impulseSMK}
 	}
 
-	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
-	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
-	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+	accjMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
+	angAccjMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
+	col2DIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{accj, angAccj, col2DIM}
+	{accjMK, angAccjMK, col2DIMMK}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];

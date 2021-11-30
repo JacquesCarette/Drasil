@@ -25,6 +25,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
 import Drasil.NoPCM.Assumptions (assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
 import Drasil.NoPCM.Derivations (eBalanceOnWtrDerivEqns)
+import Drasil.NoPCM.GenDefs (rocTempSimp)
 
 iMods :: [InstanceModel]
 iMods = [eBalanceOnWtr, heatEInWtr]
@@ -74,7 +75,7 @@ eBalanceOnWtrDeriv = mkDerivName (phraseNP (the energy) +:+ S "balance on water"
   (weave [eBalanceOnWtrDerivSentences, map eS eBalanceOnWtrDerivEqns])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
-eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,
+eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 rocTempSimp EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,
   eBalanceOnWtrDerivDesc2, eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
 
 eBalanceOnWtrDerivDesc2 :: Sentence

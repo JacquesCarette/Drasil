@@ -66,11 +66,11 @@ deModel' rc = MK (DEModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'
 equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
-equationalConstraints u n qs = MK (EquationalConstraints qs) (mkUid u) n
+equationalConstraints u n qs = MK (EquationalConstraints qs) (mkUid u +++. "MK") n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
 equationalConstraints' :: ConstraintSet e -> ModelKind e
-equationalConstraints' qs = MK (EquationalConstraints qs) (qs ^. uid) (qs ^. term)
+equationalConstraints' qs = MK (EquationalConstraints qs) (qs +++ "MK") (qs ^. term)
 
 -- | Smart constructor for 'EquationalModel's
 equationalModel :: String -> NP -> QDefinition e -> ModelKind e

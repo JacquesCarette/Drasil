@@ -1,6 +1,6 @@
 digraph avsall {
 	wVol -> assumpVCN;
-	consThermECS -> assumpTEO;
+	consThermECSMK -> assumpTEO;
 	sensHeatMK -> assumpWAL;
 	nwtnCoolingTMMK -> assumpHTCC;
 	rocTempSimpRCMK -> assumpCWTAT;
@@ -51,13 +51,13 @@ digraph avsall {
 	{wMass, wVol, tankVol, tauW}
 	}
 
-	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
+	consThermECSMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	sensHeatMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	nwtnCoolingTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECS, sensHeatMK, nwtnCoolingTMMK}
+	{consThermECSMK, sensHeatMK, nwtnCoolingTMMK}
 	}
 
 	rocTempSimpRCMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];

@@ -63,14 +63,14 @@ digraph allvsr {
 	{wMass, wVol, tankVol, tauW, eta, tauSP, tauLP, htFusion, meltFrac, aspectRatio}
 	}
 
-	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
+	consThermECSMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	sensHeatMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	latentHtETMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
 	nwtnCoolingTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECS, sensHeatMK, latentHtETMMK, nwtnCoolingTMMK}
+	{consThermECSMK, sensHeatMK, latentHtETMMK, nwtnCoolingTMMK}
 	}
 
 	rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];

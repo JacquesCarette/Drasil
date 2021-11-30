@@ -32,6 +32,9 @@ class ModelExprC r where
   -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
   deriv, pderiv :: (HasUID c, HasSymbol c) => r -> c -> r
   
+  -- | Gets the nthderivative of an 'ModelExpr' with respect to a 'Symbol'.
+  nthderiv, nthpderiv :: (HasUID c, HasSymbol c) => Integer -> r -> c -> r
+
   -- | One expression is "defined" by another.
   defines :: r -> r -> r
   
@@ -48,9 +51,18 @@ class ModelExprC r where
   intAll, sumAll, prodAll :: Symbol -> r -> r
 
 instance ModelExprC ModelExpr where
-  deriv e c  = Deriv Total e (c ^. uid)
-  pderiv e c = Deriv Part  e (c ^. uid)
-  
+  deriv e c  = Deriv 1 Total e (c ^. uid)
+  pderiv e c = Deriv 1 Part  e (c ^. uid)
+  nthderiv n e c
+    | n > 0     = Deriv n Total e (c ^. uid)
+    | n == 0    = Deriv 0 Total e (c ^. uid)
+    | otherwise = error "non-positive argument to derivative"
+
+  nthpderiv n e c
+    | n > 0     = Deriv n Part e (c ^. uid)
+    | n == 0    = Deriv 0 Total e (c ^. uid)
+    | otherwise = error "non-positive argument to derivative"
+
   defines = StatBinaryOp Defines
 
   space = Spc

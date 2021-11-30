@@ -16,11 +16,8 @@ import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
-  conceptinsTable, dataDefnTable, datadefnLookup, gendefLookup, gendefTable,
-  insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
-  refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
-  theoryModelTable, vars)
+import Database.Drasil
+import SysInfo.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
 

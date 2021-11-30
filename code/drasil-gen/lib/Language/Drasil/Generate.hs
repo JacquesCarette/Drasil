@@ -18,7 +18,7 @@ import Data.Time.Calendar (showGregorian)
 import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
-import Database.Drasil (SystemInformation(SI, _sys))
+import SysInfo.Drasil (SystemInformation(SI, _sys))
 import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
  makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot, printAllDebugInfo)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),

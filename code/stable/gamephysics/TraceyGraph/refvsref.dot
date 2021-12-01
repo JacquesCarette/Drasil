@@ -1,5 +1,5 @@
 digraph refvsref {
-	gravitationalAccelMK -> forceMK;
+	gravitationalAccelMK -> forceMDMK;
 	accjMK -> p_CM;
 	accjMK -> linearDisplacement;
 	accjMK -> linearVelocity;
@@ -37,12 +37,12 @@ digraph refvsref {
 
 	newtonSLMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 	force1MK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
-	forceMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
+	forceMDMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
 	newtonSLRMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{newtonSLMK, force1MK, forceMK, newtonSLRMK}
+	{newtonSLMK, force1MK, forceMDMK, newtonSLRMK}
 	}
 
 	gravitationalAccelMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];

@@ -14,7 +14,6 @@ import Data.List (union)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil hiding (DefiningExpr)
-import Language.Drasil.Development (showUID)
 
 -- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
 --   the description, the defining (rhs) expression and the context domain(s).
@@ -45,11 +44,9 @@ makeLenses ''MultiDefn
 
 
 instance HasUID        (MultiDefn e) where uid     = rUid
-instance HasSymbol     (MultiDefn e) where symbol  = symbol . (^. qd)
 instance NamedIdea     (MultiDefn e) where term    = qd . term
 instance Idea          (MultiDefn e) where getA    = getA . (^. qd)
 instance HasSpace      (MultiDefn e) where typ     = qd . typ
-instance Quantity      (MultiDefn e) where
 instance MayHaveUnit   (MultiDefn e) where getUnit = getUnit . view qd
 -- | The concept domain of a MultiDefn is the union of the concept domains of the underlying variants.
 instance ConceptDomain (MultiDefn e) where cdom    = foldr1 union . NE.toList . NE.map (^. cd) . (^. rvs)
@@ -57,29 +54,29 @@ instance Definition    (MultiDefn e) where defn    = rDesc
 -- | The complete Relation of a MultiDefn is defined as the quantity and the related expressions being equal
 --   e.g., `q $= a $= b $= ... $= z`
 instance Express e => Express (MultiDefn e) where
-  express q = equiv $ sy q : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
+  express q = equiv $ sy (q ^. qd) : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment. First argument is the 'String' to become a 'UID'.
-mkMultiDefn :: String -> QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefn :: UID -> QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefn u q s des
-  | length des == dupsRemovedLen = MultiDefn (mkUid u) q s des
+  | length des == dupsRemovedLen = MultiDefn (u +++. "MD") q s des
   | otherwise                    = error $
-    "MultiDefn '" ++ u ++ "' created with non-unique list of expressions"
+    "MultiDefn '" ++ show u ++ "' created with non-unique list of expressions"
   where dupsRemovedLen = length $ NE.nub des
 
 -- Should showUID be used here?
 -- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'QuantityDict'.
 mkMultiDefnForQuant :: QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
-mkMultiDefnForQuant q = mkMultiDefn (showUID q) q
+mkMultiDefnForQuant q = mkMultiDefn (q ^. uid) q
 
 -- | Smart constructor for 'DefiningExpr's.
 mkDefiningExpr :: String -> [UID] -> Sentence -> e -> DefiningExpr e
-mkDefiningExpr u = DefiningExpr (mkUid u)
+mkDefiningExpr u = DefiningExpr (mkUid u +++. "DE")
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr'.
 multiDefnGenQD :: MultiDefn e -> DefiningExpr e -> QDefinition e
 multiDefnGenQD md de = mkQDefSt (md ^. qd . uid) (md ^. term) (md ^. defn)
-                                (symbol md) (md ^. typ) (getUnit md) (de ^. expr)
+                                (symbol (md ^. qd)) (md ^. typ) (getUnit md) (de ^. expr)
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr' (by 'UID').
 multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e

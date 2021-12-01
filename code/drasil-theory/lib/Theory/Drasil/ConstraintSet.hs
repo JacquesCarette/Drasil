@@ -14,13 +14,14 @@ import qualified Data.List.NonEmpty as NE
 
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet e = CL {
-    _con  :: ConceptChunk,
-    _invs :: NE.NonEmpty e
+    _csUid :: UID,
+    _con   :: ConceptChunk,
+    _invs  :: NE.NonEmpty e
 }
 makeLenses ''ConstraintSet
 
 -- | Finds the 'UID' of the 'ConstraintSet'.
-instance HasUID        (ConstraintSet e) where uid   = con . uid
+instance HasUID        (ConstraintSet e) where uid   = csUid
 -- | Finds the term ('NP') of the 'ConstraintSet'.
 instance NamedIdea     (ConstraintSet e) where term  = con . term
 -- | Finds the idea of the 'ConstraintSet'.
@@ -36,4 +37,4 @@ instance Express e => Express (ConstraintSet e) where
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NE.NonEmpty e -> ConstraintSet e
-mkConstraintSet = CL
+mkConstraintSet c = CL (c +++ "CS") c

@@ -1,13 +1,13 @@
 digraph allvsall {
 	wVol -> assumpVCN;
 	wVol -> tankVol;
-	consThermECSMK -> assumpTEO;
+	consThermECSCSMK -> assumpTEO;
 	sensHeatMK -> assumpWAL;
 	nwtnCoolingTMMK -> assumpHTCC;
 	rocTempSimpRCMK -> assumpCWTAT;
 	rocTempSimpRCMK -> assumpDWCoW;
 	rocTempSimpRCMK -> assumpSHECoW;
-	rocTempSimpRCMK -> consThermECSMK;
+	rocTempSimpRCMK -> consThermECSCSMK;
 	rocTempSimpRCMK -> rocTempSimpRCMK;
 	htFluxCMK -> assumpLCCCW;
 	htFluxCMK -> assumpTHCCoT;
@@ -70,13 +70,13 @@ digraph allvsall {
 	{wMass, wVol, tankVol, tauW}
 	}
 
-	consThermECSMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
+	consThermECSCSMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	sensHeatMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	nwtnCoolingTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECSMK, sensHeatMK, nwtnCoolingTMMK}
+	{consThermECSCSMK, sensHeatMK, nwtnCoolingTMMK}
 	}
 
 	rocTempSimpRCMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];

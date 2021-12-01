@@ -13,17 +13,17 @@ digraph allvsall {
 	Psi -> alpha_i;
 	Psi -> f_i;
 	Psi -> Phi;
-	equilibriumCSMK -> assumpENSL;
+	equilibriumCSCSMK -> assumpENSL;
 	mcShrSrgthMK -> assumpSBSBISL;
 	effectiveStressTMMK -> sigma;
 	normForcEqMK -> alpha_i;
 	normForcEqMK -> beta_i;
-	normForcEqMK -> equilibriumCSMK;
+	normForcEqMK -> equilibriumCSCSMK;
 	normForcEqMK -> sliceWghtMK;
 	normForcEqMK -> srfWtrFMK;
 	bsShrFEqMK -> alpha_i;
 	bsShrFEqMK -> beta_i;
-	bsShrFEqMK -> equilibriumCSMK;
+	bsShrFEqMK -> equilibriumCSCSMK;
 	bsShrFEqMK -> sliceWghtMK;
 	bsShrFEqMK -> srfWtrFMK;
 	resShrMK -> assumpSLH;
@@ -56,17 +56,17 @@ digraph allvsall {
 	mobShearWOMK -> srfWtrFMK;
 	X_iMK -> assumpINSFL;
 	X_iMK -> f_i;
-	momentEqlMK -> assumpNESSS;
-	momentEqlMK -> assumpHFSM;
-	momentEqlMK -> alpha_i;
-	momentEqlMK -> beta_i;
-	momentEqlMK -> b_i;
-	momentEqlMK -> h_i;
-	momentEqlMK -> torque;
-	momentEqlMK -> equilibriumCSMK;
-	momentEqlMK -> weightMK;
-	momentEqlMK -> sliceWghtMK;
-	momentEqlMK -> srfWtrFMK;
+	momentEqlCSMK -> assumpNESSS;
+	momentEqlCSMK -> assumpHFSM;
+	momentEqlCSMK -> alpha_i;
+	momentEqlCSMK -> beta_i;
+	momentEqlCSMK -> b_i;
+	momentEqlCSMK -> h_i;
+	momentEqlCSMK -> torque;
+	momentEqlCSMK -> equilibriumCSCSMK;
+	momentEqlCSMK -> weightMK;
+	momentEqlCSMK -> sliceWghtMK;
+	momentEqlCSMK -> srfWtrFMK;
 	weightMK -> newtonSLMK;
 	sliceWghtMK -> assumpSLH;
 	sliceWghtMK -> assumpPSC;
@@ -109,7 +109,7 @@ digraph allvsall {
 	nrmShrForIMMK -> assumpSF;
 	nrmShrForIMMK -> assumpSL;
 	nrmShrForIMMK -> X_iMK;
-	nrmShrForIMMK -> momentEqlMK;
+	nrmShrForIMMK -> momentEqlCSMK;
 	nrmShrForIMMK -> FSMK;
 	nrmShrForIMMK -> nrmShrForIMMK;
 	nrmShrForIMMK -> nrmShrForNumRCMK;
@@ -206,14 +206,14 @@ digraph allvsall {
 	}
 
 	factOfSafetyTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:factOfSafety"];
-	equilibriumCSMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:equilibrium"];
+	equilibriumCSCSMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:equilibrium"];
 	mcShrSrgthMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:mcShrStrgth"];
 	effectiveStressTMMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:effStress"];
 	newtonSLMK	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 
 	subgraph TM {
 	rank="same"
-	{factOfSafetyTMMK, equilibriumCSMK, mcShrSrgthMK, effectiveStressTMMK, newtonSLMK}
+	{factOfSafetyTMMK, equilibriumCSCSMK, mcShrSrgthMK, effectiveStressTMMK, newtonSLMK}
 	}
 
 	normForcEqMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normForcEq"];
@@ -224,7 +224,7 @@ digraph allvsall {
 	resShearWOMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShearWO"];
 	mobShearWOMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShearWO"];
 	X_iMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normShrR"];
-	momentEqlMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:momentEql"];
+	momentEqlCSMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:momentEql"];
 	weightMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:weight"];
 	sliceWghtMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:sliceWght"];
 	pressureMK	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hsPressure"];
@@ -233,7 +233,7 @@ digraph allvsall {
 
 	subgraph GD {
 	rank="same"
-	{normForcEqMK, bsShrFEqMK, resShrMK, mobShrMK, effNormFMK, resShearWOMK, mobShearWOMK, X_iMK, momentEqlMK, weightMK, sliceWghtMK, pressureMK, baseWtrFMK, srfWtrFMK}
+	{normForcEqMK, bsShrFEqMK, resShrMK, mobShrMK, effNormFMK, resShearWOMK, mobShearWOMK, X_iMK, momentEqlCSMK, weightMK, sliceWghtMK, pressureMK, baseWtrFMK, srfWtrFMK}
 	}
 
 	FSMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:fctSfty"];

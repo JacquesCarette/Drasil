@@ -2,6 +2,7 @@
 module Language.Drasil.Code.CodeQuantityDicts where
 
 import Language.Drasil
+import Language.Drasil.Choices (Choices(..))
 
 -- | Variable for the input file's name.
 inFileName :: QuantityDict

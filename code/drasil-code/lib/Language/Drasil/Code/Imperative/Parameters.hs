@@ -7,7 +7,7 @@ import Language.Drasil hiding (isIn)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName), 
   quantvar, codevars, codevars', DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
-import Language.Drasil.Choices (Structure(..), InputModule(..), 
+import Language.Drasil.Choices (Choices(..), Structure(..), InputModule(..), 
   ConstantStructure(..), ConstantRepr(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 

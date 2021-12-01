@@ -13,7 +13,7 @@ import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   inMod)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
-import Language.Drasil.Choices (ImplementationType(..), InputModule(..), 
+import Language.Drasil.Choices (Choices(..), ImplementationType(..), InputModule(..), 
   Structure(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)

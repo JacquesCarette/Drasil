@@ -36,7 +36,7 @@ import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
-import Language.Drasil.Choices (Comments(..), ConstantStructure(..), 
+import Language.Drasil.Choices (Choices(..), Comments(..), ConstantStructure(..), 
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
   InputModule(..), Logging(..), Structure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))

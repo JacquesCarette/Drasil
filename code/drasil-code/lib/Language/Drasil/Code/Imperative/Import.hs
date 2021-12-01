@@ -25,7 +25,7 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
   quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
-import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
+import Language.Drasil.Choices (Choices(..), Comments(..), ConstantRepr(..),
   ConstantStructure(..), Structure(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 

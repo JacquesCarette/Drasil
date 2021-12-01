@@ -2,12 +2,12 @@ digraph allvsr {
 	findMass -> wMass;
 	findMass -> wVol;
 	findMass -> tankVol;
-	findMass -> eBalanceOnWtrRC;
+	findMass -> eBalanceOnWtrRCMK;
 	findMass -> inputInitVals;
 	outputInputDerivVals -> tauW;
 	outputInputDerivVals -> inputInitVals;
 	outputInputDerivVals -> findMass;
-	calcTempWtrOverTime -> eBalanceOnWtrRC;
+	calcTempWtrOverTime -> eBalanceOnWtrRCMK;
 	calcChgHeatEnergyWtrOverTime -> heatEInWtrIMMK;
 
 
@@ -58,12 +58,12 @@ digraph allvsr {
 	{rocTempSimpRCMK, htFluxCMK}
 	}
 
-	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
+	eBalanceOnWtrRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	heatEInWtrIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, heatEInWtrIMMK}
+	{eBalanceOnWtrRCMK, heatEInWtrIMMK}
 	}
 
 	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitVals"];

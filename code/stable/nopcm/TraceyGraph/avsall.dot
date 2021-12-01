@@ -8,9 +8,9 @@ digraph avsall {
 	rocTempSimpRCMK -> assumpSHECoW;
 	htFluxCMK -> assumpLCCCW;
 	htFluxCMK -> assumpTHCCoT;
-	eBalanceOnWtrRC -> assumpWAL;
-	eBalanceOnWtrRC -> assumpPIT;
-	eBalanceOnWtrRC -> assumpNIHGBW;
+	eBalanceOnWtrRCMK -> assumpWAL;
+	eBalanceOnWtrRCMK -> assumpPIT;
+	eBalanceOnWtrRCMK -> assumpNIHGBW;
 	heatEInWtrIMMK -> assumpWAL;
 	heatEInWtrIMMK -> assumpAPT;
 	likeChgTCVOD -> assumpTHCCoT;
@@ -68,12 +68,12 @@ digraph avsall {
 	{rocTempSimpRCMK, htFluxCMK}
 	}
 
-	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
+	eBalanceOnWtrRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	heatEInWtrIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, heatEInWtrIMMK}
+	{eBalanceOnWtrRCMK, heatEInWtrIMMK}
 	}
 
 	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitVals"];

@@ -1,6 +1,6 @@
 digraph allvsr {
-	calculateValues -> imPDRC;
-	outputValues -> imPDRC;
+	calculateValues -> imPDRCMK;
+	outputValues -> imPDRCMK;
 
 
 	pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
@@ -46,11 +46,11 @@ digraph allvsr {
 	{gdPowerPlantRCMK}
 	}
 
-	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
+	imPDRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
 
 	subgraph IM {
 	rank="same"
-	{imPDRC}
+	{imPDRCMK}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

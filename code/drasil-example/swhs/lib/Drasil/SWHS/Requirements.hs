@@ -47,12 +47,14 @@ inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI tank parameter))
 
 funcReqs :: [ConceptInstance]
 funcReqs = [findMass, checkWithPhysConsts, outputInputDerivVals,
-  calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime,
+  calcTempWtrOverTime eBalanceOnWtr, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime,
   calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd]
 
-findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime,
+findMass, checkWithPhysConsts, outputInputDerivVals,
   calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime,
   verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance
+
+calcTempWtrOverTime :: (Referable r, HasShortName r) => r -> ConceptInstance -- FIXME: This 'r' parameter is a hack to allow it to be used in NoPCM
 
 --
 findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods 
@@ -90,10 +92,10 @@ oIDQVals = map foldlSent_ [
   ]
   
 --
-calcTempWtrOverTime = cic "calcTempWtrOverTime" (foldlSent [
+calcTempWtrOverTime r = cic "calcTempWtrOverTime" (foldlSent [
   S "Calculate and", phrase output_, phraseNP (the tempW),
   sParen (ch tempW :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, fromSource eBalanceOnWtr])
+  phrase simulation, phrase time, fromSource r])
   "Calculate-Temperature-Water-Over-Time" funcReqDom
 --
 calcTempPCMOverTime = cic "calcTempPCMOverTime" (foldlSent [

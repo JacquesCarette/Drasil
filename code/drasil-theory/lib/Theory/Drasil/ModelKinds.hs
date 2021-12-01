@@ -50,11 +50,11 @@ makeLenses ''ModelKind
 
 -- | Smart constructor for 'NewDEModel's
 newDEModel :: String -> NP -> DifferentialModel -> ModelKind e
-newDEModel u n dm = MK (NewDEModel dm) (mkUid u) n
+newDEModel u n dm = MK (NewDEModel dm) (mkUid u +++. "MK") n
 
 -- | Smart constructor for 'NewDEModel's, deriving UID+Term from the 'DifferentialModel'
 newDEModel' :: DifferentialModel -> ModelKind e
-newDEModel' dm = MK (NewDEModel dm) (dm ^. uid) (dm ^. term)
+newDEModel' dm = MK (NewDEModel dm) (dm +++ "MK") (dm ^. term)
 
 -- | Smart constructor for 'DEModel's
 deModel :: String -> NP -> RelationConcept -> ModelKind e

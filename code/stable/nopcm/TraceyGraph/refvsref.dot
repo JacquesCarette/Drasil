@@ -3,9 +3,9 @@ digraph refvsref {
 	rocTempSimpRCMK -> consThermECSMK;
 	rocTempSimpRCMK -> rocTempSimpRCMK;
 	htFluxCMK -> nwtnCoolingTMMK;
-	eBalanceOnWtrRC -> tauW;
-	eBalanceOnWtrRC -> rocTempSimpRCMK;
-	eBalanceOnWtrRC -> htFluxCMK;
+	eBalanceOnWtrRCMK -> tauW;
+	eBalanceOnWtrRCMK -> rocTempSimpRCMK;
+	eBalanceOnWtrRCMK -> htFluxCMK;
 	heatEInWtrIMMK -> sensHeatMK;
 
 
@@ -36,12 +36,12 @@ digraph refvsref {
 	{rocTempSimpRCMK, htFluxCMK}
 	}
 
-	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
+	eBalanceOnWtrRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	heatEInWtrIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, heatEInWtrIMMK}
+	{eBalanceOnWtrRCMK, heatEInWtrIMMK}
 	}
 
 }

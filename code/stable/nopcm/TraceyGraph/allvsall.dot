@@ -12,24 +12,24 @@ digraph allvsall {
 	htFluxCMK -> assumpLCCCW;
 	htFluxCMK -> assumpTHCCoT;
 	htFluxCMK -> nwtnCoolingTMMK;
-	eBalanceOnWtrRC -> assumpWAL;
-	eBalanceOnWtrRC -> assumpPIT;
-	eBalanceOnWtrRC -> assumpNIHGBW;
-	eBalanceOnWtrRC -> tauW;
-	eBalanceOnWtrRC -> rocTempSimpRCMK;
-	eBalanceOnWtrRC -> htFluxCMK;
+	eBalanceOnWtrRCMK -> assumpWAL;
+	eBalanceOnWtrRCMK -> assumpPIT;
+	eBalanceOnWtrRCMK -> assumpNIHGBW;
+	eBalanceOnWtrRCMK -> tauW;
+	eBalanceOnWtrRCMK -> rocTempSimpRCMK;
+	eBalanceOnWtrRCMK -> htFluxCMK;
 	heatEInWtrIMMK -> assumpWAL;
 	heatEInWtrIMMK -> assumpAPT;
 	heatEInWtrIMMK -> sensHeatMK;
 	findMass -> wMass;
 	findMass -> wVol;
 	findMass -> tankVol;
-	findMass -> eBalanceOnWtrRC;
+	findMass -> eBalanceOnWtrRCMK;
 	findMass -> inputInitVals;
 	outputInputDerivVals -> tauW;
 	outputInputDerivVals -> inputInitVals;
 	outputInputDerivVals -> findMass;
-	calcTempWtrOverTime -> eBalanceOnWtrRC;
+	calcTempWtrOverTime -> eBalanceOnWtrRCMK;
 	calcChgHeatEnergyWtrOverTime -> heatEInWtrIMMK;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;
@@ -37,7 +37,7 @@ digraph allvsall {
 	likeChgTLH -> assumpPIT;
 	unlikeChgWFS -> assumpWAL;
 	unlikeChgNIHG -> assumpNIHGBW;
-	unlikeChgNIHG -> eBalanceOnWtrRC;
+	unlikeChgNIHG -> eBalanceOnWtrRCMK;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
@@ -87,12 +87,12 @@ digraph allvsall {
 	{rocTempSimpRCMK, htFluxCMK}
 	}
 
-	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
+	eBalanceOnWtrRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	heatEInWtrIMMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, heatEInWtrIMMK}
+	{eBalanceOnWtrRCMK, heatEInWtrIMMK}
 	}
 
 	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitVals"];

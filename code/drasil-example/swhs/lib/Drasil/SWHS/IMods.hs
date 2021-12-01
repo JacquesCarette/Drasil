@@ -354,15 +354,15 @@ htPCMNotes = map foldlSent [
 -- Intro --
 -----------
 
-instModIntro :: Sentence
-instModIntro = foldlSent [atStartNP' (the goal), foldlList Comma List
+instModIntro :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence
+instModIntro r = foldlSent [atStartNP' (the goal), foldlList Comma List
   (map refS [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]) `S.are`
   S "solved by" +:+. foldlList Comma List (map refS
   [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]), atStartNP' (the solution)
-  `S.for` refS eBalanceOnWtr `S.and_`
+  `S.for` refS r `S.and_`
   refS eBalanceOnPCM `S.are` S "coupled since the", plural solution
   `S.for` ch tempW `S.and_` ch tempPCM +:+. S "depend on one another",
-  refS heatEInWtr, S "can be solved once", refS eBalanceOnWtr +:+.
+  refS heatEInWtr, S "can be solved once", refS r +:+.
   S "has been solved", atStartNP' (the solution) `S.of_` refS eBalanceOnPCM `S.and_`
   refS heatEInPCM `S.are` S "also coupled" `sC` S "since the",
   phrase tempPCM `S.andThe` phrase pcmE,S "depend on the", phrase phaseChange]

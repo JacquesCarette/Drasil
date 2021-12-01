@@ -49,7 +49,7 @@ inputInitValsTable = mkInputPropsTable inputs inputInitVals
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputInitVals, findMass, checkWithPhysConsts,
-        oIDQConstruct oIDQVals, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
+        oIDQConstruct oIDQVals, calcTempWtrOverTime eBalanceOnWtr, calcChgHeatEnergyWtrOverTime]
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS

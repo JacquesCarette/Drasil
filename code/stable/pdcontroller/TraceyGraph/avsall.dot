@@ -9,7 +9,7 @@ digraph avsall {
 	gdPowerPlantRCMK -> massSpring;
 	gdPowerPlantRCMK -> dampingCoeffSpring;
 	gdPowerPlantRCMK -> stiffnessCoeffSpring;
-	imPDRC -> setPoint;
+	imPDRCMK -> setPoint;
 	likeChgPP -> massSpring;
 	likeChgPP -> dampingCoeffSpring;
 	likeChgPP -> stiffnessCoeffSpring;
@@ -58,11 +58,11 @@ digraph avsall {
 	{gdPowerPlantRCMK}
 	}
 
-	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
+	imPDRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
 
 	subgraph IM {
 	rank="same"
-	{imPDRC}
+	{imPDRCMK}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

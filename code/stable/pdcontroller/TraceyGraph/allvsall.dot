@@ -22,13 +22,13 @@ digraph allvsall {
 	gdPowerPlantRCMK -> stiffnessCoeffSpring;
 	gdPowerPlantRCMK -> laplaceRCMK;
 	gdPowerPlantRCMK -> tmSOSystemRCMK;
-	imPDRC -> setPoint;
-	imPDRC -> qdProcessErrorFD;
-	imPDRC -> qdCtrlVarFD;
-	imPDRC -> invLaplaceRCMK;
-	imPDRC -> gdPowerPlantRCMK;
-	calculateValues -> imPDRC;
-	outputValues -> imPDRC;
+	imPDRCMK -> setPoint;
+	imPDRCMK -> qdProcessErrorFD;
+	imPDRCMK -> qdCtrlVarFD;
+	imPDRCMK -> invLaplaceRCMK;
+	imPDRCMK -> gdPowerPlantRCMK;
+	calculateValues -> imPDRCMK;
+	outputValues -> imPDRCMK;
 	likeChgPP -> massSpring;
 	likeChgPP -> dampingCoeffSpring;
 	likeChgPP -> stiffnessCoeffSpring;
@@ -77,11 +77,11 @@ digraph allvsall {
 	{gdPowerPlantRCMK}
 	}
 
-	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
+	imPDRCMK	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
 
 	subgraph IM {
 	rank="same"
-	{imPDRC}
+	{imPDRCMK}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

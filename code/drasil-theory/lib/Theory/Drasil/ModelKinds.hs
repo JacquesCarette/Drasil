@@ -58,11 +58,11 @@ newDEModel' dm = MK (NewDEModel dm) (dm +++ "MK") (dm ^. term)
 
 -- | Smart constructor for 'DEModel's
 deModel :: String -> NP -> RelationConcept -> ModelKind e
-deModel u n rc = MK (DEModel rc) (mkUid u) n
+deModel u n rc = MK (DEModel rc) (mkUid u +++. "MK") n
 
 -- | Smart constructor for 'DEModel's, deriving UID+Term from the 'RelationConcept'
 deModel' :: RelationConcept -> ModelKind e
-deModel' rc = MK (DEModel rc) (rc ^. uid) (rc ^. term)
+deModel' rc = MK (DEModel rc) (rc +++ "MK") (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'
 equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e

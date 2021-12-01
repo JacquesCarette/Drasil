@@ -9,12 +9,15 @@ module Drasil.DocumentLanguage where
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
-  SysCntxtSub(..), UsrCharsSub(..), SystConsSub(..),
+  DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), 
   IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
-  LCsSec(..), LFunc(..), PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
-  ReqsSub(..), SCSSub(..), StkhldrSec(..), ClientSub(..), CstmrSub(..), SolChSpec(..),
-  SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
+  StkhldrSec(..), ClientSub(..), CstmrSub(..), 
+  GSDSec(..), SysCntxtSub(..), UsrCharsSub(..), SystConsSub(..),
+  SSDSec(..), ProblemDescription(..), TermsAndDefs(..), PhySysDesc(..), Goals(..),
+  SolChSpec(..), Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..), 
+  ReqrmntSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),
+  RefSec(..), RefTab(..), LCsSec(..), LFunc(..),
+  TraceabilitySec(..), TraceConfig(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
@@ -358,67 +361,68 @@ mkSystConsSub (SystConsProg cntnts) = GSD.systCon cntnts
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec si (SSDProg _) = SSD.specSysDescr 
 
--- @@ where
+-- CHECK later 
+--  where
 --    mkSubSSD :: SystemInformation -> SSDSub -> Section
 --    mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
---    mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs @@
+--    mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 -- | Helper for making the Specific System Description Problem section.
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob) = SSD.probDescF prob
 
-mkTermsAndDefsSub :: TermsAndDefsSub -> Section
-mkTermsAndDefsSub (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
+mkTermsAndDefsSub :: TermsAndDefs -> Section
+mkTermsAndDefsSub (TDProg sen concepts) = SSD.termDefnF sen concepts
 
-mkPhySysDescSub :: PhySysDescSub -> Section
-mkPhySysDescSub (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+mkPhySysDescSub :: PhySysDesc -> Section
+mkPhySysDescSub (PSDProg prog parts dif extra) = SSD.physSystDesc prog parts dif extra
 
-mkGoalsSub :: GoalsSub -> Section
-mkGoalsSub (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
+mkGoalsSub :: Goals -> Section
+mkGoalsSub (GProg ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg _) = SRS.solCharSpec 1 [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] 
 
-mkTMSub :: SystemInformation -> TMSub -> Section
-mkTMSub _ (TMs _ _ [])      = error "There are no Theoretical Models"
-mkTMSub si' (TMs intro fields ts) =
+mkTMSub :: SystemInformation -> TMs -> Section
+mkTMSub _ (TMProg _ _ [])      = error "There are no Theoretical Models"
+mkTMSub si' (TMProg intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
 
-mkGDSub :: SystemInformation -> GDSub -> Section
-mkGDSub _ (GDs _ _ [] _)    = SSD.genDefnF []
-mkGDSub si' (GDs intro fields gs' ShowDerivation) =
+mkGDSub :: SystemInformation -> GDs -> Section
+mkGDSub _ (GDProg _ _ [] _)    = SSD.genDefnF []
+mkGDSub si' (GDProg intro fields gs' ShowDerivation) =
   SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
-mkGDSub si' (GDs intro fields gs' _) =
+mkGDSub si' (GDProg intro fields gs' _) =
   SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
 
-mkDDSub :: SystemInformation -> DDSub -> Section
-mkDDSub _ (DDs _ _ [] _) = error "There are no Data Definitions"
-mkDDSub si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+mkDDSub :: SystemInformation -> DDs -> Section
+mkDDSub _ (DDProg _ _ [] _) = error "There are no Data Definitions"
+mkDDSub si' (DDProg intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
   SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
   where f e = [LlC $ ddefn fields si' e, derivation e]
-mkDDSub si' (DDs intro fields dds _) =
+mkDDSub si' (DDProg intro fields dds _) =
   SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map f dds
   where f e = LlC $ ddefn fields si' e
 
-mkIMSub :: SystemInformation -> IMSub -> Section
-mkIMSub _ (IMs _ _ [] _)    = error "There are no Instance Models"
-mkIMSub si' (IMs intro fields ims ShowDerivation) =
+mkIMSub :: SystemInformation -> IMs -> Section
+mkIMSub _ (IMProg _ _ [] _)    = error "There are no Instance Models"
+mkIMSub si' (IMProg intro fields ims ShowDerivation) =
   SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
   concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
-mkIMSub si' (IMs intro fields ims _) =
+mkIMSub si' (IMProg intro fields ims _) =
   SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
   map (LlC . instanceModel fields si') ims
 
-mkAssumpSub :: SystemInformation -> AssumpSub -> Section
-mkAssumpSub si' (Assumptions ci) =
+mkAssumpSub :: SystemInformation -> Assumptions -> Section
+mkAssumpSub si' (AssumpProg ci) =
   SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
     
-mkConstraintSub :: SystemInformation -> ConstraintSub -> Section
-mkConstraintSub _ (Constraints end cs)  = SSD.datConF end cs
+mkConstraintSub :: SystemInformation -> Constraints -> Section
+mkConstraintSub _ (ConstProg end cs)  = SSD.datConF end cs
 
-mkCorrSolnPptiesSub :: SystemInformation -> CorrSolnPptiesSub -> Section
-mkCorrSolnPptiesSub _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
+mkCorrSolnPptiesSub :: SystemInformation -> CorrSolnPpties -> Section
+mkCorrSolnPptiesSub _ (CorrSolProg c cs) = SSD.propCorSolF c cs
 
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys
@@ -427,12 +431,17 @@ siSys SI {_sys = sys} = nw sys
 
 -- | Helper for making the Requirements section.
 mkReqrmntSec :: ReqrmntSec -> Section
-mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
-  where
-    mkSubs :: ReqsSub -> Section
-    mkSubs (FReqsSub  frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
-    mkSubs (FReqsSub' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
-    mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
+mkReqrmntSec (ReqsProg _) = R.reqF
+
+mkFReqsSub :: FReqsSub -> Section
+mkFReqsSub (FReqsProg frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+
+mkFReqsSub' :: FReqsSub' -> Section
+mkFReqsSub' (FReqsProg' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+
+mkNonFReqsSub :: NonFReqsSub -> Section
+mkNonFReqsSub (NonFReqsProg nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
+
 
 -- ** Likely Changes
 

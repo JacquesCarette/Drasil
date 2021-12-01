@@ -50,6 +50,9 @@ data DocSection = TableOfContents
                 | Constraints Constraints
                 | CorrSolnPpties CorrSolnPpties
                 | ReqrmntSec ReqrmntSec
+                | FReqsSub FReqsSub
+                | FReqsSub' FReqsSub'
+                | NonFReqsSub NonFReqsSub
                 | LCsSec LCsSec
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
@@ -210,16 +213,15 @@ data DerivationDisplay = ShowDerivation
 -- ** Requirements Section
 
 -- | Requirements section. Contains a list of subsections ('ReqsSub').
-newtype ReqrmntSec = ReqsProg [ReqsSub]
+newtype ReqrmntSec = ReqsProg Sentence
 
 -- | Requirements subsections. 
-data ReqsSub where
-  -- | Functional requirements. LabelledContent needed for tables.  
-  FReqsSub'   :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
-  -- | Functional requirements. LabelledContent needed for tables.
-  FReqsSub    :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
-  -- | Non-functional requirements.
-  NonFReqsSub :: [ConceptInstance] -> ReqsSub
+-- | Functional requirements. LabelledContent needed for tables.  
+data FReqsSub' = FReqsProg' [ConceptInstance] [LabelledContent]
+-- | Functional requirements. LabelledContent needed for tables.
+data FReqsSub  = FReqsProg [ConceptInstance] [LabelledContent] 
+-- | Non-functional requirements.
+newtype NonFReqsSub = NonFReqsProg [ConceptInstance]
 
 -- ** Likely Changes Section
 
@@ -289,7 +291,9 @@ data DLPlate f = DLPlate {
   constraints :: Constraints -> f Constraints,
   corrSolnPpties :: CorrSolnPpties -> f CorrSolnPpties,
   reqSec :: ReqrmntSec -> f ReqrmntSec,
-  reqSub :: ReqsSub -> f ReqsSub,
+  fReqsSub :: FReqsSub -> f FReqsSub,
+  fReqsSub' :: FReqsSub' -> f FReqsSub',
+  nonFReqsSub :: NonFReqsSub -> f NonFReqsSub,
   lcsSec :: LCsSec -> f LCsSec,
   ucsSec :: UCsSec -> f UCsSec,
   traceSec :: TraceabilitySec -> f TraceabilitySec,
@@ -301,7 +305,7 @@ data DLPlate f = DLPlate {
 -- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
   multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr gs syscnt uschr syscon
-    ss pd td psd gl sc a tm gd dd im ct csp rs rs' lcp ucp ts es acs aps where
+    ss pd td psd gl sc a tm gd dd im ct csp rs fr fr' nfr lcp ucp ts es acs aps where
     ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
     ds (IntroSec x) = IntroSec <$> introSec p x
@@ -330,6 +334,9 @@ instance Multiplate DLPlate where
     ds (Constraints x) = Constraints <$> constraints p x
     ds (CorrSolnPpties x) = CorrSolnPpties <$> corrSolnPpties p x
     ds (ReqrmntSec x) = ReqrmntSec <$> reqSec p x
+    ds (FReqsSub x) = FReqsSub <$> fReqsSub p x
+    ds (FReqsSub' x) = FReqsSub' <$> fReqsSub' p x
+    ds (NonFReqsSub x) = NonFReqsSub <$> nonFReqsSub p x
     ds (LCsSec x) = LCsSec <$> lcsSec p x
     ds (UCsSec x) = UCsSec <$> ucsSec p x
     ds (TraceabilitySec x) = TraceabilitySec <$> traceSec p x
@@ -364,10 +371,10 @@ instance Multiplate DLPlate where
     im (IMProg s f i d) = pure $ IMProg s f i d 
     ct (ConstProg s c) = pure $ ConstProg s c
     csp (CorrSolProg c cs) = pure $ CorrSolProg c cs
-    rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
-    rs' (FReqsSub ci con) = pure $ FReqsSub ci con
-    rs' (FReqsSub' ci con) = pure $ FReqsSub' ci con
-    rs' (NonFReqsSub c) = pure $ NonFReqsSub c
+    rs (ReqsProg s) = pure $ ReqsProg s
+    fr (FReqsProg ci con) = pure $ FReqsProg ci con
+    fr' (FReqsProg' ci con) = pure $ FReqsProg' ci con
+    nfr (NonFReqsProg c) = pure $ NonFReqsProg c
     lcp (LCsProg c) = pure $ LCsProg c
     ucp (UCsProg c) = pure $ UCsProg c
     ts (TraceabilityProg progs) = pure $ TraceabilityProg progs
@@ -379,5 +386,5 @@ instance Multiplate DLPlate where
     (b gsdSec) (b sysCntxtSub) (b usrCharsSub) (b systConsSub) 
     (b ssdSec) (b problemDescription) (b termsAndDefs) (b phySysDesc) (b goals) 
     (b solChSpec) (b assumptions) (b tMs) (b gDs) (b dDs) (b iMs) (b constraints) (b corrSolnPpties)
-    (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
-    (b traceSec) (b offShelfSec) (b auxConsSec) (b appendSec)
+    (b reqSec) (b fReqsSub) (b fReqsSub') (b nonFReqsSub)
+    (b lcsSec) (b ucsSec) (b traceSec) (b offShelfSec) (b auxConsSec) (b appendSec)

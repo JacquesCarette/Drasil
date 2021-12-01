@@ -1,4 +1,4 @@
-{-# LANGUAGE LambdaCase #-}
+--{-# LANGUAGE LambdaCase #-}
 -- | Defines a DLPlate for tracability between pieces of information.
 module Drasil.TraceTable where
 
@@ -23,10 +23,9 @@ dependencyPlate = preorderFold $ purePlate {
   dDs = Constant <$> \(DDProg _ _ d _) -> getDependenciesOf [derivs, notes] d,
   gDs = Constant <$> \(GDProg _ _ g _) -> getDependenciesOf [defs, derivs, notes] g,
   iMs = Constant <$> \(IMProg _ _ i _) -> getDependenciesOf [derivs, notes] i,
-  reqSub = Constant . getDependenciesOf [defs] <$> \case
-    (FReqsSub' c _) -> c
-    (FReqsSub c _) -> c
-    (NonFReqsSub c) -> c,
+  fReqsSub' = Constant . getDependenciesOf [defs] <$> \(FReqsProg' c _) -> c,
+  fReqsSub = Constant . getDependenciesOf [defs] <$> \(FReqsProg c _) -> c,
+  nonFReqsSub = Constant . getDependenciesOf [defs] <$> \(NonFReqsProg c) -> c,
   lcsSec = Constant . getDependenciesOf [defs] <$> \(LCsProg c) -> c,
   ucsSec = Constant . getDependenciesOf [defs] <$> \(UCsProg c) -> c
 } where

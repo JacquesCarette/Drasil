@@ -8,7 +8,8 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), 
   ProblemDescription(..), SolChSpec(..), TermsAndDefs(..), PhySysDesc(..), Goals(..), 
   Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..), 
-  ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), 
+  ReqrmntSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),
+  LCsSec(..), UCsSec(..), TraceabilitySec(..), 
   AuxConstntSec(..), AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
@@ -33,20 +34,23 @@ data DocSection = TableOfContents                       -- ^ Table of Contents
                 | IntroSec DL.IntroSec                  -- ^ Introduction.
                 | StkhldrSec DL.StkhldrSec              -- ^ Stakeholders.
                 | GSDSec DL.GSDSec                      -- ^ General System Description.
-                | SSDSec DL.SSDSec                         -- ^ Specific System Description.
-                | ProblemDescription ProblemDescription 
-                | TermsAndDefs TermsAndDefs
-                | PhySysDesc PhySysDesc
-                | Goals Goals   
-                | SolChSpec SolChSpec 
-                | Assumptions Assumptions
-                | TMs TMs
-                | GDs GDs
-                | DDs DDs
-                | IMs IMs
-                | Constraints Constraints
-                | CorrSolnPpties CorrSolnPpties
-                | ReqrmntSec ReqrmntSec                 -- ^ Requirements.
+                | SSDSec DL.SSDSec                      -- ^ Specific System Description.
+                | ProblemDescription ProblemDescription -- ^ Problem Description
+                | TermsAndDefs TermsAndDefs             -- ^ Terminology and Definitions
+                | PhySysDesc PhySysDesc                 -- ^ Physical System Description
+                | Goals Goals                           -- ^ Goal Statements
+                | SolChSpec SolChSpec                   -- ^ Solution Characteristics Specification
+                | Assumptions Assumptions               -- ^ Assumptions
+                | TMs TMs                               -- ^ Theoretical Models
+                | GDs GDs                               -- ^ General Definitions
+                | DDs DDs                               -- ^ Data Definitions
+                | IMs IMs                               -- ^ Instance Models
+                | Constraints Constraints               -- ^ Data Constraints
+                | CorrSolnPpties CorrSolnPpties         -- ^ Properties of a Correct Solution
+                | ReqrmntSec DL.ReqrmntSec              -- ^ Requirements.
+                | FReqsSub FReqsSub                     -- ^ Functional Requirements
+                | FReqsSub' FReqsSub'                   -- ^ Functional Requirements
+                | NonFReqsSub NonFReqsSub               -- ^ Non-Functional Requirements
                 | LCsSec                                -- ^ Likely Changes.
                 | UCsSec                                -- ^ Unlikely Changes.
                 | TraceabilitySec DL.TraceabilitySec    -- ^ Traceability.
@@ -95,17 +99,21 @@ data CorrSolnPpties where
 
 
 -- | Requirements section (wraps 'ReqsSub' subsections).
-newtype ReqrmntSec = ReqsProg [ReqsSub]
+-- newtype ReqrmntSec = ReqsProg Sentence
 
 
 -- | Requirements subsections.
-data ReqsSub where
-  -- | Functional requirements. 'LabelledContent' for tables (includes input values).
-  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub
-  -- | Functional requirements. 'LabelledContent' for tables (no input values).
-  FReqsSub'   :: [LabelledContent] -> ReqsSub
-  -- | Non-Functional requirements.
-  NonFReqsSub :: ReqsSub
+-- | Functional requirements. 'LabelledContent' for tables (includes input values).
+data FReqsSub  = FReqsProg Sentence [LabelledContent]
+-- | Functional requirements. 'LabelledContent' for tables (no input values).
+newtype FReqsSub' = FReqsProg' [LabelledContent]
+-- | Non-Functional requirements.
+data NonFReqsSub where NonFReqsProg :: Sentence -> NonFReqsSub
+
+  
+-- | Functional requirements. LabelledContent needed for tables.
+
+
 
 -- * Functions
 
@@ -131,7 +139,10 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec (IMs (IMProg s f dd)) = DL.IMs $ DL.IMProg s f (allInDB insmodelTable) dd
   sec (Constraints (ConstProg s c)) = DL.Constraints (DL.ConstProg s c)
   sec (CorrSolnPpties (CorrSolProg c cs)) = DL.CorrSolnPpties (DL.CorrSolProg c cs)
-  sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ map reqSec r
+  sec (ReqrmntSec r) = DL.ReqrmntSec r
+  sec (FReqsSub (FReqsProg d t)) = DL.FReqsSub $ DL.FReqsProg (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
+  sec (FReqsSub' (FReqsProg' t)) = DL.FReqsSub' $ DL.FReqsProg' (fromConcInsDB funcReqDom) t
+  sec (NonFReqsSub (NonFReqsProg _))= DL.NonFReqsSub $ DL.NonFReqsProg $ fromConcInsDB nonFuncReqDom
   sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
   sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
   sec (TraceabilitySec t) = DL.TraceabilitySec t
@@ -139,10 +150,6 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec Bibliography = DL.Bibliography
   sec (AppndxSec a) = DL.AppndxSec a
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
-  reqSec :: ReqsSub -> DL.ReqsSub
-  reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
-  reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
-  reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
   expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
   expandFromDB f = f . asOrderedList . (db ^.)
   allInDB :: Getting (UMap a) ChunkDB (UMap a) -> [a]

@@ -140,36 +140,58 @@ mktSystConsSub (SystConsProg _) = namedRef SRS.sysConstraintsLabel $ titleize' D
 
 -- | Helper for creating the 'Specific System Description' section ToC entry
 mktSSDSec :: SSDSec -> ItemType
-mktSSDSec (SSDProg l) =
-  mkHeaderItem' (namedRef SRS.specSystDescLabel $ titleize Doc.specificsystemdescription) $ map mktSubSSD l
-  where
-    mktSubSSD :: SSDSub -> ItemType
-    mktSubSSD (SSDProblem (PDProg _ _ sl1)) = mkHeaderItem (namedRef SRS.probDescLabel $ titleize Doc.problemDescription) $ map mktSubPD sl1
-    mktSubSSD (SSDSolChSpec (SCSProg sl2))  = mkHeaderItem (namedRef SRS.solCharSpecLabel $ titleize Doc.solutionCharSpec) $ map mktSubSCS sl2
+mktSSDSec (SSDProg _) =
+  mkHeaderItem' (namedRef SRS.specSystDescLabel $ titleize Doc.specificsystemdescription) []
 
-    mktSubPD :: PDSub -> Sentence
-    mktSubPD (TermsAndDefs _ _) = namedRef SRS.termDefsLabel $ titleize' Doc.termAndDef
-    mktSubPD PhySysDesc {}      = namedRef SRS.physSystLabel $ titleize  Doc.physSyst
-    mktSubPD (Goals _ _)        = namedRef SRS.goalStmtLabel $ titleize' Doc.goalStmt
+mktSSDProblem :: ProblemDescription -> ItemType
+mktSSDProblem PDProg {} = mkHeaderItem (namedRef SRS.probDescLabel $ titleize Doc.problemDescription) []
 
-    mktSubSCS :: SCSSub -> Sentence
-    mktSubSCS (Assumptions _)      = namedRef SRS.assumptLabel     $ titleize' Doc.assumption
-    mktSubSCS TMs {}               = namedRef SRS.thModelLabel     $ titleize' Doc.thModel
-    mktSubSCS GDs {}               = namedRef SRS.genDefnLabel     $ titleize' Doc.genDefn
-    mktSubSCS DDs {}               = namedRef SRS.dataDefnLabel    $ titleize' Doc.dataDefn
-    mktSubSCS IMs {}               = namedRef SRS.inModelLabel     $ titleize' Doc.inModel
-    mktSubSCS (Constraints _ _)    = namedRef SRS.datConLabel      $ titleize' Doc.datumConstraint
-    mktSubSCS (CorrSolnPpties _ _) = namedRef SRS.corSolPropsLabel $ titleize' Doc.propOfCorSol
+mktSSDSolChSpec :: SolChSpec -> ItemType
+mktSSDSolChSpec SCSProg {} = mkHeaderItem (namedRef SRS.solCharSpecLabel $ titleize Doc.solutionCharSpec) []
+
+mktTermsAndDefs :: TermsAndDefs -> Sentence
+mktTermsAndDefs TDProg {} = namedRef SRS.termDefsLabel $ titleize' Doc.termAndDef
+
+mktPhySysDesc :: PhySysDesc -> Sentence
+mktPhySysDesc PSDProg {} = namedRef SRS.physSystLabel $ titleize  Doc.physSyst
+
+mktGoals :: Goals -> Sentence
+mktGoals GProg {} = namedRef SRS.goalStmtLabel $ titleize' Doc.goalStmt
+
+mktAssumptions :: Assumptions -> Sentence
+mktAssumptions AssumpProg {} = namedRef SRS.assumptLabel $ titleize' Doc.assumption
+
+mktTMs :: TMs -> Sentence
+mktTMs TMProg {} = namedRef SRS.thModelLabel $ titleize' Doc.thModel
+
+mktGDs :: GDs -> Sentence
+mktGDs GDProg {} = namedRef SRS.genDefnLabel $ titleize' Doc.genDefn
+
+mktDDs :: DDs -> Sentence
+mktDDs DDProg {} = namedRef SRS.dataDefnLabel $ titleize' Doc.dataDefn
+
+mktIMs :: IMs -> Sentence
+mktIMs IMProg {} = namedRef SRS.inModelLabel $ titleize' Doc.inModel
+
+mktConstraints :: Constraints -> Sentence
+mktConstraints ConstProg {} = namedRef SRS.datConLabel $ titleize' Doc.datumConstraint
+
+mktCorrSolnPpties :: CorrSolnPpties -> Sentence
+mktCorrSolnPpties CorrSolProg {} = namedRef SRS.corSolPropsLabel $ titleize' Doc.propOfCorSol
 
 -- | Helper for creating the 'Requirements' section ToC entry
 mktReqrmntSec :: ReqrmntSec -> ItemType
-mktReqrmntSec (ReqsProg l) =
-  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' Doc.requirement) $ map mktSubs l
-  where
-    mktSubs :: ReqsSub -> Sentence
-    mktSubs (FReqsSub' _ _) = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement
-    mktSubs (FReqsSub _ _)  = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement
-    mktSubs (NonFReqsSub _) = namedRef SRS.nonfuncReqLabel $ titleize' Doc.nonfunctionalRequirement
+mktReqrmntSec (ReqsProg _) =
+  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' Doc.requirement) []
+
+mktFReqsSub' :: FReqsSub' -> Sentence
+mktFReqsSub' FReqsProg'{} = namedRef SRS.funcReqLabel $ titleize' Doc.functionalRequirement
+
+mktFReqsSub :: FReqsSub -> Sentence
+mktFReqsSub FReqsProg {}  = namedRef SRS.funcReqLabel $ titleize' Doc.functionalRequirement
+
+mktNonFReqsSub :: NonFReqsSub -> Sentence
+mktNonFReqsSub NonFReqsProg {} = namedRef SRS.nonfuncReqLabel $ titleize' Doc.nonfunctionalRequirement
 
 -- | Helper for creating the 'Likely Changes' section ToC entry
 mktLCsSec :: LCsSec -> ItemType

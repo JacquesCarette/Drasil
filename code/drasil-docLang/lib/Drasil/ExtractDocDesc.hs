@@ -28,10 +28,9 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   phySysDesc = Constant <$> \(PSDProg _ _ lc c) -> mCon [lc] `mappend` mCon c,
   constraints = Constant <$> \(ConstProg _ c) -> mCon [inDataConstTbl c],
   corrSolnPpties = Constant <$> \(CorrSolProg c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs,
-  reqSub = Constant <$> \case
-    (FReqsSub' _ c) -> mCon c
-    (FReqsSub _ c) -> mCon c
-    (NonFReqsSub _) -> mempty,
+  fReqsSub' = Constant <$> \(FReqsProg' _ c) -> mCon c,
+  fReqsSub = Constant <$> \(FReqsProg _ c) -> mCon c,
+  --CHECK later: nonFReqsSub = Constant <$> \(NonFReqsProg _) -> mempty,
   offShelfSec = Constant <$> \(OffShelfSolnsProg c) -> mCon c,
   appendSec = Constant <$> \(AppndxProg c) -> mCon c
 }
@@ -114,10 +113,9 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     iMs = Constant . f <$> \(IMProg s _ d _) -> s ++ der d ++ notes d,
     constraints = Constant . f <$> \(ConstProg s _) -> [s],
     corrSolnPpties = Constant . f <$> \(CorrSolProg _ _) -> [],
-    reqSub = Constant . f <$> \case
-      (FReqsSub' c _) -> def c
-      (FReqsSub c _) -> def c
-      (NonFReqsSub c) -> def c,
+    fReqsSub' = Constant . f <$> \(FReqsProg' c _) -> def c,
+    fReqsSub = Constant . f <$> \(FReqsProg c _) -> def c,
+    nonFReqsSub = Constant . f <$> \(NonFReqsProg c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
     traceSec = Constant . f <$> \(TraceabilityProg progs) ->

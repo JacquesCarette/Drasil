@@ -24,6 +24,11 @@ type DocDesc = [DocSection]
 -- System Description sections (for now!).
 data DocSection = TableOfContents
                 | RefSec RefSec
+                | TUnits TUnits
+                | TUnits' TUnits'
+                | TSymb TSymb
+                | TSymb' TSymb'
+                | TAandA TAandA
                 | IntroSec IntroSec
                 | IPurposeSub IPurposeSub
                 | IScopeSub IScopeSub
@@ -33,9 +38,9 @@ data DocSection = TableOfContents
                 | ClientSub ClientSub 
                 | CstmrSub CstmrSub
                 | GSDSec GSDSec
-                | SysCntxtSub SysCntxtSub
-                | UsrCharsSub UsrCharsSub
-                | SystConsSub SystConsSub
+                | SysCntxt SysCntxt
+                | UsrChars UsrChars
+                | SystCons SystCons
                 | SSDSec SSDSec
                 | ProblemDescription ProblemDescription 
                 | TermsAndDefs TermsAndDefs
@@ -64,21 +69,20 @@ data DocSection = TableOfContents
 -- ** Reference Material Section
 
 -- | Reference section. Contents are top level followed by a list of subsections.
-data RefSec = RefProg Contents [RefTab]
+newtype RefSec = RefProg Contents
 
 -- | Reference subsections (tables) made out of units or symbols (can be customized).
-data RefTab where
-  -- | Default table of units.
-  TUnits :: RefTab
-  -- | Customized introduction.
-  TUnits' :: [TUIntro] -> ([UnitDefn] -> LabelledContent) -> RefTab
-  -- | Adds an introduction for a table of symbols.
-  TSymb :: [TSIntro] -> RefTab
-  -- | Allows Lens functions in addition to an introduction for a table of symbols.
-  TSymb' :: LFunc -> [TSIntro] -> RefTab
-  -- | Default.
-  TAandA :: RefTab
-  -- add more here
+-- | Default table of units.
+data TUnits where TUProg :: TUnits
+-- | Customized introduction.
+data TUnits' where TUProg' :: [TUIntro] -> ([UnitDefn] -> LabelledContent) -> TUnits'
+-- | Adds an introduction for a table of symbols.
+data TSymb where TSProg :: [TSIntro] -> TSymb
+-- | Allows Lens functions in addition to an introduction for a table of symbols.
+data TSymb' where TSProg' :: LFunc -> [TSIntro] -> TSymb'
+-- | Default.
+data TAandA where TAAProg:: TAandA
+-- add more here
 
 -- | For creating a table of symbols introduction
 data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used.
@@ -156,11 +160,11 @@ newtype GSDSec = GSDProg Sentence
 
 -- | General System Description subsections.
 -- | System context.
-newtype SysCntxtSub = SysCntxtProg [Contents] --FIXME: partially automate
+newtype SysCntxt = SysCntxtProg [Contents] --FIXME: partially automate
 -- | User characteristics.
-newtype UsrCharsSub = UsrCharsProg [Contents]  
+newtype UsrChars = UsrCharsProg [Contents]  
 -- | System constraints. **used to be [Contents] [Section] 
-newtype SystConsSub = SystConsProg [Contents] 
+newtype SystCons = SystConsProg [Contents] 
 -- | General System Description subsections.
 
 
@@ -265,6 +269,11 @@ newtype AppndxSec = AppndxProg [Contents]
 data DLPlate f = DLPlate {
   docSec :: DocSection -> f DocSection,
   refSec :: RefSec -> f RefSec,
+--  tUnits :: TUnits -> f TUnits,
+--  tUnits' :: TUnits' -> f TUnits',
+--  tSymb :: TSymb -> f TSymb,
+--  tSymb' :: TSymb' -> f TSymb',
+--  tAandA :: TAandA -> f TAandA,
   introSec :: IntroSec -> f IntroSec,
   iPurposeSub :: IPurposeSub -> f IPurposeSub,
   iScopeSub :: IScopeSub -> f IScopeSub,
@@ -274,9 +283,9 @@ data DLPlate f = DLPlate {
   clientSub :: ClientSub -> f ClientSub,
   cstmrSub :: CstmrSub -> f CstmrSub,
   gsdSec :: GSDSec -> f GSDSec,
-  sysCntxtSub :: SysCntxtSub -> f SysCntxtSub,
-  usrCharsSub :: UsrCharsSub -> f UsrCharsSub,
-  systConsSub :: SystConsSub -> f SystConsSub,
+  sysCntxt :: SysCntxt -> f SysCntxt,
+  usrChars :: UsrChars -> f UsrChars,
+  systCons :: SystCons -> f SystCons,
   ssdSec :: SSDSec -> f SSDSec,
   problemDescription  :: ProblemDescription  -> f ProblemDescription ,
   termsAndDefs :: TermsAndDefs -> f TermsAndDefs,
@@ -304,10 +313,15 @@ data DLPlate f = DLPlate {
 
 -- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr gs syscnt uschr syscon
-    ss pd td psd gl sc a tm gd dd im ct csp rs fr fr' nfr lcp ucp ts es acs aps where
+  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr 
+    gs syscnt uschr syscon ss pd td psd gl sc a tm gd dd im ct csp rs fr fr' nfr lcp ucp ts es acs aps where
     ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
+  --  ds (TUnits x) = TUnits <$> tUnits p x
+  --  ds (TUnits' x) = TUnits' <$> tUnits' p x
+  --  ds (TSymb x) = TSymb <$> tSymb p x
+  --  ds (TSymb' x) = TSymb' <$> tSymb' p x
+  --  ds (TAandA x) = TAandA <$> tAandA p x
     ds (IntroSec x) = IntroSec <$> introSec p x
     ds (IPurposeSub x) = IPurposeSub <$> iPurposeSub p x
     ds (IScopeSub x) = IScopeSub <$> iScopeSub p x
@@ -317,9 +331,9 @@ instance Multiplate DLPlate where
     ds (ClientSub x) = ClientSub <$> clientSub p x
     ds (CstmrSub x) = CstmrSub <$> cstmrSub p x
     ds (GSDSec x) = GSDSec <$> gsdSec p x
-    ds (SysCntxtSub x) = SysCntxtSub <$> sysCntxtSub p x
-    ds (UsrCharsSub x) = UsrCharsSub <$> usrCharsSub p x
-    ds (SystConsSub x) = SystConsSub <$> systConsSub p x
+    ds (SysCntxt x) = SysCntxt <$> sysCntxt p x
+    ds (UsrChars x) = UsrChars <$> usrChars p x
+    ds (SystCons x) = SystCons <$> systCons p x
     ds (SSDSec x) = SSDSec <$> ssdSec p x
     ds (ProblemDescription  x) = ProblemDescription  <$> problemDescription  p x
     ds (TermsAndDefs x) = TermsAndDefs <$> termsAndDefs p x
@@ -345,7 +359,12 @@ instance Multiplate DLPlate where
     ds (AppndxSec x) = AppndxSec <$> appendSec p x
     ds Bibliography = pure Bibliography
 
-    res (RefProg c x) = pure $ RefProg c x
+    res (RefProg c) = pure $ RefProg c
+--    tu (TUProg s f t) = pure $ TUProg s f t
+--    tu' (TUProg' s f g d) = pure $ TUProg' s f g d
+--    ts (TSProg s f dd d) = pure $ TSProg s f dd d
+--    ts' (TSProg' s f i d) = pure $ TSProg' s f i d 
+--    taa (TAAProg s f i d) = pure $ TAAProg s f i d 
     intro (IntroProg s1 s2) = pure $ IntroProg s1 s2 
     ipurp (IPurposeProg s) = pure $ IPurposeProg s
     iscope (IScopeProg s) = pure $ IScopeProg s
@@ -383,7 +402,7 @@ instance Multiplate DLPlate where
     aps (AppndxProg con) = pure $ AppndxProg con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b iPurposeSub) (b iScopeSub)
     (b iCharSub) (b iOrgSub) (b stkSec) (b clientSub) (b cstmrSub)
-    (b gsdSec) (b sysCntxtSub) (b usrCharsSub) (b systConsSub) 
+    (b gsdSec) (b sysCntxt) (b usrChars) (b systCons) 
     (b ssdSec) (b problemDescription) (b termsAndDefs) (b phySysDesc) (b goals) 
     (b solChSpec) (b assumptions) (b tMs) (b gDs) (b dDs) (b iMs) (b constraints) (b corrSolnPpties)
     (b reqSec) (b fReqsSub) (b fReqsSub') (b nonFReqsSub)

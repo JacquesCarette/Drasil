@@ -17,13 +17,13 @@ import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
   ([Section] -> b) -> DLPlate (Constant b)
 secConPlate mCon mSec = preorderFold $ purePlate {
-  refSec = Constant <$> \(RefProg c _) -> mCon [c],
+  refSec = Constant <$> \(RefProg c) -> mCon [c],
   iOrgSub = Constant <$> \(IOrgProg _ _ s _) -> mSec [s],
   --gsdSec = Constant <$> \case
   --  (GSDProg _) -> mempty,
-  sysCntxtSub = Constant <$> \(SysCntxtProg c) -> mCon c,
-  usrCharsSub = Constant <$> \(UsrCharsProg c) -> mCon c,
-  systConsSub = Constant <$> \(SystConsProg c) -> mCon c,
+  sysCntxt = Constant <$> \(SysCntxtProg c) -> mCon c,
+  usrChars = Constant <$> \(UsrCharsProg c) -> mCon c,
+  systCons = Constant <$> \(SystConsProg c) -> mCon c,
   --CHECK later: problemDescription  = Constant <$> \(PDProg _ s _) -> mSec s,
   phySysDesc = Constant <$> \(PSDProg _ _ lc c) -> mCon [lc] `mappend` mCon c,
   constraints = Constant <$> \(ConstProg _ c) -> mCon [inDataConstTbl c],

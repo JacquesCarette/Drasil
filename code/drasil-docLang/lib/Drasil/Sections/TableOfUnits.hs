@@ -5,7 +5,7 @@ module Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef, t
 import Control.Lens ((^.))
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfUnit)
-import Drasil.DocumentLanguage.Core (TUIntro(..), RefTab(..))
+import Drasil.DocumentLanguage.Core (TUIntro(..), TUnits'(..))
 
 -- | Creates the Table of Units with an "SI Name" column.
 tOfUnitSIName :: IsUnit s => [s] -> LabelledContent
@@ -29,11 +29,11 @@ unitTableRef = makeTabRef "ToU"
 ----- Table of units section helper functions -----
 
 -- | Table of units constructors.
-tunit, tunit' :: [TUIntro] -> RefTab
+tunit,tunit' :: [TUIntro] -> TUnits'
 -- | Table of units with an SI Name.
-tunit  t = TUnits' t tOfUnitSIName
+tunit  t = TUProg' t tOfUnitSIName
 -- | Table of units with SI name in the description column.
-tunit' t = TUnits' t tOfUnitDesc
+tunit' t = TUProg' t tOfUnitDesc
 
 -- | Table of units introduction builder. Used by 'mkRefSec'.
 tuIntro :: [TUIntro] -> Contents

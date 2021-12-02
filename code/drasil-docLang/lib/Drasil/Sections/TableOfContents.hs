@@ -86,15 +86,24 @@ mktToCSec = Flat $ namedRef SRS.tOfContLabel $ titleize' Doc.tOfCont
 
 -- | Helper for creating the 'Reference Material' section ToC entry
 mktRefSec :: RefSec -> ItemType
-mktRefSec (RefProg _ l) =
-  mkHeaderItem (namedRef SRS.refMatLabel $ titleize Doc.refMat) $ map mktSubRef l
-  where
-    mktSubRef :: RefTab -> Sentence
-    mktSubRef TUnits        = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit
-    mktSubRef (TUnits' _ _) = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit
-    mktSubRef (TSymb _)     = namedRef SRS.tOfSymbLabel   $ titleize' Doc.tOfSymb
-    mktSubRef (TSymb' _ _)  = namedRef SRS.tOfSymbLabel   $ titleize' Doc.tOfSymb
-    mktSubRef TAandA        = namedRef SRS.tOfAbbAccLabel $ titleize' Doc.abbAcc
+mktRefSec (RefProg _) =
+  mkHeaderItem (namedRef SRS.refMatLabel $ titleize Doc.refMat) []
+
+
+mktTUnits :: TUnits -> Sentence
+mktTUnits TUProg = namedRef SRS.tOfUnitLabel $ titleize' Doc.tOfUnit
+
+mktTUnits' :: TUnits' -> Sentence
+mktTUnits' (TUProg' _ _) = namedRef SRS.tOfUnitLabel $ titleize' Doc.tOfUnit
+
+mktTSymb :: TSymb -> Sentence
+mktTSymb (TSProg _) = namedRef SRS.tOfSymbLabel $ titleize' Doc.tOfSymb
+
+mktTSymb' :: TSymb' -> Sentence
+mktTSymb' (TSProg' _ _) = namedRef SRS.tOfSymbLabel $ titleize' Doc.tOfSymb
+
+mktTAandA :: TAandA -> Sentence
+mktTAandA TAAProg = namedRef SRS.tOfAbbAccLabel $ titleize' Doc.abbAcc
 
 -- | Helper for creating the 'Introduction' section ToC entry
 mktIntroSec :: IntroSec -> ItemType
@@ -129,14 +138,14 @@ mktGSDSec :: GSDSec -> ItemType
 mktGSDSec (GSDProg l) =
   mkHeaderItem (namedRef SRS.genSysDescLabel $ titleize Doc.generalSystemDescription) []
 
-mktSysCntxtSub :: SysCntxtSub -> Sentence
-mktSysCntxtSub (SysCntxtProg _) = namedRef SRS.sysContextLabel $ titleize  Doc.sysCont
+mktSysCntxt :: SysCntxt -> Sentence
+mktSysCntxt (SysCntxtProg _) = namedRef SRS.sysContextLabel $ titleize  Doc.sysCont
 
-mktUsrCharsSub :: UsrCharsSub -> Sentence
-mktUsrCharsSub (UsrCharsProg _) = namedRef SRS.userCharsLabel $ titleize' Doc.userCharacteristic
+mktUsrChars :: UsrChars -> Sentence
+mktUsrChars (UsrCharsProg _) = namedRef SRS.userCharsLabel $ titleize' Doc.userCharacteristic
 
-mktSystConsSub :: SystConsSub -> Sentence
-mktSystConsSub (SystConsProg _) = namedRef SRS.sysConstraintsLabel $ titleize' Doc.systemConstraint
+mktSystCons :: SystCons -> Sentence
+mktSystCons (SystConsProg _) = namedRef SRS.sysConstraintsLabel $ titleize' Doc.systemConstraint
 
 -- | Helper for creating the 'Specific System Description' section ToC entry
 mktSSDSec :: SSDSec -> ItemType

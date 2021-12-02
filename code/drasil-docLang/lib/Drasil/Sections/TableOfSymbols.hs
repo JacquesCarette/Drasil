@@ -13,7 +13,8 @@ import Drasil.DocumentLanguage.Units (toSentence)
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
 import Data.Drasil.Concepts.Math (unit_)
 import Language.Drasil.Printers (symbolDoc)
-import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
+import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), 
+  LFunc(..), TSymb(..), TSymb'(..))
 
 --Removed SymbolForm Constraint
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns
@@ -47,15 +48,16 @@ symbTableRef = makeTabRef "ToS"
 ----- Table of symbols section helper functions -----
 
 -- | Table of symbols constructor.
-tsymb, tsymb' :: [TSIntro] -> RefTab
+tsymb :: [TSIntro] -> TSymb
 -- | Default is term and given introduction.
-tsymb = TSymb
+tsymb = TSProg
+tsymb' :: [TSIntro] -> TSymb'
 -- | Similar to 'tsymb', but has a default Defn for the LFunc type. Still has a given introduction.
-tsymb' = TSymb' Defn
+tsymb' = TSProg' Defn
 
 -- | Table of symbols constructor. Takes a custom function and introduction.
-tsymb'' :: [TSIntro] -> LFunc -> RefTab
-tsymb'' intro lfunc = TSymb' lfunc intro
+tsymb'' :: [TSIntro] -> LFunc -> TSymb'
+tsymb'' intro lfunc = TSProg' lfunc intro
 
 -- | Table of symbols introduction builder. Used by 'mkRefSec'.
 tsIntro :: [TSIntro] -> Contents

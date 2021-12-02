@@ -12,12 +12,12 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), 
   IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
   StkhldrSec(..), ClientSub(..), CstmrSub(..), 
-  GSDSec(..), SysCntxtSub(..), UsrCharsSub(..), SystConsSub(..),
+  GSDSec(..), SysCntxt(..), UsrChars(..), SystCons(..),
   SSDSec(..), ProblemDescription(..), TermsAndDefs(..), PhySysDesc(..), Goals(..),
   SolChSpec(..), Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..), 
   ReqrmntSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),
-  RefSec(..), RefTab(..), LCsSec(..), LFunc(..),
-  TraceabilitySec(..), TraceConfig(..),
+  RefSec(..), TUnits(..), TUnits'(..), TSymb(..), TSymb'(..), TAandA(..),
+  LCsSec(..), LFunc(..), TraceabilitySec(..), TraceConfig(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
@@ -220,12 +220,8 @@ fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
 -- | Fills in the requirements section of the system information using the document description.
 fillReqs :: DocDesc -> SystemInformation -> SystemInformation
 fillReqs [] si = si
-fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
-  where
-    genReqs [] = si
-    genReqs (FReqsSub c _:_) = si {_sysinfodb = set conceptinsTable newCI db} where
-        newCI = idMap $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
-    genReqs (_:xs) = genReqs xs
+fillReqs (FReqsSub (FReqsProg c _):_) si@SI{_sysinfodb = db} = si {_sysinfodb = set conceptinsTable newCI db} where
+  newCI = idMap $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
 fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
@@ -258,7 +254,7 @@ mkSections si dd = map doit dd
 
 -- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont 0 [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
+mkToC dd = SRS.tOfCont 0 [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd]
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 
@@ -267,39 +263,46 @@ mkToC dd = SRS.tOfCont 0 [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Not
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = SRS.refMat 0 [c] (map (mkSubRef si) l)
-  where
-    mkSubRef :: SystemInformation -> RefTab -> Section
-    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef SI {_sysinfodb = db} (TUnits' con f) =
-        SRS.tOfUnit 1 [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    -- FIXME: _quants = v should be removed from this binding and symbols should
-    -- be acquired solely through document traversal, however #1658. If we do
-    -- just the doc traversal here, then we lose some symbols which only appear
-    -- in a table in GlassBR. If we grab symbols from tables (by removing the `isVar`)
-    -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
-    -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
-    -- missing a `Concept`.
-    mkSubRef SI {_quants = v, _sysinfodb = cdb} (TSymb con) =
-      SRS.tOfSymb 1
-      [tsIntro con,
-                LlC $ table Equational (sortBySymbol
-                $ filter (`hasStageSymbol` Equational) 
-                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
-                atStart] []
-    mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
-    mkSubRef SI {_usedinfodb = db} TAandA =
-      SRS.tOfAbbAcc 1 [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
+mkRefSec si dd (RefProg c) = SRS.refMat 0 [c]
+
+mkTUnits :: SystemInformation -> DocDesc -> TUnits -> Section
+mkTUnits si' dd TUProg = mkTUnits' si' dd $ TUProg' defaultTUI tOfUnitSIName
+
+mkTUnits' :: SystemInformation -> DocDesc -> TUnits' -> Section
+mkTUnits' SI {_sysinfodb = db} dd (TUProg' con f) =
+  SRS.tOfUnit 1 [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)]
+  -- FIXME: _quants = v should be removed from this binding and symbols should
+  -- be acquired solely through document traversal, however #1658. If we do
+  -- just the doc traversal here, then we lose some symbols which only appear
+  -- in a table in GlassBR. If we grab symbols from tables (by removing the `isVar`)
+  -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
+  -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
+  -- missing a `Concept`.
+    
+mkTSymb :: SystemInformation -> DocDesc -> TSymb -> Section    
+mkTSymb SI {_quants = v, _sysinfodb = cdb} dd (TSProg con) =
+  SRS.tOfSymb 1
+    [tsIntro con,
+              LlC $ table Equational (sortBySymbol
+              $ filter (`hasStageSymbol` Equational) 
+              (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+              atStart]
+
+mkTSymb' :: SystemInformation -> DocDesc -> TSymb' -> Section
+mkTSymb' SI {_sysinfodb = cdb} dd (TSProg' f con) =
+  mkTSymbol (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
+
+mkTAandA :: SystemInformation -> TAandA -> Section 
+mkTAandA SI {_usedinfodb = db} TAAProg =
+  SRS.tOfAbbAcc 1 [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db]
 
 -- | Helper for creating the table of symbols.
-mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
+mkTSymbol :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = SRS.tOfSymb 1 [tsIntro c,
+mkTSymbol v f c = SRS.tOfSymb 1 [tsIntro c,
   LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] 
-    []
   where lf Term = atStart
         lf Defn = capSent . (^. defn)
         lf (TermExcept cs) = \x -> if (x ^. uid) `elem` map (^. uid) cs then
@@ -332,7 +335,7 @@ mkIOrgSub (IOrgProg i b s t) = Intro.orgSec i b s t
 
 -- | Helper for making the Stakeholders section.
 mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg l) = SRS.stakeholder 0 [Stk.stakeholderIntro]
+mkStkhldrSec (StkhldrProg _) = SRS.stakeholder 0 [Stk.stakeholderIntro]
 
 mkClientSub :: ClientSub -> Section
 mkClientSub (ClientProg kWrd details) = Stk.tClientF kWrd details
@@ -346,14 +349,14 @@ mkCstmrSub (CstmrProg kWrd) = Stk.tCustomerF kWrd
 mkGSDSec :: GSDSec -> Section
 mkGSDSec (GSDProg _) = SRS.genSysDes 0 [GSD.genSysIntro] 
 
-mkSysCntxtSub :: SysCntxtSub -> Section
-mkSysCntxtSub (SysCntxtProg cs) = GSD.sysContxt cs
+mkSysCntxt :: SysCntxt -> Section
+mkSysCntxt (SysCntxtProg cs) = GSD.sysContxt cs
 
-mkUsrCharsSub :: UsrCharsSub -> Section
-mkUsrCharsSub (UsrCharsProg intro) = GSD.usrCharsF intro
+mkUsrChars :: UsrChars -> Section
+mkUsrChars (UsrCharsProg intro) = GSD.usrCharsF intro
 
-mkSystConsSub :: SystConsSub -> Section
-mkSystConsSub (SystConsProg cntnts) = GSD.systCon cntnts
+mkSystCons :: SystCons -> Section
+mkSystCons (SystConsProg cntnts) = GSD.systCon cntnts
 
 -- ** Specific System Description
 
@@ -408,10 +411,10 @@ mkDDSub si' (DDProg intro fields dds _) =
 mkIMSub :: SystemInformation -> IMs -> Section
 mkIMSub _ (IMProg _ _ [] _)    = error "There are no Instance Models"
 mkIMSub si' (IMProg intro fields ims ShowDerivation) =
-  SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
+  SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 []) $ map mkParagraph intro ++
   concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
 mkIMSub si' (IMProg intro fields ims _) =
-  SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 [] []) $ map mkParagraph intro ++
+  SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 []) $ map mkParagraph intro ++
   map (LlC . instanceModel fields si') ims
 
 mkAssumpSub :: SystemInformation -> Assumptions -> Section
@@ -447,7 +450,7 @@ mkNonFReqsSub (NonFReqsProg nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg 0 (intro : mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg 0 (intro : mkEnumSimpleD c)
   where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
                 plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
 
@@ -455,7 +458,7 @@ mkLCsSec (LCsProg c) = SRS.likeChg 0 (intro : mkEnumSimpleD c) []
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg 0 (intro : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg 0 (intro : mkEnumSimpleD c)
   where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
                 plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
 
@@ -465,7 +468,7 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg 0 (intro : mkEnumSimpleD c) []
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
-  (map LlC trace) (filter (not.isSpace) $ abrv sys) []
+  (map LlC trace) (filter (not.isSpace) $ abrv sys)
   where
   trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
     u desc rows cols si) progs
@@ -474,7 +477,7 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
 
 -- | Helper for making the Off-the-Shelf Solutions section.
 mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
-mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol 0 cs [] 
+mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol 0 cs 
 
 -- ** Auxiliary Constants
 
@@ -486,10 +489,10 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 -- | Helper for making the References section.
 mkBib :: BibRef -> Section
-mkBib bib = SRS.reference 0 [UlC $ ulcc (Bib bib)] []
+mkBib bib = SRS.reference 0 [UlC $ ulcc (Bib bib)] 
 
 -- ** Appendix
 
 -- | Helper for making the Appendix section.
 mkAppndxSec :: AppndxSec -> Section
-mkAppndxSec (AppndxProg cs) = SRS.appendix 0 cs []
+mkAppndxSec (AppndxProg cs) = SRS.appendix 0 cs 

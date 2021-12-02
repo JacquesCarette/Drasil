@@ -6,14 +6,16 @@ module Drasil.DocLang (
 
   -- *** Types
   -- Drasil.DocDecl
-  SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
-  PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
-  SolChSpec(..),
+  SRSDecl, DocSection(..), ProblemDescription(..), SolChSpec(..),
+  TermsAndDefs(..), PhySysDesc(..), Goals(..),  
+  Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..),
   -- Drasil.DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
-  OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
-  IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
-  RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
+  OffShelfSolnsSec(..), GSDSec(..), UsrChars(..), SystCons(..), SysCntxt(..),
+  IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
+  LFunc(..), Literature(Doc', Lit,Manual),
+  RefSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..), 
+  StkhldrSec(..), ClientSub(..), CstmrSub(..),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- *** Functions
   -- Drasil.DocumentLanguage
@@ -71,15 +73,16 @@ module Drasil.DocLang (
   secRefs
 ) where 
 
-import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
-  PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
-  SolChSpec(..))
+import Drasil.DocDecl (SRSDecl, DocSection(..), ProblemDescription(..), SolChSpec(..),
+  TermsAndDefs(..), PhySysDesc(..), Goals(..),  
+  Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..))
 import Drasil.DocumentLanguage (mkDoc, fillTraceSI, fillcdbSRS, findAllRefs)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
-  GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
-  Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
-  StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
+  UsrChars(..), SystCons(..), SysCntxt(..), IntroSec(..), 
+  IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
+  LFunc(..), Literature(Doc', Lit,Manual), RefSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),
+  StkhldrSec(..), ClientSub(..), CstmrSub(..), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
 import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), InPurposeSub(..), BodySec(..), 
   ReviewSub(..), MainIdeaSub(..),  SupportSS1(..), SupportSS2(..), SupportSS3(..),

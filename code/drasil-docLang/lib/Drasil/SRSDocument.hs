@@ -11,16 +11,17 @@ module Drasil.SRSDocument (
   PrintingInformation(..), defaultConfiguration, piSys,
   -- * Document section types needed for a SRS
   -- | Imported from "Drasil.DocDecl"
-  SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
-  PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
-  SolChSpec(..),
+  SRSDecl, DocSection(..), ProblemDescription(..), SolChSpec(..),
+  TermsAndDefs(..), PhySysDesc(..), Goals(..), 
+  Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..),
   -- ** Document subsection types needed for a SRS
   -- | Imported from "Drasil.DocumentLanguage.Core"
   AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
-  GSDSub(..), IntroSec(..), IntroSub(..), LFunc(..),
-  Literature(..), RefSec(..), RefTab(..), StkhldrSec(..),
-  StkhldrSub(..), TConvention(..), TraceabilitySec(..),
+  DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), 
+  GSDSec(..), UsrChars(..), SystCons(..), SysCntxt(..),
+  IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
+  LFunc(..), Literature(..), RefSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..), 
+  StkhldrSec(..), ClientSub(..), CstmrSub(..), TConvention(..), TraceabilitySec(..),
   TSIntro(..), TUIntro(..),
   -- ** Document subsection helper types
   -- | Imported from "Drasil.DocumentLanguage.Definitions"
@@ -42,15 +43,16 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
-  GSDSub(..), IntroSec(..), IntroSub(..), LFunc(..),
-  Literature(..), RefSec(..), RefTab(..), StkhldrSec(..),
-  StkhldrSub(..), TConvention(..), TraceabilitySec(..),
+  DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), 
+  GSDSec(..), UsrChars(..), SystCons(..), SysCntxt(..), 
+  IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
+  LFunc(..), Literature(..), RefSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),
+  StkhldrSec(..), ClientSub(..), CstmrSub(..), TConvention(..), TraceabilitySec(..),
   TSIntro(..), TUIntro(..),
   -- Drasil.DocDecl
-  SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
-  PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
-  SolChSpec(..),
+  SRSDecl, DocSection(..), ProblemDescription(..), SolChSpec(..),
+  TermsAndDefs(..), PhySysDesc(..), Goals(..),  
+  Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..),
   -- Drasil.Sections.ReferenceMaterial
   intro,
   -- DocumentLanguage

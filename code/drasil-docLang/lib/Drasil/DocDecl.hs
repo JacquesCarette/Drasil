@@ -4,12 +4,15 @@ module Drasil.DocDecl where
 
 import Drasil.DocumentLanguage.Core (DocDesc)
 import Drasil.DocumentLanguage.Definitions (Fields)
-import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
-  IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), 
+import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), 
+  RefSec(..), TUnits(..), TUnits'(..), TSymb(..), TSymb'(..), TAandA(..),
+  IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
+  StkhldrSec(..), ClientSub(..), CstmrSub(..),
+  GSDSec(..), SysCntxt(..), UsrChars(..), SystCons(..),
+  SSDSec(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), 
   ProblemDescription(..), SolChSpec(..), TermsAndDefs(..), PhySysDesc(..), Goals(..), 
   Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..), 
-  ReqrmntSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),
-  LCsSec(..), UCsSec(..), TraceabilitySec(..), 
+  ReqrmntSec(..), FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),  
   AuxConstntSec(..), AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
@@ -31,9 +34,23 @@ type SRSDecl = [DocSection]
 -- | Contains all the different sections needed for a full SRS ('SRSDecl').
 data DocSection = TableOfContents                       -- ^ Table of Contents
                 | RefSec DL.RefSec                      -- ^ Reference.
+                | TUnits DL.TUnits
+                | TUnits' DL.TUnits'
+                | TSymb DL.TSymb
+                | TSymb' DL.TSymb'
+                | TAandA DL.TAandA
                 | IntroSec DL.IntroSec                  -- ^ Introduction.
+                | IPurposeSub DL.IPurposeSub
+                | IScopeSub DL.IScopeSub
+                | ICharSub DL.ICharSub
+                | IOrgSub DL.IOrgSub
                 | StkhldrSec DL.StkhldrSec              -- ^ Stakeholders.
+                | ClientSub DL.ClientSub 
+                | CstmrSub DL.CstmrSub
                 | GSDSec DL.GSDSec                      -- ^ General System Description.
+                | SysCntxt DL.SysCntxt
+                | UsrChars DL.UsrChars
+                | SystCons DL.SystCons
                 | SSDSec DL.SSDSec                      -- ^ Specific System Description.
                 | ProblemDescription ProblemDescription -- ^ Problem Description
                 | TermsAndDefs TermsAndDefs             -- ^ Terminology and Definitions
@@ -108,11 +125,7 @@ data FReqsSub  = FReqsProg Sentence [LabelledContent]
 -- | Functional requirements. 'LabelledContent' for tables (no input values).
 newtype FReqsSub' = FReqsProg' [LabelledContent]
 -- | Non-Functional requirements.
-data NonFReqsSub where NonFReqsProg :: Sentence -> NonFReqsSub
-
-  
--- | Functional requirements. LabelledContent needed for tables.
-
+data NonFReqsSub where NonFReqsProg :: NonFReqsSub
 
 
 -- * Functions
@@ -122,10 +135,24 @@ mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
 mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
+  sec (TUnits u) = DL.TUnits u
+  sec (TUnits' u) = DL.TUnits' u
+  sec (TSymb s) = DL.TSymb s
+  sec (TSymb' s) = DL.TSymb' s
+  sec (TAandA a) = DL.TAandA a
   sec (RefSec r) = DL.RefSec r
   sec (IntroSec i) = DL.IntroSec i
+  sec (IPurposeSub p) = DL.IPurposeSub p
+  sec (IScopeSub s) = DL.IScopeSub s
+  sec (ICharSub c) = DL.ICharSub c
+  sec (IOrgSub o) = DL.IOrgSub o
   sec (StkhldrSec s) = DL.StkhldrSec s
+  sec (ClientSub c) = DL.ClientSub c
+  sec (CstmrSub c) = DL.CstmrSub c
   sec (GSDSec g) = DL.GSDSec g
+  sec (SysCntxt c) = DL.SysCntxt c
+  sec (UsrChars c) = DL.UsrChars c
+  sec (SystCons c) = DL.SystCons c
   sec (SSDSec s) = DL.SSDSec s
   sec (ProblemDescription (PDProg s)) = DL.ProblemDescription (DL.PDProg s)
   sec (TermsAndDefs (TDProg s c)) = DL.TermsAndDefs (DL.TDProg s c)
@@ -142,7 +169,7 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec (ReqrmntSec r) = DL.ReqrmntSec r
   sec (FReqsSub (FReqsProg d t)) = DL.FReqsSub $ DL.FReqsProg (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
   sec (FReqsSub' (FReqsProg' t)) = DL.FReqsSub' $ DL.FReqsProg' (fromConcInsDB funcReqDom) t
-  sec (NonFReqsSub (NonFReqsProg _))= DL.NonFReqsSub $ DL.NonFReqsProg $ fromConcInsDB nonFuncReqDom
+  sec (NonFReqsSub NonFReqsProg) = DL.NonFReqsSub $ DL.NonFReqsProg $ fromConcInsDB nonFuncReqDom
   sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
   sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
   sec (TraceabilitySec t) = DL.TraceabilitySec t

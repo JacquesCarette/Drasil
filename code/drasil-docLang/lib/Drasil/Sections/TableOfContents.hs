@@ -89,7 +89,6 @@ mktRefSec :: RefSec -> ItemType
 mktRefSec (RefProg _) =
   mkHeaderItem (namedRef SRS.refMatLabel $ titleize Doc.refMat) []
 
-
 mktTUnits :: TUnits -> Sentence
 mktTUnits TUProg = namedRef SRS.tOfUnitLabel $ titleize' Doc.tOfUnit
 

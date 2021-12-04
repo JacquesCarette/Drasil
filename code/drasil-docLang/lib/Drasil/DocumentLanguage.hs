@@ -229,6 +229,7 @@ extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
 -- * Section Creator Functions
+-- CHECK: whether si is needed in each mksection
 
 -- | Helper for creating the different document sections.
 mkSections :: SystemInformation -> DocDesc -> [Section]
@@ -236,19 +237,48 @@ mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
     doit TableOfContents      = mkToC dd
-    doit (RefSec rs)          = mkRefSec si dd rs
-    doit (IntroSec is)        = mkIntroSec si is
-    doit (StkhldrSec sts)     = mkStkhldrSec sts
-    doit (SSDSec ss)          = mkSSDSec si ss
-    doit (AuxConstntSec acs)  = mkAuxConsSec acs 
-    doit Bibliography         = mkBib (citeDB si)
-    doit (GSDSec gs')         = mkGSDSec gs'
-    doit (ReqrmntSec r)       = mkReqrmntSec r
-    doit (LCsSec lc)          = mkLCsSec lc
-    doit (UCsSec ulcs)        = mkUCsSec ulcs
-    doit (TraceabilitySec t)  = mkTraceabilitySec t si
-    doit (AppndxSec a)        = mkAppndxSec a
-    doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    doit (RefSec rs)             = mkRefSec rs
+    doit (TUnits tu)             = mkTUnits si dd tu
+    doit (TUnits' tu')           = mkTUnits' si dd tu'
+    doit (TSymb ts)              = mkTSymb si dd ts
+    doit (TSymb' ts')            = mkTSymb' si dd ts'
+    doit (TAandA ta)             = mkTAandA si ta
+    doit (IntroSec is)           = mkIntroSec is
+    doit (IPurposeSub ip)        = mkIPurpSub ip
+    doit (IScopeSub is)          = mkIScopeSub is
+    doit (ICharSub ic)           = mkICharSub si ic
+    doit (IOrgSub io)            = mkIOrgSub io
+    doit (StkhldrSec sts)        = mkStkhldrSec sts
+    doit (ClientSub c)           = mkClientSub c
+    doit (CstmrSub c)            = mkCstmrSub c
+    doit (GSDSec gs')            = mkGSDSec gs'
+    doit (SysCntxt sc)           = mkSysCntxt sc
+    doit (UsrChars ucc)          = mkUsrChars ucc
+    doit (SystCons sc)           = mkSystCons sc
+    doit (SSDSec ss)             = mkSSDSec ss
+    doit (ProblemDescription pd) = mkSSDProb si pd
+    doit (TermsAndDefs td)       = mkTermsAndDefs td
+    doit (PhySysDesc psd)        = mkPhySysDesc psd
+    doit (Goals g)               = mkGoals g
+    doit (SolChSpec scs)         = mkSolChSpec si scs
+    doit (Assumptions a)         = mkAssump si a
+    doit (TMs tm)                = mkTM si tm
+    doit (GDs gd)                = mkGD si gd
+    doit (DDs dd')               = mkDD si dd'
+    doit (IMs im)                = mkIM si im
+    doit (Constraints c)         = mkConstraint si c
+    doit (CorrSolnPpties csp)    = mkCorrSolnPpties si csp
+    doit (ReqrmntSec r)          = mkReqrmntSec r
+    doit (FReqsSub fr)           = mkFReqsSub fr
+    doit (FReqsSub' fr')         = mkFReqsSub' fr'
+    doit (NonFReqsSub nfr)       = mkNonFReqsSub nfr
+    doit (AuxConstntSec acs)     = mkAuxConsSec acs 
+    doit Bibliography            = mkBib (citeDB si)
+    doit (LCsSec lc)             = mkLCsSec lc
+    doit (UCsSec ulcs)           = mkUCsSec ulcs
+    doit (TraceabilitySec t)     = mkTraceabilitySec t si
+    doit (AppndxSec a)           = mkAppndxSec a
+    doit (OffShelfSolnsSec o)    = mkOffShelfSolnSec o
 
 -- ** Table of Contents
 
@@ -262,8 +292,8 @@ mkToC dd = SRS.tOfCont 0 [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Not
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c) = SRS.refMat 0 [c]
+mkRefSec :: RefSec -> Section
+mkRefSec (RefProg c) = SRS.refMat 0 [c]
 
 mkTUnits :: SystemInformation -> DocDesc -> TUnits -> Section
 mkTUnits si' dd TUProg = mkTUnits' si' dd $ TUProg' defaultTUI tOfUnitSIName
@@ -315,8 +345,8 @@ mkTSymbol v f c = SRS.tOfSymb 1 [tsIntro c,
 -- ** Introduction
 
 -- | Makes the Introduction section into a 'Section'.
-mkIntroSec :: SystemInformation -> IntroSec -> Section
-mkIntroSec si (IntroProg probIntro progDefn) = Intro.introductionSection probIntro progDefn
+mkIntroSec :: IntroSec -> Section
+mkIntroSec (IntroProg probIntro progDefn) = Intro.introductionSection probIntro progDefn
 
 mkIPurpSub :: IPurposeSub -> Section  
 mkIPurpSub (IPurposeProg intro) = Intro.purposeOfDoc intro
@@ -361,8 +391,8 @@ mkSystCons (SystConsProg cntnts) = GSD.systCon cntnts
 -- ** Specific System Description
 
 -- | Helper for making the Specific System Description section.
-mkSSDSec :: SystemInformation -> SSDSec -> Section
-mkSSDSec si (SSDProg _) = SSD.specSysDescr 
+mkSSDSec :: SSDSec -> Section
+mkSSDSec (SSDProg _) = SSD.specSysDescr 
 
 -- CHECK later 
 --  where
@@ -372,60 +402,60 @@ mkSSDSec si (SSDProg _) = SSD.specSysDescr
 
 -- | Helper for making the Specific System Description Problem section.
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
-mkSSDProb _ (PDProg prob) = SSD.probDescF prob
+mkSSDProb _ (PDProg prob) = SSD.probDescF prob 
 
-mkTermsAndDefsSub :: TermsAndDefs -> Section
-mkTermsAndDefsSub (TDProg sen concepts) = SSD.termDefnF sen concepts
+mkTermsAndDefs :: TermsAndDefs -> Section
+mkTermsAndDefs (TDProg sen concepts) = SSD.termDefnF sen concepts
 
-mkPhySysDescSub :: PhySysDesc -> Section
-mkPhySysDescSub (PSDProg prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+mkPhySysDesc :: PhySysDesc -> Section
+mkPhySysDesc (PSDProg prog parts dif extra) = SSD.physSystDesc prog parts dif extra
 
-mkGoalsSub :: Goals -> Section
-mkGoalsSub (GProg ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
+mkGoals :: Goals -> Section
+mkGoals (GProg ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg _) = SRS.solCharSpec 1 [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] 
 
-mkTMSub :: SystemInformation -> TMs -> Section
-mkTMSub _ (TMProg _ _ [])      = error "There are no Theoretical Models"
-mkTMSub si' (TMProg intro fields ts) =
+mkTM :: SystemInformation -> TMs -> Section
+mkTM _ (TMProg _ _ [])      = error "There are no Theoretical Models"
+mkTM si' (TMProg intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
 
-mkGDSub :: SystemInformation -> GDs -> Section
-mkGDSub _ (GDProg _ _ [] _)    = SSD.genDefnF []
-mkGDSub si' (GDProg intro fields gs' ShowDerivation) =
+mkGD :: SystemInformation -> GDs -> Section
+mkGD _ (GDProg _ _ [] _)    = SSD.genDefnF []
+mkGD si' (GDProg intro fields gs' ShowDerivation) =
   SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
-mkGDSub si' (GDProg intro fields gs' _) =
+mkGD si' (GDProg intro fields gs' _) =
   SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
 
-mkDDSub :: SystemInformation -> DDs -> Section
-mkDDSub _ (DDProg _ _ [] _) = error "There are no Data Definitions"
-mkDDSub si' (DDProg intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+mkDD :: SystemInformation -> DDs -> Section
+mkDD _ (DDProg _ _ [] _) = error "There are no Data Definitions"
+mkDD si' (DDProg intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
   SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
   where f e = [LlC $ ddefn fields si' e, derivation e]
-mkDDSub si' (DDProg intro fields dds _) =
+mkDD si' (DDProg intro fields dds _) =
   SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map f dds
   where f e = LlC $ ddefn fields si' e
 
-mkIMSub :: SystemInformation -> IMs -> Section
-mkIMSub _ (IMProg _ _ [] _)    = error "There are no Instance Models"
-mkIMSub si' (IMProg intro fields ims ShowDerivation) =
+mkIM :: SystemInformation -> IMs -> Section
+mkIM _ (IMProg _ _ [] _)    = error "There are no Instance Models"
+mkIM si' (IMProg intro fields ims ShowDerivation) =
   SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 []) $ map mkParagraph intro ++
   concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
-mkIMSub si' (IMProg intro fields ims _) =
+mkIM si' (IMProg intro fields ims _) =
   SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn 2 []) $ map mkParagraph intro ++
   map (LlC . instanceModel fields si') ims
 
-mkAssumpSub :: SystemInformation -> Assumptions -> Section
-mkAssumpSub si' (AssumpProg ci) =
+mkAssump :: SystemInformation -> Assumptions -> Section
+mkAssump si' (AssumpProg ci) =
   SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
     
-mkConstraintSub :: SystemInformation -> Constraints -> Section
-mkConstraintSub _ (ConstProg end cs)  = SSD.datConF end cs
+mkConstraint :: SystemInformation -> Constraints -> Section
+mkConstraint _ (ConstProg end cs)  = SSD.datConF end cs
 
-mkCorrSolnPptiesSub :: SystemInformation -> CorrSolnPpties -> Section
-mkCorrSolnPptiesSub _ (CorrSolProg c cs) = SSD.propCorSolF c cs
+mkCorrSolnPpties :: SystemInformation -> CorrSolnPpties -> Section
+mkCorrSolnPpties _ (CorrSolProg c cs) = SSD.propCorSolF c cs
 
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys

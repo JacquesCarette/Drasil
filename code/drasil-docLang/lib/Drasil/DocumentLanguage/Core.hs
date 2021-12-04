@@ -175,7 +175,8 @@ newtype SSDSec = SSDProg Sentence
 
 -- | Problem Description section. Contains an intro or title,
 -- 'Section's, and problem description subsections ('PDSub').
-newtype ProblemDescription = PDProg Sentence
+newtype ProblemDescription = PDProg Sentence 
+
 
 -- | Problem Description subsections.
 -- | Terms and definitions.
@@ -269,11 +270,11 @@ newtype AppndxSec = AppndxProg [Contents]
 data DLPlate f = DLPlate {
   docSec :: DocSection -> f DocSection,
   refSec :: RefSec -> f RefSec,
---  tUnits :: TUnits -> f TUnits,
---  tUnits' :: TUnits' -> f TUnits',
---  tSymb :: TSymb -> f TSymb,
---  tSymb' :: TSymb' -> f TSymb',
---  tAandA :: TAandA -> f TAandA,
+  tUnits :: TUnits -> f TUnits,
+  tUnits' :: TUnits' -> f TUnits',
+  tSymb :: TSymb -> f TSymb,
+  tSymb' :: TSymb' -> f TSymb',
+  tAandA :: TAandA -> f TAandA,
   introSec :: IntroSec -> f IntroSec,
   iPurposeSub :: IPurposeSub -> f IPurposeSub,
   iScopeSub :: IScopeSub -> f IScopeSub,
@@ -313,15 +314,15 @@ data DLPlate f = DLPlate {
 
 -- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds res intro ipurp iscope ichar iorg stk client cstmr 
-    gs syscnt uschr syscon ss pd td psd gl sc a tm gd dd im ct csp rs fr fr' nfr lcp ucp ts es acs aps where
+  multiplate p = DLPlate ds res tu tu' ts ts' taa intro ipurp iscope ichar iorg stk client cstmr 
+    gs syscnt uschr syscon ss pd td psd gl sc a tm gd dd im ct csp rs fr fr' nfr lcp ucp t es acs aps where
     ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
-  --  ds (TUnits x) = TUnits <$> tUnits p x
-  --  ds (TUnits' x) = TUnits' <$> tUnits' p x
-  --  ds (TSymb x) = TSymb <$> tSymb p x
-  --  ds (TSymb' x) = TSymb' <$> tSymb' p x
-  --  ds (TAandA x) = TAandA <$> tAandA p x
+    ds (TUnits x) = TUnits <$> tUnits p x
+    ds (TUnits' x) = TUnits' <$> tUnits' p x
+    ds (TSymb x) = TSymb <$> tSymb p x
+    ds (TSymb' x) = TSymb' <$> tSymb' p x
+    ds (TAandA x) = TAandA <$> tAandA p x
     ds (IntroSec x) = IntroSec <$> introSec p x
     ds (IPurposeSub x) = IPurposeSub <$> iPurposeSub p x
     ds (IScopeSub x) = IScopeSub <$> iScopeSub p x
@@ -360,11 +361,11 @@ instance Multiplate DLPlate where
     ds Bibliography = pure Bibliography
 
     res (RefProg c) = pure $ RefProg c
---    tu (TUProg s f t) = pure $ TUProg s f t
---    tu' (TUProg' s f g d) = pure $ TUProg' s f g d
---    ts (TSProg s f dd d) = pure $ TSProg s f dd d
---    ts' (TSProg' s f i d) = pure $ TSProg' s f i d 
---    taa (TAAProg s f i d) = pure $ TAAProg s f i d 
+    tu TUProg  = pure TUProg
+    tu' (TUProg' i lc) = pure $ TUProg' i lc
+    ts (TSProg i) = pure $ TSProg i
+    ts' (TSProg' lf i) = pure $ TSProg' lf i 
+    taa TAAProg = pure TAAProg 
     intro (IntroProg s1 s2) = pure $ IntroProg s1 s2 
     ipurp (IPurposeProg s) = pure $ IPurposeProg s
     iscope (IScopeProg s) = pure $ IScopeProg s
@@ -396,11 +397,12 @@ instance Multiplate DLPlate where
     nfr (NonFReqsProg c) = pure $ NonFReqsProg c
     lcp (LCsProg c) = pure $ LCsProg c
     ucp (UCsProg c) = pure $ UCsProg c
-    ts (TraceabilityProg progs) = pure $ TraceabilityProg progs
+    t (TraceabilityProg progs) = pure $ TraceabilityProg progs
     es (OffShelfSolnsProg contents) = pure $ OffShelfSolnsProg contents
     acs (AuxConsProg ci qdef) = pure $ AuxConsProg ci qdef
     aps (AppndxProg con) = pure $ AppndxProg con
-  mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b iPurposeSub) (b iScopeSub)
+  mkPlate b = DLPlate (b docSec) (b refSec) (b tUnits) (b tUnits') (b tSymb) (b tSymb') (b tAandA)
+    (b introSec) (b iPurposeSub) (b iScopeSub)
     (b iCharSub) (b iOrgSub) (b stkSec) (b clientSub) (b cstmrSub)
     (b gsdSec) (b sysCntxt) (b usrChars) (b systCons) 
     (b ssdSec) (b problemDescription) (b termsAndDefs) (b phySysDesc) (b goals) 

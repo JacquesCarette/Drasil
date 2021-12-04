@@ -20,6 +20,9 @@ blank :: Doc
 -- | Indents a document (by 4 spaces).
 indent :: Doc -> Doc
 
+-- | Helper which concatenates two Docs and appends a period.
+(+:+.) :: Doc -> Doc -> Doc
+
 -- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
 

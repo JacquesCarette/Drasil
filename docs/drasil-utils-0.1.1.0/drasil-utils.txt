@@ -10,6 +10,23 @@
 @version 0.1.1.0
 
 
+-- | Common <a>Doc</a>-related functions for writting printers with a
+--   little more clarity.
+module Utils.Drasil.Document
+
+-- | Creates a blank document with no text.
+blank :: Doc
+
+-- | Indents a document (by 4 spaces).
+indent :: Doc -> Doc
+
+-- | Helper which concatenates two Docs and appends a period.
+(+:+.) :: Doc -> Doc -> Doc
+
+-- | Indents a list of Docs and combines into one Doc.
+indentList :: [Doc] -> Doc
+
+
 -- | Gather Drasil's utility functions and re-export for easy use. For now,
 --   does not include combinators (Sentence.hs, NounPhrase.hs, Concepts.hs)
 module Utils.Drasil

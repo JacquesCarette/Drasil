@@ -32,8 +32,8 @@ verbosityToDoc Quiet = yes
 
 -- | Renderings of comments regarding the default tag values for various Doxygen settings.
 defNo, defYes :: Doc
-defNo = defaultValSentence <> no <> text "."
-defYes = defaultValSentence <> yes <> text "."
+defNo = defaultValSentence +:+. no
+defYes = defaultValSentence +:+. yes
 
 
 -- | Renders a Doxygen configuration file.

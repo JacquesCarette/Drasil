@@ -11,6 +11,10 @@ blank = text ""
 indent :: Doc -> Doc
 indent = nest 4
 
+-- | Helper which concatenates two Docs and appends a period.
+(+:+.) :: Doc -> Doc -> Doc
+a +:+. b = a <> b <> text "."
+
 -- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
 indentList = vcat . map indent  -- TODO: Isn't this just `indent . vcat`? This would be a bit more efficient too

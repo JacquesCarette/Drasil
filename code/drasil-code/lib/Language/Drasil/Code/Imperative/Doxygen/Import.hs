@@ -12,6 +12,7 @@ import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
+import Utils.Drasil.Document ((+:+.))
 
 -- | A 'Doc' that holds optimized choices for configuring doxygen files.
 type OptimizeChoice = Doc

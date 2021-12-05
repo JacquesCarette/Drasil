@@ -69,7 +69,7 @@ findMassConstruct fr m ims ddefs = cic "findMass" (foldlSent [
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   S "Verify that", pluralNP (the input_), S "satisfy the required",
-  namedRef (datCon 0 [] []) (plural physicalConstraint)])
+  namedRef (datCon 0 []) (plural physicalConstraint)])
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
 outputInputDerivVals = oIDQConstruct oIDQVals
@@ -119,7 +119,7 @@ verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch watE :+: sParen (ch time) `S.and_` ch pcmE :+:
   sParen (ch time)), S "follow the", phrase CT.lawConsEnergy `sC`
-  S "as outlined in", namedRef (propCorSol 0 [] []) (titleize' propOfCorSol) `sC`
+  S "as outlined in", namedRef (propCorSol 0 []) (titleize' propOfCorSol) `sC`
   S "with relative error no greater than", ch consTol])
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --
@@ -150,7 +150,7 @@ nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [atStartNP'
   (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", namedRef (propCorSol 2 [] []) (titleize' propOfCorSol)
+  plural property, S "described in", namedRef (propCorSol 0 []) (titleize' propOfCorSol)
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance

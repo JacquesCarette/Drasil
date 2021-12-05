@@ -65,7 +65,7 @@ explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the 
 
 standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [atStartNP' (the value), S "provided in",
-  refS $ SRS.valsOfAuxCons 0 ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea, 
+  refS $ SRS.valsOfAuxCons 0 ([]::[Contents]), S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `S.of_` 
   foldlList Comma List (map ch (take 3 assumptionConstants))]
 

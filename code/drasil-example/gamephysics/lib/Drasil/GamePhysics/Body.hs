@@ -61,42 +61,43 @@ resourcePath = "../../../../datafiles/gamephysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro (short gamePhysics)
-  [IPurpose $ purpDoc gamePhysics Verbose,
-   IScope scope,
-   IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel 0 [] []) EmptyS],
-   GSDSec $ GSDProg [
-    SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-    UsrChars [userCharacteristicsIntro], SystCons [] []],
-   SSDSec $ SSDProg
-      [ SSDProblem $ PDProg probDescIntro []
-        [ TermsAndDefs Nothing terms
-        , Goals [S "the kinematic" +:+ plural property `sC` S "and" +:+ plural QP.force +:+
-                 sParen (S "including any" +:+ phrase CP.collision +:+ plural QP.force) +:+
-                 S "applied on a set of" +:+ plural CP.rigidBody]]
-      , SSDSolChSpec $ SCSProg
-        [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS inputConstraints
-        , CorrSolnPpties outputConstraints []
-        ]
-      ],
-    ReqrmntSec $ ReqsProg [
-      FReqsSub' [],
-      NonFReqsSub
-    ],
-    LCsSec,
-    UCsSec,
-    OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
-    TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-    AuxConstntSec $ AuxConsProg gamePhysics [],
-    Bibliography]
-      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
+  RefSec $ RefProg intro,
+  TUnits TUProg, 
+  TSymb $ tsymb tableOfSymbols, 
+  TAandA TAAProg,
+  IntroSec $ IntroProg para1_introduction_intro (short gamePhysics),
+  IPurposeSub $ IPurposeProg $ purpDoc gamePhysics Verbose,
+  IScopeSub $ IScopeProg scope,
+  ICharSub $ ICharProg [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
+  IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel 0 []) EmptyS,
+  GSDSec $ GSDProg EmptyS,
+  SysCntxt $ SysCntxtProg [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+  UsrChars $ UsrCharsProg [userCharacteristicsIntro], 
+  SystCons $ SystConsProg [],
+  SSDSec $ SSDProg EmptyS,
+  ProblemDescription $ PDProg probDescIntro,
+  TermsAndDefs $ TDProg Nothing terms,
+  Goals $ GProg [S "the kinematic" +:+ plural property `sC` S "and" +:+ plural QP.force +:+
+        sParen (S "including any" +:+ phrase CP.collision +:+ plural QP.force) +:+
+        S "applied on a set of" +:+ plural CP.rigidBody],
+  SolChSpec $ SCSProg EmptyS,
+  Assumptions $ AssumpProg EmptyS,
+  TMs $ TMProg [] (Label : stdFields),
+  GDs $ GDProg [] ([Label, Units] ++ stdFields) ShowDerivation,
+  DDs $ DDProg [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+  IMs $ IMProg [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation,
+  Constraints $ ConstProg EmptyS inputConstraints,
+  CorrSolnPpties $ CorrSolProg outputConstraints [],
+  ReqrmntSec $ ReqsProg EmptyS,
+  FReqsSub' $ FReqsProg' [],
+  NonFReqsSub NonFReqsProg,
+  LCsSec,
+  UCsSec,
+  OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  AuxConstntSec $ AuxConsProg gamePhysics [],
+  Bibliography]
+    where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: SystemInformation
 si = SI {
@@ -246,14 +247,14 @@ sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   S "Ensure application programming" +:+ phrase interface +:+
   S "use complies with the" +:+ phrase user +:+. phrase guide,
   S "Ensure required" +:+
-  namedRef (SRS.assumpt 0 ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
+  namedRef (SRS.assumpt 0 ([]::[Contents])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
   phrase problem +:+ phraseNP (the software) +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
     simulation) +:+ S "state satisfy the required" +:+.
-    namedRef (SRS.datCon 0 ([]::[Contents]) ([]::[Section])) (phrase physical `S.and_` plural systemConstraint),
+    namedRef (SRS.datCon 0 ([]::[Contents])) (phrase physical `S.and_` plural systemConstraint),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",
@@ -307,7 +308,7 @@ probDescIntro = foldlSent_
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
   plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",
-  namedRef (SRS.offShelfSol 0 ([] :: [Contents]) ([] :: [Section])) (plural physLib),
+  namedRef (SRS.offShelfSol 0 ([] :: [Contents])) (plural physLib),
   S "available to be used for", phrase consumer, plural product_]
   
 -----------------------------------------
@@ -408,7 +409,7 @@ offShelfSolsIntro, offShelfSols2DList,
   offShelfSolsMid, offShelfSols3DList :: Contents
 
 offShelfSolsIntro = mkParagraph $ foldlSentCol 
-  [S "As mentioned in the", namedRef (SRS.probDesc 0 [] []) (phrase problemDescription) `sC`
+  [S "As mentioned in the", namedRef (SRS.probDesc 0 []) (phrase problemDescription) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
 

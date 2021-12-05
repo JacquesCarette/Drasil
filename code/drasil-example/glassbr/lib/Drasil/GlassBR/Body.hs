@@ -85,40 +85,39 @@ si = SI {
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
-  IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
-      (short glassBR)
-    [IPurpose $ purpDoc glassBR Verbose,
-     IScope scope,
-     IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel 2 [] []) orgOfDocIntroEnd],
-  StkhldrSec $
-    StkhldrProg
-      [Client glassBR $ phraseNP (a_ company)
-        +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
-      Cstmr glassBR],
-  GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
-    UsrChars [userCharacteristicsIntro], SystCons [] [] ],
-  SSDSec $
-    SSDProg
-      [SSDProblem $ PDProg prob [termsAndDesc]
-        [ PhySysDesc glassBR physSystParts physSystFig []
-        , Goals goalInputs],
-       SSDSolChSpec $ SCSProg
-        [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
-        , Constraints auxSpecSent inputDataConstraints
-        , CorrSolnPpties [probBr, stressDistFac] []
-        ]
-      ],
-  ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc funcReqsTables,
-    NonFReqsSub
-  ],
+  RefSec $ RefProg intro,
+  TUnits TUProg, 
+  TSymb $ tsymb [TSPurpose, SymbOrder], 
+  TAandA TAAProg,
+  IntroSec $ IntroProg (startIntro software blstRskInvWGlassSlab glassBR) (short glassBR),
+  IPurposeSub $ IPurposeProg $ purpDoc glassBR Verbose,
+  IScopeSub $ IScopeProg scope,
+  ICharSub $ ICharProg [] (undIR ++ appStanddIR) [],
+  IOrgSub $ IOrgProg orgOfDocIntro Doc.dataDefn (SRS.inModel 2 []) orgOfDocIntroEnd,
+  StkhldrSec $ StkhldrProg EmptyS,
+  ClientSub $ ClientProg glassBR $ phraseNP (a_ company) 
+    +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
+  CstmrSub $ CstmrProg glassBR,
+  GSDSec $ GSDProg EmptyS, 
+  SysCntxt $ SysCntxtProg [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
+  UsrChars $ UsrCharsProg [userCharacteristicsIntro],
+  SystCons $ SystConsProg [],
+  SSDSec $ SSDProg EmptyS,
+  --CHECK: ProblemDescription $ PDProg prob [termsAndDesc],
+  ProblemDescription $ PDProg prob,
+  PhySysDesc $ PSDProg glassBR physSystParts physSystFig [], 
+  Goals $ GProg goalInputs,
+  SolChSpec $ SCSProg EmptyS,
+  Assumptions $ AssumpProg EmptyS,
+  TMs $ TMProg [] (Label : stdFields),
+  GDs $ GDProg [] [] HideDerivation, -- No Gen Defs for GlassBR
+  DDs $ DDProg [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+  IMs $ IMProg [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation,
+  Constraints $ ConstProg auxSpecSent inputDataConstraints,
+  CorrSolnPpties $ CorrSolProg [probBr, stressDistFac] [],
+  ReqrmntSec $ ReqsProg EmptyS,
+  FReqsSub $ FReqsProg inReqDesc funcReqsTables,
+  NonFReqsSub NonFReqsProg,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -208,7 +207,7 @@ undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
   (map refS [astm2009, astm2012, astm2016]) `S.in_`
-  namedRef (SRS.reference 0 ([]::[Contents]) ([]::[Section])) (plural reference)]
+  namedRef (SRS.reference 0 ([]::[Contents])) (plural reference)]
 
 scope :: Sentence
 scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
@@ -265,7 +264,7 @@ sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
   S "Ensure required" +:+ 
-  namedRef (SRS.assumpt 0 [] []) (pluralNP (combineNINI software assumption))
+  namedRef (SRS.assumpt 0 []) (pluralNP (combineNINI software assumption))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 

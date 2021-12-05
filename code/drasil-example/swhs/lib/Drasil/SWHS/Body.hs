@@ -115,42 +115,35 @@ refDB = rdb citations concIns
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [
-    TUnits,
-    tsymb'' tSymbIntro $ TermExcept [uNormalVect],
-    TAandA],
-  IntroSec $
-    IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName)
-    [IPurpose $ purpDoc progName Verbose,
-     IScope scope,
-     IChar [] charsOfReader [],
-     IOrgSec orgDocIntro inModel (SRS.inModel 0 [] []) orgDocEnd
-    ],
-  GSDSec $ GSDProg
-    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
-    , UsrChars [userChars progName]
-    , SystCons [] []
-    ],
-  SSDSec $
-    SSDProg 
-      [ SSDProblem $ PDProg probDescIntro []
-        [ TermsAndDefs Nothing terms
-        , PhySysDesc progName physSystParts figTank []
-        , Goals goalInputs]
-      , SSDSolChSpec $ SCSProg
-        [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints dataConTail inputConstraints
-        , CorrSolnPpties outputConstraints propsDeriv
-        ]
-      ],
-  ReqrmntSec $ ReqsProg [
-    FReqsSub inReqDesc [],
-    NonFReqsSub
-  ],
+  RefSec $ RefProg intro,
+  TUnits TUProg,
+  TSymb' $ tsymb'' tSymbIntro $ TermExcept [uNormalVect],
+  TAandA TAAProg,
+  IntroSec $ IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName),
+  IPurposeSub $ IPurposeProg $ purpDoc progName Verbose,
+  IScopeSub $ IScopeProg scope,
+  ICharSub $ ICharProg [] charsOfReader [],
+  IOrgSub $ IOrgProg orgDocIntro inModel (SRS.inModel 0 []) orgDocEnd,
+  GSDSec $ GSDProg EmptyS,
+  SysCntxt $ SysCntxtProg [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets],
+  UsrChars $ UsrCharsProg [userChars progName],
+  SystCons $ SystConsProg [],
+  SSDSec $ SSDProg EmptyS,
+  ProblemDescription $ PDProg probDescIntro,
+  TermsAndDefs $ TDProg Nothing terms, 
+  PhySysDesc $ PSDProg progName physSystParts figTank [], 
+  Goals $ GProg goalInputs,
+  SolChSpec $ SCSProg EmptyS,
+  Assumptions $ AssumpProg EmptyS,
+  TMs $ TMProg [] (Label : stdFields),
+  GDs $ GDProg [] ([Label, Units] ++ stdFields) ShowDerivation,
+  DDs $ DDProg [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+  IMs $ IMProg [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation,
+  Constraints $ ConstProg dataConTail inputConstraints,
+  CorrSolnPpties $ CorrSolProg outputConstraints propsDeriv,
+  ReqrmntSec $ ReqsProg EmptyS,
+  FReqsSub $ FReqsProg inReqDesc [],
+  NonFReqsSub NonFReqsProg,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,

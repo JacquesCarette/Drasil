@@ -54,36 +54,28 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $
-    RefProg intro
-      [ TUnits
-      , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA
-      ],
-  IntroSec $
-    IntroProg justification (phrase projectileTitle)
-      [ IScope scope ],
-  SSDSec $
-    SSDProg
-      [ SSDProblem $ PDProg prob []
-        [ TermsAndDefs Nothing terms
-        , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
-      , SSDSolChSpec $ SCSProg
-        [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS inConstraints
-        , CorrSolnPpties outConstraints []
-        ]
-      ],
-  ReqrmntSec $
-    ReqsProg
-      [ FReqsSub EmptyS []
-      , NonFReqsSub
-      ],
+  RefSec $ RefProg intro,
+  TUnits TUProg,
+  TSymb $ tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits],
+  TAandA TAAProg,
+  IntroSec $ IntroProg justification (phrase projectileTitle),
+  IScopeSub $ IScopeProg scope,
+  SSDSec $ SSDProg EmptyS,
+  ProblemDescription $ PDProg prob,
+  TermsAndDefs $ TDProg Nothing terms,
+  PhySysDesc $ PSDProg projectileTitle physSystParts figLaunch [],
+  Goals $ GProg [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile],
+  SolChSpec $ SCSProg EmptyS,
+  Assumptions $ AssumpProg EmptyS, 
+  TMs $ TMProg [] (Label : stdFields),
+  GDs $ GDProg [] ([Label, Units] ++ stdFields) ShowDerivation,
+  DDs $ DDProg [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+  IMs $ IMProg [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation,
+  Constraints $ ConstProg EmptyS inConstraints,
+  CorrSolnPpties $ CorrSolProg outConstraints [],
+  ReqrmntSec $ ReqsProg EmptyS,
+  FReqsSub $ FReqsProg EmptyS [],
+  NonFReqsSub NonFReqsProg,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
     AuxConsProg projectileTitle constants,

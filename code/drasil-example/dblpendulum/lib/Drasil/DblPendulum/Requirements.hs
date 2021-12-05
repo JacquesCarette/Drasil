@@ -28,7 +28,7 @@ outputValues   = cic "outputValues"   outputValuesDesc    "Output-Values"       
 verifyInptValsDesc, calcAngPosDesc, outputValuesDesc :: Sentence
 
 verifyInptValsDesc = foldlSent [S "Check the entered", plural inValue,
-  S "to ensure that they do not exceed the" +:+. namedRef (datCon 0 ([]::[Contents]) ([]::[Section])) (plural datumConstraint),
+  S "to ensure that they do not exceed the" +:+. namedRef (datCon 0 ([]::[Contents])) (plural datumConstraint),
   S "If any of the", plural inValue, S "are out of bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
@@ -46,7 +46,7 @@ nonFuncReqs = [correct, portable]
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
  atStartNP' (output_ `the_ofThePS` code), S "have the", 
- namedRef (propCorSol 0 [] []) (plural propOfCorSol)]
+ namedRef (propCorSol 0 []) (plural propOfCorSol)]
  ) "Correct" nonFuncReqDom
 
 portable :: ConceptInstance

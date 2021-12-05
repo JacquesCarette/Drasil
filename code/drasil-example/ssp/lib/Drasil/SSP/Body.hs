@@ -92,42 +92,39 @@ si = SI {
   
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro
-  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
-  IntroSec $ IntroProg startIntro kSent
-    [ IPurpose $ purpDoc ssp Verbose
-    , IScope scope
-    , IChar []
-        [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
-        phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
-        [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel 0 [] []) orgSecEnd
-    ],
+  RefSec $ RefProg intro,
+  TUnits TUProg,
+  TSymb' $ tsymb'' tableOfSymbIntro TAD, 
+  TAandA TAAProg,
+  IntroSec $ IntroProg startIntro kSent,
+  IPurposeSub $ IPurposeProg $ purpDoc ssp Verbose,
+  IScopeSub $ IScopeProg scope,
+  ICharSub $ ICharProg []
+    [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
+    phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
+    [phrase soilMechanics],
+  IOrgSub $ IOrgProg orgSecStart inModel (SRS.inModel 0 []) orgSecEnd,
     --FIXME: issue #235
-  GSDSec $ GSDProg
-    [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
-    , UsrChars [userCharIntro], SystCons [sysConstraints] []
-    ],
-  SSDSec $
-    SSDProg
-      [ SSDProblem $ PDProg prob []
-        [ TermsAndDefs Nothing terms
-        , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
-        , Goals goalsInputs]
-      , SSDSolChSpec $ SCSProg
-        [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
-        , CorrSolnPpties outputs []
-        ]
-      ],
-  ReqrmntSec $ ReqsProg
-    [ FReqsSub' funcReqTables
-    , NonFReqsSub
-    ],
+  GSDSec $ GSDProg EmptyS,
+  SysCntxt $ SysCntxtProg [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+  UsrChars $ UsrCharsProg [userCharIntro], 
+  SystCons $ SystConsProg [sysConstraints],
+  SSDSec $ SSDProg EmptyS,
+  ProblemDescription $ PDProg prob,
+  TermsAndDefs $ TDProg Nothing terms,
+  PhySysDesc $ PSDProg ssp physSystParts figPhysSyst physSystContents, 
+  Goals $ GProg goalsInputs,
+  SolChSpec $ SCSProg EmptyS,
+  Assumptions $ AssumpProg EmptyS,
+  TMs $ TMProg [] (Label : stdFields),
+  GDs $ GDProg [] ([Label, Units] ++ stdFields) ShowDerivation,
+  DDs $ DDProg [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+  IMs $ IMProg instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation,
+  Constraints $ ConstProg EmptyS inputsWUncrtn, --FIXME: issue #295
+  CorrSolnPpties $ CorrSolProg outputs [],
+  ReqrmntSec $ ReqsProg EmptyS,
+  FReqsSub' $ FReqsProg' funcReqTables,
+  NonFReqsSub NonFReqsProg,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -263,7 +260,7 @@ sysCtxUsrResp = [S "Provide" +:+ phraseNP (the input_) +:+ S "data related to" +
   S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
   S "required by" +:+ short ssp,
   S "Ensure that consistent units are used for" +:+ pluralNP (combineNINI input_ variable),
-  S "Ensure required" +:+ namedRef (SRS.assumpt 0 [] []) (pluralNP (combineNINI software assumption)) 
+  S "Ensure required" +:+ namedRef (SRS.assumpt 0 []) (pluralNP (combineNINI software assumption)) 
   +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
   phrase user +:+ S "is applying the" +:+ phrase software]
   
@@ -272,7 +269,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
   S "point" +:+ phrase number,
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical `S.and_` S "other" +:+ namedRef (SRS.datCon 0 [] []) (plural datumConstraint),
+  phrase physical `S.and_` S "other" +:+ namedRef (SRS.datCon 0 []) (plural datumConstraint),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
@@ -367,7 +364,7 @@ physSysFbd :: Contents
 physSysFbd = foldlSP [atStartNP' (NP.a_ (fbd `ofThe` force)), S "acting on a",
   phrase slice `S.is` S "displayed in" +:+. refS figForceActing, S "The specific",
   pluralNP (force `and_PP` symbol_), S "will be discussed in detail in",
-  refS (SRS.genDefn 0 [] []) `S.and_` refS (SRS.dataDefn 0 [] [])]
+  refS (SRS.genDefn 0 []) `S.and_` refS (SRS.dataDefn 0 [])]
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $

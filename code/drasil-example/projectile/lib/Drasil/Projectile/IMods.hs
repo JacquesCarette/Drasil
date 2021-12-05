@@ -156,4 +156,4 @@ targPosConsNote = atStartNP (the constraint) +:+
 timeConsNote = atStartNP (the constraint) +:+
   eS (sy flightDur $> exactDbl 0) `S.is` S "from" +:+. refS timeStartZero
 
-tolNote = ch tol `S.is` S "defined in" +:+. refS (SRS.valsOfAuxCons 0 ([]::[Contents]) ([]::[Section]))
+tolNote = ch tol `S.is` S "defined in" +:+. refS (SRS.valsOfAuxCons 0 ([]::[Contents]))

@@ -45,13 +45,12 @@ si = SI {
   
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-    RefSec $
-    RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
-    SSDSec $ SSDProg [
-      SSDSolChSpec $ SCSProg [
-        DDs [] [Label, Symbol, Units, DefiningEquation,
-          Description Verbose IncludeUnits] HideDerivation
-      ]]]
+    RefSec $ RefProg intro,
+    TUnits TUProg, 
+    TSymb $ tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]],
+    SSDSec $ SSDProg EmptyS,
+    SolChSpec $ SCSProg EmptyS,
+    DDs $ DDProg [] [Label, Symbol, Units, DefiningEquation, Description Verbose IncludeUnits] HideDerivation]
 
 symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived

@@ -97,7 +97,7 @@ nmFEqDesc = foldlSent [S "This equation satisfies", refS equilibrium +:+.
 nmFEqDeriv :: Derivation
 nmFEqDeriv = mkDerivNoHeader [foldlSent [atStart normForcEq `S.is`
   S "derived from the free body diagram" `S.of_`
-  (refS figForceActing `S.in_` refS (SRS.physSyst 0 [] []))]]
+  (refS figForceActing `S.in_` refS (SRS.physSyst 0 []))]]
 
 --
 bsShrFEq :: RelationConcept
@@ -117,7 +117,7 @@ bShFEqDesc = foldlSent [S "This equation satisfies", refS equilibrium +:+.
 bShFEqDeriv :: Derivation
 bShFEqDeriv = mkDerivNoHeader [foldlSent [atStart bsShrFEq `S.is`
   S "derived from the free body diagram" `S.of_`
-  (refS figForceActing `S.in_` refS (SRS.physSyst 0 [] []))]]
+  (refS figForceActing `S.in_` refS (SRS.physSyst 0 []))]]
 --
 shrResEqn :: Expr
 shrResEqn = inxi nrmFSubWat `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion `mulRe`

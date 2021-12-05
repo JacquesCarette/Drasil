@@ -57,43 +57,38 @@ printSetting = piSys fullSI Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
-     IntroSec $
-       IntroProg introPara (phrase pidControllerSystem)
-         [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
-          IChar introUserChar1 introUserChar2 [],
-          IOrgSec introDocOrg IDict.dataDefn (SRS.inModel 0 [] [])
-            (S "The instance model referred as" +:+ refS imPD +:+
-               S "provides an"
-               +:+ titleize ode +:+ sParen (short ode)
-               +:+ S "that models the"
-               +:+ phrase pidC)],
-     GSDSec $
-       GSDProg
-         [SysCntxt
-            [gsdSysContextP1, LlC gsdSysContextFig, gsdSysContextP2,
-             gsdSysContextList],
-          UsrChars [gsduserCharacteristics], SystCons [] []],
-     SSDSec $
-       SSDProg
-         [SSDProblem $
-            PDProg sysProblemDesc []
-              [TermsAndDefs Nothing defs,
-               PhySysDesc pidControllerSystem sysParts sysFigure [],
-               Goals sysGoalInput],
-          SSDSolChSpec $
-            SCSProg
-              [Assumptions, TMs [] (Label : stdFields),
-               GDs [] (Label : stdFields) HideDerivation,
-               DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
-               IMs []
-                 ([Label, Input, Output, InConstraints, OutConstraints] ++
-                    stdFields)
-                 ShowDerivation,
-               Constraints EmptyS inputsUC]],
-
-     ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
-     TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
+    RefSec $ RefProg intro,
+    TUnits TUProg, 
+    TSymb $ tsymb [TSPurpose, SymbOrder], 
+    TAandA TAAProg,
+    IntroSec $ IntroProg introPara (phrase pidControllerSystem),
+    IPurposeSub $ IPurposeProg [introPurposeOfDoc], 
+    IScopeSub $ IScopeProg introscopeOfReq,
+    ICharSub $ ICharProg introUserChar1 introUserChar2 [],
+    IOrgSub $ IOrgProg introDocOrg IDict.dataDefn (SRS.inModel 0 [])
+      (S "The instance model referred as" +:+ refS imPD +:+
+        S "provides an" +:+ titleize ode +:+ sParen (short ode) +:+ S "that models the" +:+ phrase pidC),
+    GSDSec $ GSDProg EmptyS,
+    SysCntxt $ SysCntxtProg [gsdSysContextP1, LlC gsdSysContextFig, gsdSysContextP2, gsdSysContextList],
+    UsrChars $ UsrCharsProg [gsduserCharacteristics], 
+    SystCons $ SystConsProg [],
+    SSDSec $ SSDProg EmptyS,
+    ProblemDescription $ PDProg sysProblemDesc,
+    TermsAndDefs $ TDProg Nothing defs,
+    PhySysDesc $ PSDProg pidControllerSystem sysParts sysFigure [],
+    Goals $ GProg sysGoalInput,
+    SolChSpec $ SCSProg EmptyS,
+    Assumptions $ AssumpProg EmptyS, 
+    TMs $ TMProg [] (Label : stdFields),
+    GDs $ GDProg [] (Label : stdFields) HideDerivation,
+    DDs $ DDProg [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+    IMs $ IMProg [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation,
+    Constraints $ ConstProg EmptyS inputsUC,
+    ReqrmntSec $ ReqsProg EmptyS,
+    FReqsSub $ FReqsProg EmptyS [], 
+    NonFReqsSub NonFReqsProg, 
+    LCsSec,
+    TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: SystemInformation
 si

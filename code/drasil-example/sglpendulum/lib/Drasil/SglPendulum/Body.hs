@@ -55,40 +55,39 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,        -- This creates the Table of Contents
   RefSec $ RefProg intro,        -- This creates the Reference section of the SRS
   -- This add the introduction blob to the reference section  
-  TUnits TUProg,                 -- Adds table of unit section with a table frame
-  TSymb $ tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits], -- Adds table of symbol section with a table frame
+    TUnits TUProg,                 -- Adds table of unit section with a table frame
+    TSymb $ tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits], -- Adds table of symbol section with a table frame
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-  TAandA TAAProg,                -- Add table of abbreviation and acronym section
+    TAandA TAAProg,                -- Add table of abbreviation and acronym section
   IntroSec $ IntroProg justification (phrase progName),
-  IPurposeSub $ IPurposeProg $ purpDoc progName Verbose,
-  IScopeSub $ IScopeProg scope,
-  ICharSub $ ICharProg [] charsOfReader [],
-  IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel 0 []) EmptyS,
+    IPurposeSub $ IPurposeProg $ purpDoc progName Verbose,
+    IScopeSub $ IScopeProg scope,
+    ICharSub $ ICharProg [] charsOfReader [],
+    IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel 0 []) EmptyS,
   GSDSec $ GSDProg EmptyS,
-  SysCntxt $ SysCntxtProg [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-  UsrChars $ UsrCharsProg [userCharacteristicsIntro], 
-  SystCons $ SystConsProg [],                            
+    SysCntxt $ SysCntxtProg [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+    UsrChars $ UsrCharsProg [userCharacteristicsIntro], 
+    SystCons $ SystConsProg [],                            
   SSDSec $ SSDProg EmptyS,
-  ProblemDescription $ PDProg prob,                      --  This adds a is used to define the problem your system will solve
-  TermsAndDefs $ TDProg Nothing terms,                      -- This is used to define the terms to be defined in terminology sub section
-  PhySysDesc $ PSDProg progName physSystParts figMotion [], -- This defines the Physicalsystem sub-section, define the parts
+    ProblemDescription $ PDProg prob,                      --  This adds a is used to define the problem your system will solve
+      TermsAndDefs $ TDProg Nothing terms,                      -- This is used to define the terms to be defined in terminology sub section
+      PhySysDesc $ PSDProg progName physSystParts figMotion [], -- This defines the Physicalsystem sub-section, define the parts
                                                             -- of the system using physSysParts, figMotion is a function in figures for the image
-  Goals $ GProg goalsInputs, -- This adds a goals section and goals input is defined for the preample of the goal.
-  SolChSpec $ SCSProg EmptyS, -- This creates the solution characteristics section with a preamble
-  Assumptions $ AssumpProg EmptyS,
-  TMs $ TMProg [] (Label : stdFields),
-  GDs $ GDProg [] ([Label, Units] ++ stdFields) ShowDerivation,
-  DDs $ DDProg [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
-  IMs $ IMProg [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation,
-  Constraints $ ConstProg EmptyS inConstraints,
-  CorrSolnPpties $ CorrSolProg outConstraints [],
+      Goals $ GProg goalsInputs, -- This adds a goals section and goals input is defined for the preample of the goal.
+    SolChSpec $ SCSProg EmptyS, -- This creates the solution characteristics section with a preamble
+      Assumptions $ AssumpProg EmptyS,
+      TMs $ TMProg [] (Label : stdFields),
+      GDs $ GDProg [] ([Label, Units] ++ stdFields) ShowDerivation,
+      DDs $ DDProg [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+      IMs $ IMProg [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation,
+      Constraints $ ConstProg EmptyS inConstraints,
+      CorrSolnPpties $ CorrSolProg outConstraints [],
   ReqrmntSec $ ReqsProg EmptyS,
-  FReqsSub $ FReqsProg EmptyS [],
-  NonFReqsSub NonFReqsProg,
+    FReqsSub $ FReqsProg EmptyS [],
+    NonFReqsSub NonFReqsProg,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $
-     AuxConsProg progName [],  --Adds Auxilliary constraint section
-  Bibliography                    -- Adds reference section
+  AuxConstntSec $ AuxConsProg progName [],  -- Adds Auxilliary constraint section
+  Bibliography                              -- Adds reference section
   ]
 
 progName :: CI

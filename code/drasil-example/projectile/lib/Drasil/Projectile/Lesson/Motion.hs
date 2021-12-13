@@ -2,8 +2,6 @@ module Drasil.Projectile.Lesson.Motion where
 
 import Data.List
 
-import qualified Drasil.DocLang.Notebook as NB (summary, hormotion, vermotion)
-
 import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
   constAccel, horizontalMotion, verticalMotion)
 import Data.Drasil.Units.Physics (accelU)

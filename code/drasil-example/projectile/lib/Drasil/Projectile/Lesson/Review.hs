@@ -1,7 +1,7 @@
 module Drasil.Projectile.Lesson.Review where
 
 import Data.Drasil.Concepts.Physics (motion, position, time)
-import qualified Drasil.Projectile.Expressions as E (lcrectVel, lcrectPos, lcrectNoTime)
+import qualified Drasil.Projectile.Expressions as E (lcrectNoTime)
 import Drasil.Projectile.Concepts (projectile)
 import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil

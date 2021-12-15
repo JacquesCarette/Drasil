@@ -20,23 +20,23 @@ theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
 tmLaplace :: TheoryModel
 tmLaplace
   = tm (othModel' laplaceRC)
-      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdPosInf,
+      [qw qdLaplaceTransform, qw qdFreqDomain, qw time,
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
-      [express laplaceRel]
+      [laplaceME]
       []
       [dRef laplaceWiki]
       "laplaceTransform"
       [laplaceDesc]
 
 laplaceRC :: RelationConcept
-laplaceRC = makeRC "laplaceRC" (cn' "Laplace Transform") EmptyS laplaceRel
+laplaceRC = makeRC "laplaceRC" (cn' "Laplace Transform") EmptyS laplaceME
 
-laplaceRel :: Relation
-laplaceRel
+laplaceME :: ModelExpr
+laplaceME
   = sy qdLaplaceTransform $=
-      defint (eqSymb time) (sy qdNegInf) (sy qdPosInf) (sy qdFxnTDomain 
+      intAll (eqSymb time) (sy qdFxnTDomain 
       `mulRe` DrasilLang.exp (neg (sy qdFreqDomain) `mulRe` sy time))
 
 laplaceDesc :: Sentence
@@ -52,8 +52,7 @@ laplaceDesc
 tmInvLaplace :: TheoryModel
 tmInvLaplace
   = tm (othModel' invlaplaceRC)
-      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdPosInf,
-       qw qdFxnTDomain]
+      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
       [express invLaplaceRel]

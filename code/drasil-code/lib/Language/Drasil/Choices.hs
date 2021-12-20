@@ -172,7 +172,7 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
         matchSpaces' [] sm = sm
 
 -- | Sets component names.
-data ComponentName = GetInput --deriving Eq -- ^ Sets input component name.
+data ComponentName = GetInput -- ^ Sets input component name.
 
 instance RenderChoicesStr ComponentName where
   showChsStr GetInput = "get_input"  

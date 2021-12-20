@@ -2,10 +2,10 @@
 module Language.Drasil.Choices (
   Choices(..), Modularity(..), InputModule(..), inputModule, Structure(..), 
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, 
-  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
-  ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
-  Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs) where
+  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ComponentName(..), 
+  ImplementationType(..), ConstraintBehaviour(..), Comments(..), Verbosity(..),  
+  Visibility(..), Logging(..), AuxFile(..), getSampleData, hasSampleInput, 
+  defaultChoices, choicesSent, showChs, showChsStr) where
 
 import Language.Drasil
 
@@ -40,6 +40,8 @@ data Choices = Choices {
   -- Matching a 'Space' to a 'CodeType' means values of the 'Space' should have that
   -- 'CodeType' in the generated code.
   spaceMatch :: SpaceMatch,
+  -- | Sets component names.
+  componentName :: ComponentName,
   ------- Local design choices (affect one part of program) -------
   -- | Implementation type, program or library.
   impType :: ImplementationType,
@@ -69,21 +71,25 @@ data Choices = Choices {
 }
 
 -- | Renders program choices as a 'Sentence'.
-class RenderChoices a where
+class RenderChoicesS a where
     showChs :: a -> Sentence
     showChsList :: [a] -> Sentence
     showChsList lst = foldlSent_ (map showChs lst)
+
+-- | Renders program choices as a String.
+class RenderChoicesStr a where
+    showChsStr :: a -> String      
 
 -- | Modularity of a program.
 data Modularity = Modular InputModule -- ^ Different modules. For controller, 
                                       -- input, calculations, output.
                 | Unmodular -- ^ All generated code is in one module/file.
 
--- | Renders the modularity of a program.
-instance RenderChoices Modularity where 
+-- | Renders the modularity of a program as a 'Sentence'.
+instance RenderChoicesS Modularity where 
   showChs Unmodular = S "Unmodular"
   showChs (Modular Combined) = S "Modular Combined"
-  showChs (Modular Separated)= S "Modular Separated"
+  showChs (Modular Separated)= S "Modular Separated" 
 
 -- | Options for input modules.
 data InputModule = Combined -- ^ Input-related functions combined in one module.
@@ -102,7 +108,7 @@ data Structure = Unbundled -- ^ Individual variables
                | Bundled -- ^ Variables bundled in a class
 
 -- | Renders the structure of variables in a program.
-instance RenderChoices Structure where 
+instance RenderChoicesS Structure where 
   showChs Unbundled = S "Unbundled"
   showChs Bundled = S "Bundled"
 
@@ -113,7 +119,7 @@ data ConstantStructure = Inline          -- ^ Inline values for constants.
                                          -- inputs, whether bundled or unbundled.
 
 -- | Renders the structure of constants in a program.
-instance RenderChoices ConstantStructure where 
+instance RenderChoicesS ConstantStructure where 
   showChs Inline = S "Inline"
   showChs WithInputs = S "WithInputs"
   showChs (Store Unbundled) = S "Store Unbundled"
@@ -124,7 +130,7 @@ data ConstantRepr = Var   -- ^ Constants represented as regular variables.
                   | Const -- ^ Use target language's mechanism for defining constants.
 
 -- | Renders the representation of constants in a program.
-instance RenderChoices ConstantRepr where 
+instance RenderChoicesS ConstantRepr where 
   showChs Var = S "Var"
   showChs Const = S "Const"
 
@@ -142,7 +148,7 @@ type MatchedConceptMap = Map UID CodeConcept
 data CodeConcept = Pi deriving Eq
 
 -- | Renders 'CodeConcept's.
-instance RenderChoices CodeConcept where
+instance RenderChoicesS CodeConcept where
   showChs Pi = S "Pi"
 
 -- | Builds a 'ConceptMatchMap' from an association list of chunks and 'CodeConcepts'.
@@ -165,12 +171,18 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
   where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
         matchSpaces' [] sm = sm
 
+-- | Sets component names.
+data ComponentName = GetInput --deriving Eq -- ^ Sets input component name.
+
+instance RenderChoicesStr ComponentName where
+  showChsStr GetInput = "get_input"  
+
 -- | Program implementation options.
 data ImplementationType = Library -- ^ Generated code does not include Controller.
                         | Program -- ^ Generated code includes Controller.
 
 -- | Renders options for program implementation.
-instance RenderChoices ImplementationType where 
+instance RenderChoicesS ImplementationType where 
   showChs Library = S "Library"
   showChs Program = S "Program" 
 
@@ -179,7 +191,7 @@ data ConstraintBehaviour = Warning   -- ^ Print warning when constraint violated
                          | Exception -- ^ Throw exception when constraint violated.
 
 -- | Renders options for program implementation.
-instance RenderChoices ConstraintBehaviour where 
+instance RenderChoicesS ConstraintBehaviour where 
   showChs Warning = S "Warning"
   showChs Exception = S "Exception" 
 
@@ -190,7 +202,7 @@ data Comments = CommentFunc  -- ^ Function/method-level comments.
               deriving Eq
 
 -- | Renders options for implementation of comments.
-instance RenderChoices Comments where 
+instance RenderChoicesS Comments where 
   showChs CommentFunc = S "CommentFunc"
   showChs CommentClass = S "CommentClass"
   showChs CommentMod = S "CommentMod"
@@ -199,7 +211,7 @@ instance RenderChoices Comments where
 data Verbosity = Verbose | Quiet
 
 -- | Renders options for doxygen verbosity.
-instance RenderChoices Verbosity where 
+instance RenderChoicesS Verbosity where 
   showChs Verbose = S "Verbose"
   showChs Quiet = S "Quiet" 
 
@@ -208,7 +220,7 @@ data Visibility = Show
                 | Hide
 
 -- | Renders options for doxygen date-field visibility.
-instance RenderChoices Visibility where 
+instance RenderChoicesS Visibility where 
   showChs Show = S "Show"
   showChs Hide = S "Hide"
 
@@ -220,7 +232,7 @@ data Logging = LogFunc -- ^ Log messages generated for function calls.
              deriving Eq
 
 -- | Renders options for program logging.
-instance RenderChoices Logging where 
+instance RenderChoicesS Logging where 
   showChs LogFunc = S "LogFunc"
   showChs LogVar = S "LogVar"
 
@@ -232,7 +244,7 @@ data AuxFile = SampleInput FilePath
                 deriving Eq
 
 -- | Renders options for auxiliary file generation.
-instance RenderChoices AuxFile where 
+instance RenderChoicesS AuxFile where 
   showChs (SampleInput fp) = S "SampleInput" +:+ S fp
   showChs ReadME = S "ReadME"
 
@@ -268,7 +280,8 @@ defaultChoices = Choices {
   constStructure = Inline,
   constRepr = Const,
   conceptMatch = matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]),
-  spaceMatch = spaceToCodeType, 
+  spaceMatch = spaceToCodeType,
+  componentName = GetInput, 
   auxFiles = [ReadME],
   odeLib = [],
   odes = []

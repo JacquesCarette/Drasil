@@ -166,7 +166,7 @@ genUnmodular = do
   umDesc <- unmodularDesc
   let n = pName $ codeSpec g
       cls = any (`member` clsMap g) 
-        [(showChsStr GetInput), "derived_values", "input_constraints"]
+        [showChsStr GetInput, "derived_values", "input_constraints"]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc 
       : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g) 

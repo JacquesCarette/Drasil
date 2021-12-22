@@ -267,7 +267,7 @@ genInputConstructor = do
         ctor <- genConstructor "InputParameters" cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor
-  genCtor $ any (`elem` dl) [(showChsStr GetInput), "derived_values", 
+  genCtor $ any (`elem` dl) [showChsStr GetInput, "derived_values", 
     "input_constraints"]
 
 -- | Generates a function for calculating derived inputs.
@@ -425,7 +425,7 @@ genInputFormat s = do
         desc <- inFmtFuncDesc
         mthd <- getFunc s (showChsStr GetInput) desc ins outs bod
         return $ Just mthd
-  genInFormat $ (showChsStr GetInput) `elem` defList g
+  genInFormat $ showChsStr GetInput `elem` defList g
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices 

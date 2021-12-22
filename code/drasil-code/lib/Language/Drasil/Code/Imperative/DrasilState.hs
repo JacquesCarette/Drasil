@@ -268,7 +268,7 @@ getExpInputFormat n chs _ = fMod (modularity chs) (inputStructure chs)
 getInputFormatCls :: Choices -> [Input] -> [ClassDef]
 getInputFormatCls _ [] = []
 getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure chs)
-  where ifCls Combined Bundled = [((showChsStr GetInput), "InputParameters")]
+  where ifCls Combined Bundled = [(showChsStr GetInput, "InputParameters")]
         ifCls _ _ = []
 
 -- | Gets exported calculations.

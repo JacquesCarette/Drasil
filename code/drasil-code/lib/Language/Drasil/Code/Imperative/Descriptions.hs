@@ -74,7 +74,7 @@ inputConstructorDesc = do
       icDesc True = "checking " ++ pAndS ++ " on the input"
       dl = defList g
   return $ "Initializes input object by " ++ stringList [ 
-    ifDesc ((showChsStr GetInput) `elem` dl),
+    ifDesc (showChsStr GetInput `elem` dl),
     idDesc ("derived_values" `elem` dl),
     icDesc ("input_constraints" `elem` dl)]
 
@@ -85,7 +85,7 @@ inputFormatDesc = do
   g <- get
   let ifDesc False = ""
       ifDesc _ = "the function for reading inputs"
-  return $ ifDesc $ (showChsStr GetInput) `elem` defList g
+  return $ ifDesc $ showChsStr GetInput `elem` defList g
 
 -- | Returns a description of what is contained in the Derived Values module,
 -- if it exists.
@@ -169,7 +169,7 @@ inFmtFuncDesc = do
   g <- get
   let ifDesc False = ""
       ifDesc _ = "Reads input from a file with the given file name"
-  return $ ifDesc $ (showChsStr GetInput) `elem` defList g
+  return $ ifDesc $ showChsStr GetInput `elem` defList g
 
 -- | Returns a description for the generated function that checks input constraints,
 -- if it exists.

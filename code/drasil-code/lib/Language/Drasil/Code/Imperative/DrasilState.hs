@@ -13,7 +13,8 @@ import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), AuxFile, Modularity(..), 
   ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 
   ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
-  InputModule(..), Logging, Structure(..), inputModule)
+  InputModule(..), Logging, Structure(..), ComponentName(..), inputModule,
+  showChsStr)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def, 
   CodeSpec(..),  getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..), 
@@ -260,14 +261,14 @@ getExpInputFormat n chs _ = fMod (modularity chs) (inputStructure chs)
         fMod _ Bundled = []
         fMod Unmodular _ = [(giNm, n)]
         fMod (Modular Combined) _ = [(giNm, "InputParameters")]
-        giNm = "get_input"
+        giNm = showChsStr GetInput
 
 -- | Get input format defined in a class (for @get_input@).
 -- See 'getDerivedCls' for full logic details.
 getInputFormatCls :: Choices -> [Input] -> [ClassDef]
 getInputFormatCls _ [] = []
 getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure chs)
-  where ifCls Combined Bundled = [("get_input", "InputParameters")]
+  where ifCls Combined Bundled = [((showChsStr GetInput), "InputParameters")]
         ifCls _ _ = []
 
 -- | Gets exported calculations.

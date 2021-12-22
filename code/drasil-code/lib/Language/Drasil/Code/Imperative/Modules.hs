@@ -38,7 +38,8 @@ import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..), 
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
-  InputModule(..), Logging(..), Structure(..), hasSampleInput)
+  InputModule(..), Logging(..), Structure(..), ComponentName(..), hasSampleInput, 
+  showChsStr)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (Linearity(Linear), codeExprDoc)
@@ -266,7 +267,7 @@ genInputConstructor = do
         ctor <- genConstructor "InputParameters" cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor
-  genCtor $ any (`elem` dl) ["get_input", "derived_values", 
+  genCtor $ any (`elem` dl) [(showChsStr GetInput), "derived_values", 
     "input_constraints"]
 
 -- | Generates a function for calculating derived inputs.
@@ -422,9 +423,9 @@ genInputFormat s = do
         outs <- getInputFormatOuts
         bod <- readData dd
         desc <- inFmtFuncDesc
-        mthd <- getFunc s "get_input" desc ins outs bod
+        mthd <- getFunc s (showChsStr GetInput) desc ins outs bod
         return $ Just mthd
-  genInFormat $ "get_input" `elem` defList g
+  genInFormat $ (showChsStr GetInput) `elem` defList g
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices 

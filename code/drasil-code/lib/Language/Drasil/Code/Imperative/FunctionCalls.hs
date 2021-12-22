@@ -10,6 +10,7 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
+import Language.Drasil.Choices (ComponentName(..), showChsStr)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
@@ -35,7 +36,7 @@ getAllInputCalls = do
 
 -- | Generates a call to the function for reading inputs from a file.
 getInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
+getInputCall = getInOutCall (showChsStr GetInput) getInputFormatIns getInputFormatOuts
 
 -- | Generates a call to the function for calculating derived inputs.
 getDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))

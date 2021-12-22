@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName),
   quantvar, codevars, codevars', DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Choices (Structure(..), InputModule(..), 
-  ConstantStructure(..), ConstantRepr(..))
+  ConstantStructure(..), ConstantRepr(..), ComponentName(..), showChsStr)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   inMod)
@@ -56,13 +56,13 @@ getInputFormatIns = do
   let getIns :: Structure -> InputModule -> [CodeVarChunk]
       getIns Bundled Separated = [quantvar inParams]
       getIns _ _ = []
-  getParams "get_input" In $ quantvar inFileName : getIns (inStruct g) (inMod g)
+  getParams (showChsStr GetInput) In $ quantvar inFileName : getIns (inStruct g) (inMod g)
 
 -- | The outputs from the function for reading inputs are the inputs.
 getInputFormatOuts :: GenState [CodeVarChunk]
 getInputFormatOuts = do
   g <- get
-  getParams "get_input" Out $ extInputs $ codeSpec g
+  getParams (showChsStr GetInput) Out $ extInputs $ codeSpec g
 
 -- | The inputs to the function for calculating derived inputs are any variables 
 -- used in the equations for the derived inputs.

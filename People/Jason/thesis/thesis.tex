@@ -1,0 +1,50 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+
+\title{
+    {Title}\\
+    {McMaster University}
+}
+\author{Jason Balaci}
+\date{Submission Date}
+
+\begin{document}
+    \maketitle
+
+    \chapter*{Abstract}
+    \input{chapters/abstract}
+
+    \chapter*{Dedication}
+    \input{chapters/dedication}
+
+    \chapter*{Acknowledgements}
+    \input{chapters/acknowledgements}
+
+    \tableofcontents
+
+    \chapter{Introduction}
+    \input{chapters/introduction}
+
+    \chapter{Background}
+    \input{chapters/background}
+    
+    \chapter{Topic \#1: Typing the Expression Language}
+    \input{chapters/topic_typing}
+    
+    \chapter{Topic \#2: ModelKinds -- Theory types / discrimination -- ``Expressions in context''}
+    \input{chapters/topic_modelkinds}
+
+    % TODO: Regarding ChunkDBs -- FROM @JacquesCarette: You might want to take a look at what you’ve also done, and have a Topic #3 as well.
+
+    \chapter{Future Work}
+    \input{chapters/future_work}
+    
+    \chapter{Conclusion}
+    \input{chapters/conclusion}
+
+    \appendix
+    \chapter{Appendix}
+    \input{chapters/appendix}
+
+    % TODO: References \& Relevant code
+\end{document}

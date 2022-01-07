@@ -1,14 +1,22 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs, DataKinds #-}
+{-# LANGUAGE KindSignatures #-}
+
 -- | Number space types and functions.
 module Language.Drasil.Space (
   -- * Types
-  Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
+  Space(..), 
+  RealInterval(..), Inclusive(..),
+  DomainDesc(..), RTopology(..), DiscreteDomainDesc, ContinuousDomainDesc,
+  -- * Class
+  HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction) where
+  getActorName, getInnerSpace, mkFunction
+) where
 
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil.Symbol (Symbol)
+import Control.Lens (Lens')
 
 -- FIXME: These need to be spaces and not just types.
 
@@ -34,6 +42,11 @@ data Space =
   | Void
   deriving (Eq, Show)
 
+-- | HasSpace is anything which has a 'Space'.
+class HasSpace c where
+  -- | Provides a 'Lens' to the 'Space'.
+  typ      :: Lens' c Space
+
 type Primitive = Space
 
 mkFunction :: [Primitive] -> Primitive -> Space
@@ -46,9 +59,12 @@ mkFunction ins = Function (NE.fromList ins)
 data RTopology = Continuous | Discrete
 
 -- | Describes the domain of a 'Symbol' given a topology. Can be bounded or encase all of the domain.
-data DomainDesc a b where
-  BoundedDD :: Symbol -> RTopology -> a -> b -> DomainDesc a b
-  AllDD     :: Symbol -> RTopology -> DomainDesc a b
+data DomainDesc (tplgy :: RTopology) a b where
+  BoundedDD :: Symbol -> RTopology -> a -> b -> DomainDesc 'Discrete a b
+  AllDD     :: Symbol -> RTopology -> DomainDesc 'Continuous a b
+
+type DiscreteDomainDesc a b = DomainDesc 'Discrete a b
+type ContinuousDomainDesc a b = DomainDesc 'Continuous a b
 
 -- | Inclusive or exclusive bounds.
 data Inclusive = Inc | Exc

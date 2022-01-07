@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Concepts where --whole file is used
 
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
   notApp, physSyst, response, requirement, srs, type_, typUnc, unlikelyChg)

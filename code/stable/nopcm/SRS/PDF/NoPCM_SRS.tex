@@ -80,9 +80,9 @@ ${A_{\text{out}}}$ & Surface area over which heat is transferred out & ${\text{m
 \\
 ${A_{\text{tol}}}$ & Absolute tolerance & --
 \\
-${AR_{\text{max}}}$ & Maximum aspect ratio & --
+${\mathit{AR}_{\text{max}}}$ & Maximum aspect ratio & --
 \\
-${AR_{\text{min}}}$ & Minimum aspect ratio & --
+${\mathit{AR}_{\text{min}}}$ & Minimum aspect ratio & --
 \\
 $C$ & Specific heat capacity & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
@@ -751,7 +751,7 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)
+           \frac{\,d{T_{\text{W}}}}{\,dt}-\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)=0
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -860,7 +860,7 @@ ${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}
 \\
 ${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${{C_{\text{W}}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{{C_{\text{W}}}^{\text{max}}}$ & $4186$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-$D$ & $D\gt{}0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ ${\text{m}}$ & 10$\%$
+$D$ & $D\gt{}0$ & ${\mathit{AR}_{\text{min}}}\leq{}D\leq{}{\mathit{AR}_{\text{max}}}$ & $0.412$ ${\text{m}}$ & 10$\%$
 \\
 ${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1000$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
 \\
@@ -1211,9 +1211,9 @@ This section contains the standard values that are used for calculations in SWHS
 \endhead
 ${{A_{\text{C}}}^{\text{max}}}$ & maximum surface area of coil & $100000$ & ${\text{m}^{2}}$
 \\
-${AR_{\text{max}}}$ & maximum aspect ratio & $100$ & --
+${\mathit{AR}_{\text{max}}}$ & maximum aspect ratio & $100$ & --
 \\
-${AR_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
+${\mathit{AR}_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
 \\
 ${{C_{\text{W}}}^{\text{max}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\

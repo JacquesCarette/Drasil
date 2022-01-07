@@ -1,9 +1,8 @@
 module Drasil.Projectile.Concepts where
 
 import Language.Drasil
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (constant)
 import Data.Drasil.Concepts.Math (angle)

@@ -4,17 +4,17 @@ module Drasil.Projectile.Derivations (
   rectVelDeriv,
   rectPosDeriv,
   horMotionDeriv, horMotionEqn1, horMotionEqn2,
-  verMotionDeriv
+  verMotionDeriv, verMotionEqn1, verMotionEqn2, verMotionEqn3
 ) where
 
 import Prelude hiding (cos, sin)
 
-import Language.Drasil (eqSymb, ModelExprC(..), ExprC(..),
+import Language.Drasil (eqSymb, LiteralC(..), ModelExprC(..), ExprC(..),
   ModelExpr, square, half)
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, ixPos, iyPos)
 import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelConst,
-  iPos, ixVel, iyVel, scalarPos, speed, time, xPos, xVel, yPos, yVel)
+  iPos, ixVel, iyVel, scalarPos, speed, time, xPos, xVel, yPos, yVel, ixSpeed, iySpeed)
 
 import Drasil.Projectile.Unitals (launAngle, launSpeed, landPos, flightDur)
 
@@ -63,14 +63,14 @@ horMotionDeriv :: [ModelExpr]
 horMotionDeriv = [horMotionEqn1, horMotionEqn2]
 
 horMotionEqn1, horMotionEqn2 :: ModelExpr
-horMotionEqn1 = sy xVel $= sy ixVel
-horMotionEqn2 = sy xPos $= sy QP.ixPos `addRe` (sy ixVel `mulRe` sy time)
+horMotionEqn1 = sy xVel $= sy ixSpeed
+horMotionEqn2 = sy xPos $= sy QP.ixPos `addRe` (sy ixSpeed `mulRe` sy time)
 
 --
 verMotionDeriv :: [ModelExpr]
 verMotionDeriv = [verMotionEqn1, verMotionEqn2, verMotionEqn3]
 
 verMotionEqn1, verMotionEqn2, verMotionEqn3 :: ModelExpr
-verMotionEqn1 = sy yVel $= sy iyVel $- (sy gravitationalAccel `mulRe` sy time)
-verMotionEqn2 = sy yPos $= sy QP.iyPos `addRe` (sy iyVel `mulRe` sy time) $- (sy gravitationalAccel `mulRe` square (sy time) $/ exactDbl 2)
-verMotionEqn3 = square (sy yVel) $= square (sy iyVel) $- exactDbl 2 `mulRe` sy gravitationalAccel `mulRe` (sy yPos $- sy QP.iyPos) 
+verMotionEqn1 = sy yVel $= sy iySpeed $- (sy gravitationalAccel `mulRe` sy time)
+verMotionEqn2 = sy yPos $= sy QP.iyPos `addRe` (sy iySpeed `mulRe` sy time) $- (sy gravitationalAccel `mulRe` square (sy time) $/ exactDbl 2)
+verMotionEqn3 = square (sy yVel) $= square (sy iySpeed) $- (exactDbl 2 `mulRe` sy gravitationalAccel `mulRe` (sy yPos $- sy QP.iyPos)) 

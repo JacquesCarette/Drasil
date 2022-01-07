@@ -3,19 +3,24 @@
 module Language.Drasil.Label.Type(
   -- * Types
     LblType(RP, Citation, URI), IRefProg(..)
+  -- * Classes
+  , HasRefAddress(..), Referable(..)
   -- * 'LblType' accessor
   , getAdd
   -- * 'IRefProg' constructors
   , name, (+::+), raw, defer, prepend
-  ) where
+) where
 
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID, HasUID)
 
 -- | Applying different pieces of information for a reference.
 -- An RP is a decorated internal reference.
 -- Citation is a citation.
 -- URI is for URLs and other external links.
-data LblType = RP IRefProg String | Citation String | URI String
+data LblType =
+    RP IRefProg String
+  | Citation String
+  | URI String
 
 -- | Created for different forms of references. Used in 'LblType'. 
 data IRefProg =
@@ -23,6 +28,19 @@ data IRefProg =
   | RS String                   -- ^ Lifts a 'String' into a 'RefProg'.
   | RConcat IRefProg IRefProg   -- ^ Concatenates with two subprograms.
   | Name                        -- ^ The 'Symbol' to insert the 'ShortName' directly.
+
+-- | Members must have a reference address.
+class HasRefAddress b where
+  -- | Provides the ability to hold a reference address.
+  getRefAdd :: b -> LblType
+
+-- | Members of this class have the ability to be referenced.
+class (HasUID s, HasRefAddress s) => Referable s where
+  -- | The referencing address (what we're linking to).
+  -- Only visible in the source (tex/html).
+  refAdd    :: s -> String 
+  -- | Alternate form of reference.
+  renderRef :: s -> LblType 
 
 -- | Retrieves the 'String' contained in a 'LblType'.
 getAdd :: LblType -> String

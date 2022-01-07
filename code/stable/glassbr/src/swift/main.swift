@@ -263,7 +263,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var is_safeLR: Bool = try func_is_safeLR(LR, q)
+var isSafeLR: Bool = try func_isSafeLR(LR, q)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -271,12 +271,12 @@ do {
     throw "Error opening file."
 }
 do {
-    try outfile.write(contentsOf: Data("var 'is_safeLR' assigned ".utf8))
+    try outfile.write(contentsOf: Data("var 'isSafeLR' assigned ".utf8))
 } catch {
     throw "Error printing to file."
 }
 do {
-    try outfile.write(contentsOf: Data(String(is_safeLR).utf8))
+    try outfile.write(contentsOf: Data(String(isSafeLR).utf8))
 } catch {
     throw "Error printing to file."
 }
@@ -319,7 +319,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var is_safePb: Bool = try func_is_safePb(&inParams, P_b)
+var isSafePb: Bool = try func_isSafePb(&inParams, P_b)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -327,12 +327,12 @@ do {
     throw "Error opening file."
 }
 do {
-    try outfile.write(contentsOf: Data("var 'is_safePb' assigned ".utf8))
+    try outfile.write(contentsOf: Data("var 'isSafePb' assigned ".utf8))
 } catch {
     throw "Error printing to file."
 }
 do {
-    try outfile.write(contentsOf: Data(String(is_safePb).utf8))
+    try outfile.write(contentsOf: Data(String(isSafePb).utf8))
 } catch {
     throw "Error printing to file."
 }
@@ -347,4 +347,4 @@ do {
 } catch {
     throw "Error closing file."
 }
-try write_output(is_safePb, is_safeLR, P_b, J)
+try write_output(isSafePb, isSafeLR, P_b, J)

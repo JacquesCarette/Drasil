@@ -4,19 +4,13 @@ module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
 
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil (plural, (+:), dRefInfo, eS', (+:+), ch, eqSymb,
-  mkFuncDefByQ, eS, (+:+.), atStartNP, (!.), atStart, fromEqnSt'', refS,
-  sParen, sC, phrase, shortname', makeURI, nounPhraseSP, dccWDS, dRef,
-  qw, RefInfo(Page), HasSpace(typ), ModelExprC(..), HasSymbol(..), ExprC(..),
-  Definition(..), Reference, Express(..), Sentence(S, (:+:), E), ModelQDef,
-  ConceptChunk, ModelExpr, apply1)
+import Language.Drasil
 import Control.Lens ((^.))
 import Theory.Drasil (ConstraintSet, mkConstraintSet,
   TheoryModel, tm, equationalModel', equationalConstraints',
   ModelKind, equationalModel)
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng)

@@ -13,39 +13,25 @@ module Language.Drasil.CodeExpr (CodeExpr,
   -- * Programming-related CodeExpr Constructors
   new, newWithNamedArgs, message, msgWithNamedArgs,
   field, apply, apply1, apply2, applyWithNamedArgs,
-  -- * 'Expr' -> 'CodeExpr'
+  -- * 'Expr' -> 'CodeExpr' -- FIXME: Remove
   expr) where
 
 import Prelude hiding (exp, sin, cos, tan, sqrt, log)
 
 import Language.Drasil (Space(Actor), Callable, HasSpace(..), HasSymbol,
-  HasUID(..), IsArgumentName)
+  HasUID(..), IsArgumentName, LiteralC(..))
 
 import Language.Drasil.Chunk.CodeBase (CodeIdea, CodeVarChunk)
 import Language.Drasil.Code.Expr
 import Language.Drasil.Code.Expr.Convert (expr)
+
+import Language.Drasil.Literal.Development (Literal(..))
 
 import Control.Lens ((^.))
 
 -- | Smart constructor for chunk symbols.
 sy :: (HasUID u, HasSymbol u) => u -> CodeExpr
 sy = C . (^. uid)
-
--- | Smart constructor for strings.
-str :: String -> CodeExpr
-str = Str
-
--- | Smart constructor for integers.
-int :: Integer -> CodeExpr
-int = Int
-
--- | Smart constructor for doubles.
-dbl :: Double -> CodeExpr
-dbl = Dbl
-
--- | Smart constructor for exact doubles.
-exactDbl :: Integer -> CodeExpr
-exactDbl = ExactDbl
 
 -- | Smart constructor for matrices.
 matrix :: [[CodeExpr]] -> CodeExpr
@@ -221,8 +207,8 @@ a $&& b = AssocB And [a, b]
 
 -- | Add two expressions (Integers).
 addI :: CodeExpr -> CodeExpr -> CodeExpr
-addI l (Int 0) = l
-addI (Int 0) r = r
+addI l (Lit (Int 0)) = l
+addI (Lit (Int 0)) r = r
 addI (AssocA AddI l) (AssocA AddI r) = AssocA AddI (l ++ r)
 addI (AssocA AddI l) r = AssocA AddI (l ++ [r])
 addI l (AssocA AddI r) = AssocA AddI (l : r)
@@ -230,10 +216,10 @@ addI l r = AssocA AddI [l, r]
 
 -- | Add two expressions (Real numbers).
 addRe :: CodeExpr -> CodeExpr -> CodeExpr
-addRe l (Dbl 0)      = l
-addRe (Dbl 0) r      = r
-addRe l (ExactDbl 0) = l
-addRe (ExactDbl 0) r = r
+addRe l (Lit (Dbl 0))      = l
+addRe (Lit (Dbl 0)) r      = r
+addRe l (Lit (ExactDbl 0)) = l
+addRe (Lit (ExactDbl 0)) r = r
 addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
 addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
 addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
@@ -241,8 +227,8 @@ addRe l r = AssocA AddRe [l, r]
 
 -- | Multiply two expressions (Integers).
 mulI :: CodeExpr -> CodeExpr -> CodeExpr
-mulI l (Int 1) = l
-mulI (Int 1) r = r
+mulI l (Lit (Int 1)) = l
+mulI (Lit (Int 1)) r = r
 mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
 mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
 mulI l (AssocA MulI r) = AssocA MulI (l : r)
@@ -250,10 +236,10 @@ mulI l r = AssocA MulI [l, r]
 
 -- | Multiply two expressions (Real numbers).
 mulRe :: CodeExpr -> CodeExpr -> CodeExpr
-mulRe l (Dbl 1)      = l
-mulRe (Dbl 1) r      = r
-mulRe l (ExactDbl 1) = l
-mulRe (ExactDbl 1) r = r
+mulRe l (Lit (Dbl 1))      = l
+mulRe (Lit (Dbl 1)) r      = r
+mulRe l (Lit (ExactDbl 1)) = l
+mulRe (Lit (ExactDbl 1)) r = r
 mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
 mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
 mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)

@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
 --import Utils.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (source, theory)
 import Data.Drasil.Concepts.Physics (energy)

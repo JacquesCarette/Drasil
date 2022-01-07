@@ -9,13 +9,12 @@ module Language.Drasil.Chunk.CommonIdea (
   getAcc, getAccStr, prependAbrv) where
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, NamedChunk, nc)
-import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.Misc (repUnd)
-import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.UID (UID)
+import Language.Drasil.UID (UID, HasUID(uid))
 
 import Control.Lens (makeLenses, (^.), view)
 

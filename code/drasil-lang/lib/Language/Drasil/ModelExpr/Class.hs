@@ -5,10 +5,11 @@ import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 
 import Control.Lens ((^.))
 
+import Language.Drasil.UID (HasUID(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..), DerivType(..),
-  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..))
-import Language.Drasil.Space (Space)
-import Language.Drasil.Classes.Core (HasSymbol, HasUID(..))
+  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..), AssocArithOper(..))
+import Language.Drasil.Space (DomainDesc(..), RTopology(..), Space)
+import Language.Drasil.Symbol (Symbol, HasSymbol)
 
   
 -- | Helper for creating new smart constructors for Associative Binary
@@ -31,6 +32,9 @@ class ModelExprC r where
   -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
   deriv, pderiv :: (HasUID c, HasSymbol c) => r -> c -> r
   
+  -- | Gets the nthderivative of an 'ModelExpr' with respect to a 'Symbol'.
+  nthderiv, nthpderiv :: (HasUID c, HasSymbol c) => Integer -> r -> c -> r
+
   -- | One expression is "defined" by another.
   defines :: r -> r -> r
   
@@ -42,11 +46,23 @@ class ModelExprC r where
   
   -- | Binary associative "Equivalence".
   equiv :: [r] -> r
+  
+  -- | Smart constructor for the summation, product, and integral functions over all Real numbers.
+  intAll, sumAll, prodAll :: Symbol -> r -> r
 
 instance ModelExprC ModelExpr where
-  deriv e c  = Deriv Total e (c ^. uid)
-  pderiv e c = Deriv Part  e (c ^. uid)
-  
+  deriv e c  = Deriv 1 Total e (c ^. uid)
+  pderiv e c = Deriv 1 Part  e (c ^. uid)
+  nthderiv n e c
+    | n > 0     = Deriv n Total e (c ^. uid)
+    | n == 0    = Deriv 0 Total e (c ^. uid)
+    | otherwise = error "non-positive argument to derivative"
+
+  nthpderiv n e c
+    | n > 0     = Deriv n Part e (c ^. uid)
+    | n == 0    = Deriv 0 Total e (c ^. uid)
+    | otherwise = error "non-positive argument to derivative"
+
   defines = StatBinaryOp Defines
 
   space = Spc
@@ -57,3 +73,10 @@ instance ModelExprC ModelExpr where
     | length des >= 2 = assocCreate Equivalence des
     | otherwise       = error $ "Need at least 2 expressions to create " ++ show Equivalence
  
+  -- TODO: All of the below only allow for Reals! Will be easier to fix while we add typing.
+  -- | Integrate over some expression (∫).
+  intAll v = Operator AddRe (AllDD v Continuous)
+  -- | Sum over some expression (∑).
+  sumAll v = Operator AddRe (AllDD v Discrete)
+  -- | Product over some expression (∏).
+  prodAll v = Operator MulRe (AllDD v Discrete)

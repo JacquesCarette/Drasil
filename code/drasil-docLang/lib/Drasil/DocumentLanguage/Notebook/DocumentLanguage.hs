@@ -7,9 +7,7 @@ import Drasil.DocumentLanguage.Notebook.Core (ApndxSec(..), NBDesc, DocSection(.
 
 import Language.Drasil
 
-import Utils.Drasil
-
-import Database.Drasil(SystemInformation(SI), _authors, _kind, _sys, citeDB)
+import SysInfo.Drasil (SystemInformation(SI), _authors, _kind, _sys, citeDB)
 
 import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summary)
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)

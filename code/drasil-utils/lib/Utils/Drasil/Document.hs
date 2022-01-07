@@ -1,5 +1,5 @@
 -- | Common 'Doc'-related functions for writting printers with a little more clarity.
-module Utils.Drasil.Document (blank, indent, indentList) where
+module Utils.Drasil.Document (blank, indent, (+:+.), indentList) where
 
 import Text.PrettyPrint.HughesPJ (Doc, nest, text, vcat)
 
@@ -11,6 +11,10 @@ blank = text ""
 indent :: Doc -> Doc
 indent = nest 4
 
+-- | Helper which concatenates two Docs and appends a period.
+(+:+.) :: Doc -> Doc -> Doc
+a +:+. b = a <> b <> text "."
+
 -- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
-indentList = vcat . map indent
+indentList = vcat . map indent  -- TODO: Isn't this just `indent . vcat`? This would be a bit more efficient too

@@ -81,10 +81,10 @@ int main(int argc, const char *argv[]) {
     outfile << LR;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    bool is_safeLR = func_is_safeLR(LR, q);
+    bool isSafeLR = func_isSafeLR(LR, q);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'is_safeLR' assigned ";
-    outfile << is_safeLR;
+    outfile << "var 'isSafeLR' assigned ";
+    outfile << isSafeLR;
     outfile << " in module Control" << std::endl;
     outfile.close();
     double P_b = func_P_b(B);
@@ -93,13 +93,13 @@ int main(int argc, const char *argv[]) {
     outfile << P_b;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    bool is_safePb = func_is_safePb(inParams, P_b);
+    bool isSafePb = func_isSafePb(inParams, P_b);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'is_safePb' assigned ";
-    outfile << is_safePb;
+    outfile << "var 'isSafePb' assigned ";
+    outfile << isSafePb;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    write_output(is_safePb, is_safeLR, P_b, J);
+    write_output(isSafePb, isSafeLR, P_b, J);
     
     return 0;
 }

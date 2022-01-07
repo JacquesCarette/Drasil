@@ -1,14 +1,10 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
-import Language.Drasil (dRefInfo, (+:+), ch, eS, atStartNP, refS, sParen,
-  sC, phrase, nounPhraseSP, qw, RefInfo(RefNote), NounPhrase(..),
-  ModelExprC(..), ExprC(..), PExpr, Definition(..), MayHaveUnit(..),
-  Sentence(..), ModelExpr, Inclusive(..), RealInterval(..), Derivation,
-  makeRC, mkDerivName, RelationConcept, recip_, apply1)
-import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil
+import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel')
+import Utils.Drasil (weave)
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (goal)
@@ -38,7 +34,7 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 ---------
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
+eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
   [qwC tempC $ UpFrom (Inc, sy tempInit)
   , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass]
   (qw tempW) []
@@ -46,16 +42,19 @@ eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
   [dRefInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes
 
-eBalanceOnWtrRC :: RelationConcept
-eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") (tempW ^. defn) balWtrRel
-  -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
-
-balWtrRel :: ModelExpr
-balWtrRel = deriv (sy tempW) time $= balWtrExpr
+eBalanceOnWtrRC :: DifferentialModel 
+eBalanceOnWtrRC = 
+  makeLinear
+    time 
+    tempW
+    [exactDbl 1 $* 1]
+    balWtrExpr
+    "eBalanceOnWtrRC" 
+    (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water") 
+    (tempW ^. defn)
 
 balWtrExpr :: PExpr
-balWtrExpr = recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time)
+balWtrExpr = neg (recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time))
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [

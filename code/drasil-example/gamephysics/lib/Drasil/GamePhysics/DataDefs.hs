@@ -6,9 +6,9 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD,
 import Language.Drasil
 
 import Theory.Drasil
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Utils.Drasil (weave)
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
@@ -36,13 +36,13 @@ dataDefs = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
 -- DD1 : Centre of mass --
 
 ctrOfMassDD :: DataDefinition
-ctrOfMassDD = ddENoRefs ctrOfMass Nothing "ctrOfMass" [rigidBodyAssump]
+ctrOfMassDD = ddMENoRefs ctrOfMass Nothing "ctrOfMass" [rigidBodyAssump]
 
-ctrOfMass :: SimpleQDef
+ctrOfMass :: ModelQDef
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (variable "i") is a horrible hack
-ctrOfMassEqn :: Expr
+ctrOfMassEqn :: ModelExpr
 ctrOfMassEqn = sumAll (variable "j") (sy massj `mulRe` sy posj) $/ sy mTot
 
 -- DD2 : Linear displacement --
@@ -296,13 +296,13 @@ kEnergyDesc = foldlSent [atStart QP.kEnergy `S.is` (QP.kEnergy ^. defn)]
 -----------------------DD16 Moment Of Inertia--------------------------------------------------------
 
 momentOfInertiaDD :: DataDefinition
-momentOfInertiaDD = ddENoRefs momentOfInertia Nothing "momentOfInertia"
+momentOfInertiaDD = ddMENoRefs momentOfInertia Nothing "momentOfInertia"
  [momentOfInertiaDesc, rigidBodyAssump] 
 
-momentOfInertia :: SimpleQDef
+momentOfInertia :: ModelQDef
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
-momentOfInertiaEqn :: Expr
+momentOfInertiaEqn :: ModelExpr
 momentOfInertiaEqn = sumAll (variable "j") $ sy massj `mulRe` square (sy rRot)
 
 momentOfInertiaDesc :: Sentence

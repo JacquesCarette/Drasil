@@ -3,7 +3,7 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 import Language.Drasil
 import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -457,7 +457,7 @@ relTol = uvc "relTol" (nounPhraseSP "relative tolerance")
 -- Max / Min Variables --
 -------------------------
 
-specParamValList :: [SimpleQDef]
+specParamValList :: [ConstQDef]
 specParamValList = [tankLengthMin, tankLengthMax, pcmDensityMin, pcmDensityMax,
   wDensityMin, wDensityMax, htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
   htFusionMin, htFusionMax, coilSAMax, htCapWMin, htCapWMax, coilHTCMin,
@@ -468,7 +468,7 @@ tankLengthMin, tankLengthMax, pcmDensityMin,
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, htCapSPMax, htCapLPMin,
   htCapLPMax, htFusionMin, htFusionMax, coilSAMax, htCapWMin, htCapWMax,
   coilHTCMin, coilHTCMax, pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux,
-  consTolAux, arMin, arMax :: SimpleQDef
+  consTolAux, arMin, arMax :: ConstQDef
 
 consTolAux = mkQuantDef consTol $ perc 1 5
 

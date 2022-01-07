@@ -1,7 +1,7 @@
 module Drasil.SglPendulum.Figures (figMotion, sysCtxFig1) where
 
 import Language.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (physicalSystem, sysCont)
 

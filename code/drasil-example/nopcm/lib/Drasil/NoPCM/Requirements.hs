@@ -2,8 +2,7 @@ module Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable) where
 
 import Language.Drasil
 import Drasil.DocLang (mkInputPropsTable)
-import Utils.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, input_, value)
 

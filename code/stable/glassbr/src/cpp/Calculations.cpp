@@ -125,10 +125,10 @@ double func_LR(InputParameters &inParams, double NFL) {
     return NFL * inParams.GTF * 1.0;
 }
 
-bool func_is_safeLR(double LR, double q) {
+bool func_isSafeLR(double LR, double q) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_is_safeLR called with inputs: {" << std::endl;
+    outfile << "function func_isSafeLR called with inputs: {" << std::endl;
     outfile << "  LR = ";
     outfile << LR;
     outfile << ", " << std::endl;
@@ -152,10 +152,10 @@ double func_P_b(double B) {
     return 1.0 - exp(-B);
 }
 
-bool func_is_safePb(InputParameters &inParams, double P_b) {
+bool func_isSafePb(InputParameters &inParams, double P_b) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_is_safePb called with inputs: {" << std::endl;
+    outfile << "function func_isSafePb called with inputs: {" << std::endl;
     outfile << "  inParams = ";
     outfile << "Instance of InputParameters object";
     outfile << ", " << std::endl;

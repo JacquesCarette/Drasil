@@ -4,7 +4,8 @@ module Language.Drasil.Printing.PrintingInformation where
 
 import Control.Lens (makeLenses, Lens', (^.))
 
-import Database.Drasil (ChunkDB, SystemInformation, sysinfodb)
+import SysInfo.Drasil (sysinfodb, SystemInformation)
+import Database.Drasil (ChunkDB)
 
 import Language.Drasil (Stage(..))
 

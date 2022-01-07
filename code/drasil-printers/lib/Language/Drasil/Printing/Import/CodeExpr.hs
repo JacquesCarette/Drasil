@@ -1,23 +1,24 @@
+{-# LANGUAGE GADTs #-}
+
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
 import Language.Drasil (DomainDesc(..), Inclusive(..),
-  RTopology(..), RealInterval(..), UID )
+  RTopology(..), RealInterval(..), UID, LiteralC (int))
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.CodeExpr (dbl)
 import Language.Drasil.Code.Expr.Development
+import Language.Drasil.Literal.Development
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
-  PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
 
 import Language.Drasil.Printing.Import.Helpers
-    (digitsProcess, lookupC, parens, processExpo)
+    (lookupC, parens)
+import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
 
 import Control.Lens ((^.))
 import Data.List (intersperse)
-import Numeric (floatToDigits)
 
 
 -- | Helper that creates an expression row given printing information, an operator, and an expression.
@@ -35,8 +36,9 @@ expr' s p e = fence $ codeExpr e s
 
 -- | Helper for properly rendering negation of expressions.
 neg' :: CodeExpr -> Bool
-neg' (Dbl     _)            = True
-neg' (Int     _)            = True
+neg' (Lit (Dbl _))          = True
+neg' (Lit (Int _))          = True
+neg' (Lit (ExactDbl _))     = True
 neg' Operator{}             = True
 neg' (AssocA MulI _)        = True
 neg' (AssocA MulRe _)       = True
@@ -75,7 +77,7 @@ call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
   P.MO P.Eq, codeExpr a sm]) (map fst ns) (map snd ns)]
 
 -- | Helper function for addition 'EOperator's.
-eopAdds :: PrintingInformation -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> P.Expr
+eopAdds :: PrintingInformation -> DomainDesc t CodeExpr CodeExpr -> CodeExpr -> P.Expr
 eopAdds sm (BoundedDD v Continuous l h) e =
   P.Row [P.MO P.Inte, P.Sub (codeExpr l sm), P.Sup (codeExpr h sm),
          P.Row [codeExpr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
@@ -88,7 +90,7 @@ eopAdds sm (BoundedDD v Discrete l h) e =
 eopAdds sm (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [codeExpr e sm]]
 
 -- | Helper function for multiplicative 'EOperator's.
-eopMuls :: PrintingInformation -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> P.Expr
+eopMuls :: PrintingInformation -> DomainDesc t CodeExpr CodeExpr -> CodeExpr -> P.Expr
 eopMuls sm (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, codeExpr l sm]), P.Sup (codeExpr h sm),
          P.Row [codeExpr e sm]]
@@ -98,7 +100,7 @@ eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Int
 
 
 -- | Helper function for translating 'EOperator's.
-eop :: PrintingInformation -> AssocArithOper -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> P.Expr
+eop :: PrintingInformation -> AssocArithOper -> DomainDesc t CodeExpr CodeExpr -> CodeExpr -> P.Expr
 eop sm AddI = eopAdds sm
 eop sm AddRe = eopAdds sm
 eop sm MulI = eopMuls sm
@@ -106,21 +108,11 @@ eop sm MulRe = eopMuls sm
 
 -- | Translate 'CodeExpr's to printable layout AST 'Expr's.
 codeExpr :: CodeExpr -> PrintingInformation -> P.Expr
-codeExpr (Dbl d)                  sm = case sm ^. getSetting of
-  Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
-     (fst $ processExpo $ snd $ floatToDigits 10 d) 0
-     (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
-  Scientific  ->  P.Dbl d
-codeExpr (Int i)                   _ = P.Int i
-codeExpr (ExactDbl d)              _ = P.Int d
-codeExpr (Str s)                   _ = P.Str s
-codeExpr (Perc a b)               sm = P.Row [codeExpr (dbl val) sm, P.MO P.Perc]
-  where
-    val = fromIntegral a / (10 ** fromIntegral (b - 2))
+codeExpr (Lit l)                  sm = literal l sm
 codeExpr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 codeExpr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
-codeExpr (AssocA AddI l)          sm = assocExpr P.Add (precA AddI) l sm
-codeExpr (AssocA AddRe l)         sm = assocExpr P.Add (precA AddRe) l sm
+codeExpr (AssocA AddI l)          sm = P.Row $ addExpr l AddI sm
+codeExpr (AssocA AddRe l)         sm = P.Row $ addExpr l AddRe sm
 codeExpr (AssocA MulI l)          sm = P.Row $ mulExpr l MulI sm
 codeExpr (AssocA MulRe l)         sm = P.Row $ mulExpr l MulRe sm
 codeExpr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
@@ -179,14 +171,25 @@ assocExpr :: P.Ops -> Int -> [CodeExpr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
 -- | Helper for rendering printable expressions.
+addExpr :: [CodeExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
+addExpr exprs o sm = addExprFilter (map (expr' sm (precA o)) exprs)
+
+-- | Add add symbol only when the second Expr is not negation 
+addExprFilter :: [P.Expr] -> [P.Expr]
+addExprFilter [] = []
+addExprFilter [x] = [x]
+addExprFilter (x1:P.Row[P.MO P.Neg, x2]:xs) = x1 : addExprFilter (P.Row[P.MO P.Neg, x2] : xs)
+addExprFilter (x:xs) = x : P.MO P.Add : addExprFilter xs
+
+-- | Helper for rendering printable expressions.
 mulExpr ::  [CodeExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
-  (a, Int _)      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, ExactDbl _) ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Dbl _)      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, _)          ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Int _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (ExactDbl _)) ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Dbl _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, _)                ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [expr' sm (precA o) hd]
-mulExpr []           o sm = [expr' sm (precA o) (Int 1)]
+mulExpr []           o sm = [expr' sm (precA o) (int 1)]
 
 
 -- | Helper that adds parenthesis to the first expression. The second expression

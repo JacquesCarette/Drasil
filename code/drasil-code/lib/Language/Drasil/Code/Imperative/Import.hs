@@ -31,6 +31,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
+import Language.Drasil.Literal.Development
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
@@ -275,16 +276,16 @@ genInOutFunc f docf n desc ins' outs' b = do
 
 -- | Converts an 'Expr' to a GOOL Value.
 convExpr :: (OOProg r) => CodeExpr -> GenState (SValue r)
-convExpr (Dbl d) = do
+convExpr (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
   let getLiteral Double = litDouble d
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (ExactDbl d) = convExpr $ Dbl $ fromInteger d
-convExpr (Int i)      = return $ litInt i
-convExpr (Str s)      = return $ litString s
-convExpr (Perc a b) = do
+convExpr (Lit (ExactDbl d)) = convExpr $ Lit . Dbl $ fromInteger d
+convExpr (Lit (Int i))      = return $ litInt i
+convExpr (Lit (Str s))      = return $ litString s
+convExpr (Lit (Perc a b)) = do
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble
       getLiteral Float = litFloat . realToFrac
@@ -321,7 +322,7 @@ convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
 convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
 convExpr (UnaryOpVV o u)  = fmap (unopVV o) (convExpr u)
 convExpr (UnaryOpVN o u)  = fmap (unopVN o) (convExpr u)
-convExpr (ArithBinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
+convExpr (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)

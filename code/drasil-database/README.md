@@ -1,16 +1,16 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 9, 2019
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Database**
-  - Contains the database code for the Drasil language
- 
+**lib**
+  - Contains the library code for this package.
+
+package.yaml
+  - Used by Hpack
+
 README.md
   - This file
-
-drasil-lang.cabal
-  - Cabal file, used by stack to build drasil-lang
 
 stack.yaml
   - Used by Stack

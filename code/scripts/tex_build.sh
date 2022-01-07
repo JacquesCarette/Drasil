@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+# Build LaTeX files
+
 if [ -z "$EDIR" ]; then
   echo "Missing EDIR."
   exit 1
@@ -20,8 +24,8 @@ fi
 
 GEN_NAME_SUFFIX=_SRS
 
-cd "$BUILD_FOLDER$EDIR"/SRS/
-"$MAKE" TEXFLAGS=--interaction="$IMODE" BIBTEXFLAGS="$BIFLAGS"
+cd "$BUILD_FOLDER$EDIR"/SRS/PDF
+"$MAKE" TEXFLAGS="-interaction=$IMODE --shell-escape" BIBTEXFLAGS="$BIFLAGS"
 RET=$?
 
 if [ "$SUMMARIZE_TEX" = "yes" ]; then

@@ -1,7 +1,9 @@
 A guide to Drasil, through its files. If Drasil was done in a literate style, i.e.
 Drasil-in-Drasil, then this information would be there, somewhere.
 
-Drasil is divided into package:
+**Last updated April 18, 2019**. For more up-to-date information, please see individual package READMEs or the [wiki](https://github.com/JacquesCarette/Drasil/wiki/SubPackages).
+
+Drasil is divided into packages:
 - **drasil-lang**: the language of used to describe basic knowledge
 - **drasil-build**: representation of build system languages and renderers
 - **drasil-code**: representation of output programming languages
@@ -188,4 +190,4 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Chunk/UncertainQuantity**: Either a Quantity or a DefinedQuantity that has
   some uncertainty.
 
-- **Develement/Sentence**: (bad name) short-cuts for building Sentences.
+- **Development/Sentence**: (bad name) short-cuts for building Sentences.

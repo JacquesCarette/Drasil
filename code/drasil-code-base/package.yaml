@@ -23,10 +23,11 @@ ghc-options:
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
     - Language.Drasil.Chunk.CodeBase
     - Language.Drasil.CodeExpr
+    - Language.Drasil.Code.Expr.Convert
     - Language.Drasil.Code.Expr.Development
   when:
     - condition: false

@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+# Check to see if log files should be empty.
+# Logs come from calling diff between generated artifacts and those found in the stable folder.
 if [ -z "$LOG_FOLDER" ] && [ -z "$LOG_SUFFIX" ]; then
   echo "At least one of LOG_FOLDER or LOG_SUFFIX must be defined."
   exit 1

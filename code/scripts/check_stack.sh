@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+
+# Ensure Stack version is at least our designated minimum, caching the stack
+# version so we don't need to do this too often.
+
 if [ -z $MIN_STACK_VER ]; then
   echo "Missing MIN_STACK_VER"
   exit 1
@@ -16,7 +21,7 @@ if [ -f "$CACHED_MSV_FILE" ]; then
   fi
 fi
 
-BIN=stack DOWNLOAD_LOCATION=https://www.haskellstack.org/ "$SHELL" scripts/check_binary.sh
+BIN=stack DOWNLOAD_LOCATION="https://www.haskellstack.org/" "$SHELL" scripts/check_binary.sh
 RET=$?
 if [ $RET -ne 0 ]; then
   exit 1

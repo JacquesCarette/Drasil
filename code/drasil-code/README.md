@@ -1,16 +1,19 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2018
+Last updated: Sept. 15, 2021
 --------------------------------------------------
 
-**Language**
-  - Contains the code for Drasil
- 
+**lib**
+  - Contains the library code for this package.
+
+**test**
+  - Contains code tests for GOOL
+
+package.yaml
+  - Used by Hpack
+
 README.md
   - This file
-
-drasil-code.cabal
-  - Cabal file, used by stack to build drasil-code
 
 stack.yaml
   - Used by Stack

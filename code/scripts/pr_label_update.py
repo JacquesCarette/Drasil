@@ -5,6 +5,12 @@ import os
 import subprocess
 import sys
 
+#                        UNUSED FILE : SEE ISSUE #2287
+#
+# For the Travis PR builds, this script was used to automatically update the labels
+# of a PR being constructed with a list of labels for which the branch fails.
+
+
 # Assuming Python 3.5 (Xenial only has up to 3.5).
 # Can't use fstrings
 

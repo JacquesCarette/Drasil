@@ -12,14 +12,13 @@ extra-source-files: []
 dependencies:
 - base >= 4.7 && < 5
 - pretty
-- drasil-lang
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
   - Build.Drasil
   when:

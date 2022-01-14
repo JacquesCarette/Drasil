@@ -1,5 +1,11 @@
 \documentclass[12pt]{report}
 \usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+
+\usepackage{todonotes} % Giving todonotes a try
+
+\usepackage{hyphenat} % "\hyp{}" seems to be the only way to properly add hyphenated words.
+
 
 \title{
     {Title}\\
@@ -8,7 +14,17 @@
 \author{Jason Balaci}
 \date{Submission Date}
 
+% START : TODO LIST -- FOR LATER REMOVAL %
+\setlength{\marginparwidth}{2cm}
+% \reversemarginpar  % Moves the todonotes to the LHS of the document
+% END   : TODO LIST -- FOR LATER REMOVAL %
+
 \begin{document}
+    % START : TODO LIST
+    \todototoc
+    \listoftodos
+    % END   : TODO LIST
+
     \maketitle
 
     \chapter*{Abstract}
@@ -28,7 +44,7 @@
     \chapter{Topic \#1: Typing the Expression Language}
     \input{chapters/topic_typing}
     
-    \chapter{Topic \#2: ModelKinds -- Theory types / discrimination -- ``Expressions in context''}
+    \chapter{Topic \#2: Framing Theories in Contexts}
     \input{chapters/topic_modelkinds}
 
     % TODO: Regarding ChunkDBs -- FROM @JacquesCarette: You might want to take a look at what you’ve also done, and have a Topic #3 as well.

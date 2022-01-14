@@ -2,7 +2,9 @@
 \usepackage[utf8]{inputenc}
 % \usepackage[T1]{fontenc}
 
-\usepackage{hyphenat}
+\usepackage{todonotes} % Giving todonotes a try
+
+\usepackage{hyphenat} % "\hyp{}" seems to be the only way to properly add hyphenated words.
 
 
 \title{
@@ -12,7 +14,17 @@
 \author{Jason Balaci}
 \date{Submission Date}
 
+% START : TODO LIST -- FOR LATER REMOVAL %
+\setlength{\marginparwidth}{2cm}
+% \reversemarginpar  % Moves the todonotes to the LHS of the document
+% END   : TODO LIST -- FOR LATER REMOVAL %
+
 \begin{document}
+    % START : TODO LIST
+    \todototoc
+    \listoftodos
+    % END   : TODO LIST
+
     \maketitle
 
     \chapter*{Abstract}

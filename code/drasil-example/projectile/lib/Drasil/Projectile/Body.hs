@@ -1,6 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI) where
 
-import Language.Drasil
+import Language.Drasil 
 import Drasil.SRSDocument
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -52,9 +52,70 @@ fullSI = fillcdbSRS mkSRS si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
+{-
+tocTree :: Tree D.SRSSection
+tocTree = 
+  Node D.TableOfContents [
+    Node D.RefSec [
+      Node D.TUnits [],
+      Node D.TSymb [], 
+      Node D.TAandA []],
+    Node D.IntroSec [
+      Node D.IScopeSub []],
+    Node D.SSDSec [
+      Node D.ProblemDescription [
+        Node D.TermsAndDefs [],
+        Node D.PhySysDesc [],
+        Node D.Goals []],
+      Node D.SolChSpec [
+        Node D.Assumptions [],
+        Node D.TMs [],
+        Node D.GDs [],
+        Node D.DDs [],
+        Node D.IMs [],
+        Node D.Constraints [],
+        Node D.CorrSolnPpties []]],
+    Node D.ReqrmntSec [
+      Node D.FReqsSub [],
+      Node D.NonFReqsSub []],
+    Node D.TraceabilitySec [],
+    Node D.AuxConstntSec [],
+    Node D.Bibliography []
+  ]
+-}
+
+toC :: [SRSSection]
+toC = [TableContents,
+    Ref' [
+      TU, 
+      TS, 
+      TAA],
+    Intro [
+      IScope],
+    SSD [
+      ProblemDescription' [
+        TermsAndDefs',
+        PhySysDesc',
+        Goals'], 
+      SolChSpec' [
+        Assumpt,
+        TM,
+        GD,
+        DD,
+        IM,
+        Consts,
+        CorSolPpt]],
+    Reqrmnt [
+      FReqs,
+      NonFReqs], 
+    Traceability,
+    AuxConstnt,
+    Bibliography'
+  ]
+
 mkSRS :: SRSDecl
 mkSRS = [
-  TableOfContents,
+  TableOfContents $ ToCProg toC,
   RefSec $ RefProg intro,
     TUnits TUProg,
     TSymb $ tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits],

@@ -42,10 +42,33 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = rdb [] [] -- FIXME?
 }
-  
+
+{-
+tocTree :: Tree D.SRSSection
+tocTree = 
+  Node D.TableOfContents [
+    Node D.RefSec [
+      Node D.TUnits [],
+      Node D.TSymb []],
+    Node D.SSDSec [
+      Node D.SolChSpec [
+        Node D.DDs []]]
+  ]
+-}
+
+toC :: [SRSSection]
+toC = [TableContents,
+    Ref' [
+      TU, 
+      TS],
+    SSD [
+      SolChSpec' [
+        DD]]
+  ]
+
 mkSRS :: SRSDecl
 mkSRS = [
-  TableOfContents,
+  TableOfContents $ ToCProg toC,
   RefSec $ RefProg intro,
     TUnits TUProg, 
     TSymb $ tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]],

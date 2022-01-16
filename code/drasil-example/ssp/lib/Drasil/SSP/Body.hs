@@ -89,10 +89,89 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
-  
+
+{-
+tocTree :: Tree D.SRSSection
+tocTree = 
+  Node D.TableOfContents [
+    Node D.RefSec [
+      Node D.TUnits [],
+      Node D.TSymb [], 
+      Node D.TAandA []],
+    Node D.IntroSec [
+      Node D.IPurposeSub [],
+      Node D.IScopeSub [], 
+      Node D.ICharSub [],
+      Node D.IOrgSub []],
+    Node D.GSDSec [
+      Node D.SysCntxt [],
+      Node D.UsrChars [], 
+      Node D.SystCons []],
+    Node D.SSDSec [
+      Node D.ProblemDescription [
+        Node D.TermsAndDefs [],
+        Node D.PhySysDesc [],
+        Node D.Goals []],
+      Node D.SolChSpec [
+        Node D.Assumptions [],
+        Node D.TMs [],
+        Node D.GDs [],
+        Node D.DDs [],
+        Node D.IMs [],
+        Node D.Constraints [],
+        Node D.CorrSolnPpties []]],
+    Node D.ReqrmntSec [
+      Node D.FReqsSub [],
+      Node D.NonFReqsSub []],
+    Node D.LCsSec [],
+    Node D.UCsSec [],
+    Node D.TraceabilitySec [],
+    Node D.AuxConstntSec [],
+    Node D.Bibliography []
+  ] 
+-}
+
+toC :: [SRSSection]
+toC = [TableContents,
+    Ref' [
+      TU, 
+      TS, 
+      TAA],
+    Intro [
+      IPurpose, 
+      IScope, 
+      IChar, 
+      IOrg],
+    GSD [
+      SysCntxt', 
+      UsrChars', 
+      SystCons'],
+    SSD [
+      ProblemDescription' [
+        TermsAndDefs',
+        PhySysDesc',
+        Goals'], 
+      SolChSpec' [
+        Assumpt,
+        TM,
+        GD,
+        DD,
+        IM,
+        Consts,
+        CorSolPpt]],
+    Reqrmnt [
+      FReqs,
+      NonFReqs], 
+    LCSec,
+    UCSec,
+    Traceability,
+    AuxConstnt,
+    Bibliography'
+  ]
+
 mkSRS :: SRSDecl
 mkSRS = [
-  TableOfContents,
+  TableOfContents $ ToCProg toC,
   RefSec $ RefProg intro,
     TUnits TUProg,
     TSymb' $ tsymb'' tableOfSymbIntro TAD, 

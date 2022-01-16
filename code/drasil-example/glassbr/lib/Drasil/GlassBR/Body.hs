@@ -3,6 +3,7 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
+--import qualified Language.Drasil as D (SRSSection(..))
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
@@ -82,10 +83,93 @@ si = SI {
    refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
+{- 
+tocTree :: Tree D.SRSSection
+tocTree = 
+  Node D.TableOfContents [
+    Node D.RefSec [
+      Node D.TUnits [],
+      Node D.TSymb [], 
+      Node D.TAandA []], --
+    Node D.IntroSec [
+      Node D.IPurposeSub [],
+      Node D.IScopeSub [], 
+      Node D.ICharSub [],
+      Node D.IOrgSub []], --
+    Node D.StkhldrSec [
+      Node D.ClientSub [], --
+      Node D.CstmrSub[]],
+    Node D.GSDSec [
+      Node D.SysCntxt [],
+      Node D.UsrChars [], 
+      Node D.SystCons []], --
+    Node D.SSDSec [
+      Node D.ProblemDescription [
+        Node D.PhySysDesc [],
+        Node D.Goals []], --
+      Node D.SolChSpec [ --
+        Node D.Assumptions [],
+        Node D.TMs [],
+        Node D.GDs [],
+        Node D.DDs [],
+        Node D.IMs [],
+        Node D.Constraints [],
+        Node D.CorrSolnPpties []]], --
+    Node D.ReqrmntSec [
+      Node D.FReqsSub [],
+      Node D.NonFReqsSub []], --
+    Node D.LCsSec [],
+    Node D.UCsSec [],
+    Node D.TraceabilitySec [],
+    Node D.AuxConstntSec [],
+    Node D.Bibliography [],
+    Node D.AppndxSec [] --
+  ]
+-}
+toC :: [SRSSection]
+toC = [TableContents,
+    Ref' [
+      TU, 
+      TS, 
+      TAA],
+    Intro [
+      IPurpose, 
+      IScope, 
+      IChar, 
+      IOrg],
+    Stkhldr [
+      Client, 
+      Cstmr],
+    GSD [
+      SysCntxt', 
+      UsrChars', 
+      SystCons'],
+    SSD [
+      ProblemDescription' [
+        PhySysDesc',
+        Goals'], 
+      SolChSpec' [
+        Assumpt,
+        TM,
+        GD,
+        DD,
+        IM,
+        Consts,
+        CorSolPpt]],
+    Reqrmnt [
+      FReqs,
+      NonFReqs], 
+    LCSec,
+    UCSec,
+    Traceability,
+    AuxConstnt,
+    Bibliography',
+    Appndx
+  ]
 
 mkSRS :: SRSDecl
-mkSRS = [TableOfContents,
-  RefSec $ RefProg intro,
+mkSRS = [TableOfContents $ ToCProg toC,
+   RefSec $ RefProg intro,
     TUnits TUProg, 
     TSymb $ tsymb [TSPurpose, SymbOrder], 
     TAandA TAAProg,

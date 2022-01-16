@@ -11,13 +11,15 @@ module Drasil.SRSDocument (
   PrintingInformation(..), defaultConfiguration, piSys,
   -- * Document section types needed for a SRS
   -- | Imported from "Drasil.DocDecl"
-  SRSDecl, DocSection(..), ProblemDescription(..), SolChSpec(..),
+  SRSDecl, DocSection(..), ProblemDescription(..), SolChSpec(..), 
   TermsAndDefs(..), PhySysDesc(..), Goals(..), 
   Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..),
   FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),
   -- ** Document subsection types needed for a SRS
   -- | Imported from "Drasil.DocumentLanguage.Core"
-  AppndxSec(..), AuxConstntSec(..), LFunc(..), Literature(..),
+  SRSSection(..), RefTab(..), IntroSub(..), StkhldrSub(..), GSDSub(..), 
+  SSDSub(..), PDSub(..), SCSSub(..), ReqSub(..),
+  AppndxSec(..), AuxConstntSec(..), LFunc(..), Literature(..), TableOfContents(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), 
   GSDSec(..), UsrChars(..), SystCons(..), SysCntxt(..),
   IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
@@ -43,7 +45,9 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation
   cdb, rdb)
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core
-  AppndxSec(..), AuxConstntSec(..), LFunc(..), Literature(..),
+  SRSSection(..), RefTab(..), IntroSub(..), StkhldrSub(..), GSDSub(..), 
+  SSDSub(..), PDSub(..), SCSSub(..), ReqSub(..),
+  AppndxSec(..), AuxConstntSec(..), LFunc(..), Literature(..), TableOfContents(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), 
   GSDSec(..), UsrChars(..), SystCons(..), SysCntxt(..), 
   IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
@@ -51,7 +55,7 @@ import Drasil.DocLang (
   StkhldrSec(..), ClientSub(..), CstmrSub(..), TConvention(..), TraceabilitySec(..),
   TSIntro(..), TUIntro(..), SSDSec(..), ReqrmntSec(..),
   -- Drasil.DocDecl
-  SRSDecl, DocSection(..), ProblemDescription(..), SolChSpec(..),
+  SRSDecl, DocSection(..), ProblemDescription(..), SolChSpec(..), 
   TermsAndDefs(..), PhySysDesc(..), Goals(..),  
   Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..),
   FReqsSub'(..), FReqsSub(..), NonFReqsSub(..),

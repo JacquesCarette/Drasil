@@ -8,7 +8,7 @@
 module Drasil.DocumentLanguage where
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
-import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
+import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..), TableOfContents(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), 
   IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
   StkhldrSec(..), ClientSub(..), CstmrSub(..), 
@@ -236,7 +236,7 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
-    doit TableOfContents      = mkToC dd
+    doit (TableOfContents st)    = mkToC st
     doit (RefSec rs)             = mkRefSec rs
     doit (TUnits tu)             = mkTUnits si dd tu
     doit (TUnits' tu')           = mkTUnits' si dd tu'
@@ -283,8 +283,8 @@ mkSections si dd = map doit dd
 -- ** Table of Contents
 
 -- | Helper for making the Table of Contents section.
-mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont 0 [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd]
+mkToC :: TableOfContents -> Section
+mkToC (ToCProg dd) = SRS.tOfCont 0 [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd]
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 

@@ -5,8 +5,8 @@ module Drasil.DocumentLanguage.Core where
 import Drasil.DocumentLanguage.Definitions (Fields)
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
 import Language.Drasil hiding (Manual, Verb, constraints) -- Manual - Citation name conflict. FIXME: Move to different namespace
+--import qualified Language.Drasil as D (SRSSection) 
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
@@ -16,13 +16,37 @@ type System = Sentence
 type DocKind = Sentence
 
 -- * Document Types
+data SRSSection = TableContents 
+                | Ref' [RefTab] 
+                | Intro [IntroSub]
+                | Stkhldr [StkhldrSub]
+                | GSD [GSDSub]
+                | SSD [SSDSub] 
+                | Reqrmnt [ReqSub]
+                | LCSec
+                | UCSec
+                | Traceability
+                | AuxConstnt
+                | Bibliography'
+                | Appndx
+                | OffShelfSolns
+
+data RefTab = TU | TS | TAA
+data IntroSub = IPurpose | IScope | IChar | IOrg
+data StkhldrSub = Client | Cstmr
+data GSDSub = SysCntxt' | UsrChars' | SystCons'
+data SSDSub = ProblemDescription' [PDSub]
+            | SolChSpec' [SCSSub]
+data PDSub = TermsAndDefs' | PhySysDesc' | Goals'
+data SCSSub = Assumpt | TM | GD | DD | IM | Consts | CorSolPpt
+data ReqSub = FReqs | NonFReqs
 
 -- | A document description is made up of document sections.
 type DocDesc = [DocSection]
 
 -- | Document sections are either Reference, Introduction, or Specific
 -- System Description sections (for now!).
-data DocSection = TableOfContents
+data DocSection = TableOfContents TableOfContents
                 | RefSec RefSec
                 | TUnits TUnits
                 | TUnits' TUnits'
@@ -65,6 +89,11 @@ data DocSection = TableOfContents
                 | Bibliography
                 | AppndxSec AppndxSec
                 | OffShelfSolnsSec OffShelfSolnsSec
+
+
+-- ** Table of Contents Section
+newtype TableOfContents = ToCProg [SRSSection]
+--newtype TableOfContents = ToCProg (Tree D.SRSSection)
 
 -- ** Reference Material Section
 
@@ -269,6 +298,7 @@ newtype AppndxSec = AppndxProg [Contents]
 -- | Holds all of the different kinds of sections. Defines as a plate with an applicative functor.
 data DLPlate f = DLPlate {
   docSec :: DocSection -> f DocSection,
+  tableOfContents :: TableOfContents -> f TableOfContents,
   refSec :: RefSec -> f RefSec,
   tUnits :: TUnits -> f TUnits,
   tUnits' :: TUnits' -> f TUnits',
@@ -314,9 +344,10 @@ data DLPlate f = DLPlate {
 
 -- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds res tu tu' ts ts' taa intro ipurp iscope ichar iorg stk client cstmr 
-    gs syscnt uschr syscon ss pd td psd gl sc a tm gd dd im ct csp rs fr fr' nfr lcp ucp t es acs aps where
-    ds TableOfContents = pure TableOfContents
+  multiplate p = DLPlate ds tc res tu tu' ts ts' taa intro ipurp iscope ichar iorg 
+    stk client cstmr gs syscnt uschr syscon ss pd td psd gl sc a tm gd dd' im ct csp 
+    rs fr fr' nfr lcp ucp tr es acs aps where
+    ds (TableOfContents x) = TableOfContents <$> tableOfContents p x
     ds (RefSec x) = RefSec <$> refSec p x
     ds (TUnits x) = TUnits <$> tUnits p x
     ds (TUnits' x) = TUnits' <$> tUnits' p x
@@ -360,6 +391,7 @@ instance Multiplate DLPlate where
     ds (AppndxSec x) = AppndxSec <$> appendSec p x
     ds Bibliography = pure Bibliography
 
+    tc (ToCProg st) = pure $ ToCProg st
     res (RefProg c) = pure $ RefProg c
     tu TUProg  = pure TUProg
     tu' (TUProg' i lc) = pure $ TUProg' i lc
@@ -387,7 +419,7 @@ instance Multiplate DLPlate where
     a (AssumpProg c) = pure $ AssumpProg c
     tm (TMProg s f t) = pure $ TMProg s f t
     gd (GDProg s f g d) = pure $ GDProg s f g d
-    dd (DDProg s f dd d) = pure $ DDProg s f dd d
+    dd' (DDProg s f dd d) = pure $ DDProg s f dd d
     im (IMProg s f i d) = pure $ IMProg s f i d 
     ct (ConstProg s c) = pure $ ConstProg s c
     csp (CorrSolProg c cs) = pure $ CorrSolProg c cs
@@ -397,11 +429,12 @@ instance Multiplate DLPlate where
     nfr (NonFReqsProg c) = pure $ NonFReqsProg c
     lcp (LCsProg c) = pure $ LCsProg c
     ucp (UCsProg c) = pure $ UCsProg c
-    t (TraceabilityProg progs) = pure $ TraceabilityProg progs
+    tr (TraceabilityProg progs) = pure $ TraceabilityProg progs
     es (OffShelfSolnsProg contents) = pure $ OffShelfSolnsProg contents
     acs (AuxConsProg ci qdef) = pure $ AuxConsProg ci qdef
     aps (AppndxProg con) = pure $ AppndxProg con
-  mkPlate b = DLPlate (b docSec) (b refSec) (b tUnits) (b tUnits') (b tSymb) (b tSymb') (b tAandA)
+  mkPlate b = DLPlate (b docSec) (b tableOfContents) 
+    (b refSec) (b tUnits) (b tUnits') (b tSymb) (b tSymb') (b tAandA)
     (b introSec) (b iPurposeSub) (b iScopeSub)
     (b iCharSub) (b iOrgSub) (b stkSec) (b clientSub) (b cstmrSub)
     (b gsdSec) (b sysCntxt) (b usrChars) (b systCons) 

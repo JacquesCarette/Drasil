@@ -37,6 +37,50 @@ data Section = Section
              }
 makeLenses ''Section
 
+--data SecTree a = SecTree a [SecTree a]
+{-
+data SRSSection = TableOfContents 
+                | RefSec 
+                | TUnits
+                | TSymb
+                | TAandA 
+                | IntroSec 
+                | IPurposeSub
+                | IScopeSub
+                | ICharSub
+                | IOrgSub
+                | StkhldrSec
+                | ClientSub 
+                | CstmrSub
+                | GSDSec
+                | SysCntxt
+                | UsrChars
+                | SystCons
+                | SSDSec
+                | ProblemDescription 
+                | TermsAndDefs
+                | PhySysDesc
+                | Goals                
+                | SolChSpec 
+                | Assumptions
+                | TMs
+                | GDs
+                | DDs
+                | IMs
+                | Constraints
+                | CorrSolnPpties
+                | ReqrmntSec
+                | FReqsSub
+                | NonFReqsSub
+                | LCsSec
+                | UCsSec
+                | TraceabilitySec
+                | AuxConstntSec
+                | Bibliography
+                | AppndxSec
+                | OffShelfSolnsSec
+-}
+
 {-
 data Section = Section
              { depth  :: Depth

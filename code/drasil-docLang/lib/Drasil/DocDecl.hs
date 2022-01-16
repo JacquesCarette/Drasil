@@ -4,11 +4,10 @@ module Drasil.DocDecl where
 
 import Drasil.DocumentLanguage.Core (DocDesc)
 import Drasil.DocumentLanguage.Definitions (Fields)
-import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), 
+import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), TableOfContents(..),
   RefSec(..), TUnits(..), TUnits'(..), TSymb(..), TSymb'(..), TAandA(..),
   IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),
-  StkhldrSec(..), ClientSub(..), CstmrSub(..),
-  GSDSec(..), SysCntxt(..), UsrChars(..), SystCons(..),
+  StkhldrSec(..), ClientSub(..), CstmrSub(..), GSDSec(..), SysCntxt(..), UsrChars(..), SystCons(..),
   SSDSec(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), 
   ProblemDescription(..), SolChSpec(..), TermsAndDefs(..), PhySysDesc(..), Goals(..), 
   Assumptions(..), TMs(..), GDs(..), DDs(..), IMs(..), Constraints(..), CorrSolnPpties(..), 
@@ -32,7 +31,7 @@ import Control.Lens((^.), Getting)
 type SRSDecl = [DocSection]
 
 -- | Contains all the different sections needed for a full SRS ('SRSDecl').
-data DocSection = TableOfContents                       -- ^ Table of Contents
+data DocSection = TableOfContents DL.TableOfContents    -- ^ Table of Contents
                 | RefSec DL.RefSec                      -- ^ Reference.
                 | TUnits DL.TUnits
                 | TUnits' DL.TUnits'
@@ -75,7 +74,6 @@ data DocSection = TableOfContents                       -- ^ Table of Contents
                 | Bibliography                          -- ^ Bibliography.
                 | AppndxSec DL.AppndxSec                -- ^ Appendix.
                 | OffShelfSolnsSec DL.OffShelfSolnsSec  -- ^ Off the Shelf Solutions.
-
 
 -- | Specific System Description section (wraps 'SSDSub' subsections).
 --newtype SSDSec = SSDProg Sentence
@@ -134,7 +132,7 @@ data NonFReqsSub where NonFReqsProg :: NonFReqsSub
 mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
 mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec :: DocSection -> DL.DocSection
-  sec TableOfContents = DL.TableOfContents
+  sec (TableOfContents tc) = DL.TableOfContents tc
   sec (TUnits u) = DL.TUnits u
   sec (TUnits' u) = DL.TUnits' u
   sec (TSymb s) = DL.TSymb s

@@ -3,59 +3,102 @@
 \section{Problem}
 
 \begin{itemize}
-    \item It's important that each knowledge encoding in Drasil exposes as much information as reasonably possible (and useful). \todo{this is still very vague} We want to expose the ``specifications'' of each piece of knowledge that we are encoding.
-    \item With mathematical models, it's very easy to write ``difficult to interpret'' expressions, and create expressions for which aren't directly calculable (i.e., things that require an extra paper and pencil/mental mathematics before performing).
-    \item Since we want to generate code that represents calculations of all sorts, it's important that the mathematical expression language we use to write calculations expose sufficient information to the generator in a concise and easy-to-digest manner.
-    \item For example, assuming the following expressions are written using the existing mathematical Expr language in Drasil...
-          \begin{itemize}
-              \item While \(y = x\) might conventionally be seen as ``y is defined by x'', we might want, in our model, for it to be understood as ``x is defined by y'' but displayed differently.
-              \item Statements such as \(a = b = c = ... = d\) can be ambiguous ...
-              \item Truth statements such as \(y < x\) might ...
-              \item \todo{list problems}
-          \end{itemize}
-\end{itemize}
 
-It's important that each knowledge encoding in Drasil exposes as much information as reasonably possible (and useful). \todo{this is still very vague} We want to expose the ``specifications'' of each piece of knowledge that we are encoding.
+	\item It's important that each knowledge encoding in Drasil exposes as much
+	      information as reasonably possible (and useful). \todo{this is still
+		      very vague} We want to expose the ``specifications'' of each piece
+          of knowledge that we are encoding.
+
+	\item With mathematical models, it's very easy to write ``difficult to
+	      interpret'' expressions, and create expressions for which aren't
+	      directly calculable (i.e., things that require an extra paper and
+	      pencil/mental mathematics before performing).
+
+	\item Since we want to generate code that represents calculations of all
+	      sorts, it's important that the mathematical expression language we
+	      use to write calculations expose sufficient information to the
+	      generator in a concise and easy-to-digest manner.
+
+	\item For example, assuming the following expressions are written using
+	      the existing mathematical Expr language in Drasil...
+	      \begin{itemize}
+
+		      \item While \(y = x\) might conventionally be seen as ``y is
+		            defined by x'', we might want, in our model, for it to be
+		            understood as ``x is defined by y'' but displayed differently.
+
+		      \item \(a = b = c = ... = d\) can be ambiguously read ...
+
+		      \item Truth statements such as \(y < x\) might ...
+
+		      \item \todo{list problems}
+
+	      \end{itemize}
+
+\end{itemize}
 
 \section{Requirements \& properties of a good solution}
 
 \begin{itemize}
-    \item \todo{easy to digest}
+
+	\item We should be able to better interpret mathematical expressions
+	      by having model containers form them. In other words, making
+	      proper containers for the models/theories and having the original
+          expression generated from the containers, that describe specific
+          kinds of theories, 
+
+	\item Specifically, more expressions should be usable in code generation.
+	
 \end{itemize}
 
 \section{Solution}
 
 \begin{itemize}
-    \item Splitting Expr into CodeExpr, ModelExpr, and Expr
+
+	\item Splitting Expr into CodeExpr, ModelExpr, and Expr
+	
     \item ModelKinds
+	
+    \item Replacing RelationConcepts usage \todo{``higher level'' encodings}
+
 \end{itemize}
 
 \subsection{EquationalModels}
 
 \begin{itemize}
+
     \item \todo{usage}
+
 \end{itemize}
 
 \subsection{EquationalRealms}
 
 \begin{itemize}
+
     \item \todo{usage}
+
 \end{itemize}
 
 \subsection{EquationalConstraints}
 
 \begin{itemize}
+
     \item \todo{usage}
+
 \end{itemize}
 
 \subsection{DEModel}
 
 \begin{itemize}
+
     \item \todo{usage}
+
 \end{itemize}
 
 \subsection{Continued}
 
 \begin{itemize}
+
     \item \todo{usage}
+
 \end{itemize}

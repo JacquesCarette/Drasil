@@ -10,10 +10,10 @@ import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs,
     equationalModel', equationalModelU, equationalRealmU,
     MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
-import qualified Utils.Drasil.NounPhrase as NP
+import Utils.Drasil (weave)
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, direction, angle)

@@ -2,10 +2,10 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
   rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
 import Language.Drasil
+import Utils.Drasil (weave)
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)

@@ -1,18 +1,34 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | The lowest level of chunks in Drasil. It all starts with an identifier and a term.
 module Language.Drasil.Chunk.NamedIdea (
-  -- * Chunk Types
+  -- * Types
   NamedChunk, IdeaDict,
+  -- * Classes
+  NamedIdea(..), Idea(..),
   -- * Constructors
-  nc, ncUID, nw, mkIdea, mkIdeaUID) where
+  nc, ncUID, nw, mkIdea, mkIdeaUID
+) where
 
-import Language.Drasil.UID (UID)
-import qualified Language.Drasil.UID.Core as UID (uid)
-import Language.Drasil.Classes.Core (HasUID(uid))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
+import Language.Drasil.UID (mkUid, UID, HasUID(..))
 import Control.Lens ((^.), makeLenses)
 
-import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.NounPhrase.Core ( NP )
+import Control.Lens.Lens (Lens')
+
+-- TODO: Why does a NamedIdea need a UID? It might need a UID to be registered in the chunk map.
+-- | A NamedIdea is a 'term' that we've identified (has a 'UID') as 
+-- being worthy of naming.
+class HasUID c => NamedIdea c where
+  -- | Lens to the term (a noun phrase).
+  term :: Lens' c NP
+
+-- | An 'Idea' is the combination of a 'NamedIdea' and a 'CommonIdea'.
+-- In other words, it /may/ have an acronym/abbreviation.
+class NamedIdea c => Idea c where
+  -- | Gets the acronym/abbreviation.
+  getA :: c -> Maybe String
+  --Get Abbreviation/Acronym? These might need to be separated 
+  --depending on contexts, but for now I don't see a problem with it.
 
 -- === DATA TYPES/INSTANCES === --
 -- | Used for anything worth naming. Note that a 'NamedChunk' does not have an acronym/abbreviation
@@ -21,7 +37,10 @@ import Language.Drasil.NounPhrase (NP)
 --
 -- Ex. Anything worth naming must start out somewhere. Before we can assign equations
 -- and values and symbols to something like the arm of a pendulum, we must first give it a name. 
-data NamedChunk = NC {_uu :: UID, _np :: NP}
+data NamedChunk = NC {
+  _uu :: UID,
+  _np :: NP
+}
 makeLenses ''NamedChunk
 
 -- | Equal if 'UID's are equal.
@@ -34,11 +53,11 @@ instance NamedIdea NamedChunk where term = np
 instance Idea      NamedChunk where getA _ = Nothing
 
 -- TODO: Add in function to check UIDs (see #2788).
--- TODO: Any contructor that takes in a UID should be built off of this one so that
+-- TODO: Any constructor that takes in a UID should be built off of this one so that
 -- the UID may be checked by the first TODO.
 -- | 'NamedChunk' constructor, takes a 'String' for its 'UID' and a term.
 nc :: String -> NP -> NamedChunk
-nc s = NC (UID.uid s)
+nc s = NC (mkUid s)
 
 -- | Similar to 'nc', but takes in the 'UID' in the form of a 'UID' rather than a 'String'.
 ncUID :: UID -> NP -> NamedChunk
@@ -49,7 +68,10 @@ ncUID = NC
 -- Contains a 'NamedChunk' that could have an abbreviation ('Maybe' 'String').
 --
 -- Ex. The project name "Double Pendulum" may have the abbreviation "DblPendulum".
-data IdeaDict = IdeaDict { _nc' :: NamedChunk, mabbr :: Maybe String }
+data IdeaDict = IdeaDict {
+  _nc' :: NamedChunk,
+  mabbr :: Maybe String
+}
 makeLenses ''IdeaDict
 
 -- | Equal if 'UID's are equal.
@@ -76,4 +98,4 @@ mkIdeaUID s np' = IdeaDict (ncUID s np')
 -- an 'Idea' and places its 'UID' and 'NP' into an 'IdeaDict' with
 -- 'Nothing' for an abbreviation.
 nw :: Idea c => c -> IdeaDict
-nw c = IdeaDict (NC (c^.uid) (c^.term)) (getA c)
+nw c = IdeaDict (NC (c ^. uid) (c ^. term)) (getA c)

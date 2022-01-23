@@ -137,9 +137,9 @@ def func_LR(inParams, NFL):
 # \param LR load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
 # \param q applied load (demand): 3 second duration equivalent pressure (Pa)
 # \return 3 second load equivalent resistance safety requirement
-def func_is_safeLR(LR, q):
+def func_isSafeLR(LR, q):
     outfile = open("log.txt", "a")
-    print("function func_is_safeLR called with inputs: {", file=outfile)
+    print("function func_isSafeLR called with inputs: {", file=outfile)
     print("  LR = ", end="", file=outfile)
     print(LR, end="", file=outfile)
     print(", ", file=outfile)
@@ -167,9 +167,9 @@ def func_P_b(B):
 # \param inParams structure holding the input values
 # \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
 # \return probability of glass breakage safety requirement
-def func_is_safePb(inParams, P_b):
+def func_isSafePb(inParams, P_b):
     outfile = open("log.txt", "a")
-    print("function func_is_safePb called with inputs: {", file=outfile)
+    print("function func_isSafePb called with inputs: {", file=outfile)
     print("  inParams = ", end="", file=outfile)
     print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)

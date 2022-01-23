@@ -3,7 +3,6 @@
 module Drasil.Website.Introduction where
 
 import Language.Drasil
-import Utils.Drasil
 
 
 -- * Introduction Section

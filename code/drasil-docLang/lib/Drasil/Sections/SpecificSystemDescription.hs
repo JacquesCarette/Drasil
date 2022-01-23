@@ -24,10 +24,9 @@ module Drasil.Sections.SpecificSystemDescription (
 
 import Language.Drasil hiding (variable)
 import Language.Drasil.Development (showUID)
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSol,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition, element, general, goalStmt, information,
@@ -38,7 +37,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSo
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import Database.Drasil(SystemInformation)
+import SysInfo.Drasil (SystemInformation)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 

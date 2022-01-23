@@ -286,7 +286,7 @@ newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 -- ** Values of Auxiliary Constants Section
 
 -- | Values of Auxiliary Constants section.
-data AuxConstntSec = AuxConsProg CI [SimpleQDef]
+data AuxConstntSec = AuxConsProg CI [ConstQDef]
 
 -- ** Appendix Section
 

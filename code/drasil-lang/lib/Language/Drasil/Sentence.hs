@@ -12,12 +12,11 @@ module Language.Drasil.Sentence (
   sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm) where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
+import Language.Drasil.UID (HasUID(..), UID)
+import Language.Drasil.Symbol (HasSymbol, Symbol)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ExprClasses (Express(express))
-import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
-import Language.Drasil.UID (UID)
 
 import Control.Lens ((^.))
 

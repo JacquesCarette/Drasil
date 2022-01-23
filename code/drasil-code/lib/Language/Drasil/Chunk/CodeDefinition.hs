@@ -10,6 +10,7 @@ import Language.Drasil.CodeExpr (CodeExpr, matrix, expr)
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.Code.Expr.Convert (CanGenCode(toCodeExpr))
 
 -- | The definition may be specialized to use ODEs.
 data DefinitionType = Definition | ODE
@@ -51,13 +52,16 @@ instance DefiningCodeExpr CodeDefinition where codeExpr = def
 -- NOTE: We'll eventually want extra smart constructors that allow for custom
 --       CodeExprs inputs.
 
+-- TODO: These below 3 functions that generate ``CodeDefinitions'' should be generalized
+--       It _might_ be good to create make a ``CanGenCodeDefinition''-like typeclass
+
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a function.
 qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q) => q Expr -> CodeDefinition
 qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.
-qtov :: SimpleQDef -> CodeDefinition
-qtov q = CD (codeChunk $ quantvar q) (expr $ q ^. defnExpr) [] Definition
+qtov :: CanGenCode e => QDefinition e -> CodeDefinition
+qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.
 odeDef :: ODEInfo -> CodeDefinition

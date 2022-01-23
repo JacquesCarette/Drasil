@@ -8,7 +8,7 @@ module Drasil.GamePhysics.GDefs (genDefs) where
 
 import Language.Drasil
 import Utils.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.PhysicalProperties (mass)

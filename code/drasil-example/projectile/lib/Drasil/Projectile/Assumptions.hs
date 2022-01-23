@@ -4,10 +4,9 @@ module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
   posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity) where
 
 import Language.Drasil
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.NounPhrase as NP
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 

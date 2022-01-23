@@ -84,7 +84,7 @@ ${\symbf{C}_{\text{num}}}$ & Proportionality Constant Numerator: Values for each
 \\
 $c'$ & Effective Cohesion: The internal pressure that sticks particles of soil together. & ${\text{Pa}}$
 \\
-$const_f$ & Decision on F: A Boolean decision on which form of f the user desires: constant if true, or half-sine if false. & --
+$\mathit{const\_f}$ & Decision on F: A Boolean decision on which form of f the user desires: constant if true, or half-sine if false. & --
 \\
 ${F_{\text{n}}}$ & Total Normal Force: Component of a force in the normal direction. & ${\text{N}}$
 \\
@@ -1809,8 +1809,8 @@ Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
            \symbf{f}=\begin{cases}
-                     1, & const_f\\
-                     \sin\left(π \frac{{\symbf{x}_{\text{slip},i}}-{\symbf{x}_{\text{slip},0}}}{{\symbf{x}_{\text{slip},n}}-{\symbf{x}_{\text{slip},0}}}\right), & \neg{}const_f
+                     1, & \mathit{const\_f}\\
+                     \sin\left(π \frac{{\symbf{x}_{\text{slip},i}}-{\symbf{x}_{\text{slip},0}}}{{\symbf{x}_{\text{slip},n}}-{\symbf{x}_{\text{slip},0}}}\right), & \neg{}\mathit{const\_f}
                      \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1820,7 +1820,7 @@ Description & \begin{symbDescription}
               \item{${\symbf{x}_{\text{slip}}}$ is the $x$-coordinates of the slip surface (${\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$n$ is the number of slices (Unitless)}
-              \item{$const_f$ is the decision on f (Unitless)}
+              \item{$\mathit{const\_f}$ is the decision on f (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -2082,7 +2082,7 @@ The Morgenstern-Price method is a vertical slice, limit equilibrium slope stabil
 Label & Factor of safety
         
 \\ \midrule \\
-Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, ${\symbf{x}_{\text{slip}}}$, ${\symbf{y}_{\text{slip}}}$, $const_f$
+Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, ${\symbf{x}_{\text{slip}}}$, ${\symbf{y}_{\text{slip}}}$, $\mathit{const\_f}$
         
 \\ \midrule \\
 Output & ${F_{\text{S}}}$
@@ -2244,7 +2244,7 @@ ${F_{\text{S}}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM:nrmShr
 Label & Normal and shear force proportionality constant
         
 \\ \midrule \\
-Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{y}_{\text{wt}}}$, ${γ_{w}}$, ${\symbf{x}_{\text{slip}}}$, ${\symbf{y}_{\text{slip}}}$, $const_f$
+Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{y}_{\text{wt}}}$, ${γ_{w}}$, ${\symbf{x}_{\text{slip}}}$, ${\symbf{y}_{\text{slip}}}$, $\mathit{const\_f}$
         
 \\ \midrule \\
 Output & $λ$
@@ -2324,7 +2324,7 @@ Output Constraints &
 Equation & \begin{displaymath}
            {\symbf{C}_{\text{num},i}}=\begin{cases}
                                       {\symbf{b}}_{1} \left({\symbf{G}}_{1}+{\symbf{H}}_{1}\right) \tan\left({\symbf{α}}_{1}\right), & i=1\\
-                                      {\symbf{b}}_{i} \left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\symbf{α}}_{i}\right)+\symbf{h} -\left(2\right) {\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+                                      {\symbf{b}}_{i} \left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\symbf{α}}_{i}\right)+\symbf{h} -2 {\symbf{U}_{\text{g},i}} \sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
                                       {\symbf{b}}_{n} \left({\symbf{G}}_{n-1}+{\symbf{H}}_{n-1}\right) \tan\left({\symbf{α}}_{n-1}\right), & i=n
                                       \end{cases}
            \end{displaymath}
@@ -2370,7 +2370,7 @@ See \hyperref[IM:nrmShrFor]{IM:nrmShrFor} for the derivation of ${\symbf{C}_{\te
 Label & Normal and shear force proportionality constant denominator
         
 \\ \midrule \\
-Input & ${\symbf{x}_{\text{slip}}}$, $const_f$
+Input & ${\symbf{x}_{\text{slip}}}$, $\mathit{const\_f}$
         
 \\ \midrule \\
 Output & ${\symbf{C}_{\text{den}}}$
@@ -2423,7 +2423,7 @@ See \hyperref[IM:nrmShrFor]{IM:nrmShrFor} for the derivation of ${\symbf{C}_{\te
 Label & Interslice normal forces
         
 \\ \midrule \\
-Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, ${\symbf{x}_{\text{slip}}}$, ${\symbf{y}_{\text{slip}}}$, $const_f$
+Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, ${\symbf{x}_{\text{slip}}}$, ${\symbf{y}_{\text{slip}}}$, $\mathit{const\_f}$
         
 \\ \midrule \\
 Output & $\symbf{G}$
@@ -2488,7 +2488,7 @@ The cases shown in \hyperref[IM:intsliceFs]{IM:intsliceFs} for when $i=0$, $i=1$
 Label & Critical slip surface identification
         
 \\ \midrule \\
-Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{x}_{\text{wt}}}$, ${\symbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, $const_f$
+Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{x}_{\text{wt}}}$, ${\symbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, $\mathit{const\_f}$
         
 \\ \midrule \\
 Output & ${{F_{\text{S}}}^{\text{min}}}$
@@ -2499,7 +2499,7 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{F_{\text{S}}}^{\text{min}}}=Υ\left({\symbf{x}_{\text{slope}}},{\symbf{y}_{\text{slope}}},{\symbf{x}_{\text{wt}}},{\symbf{y}_{\text{wt}}},c',φ',{γ_{\text{dry}}},{γ_{\text{sat}}},{γ_{w}},const_f\right)
+           {{F_{\text{S}}}^{\text{min}}}=Υ\left({\symbf{x}_{\text{slope}}},{\symbf{y}_{\text{slope}}},{\symbf{x}_{\text{wt}}},{\symbf{y}_{\text{wt}}},c',φ',{γ_{\text{dry}}},{γ_{\text{sat}}},{γ_{w}},\mathit{const\_f}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -2514,7 +2514,7 @@ Description & \begin{symbDescription}
               \item{${γ_{\text{dry}}}$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${γ_{\text{sat}}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{$const_f$ is the decision on f (Unitless)}
+              \item{$\mathit{const\_f}$ is the decision on f (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A:Slip-Surface-Concave} and \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}. The sizes of ${\symbf{x}_{\text{wt}}}$ and ${\symbf{y}_{\text{wt}}}$ must be equal and not 1. The sizes of ${\symbf{x}_{\text{slope}}}$ and ${\symbf{y}_{\text{slope}}}$ must be equal and at least 2. The first and last ${\symbf{x}_{\text{wt}}}$ values must be equal to the first and last ${\symbf{x}_{\text{slope}}}$ values. ${\symbf{x}_{\text{wt}}}$ and ${\symbf{x}_{\text{slope}}}$ values must be monotonically increasing. ${{x_{\text{slip}}}^{\text{maxExt}}}$, ${{x_{\text{slip}}}^{\text{maxEtr}}}$, ${{x_{\text{slip}}}^{\text{minExt}}}$, and ${{x_{\text{slip}}}^{\text{minEtr}}}$ must be between or equal to the minimum and maximum ${\symbf{x}_{\text{slope}}}$ values. ${{y_{\text{slip}}}^{\text{max}}}$ cannot be below the minimum ${\symbf{y}_{\text{slope}}}$ value. ${{y_{\text{slip}}}^{\text{min}}}$ cannot be above the maximum ${\symbf{y}_{\text{slope}}}$ value. All $x$ values of ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must be between ${{x_{\text{slip}}}^{\text{minEtr}}}$ and ${{x_{\text{slip}}}^{\text{maxExt}}}$. All $y$ values of ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must not be below ${{y_{\text{slip}}}^{\text{min}}}$. For any given vertex in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ the $y$ value must not exceed the ${\symbf{y}_{\text{slope}}}$ value corresponding to the same $x$ value. The first and last vertices in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must each be equal to one of the vertices formed by ${\symbf{x}_{\text{slope}}}$ and ${\symbf{y}_{\text{slope}}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must not be below 110 degrees.
@@ -2621,7 +2621,7 @@ $\text{(x,y)}$ & Cartesian position coordinates & ${\text{m}}$
 \\
 $c'$ & Effective cohesion & ${\text{Pa}}$
 \\
-$const_f$ & Decision on f & --
+$\mathit{const\_f}$ & Decision on f & --
 \\
 ${{x_{\text{slip}}}^{\text{maxEtr}}}$ & Maximum entry $x$-coordinate & ${\text{m}}$
 \\
@@ -2661,7 +2661,7 @@ $φ'$ & Effective angle of friction & ${{}^{\circ}}$
 \\
 \midrule
 \endhead
-$const_f$ & decision on f
+$\mathit{const\_f}$ & decision on f
 \\
 ${{x_{\text{slip}}}^{\text{maxExt}}}$ & maximum exit $x$-coordinate
 \\

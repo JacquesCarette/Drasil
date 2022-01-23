@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Unitals where
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..), Decoration(Magnitude))
 import Language.Drasil.ShortHands
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -322,7 +322,7 @@ outputConstraints = map (`uq` defaultUncrt)
 lengthCons     = constrained' QPP.len               [gtZeroConstr] (dbl 44.2)
 massCons       = constrained' QPP.mass              [gtZeroConstr] (dbl 56.2)
 mmntOfInCons   = constrained' QP.momentOfInertia    [gtZeroConstr] (dbl 74.5)
-gravAccelCons  = constrained' QP.gravitationalConst [] (QP.gravitationalConstValue ^. defnExpr)
+gravAccelCons  = constrained' QP.gravitationalConst [] (lit $ QP.gravitationalConstValue ^. defnExpr)
 posCons        = constrained' QP.position           [] (dbl 0.412) --FIXME: should be (0.412, 0.502) vector
 veloCons       = constrained' QP.velocity           [] (dbl 2.51)
 orientCons     = constrained' QM.orientation        [sfwrc $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 2 `mulRe` sy QM.pi_)] (half $ sy QM.pi_) -- physical constraint not needed space is radians

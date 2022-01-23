@@ -7,15 +7,15 @@
 using std::ofstream;
 using std::string;
 
-void write_output(bool is_safePb, bool is_safeLR, double P_b, double J) {
+void write_output(bool isSafePb, bool isSafeLR, double P_b, double J) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function write_output called with inputs: {" << std::endl;
-    outfile << "  is_safePb = ";
-    outfile << is_safePb;
+    outfile << "  isSafePb = ";
+    outfile << isSafePb;
     outfile << ", " << std::endl;
-    outfile << "  is_safeLR = ";
-    outfile << is_safeLR;
+    outfile << "  isSafeLR = ";
+    outfile << isSafeLR;
     outfile << ", " << std::endl;
     outfile << "  P_b = ";
     outfile << P_b;
@@ -27,10 +27,10 @@ void write_output(bool is_safePb, bool is_safeLR, double P_b, double J) {
     
     ofstream outputfile;
     outputfile.open("output.txt", std::fstream::out);
-    outputfile << "is_safePb = ";
-    outputfile << is_safePb << std::endl;
-    outputfile << "is_safeLR = ";
-    outputfile << is_safeLR << std::endl;
+    outputfile << "isSafePb = ";
+    outputfile << isSafePb << std::endl;
+    outputfile << "isSafeLR = ";
+    outputfile << isSafeLR << std::endl;
     outputfile << "P_b = ";
     outputfile << P_b << std::endl;
     outputfile << "J = ";

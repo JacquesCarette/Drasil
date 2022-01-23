@@ -2,9 +2,13 @@
 module Language.Drasil.Symbol (
   -- * Types
   Decoration(..), Symbol(..),
+  -- * Classes
+  HasSymbol(..),
   -- * Ordering Function
-  compsy) where
+  compsy
+) where
 
+import Language.Drasil.Stages (Stage)
 import Language.Drasil.Unicode(Special)
 
 import Data.Char (toLower)
@@ -58,6 +62,12 @@ data Symbol =
   | Concat   [Symbol] -- ^ Concatentation of two symbols: @[s1, s2] -> s1s2@
   | Empty -- ^ Placeholder for when a symbol is not needed.
   deriving Eq
+
+-- TODO: Instead of having "Stage" as a parameter of "symbol", we can make it a typeclass parameter instead.. extensibility for cheap!
+-- | A HasSymbol is anything which has a 'Symbol'.
+class HasSymbol c where
+  -- | Provides the 'Symbol' for a particular stage of generation.
+  symbol  :: c -> Stage -> Symbol
 
 -- | Symbols may be concatenated.
 instance Semigroup Symbol where

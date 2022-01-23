@@ -41,8 +41,8 @@ module Drasil.SRSDocument (
   ) where
 
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(..),
-  cdb, rdb)
+import Database.Drasil
+import SysInfo.Drasil
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core
   SRSSection(..), RefTab(..), IntroSub(..), StkhldrSub(..), GSDSub(..), 

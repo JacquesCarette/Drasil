@@ -20,8 +20,8 @@ module Theory.Drasil (
   , multiDefnGenQD, multiDefnGenQDByUID
   -- * ModelKinds
   , ModelKind
-  , deModel, equationalConstraints, equationalModel, equationalRealm, othModel
-  , deModel', equationalConstraints', equationalModel', equationalRealm', othModel'
+  , newDEModel, deModel, equationalConstraints, equationalModel, equationalRealm, othModel
+  , newDEModel', deModel', equationalConstraints', equationalModel', equationalRealm', othModel'
   , equationalModelU, equationalModelN, equationalRealmU, equationalRealmN
   -- * Instance Models
   , InstanceModel
@@ -38,6 +38,7 @@ import Theory.Drasil.DataDefinition (ddMENoRefs, ddME, ddENoRefs, ddE,
   DataDefinition, qdFromDD, qdEFromDD)
 import Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs, getEqModQdsFromGd)
 import Theory.Drasil.ModelKinds (ModelKind,
+  newDEModel, newDEModel',
   deModel', deModel,
   equationalConstraints, equationalConstraints',
   equationalModel, equationalModel', equationalModelN, equationalModelU,

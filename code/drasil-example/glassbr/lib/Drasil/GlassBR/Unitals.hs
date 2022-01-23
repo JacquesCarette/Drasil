@@ -3,8 +3,7 @@ module Drasil.GlassBR.Unitals where --whole file is used
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
-import Utils.Drasil
-import Utils.Drasil.Concepts
+import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Prelude hiding (log)
 
@@ -143,12 +142,12 @@ pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure")
 
 {--}
 
-specParamVals :: [SimpleQDef]
+specParamVals :: [ConstQDef]
 specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
   sdMax, sdMin, stressDistFacMin, stressDistFacMax]
 
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDistFacMax,
-  sdMin :: SimpleQDef
+  sdMin :: ConstQDef
 
 dimMax     = mkQuantDef (unitary "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
@@ -243,13 +242,13 @@ dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 gTF           = dqdNoUnit glTyFac (variable "GTF") Real
 
 isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
-  (variable "is-safePb")   Boolean
+  (variable "isSafePb")   Boolean
 isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
-  (variable "is-safeProb") Boolean
+  (variable "isSafeProb") Boolean
 isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance safety requirement")
-  (variable "is-safeLR")   Boolean
+  (variable "isSafeLR")   Boolean
 isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
-  (variable "is-safeLoad") Boolean
+  (variable "isSafeLoad") Boolean
 
 lDurFac       = vc'' loadDurFactor (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
@@ -379,16 +378,17 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 --Constants--
 
-constants :: [SimpleQDef]
+constants :: [ConstQDef]
 constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
                 ++ specParamVals 
 
-constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: SimpleQDef
+constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: ConstQDef
 constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53
 constantM       = mkQuantDef sflawParamM $ exactDbl 7
 constantModElas = mkQuantDef modElas     $ dbl 7.17e10
 constantLoadDur = mkQuantDef loadDur     $ exactDbl 3
 constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
+
 --Equations--
 
 sdVectorSent :: Sentence

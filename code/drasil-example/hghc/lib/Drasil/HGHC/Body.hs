@@ -2,7 +2,7 @@ module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
     nuclearPhys, symbols)

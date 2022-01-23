@@ -4,9 +4,8 @@ import Language.Drasil hiding (section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Language.Drasil.Code (quantvar, listToArray)
 

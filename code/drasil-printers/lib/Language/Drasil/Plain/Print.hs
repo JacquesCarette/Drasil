@@ -16,7 +16,7 @@ import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
 import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..), 
   PrintingInformation(..), Notation(Scientific))
 
-import Utils.Drasil.Strings (toPlainName)
+import Utils.Drasil (toPlainName)
 
 import Prelude hiding ((<>))
 import Data.List (partition)

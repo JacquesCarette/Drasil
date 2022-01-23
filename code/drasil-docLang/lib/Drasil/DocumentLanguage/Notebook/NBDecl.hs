@@ -6,7 +6,7 @@ import qualified Drasil.DocumentLanguage.Notebook.Core as NB (ApndxSec(..), NBDe
   ReviewSub(..), MainIdeaSub(..), SupportSS1(..), SupportSS2(..), SupportSS3(..),
   MethsAnlsSub(..), ExampleSub(..))
 
-import Database.Drasil (SystemInformation)
+import SysInfo.Drasil (SystemInformation)
 
 -- * Types
 

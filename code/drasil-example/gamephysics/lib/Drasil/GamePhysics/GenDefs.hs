@@ -2,9 +2,9 @@
 module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD) where
 
 import Language.Drasil
-import Utils.Drasil
-import qualified Utils.Drasil.Sentence as S
+import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (GenDefn, gd, equationalModel')
+import Utils.Drasil (weave)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)
@@ -137,7 +137,7 @@ accelGravityDerivEqn4 = sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrD
 accelGravityDerivEqn5 :: PExpr
 accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist)) `mulRe` sy dVect
 
-accelGravityDerivEqns :: ExprC r => [r]
+accelGravityDerivEqns :: (ExprC r, LiteralC r) => [r]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
                          accelGravityDerivEqn4, accelGravityDerivEqn5]
 

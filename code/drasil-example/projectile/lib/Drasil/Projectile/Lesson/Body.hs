@@ -4,12 +4,9 @@ import Data.List (nub)
 import Language.Drasil
 import Drasil.DocLang
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Utils.Drasil
-import qualified Utils.Drasil.Sentence as S
+import Database.Drasil
+import SysInfo.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
@@ -63,7 +60,7 @@ si = SI {
   _outputs     = [] :: [QuantityDict],
   _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [SimpleQDef],
+  _constants   = [] :: [ConstQDef],
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
    refdb       = refDB

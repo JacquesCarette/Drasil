@@ -8,7 +8,6 @@ module Language.Drasil.Choices (
   choicesSent, showChs) where
 
 import Language.Drasil
-import Utils.Drasil (foldlSent_)
 
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))

@@ -204,7 +204,8 @@ deps: check_stack ##@Dependencies Build only dependencies.
 #-------------------------------------------------#
 
 # Build all the Drasil packages.
-code: $(BUILD_PACKAGES) ##@Examples Build all Drasil packages.
+code: ##@Examples Build all Drasil packages.
+	stack build $(stackArgs)
 
 # First build all the Drasil packages, then run all examples (no traceability graphs).
 examples: $(GEN_EXAMPLES) ##@Examples Run all examples (no traceability graphs).
@@ -308,6 +309,7 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 #----------------------------------------------------------------------------------#
 
 graphs: $(GRAPH_PACKAGES) ##@Analysis Generate all module dependency graphs.
+	- echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
 	
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
@@ -323,7 +325,7 @@ analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasi
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
-	@echo "Analysis complete. Please see 'analysis/' folder."
+	@echo "Analysis complete. Please see '$(ANALYSIS_FOLDER)' folder."
 
 convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs.
 	@echo "Building dependency graphs in Dot and Circo formats. This may take a few minutes."
@@ -337,7 +339,7 @@ convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
-	@echo "Dependency graphs built."
+	@echo "Dependency graphs built, check your '$(TYPEGRAPH_FOLDER)' and '$(CLASSINST_GRAPH_FOLDER)' folders."
 
 #---------------------------------------#
 #--- HLint and Haddock Documentation ---#

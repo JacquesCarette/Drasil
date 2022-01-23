@@ -7,11 +7,11 @@ import Prelude hiding (cos, sin, sqrt)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
+import Utils.Drasil (weave)
 import Theory.Drasil
-import Utils.Drasil
-import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S
-import qualified Utils.Drasil.NounPhrase as NP
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
 import Drasil.DblPendulum.DataDefs

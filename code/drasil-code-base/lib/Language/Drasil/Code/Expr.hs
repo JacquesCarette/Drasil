@@ -2,7 +2,8 @@
 
 module Language.Drasil.Code.Expr where
 
-import Language.Drasil (UID, DomainDesc, Completeness, RealInterval)
+import Language.Drasil (UID, DiscreteDomainDesc,
+  Completeness, RealInterval, Literal, LiteralC(..))
 
 -- * Operators (mostly binary)
 
@@ -62,18 +63,12 @@ data UFuncVN = Norm | Dim
 
 -- * CodeExpr
 
--- | A one-to-one clone of Expr, with extra OO/code-related functionality.
+-- | Expression language where all terms also denote a term in GOOL
+--   (i.e. translation is total and meaning preserving).
 data CodeExpr where
-  -- | Turns a decimal value ('Double') into an expression.
-  Dbl      :: Double -> CodeExpr
-  -- | Turns an integer into an expression.
-  Int      :: Integer -> CodeExpr
-  -- | Represents decimal values that are exact as integers.
-  ExactDbl :: Integer -> CodeExpr 
-  -- | Turns a string into an expression.
-  Str      :: String -> CodeExpr
-  -- | Turns two integers into a fraction (or percent).
-  Perc     :: Integer -> Integer -> CodeExpr
+  -- | Brings literals into the expression language.
+  Lit      :: Literal -> CodeExpr
+
   -- | Takes an associative arithmetic operator with a list of expressions.
   AssocA   :: AssocArithOper -> [CodeExpr] -> CodeExpr
   -- | Takes an associative boolean operator with a list of expressions.
@@ -132,8 +127,15 @@ data CodeExpr where
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
+  Operator :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
   -- | The expression is an element of a space.
   -- IsIn     :: Expr -> Space -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
+
+instance LiteralC CodeExpr where
+  str      = Lit . str
+  int      = Lit . int
+  dbl      = Lit . dbl
+  exactDbl = Lit . exactDbl
+  perc l r = Lit $ perc l r

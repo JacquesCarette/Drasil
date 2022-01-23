@@ -14,13 +14,14 @@ dependencies:
 - pretty
 - directory
 - time
-- drasil-lang
-- drasil-gool
 - drasil-build
 - drasil-code
-- drasil-printers
-- drasil-docLang
 - drasil-database
+- drasil-docLang
+- drasil-gool
+- drasil-lang
+- drasil-printers
+- drasil-sysinfo
 
 ghc-options:
 - -Wall

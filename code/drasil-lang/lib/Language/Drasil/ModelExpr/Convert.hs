@@ -1,9 +1,10 @@
+{-# LANGUAGE GADTs #-}
 -- | Defines functions to convert from the base expression language to 'ModelExpr's.
 module Language.Drasil.ModelExpr.Convert where
 
 import Data.Bifunctor (bimap, second)
 
-import Language.Drasil.Space (DomainDesc(..), RealInterval(..))
+import Language.Drasil.Space
 import qualified Language.Drasil.Expr.Lang as E
 import Language.Drasil.ModelExpr.Lang
 
@@ -73,11 +74,7 @@ vvnBinOp :: E.VVNBinOp -> VVNBinOp
 vvnBinOp E.Dot = Dot
 
 expr :: E.Expr -> ModelExpr
-expr (E.Dbl d) = Dbl d
-expr (E.Int i) = Int i
-expr (E.ExactDbl i) = ExactDbl i
-expr (E.Str s) = Str s
-expr (E.Perc n d) = Perc n d
+expr (E.Lit a) = Lit a
 expr (E.AssocA ao es) = AssocA (assocArithOper ao) $ map expr es
 expr (E.AssocB bo es) = AssocB (assocBoolOper bo) $ map expr es
 expr (E.C u) = C u
@@ -103,6 +100,6 @@ realInterval (Bounded (li, l) (ri, r)) = Bounded (li, expr l) (ri, expr r)
 realInterval (UpTo (i, e)) = UpTo (i, expr e)
 realInterval (UpFrom (i, e)) = UpFrom (i, expr e)
 
-domainDesc :: DomainDesc E.Expr E.Expr -> DomainDesc ModelExpr ModelExpr
+domainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc ModelExpr ModelExpr
 domainDesc (BoundedDD s rt l r) = BoundedDD s rt (expr l) (expr r)
-domainDesc (AllDD s rt) = AllDD s rt
+-- domainDesc (AllDD s rt) = AllDD s rt

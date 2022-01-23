@@ -2,6 +2,7 @@
 module Language.Drasil.Derivation where
 
 import Language.Drasil.Sentence (Sentence(EmptyS, S), (+:))
+import Control.Lens (Lens')
 
 -- * Type
 
@@ -10,14 +11,23 @@ import Language.Drasil.Sentence (Sentence(EmptyS, S), (+:))
 -- the derivation.
 data Derivation = Derivation Sentence [Sentence]
 
+-- * Class
+
+-- | A class that might have a 'Derivation'.
+class HasDerivation c where
+  -- | Provides a 'Lens' to a possible derivation.
+  derivations :: Lens' c (Maybe Derivation)
+
 -- * Functions
 
 -- | Smart constructor for creating a 'Derivation'.
 mkDeriv :: Sentence -> [Sentence] -> Derivation
 mkDeriv = Derivation
+
 -- | Similar to 'mkDeriv', but prepends "Detailed derivation of" to the header.
 mkDerivName :: Sentence -> [Sentence] -> Derivation
 mkDerivName s = Derivation (S "Detailed derivation of" +: s)
+
 -- | Similar to 'mkDeriv', but without a header 'Sentence'.
 mkDerivNoHeader :: [Sentence] -> Derivation
 mkDerivNoHeader = Derivation EmptyS

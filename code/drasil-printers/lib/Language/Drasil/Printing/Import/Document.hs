@@ -32,7 +32,7 @@ createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout sm = map (sec sm 0)
 
 createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
-createLayout' sm = map (cel sm 0)
+createLayout' sm = map (cel sm)
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
@@ -42,8 +42,8 @@ sec sm depth x@(Section _ titleLb contents _) = --FIXME: should ShortName be use
   (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) refr
 
-cel :: PrintingInformation -> Int -> Section -> T.LayoutObj
-cel sm depth x@(Section depth' titleLb contents _) = 
+cel :: PrintingInformation -> Section -> T.LayoutObj
+cel sm x@(Section depth titleLb contents _) = 
   let refr = P.S (refAdd x) in
   T.Cell (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) 

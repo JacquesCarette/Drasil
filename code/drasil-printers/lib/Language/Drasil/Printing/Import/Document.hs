@@ -29,14 +29,14 @@ makeDocument sm (Notebook titleLb authorName sections) =
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
-createLayout sm = map (sec sm 0)
+createLayout sm = map (sec sm)
 
 createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout' sm = map (cel sm)
 
 -- | Helper function for creating sections at the appropriate depth.
-sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section _ titleLb contents _) = --FIXME: should ShortName be used somewhere?
+sec :: PrintingInformation -> Section -> T.LayoutObj
+sec sm x@(Section depth titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let refr = P.S (refAdd x) in
   T.HDiv [concat (replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) refr :
@@ -50,8 +50,9 @@ cel sm x@(Section depth titleLb contents _) =
 
 -- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').
 layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
-layout sm currDepth (Sub s) = sec sm (currDepth+1) s
-layout sm _         (Con c) = lay sm c
+--layout sm currDepth (Sub s) = sec sm (currDepth+1) s
+layout sm _ (Sub s) = sec sm s
+layout sm _ (Con c) = lay sm c
 
 -- | Helper that translates 'Contents' to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'layout'.

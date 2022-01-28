@@ -41,6 +41,8 @@ module Language.Drasil.Code (
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), 
   ODELibPckg(..), mkODELib, mkODELibNoPath,
   unPP, unJP, unCSP, unCPPP, unSP
+  -- Language.Drasil.Chunk.NamedArgument
+  , NamedArgument, narg
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -97,6 +99,8 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), PackData(..))
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk, 
   quantvar, quantfunc, ccObjVar, listToArray)
+
+import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 
 import Language.Drasil.CodeExpr (field)
 

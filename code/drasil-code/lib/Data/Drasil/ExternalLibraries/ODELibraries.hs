@@ -11,8 +11,8 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space(..), narg, implVar, implVarUID, implVarUID', qw,
-  compoundPhrase, nounPhrase, nounPhraseSP, label, sub, NamedArgument,
+  QuantityDict, HasSpace(typ), Space(..), implVar, implVarUID, implVarUID', qw,
+  compoundPhrase, nounPhrase, nounPhraseSP, label, sub,
   Idea(getA), NamedIdea(term), Stage(..), (+++))
 import Language.Drasil.Display (Symbol(Label, Concat))
 
@@ -36,7 +36,8 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill,
   CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
-  mkODELibNoPath, pubStateVar, privStateVar, initSolWithValFill)
+  mkODELibNoPath, pubStateVar, privStateVar, initSolWithValFill,
+  NamedArgument, narg)
 import Language.Drasil.CodeExpr
 import Language.Drasil.Code.Expr.Development
 

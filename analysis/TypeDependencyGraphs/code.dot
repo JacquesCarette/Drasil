@@ -21,6 +21,12 @@ digraph alltypes {
 		ConstraintCEMap -> MapUIDConstraintCE;
 		}
 	}
+	subgraph namedargument {
+		subgraph namedargument{
+		NamedArgument	[shape=oval, color=darkgreen, label="NamedArgument"];
+		NamedArgument -> QuantityDict;
+		}
+	}
 	subgraph parameter {
 		subgraph passby{
 		PassBy	[shape=oval, color=cyan3, label="PassBy"];

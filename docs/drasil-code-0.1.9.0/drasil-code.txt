@@ -825,6 +825,14 @@ unCSP :: CSharpProject a -> a
 unCPPP :: CppProject a -> a
 unSP :: SwiftProject a -> a
 
+-- | Any quantity can be a named argument (wrapper for
+--   <a>QuantityDict</a>), but with more of a focus on generating code
+--   arguments.
+data NamedArgument
+
+-- | Smart constructor for <a>NamedArgument</a> .
+narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
+
 
 -- | Define and collect information about ODEs and ODE solvers from various
 --   libraries.

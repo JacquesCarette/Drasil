@@ -58,8 +58,8 @@
 </span><span id="line-49"></span><span id="indepVar"><span id="depVar"><span id="constant"><span id="conc"><span id="coefficients"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">DifferentialModel</span></span></span></span></span></span><span>
 </span><span id="line-50"></span><span>
 </span><span id="line-51"></span><span class="hs-comment">-- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DifferentialModel'.</span><span>
-</span><span id="line-52"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span>        </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679411414"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; DifferentialModel -&gt; f DifferentialModel
-</span><a href="#local-6989586621679411414"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; f ConceptChunk)
+</span><span id="line-52"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span>        </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679409666"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; DifferentialModel -&gt; f DifferentialModel
+</span><a href="#local-6989586621679409666"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; f ConceptChunk)
 -&gt; DifferentialModel -&gt; f DifferentialModel
 Lens' DifferentialModel ConceptChunk
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#conc"><span class="hs-identifier hs-var">conc</span></a></span><span> </span><span class="annot"><span class="annottext">((ConceptChunk -&gt; f ConceptChunk)
@@ -73,24 +73,24 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span>
 </span><span id="line-53"></span><span class="hs-comment">-- | Equal if 'UID's are equal.</span><span>
-</span><span id="line-54"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679411410"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>            </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679411408"><span class="annot"><span class="annottext">a :: DifferentialModel
-</span><a href="#local-6989586621679411408"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679411407"><span class="annot"><span class="annottext">== :: DifferentialModel -&gt; DifferentialModel -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679411406"><span class="annot"><span class="annottext">b :: DifferentialModel
-</span><a href="#local-6989586621679411406"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679411408"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; Getting UID DifferentialModel UID -&gt; UID
+</span><span id="line-54"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679409662"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>            </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679409660"><span class="annot"><span class="annottext">a :: DifferentialModel
+</span><a href="#local-6989586621679409660"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679409659"><span class="annot"><span class="annottext">== :: DifferentialModel -&gt; DifferentialModel -&gt; Bool
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679409658"><span class="annot"><span class="annottext">b :: DifferentialModel
+</span><a href="#local-6989586621679409658"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel
+</span><a href="#local-6989586621679409660"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; Getting UID DifferentialModel UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID DifferentialModel UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679411406"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; Getting UID DifferentialModel UID -&gt; UID
+</span><a href="#local-6989586621679409658"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; Getting UID DifferentialModel UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID DifferentialModel UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-55"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'ConceptChunk' used to make the 'DifferentialModel'.</span><span>
-</span><span id="line-56"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.NamedIdea.html#NamedIdea"><span class="hs-identifier hs-type">NamedIdea</span></a></span><span>     </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679411402"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; DifferentialModel -&gt; f DifferentialModel
+</span><span id="line-56"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.NamedIdea.html#NamedIdea"><span class="hs-identifier hs-type">NamedIdea</span></a></span><span>     </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679409654"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; DifferentialModel -&gt; f DifferentialModel
 </span><a href="Language.Drasil.Chunk.NamedIdea.html#term"><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; f ConceptChunk)
 -&gt; DifferentialModel -&gt; f DifferentialModel
 Lens' DifferentialModel ConceptChunk
@@ -105,7 +105,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. NamedIdea c =&gt; Lens' c NP
 </span><a href="Language.Drasil.Chunk.NamedIdea.html#term"><span class="hs-identifier hs-var">term</span></a></span><span>
 </span><span id="line-57"></span><span class="hs-comment">-- | Finds the idea contained in the 'ConceptChunk' used to make the 'DifferentialModel'.</span><span>
-</span><span id="line-58"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.NamedIdea.html#Idea"><span class="hs-identifier hs-type">Idea</span></a></span><span>          </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679411397"><span class="annot"><span class="annottext">getA :: DifferentialModel -&gt; Maybe String
+</span><span id="line-58"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.NamedIdea.html#Idea"><span class="hs-identifier hs-type">Idea</span></a></span><span>          </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679409649"><span class="annot"><span class="annottext">getA :: DifferentialModel -&gt; Maybe String
 </span><a href="Language.Drasil.Chunk.NamedIdea.html#getA"><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Maybe String
 forall c. Idea c =&gt; c -&gt; Maybe String
 </span><a href="Language.Drasil.Chunk.NamedIdea.html#getA"><span class="hs-identifier hs-var">getA</span></a></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Maybe String)
@@ -120,7 +120,7 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 Lens' DifferentialModel ConceptChunk
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#conc"><span class="hs-identifier hs-var">conc</span></a></span><span>
 </span><span id="line-59"></span><span class="hs-comment">-- | Finds the definition contained in the 'ConceptChunk' used to make the 'DifferentialModel'.</span><span>
-</span><span id="line-60"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#Definition"><span class="hs-identifier hs-type">Definition</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679411393"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence)
+</span><span id="line-60"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#Definition"><span class="hs-identifier hs-type">Definition</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679409645"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence)
 -&gt; DifferentialModel -&gt; f DifferentialModel
 </span><a href="Language.Drasil.Classes.html#defn"><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; f ConceptChunk)
 -&gt; DifferentialModel -&gt; f DifferentialModel
@@ -135,7 +135,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; f Sentence) -&gt; ConceptChunk -&gt; f ConceptChunk
 forall c. Definition c =&gt; Lens' c Sentence
 </span><a href="Language.Drasil.Classes.html#defn"><span class="hs-identifier hs-var">defn</span></a></span><span>
-</span><span id="line-61"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#ConceptDomain"><span class="hs-identifier hs-type">ConceptDomain</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679411389"><span class="annot"><span class="annottext">cdom :: DifferentialModel -&gt; [UID]
+</span><span id="line-61"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#ConceptDomain"><span class="hs-identifier hs-type">ConceptDomain</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679409641"><span class="annot"><span class="annottext">cdom :: DifferentialModel -&gt; [UID]
 </span><a href="Language.Drasil.Classes.html#cdom"><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; [UID]
 forall c. ConceptDomain c =&gt; c -&gt; [UID]
 </span><a href="Language.Drasil.Classes.html#cdom"><span class="hs-identifier hs-var">cdom</span></a></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; [UID])
@@ -152,7 +152,7 @@ Lens' DifferentialModel ConceptChunk
 </span><span id="line-62"></span><span class="hs-comment">-- | Finds the domain of the 'ConceptChunk' used to make the 'DifferentialModel'.</span><span>
 </span><span id="line-63"></span><span class="hs-comment">-- | Convert the 'DifferentialModel' into the model expression language.</span><span>
 </span><span id="line-64"></span><span class="hs-comment">-- | Set Canonical form of ODE to Zero, e.g. ax0 + bx1 + cx2 + .... + c = 0</span><span>
-</span><span id="line-65"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.ExprClasses.html#Express"><span class="hs-identifier hs-type">Express</span></a></span><span>       </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679411385"><span class="annot"><span class="annottext">express :: DifferentialModel -&gt; ModelExpr
+</span><span id="line-65"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.ExprClasses.html#Express"><span class="hs-identifier hs-type">Express</span></a></span><span>       </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679409637"><span class="annot"><span class="annottext">express :: DifferentialModel -&gt; ModelExpr
 </span><a href="Language.Drasil.ExprClasses.html#express"><span class="hs-identifier hs-var hs-var hs-var hs-var">express</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; ModelExpr
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#formStdODE"><span class="hs-identifier hs-var">formStdODE</span></a></span><span>
 </span><span id="line-66"></span><span>
@@ -160,19 +160,19 @@ Lens' DifferentialModel ConceptChunk
 </span><span id="line-68"></span><span class="hs-comment">-- | x0 is the highest order, x1 is the second higest order, and so on. The c is the constant.</span><span>
 </span><span id="line-69"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formStdODE"><span class="hs-identifier hs-type">formStdODE</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span>
 </span><span id="line-70"></span><span id="formStdODE"><span class="annot"><span class="annottext">formStdODE :: DifferentialModel -&gt; ModelExpr
-</span><a href="Language.Drasil.Chunk.DifferentialModel.html#formStdODE"><span class="hs-identifier hs-var hs-var">formStdODE</span></a></span></span><span> </span><span id="local-6989586621679411382"><span class="annot"><span class="annottext">d :: DifferentialModel
-</span><a href="#local-6989586621679411382"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; ModelExpr
+</span><a href="Language.Drasil.Chunk.DifferentialModel.html#formStdODE"><span class="hs-identifier hs-var hs-var">formStdODE</span></a></span></span><span> </span><span id="local-6989586621679409634"><span class="annot"><span class="annottext">d :: DifferentialModel
+</span><a href="#local-6989586621679409634"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; ModelExpr
 forall r. ModelExprC r =&gt; [r] -&gt; r
 </span><a href="Language.Drasil.ModelExpr.Class.html#equiv"><span class="hs-identifier hs-var">equiv</span></a></span><span> </span><span class="annot"><span class="annottext">([ModelExpr] -&gt; ModelExpr) -&gt; [ModelExpr] -&gt; ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel -&gt; ModelExpr
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#addCoes"><span class="hs-identifier hs-var">addCoes</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679411382"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><a href="#local-6989586621679409634"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-operator hs-var">`addRe`</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; ModelExpr
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><a href="Language.Drasil.ExprClasses.html#express"><span class="hs-identifier hs-var">express</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679411382"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; Getting Expr DifferentialModel Expr -&gt; Expr
+</span><a href="#local-6989586621679409634"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel -&gt; Getting Expr DifferentialModel Expr -&gt; Expr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr DifferentialModel Expr
 Lens' DifferentialModel Expr
@@ -189,8 +189,8 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span id="line-76"></span><span class="hs-comment">-- | Add coefficients together by restructuring each CoeffDeriv</span><span>
 </span><span id="line-77"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#addCoes"><span class="hs-identifier hs-type">addCoes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#DifferentialModel"><span class="hs-identifier hs-type">DifferentialModel</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span>
 </span><span id="line-78"></span><span id="addCoes"><span class="annot"><span class="annottext">addCoes :: DifferentialModel -&gt; ModelExpr
-</span><a href="Language.Drasil.Chunk.DifferentialModel.html#addCoes"><span class="hs-identifier hs-var hs-var">addCoes</span></a></span></span><span> </span><span id="local-6989586621679411380"><span class="annot"><span class="annottext">d :: DifferentialModel
-</span><a href="#local-6989586621679411380"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; ModelExpr -&gt; ModelExpr) -&gt; [ModelExpr] -&gt; ModelExpr
+</span><a href="Language.Drasil.Chunk.DifferentialModel.html#addCoes"><span class="hs-identifier hs-var hs-var">addCoes</span></a></span></span><span> </span><span id="local-6989586621679409632"><span class="annot"><span class="annottext">d :: DifferentialModel
+</span><a href="#local-6989586621679409632"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; ModelExpr -&gt; ModelExpr) -&gt; [ModelExpr] -&gt; ModelExpr
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; a -&gt; a) -&gt; t a -&gt; a
 </span><span class="hs-identifier hs-var">foldr1</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -199,12 +199,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-79"></span><span>            </span><span class="annot"><span class="annottext">(CoeffDeriv -&gt; ModelExpr) -&gt; [CoeffDeriv] -&gt; [ModelExpr]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679411378"><span class="annot"><span class="annottext">x :: CoeffDeriv
-</span><a href="#local-6989586621679411378"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span class="hs-identifier hs-var">map</span></span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679409630"><span class="annot"><span class="annottext">x :: CoeffDeriv
+</span><a href="#local-6989586621679409630"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-80"></span><span>                  </span><span class="annot"><span class="annottext">Expr -&gt; ModelExpr
 forall c. Express c =&gt; c -&gt; ModelExpr
 </span><a href="Language.Drasil.ExprClasses.html#express"><span class="hs-identifier hs-var">express</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CoeffDeriv
-</span><a href="#local-6989586621679411378"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">CoeffDeriv -&gt; Getting Expr CoeffDeriv Expr -&gt; Expr
+</span><a href="#local-6989586621679409630"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">CoeffDeriv -&gt; Getting Expr CoeffDeriv Expr -&gt; Expr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr CoeffDeriv Expr
 Lens' CoeffDeriv Expr
@@ -220,7 +220,7 @@ Integer -&gt; r -&gt; c -&gt; r
 </span><span id="line-83"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; Integer
 forall a. Integral a =&gt; a -&gt; Integer
 </span><span class="hs-identifier hs-var">toInteger</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CoeffDeriv
-</span><a href="#local-6989586621679411378"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">CoeffDeriv -&gt; Getting Int CoeffDeriv Int -&gt; Int
+</span><a href="#local-6989586621679409630"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">CoeffDeriv -&gt; Getting Int CoeffDeriv Int -&gt; Int
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Int CoeffDeriv Int
 Lens' CoeffDeriv Int
@@ -230,7 +230,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#sy"><span class="hs-identifier hs-var">sy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Language.Drasil.Chunk.Quantity.html#qw"><span class="hs-identifier hs-var">qw</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679411380"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
+</span><a href="#local-6989586621679409632"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
 -&gt; Getting ConstrConcept DifferentialModel ConstrConcept
 -&gt; ConstrConcept
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -238,7 +238,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 Lens' DifferentialModel ConstrConcept
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#depVar"><span class="hs-identifier hs-var">depVar</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-85"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679411380"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
+</span><a href="#local-6989586621679409632"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
 -&gt; Getting UnitalChunk DifferentialModel UnitalChunk -&gt; UnitalChunk
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UnitalChunk DifferentialModel UnitalChunk
@@ -246,7 +246,7 @@ Lens' DifferentialModel UnitalChunk
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#indepVar"><span class="hs-identifier hs-var">indepVar</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-86"></span><span>               </span><span class="hs-special">)</span><span>
 </span><span id="line-87"></span><span>               </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DifferentialModel
-</span><a href="#local-6989586621679411380"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
+</span><a href="#local-6989586621679409632"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
 -&gt; Getting [CoeffDeriv] DifferentialModel [CoeffDeriv]
 -&gt; [CoeffDeriv]
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -265,14 +265,14 @@ Lens' DifferentialModel [CoeffDeriv]
 -&gt; NP
 -&gt; Sentence
 -&gt; DifferentialModel
-</span><a href="Language.Drasil.Chunk.DifferentialModel.html#makeLinear"><span class="hs-identifier hs-var hs-var">makeLinear</span></a></span></span><span> </span><span id="local-6989586621679411377"><span class="annot"><span class="annottext">dmIndepVar :: UnitalChunk
-</span><a href="#local-6989586621679411377"><span class="hs-identifier hs-var">dmIndepVar</span></a></span></span><span> </span><span id="local-6989586621679411376"><span class="annot"><span class="annottext">dmDepVar :: ConstrConcept
-</span><a href="#local-6989586621679411376"><span class="hs-identifier hs-var">dmDepVar</span></a></span></span><span> </span><span id="local-6989586621679411375"><span class="annot"><span class="annottext">dmCoeff :: [CoeffDeriv]
-</span><a href="#local-6989586621679411375"><span class="hs-identifier hs-var">dmCoeff</span></a></span></span><span> </span><span id="local-6989586621679411374"><span class="annot"><span class="annottext">dmConst :: Expr
-</span><a href="#local-6989586621679411374"><span class="hs-identifier hs-var">dmConst</span></a></span></span><span> </span><span id="local-6989586621679411373"><span class="annot"><span class="annottext">dmID :: String
-</span><a href="#local-6989586621679411373"><span class="hs-identifier hs-var">dmID</span></a></span></span><span> </span><span id="local-6989586621679411372"><span class="annot"><span class="annottext">dmTerm :: NP
-</span><a href="#local-6989586621679411372"><span class="hs-identifier hs-var">dmTerm</span></a></span></span><span> </span><span id="local-6989586621679411371"><span class="annot"><span class="annottext">dmDefn :: Sentence
-</span><a href="#local-6989586621679411371"><span class="hs-identifier hs-var">dmDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="Language.Drasil.Chunk.DifferentialModel.html#makeLinear"><span class="hs-identifier hs-var hs-var">makeLinear</span></a></span></span><span> </span><span id="local-6989586621679409629"><span class="annot"><span class="annottext">dmIndepVar :: UnitalChunk
+</span><a href="#local-6989586621679409629"><span class="hs-identifier hs-var">dmIndepVar</span></a></span></span><span> </span><span id="local-6989586621679409628"><span class="annot"><span class="annottext">dmDepVar :: ConstrConcept
+</span><a href="#local-6989586621679409628"><span class="hs-identifier hs-var">dmDepVar</span></a></span></span><span> </span><span id="local-6989586621679409627"><span class="annot"><span class="annottext">dmCoeff :: [CoeffDeriv]
+</span><a href="#local-6989586621679409627"><span class="hs-identifier hs-var">dmCoeff</span></a></span></span><span> </span><span id="local-6989586621679409626"><span class="annot"><span class="annottext">dmConst :: Expr
+</span><a href="#local-6989586621679409626"><span class="hs-identifier hs-var">dmConst</span></a></span></span><span> </span><span id="local-6989586621679409625"><span class="annot"><span class="annottext">dmID :: String
+</span><a href="#local-6989586621679409625"><span class="hs-identifier hs-var">dmID</span></a></span></span><span> </span><span id="local-6989586621679409624"><span class="annot"><span class="annottext">dmTerm :: NP
+</span><a href="#local-6989586621679409624"><span class="hs-identifier hs-var">dmTerm</span></a></span></span><span> </span><span id="local-6989586621679409623"><span class="annot"><span class="annottext">dmDefn :: Sentence
+</span><a href="#local-6989586621679409623"><span class="hs-identifier hs-var">dmDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
 -&gt; ConstrConcept
 -&gt; [CoeffDeriv]
@@ -280,12 +280,12 @@ Lens' DifferentialModel [CoeffDeriv]
 -&gt; ConceptChunk
 -&gt; DifferentialModel
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#Linear"><span class="hs-identifier hs-var">Linear</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679411377"><span class="hs-identifier hs-var">dmIndepVar</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="#local-6989586621679411376"><span class="hs-identifier hs-var">dmDepVar</span></a></span><span> </span><span class="annot"><span class="annottext">[CoeffDeriv]
-</span><a href="#local-6989586621679411375"><span class="hs-identifier hs-var">dmCoeff</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679411374"><span class="hs-identifier hs-var">dmConst</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><a href="#local-6989586621679409629"><span class="hs-identifier hs-var">dmIndepVar</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="#local-6989586621679409628"><span class="hs-identifier hs-var">dmDepVar</span></a></span><span> </span><span class="annot"><span class="annottext">[CoeffDeriv]
+</span><a href="#local-6989586621679409627"><span class="hs-identifier hs-var">dmCoeff</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="#local-6989586621679409626"><span class="hs-identifier hs-var">dmConst</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><a href="Language.Drasil.Chunk.Concept.html#dccWDS"><span class="hs-identifier hs-var">dccWDS</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679411373"><span class="hs-identifier hs-var">dmID</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679411372"><span class="hs-identifier hs-var">dmTerm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679411371"><span class="hs-identifier hs-var">dmDefn</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679409625"><span class="hs-identifier hs-var">dmID</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679409624"><span class="hs-identifier hs-var">dmTerm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679409623"><span class="hs-identifier hs-var">dmDefn</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-94"></span></pre></body></html>

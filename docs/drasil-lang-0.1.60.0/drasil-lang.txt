@@ -2090,14 +2090,6 @@ vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 -- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
 --   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
-
--- | Any quantity can be a named argument (wrapper for
---   <a>QuantityDict</a>), but with more of a focus on generating code
---   arguments.
-data NamedArgument
-
--- | Smart constructor for <a>NamedArgument</a> .
-narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 data QDefinition e
 
 -- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>String</a>),

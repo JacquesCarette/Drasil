@@ -95,12 +95,6 @@ digraph alltypes {
 		QDefinitione -> Lens_;
 		}
 	}
-	subgraph namedargument {
-		subgraph namedargument{
-		NamedArgument	[shape=oval, color=darkgreen, label="NamedArgument"];
-		NamedArgument -> QuantityDict;
-		}
-	}
 	subgraph namedidea {
 		subgraph namedchunk{
 		NamedChunk	[shape=oval, color=cyan3, label="NamedChunk"];

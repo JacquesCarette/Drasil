@@ -105,6 +105,29 @@ physLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
 -- | Returns a pair of a chunk and its software constraints.
 sfwrLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
 
+
+-- | Named arguments used in generating code.
+module Language.Drasil.Chunk.NamedArgument
+
+-- | Any quantity can be a named argument (wrapper for
+--   <a>QuantityDict</a>), but with more of a focus on generating code
+--   arguments.
+newtype NamedArgument
+NA :: QuantityDict -> NamedArgument
+[_qtd] :: NamedArgument -> QuantityDict
+
+-- | Smart constructor for <a>NamedArgument</a> .
+narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Classes.IsArgumentName Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance GHC.Classes.Eq Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.NamedArgument.NamedArgument
+
 module Language.Drasil.Chunk.Parameter
 
 -- | Determines whether a parameter is passed by value or by reference.
@@ -2951,6 +2974,14 @@ unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a
 unCPPP :: CppProject a -> a
 unSP :: SwiftProject a -> a
+
+-- | Any quantity can be a named argument (wrapper for
+--   <a>QuantityDict</a>), but with more of a focus on generating code
+--   arguments.
+data NamedArgument
+
+-- | Smart constructor for <a>NamedArgument</a> .
+narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 
 
 -- | Define and collect information about ODEs and ODE solvers from various

@@ -80,6 +80,12 @@ digraph alltypes {
 		ConstraintCEMap -> MapUIDConstraintCE;
 		}
 	}
+	subgraph namedargument {
+		subgraph namedargument{
+		NamedArgument	[shape=oval, color=darkgreen, label="NamedArgument"];
+		NamedArgument -> QuantityDict;
+		}
+	}
 	subgraph parameter {
 		subgraph passby{
 		PassBy	[shape=oval, color=cyan3, label="PassBy"];
@@ -2926,12 +2932,6 @@ digraph alltypes {
 		QDefinitione -> e;
 		QDefinitione -> QDefinition;
 		QDefinitione -> Lens_;
-		}
-	}
-	subgraph namedargument {
-		subgraph namedargument{
-		NamedArgument	[shape=oval, color=darkgreen, label="NamedArgument"];
-		NamedArgument -> QuantityDict;
 		}
 	}
 	subgraph namedidea {

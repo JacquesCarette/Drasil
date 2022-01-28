@@ -9,14 +9,6 @@ module Language.Drasil.Chunk.NamedArgument (
 import Language.Drasil (QuantityDict, HasSpace(..), HasSymbol(..), HasUID(..),
   Idea(..), MayHaveUnit(..), NamedIdea(..), Quantity, qw, IsArgumentName)
 
--- import Language.Drasil.Space (HasSpace(..))
--- import Language.Drasil.Symbol (HasSymbol(symbol))
--- import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
---   Quantity, IsArgumentName)
--- import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
--- import Language.Drasil.Chunk.UnitDefn(MayHaveUnit(getUnit))
--- import Language.Drasil.UID (HasUID(..))
-
 import Control.Lens ((^.), makeLenses, view)
 
 -- | Any quantity can be a named argument (wrapper for 'QuantityDict'),

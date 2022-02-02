@@ -1,6 +1,8 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 -- | Defines constructors for 'CodeExpr's often used in relation to code generation.
 module Language.Drasil.CodeExpr (CodeExpr,
+  CodeExprC(..), ExprC(..), LiteralC(..),
+  {-
   -- * CodeExpr Smart Constructors (mostly Unary)
   sy, str, int, dbl, exactDbl, matrix,
   frac, recip_, abs_, neg, log,  ln, sqrt,
@@ -12,23 +14,19 @@ module Language.Drasil.CodeExpr (CodeExpr,
   addI, addRe, mulI, mulRe, idx,
   -- * Programming-related CodeExpr Constructors
   new, newWithNamedArgs, message, msgWithNamedArgs,
-  field, apply, apply1, apply2, applyWithNamedArgs,
+  field, apply, apply1, apply2, applyWithNamedArgs, -}
   -- * 'Expr' -> 'CodeExpr' -- FIXME: Remove
   expr) where
 
 import Prelude hiding (exp, sin, cos, tan, sqrt, log)
 
-import Language.Drasil (Space(Actor), Callable, HasSpace(..), HasSymbol,
-  HasUID(..), IsArgumentName, LiteralC(..))
+import Language.Drasil (ExprC(..), LiteralC(..))
+import Language.Drasil.Code.Expr (CodeExpr)
+import Language.Drasil.Code.Expr.Convert (expr) -- TODO: Remove.
 
-import Language.Drasil.Chunk.CodeBase (CodeIdea, CodeVarChunk)
-import Language.Drasil.Code.Expr
-import Language.Drasil.Code.Expr.Convert (expr)
+import Language.Drasil.Code.Expr.Class (CodeExprC(..))
 
-import Language.Drasil.Literal.Development (Literal(..))
-
-import Control.Lens ((^.))
-
+{-
 -- | Smart constructor for chunk symbols.
 sy :: (HasUID u, HasSymbol u) => u -> CodeExpr
 sy = C . (^. uid)
@@ -244,3 +242,4 @@ mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
 mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
 mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)
 mulRe l r = AssocA MulRe [l, r]
+-}

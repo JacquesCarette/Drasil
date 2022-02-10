@@ -17,13 +17,13 @@
 -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; ODEOptions
 </span><span class="hs-identifier hs-var">odeOptions</span></span><span> </span><span class="annot"><span class="annottext">ODEMethod
 </span><span class="hs-identifier hs-var">RK45</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstQDef -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.PDController.Unitals.html#odeAbsTolConst"><span class="hs-identifier hs-var">odeAbsTolConst</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstQDef -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier hs-var">odeRelTolConst</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-var">qdStepTime</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -66,56 +66,67 @@ forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-26"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-var">qdSimTime</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-27"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-28"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-29"></span><span>      </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>   </span><span class="hs-comment">-- ? CHECK: Seems like `neg` does not generate generate sufficient parentheses?</span><span>
 </span><span id="line-30"></span><span>      </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">20</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span>      </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-32"></span><span>      </span><span class="annot"><span class="annottext">ODEOptions

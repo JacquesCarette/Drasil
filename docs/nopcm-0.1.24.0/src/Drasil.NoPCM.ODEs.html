@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.NoPCM.ODEs</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier">noPCMODEOpts</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier">noPCMODEInfo</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-2"></span><span>
-</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">odeInfo</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">odeOptions</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">quantvar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEInfo</span></span><span class="hs-special">,</span><span>
-</span><span id="line-4"></span><span>  </span><span class="annot"><span class="hs-identifier">ODEMethod</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">RK45</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEOptions</span></span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.CodeExpr</span></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">recip_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ExprC</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mulRe</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">idx</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sy</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">($-)</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">LiteralC</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">exactDbl</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">odeInfo</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">odeOptions</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">quantvar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEInfo</span></span><span class="hs-special">,</span><span>
+</span><span id="line-5"></span><span>  </span><span class="annot"><span class="hs-identifier">ODEMethod</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">RK45</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEOptions</span></span><span class="hs-special">)</span><span>
 </span><span id="line-6"></span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span>
@@ -16,13 +16,13 @@
 -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; ODEOptions
 </span><span class="hs-identifier hs-var">odeOptions</span></span><span> </span><span class="annot"><span class="annottext">ODEMethod
 </span><span class="hs-identifier hs-var">RK45</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertainChunk -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk
 </span><span class="hs-identifier hs-var">absTol</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertainChunk -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk
 </span><span class="hs-identifier hs-var">relTol</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">timeStep</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -55,24 +55,28 @@ forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">tempC</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">timeFinal</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempInit</span></span><span class="hs-special">)</span><span>
 </span><span id="line-19"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempC</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">CodeExpr -&gt; CodeExpr -&gt; CodeExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; CodeExpr
-forall u. (HasUID u, HasSymbol u) =&gt; u -&gt; CodeExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; CodeExpr
 forall r. LiteralC r =&gt; Integer -&gt; r

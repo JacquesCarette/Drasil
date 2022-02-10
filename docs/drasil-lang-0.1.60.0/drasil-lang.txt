@@ -1585,6 +1585,9 @@ completeCase :: ExprC r => [(r, r)] -> r
 -- | Smart constructor for case statements with an incomplete set of cases.
 incompleteCase :: ExprC r => [(r, r)] -> r
 
+-- | Create a matrix. TODO: Re-work later.
+matrix :: ExprC r => [[r]] -> r
+
 -- | Create a two-by-two matrix from four given values. For example:
 --   
 --   <pre>

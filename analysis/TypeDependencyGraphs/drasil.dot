@@ -874,6 +874,8 @@ digraph alltypes {
 		CodeFuncChunk -> CodeChunk;
 		}
 	}
+	subgraph class {
+	}
 	subgraph convert {
 	}
 	subgraph development {

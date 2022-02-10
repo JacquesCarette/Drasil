@@ -730,7 +730,7 @@ ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
 
 -- | Constructs a CodeExpr representing the field of an actor
-field :: CodeVarChunk -> CodeVarChunk -> CodeExpr
+field :: CodeExprC r => CodeVarChunk -> CodeVarChunk -> r
 
 -- | Structure to hold ODE information.
 data ODEInfo

@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.CodeDefinition (
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeChunk(..), CodeIdea(codeName, codeChunk),
   VarOrFunc(..), quantvar, quantfunc, funcPrefix, DefiningCodeExpr(..))
-import Language.Drasil.CodeExpr (CodeExpr, matrix, expr)
+import Language.Drasil.CodeExpr (CodeExpr, expr)
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 import Control.Lens ((^.), makeLenses, view)

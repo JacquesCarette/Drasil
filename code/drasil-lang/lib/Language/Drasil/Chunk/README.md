@@ -25,9 +25,6 @@ DefinedQuantity.hs
 Eq.hs
   - Defines `QDefinition` data type (quantity with units and defining equations)
 
-NamedArgument.hs
-  - Code-oriented version of `DefinedQuantityDict`
-
 NamedIdea.hs
   - `NamedChunk` and `IdeaDict` data types
   - Various `NamedChunk` combinators

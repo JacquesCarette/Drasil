@@ -173,6 +173,12 @@ class ExprC r where
   -- | Smart constructor for case statements with an incomplete set of cases.
   incompleteCase :: [(r, r)] -> r
   
+  -- | Create a matrix.
+  -- TODO: Re-work later.
+  matrix :: [[r]] -> r
+
+  -- TODO: The 3 below smart constructors can be re-built above without needing to be inside of this typeclass definition.
+
   -- | Create a two-by-two matrix from four given values. For example:
   --
   -- >>> m2x2 1 2 3 4
@@ -363,15 +369,17 @@ instance ExprC Expr where
   -- | Smart constructor for case statements with an incomplete set of cases.
   incompleteCase = Case Incomplete
   
+  matrix = Matrix
+
   -- | Create a two-by-two matrix from four given values. For example:
   --
   -- >>> m2x2 1 2 3 4
   -- [ [1,2],
   --   [3,4] ]
-  m2x2 a b c d = Matrix [[a,b],[c,d]]
+  m2x2 a b c d = matrix [[a,b],[c,d]]
   
   -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = Matrix [[a],[b]]
+  vec2D a b    = matrix [[a],[b]]
   
   -- | Creates a diagonal two-by-two matrix. For example:
   --
@@ -553,15 +561,17 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for case statements with an incomplete set of cases.
   incompleteCase = M.Case Incomplete
 
+  matrix = M.Matrix
+
   -- | Create a two-by-two matrix from four given values. For example:
   --
   -- >>> m2x2 1 2 3 4
   -- [ [1,2],
   --   [3,4] ]
-  m2x2 a b c d = M.Matrix [[a,b],[c,d]]
+  m2x2 a b c d = matrix [[a,b],[c,d]]
 
   -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = M.Matrix [[a],[b]]
+  vec2D a b    = matrix [[a],[b]]
 
   -- | Creates a diagonal two-by-two matrix. For example:
   --

@@ -41,6 +41,7 @@ library:
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeDefinition
     - Language.Drasil.Chunk.ConstraintMap
+    - Language.Drasil.Chunk.NamedArgument
     - Language.Drasil.Chunk.Parameter
     - Language.Drasil.Code.Code
     - Language.Drasil.Code.CodeQuantityDicts

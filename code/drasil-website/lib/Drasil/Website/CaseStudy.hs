@@ -155,7 +155,7 @@ implementationTypeLegend = CSL {
 -- | Compiler logging statements.
 loggingLegend :: CSLegend
 loggingLegend = CSL {
-  ttle = inStructTitle,
+  ttle = loggingTitle,
   symbAndDefs = [ ("NoL", "No Logging statements"),
                   ("L", "Logging statements included")]
 }
@@ -163,7 +163,7 @@ loggingLegend = CSL {
 -- | Input value structure.
 inputStrLegend :: CSLegend
 inputStrLegend = CSL {
-  ttle = loggingTitle,
+  ttle = inStructTitle,
   symbAndDefs = [ ("B", "Inputs are Bundled in a class"),
                   ("U", "Inputs are Unbundled")]
 }

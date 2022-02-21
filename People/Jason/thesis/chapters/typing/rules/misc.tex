@@ -56,8 +56,45 @@
 
         \end{enumerate}
 
+    \item BinaryOp:
+        \begin{enumerate}
+            \item Arithmetic: % TODO: 
+            \item Bool: % TODO: 
+            \item Equality: % TODO: 
+            \item Ordering: % TODO: 
+            \item Indexing: % TODO: 
+            \item Vectors: % TODO: 
+        \end{enumerate}
+    
+    \item RTopology:
+        \newrule{}
+            {\ofTy{Discrete[]}{RTopology}}
+
+        \newrule{}
+            {\ofTy{Continuous[]}{RTopology}}
+    
+    \item DomainDesc: % TODO: Why does the topology appear as a type constructor argument, and type signature argument?
+        \newrule{\ofTy{top}{$\tau_1$} & \ofTy{bot}{$\tau_2$} & \ofTy{s}{Symbol} & \ofTy{rtop}{RTopology}}
+            {\ofTy{BoundedDD[s, rtop, top, bot]}{DomainDesc Discrete $\tau_1$ $\tau_2$}}
+
+        \newrule{\ty{topT} & \ty{botT} & \ofTy{s}{Symbol} & \ofTy{rtop}{RTopology}}
+            {\ofTy{AllDD[s, rtop]}{DomainDesc Continuous topT botT}}
+
+    \item Inclusive:
+        \newrule{}
+            {\ofTy{Inc[]}{Inclusive}}
+
+        \newrule{}
+            {\ofTy{Exc[]}{Inclusive}}
+
+    \item RealInterval:
+        \newrule{\ty{a} & \ty{b} & \ofTy{top}{(Inclusive, a)} & \ofTy{bot}{(Inclusive, b)}}
+            {\ofTy{Bounded[top, bot]}{RealInterval a b}}
+
+        \newrule{\ty{a} & \ty{b} & \ofTy{top}{(Inclusive, a)}}
+            {\ofTy{UpTo[top]}{RealInterval a b}}
+
+        \newrule{\ty{a} & \ty{b} & \ofTy{bot}{(Inclusive, b)}}
+            {\ofTy{UpFrom[bot]}{RealInterval a b}}
+
 \end{enumerate}
-
-% TODO: BinaryOp
-
-% TODO: DiscreteDomainDesc

@@ -31,7 +31,7 @@
             {\ofTy{Binary[op, l, r]}{Expr z}}
 
     \item ``Big'' Operations:
-        \newrule{\ty{x} & \ofTy{op}{AssocOp x} & \ofTy{dom}{DiscreteDomainDesc (Expr x) (Expr x)}}
+        \newrule{\ty{x} & \ofTy{op}{AssocOp x} & \ofTy{dom}{DomainDesc Discrete (Expr x) (Expr x)}}
             {\ofTy{BigOp[op, dom]}{Expr x}}
     
     \item ``Is in interval'' operator:

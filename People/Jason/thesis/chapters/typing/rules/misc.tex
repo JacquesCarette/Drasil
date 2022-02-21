@@ -1,0 +1,63 @@
+
+\begin{enumerate}
+
+    \item Completeness:
+        \newrule{}
+            {\ofTy{Complete[]}{Completeness}}
+        
+        \newrule{}
+            {\ofTy{Incomplete[]}{Completeness}}
+
+    \item AssocOp:
+        \begin{enumerate}
+            \item Numerics:
+                \newrule{\ofTy{x}{Numerics($\tau$)}}
+                    {\ofTy{Add[]}{AssocOp x}}
+        
+                \newrule{\ofTy{x}{Numerics($\tau$)}}
+                    {\ofTy{Mul[]}{AssocOp x}}
+    
+            \item Bool:
+                \newrule{}
+                    {\ofTy{And[]}{AssocOp Bool}}
+        
+                \newrule{}
+                    {\ofTy{Or[]}{AssocOp Bool}}
+        \end{enumerate}
+
+    \item UnaryOp:
+        \begin{enumerate}
+            \item Numerics:
+                \newrule{\ofTy{x}{NumericsWithNegation(x)}}
+                    {\ofTy{Neg[]}{UnaryOp x x}}
+
+                \newrule{\ofTy{x}{NumericsWithNegation(x)}}
+                    {\ofTy{Abs[]}{UnaryOp x x}}
+                
+                % TODO: Exp
+                
+                For Log, Ln, Sin, Cos, Tan, Sec, Csc, Cot, Arcsin, Arccos, Arctan, and Sqrt, please use the following template, replacing ``$\$TRG$'' with the desired operator:
+                \newrule{}
+                    {\ofTy{\$TRG[]}{UnaryOp Real Real}}
+
+            \item Vectors:
+                \newrule{\ofTy{x}{NumericsWithNegation(x)}}
+                    {\ofTy{NegV[]}{UnaryOp [x] [x]}}
+
+                \newrule{\ofTy{x}{Numerics(x)}}
+                    {\ofTy{Norm[]}{UnaryOp [x] Real}}
+
+                \newrule{\ty{x}}
+                    {\ofTy{Dim[]}{UnaryOp [x] Integer}}
+                
+            \item Booleans:
+                \newrule{}
+                    {\ofTy{Not[]}{UnaryOp Bool Bool}}
+
+        \end{enumerate}
+
+\end{enumerate}
+
+% TODO: BinaryOp
+
+% TODO: DiscreteDomainDesc

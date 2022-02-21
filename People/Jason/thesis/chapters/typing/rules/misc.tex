@@ -11,10 +11,10 @@
     \item AssocOp:
         \begin{enumerate}
             \item Numerics:
-                \newrule{\ofTy{x}{Numerics($\tau$)}}
+                \newrule{\numericTy{x}}
                     {\ofTy{Add[]}{AssocOp x}}
         
-                \newrule{\ofTy{x}{Numerics($\tau$)}}
+                \newrule{\numericTy{x}}
                     {\ofTy{Mul[]}{AssocOp x}}
     
             \item Bool:
@@ -28,23 +28,23 @@
     \item UnaryOp:
         \begin{enumerate}
             \item Numerics:
-                \newrule{\ofTy{x}{NumericsWithNegation(x)}}
+                \newrule{\negNumericTy{x}}
                     {\ofTy{Neg[]}{UnaryOp x x}}
 
-                \newrule{\ofTy{x}{NumericsWithNegation(x)}}
+                \newrule{\negNumericTy{x}}
                     {\ofTy{Abs[]}{UnaryOp x x}}
                 
-                % TODO: Exp
+                % TODO: Why is there an 'Exp' in unary op?
                 
                 For Log, Ln, Sin, Cos, Tan, Sec, Csc, Cot, Arcsin, Arccos, Arctan, and Sqrt, please use the following template, replacing ``$\$TRG$'' with the desired operator:
                 \newrule{}
                     {\ofTy{\$TRG[]}{UnaryOp Real Real}}
 
             \item Vectors:
-                \newrule{\ofTy{x}{NumericsWithNegation(x)}}
+                \newrule{\negNumericTy{x}}
                     {\ofTy{NegV[]}{UnaryOp [x] [x]}}
 
-                \newrule{\ofTy{x}{Numerics(x)}}
+                \newrule{\numericTy{x}}
                     {\ofTy{Norm[]}{UnaryOp [x] Real}}
 
                 \newrule{\ty{x}}
@@ -58,12 +58,47 @@
 
     \item BinaryOp:
         \begin{enumerate}
-            \item Arithmetic: % TODO: 
-            \item Bool: % TODO: 
-            \item Equality: % TODO: 
-            \item Ordering: % TODO: 
-            \item Indexing: % TODO: 
-            \item Vectors: % TODO: 
+            \item Arithmetic: % TODO: Should we have FracI and FracR? 
+                \newrule{}
+                    {\ofTy{FracR[]}{BinaryOp Real Real Real}}
+
+            \item Bool:
+                \newrule{}
+                    {\ofTy{Impl[]}{BinaryOp Bool Bool Bool}}
+                
+                \newrule{}
+                    {\ofTy{Iff[]}{BinaryOp Bool Bool Bool}}
+                
+            \item Equality:
+                \newrule{\ty{x}}
+                    {\ofTy{Eq[]}{BinaryOp x x Bool}}
+        
+                \newrule{\ty{x}}
+                    {\ofTy{NEq[]}{BinaryOp x x Bool}}
+            
+            \item Ordering:
+                \newrule{\numericTy{x}}
+                    {\ofTy{Lt[]}{BinaryOp x x Bool}}
+        
+                \newrule{\numericTy{x}}
+                    {\ofTy{Gt[]}{BinaryOp x x Bool}}
+            
+                \newrule{\numericTy{x}}
+                    {\ofTy{LEq[]}{BinaryOp x x Bool}}
+        
+                \newrule{\numericTy{x}}
+                    {\ofTy{GEq[]}{BinaryOp x x Bool}}
+            
+            \item Indexing: % TODO: Everything related to vectors is up for debate, we can redesign them however we see fit. It shouldn't add much complexity.
+                \newrule{\ty{x}}
+                    {\ofTy{Index[]}{BinaryOp [x] Integer x}}
+            
+            \item Vectors:
+                \newrule{\numericTy{x}}
+                    {\ofTy{Cross[]}{BinaryOp [x] [x] [x]}}
+        
+                \newrule{\numericTy{x}}
+                    {\ofTy{Dot[]}{BinaryOp [x] [x] x}}
         \end{enumerate}
     
     \item RTopology:

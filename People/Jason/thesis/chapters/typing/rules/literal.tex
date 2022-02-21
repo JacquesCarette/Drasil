@@ -1,0 +1,9 @@
+\begin{enumerate}
+
+    \item \[ \infer{\ofTy{Integer[i]}{Literal Integer}}{\ofTy{i}{Integer}} \]
+    \item \[ \infer{\ofTy{Str[s]}{Literal String}}{\ofTy{s}{String}} \]
+    \item \[ \infer{\ofTy{Dbl[d]}{Literal Real}}{\ofTy{d}{Double}} \]
+    \item \[ \infer{\ofTy{ExactDbl[d]}{Literal Real}}{\ofTy{d}{Integer}} \]
+    \item \[ \infer{\ofTy{Perc[n,d]}{Literal Real}}{\ofTy{n}{Integer} & \ofTy{d}{Integer}} \]
+
+\end{enumerate}

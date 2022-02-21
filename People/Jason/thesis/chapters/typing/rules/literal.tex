@@ -1,18 +1,23 @@
 \begin{enumerate}
 
     \item Integers:
-        \[ \infer{\ofTy{Integer[i]}{Literal Integer}}{\ofTy{i}{Integer}} \]
+        \newrule{\ofTy{i}{Integer}}
+            {\ofTy{Integer[i]}{Literal Integer}}
 
     \item Strings (Text):
-        \[ \infer{\ofTy{Str[s]}{Literal String}}{\ofTy{s}{String}} \]
+        \newrule{\ofTy{s}{String}}
+            {\ofTy{Str[s]}{Literal String}}
 
     \item Real numbers:
-        \[ \infer{\ofTy{Dbl[d]}{Literal Real}}{\ofTy{d}{Double}} \]
+        \newrule{\ofTy{d}{Double}}
+            {\ofTy{Dbl[d]}{Literal Real}}
 
     \item Whole numbered reals (\(\bb{Z} \subset{} \bb{R}\)): 
-        \[ \infer{\ofTy{ExactDbl[d]}{Literal Real}}{\ofTy{d}{Integer}} \]
+        \newrule{\ofTy{d}{Integer}}
+            {\ofTy{ExactDbl[d]}{Literal Real}}
 
     \item Percentages:
-        \[ \infer{\ofTy{Perc[n,d]}{Literal Real}}{\ofTy{n}{Integer} & \ofTy{d}{Integer}} \]
+        \newrule{\ofTy{n}{Integer} & \ofTy{d}{Integer}}
+            {\ofTy{Perc[n,d]}{Literal Real}}
 
 \end{enumerate}

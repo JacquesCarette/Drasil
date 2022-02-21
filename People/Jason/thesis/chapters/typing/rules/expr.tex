@@ -1,5 +1,26 @@
 \begin{enumerate}
 
-    \item \[ \infer{A}{B & C} \]
+    \item Literals:
+        \newrule{\ty{x} & \ofTy{l}{Literal x}}
+            {\ofTy{Lit[l]}{Expr x}}
+
+    \item Associative Operations:
+        \newrule{\ty{x} & \ofTy{op}{AssocOper x} & \ofTy{args}{[Expr x]}}
+            {\ofTy{Assoc[op,args]}{Expr x}}
+
+    \item Symbols:
+        \newrule{\ty{x} & \ofTy{u}{UID}}
+            {\ofTy{C[u]}{Expr x}}
+          
+    \item Function Call % TODO:
+    \item Case: % TODO:
+    
+    \item Matrices:
+        \newrule{\ty{x} & \ofTy{es}{[[Expr x]]}}
+            {\ofTy{Matrix[es]}{Expr x}}
+
+    \item Unary Operations:
+        \newrule{\ty{x} & \ofTy{op}{UnaryOp x} & \ofTy{e}{Expr x}}
+            {\ofTy{Unary[op,e]}{Expr x}}
 
 \end{enumerate}

@@ -1,3 +1,61 @@
+\begin{center}
+    \textbf{Sorts Legend}
+    \begin{tabular}{ l l }
+        \textbf{Numerics($\Tau$)} &: any numeric type \\
+        \textbf{NumericsWithNegation($\Tau$)} &: any signed numeric type
+    \end{tabular}
+    
+    \todo{These might need to be replaced with variants for Reals/Integers}
+\end{center}
+
+\textbf{Vectors}
+
+As of right now, Drasil/GOOL only supports lists and arrays as ``code types'', 
+which would be the representations used for representing ``vectors'' in Drasil.
+
+\todo{Do we want to have the length of our vectors as a type argument?}
+
+For now, the below type rules define vectors with Haskell lists. We can choose to
+create our own type with the length of the vector as a parameter -- likely going
+``too far into Haskell''.
+
+\textbf{Functions}
+
+Presently, functions are defined through ``QDefinitions'', where a list of
+UIDs used in an expression are marked as the parameters of the function. Function
+``calls''/applications are captured in ``Expr'' (the expression language) by
+providing a list of input expressions and a list of named inputs (expressions) -- 
+$f(x,y,z,a="b")$.
+
+\todo{define criteria for what a well-formed expression language should provide}
+
+\todo{Quantities discussion -- remaining untyped}
+
+A few solutions:
+
+\begin{enumerate}
+
+    \item Leave expressions in general untyped in Haskell, and rely on calculating
+          the ``space'' of an expression dynamically to ensure that expressions are
+          well-formed. If runtime (drasil's compiling-knowledge-time) type analysis
+          is ever needed, this will prove much easier to use in general.
+    
+    \item Push the typing rules into Haskell via Generalized Algebraic Data Types (GADTs).
+          Here, a larger question appears regarding functions -- how should we handle
+          function creation, application, and typing?
+          
+          \begin{enumerate}
+
+              \item Currying and applying arguments (allowing partial function applications):
+                    This would work well if we only generated functional languages, but it might
+                    prove problematic for GOOL if expressions are left with partial function
+                    applications.
+
+          \end{enumerate}
+          
+\end{enumerate}
+
+\textbf{Type Rules}
 
 \begin{enumerate}
 
@@ -28,7 +86,6 @@
     \item UnaryOp:
         \begin{enumerate}
             \item Numerics:
-                \todo{Discuss Numerics-($\Tau$) and Numerics-With-Negation-($\Tau$)}
                 \newrule{\negNumericTy{x}}
                     {\ofTy{Neg[]}{UnaryOp x x}}
 
@@ -78,9 +135,14 @@
 
     \item BinaryOp:
         \begin{enumerate}
-            \item Arithmetic: % TODO: Should we have FracI and FracR? 
+            \item Arithmetic:
+                \newrule{}
+                    {\ofTy{FracI[]}{BinaryOp Integer Integer Integer}}
+ 
                 \newrule{}
                     {\ofTy{FracR[]}{BinaryOp Real Real Real}}
+
+                \todo{modulo, remainder, etc.}
 
             \item Bool:
                 \newrule{}
@@ -109,7 +171,7 @@
                 \newrule{\numericTy{x}}
                     {\ofTy{GEq[]}{BinaryOp x x Bool}}
             
-            \item Indexing: % TODO: Everything related to vectors is up for debate, we can redesign them however we see fit. It shouldn't add much complexity.
+            \item Indexing:
                 \newrule{\ty{x}}
                     {\ofTy{Index[]}{BinaryOp [x] Integer x}}
             
@@ -132,7 +194,9 @@
         \newrule{}
             {\ofTy{Continuous[]}{RTopology}}
     
-    \item DomainDesc: % TODO: Why does the topology appear as a type constructor argument, and type signature argument?
+    \item DomainDesc:
+        \todo{oddity: topology appears as a constructor arg and signature arg but can desync -- can we just remove the constructor arg?}
+
         \newrule{\ofTy{top}{$\tau_1$} & \ofTy{bot}{$\tau_2$} & \ofTy{s}{Symbol} & \ofTy{rtop}{RTopology}}
             {\ofTy{BoundedDD[s, rtop, top, bot]}{DomainDesc Discrete $\tau_1$ $\tau_2$}}
 

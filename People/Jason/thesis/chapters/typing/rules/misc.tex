@@ -35,14 +35,31 @@
                 \newrule{\negNumericTy{x}}
                     {\ofTy{Abs[]}{UnaryOp x x}}
                 
-                % TODO: Why is there an 'Exp' in unary op? "e ^ x"?
+                \newrule{\numericTy{x}}
+                    {\ofTy{Exp[]}{UnaryOp x Real}}
                 
                 For Log, Ln, Sin, Cos, Tan, Sec, Csc, Cot, Arcsin, Arccos, Arctan, and Sqrt, please use the following template, replacing ``$\$TRG$'' with the desired operator:
+                \newlblrule{}
+                    {\ofTy{\$TRG[]}{UnaryOp Real Real}}{eqn:unOpTemplate}
+
                 \newrule{}
-                    {\ofTy{\$TRG[]}{UnaryOp Real Real}}
+                    {\ofTy{RtoI[]}{UnaryOp Real Integer}}
+                
+                \newrule{}
+                    {\ofTy{ItoR[]}{UnaryOp Integer Real}}
+            
+                \newrule{}
+                    {\ofTy{Floor[]}{UnaryOp Real Integer}}
 
-                \todo{Add ``casting'' between numerics}
-
+                \newrule{}
+                    {\ofTy{Ceil[]}{UnaryOp Real Integer}}
+                
+                \newrule{}
+                    {\ofTy{Round[]}{UnaryOp Real Integer}}
+                
+                \newrule{}
+                    {\ofTy{Trunc[]}{UnaryOp Real Integer}}
+                
             \item Vectors:
                 \newrule{\negNumericTy{x}}
                     {\ofTy{NegV[]}{UnaryOp [x] [x]}}
@@ -52,9 +69,6 @@
 
                 \newrule{\ty{x}}
                     {\ofTy{Dim[]}{UnaryOp [x] Integer}}
-                
-                % TODO: Scaling?
-                % TODO: "Projecting" is indexing
 
             \item Booleans:
                 \newrule{}
@@ -105,6 +119,10 @@
         
                 \newrule{\numericTy{x}}
                     {\ofTy{Dot[]}{BinaryOp [x] [x] x}}
+                
+                \newrule{\numericTy{x}}
+                    {\ofTy{Scale[]}{BinaryOp [x] x [x]}}
+
         \end{enumerate}
     
     \item RTopology:

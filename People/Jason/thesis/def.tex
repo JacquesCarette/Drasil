@@ -1,4 +1,6 @@
-\newcommand{\newrule}[2]{\[ \infer{#2}{#1} \]}
+% TODO: need to add a field for a label, and then we can reference by \eqref{label}
+\newcommand{\newrule}[2]{\begin{equation} \infer{#2}{#1} \end{equation}} % Adds to automatically numbered equations
+\newcommand{\exampleRule}[2]{\[ \infer{#2}{#1} \]} % Does not add a number to equations
 
 \newcommand{\Tau}{\mathrm{T}}
 \newcommand{\ty}[1]{\texttt{#1} : \tau}

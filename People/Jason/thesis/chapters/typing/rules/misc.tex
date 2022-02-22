@@ -27,19 +27,21 @@
 
     \item UnaryOp:
         \begin{enumerate}
-            \item Numerics:
+            \item Numerics: \todo{Discuss Numerics($\Tau$) and NumericsWithNegation($\Tau$)}
                 \newrule{\negNumericTy{x}}
                     {\ofTy{Neg[]}{UnaryOp x x}}
 
                 \newrule{\negNumericTy{x}}
                     {\ofTy{Abs[]}{UnaryOp x x}}
                 
-                % TODO: Why is there an 'Exp' in unary op?
+                % TODO: Why is there an 'Exp' in unary op? "e ^ x"?
                 
                 For Log, Ln, Sin, Cos, Tan, Sec, Csc, Cot, Arcsin, Arccos, Arctan, and Sqrt, please use the following template, replacing ``$\$TRG$'' with the desired operator:
                 \newrule{}
                     {\ofTy{\$TRG[]}{UnaryOp Real Real}}
 
+                \todo{Add ``casting'' between numerics}
+                
             \item Vectors:
                 \newrule{\negNumericTy{x}}
                     {\ofTy{NegV[]}{UnaryOp [x] [x]}}
@@ -50,6 +52,9 @@
                 \newrule{\ty{x}}
                     {\ofTy{Dim[]}{UnaryOp [x] Integer}}
                 
+                % TODO: Scaling?
+                % TODO: "Projecting" is indexing
+
             \item Booleans:
                 \newrule{}
                     {\ofTy{Not[]}{UnaryOp Bool Bool}}
@@ -93,7 +98,7 @@
                 \newrule{\ty{x}}
                     {\ofTy{Index[]}{BinaryOp [x] Integer x}}
             
-            \item Vectors:
+            \item Vectors: \todo{discuss vectors in general}
                 \newrule{\numericTy{x}}
                     {\ofTy{Cross[]}{BinaryOp [x] [x] [x]}}
         

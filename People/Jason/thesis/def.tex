@@ -1,3 +1,4 @@
+% JUDGMENTS
 \newcommand{\newrule}[2]{\begin{equation} \infer{#2}{#1} \end{equation}} % Adds to automatically numbered equations
 \newcommand{\newlblrule}[3]{\begin{equation} \infer{#2}{#1} \label{#3}\end{equation}} % Adds to automatically numbered equations, with a label
 \newcommand{\exampleRule}[2]{\[ \infer{#2}{#1} \]} % Does not add a number to equations
@@ -11,3 +12,9 @@
 \newcommand{\negNumericTy}[1]{\ofTy{#1}{\texttt{NumericsWithNegation($\Tau$)}}}
 
 \newcommand{\bb}[1]{\mathbb{#1}}
+
+% SYNTAX CHARTS
+\newcommand{\startSyntaxTable}{\begin{tabular}{ r c c l c l }}
+\newcommand{\newsyntaxRow}[5]{#1 & \( #2 \) & $::=$ & \texttt{#3} & $#4$ & #5 \\}
+\newcommand{\syntaxRow}[3]{& & $\vert$ & \texttt{#1} & $#2$ & #3 \\}
+\newcommand{\closeSyntaxTable}{\end{tabular}}

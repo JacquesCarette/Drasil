@@ -1,0 +1,27 @@
+\startSyntaxTable
+    \newsyntaxRow{Type}{\tau}{Integer}{}{Integer numbers}
+    \syntaxRow{Real}{}{Real numbers}
+    \syntaxRow{String}{}{Text}
+    \syntaxRow{Bool}{}{Truth values (true/false)}
+    \syntaxRow{Vector[$\tau$]}{}{Vectors}
+     \\
+
+    \newsyntaxRow{Literal}{l}{Integer[$n$]}{n}{Integer number}
+    \syntaxRow{Real[$r$]}{r}{Real number}
+    \syntaxRow{String[$s$]}{``s''}{Text}
+    \syntaxRow{Bool[$b$]}{b}{Boolean value}
+    \syntaxRow{Vector($l_1...l_n$)}{<l_1, ..., l_n>}{Vectors}
+     \\
+
+    % TODO: Unary Operations
+    % TODO: Binary Operations
+    % TODO: Associative binary operations
+
+    \newsyntaxRow{Expr}{e}{Literal($l$)}{l}{Literal values}
+    % TODO: Symbols : \syntaxRow{C(u)}
+    \syntaxRow{UnaryOp($f$,$e$)}{f(e)}{Unary operations}
+    \syntaxRow{BinaryOp($\oplus$,$e_1$,$e_2$)}{e_1 \oplus e_2}{Binary operations}
+    \syntaxRow{AssocOp($\otimes$, $e_1...e_n$)}{e_1 \otimes ... \otimes e_n}{Associative binary operations}
+    \syntaxRow{Case($e_{1c}e_{1e}...e_{nc}e_{ne}$)}{if\ e_{1c}\ then\ e_{2e}\ elif\ e_{2c}\ ...}{If-then-else-if-then-else (Switch-like statements)}
+    
+\closeSyntaxTable

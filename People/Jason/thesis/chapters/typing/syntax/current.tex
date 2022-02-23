@@ -1,9 +1,11 @@
+An idealized version of the current syntax.
+
 \startSyntaxTable
-    \newsyntaxRow{Type}{\tau}{Integer}{}{Integer numbers}
-    \syntaxRow{Real}{}{Real numbers}
-    \syntaxRow{String}{}{Text}
-    \syntaxRow{Bool}{}{Truth values (true/false)}
-    \syntaxRow{Vector[$\tau$]}{}{Vectors}
+    \newsyntaxRow{Type}{\tau}{Integer}{\bb{Z}}{Integer numbers}
+    \syntaxRow{Real}{\bb{R}}{Real numbers}
+    \syntaxRow{String}{String}{Text}
+    \syntaxRow{Bool}{\bb{B}}{Truth values (true/false)}
+    \syntaxRow{Vector($\tau$)}{[\tau]}{Vectors}
      \\
 
     \newsyntaxRow{Literal}{l}{Integer[$n$]}{n}{Integer number}
@@ -13,15 +15,30 @@
     \syntaxRow{Vector($l_1...l_n$)}{<l_1, ..., l_n>}{Vectors}
      \\
 
-    % TODO: Unary Operations
-    % TODO: Binary Operations
-    % TODO: Associative binary operations
+    \newsyntaxRow{UnaryOp}{u}{Not}{\lnot \_}{Logical negation}
+    \syntaxRow{Neg}{- \_}{Numeric negation}
+    \syntaxRow{...}{}{}
+     \\
+
+    \newsyntaxRow{BinaryOp}{\oplus}{Sub}{\_ - \_}{Subtraction}
+    \syntaxRow{Pow}{\_^\_}{Powers}
+    \syntaxRow{...}{}{}
+     \\
+    
+    \newsyntaxRow{AssocBinOp}{\otimes}{Add}{\_ + \_}{Addition}
+    \syntaxRow{Mul}{\_ \times \_}{Multiplication}
+    \syntaxRow{...}{}{}
+     \\
 
     \newsyntaxRow{Expr}{e}{Literal($l$)}{l}{Literal values}
+    \syntaxRow{Vector($e_1...e_n$)}{<e_1, ..., e_n>}{Vectors}
     % TODO: Symbols : \syntaxRow{C(u)}
-    \syntaxRow{UnaryOp($f$,$e$)}{f(e)}{Unary operations}
+    % TODO: Function "Calls"
+    \syntaxRow{UnaryOp($u$,$e$)}{u(e)}{Unary operations}
     \syntaxRow{BinaryOp($\oplus$,$e_1$,$e_2$)}{e_1 \oplus e_2}{Binary operations}
     \syntaxRow{AssocOp($\otimes$, $e_1...e_n$)}{e_1 \otimes ... \otimes e_n}{Associative binary operations}
     \syntaxRow{Case($e_{1c}e_{1e}...e_{nc}e_{ne}$)}{if\ e_{1c}\ then\ e_{2e}\ elif\ e_{2c}\ ...}{If-then-else-if-then-else (Switch-like statements)}
-    
+    % TODO: BigBinOp
+    % TODO: RealI / Is In Interval
+
 \closeSyntaxTable

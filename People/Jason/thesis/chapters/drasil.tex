@@ -1,19 +1,20 @@
 \todo{tidy up}
 
-With a focus on building Scientific Computing Software, Drasil is an
-exploration of this idea. Rather than building one's software project in any
-single or combination of general purpose programming language, the usage of a
-sequence of domain-specific languages together in Drasil-based projects can be
-used to describe common undergraduate level physics models and problems and
-describe the target program that simulates said models.
+With a focus on building Scientific Computing Software, Drasil is an exploration
+of this idea. Rather than building one's software project in any single or
+combination of general purpose programming language, the usage of a sequence of
+domain-specific languages together in Drasil-based projects can be used to
+describe common undergraduate level physics models and problems and describe the
+target program that simulates said models.
 
 \begin{itemize}
     \item Website: \url{https://jacquescarette.github.io/Drasil/}
     \item Hosted at: \url{https://github.com/JacquesCarette/Drasil}
     \item Wiki: \url{https://github.com/JacquesCarette/Drasil/wiki}
-        \begin{itemize}
-            \item Workspace configuration instructions: \url{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}
-        \end{itemize}
+          \begin{itemize}
+              \item Workspace configuration instructions:
+              \url{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}
+          \end{itemize}
     \item Principal investigators: Dr. Jacques Carette \& Dr. Spencer Smith
 \end{itemize}
 
@@ -22,11 +23,11 @@ describe the target program that simulates said models.
 \begin{itemize}
     \item Primarily for undergraduate-level science (primarily physics) problems
     \item Generating scientific software artifacts
-        \begin{itemize}
-            \item Develop a stable knowledge base for physics problems
-            \item Develop a stable framework for laying cookie-cutter problems.
-            \item Make it as simple as using a projectional editor.
-        \end{itemize}
+          \begin{itemize}
+              \item Develop a stable knowledge base for physics problems
+              \item Develop a stable framework for laying cookie-cutter problems.
+              \item Make it as simple as using a projectional editor.
+          \end{itemize}
 \end{itemize}
 
 \section{Methodology}
@@ -38,12 +39,42 @@ describe the target program that simulates said models.
 \section{Architecture}
 
 \begin{itemize}
-    \item Chunks
-    \item ChunkDB
+    \item Knowledge Encodings
+          \begin{itemize}
+              \item Chunks
+              \item ChunkDB
+          \end{itemize}
+    \item SmithEtAl template for SRS documents
+    \item Haskell/GHC 8.8.4
 \end{itemize}
 
 \section{State}
-todo
 
-\subsection{Short-term problems -- leading into topics}
-todo
+\begin{itemize}
+    \item GOOL is used to generate code in C++/C, Java, Python, Swift, and C\#.
+    \item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
+          formed equations (e.g., simple LHS = complex RHS), and ODEs supported
+          by python libraries.
+    \item Multiple examples:
+          \begin{itemize}
+              \item DblPendulum
+              \item Game physics
+              \item GlassBR
+              \item HGHC
+              \item NoPCM
+              \item PDController
+              \item Projectile
+              \item SglPendulum
+              \item SSP
+              \item SWHS
+          \end{itemize}
+    \item Multiple code generating examples (each with their own requirements):
+          \begin{itemize}
+              \item GlassBR
+              \item NoPCM
+              \item PDController
+              \item Projectile
+          \end{itemize}
+\end{itemize}
+
+\todo{Short-term problems -- leading into topics}

@@ -1,4 +1,7 @@
 \documentclass[12pt]{report}
+
+\usepackage[english,canadian]{babel}
+
 \usepackage[utf8]{inputenc}
 % \usepackage[T1]{fontenc}
 
@@ -7,6 +10,21 @@
 \usepackage{proof}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{lmodern}
+
+\usepackage[
+  letterpaper,
+  top=3.8cm,
+  bottom=2.5cm,
+  inner=2.5cm,
+  outer=3.8cm
+]{geometry}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks,
+  linkcolor=red
+}
 
 \input{def}
 
@@ -15,7 +33,7 @@
     {McMaster University}
 }
 \author{Jason Balaci}
-\date{Submission Date}
+\date{\today}
 
 % START : TODO LIST -- FOR LATER REMOVAL %
 \setlength{\marginparwidth}{2cm}
@@ -23,45 +41,47 @@
 % END   : TODO LIST -- FOR LATER REMOVAL %
 
 \begin{document}
-    % START : TODO LIST
-    \todototoc
-    \listoftodos
-    % END   : TODO LIST
 
-    \maketitle
+% START : TODO LIST
+\todototoc
+\listoftodos
+% END   : TODO LIST
 
-    \chapter*{Abstract}
-    \input{chapters/abstract}
+\maketitle
 
-    \chapter*{Acknowledgements}
-    \input{chapters/acknowledgements}
+\chapter*{Abstract}
+\input{chapters/abstract}
 
-    \tableofcontents
+\chapter*{Acknowledgements}
+\input{chapters/acknowledgements}
 
-    \chapter{Introduction}
-    \input{chapters/introduction}
+\tableofcontents
 
-    \chapter{Drasil}
-    \input{chapters/drasil}
-    
-    \chapter{Topic \#1: Framing Theories in Context}
-    \input{chapters/topic_modelkinds}
+\chapter{Introduction}
+\input{chapters/introduction}
 
-    \chapter{Topic \#2: Safe Expression Creation and Handling}
-    \input{chapters/topic_typing}
+\chapter{Drasil}
+\input{chapters/drasil}
 
-    % TODO: Regarding ChunkDBs -- FROM @JacquesCarette: You might want to take a look at what you’ve also done, and have a Topic #3 as well.
+\chapter{Topic \#1: Framing Theories in Context}
+\input{chapters/topic_modelkinds}
 
-    \chapter{Future Work}
-    \input{chapters/future_work}
-    
-    \chapter{Conclusion}
-    \input{chapters/conclusion}
+\chapter{Topic \#2: Safe Expression Creation and Handling}
+\input{chapters/topic_typing}
 
-    \appendix
-    \chapter{Appendix}
-    \input{chapters/appendix}
+\chapter{Topic \#3: Knowledge Management}
+\input{chapters/topic_chunkmgmt}
 
-    % TODO: References \& Relevant code
-    \todo{Ref: ``When Capturing Knowledge Improves Productivity''}
+\chapter{Future Work}
+\input{chapters/future_work}
+
+\chapter{Conclusion}
+\input{chapters/conclusion}
+
+\appendix
+\chapter{Appendix}
+\input{chapters/appendix}
+
+% TODO: References \& Relevant code
+\todo{Ref: ``When Capturing Knowledge Improves Productivity''}
 \end{document}

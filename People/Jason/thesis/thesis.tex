@@ -28,6 +28,8 @@
   breaklinks=true
 }
 
+\usepackage{fancyhdr}
+
 \input{def}
 
 \title{
@@ -48,10 +50,6 @@
 % START : TODO LIST
 \todototoc
 \listoftodos
-
-% need to follow: https://gs.mcmaster.ca/app/uploads/2019/10/Prep_Guide_Masters_and_Doctoral_Theses_August-2021.pdf
-\todo{Create prelim. pages as McMaster rules}
-
 \newpage
 % END   : TODO LIST
 
@@ -163,6 +161,16 @@ Declaration of academic achievement. See
 %------------------------------------------------------------------------------
 
 \mainmatter
+
+% START : HEADER %
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[R]{McMaster University -- Computing and Software}
+\fancyhead[L]{M.Sc. Thesis -- Jason Balaci}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+% END : HEADER %
 
 \chapter{Introduction}
 \input{chapters/introduction}

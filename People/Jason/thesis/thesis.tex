@@ -1,9 +1,9 @@
-\documentclass[12pt]{report}
+\documentclass[12pt,oneside]{book}
 
 \usepackage[canadian]{babel}
 
 \usepackage[utf8]{inputenc}
-% \usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc}
 
 \usepackage{todonotes}
 
@@ -11,19 +11,21 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{lmodern}
+\usepackage{lastpage}
 
 \usepackage[
-  letterpaper,
+  a4paper,
   top=3.8cm,
   bottom=2.5cm,
-  inner=2.5cm,
-  outer=3.8cm
+  inner=3.8cm,
+  outer=2.5cm
 ]{geometry}
 
 \usepackage{hyperref}
 \hypersetup{
   colorlinks,
-  linkcolor=red
+  linkcolor=red,
+  breaklinks=true
 }
 
 \input{def}
@@ -41,23 +43,126 @@
 
 \begin{document}
 
+\frontmatter
+
 % START : TODO LIST
 \todototoc
 \listoftodos
-% END   : TODO LIST
 
 % need to follow: https://gs.mcmaster.ca/app/uploads/2019/10/Prep_Guide_Masters_and_Doctoral_Theses_August-2021.pdf
 \todo{Create prelim. pages as McMaster rules}
 
-\maketitle
+\newpage
+% END   : TODO LIST
 
-\chapter*{Abstract}
+
+%------------------------------------------------------------------------------
+% Half Title page
+%------------------------------------------------------------------------------
+
+\pagenumbering{gobble} % page 0
+\null % Needed or else vspace doesn't work
+\vspace{0.25\textheight}
+
+\begin{center}
+  60 CHARACTERS TITLE, ALL CAPITAL LETTERS
+\end{center}
+
+\newpage
+
+%------------------------------------------------------------------------------
+% Title page
+%------------------------------------------------------------------------------
+
+\null
+\vspace{0.2\textheight}
+% page 1
+
+\begin{center}
+  THE TITLE IN ALL CAPITAL LETTERS
+
+  \vspace{2cm}
+
+  By JASON BALACI, B.Sc.
+
+  \vfill
+
+  A Thesis Submitted to the School of Graduate Studies in Partial Fulfillment of the Requirements for the Degree Master of Science in Computer Science
+
+  \vspace{2cm}
+
+  McMaster University \textcopyright\ Copyright by Jason Balaci, May 2022
+
+\end{center}
+
+\newpage
+
+%------------------------------------------------------------------------------
+% Descriptive Note
+%------------------------------------------------------------------------------
+
+\pagenumbering{roman}
+\setcounter{page}{2} % page 2
+
+\noindent
+McMaster University \\
+Master of Science (2022) \\
+Hamilton, Ontario (Department of Computing and Software)
+
+\vspace{2cm}
+
+\noindent
+TITLE: The Title Written Properly \\
+AUTHOR: Jason Balaci, B.Sc. \\
+SUPERVISOR: Dr. Jacques Carette \\
+PAGES: \pageref{lastOfFrontMatter}, \pageref{LastPage}
+
+\newpage
+
+%------------------------------------------------------------------------------
+% Lay Abstract
+%------------------------------------------------------------------------------
+
+\chapter*{Lay Abstract}
+\input{chapters/lay_abstract}
+
+%------------------------------------------------------------------------------
+% Abstract
+%------------------------------------------------------------------------------
+
+\chapter{Abstract}
 \input{chapters/abstract}
 
-\chapter*{Acknowledgements}
+%------------------------------------------------------------------------------
+% Acknowledgements
+%------------------------------------------------------------------------------
+
+\chapter{Acknowledgements}
 \input{chapters/acknowledgements}
 
+
+%------------------------------------------------------------------------------
+% Table of Content
+%------------------------------------------------------------------------------
+
 \tableofcontents
+
+%------------------------------------------------------------------------------
+% Declaration of Academic Achievement
+%------------------------------------------------------------------------------
+
+\chapter{Declaration of Academic Achievement}
+\noindent
+Declaration of academic achievement. See
+\url{https://gs.mcmaster.ca/app/uploads/2019/10/Prep_Guide_Masters_and_Doctoral_Theses_August-2021.pdf}.
+
+\label{lastOfFrontMatter}
+
+%------------------------------------------------------------------------------
+% Main Chapters
+%------------------------------------------------------------------------------
+
+\mainmatter
 
 \chapter{Introduction}
 \input{chapters/introduction}
@@ -79,6 +184,13 @@
 
 \chapter{Conclusion}
 \input{chapters/conclusion}
+
+
+%------------------------------------------------------------------------------
+% Appendix and bibliography
+%------------------------------------------------------------------------------
+
+\backmatter
 
 \appendix
 \chapter{Appendix}

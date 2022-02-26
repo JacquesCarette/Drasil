@@ -49,8 +49,11 @@
     \item Splitting Expr into 3 variants; Expr, CodeExpr, and ModelExpr.
           \todo{this is the same note as in topic \#2s solution, perhaps merge?}
           This allows us to both segregate terms to particular domains, and add
-          weak typing where necessary, as required (e.g., areas where we we might
+          weak typing where necessary, as required (e.g., areas where we might
           require a dependently typed host language).
+          \begin{itemize}
+            \item \url{https://github.com/JacquesCarette/Drasil/issues/1220}
+          \end{itemize}
     
     \item Use TTF encodings of the smart constructors to lessen the cognitive
           load of handling at least 3 different expression languages.

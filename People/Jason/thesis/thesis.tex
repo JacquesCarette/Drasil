@@ -13,6 +13,10 @@
 \usepackage{lmodern}
 \usepackage{lastpage}
 
+% Make \today only show month and year
+\usepackage[useregional]{datetime2}
+\DTMlangsetup[en-CA]{showdayofmonth=false}
+
 \usepackage[
   a4paper,
   top=3.8cm,
@@ -90,7 +94,7 @@
 
   \vspace{2cm}
 
-  McMaster University \textcopyright\ Copyright by Jason Balaci, May 2022
+  McMaster University \textcopyright\ Copyright by Jason Balaci, \today
 
 \end{center}
 
@@ -105,7 +109,7 @@
 
 \noindent
 McMaster University \\
-Master of Science (2022) \\
+Master of Science (\the\year{}) \\
 Hamilton, Ontario (Department of Computing and Software)
 
 \vspace{2cm}
@@ -194,9 +198,8 @@ Declaration of academic achievement. See
 \chapter{Conclusion}
 \input{chapters/conclusion}
 
-
 %------------------------------------------------------------------------------
-% Appendix and bibliography
+% Appendix
 %------------------------------------------------------------------------------
 
 \backmatter
@@ -205,7 +208,12 @@ Declaration of academic achievement. See
 \chapter{Appendix}
 \input{chapters/appendix}
 
-% TODO: References \& Relevant code
+\todo{Relevant code}
+
+%------------------------------------------------------------------------------
+% Bibliography
+%------------------------------------------------------------------------------
+
 \todo{Ref: ``When Capturing Knowledge Improves Productivity''}
 % See section 4.3 of https://gs.mcmaster.ca/app/uploads/2019/10/Prep_Guide_Masters_and_Doctoral_Theses_August-2021.pdf
 % to figure out how to cite the unpublished work.

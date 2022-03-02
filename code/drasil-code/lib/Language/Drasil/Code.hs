@@ -8,7 +8,7 @@ module Language.Drasil.Code (
   ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
   matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData, 
   Visibility(..), defaultChoices, 
-  CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec,
+  CodeSpec(..), funcUID, asVC, codeSpec,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -87,7 +87,7 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), 
   getSampleData, Visibility(..), defaultChoices,)
-import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, funcUID', asVC, asVC', 
+import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, asVC, 
   codeSpec)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
@@ -108,6 +108,8 @@ import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, ODEOptions(..),
   odeOptions, ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, 
   mkODELibNoPath)
+
+import Drasil.GlassBR.Unitals (interpY, interpZ)  
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

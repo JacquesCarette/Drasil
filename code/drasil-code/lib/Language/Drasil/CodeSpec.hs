@@ -17,6 +17,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
 import Language.Drasil.Choices (Choices(..))
 import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
+import Drasil.GlassBR.Unitals (interps)
 
 import Utils.Drasil (subsetOf)
 
@@ -134,15 +135,15 @@ funcUID f = asVC f ^. uid
 
 -- FIXME: hack. 
 -- | Used for implementation-stage functions that need to be displayed in the SRS.
-funcUID' :: Func -> UID
-funcUID' f = asVC' f ^. uid
+-- funcUID' :: Func -> UID
+-- funcUID' f = asVC' f ^. uid
 
 -- FIXME: Part of above hack
 -- | Helper for 'funcUID''.
-asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
-asVC' (FDef (CtorDef n _ _ _ _))   = vc n (nounPhraseSP n) (Variable n) Real
-asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
+-- asVC' :: Func -> QuantityDict
+-- asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
+-- asVC' (FDef (CtorDef n _ _ _ _))   = vc n (nounPhraseSP n) (Variable n) Real
+-- asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 
 -- | Determines the derived inputs, which can be immediately calculated from the 
 -- knowns (inputs and constants). If there are DDs, the derived inputs will 

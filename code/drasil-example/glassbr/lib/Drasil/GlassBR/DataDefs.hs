@@ -5,7 +5,6 @@ module Drasil.GlassBR.DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac,
 
 import Control.Lens ((^.))
 import Language.Drasil
-import Language.Drasil.Code (asVC')
 import Prelude hiding (log, exp, sqrt)
 import Theory.Drasil (DataDefinition, ddE)
 import SysInfo.Drasil
@@ -20,14 +19,13 @@ import Data.Drasil.Citations (campidelli)
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
 import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
 import Drasil.GlassBR.Figures (demandVsSDFig, dimlessloadVsARFig)
-import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
   demand, demandq, dimlessLoad, eqTNTWeight, gTF, glassType, glassTypeCon,
   glassTypeFactors, lDurFac, lRe, loadDur, loadSF, minThick, modElas, nomThick,
   nominalThicknesses, nonFactorL, pbTol, plateLen, plateWidth, probBr, riskFun,
   sdfTol, sdx, sdy, sdz, sflawParamK, sflawParamM, standOffDist, stressDistFac,
-  tNT, tolLoad)
+  tNT, tolLoad, interpY, interpZ)
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -92,7 +90,7 @@ loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
 strDisFacEq :: Expr
 -- strDisFacEq = apply (sy stressDistFac)
 --   [sy dimlessLoad, sy aspectRatio]
-strDisFacEq = apply (asVC' interpZ) [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
+strDisFacEq = apply (interpZ ^. uid) [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 
 strDisFacQD :: SimpleQDef
 strDisFacQD = mkQuantDef stressDistFac strDisFacEq
@@ -146,7 +144,7 @@ dimLL = ddE dimLLQD [dRef astm2009, dRefInfo campidelli $ Equation [7]] Nothing 
 
 tolPreEq :: Expr
 --tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
-tolPreEq = apply (asVC' interpY) [str "SDF.txt", sy aspectRatio, sy sdfTol]
+tolPreEq = apply (interpY ^. uid) [str "SDF.txt", sy aspectRatio, sy sdfTol]
 
 tolPreQD :: SimpleQDef
 tolPreQD = mkQuantDef tolLoad tolPreEq
@@ -226,7 +224,7 @@ calofCapacity = ddE calofCapacityQD [dRef astm2009] Nothing "calofCapacity"
 
 --DD15--
 calofDemandEq :: Expr
-calofDemandEq = apply (asVC' interpY) [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
+calofDemandEq = apply (interpY ^. uid) [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
 
 calofDemandQD :: SimpleQDef
 calofDemandQD = mkQuantDef demand calofDemandEq

@@ -1,3 +1,5 @@
 thesis.pdf
 *.tdo
 *.dvi
+*.bcf
+*.run.xml

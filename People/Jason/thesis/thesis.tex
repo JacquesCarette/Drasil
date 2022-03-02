@@ -26,6 +26,18 @@
   linkcolor=red
 }
 
+\usepackage{csquotes} % Required for biblatex
+% Credit to Gabriel Devenyi for this bibliography cfg: github.com/gdevenyi/mcmaster.latex
+\usepackage[
+  style=numeric-comp,
+  backend=biber,
+  sorting=none,
+  backref=true,
+  maxnames=99,
+  alldates=iso8601
+]{biblatex} % bibliography
+\addbibresource{references.bib}
+
 \input{def}
 
 \title{
@@ -80,10 +92,11 @@
 \chapter{Conclusion}
 \input{chapters/conclusion}
 
+\printbibliography[heading=bibintoc]
+\todo{Ref: ``When Capturing Knowledge Improves Productivity''}
+
 \appendix
 \chapter{Appendix}
 \input{chapters/appendix}
 
-% TODO: References \& Relevant code
-\todo{Ref: ``When Capturing Knowledge Improves Productivity''}
 \end{document}

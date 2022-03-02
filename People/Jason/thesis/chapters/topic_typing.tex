@@ -31,7 +31,7 @@
     
     \item Invalid expression formation attempts should be statically found and
           reported by the compiler, at compile-time. This will move the
-          previously runtime errors to comple-time.
+          previously runtime errors to compile-time.
 
     \item Invalid expression cases should not need to be considered when working
           (e.g., case-ing) with expressions.
@@ -49,8 +49,11 @@
     \item Splitting Expr into 3 variants; Expr, CodeExpr, and ModelExpr.
           \todo{this is the same note as in topic \#2s solution, perhaps merge?}
           This allows us to both segregate terms to particular domains, and add
-          weak typing where necessary, as required (e.g., areas where we we might
+          weak typing where necessary, as required (e.g., areas where we might
           require a dependently typed host language).
+          \begin{itemize}
+            \item \url{https://github.com/JacquesCarette/Drasil/issues/1220}
+          \end{itemize}
     
     \item Use TTF encodings of the smart constructors to lessen the cognitive
           load of handling at least 3 different expression languages.

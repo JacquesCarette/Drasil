@@ -17,7 +17,6 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
 import Language.Drasil.Choices (Choices(..))
 import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
-import Drasil.GlassBR.Unitals (interps)
 
 import Utils.Drasil (subsetOf)
 

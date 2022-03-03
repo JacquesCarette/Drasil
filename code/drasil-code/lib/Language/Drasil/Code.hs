@@ -109,8 +109,6 @@ import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, ODEOptions(..),
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, 
   mkODELibNoPath)
 
-import Drasil.GlassBR.Unitals (interpY, interpZ)  
-
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)

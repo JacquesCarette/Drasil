@@ -13,6 +13,7 @@
 \usepackage{lmodern}
 \usepackage{lastpage}
 
+% For code highlighting
 \usepackage{minted}
 
 % Make \today only show month and year
@@ -48,7 +49,13 @@
 ]{biblatex} % bibliography
 \addbibresource{references.bib}
 
+% Fancy Headers
 \usepackage{fancyhdr}
+
+% List of Abbreviations and Symbols
+\usepackage{array}
+\usepackage{acro}
+\input{abbreviations}
 
 \input{def}
 
@@ -166,6 +173,17 @@ PAGES: \pageref{lastOfFrontMatter}, \pageref{LastPage}
 %------------------------------------------------------------------------------
 
 \tableofcontents
+
+%------------------------------------------------------------------------------
+% List of Abbreviations and Symbols
+%------------------------------------------------------------------------------
+
+\printacronyms[
+  display=all,
+  template=tabular,
+  heading=chapter,
+  name=List of Abbreviations and Symbols
+]
 
 %------------------------------------------------------------------------------
 % Declaration of Academic Achievement

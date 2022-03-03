@@ -3,3 +3,5 @@ thesis.pdf
 *.dvi
 *.bcf
 *.run.xml
+*.acr
+*.ist

@@ -1,2 +1,10 @@
-\DeclareAcronym{uid}{short=UID, long=Unique Identifier}
-\DeclareAcronym{gool}{short=GOOL, long=Generic Object-Oriented Language}
+% For one-offs,
+% \DeclareAcronym{acronym}{short=short-version,long=long-version}
+
+\newcommand{\newacr}[2]{\DeclareAcronym{#1}{short=\uppercase{#1},long=#2}}
+
+% Alphabetically sorted list of acronyms
+\newacr{gadt}{Generalized Algebraic Datatypes}
+\newacr{gool}{Generic Object-Oriented Language}
+\newacr{tt}{Typed Tagless}
+\newacr{uid}{Unique Identifier}

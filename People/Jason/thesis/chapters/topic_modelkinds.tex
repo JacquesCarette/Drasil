@@ -5,7 +5,7 @@
 \begin{itemize}
 
 	\item It's important that each knowledge encoding in Drasil exposes as much
-	      information as reasonably possible (and useful). \todo{this is still
+	      information as reasonably possible (and useful). \todo{This is still
 		      very vague} We want to expose the ``specifications'' of each piece
 	      of knowledge that we are encoding so that transformers and generators
 	      may appropriately make use of contained knowledge.
@@ -20,8 +20,7 @@
 	\item Since we want to generate code that represents calculations of all
 	      sorts, it's important that the mathematical expression language we
 	      use to write calculations expose sufficient information to the
-	      generator in a concise and easy-to-digest manner. \todo{it seems
-		      like this might mergable with topic \#1?}
+	      generator in a concise and easy-to-digest manner.
 
 	\item For example, assuming the following expressions are written using
 	      the existing mathematical Expr language in Drasil...
@@ -34,9 +33,9 @@
 		      \item \(a = b = c = ... = d\) can be ambiguously read ...
 
 		      \item Truth statements such as \(y < x\) might be usable in
-		            constraining/asserting constraints at software runtime
-		            but it's difficult to find a place for it to belong
-		            without extra context.
+		            asserting constraints at software runtime, but it's
+		            difficult to find a place for it to belong without extra
+		            context.
 
 		      \item \todo{list problems}
 
@@ -72,7 +71,7 @@
 	      levels of interpretation through a common type (either
 	      using the GADT, or the TTF constraints).
 
-	\item Replacing RelationConcepts:
+	\item Replacing ``RelationConcepts'':
 
 	      \begin{itemize}
 
@@ -85,8 +84,8 @@
 		            as a property of the higher-level encodings will
 		            allow us to quickly identify, discriminate, and efficiently
 		            use the information originally contained in the expressions
-		            better. This is done through replacing RelationConcepts
-		            with, largely, ModelKinds:
+		            better. This is done through replacing ``RelationConcepts''
+		            with, largely, ``ModelKinds'':
 
 	      \end{itemize}
 

@@ -21,3 +21,6 @@
 
 % Haskell snippet
 \newenvironment{haskell}{\VerbatimEnvironment\begin{minted}{haskell}}{\end{minted}}
+
+% Portable HREFs
+\newcommand{\porthref}[2]{\href{#2}{#1\footnote{\url{#2}}}}

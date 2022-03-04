@@ -8,8 +8,18 @@
 		  pencil and paper. Thankfully, with scientific problems, the
 		  well-understood ones will be codified\cite{well-understood}, and as
 		  such, are a good fit for Drasil, as it is intended to automatically
-		  generate software that performs calculation for a specific problem in
+		  generate software that performs calculations for a specific problem in
 		  the universe of generic programs supported.
+
+	\item In most, if not all, physics problems, a common language of mathematic
+	      calculation. In Drasil, this language is written as an \acf{adt}: 
+		  
+		  \currentExprHaskell
+
+	\item Here, we explain that a mathematical expression is defined by the
+	      above \acf{ast}. The language contains the commonly found operations
+	      in a well-understood physics textbook (here, with a focus on
+	      graduate-level scientific problems).
 
 	\item It's important that each knowledge encoding in Drasil exposes as much
 	      information as reasonably possible (and useful). \todo{This is still

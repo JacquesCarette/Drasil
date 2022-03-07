@@ -23,29 +23,29 @@
 
 	\item It's important that each knowledge encoding in Drasil exposes as much
 	      information as reasonably possible (and useful). \todo{This is still
-		      very vague} We want to expose the ``specifications'' of each piece
-	      of knowledge that we are encoding so that transformers and generators
-	      may appropriately make use of contained knowledge.
+	      very vague} We want to expose the ``specifications'' of each piece of
+	      knowledge that we are encoding so that transformers and generators may
+	      appropriately make use of contained knowledge.
 
 	\item With mathematical models, it's very easy to write ``difficult to
 	      interpret'' expressions, and create expressions for which aren't
 	      directly calculable (i.e., things that require an extra paper and
-	      pencil/mental mathematics before performing), either without
-	      extra surrounding information or simply too ``difficult'' (areas
-	      where we might find choices are especially difficult).
+	      pencil/mental mathematics before performing), either without extra
+	      surrounding information or simply too ``difficult'' (areas where we
+	      might find choices are especially difficult).
 
 	\item Since we want to generate code that represents calculations of all
-	      sorts, it's important that the mathematical expression language we
-	      use to write calculations expose sufficient information to the
-	      generator in a concise and easy-to-digest manner.
+	      sorts, it's important that the mathematical expression language we use
+	      to write calculations expose sufficient information to the generator
+	      in a concise and easy-to-digest manner.
 
-	\item For example, assuming the following expressions are written using
-	      the existing mathematical Expr language in Drasil...
+	\item For example, assuming the following expressions are written using the
+	      existing mathematical Expr language in Drasil...
 	      \begin{itemize}
 
-		      \item While \(y = x\) might conventionally be seen as ``y is
-		            equal to x'', we might want, in our model, for it to be
-		            understood as ``x is defined by y'' but displayed differently.
+		      \item While \(y = x\) might conventionally be seen as ``y is equal
+		            to x'', we might want, in our model, for it to be understood
+		            as ``x is defined by y'' but displayed differently.
 
 		      \item \(a = b = c = ... = d\) can be ambiguously read ...
 
@@ -67,9 +67,9 @@
 	\item Expressions are great for viewing, but not for a computer to
 	      systematically use to generate things.
 
-	\item Theories should expose more information about themselves so that
-	      we can directly interpret them without needing to traverse over
-	      an expression.
+	\item Theories should expose more information about themselves so that we
+	      can directly interpret them without needing to traverse over an
+	      expression.
 
 	\item Specifically, more expressions should be usable in code generation,
 	      amongst other things.
@@ -92,16 +92,16 @@
 	      \begin{itemize}
 
 		      \item Using raw expressions to transcribe whole mathematical
-		            theories and data structures leads to many problems
-		            and difficulties in interpretation alone.
+		            theories and data structures leads to many problems and
+		            difficulties in interpretation alone.
 
-		      \item Replacing raw expressions with ``encodings one step
-		            higher'' that can push out the same raw expressions
-		            as a property of the higher-level encodings will
-		            allow us to quickly identify, discriminate, and efficiently
-		            use the information originally contained in the expressions
-		            better. This is done through replacing ``RelationConcepts''
-		            with, largely, ``ModelKinds'':
+		      \item Replacing raw expressions with ``encodings one step higher''
+		            that can push out the same raw expressions as a property of
+		            the higher-level encodings will allow us to quickly
+		            identify, discriminate, and efficiently use the information
+		            originally contained in the expressions better. This is done
+		            through replacing ``RelationConcepts'' with, largely,
+		            ``ModelKinds'':
 
 	      \end{itemize}
 

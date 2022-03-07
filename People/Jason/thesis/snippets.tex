@@ -1,3 +1,11 @@
-\newcommand{\codeSnippet}[0]{snippets/code}
-\newcommand{\currentCode}[0]{\codeSnippet/current}
-\newcommand{\currentExprHaskell}[0]{\input{\currentCode/expr}}
+\newcommand{\codeSnippet}{snippets/code}
+\newcommand{\currentCode}{\codeSnippet/current}
+
+\newcommand{\currentExprHaskell}{\input{\currentCode/expr}}
+\newcommand{\refCurrentExprHaskell}{\ref{lst:currentExpr}}
+
+\newcommand{\currentRelationConceptHaskell}{\input{\currentCode/relationconcept}}
+\newcommand{\refCurrentRelationConceptHaskell}{\ref{lst:defRelConcept}}
+
+\newcommand{\currentModelKindsHaskell}{\input{\currentCode/modelkinds}}
+\newcommand{\refCurrentModelKindsHaskell}{\ref{lst:defModelKinds}}

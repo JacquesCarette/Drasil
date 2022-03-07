@@ -33,6 +33,7 @@
   outer=2.5cm,
   headheight=15pt,
 ]{geometry}
+\usepackage{afterpage}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -95,6 +96,10 @@
 % Half Title page
 %------------------------------------------------------------------------------
 
+% First two pages will have a slightly different margin than the rest of the
+% document, for the sake of making the document look slightly nicer.
+\newgeometry{margin=1in}
+
 \pagenumbering{gobble} % page 0
 \null % Needed or else vspace doesn't work
 \vspace{0.25\textheight}
@@ -132,6 +137,9 @@
 \end{center}
 
 \newpage
+
+% restore the required margin details for the rest of the document.
+\restoregeometry
 
 %------------------------------------------------------------------------------
 % Descriptive Note

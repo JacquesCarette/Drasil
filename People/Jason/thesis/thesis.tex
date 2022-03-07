@@ -1,4 +1,5 @@
 \documentclass[12pt,oneside]{book}
+% \usepackage{xparse}
 
 \usepackage[canadian]{babel}
 
@@ -13,8 +14,12 @@
 \usepackage{lmodern}
 \usepackage{lastpage}
 
+\usepackage{caption}
+
 % For code highlighting
-\usepackage{minted}
+\usepackage[newfloat]{minted}
+% Credits to Arash Esbati (https://tex.stackexchange.com/a/254177) for the
+% listings-related component of minted usage.
 
 % Make \today only show month and year
 \usepackage[useregional]{datetime2}
@@ -171,12 +176,17 @@ PAGES: \pageref{lastOfFrontMatter}, \pageref{LastPage}
 \chapter{Acknowledgements}
 \input{chapters/acknowledgements}
 
-
 %------------------------------------------------------------------------------
 % Table of Content
 %------------------------------------------------------------------------------
 
 \tableofcontents
+
+%------------------------------------------------------------------------------
+% Table of Content
+%------------------------------------------------------------------------------
+
+\listoflistings
 
 %------------------------------------------------------------------------------
 % List of Abbreviations and Symbols

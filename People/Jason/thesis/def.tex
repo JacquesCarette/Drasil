@@ -19,12 +19,18 @@
 \newcommand{\syntaxRow}[3]{& & $\vert$ & \texttt{#1} & $#2$ & #3 \\}
 \newcommand{\closeSyntaxTable}{\end{tabular}}
 
-% Haskell snippet
-\newenvironment{haskell}{\VerbatimEnvironment\begin{minted}{haskell}}{\end{minted}}
-
 % Portable HREFs
 \newcommand{\porthref}[2]{\href{#2}{#1\footnote{\url{#2}}}}
 \newcommand{\porthreft}[3]{\href{#3}{#1\footnote{\href{#3}{#2}}}}
+\newcommand{\porthreftm}[2]{\href{#2}{#1\footnotemark}}
 
 % Inlined TODOs
 \newcommand{\intodo}[1]{\todo[inline]{#1}}
+
+% Haskell snippet
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Source Code,listname=List of Source Codes}
+\newenvironment{haskell}[4]
+    {\VerbatimEnvironment\begin{code}\caption[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
+    {\end{minted}\end{code}}
+

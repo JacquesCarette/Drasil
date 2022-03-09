@@ -25,7 +25,7 @@ import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..),
+import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..), Visibility(..),
   choicesSent)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
@@ -49,13 +49,13 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
   -- constants
   codeSpec = spec,
-  modular = modularity chs,
+  modular = modularity $ architecture chs,
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
   conRepr = constRepr chs,
   concMatches = mcm,
   spaceMatches = chooseSpace l chs,
-  implType = impType chs,
+  implType = impType $ architecture chs,
   onSfwrC = onSfwrConstraint chs,
   onPhysC = onPhysConstraint chs,
   commented = comments chs,

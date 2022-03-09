@@ -3,7 +3,7 @@ module Drasil.GlassBR.Choices where
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..),
+  ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..), makeArchit,
   defaultChoices)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -15,8 +15,7 @@ code = codeSpec fullSI choices allMods
 choices :: Choices
 choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
-  modularity = Modular Separated,
-  impType = Program,
+  architecture = makeArchit (Modular Separated) Program,
   logFile = "log.txt",
   logging = [LogVar, LogFunc],
   comments = [CommentFunc, CommentClass, CommentMod],

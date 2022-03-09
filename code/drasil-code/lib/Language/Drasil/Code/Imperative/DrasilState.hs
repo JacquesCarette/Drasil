@@ -10,7 +10,7 @@ import GOOL.Drasil (ScopeTag(..), CodeType)
 import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
-import Language.Drasil.Choices (Choices(..), AuxFile, Modularity(..), 
+import Language.Drasil.Choices (Choices(..), Architecture (..), AuxFile, Modularity(..), 
   ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 
   ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
   InputModule(..), Logging, Structure(..), inputModule)
@@ -105,7 +105,7 @@ modExportMap cs@CodeSpec {
   derivedInputs = ds,
   constants = cns
   } chs@Choices {
-    modularity = m
+    architecture = m
   } ms = fromList $ nub $ concatMap mpair ms
     ++ getExpInput prn chs ins
     ++ getExpConstants prn chs cns
@@ -117,7 +117,7 @@ modExportMap cs@CodeSpec {
   where mpair (Mod n _ _ cls fs) = (map className cls ++ 
           concatMap (map (codeName . stVar) . filter ((== Pub) . svScope) . 
           stateVars) cls ++ map fname (fs ++ concatMap methods cls)) `zip` 
-          repeat (defModName m n)
+          repeat (defModName (modularity m) n)
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
@@ -154,7 +154,7 @@ type ClassDef = (String, String)
 -- constructor is generated, thus "InputParameters" is added to map.
 getExpInput :: Name -> Choices -> [Input] -> [ModExp]
 getExpInput _ _ [] = []
-getExpInput prn chs ins = inExp (modularity chs) (inputStructure chs) 
+getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure chs) 
   where inExp _ Unbundled = []
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp (Modular Separated) Bundled = inVarDefs ipName
@@ -184,7 +184,7 @@ getInputCls chs ins = inCls (inputModule chs) (inputStructure chs)
 -- If 'Unbundled', constants are not exported by any module.
 getExpConstants :: Name -> Choices -> [Const] -> [ModExp]
 getExpConstants _ _ [] = []
-getExpConstants n chs cs = cExp (modularity chs) (constStructure chs) 
+getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure chs) 
   (inputStructure chs)
   where cExp Unmodular (Store Bundled) _ = zipCs $ repeat n
         cExp Unmodular WithInputs Bundled = zipCs $ repeat n
@@ -214,7 +214,7 @@ getConstantsCls chs cs = cnCls (constStructure chs) (inputStructure chs)
 -- Similar logic for input_constraints and get_input below.
 getExpDerived :: Name -> Choices -> [Derived] -> [ModExp]
 getExpDerived _ _ [] = []
-getExpDerived n chs _ = dMod (modularity chs) (inputStructure chs)
+getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure chs)
   where dMod (Modular Separated) _ = [(dvNm, "DerivedValues")]
         dMod _ Bundled = []
         dMod Unmodular _ = [(dvNm, n)]
@@ -236,7 +236,7 @@ getDerivedCls chs _ = dCls (inputModule chs) (inputStructure chs)
 -- See 'getExpDerived' for full logic details.
 getExpConstraints :: Name -> Choices -> [ConstraintCE] -> [ModExp]
 getExpConstraints _ _ [] = []
-getExpConstraints n chs _ = cMod (modularity chs) (inputStructure chs)
+getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure chs)
   where cMod (Modular Separated) _ = [(icNm, "InputConstraints")]
         cMod _ Bundled = []
         cMod Unmodular _ = [(icNm, n)]
@@ -255,7 +255,7 @@ getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure chs)
 -- See 'getExpDerived' for full logic details.
 getExpInputFormat :: Name -> Choices -> [Input] -> [ModExp]
 getExpInputFormat _ _ [] = []
-getExpInputFormat n chs _ = fMod (modularity chs) (inputStructure chs)
+getExpInputFormat n chs _ = fMod (modularity $ architecture chs) (inputStructure chs)
   where fMod (Modular Separated) _ = [(giNm, "InputFormat")]
         fMod _ Bundled = []
         fMod Unmodular _ = [(giNm, n)]
@@ -275,7 +275,7 @@ getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure chs)
 -- Function is exported by Calculations module if program is 'Modular'.
 getExpCalcs :: Name -> Choices -> [Def] -> [ModExp]
 getExpCalcs n chs = map (\d -> (codeName d, calMod))
-  where calMod = cMod $ modularity chs
+  where calMod = cMod $ modularity $ architecture chs
         cMod Unmodular = n
         cMod _ = "Calculations"
 
@@ -285,6 +285,6 @@ getExpCalcs n chs = map (\d -> (codeName d, calMod))
 -- Function is exported by OutputFormat module if program is 'Modular'.
 getExpOutput :: Name -> Choices -> [Output] -> [ModExp]
 getExpOutput _ _ [] = []
-getExpOutput n chs _ = [("write_output", oMod $ modularity chs)]
+getExpOutput n chs _ = [("write_output", oMod $ modularity $ architecture chs)]
   where oMod Unmodular = n
         oMod _ = "OutputFormat"

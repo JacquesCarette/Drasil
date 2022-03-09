@@ -1,6 +1,6 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
-  Choices(..), Modularity(..), InputModule(..), inputModule, Structure(..), 
+  Choices(..), Architecture (..), makeArchit, Modularity(..), InputModule(..), inputModule, Structure(..), 
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, 
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
@@ -23,7 +23,7 @@ import Data.Map (Map, fromList)
 -- https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
 data Choices = Choices {
   lang :: [Lang],
-  modularity :: Modularity,
+  architecture :: Architecture,
   inputStructure :: Structure,
   constStructure :: ConstantStructure,
   constRepr :: ConstantRepr,
@@ -35,7 +35,6 @@ data Choices = Choices {
   -- Matching a 'Space' to a 'CodeType' means values of the 'Space' should have that
   -- 'CodeType' in the generated code.
   spaceMatch :: SpaceMatch,
-  impType :: ImplementationType,
   -- | Preferentially-ordered list ODE libraries to try.
   odeLib :: [ODELibPckg],
   -- FIXME: ODEInfos should be automatically built from Instance models when 
@@ -60,6 +59,13 @@ class RenderChoices a where
     showChsList :: [a] -> Sentence
     showChsList lst = foldlSent_ (map showChs lst)
 
+data Architecture = Archt {
+  modularity ::  Modularity,
+  impType :: ImplementationType
+}
+makeArchit :: Modularity -> ImplementationType -> Architecture
+makeArchit = Archt
+
 -- | Modularity of a program.
 data Modularity = Modular InputModule 
                 | Unmodular
@@ -78,10 +84,10 @@ data InputModule = Combined
 -- modules, based on a 'Choices' structure. An 'Unmodular' design implicitly means 
 -- that input modules are 'Combined'.
 inputModule :: Choices -> InputModule
-inputModule c = inputModule' $ modularity c
+inputModule c = inputModule' $ modularity $ architecture c
   where inputModule' Unmodular = Combined
         inputModule' (Modular im) = im
-    
+
 -- | Variable structure options.
 data Structure = Unbundled
                | Bundled
@@ -239,8 +245,7 @@ hasSampleInput (_:xs) = hasSampleInput xs
 defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
-  modularity = Modular Combined,
-  impType = Program,
+  architecture = makeArchit (Modular Combined) Program,
   logFile = "log.txt",
   logging = [],
   comments = [],
@@ -262,11 +267,11 @@ defaultChoices = Choices {
 choicesSent :: Choices -> [Sentence] 
 choicesSent chs = map chsFieldSent [
     (S "Languages", foldlSent_ $ map (S . show) $ lang chs)
-  , (S "Modularity", showChs $ modularity chs)
+  , (S "Modularity", showChs $ modularity $ architecture chs)
   , (S "Input Structure", showChs $ inputStructure chs)
   , (S "Constant Structure", showChs $ constStructure chs)
   , (S "Constant Representation", showChs $ constRepr chs)
-  , (S "Implementation Type", showChs $ impType chs)
+  , (S "Implementation Type", showChs $ impType $ architecture chs)
   , (S "Software Constraint Behaviour", showChs $ onSfwrConstraint chs)
   , (S "Physical Constraint Behaviour", showChs $ onPhysConstraint chs)
   , (S "Comments", showChsList $ comments chs)

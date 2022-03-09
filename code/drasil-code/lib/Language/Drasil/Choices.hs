@@ -19,18 +19,13 @@ import GOOL.Drasil (CodeType)
 import Control.Lens ((^.))
 import Data.Map (Map, fromList)
 
--- | Global design choices (affect entire program)
+-- Full details of Choices documentation 
+-- https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
 data Choices = Choices {
-  -- | Target languages.
-  -- Choosing multiple means program will be generated in multiple languages.
   lang :: [Lang],
-  -- | How the program should be modularized.
   modularity :: Modularity,
-  -- | Structure of inputs (bundled or not).
   inputStructure :: Structure,
-  -- | Structure of constants (inlined or bundled or not, or stored with inputs).
   constStructure :: ConstantStructure,
-  -- | Representation of constants (as variables or as constants).
   constRepr :: ConstantRepr,
   -- | Map of 'UID's for Drasil concepts to code concepts.
   -- Matching a 'UID' to a code concept means the code concept should be used
@@ -40,8 +35,6 @@ data Choices = Choices {
   -- Matching a 'Space' to a 'CodeType' means values of the 'Space' should have that
   -- 'CodeType' in the generated code.
   spaceMatch :: SpaceMatch,
-  ------- Local design choices (affect one part of program) -------
-  -- | Implementation type, program or library.
   impType :: ImplementationType,
   -- | Preferentially-ordered list ODE libraries to try.
   odeLib :: [ODELibPckg],
@@ -50,21 +43,14 @@ data Choices = Choices {
   -- This choice should really just be for an ODEMethod
   -- | ODE information.
   odes :: [ODEInfo],
-  -- | Constraint violation behaviour. Exception or Warning.
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
   ------- Features that can be toggled on on off -------
-  -- | Turns Doxygen comments for different code structures on or off.
   comments :: [Comments],
-  -- | Standard output from running Doxygen: verbose or quiet?
   doxVerbosity :: Verbosity,
-  -- | Turns date field on or off in the generated module-level Doxygen comments.
   dates :: Visibility,
-  -- | Turns different forms of logging on or off.
   logging :: [Logging],
-  -- | Name of log file.
   logFile :: FilePath,
-  -- | Turns generation of different auxiliary (non-source-code) files on or off.
   auxFiles :: [AuxFile]
 }
 
@@ -75,9 +61,8 @@ class RenderChoices a where
     showChsList lst = foldlSent_ (map showChs lst)
 
 -- | Modularity of a program.
-data Modularity = Modular InputModule -- ^ Different modules. For controller, 
-                                      -- input, calculations, output.
-                | Unmodular -- ^ All generated code is in one module/file.
+data Modularity = Modular InputModule 
+                | Unmodular
 
 -- | Renders the modularity of a program.
 instance RenderChoices Modularity where 
@@ -86,8 +71,8 @@ instance RenderChoices Modularity where
   showChs (Modular Separated)= S "Modular Separated"
 
 -- | Options for input modules.
-data InputModule = Combined -- ^ Input-related functions combined in one module.
-                 | Separated -- ^ Input-related functions each in own module.
+data InputModule = Combined
+                 | Separated
 
 -- | Determines whether there is a 'Combined' input module or many 'Separated' input 
 -- modules, based on a 'Choices' structure. An 'Unmodular' design implicitly means 
@@ -98,8 +83,8 @@ inputModule c = inputModule' $ modularity c
         inputModule' (Modular im) = im
     
 -- | Variable structure options.
-data Structure = Unbundled -- ^ Individual variables
-               | Bundled -- ^ Variables bundled in a class
+data Structure = Unbundled
+               | Bundled
 
 -- | Renders the structure of variables in a program.
 instance RenderChoices Structure where 
@@ -107,10 +92,9 @@ instance RenderChoices Structure where
   showChs Bundled = S "Bundled"
 
 -- | Constants options.
-data ConstantStructure = Inline          -- ^ Inline values for constants.
-                       | WithInputs      -- ^ Store constants with inputs.
-                       | Store Structure -- ^ Store constants separately from 
-                                         -- inputs, whether bundled or unbundled.
+data ConstantStructure = Inline
+                       | WithInputs
+                       | Store Structure
 
 -- | Renders the structure of constants in a program.
 instance RenderChoices ConstantStructure where 
@@ -120,8 +104,8 @@ instance RenderChoices ConstantStructure where
   showChs (Store Bundled) = S "Store Bundled"
 
 -- | Options for representing constants in a program.
-data ConstantRepr = Var   -- ^ Constants represented as regular variables.
-                  | Const -- ^ Use target language's mechanism for defining constants.
+data ConstantRepr = Var
+                  | Const
 
 -- | Renders the representation of constants in a program.
 instance RenderChoices ConstantRepr where 
@@ -166,8 +150,8 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
         matchSpaces' [] sm = sm
 
 -- | Program implementation options.
-data ImplementationType = Library -- ^ Generated code does not include Controller.
-                        | Program -- ^ Generated code includes Controller.
+data ImplementationType = Library
+                        | Program
 
 -- | Renders options for program implementation.
 instance RenderChoices ImplementationType where 
@@ -175,8 +159,8 @@ instance RenderChoices ImplementationType where
   showChs Program = S "Program" 
 
 -- | Constraint behaviour options within program.
-data ConstraintBehaviour = Warning   -- ^ Print warning when constraint violated.
-                         | Exception -- ^ Throw exception when constraint violated.
+data ConstraintBehaviour = Warning
+                         | Exception
 
 -- | Renders options for program implementation.
 instance RenderChoices ConstraintBehaviour where 
@@ -184,9 +168,9 @@ instance RenderChoices ConstraintBehaviour where
   showChs Exception = S "Exception" 
 
 -- | Comment implementation options.
-data Comments = CommentFunc  -- ^ Function/method-level comments.
-              | CommentClass -- ^ Class-level comments.
-              | CommentMod   -- ^ File/Module-level comments.
+data Comments = CommentFunc
+              | CommentClass
+              | CommentMod
               deriving Eq
 
 -- | Renders options for implementation of comments.
@@ -215,8 +199,8 @@ instance RenderChoices Visibility where
 -- | Logging options for function calls and variable assignments.
 -- Eq instances required for Logging and Comments because generator needs to 
 -- check membership of these elements in lists
-data Logging = LogFunc -- ^ Log messages generated for function calls.
-             | LogVar  -- ^ Log messages generated for variable assignments.
+data Logging = LogFunc
+             | LogVar
              deriving Eq
 
 -- | Renders options for program logging.
@@ -228,8 +212,8 @@ instance RenderChoices Logging where
 -- To generate a sample input file compatible with the generated program,
 -- 'FilePath' is the path to the user-provided file containing a sample set of input data.
 data AuxFile = SampleInput FilePath 
-                | ReadME 
-                deriving Eq
+             | ReadME 
+             deriving Eq
 
 -- | Renders options for auxiliary file generation.
 instance RenderChoices AuxFile where 

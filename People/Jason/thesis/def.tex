@@ -28,11 +28,15 @@
 \newcommand{\intodo}[1]{\todo[inline]{#1}}
 
 % Haskell snippet
-\newenvironment{code}{\captionsetup{type=listing}}{}
+\newenvironment{code}{\captionsetup{type=listing,skip=14pt}}{}
 \SetupFloatingEnvironment{listing}{name=Source Code,listname=List of Source Codes}
 \newenvironment{haskell}[4]
     {\VerbatimEnvironment\begin{code}\caption[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
     {\end{minted}\end{code}}
+% TODO: Figure out how I can properly space the label between "Source Code X.X:
+% X" and the minted code itself. "\vspace*{-3mm}" barely works, and doesn't
+% really solve the real problem here.
+
 
 % TODO: If I want to wrap "#3" in a \url{#3}, it causes a weird LaTeX error that
 %       I just can't figure out at the moment. It seems what I'm trying to do

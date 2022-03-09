@@ -1,5 +1,12 @@
 % ModelKinds -- Theory types / discrimination -- ``Expressions in context''
 
+In order for Drasil to generate software artifacts that solve problems, it must
+have a way of discussing the space your problem lies in, and the ways it can be
+transformed into the working calculation steps that a software artifact can
+follow to solve your problem.
+
+\originalExprHaskell
+
 \section{Problem}
 
 \begin{itemize}
@@ -100,8 +107,7 @@
 		            the higher-level encodings will allow us to quickly
 		            identify, discriminate, and efficiently use the information
 		            originally contained in the expressions better. This is done
-		            through replacing ``RelationConcepts'' with, largely,
-		            ``ModelKinds'':
+		            through replacing ``RelationConcepts'' with ``ModelKinds'':
 
 			  \item \currentModelKindsHaskell
 			  

@@ -1,5 +1,14 @@
+%------------------------------------------------------------------------------
+% Folders
+%------------------------------------------------------------------------------
+
 \newcommand{\codeSnippet}{snippets/code}
 \newcommand{\currentCode}{\codeSnippet/current}
+\newcommand{\originalCode}{\codeSnippet/original}
+
+%------------------------------------------------------------------------------
+% Specific files
+%------------------------------------------------------------------------------
 
 \newcommand{\currentExprHaskell}{\input{\currentCode/expr}}
 \newcommand{\refCurrentExprHaskell}{\ref{lst:currentExpr}}
@@ -9,3 +18,6 @@
 
 \newcommand{\currentModelKindsHaskell}{\input{\currentCode/modelkinds}}
 \newcommand{\refCurrentModelKindsHaskell}{\ref{lst:defModelKinds}}
+
+\newcommand{\originalExprHaskell}{\input{\originalCode/expr}}
+\newcommand{\refOriginalExprHaskell}{\ref{lst:origExpr}}

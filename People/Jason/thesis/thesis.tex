@@ -145,6 +145,14 @@
 % Descriptive Note
 %------------------------------------------------------------------------------
 
+% START : HEADER %
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt} % Remove underline of header
+% END   : HEADER %
+
 \pagenumbering{roman}
 \setcounter{page}{2} % page 2
 
@@ -226,13 +234,8 @@ descriptive instruction.
 \mainmatter
 
 % START : HEADER %
-\pagestyle{fancy}
-\fancyhead{}
-\fancyfoot{}
 \fancyhead[R]{McMaster University -- Computing and Software}
 \fancyhead[L]{M.Sc. Thesis -- Jason Balaci}
-\fancyfoot[C]{\thepage}
-\renewcommand{\headrulewidth}{0pt}
 % END   : HEADER %
 
 \chapter{Introduction}

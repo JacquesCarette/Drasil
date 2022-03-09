@@ -4,7 +4,7 @@ module Language.Drasil.Code (
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
   Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), makeArchit,
-  ImplementationType(..), Logging(..), Modularity(..), Structure(..), 
+  Architecture(..), ImplementationType(..), Logging(..), Modularity(..), Structure(..), 
   ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
   matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData, 
   Visibility(..), defaultChoices, 
@@ -86,7 +86,7 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   ConstraintBehaviour(..), ImplementationType(..), Logging(..), Modularity(..), 
   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), 
-  getSampleData, Visibility(..), defaultChoices, makeArchit)
+  getSampleData, Visibility(..), defaultChoices, makeArchit, Architecture(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, funcUID', asVC, asVC', 
   codeSpec)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 

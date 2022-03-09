@@ -3,7 +3,7 @@ module Drasil.NoPCM.Choices where
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), AuxFile(..), Visibility(..), defaultChoices)
+  InputModule(..), AuxFile(..), Visibility(..), defaultChoices, makeArchit)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
   apacheODEPckg, odeintPckg)
@@ -17,8 +17,7 @@ code = codeSpec fullSI choices []
 choices :: Choices
 choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java],
-  modularity = Modular Combined,
-  impType = Program,
+  architecture = makeArchit (Modular Combined) Program,
   logFile = "log.txt",
   logging = [],
   comments = [CommentFunc, CommentClass, CommentMod],

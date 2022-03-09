@@ -6,7 +6,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec)
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, Architecture(..))
 import Language.Drasil.Generate (genCode)
 import GOOL.Drasil (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
@@ -32,16 +32,15 @@ genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName ful
 
 codedDirName :: String -> Choices -> String
 codedDirName n Choices {
-  modularity = m,
-  impType = it,
+  architecture = a,
   logging = l,
   inputStructure = is,
   constStructure = cs,
   constRepr = cr,
   spaceMatch = sm} = 
-  intercalate "_" [n, codedMod m, codedImpTp it, codedLog l, codedStruct is, 
+  intercalate "_" [n, codedMod (modularity a), codedImpTp (impType a), codedLog l, codedStruct is, 
     codedConStruct cs, codedConRepr cr, codedSpaceMatch sm]
-  
+
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
 codedMod (Modular Combined) = "C"
@@ -77,12 +76,11 @@ codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
 choiceCombos :: [Choices]
 choiceCombos = [baseChoices, 
   baseChoices {
-    modularity = Modular Combined,
+    architecture = makeArchit (Modular Combined) Program,
     inputStructure = Bundled,
     constStructure = Store Unbundled},
   baseChoices {
-    modularity = Modular Separated,
-    impType = Library,
+    architecture = makeArchit (Modular Separated) Library,
     constStructure = Store Unbundled,
     spaceMatch = matchToFloats},
   baseChoices {
@@ -101,8 +99,7 @@ matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
 baseChoices :: Choices
 baseChoices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
-  modularity = Unmodular,
-  impType = Program,
+  architecture = makeArchit Unmodular Program,
   logFile = "log.txt",
   logging = [],
   comments = [CommentFunc, CommentClass, CommentMod],

@@ -1,7 +1,7 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData,
-  Maps(..), makeMaps, spaceToCodeType,
+  Maps(..), makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
   Modularity(..), InputModule(..), inputModule, Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
@@ -34,8 +34,7 @@ data Choices = Choices {
   -- This choice should really just be for an ODEMethod
   -- | ODE information.
   odes :: [ODEInfo],
-  onSfwrConstraint :: ConstraintBehaviour,
-  onPhysConstraint :: ConstraintBehaviour,
+  srsConstraints :: Constraints,
   ------- Features that can be toggled on on off -------
   comments :: [Comments],
   doxVerbosity :: Verbosity,
@@ -183,6 +182,15 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
   where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
         matchSpaces' [] sm = sm
 
+-- | SRS Constraints
+data Constraints = Constraints{
+  onSfwrConstraint :: ConstraintBehaviour,
+  onPhysConstraint :: ConstraintBehaviour
+}
+-- | Constructor to create a Constraints
+makeConstraints :: ConstraintBehaviour -> ConstraintBehaviour -> Constraints
+makeConstraints = Constraints
+
 -- | Constraint behaviour options within program.
 data ConstraintBehaviour = Warning
                          | Exception
@@ -266,14 +274,13 @@ defaultChoices = Choices {
   lang = [Python],
   architecture = makeArchit (Modular Combined) Program,
   dataInfo = makeData Bundled Inline Const,
+  maps = makeMaps (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])])) spaceToCodeType,
+  srsConstraints = makeConstraints Exception Warning,
   logFile = "log.txt",
   logging = [],
   comments = [],
   doxVerbosity = Verbose,
   dates = Hide,
-  onSfwrConstraint = Exception,
-  onPhysConstraint = Warning,
-  maps = makeMaps (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])])) spaceToCodeType,
   auxFiles = [ReadME],
   odeLib = [],
   odes = []
@@ -288,8 +295,8 @@ choicesSent chs = map chsFieldSent [
   , (S "Constant Structure", showChs $ constStructure $ dataInfo chs)
   , (S "Constant Representation", showChs $ constRepr $ dataInfo chs)
   , (S "Implementation Type", showChs $ impType $ architecture chs)
-  , (S "Software Constraint Behaviour", showChs $ onSfwrConstraint chs)
-  , (S "Physical Constraint Behaviour", showChs $ onPhysConstraint chs)
+  , (S "Software Constraint Behaviour", showChs $ onSfwrConstraint $ srsConstraints chs)
+  , (S "Physical Constraint Behaviour", showChs $ onPhysConstraint $ srsConstraints chs)
   , (S "Comments", showChsList $ comments chs)
   , (S "Dox Verbosity", showChs $ doxVerbosity chs)
   , (S "Dates", showChs $ dates chs)

@@ -6,7 +6,7 @@ import Language.Drasil.Code
        (AuxFile(..), Choices(..), CodeSpec, Comments(..), ConstantRepr(..),
         ConstantStructure(..), ConstraintBehaviour(..), ImplementationType(..),
         InputModule(..), Lang(..), Modularity(..), Structure(..), Verbosity(..),
-        Visibility(..), codeSpec, defaultChoices, makeArchit, makeData)
+        Visibility(..), codeSpec, defaultChoices, makeArchit, makeData, makeConstraints)
 
 codeSpecs :: CodeSpec
 codeSpecs = codeSpec fullSI codeChoices []
@@ -21,8 +21,7 @@ codeChoices = defaultChoices{
   comments = [CommentFunc, CommentClass, CommentMod],
   doxVerbosity = Verbose,
   dates = Hide,
-  onSfwrConstraint = Exception,
-  onPhysConstraint = Exception,
+  srsConstraints = makeConstraints Exception Exception,
   auxFiles = [SampleInput "../../datafiles/pdcontroller/sampleInput.txt", ReadME],
   odeLib = [scipyODELSodaPkg],
   odes = [pidODEInfo]

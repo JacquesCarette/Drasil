@@ -4,7 +4,7 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), AuxFile(..), Visibility(..), defaultChoices, makeArchit,
-  makeData)
+  makeData, makeConstraints)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
   apacheODEPckg, odeintPckg)
@@ -25,8 +25,7 @@ choices = defaultChoices {
   comments = [CommentFunc, CommentClass, CommentMod],
   doxVerbosity = Quiet,
   dates = Hide,
-  onSfwrConstraint = Warning,
-  onPhysConstraint = Warning,
+  srsConstraints = makeConstraints Warning Warning,
   auxFiles = [SampleInput "../../datafiles/nopcm/sampleInput.txt", ReadME],
   odeLib = [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg],
   odes = [noPCMODEInfo]

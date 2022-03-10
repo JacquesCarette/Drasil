@@ -8,7 +8,8 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
   Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
-  makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..))
+  makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
+  makeOptFeats)
 import Language.Drasil.Generate (genCode)
 import GOOL.Drasil (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
@@ -35,10 +36,10 @@ genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName ful
 codedDirName :: String -> Choices -> String
 codedDirName n Choices {
   architecture = a,
-  logConfig = l,
+  optFeats = o,
   dataInfo = d,
   maps = m} = 
-  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging l, 
+  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o, 
     codedStruct $ inputStructure d, codedConStruct $ constStructure d, 
     codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
 
@@ -86,13 +87,19 @@ choiceCombos = [baseChoices,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   },
   baseChoices {
-    logConfig = makeLogConfig [LogVar, LogFunc] "log.txt",
-    dataInfo = makeData Bundled (Store Bundled) Const
+    dataInfo = makeData Bundled (Store Bundled) Const,
+    optFeats = makeOptFeats
+      (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
+      (makeLogConfig [LogVar, LogFunc] "log.txt")
+      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
   },
   baseChoices {
-    logConfig = makeLogConfig [LogVar, LogFunc] "log.txt",
     dataInfo = makeData Bundled WithInputs Var,
-    maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
+    maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats,
+    optFeats = makeOptFeats
+      (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
+      (makeLogConfig [LogVar, LogFunc] "log.txt")
+      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
   }]
 
 matchToFloats :: SpaceMatch
@@ -103,9 +110,10 @@ baseChoices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
   architecture = makeArchit Unmodular Program,
   dataInfo = makeData Unbundled WithInputs Var,
-  logConfig = makeLogConfig [] "log.txt",
-  docConfig = makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide,
-  srsConstraints = makeConstraints Warning Warning,
   maps = makeMaps (matchConcepts [(piConst, [Pi])]) spaceToCodeType,
-  auxFiles = [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
+  optFeats = makeOptFeats
+    (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
+    (makeLogConfig [] "log.txt")
+    [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+  srsConstraints = makeConstraints Warning Warning
 }

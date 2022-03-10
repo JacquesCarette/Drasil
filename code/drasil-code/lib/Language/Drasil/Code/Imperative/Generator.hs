@@ -26,7 +26,7 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..), Visibility(..),
-  DataInfo(..), Constraints(..), choicesSent, ODE(..), DocConfig(..), LogConfig(..))
+  DataInfo(..), Constraints(..), choicesSent, ODE(..), DocConfig(..), LogConfig(..), OptionalFeatures(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
@@ -58,12 +58,12 @@ generator l dt sd chs spec = DrasilState {
   implType = impType $ architecture chs,
   onSfwrC = onSfwrConstraint $ srsConstraints chs,
   onPhysC = onPhysConstraint $ srsConstraints chs,
-  commented = comments $ docConfig chs,
-  doxOutput = doxVerbosity $ docConfig chs,
-  date = showDate $ dates $ docConfig chs,
-  logKind  = logging $ logConfig chs,
-  logName = logFile $ logConfig chs,
-  auxiliaries = auxFiles chs,
+  commented = comments $ docConfig $ optFeats chs,
+  doxOutput = doxVerbosity $ docConfig $ optFeats chs,
+  date = showDate $ dates $ docConfig $ optFeats chs,
+  logKind  = logging $ logConfig $ optFeats chs,
+  logName = logFile $ logConfig $ optFeats chs,
+  auxiliaries = auxFiles $ optFeats chs,
   sampleData = sd,
   modules = modules',
   extLibNames = nms,

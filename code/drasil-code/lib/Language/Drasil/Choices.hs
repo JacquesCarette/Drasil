@@ -1,9 +1,9 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
-  Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData,
-  Maps(..), makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
-  ODE(..), makeODE, DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig,
-  Modularity(..), InputModule(..), inputModule, Structure(..),
+  Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..), 
+  makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE, 
+  DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..), 
+  makeOptFeats, Modularity(..), InputModule(..), inputModule, Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
@@ -28,13 +28,9 @@ data Choices = Choices {
   architecture :: Architecture,
   dataInfo :: DataInfo,
   maps :: Maps,
-  docConfig :: DocConfig,
-  logConfig :: LogConfig,
-  auxFiles :: [AuxFile],
+  optFeats :: OptionalFeatures,
   srsConstraints :: Constraints,
   ode :: ODE
-  ------- Features that can be toggled on on off -------
-
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -175,6 +171,16 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
   where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
         matchSpaces' [] sm = sm
 
+-- Optional Features can be added to the program or left it out
+data OptionalFeatures = OptFeats{
+  docConfig :: DocConfig,
+  logConfig :: LogConfig,
+  auxFiles :: [AuxFile]
+}
+-- | Constructor to create a OptionalFeatures
+makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+makeOptFeats = OptFeats
+
 -- | Configuration for Doxygen documentation 
 data DocConfig = DocConfig {
   comments :: [Comments],
@@ -248,7 +254,7 @@ instance RenderChoices AuxFile where
 -- | Gets the file path to a sample input data set from a 'Choices' structure, if 
 -- the user chose to generate a sample input file.
 getSampleData :: Choices -> Maybe FilePath
-getSampleData chs = getSampleData' (auxFiles chs)
+getSampleData chs = getSampleData' (auxFiles $ optFeats chs)
   where getSampleData' [] = Nothing
         getSampleData' (SampleInput fp:_) = Just fp
         getSampleData' (_:xs) = getSampleData' xs
@@ -298,11 +304,14 @@ defaultChoices = Choices {
   lang = [Python],
   architecture = makeArchit (Modular Combined) Program,
   dataInfo = makeData Bundled Inline Const,
-  maps = makeMaps (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])])) spaceToCodeType,
+  maps = makeMaps 
+    (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])])) 
+    spaceToCodeType,
+  optFeats = makeOptFeats 
+    (makeDocConfig [] Verbose Hide) 
+    (makeLogConfig [] "log.txt") 
+    [ReadME],
   srsConstraints = makeConstraints Exception Warning,
-  logConfig = makeLogConfig [] "log.txt",
-  docConfig = makeDocConfig [] Verbose Hide,
-  auxFiles = [ReadME],
   ode = makeODE [] []
 }
 
@@ -317,12 +326,12 @@ choicesSent chs = map chsFieldSent [
   , (S "Implementation Type", showChs $ impType $ architecture chs)
   , (S "Software Constraint Behaviour", showChs $ onSfwrConstraint $ srsConstraints chs)
   , (S "Physical Constraint Behaviour", showChs $ onPhysConstraint $ srsConstraints chs)
-  , (S "Comments", showChsList $ comments $ docConfig chs)
-  , (S "Dox Verbosity", showChs $ doxVerbosity $ docConfig chs)
-  , (S "Dates", showChs $ dates $ docConfig chs)
-  , (S "Log File Name", S $ logFile $ logConfig chs)
-  , (S "Logging", showChsList $ logging $ logConfig chs)
-  , (S "Auxiliary Files", showChsList $ auxFiles chs)
+  , (S "Comments", showChsList $ comments $ docConfig $ optFeats chs)
+  , (S "Dox Verbosity", showChs $ doxVerbosity $ docConfig $ optFeats chs)
+  , (S "Dates", showChs $ dates $ docConfig $ optFeats chs)
+  , (S "Log File Name", S $ logFile $ logConfig $ optFeats chs)
+  , (S "Logging", showChsList $ logging $ logConfig $ optFeats chs)
+  , (S "Auxiliary Files", showChsList $ auxFiles $ optFeats chs)
   ]
 
 -- | Helper to combine pairs of 'Sentence's for rendering 'Choices'.

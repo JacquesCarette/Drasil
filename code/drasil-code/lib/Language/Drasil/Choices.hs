@@ -1,6 +1,7 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
-  Choices(..), Architecture (..), makeArchit, Modularity(..), InputModule(..), inputModule, Structure(..), 
+  Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData,
+  Modularity(..), InputModule(..), inputModule, Structure(..), 
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, 
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
@@ -24,9 +25,7 @@ import Data.Map (Map, fromList)
 data Choices = Choices {
   lang :: [Lang],
   architecture :: Architecture,
-  inputStructure :: Structure,
-  constStructure :: ConstantStructure,
-  constRepr :: ConstantRepr,
+  dataInfo :: DataInfo,
   -- | Map of 'UID's for Drasil concepts to code concepts.
   -- Matching a 'UID' to a code concept means the code concept should be used
   -- instead of the chunk associated with the 'UID'.
@@ -59,12 +58,24 @@ class RenderChoices a where
     showChsList :: [a] -> Sentence
     showChsList lst = foldlSent_ (map showChs lst)
 
+-- | Architecture of a program
 data Architecture = Archt {
-  modularity ::  Modularity,
+  modularity :: Modularity,
   impType :: ImplementationType
 }
+-- | Constructor to create a Architecture
 makeArchit :: Modularity -> ImplementationType -> Architecture
 makeArchit = Archt
+
+-- | Data of a program - how information should be encoded.
+data DataInfo = DataInfo {
+  inputStructure :: Structure,
+  constStructure :: ConstantStructure,
+  constRepr :: ConstantRepr
+}
+-- | Constructor to create a DataInfo
+makeData :: Structure -> ConstantStructure -> ConstantRepr -> DataInfo
+makeData = DataInfo
 
 -- | Modularity of a program.
 data Modularity = Modular InputModule 
@@ -253,9 +264,7 @@ defaultChoices = Choices {
   dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
-  inputStructure = Bundled,
-  constStructure = Inline,
-  constRepr = Const,
+  dataInfo = makeData Bundled Inline Const,
   conceptMatch = matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]),
   spaceMatch = spaceToCodeType, 
   auxFiles = [ReadME],
@@ -268,9 +277,9 @@ choicesSent :: Choices -> [Sentence]
 choicesSent chs = map chsFieldSent [
     (S "Languages", foldlSent_ $ map (S . show) $ lang chs)
   , (S "Modularity", showChs $ modularity $ architecture chs)
-  , (S "Input Structure", showChs $ inputStructure chs)
-  , (S "Constant Structure", showChs $ constStructure chs)
-  , (S "Constant Representation", showChs $ constRepr chs)
+  , (S "Input Structure", showChs $ inputStructure $ dataInfo chs)
+  , (S "Constant Structure", showChs $ constStructure $ dataInfo chs)
+  , (S "Constant Representation", showChs $ constRepr $ dataInfo chs)
   , (S "Implementation Type", showChs $ impType $ architecture chs)
   , (S "Software Constraint Behaviour", showChs $ onSfwrConstraint chs)
   , (S "Physical Constraint Behaviour", showChs $ onPhysConstraint chs)

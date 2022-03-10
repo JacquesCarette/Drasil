@@ -26,7 +26,7 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..), Visibility(..),
-  choicesSent)
+  DataInfo(..), choicesSent)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
@@ -50,9 +50,9 @@ generator l dt sd chs spec = DrasilState {
   -- constants
   codeSpec = spec,
   modular = modularity $ architecture chs,
-  inStruct = inputStructure chs,
-  conStruct = constStructure chs,
-  conRepr = constRepr chs,
+  inStruct = inputStructure $ dataInfo chs,
+  conStruct = constStructure $ dataInfo chs,
+  conRepr = constRepr $ dataInfo chs,
   concMatches = mcm,
   spaceMatches = chooseSpace l chs,
   implType = impType $ architecture chs,

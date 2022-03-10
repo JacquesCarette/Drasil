@@ -4,6 +4,7 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..), makeArchit,
+  makeData,
   defaultChoices)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -23,9 +24,7 @@ choices = defaultChoices {
   dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Exception,
-  inputStructure = Bundled,
-  constStructure = Inline,
-  constRepr = Const,
+  dataInfo = makeData Bundled Inline Const,
   auxFiles = [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME] 
 }
   

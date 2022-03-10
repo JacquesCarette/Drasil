@@ -10,7 +10,8 @@ import GOOL.Drasil (ScopeTag(..), CodeType)
 import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
-import Language.Drasil.Choices (Choices(..), Architecture (..), AuxFile, Modularity(..), 
+import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
+  AuxFile, Modularity(..), 
   ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 
   ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
   InputModule(..), Logging, Structure(..), inputModule)
@@ -154,7 +155,7 @@ type ClassDef = (String, String)
 -- constructor is generated, thus "InputParameters" is added to map.
 getExpInput :: Name -> Choices -> [Input] -> [ModExp]
 getExpInput _ _ [] = []
-getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure chs) 
+getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure $ dataInfo chs) 
   where inExp _ Unbundled = []
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp (Modular Separated) Bundled = inVarDefs ipName
@@ -169,7 +170,7 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
 -- If 'Bundled' and input modules are 'Separated', input variables are defined in InputParameters but no constructor is generated.
 getInputCls :: Choices -> [Input] -> [ClassDef]
 getInputCls _ [] = []
-getInputCls chs ins = inCls (inputModule chs) (inputStructure chs) 
+getInputCls chs ins = inCls (inputModule chs) (inputStructure $ dataInfo chs) 
   where inCls _ Unbundled = []
         inCls Combined Bundled = (ipName, ipName) : inVarDefs
         inCls Separated Bundled = inVarDefs
@@ -184,8 +185,8 @@ getInputCls chs ins = inCls (inputModule chs) (inputStructure chs)
 -- If 'Unbundled', constants are not exported by any module.
 getExpConstants :: Name -> Choices -> [Const] -> [ModExp]
 getExpConstants _ _ [] = []
-getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure chs) 
-  (inputStructure chs)
+getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure $ dataInfo chs) 
+  (inputStructure $ dataInfo chs)
   where cExp Unmodular (Store Bundled) _ = zipCs $ repeat n
         cExp Unmodular WithInputs Bundled = zipCs $ repeat n
         cExp _ (Store Bundled) _ = zipCs $ repeat "Constants"
@@ -200,7 +201,7 @@ getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure 
 -- If constants are 'Unbundled', state variables for the constants are not defined in any class.
 getConstantsCls :: Choices -> [Const] -> [ClassDef]
 getConstantsCls _ [] = []
-getConstantsCls chs cs = cnCls (constStructure chs) (inputStructure chs)
+getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $ dataInfo chs)
   where cnCls (Store Bundled) _ = zipCs $ repeat "Constants"
         cnCls WithInputs Bundled = zipCs $ repeat "InputParameters"
         cnCls _ _ = []
@@ -214,7 +215,7 @@ getConstantsCls chs cs = cnCls (constStructure chs) (inputStructure chs)
 -- Similar logic for input_constraints and get_input below.
 getExpDerived :: Name -> Choices -> [Derived] -> [ModExp]
 getExpDerived _ _ [] = []
-getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure chs)
+getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
   where dMod (Modular Separated) _ = [(dvNm, "DerivedValues")]
         dMod _ Bundled = []
         dMod Unmodular _ = [(dvNm, n)]
@@ -228,7 +229,7 @@ getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure chs
 -- Similar logic for input_constraints and get_input below.
 getDerivedCls :: Choices -> [Derived] -> [ClassDef]
 getDerivedCls _ [] = []
-getDerivedCls chs _ = dCls (inputModule chs) (inputStructure chs)
+getDerivedCls chs _ = dCls (inputModule chs) (inputStructure $ dataInfo chs)
   where dCls Combined Bundled = [("derived_values", "InputParameters")]
         dCls _ _ = []
 
@@ -236,7 +237,7 @@ getDerivedCls chs _ = dCls (inputModule chs) (inputStructure chs)
 -- See 'getExpDerived' for full logic details.
 getExpConstraints :: Name -> Choices -> [ConstraintCE] -> [ModExp]
 getExpConstraints _ _ [] = []
-getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure chs)
+getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
   where cMod (Modular Separated) _ = [(icNm, "InputConstraints")]
         cMod _ Bundled = []
         cMod Unmodular _ = [(icNm, n)]
@@ -247,7 +248,7 @@ getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure
 -- See 'getDerivedCls' for full logic details.
 getConstraintsCls :: Choices -> [ConstraintCE] -> [ClassDef]
 getConstraintsCls _   [] = []
-getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure chs)
+getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure $ dataInfo chs)
   where cCls Combined Bundled = [("input_constraints", "InputParameters")]
         cCls _ _ = []
 
@@ -255,7 +256,7 @@ getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure chs)
 -- See 'getExpDerived' for full logic details.
 getExpInputFormat :: Name -> Choices -> [Input] -> [ModExp]
 getExpInputFormat _ _ [] = []
-getExpInputFormat n chs _ = fMod (modularity $ architecture chs) (inputStructure chs)
+getExpInputFormat n chs _ = fMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
   where fMod (Modular Separated) _ = [(giNm, "InputFormat")]
         fMod _ Bundled = []
         fMod Unmodular _ = [(giNm, n)]
@@ -266,7 +267,7 @@ getExpInputFormat n chs _ = fMod (modularity $ architecture chs) (inputStructure
 -- See 'getDerivedCls' for full logic details.
 getInputFormatCls :: Choices -> [Input] -> [ClassDef]
 getInputFormatCls _ [] = []
-getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure chs)
+getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure $ dataInfo chs)
   where ifCls Combined Bundled = [("get_input", "InputParameters")]
         ifCls _ _ = []
 

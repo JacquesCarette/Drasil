@@ -2,7 +2,7 @@
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData,
   Maps(..), makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
-  ODE(..), makeODE,
+  ODE(..), makeODE, DocConfig(..), makeDocConfig,
   Modularity(..), InputModule(..), inputModule, Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
@@ -28,12 +28,10 @@ data Choices = Choices {
   architecture :: Architecture,
   dataInfo :: DataInfo,
   maps :: Maps,
+  docConfig :: DocConfig,
   ode :: ODE,
   srsConstraints :: Constraints,
   ------- Features that can be toggled on on off -------
-  comments :: [Comments],
-  doxVerbosity :: Verbosity,
-  dates :: Visibility,
   logging :: [Logging],
   logFile :: FilePath,
   auxFiles :: [AuxFile]
@@ -177,6 +175,15 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
   where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
         matchSpaces' [] sm = sm
 
+-- | Configuration for Doxygen documentation 
+data DocConfig = DocConfig {
+  comments :: [Comments],
+  doxVerbosity :: Verbosity,
+  dates :: Visibility
+}
+-- | Constructor to create a DocConfig
+makeDocConfig = DocConfig
+
 -- | SRS Constraints
 data Constraints = Constraints{
   onSfwrConstraint :: ConstraintBehaviour,
@@ -287,9 +294,7 @@ defaultChoices = Choices {
   srsConstraints = makeConstraints Exception Warning,
   logFile = "log.txt",
   logging = [],
-  comments = [],
-  doxVerbosity = Verbose,
-  dates = Hide,
+  docConfig = makeDocConfig [] Verbose Hide,
   auxFiles = [ReadME],
   ode = makeODE [] []
 }
@@ -305,9 +310,9 @@ choicesSent chs = map chsFieldSent [
   , (S "Implementation Type", showChs $ impType $ architecture chs)
   , (S "Software Constraint Behaviour", showChs $ onSfwrConstraint $ srsConstraints chs)
   , (S "Physical Constraint Behaviour", showChs $ onPhysConstraint $ srsConstraints chs)
-  , (S "Comments", showChsList $ comments chs)
-  , (S "Dox Verbosity", showChs $ doxVerbosity chs)
-  , (S "Dates", showChs $ dates chs)
+  , (S "Comments", showChsList $ comments $ docConfig chs)
+  , (S "Dox Verbosity", showChs $ doxVerbosity $ docConfig chs)
+  , (S "Dates", showChs $ dates $ docConfig chs)
   , (S "Log File Name", S $ logFile chs)
   , (S "Logging", showChsList $ logging chs)
   , (S "Auxiliary Files", showChsList $ auxFiles chs)

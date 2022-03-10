@@ -8,7 +8,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
   Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
-  makeConstraints)
+  makeConstraints, makeDocConfig)
 import Language.Drasil.Generate (genCode)
 import GOOL.Drasil (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
@@ -105,9 +105,7 @@ baseChoices = defaultChoices {
   dataInfo = makeData Unbundled WithInputs Var,
   logFile = "log.txt",
   logging = [],
-  comments = [CommentFunc, CommentClass, CommentMod],
-  doxVerbosity = Quiet,
-  dates = Hide,
+  docConfig = makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide,
   srsConstraints = makeConstraints Warning Warning,
   maps = makeMaps (matchConcepts [(piConst, [Pi])]) spaceToCodeType,
   auxFiles = [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]

@@ -26,7 +26,7 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..), Visibility(..),
-  DataInfo(..), Constraints(..), choicesSent, ODE(..), DocConfig(..))
+  DataInfo(..), Constraints(..), choicesSent, ODE(..), DocConfig(..), LogConfig(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
@@ -61,8 +61,8 @@ generator l dt sd chs spec = DrasilState {
   commented = comments $ docConfig chs,
   doxOutput = doxVerbosity $ docConfig chs,
   date = showDate $ dates $ docConfig chs,
-  logKind  = logging chs,
-  logName = logFile chs,
+  logKind  = logging $ logConfig chs,
+  logName = logFile $ logConfig chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
   modules = modules',

@@ -6,7 +6,7 @@ import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..),
   ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..), 
   ImplementationType(..), InputModule(..), Lang(..), Modularity(..), Structure(..), 
   Verbosity(..), Visibility(..), codeSpec, defaultChoices, makeArchit, makeData, 
-  makeConstraints, makeODE, makeDocConfig)
+  makeConstraints, makeODE, makeDocConfig, makeLogConfig)
 
 codeSpecs :: CodeSpec
 codeSpecs = codeSpec fullSI codeChoices []
@@ -16,8 +16,7 @@ codeChoices = defaultChoices{
   lang = [Python],
   architecture = makeArchit (Modular Combined) Program,
   dataInfo = makeData Unbundled (Store Bundled) Const,
-  logFile = "log.txt",
-  logging = [],
+  logConfig = makeLogConfig [] "log.txt",
   docConfig = makeDocConfig [CommentFunc, CommentClass, CommentMod] Verbose Hide,
   srsConstraints = makeConstraints Exception Exception,
   auxFiles = [SampleInput "../../datafiles/pdcontroller/sampleInput.txt", ReadME],

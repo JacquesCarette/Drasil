@@ -4,7 +4,7 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), AuxFile(..), Visibility(..), defaultChoices, makeArchit,
-  makeData, makeConstraints, makeODE, makeDocConfig)
+  makeData, makeConstraints, makeODE, makeDocConfig, makeLogConfig)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
   apacheODEPckg, odeintPckg)
@@ -20,8 +20,7 @@ choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java],
   architecture = makeArchit (Modular Combined) Program,
   dataInfo = makeData Unbundled (Store Bundled) Const,
-  logFile = "log.txt",
-  logging = [],
+  logConfig = makeLogConfig [] "log.txt",
   docConfig = makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide,
   srsConstraints = makeConstraints Warning Warning,
   auxFiles = [SampleInput "../../datafiles/nopcm/sampleInput.txt", ReadME],

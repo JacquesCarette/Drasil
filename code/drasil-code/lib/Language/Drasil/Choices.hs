@@ -2,7 +2,7 @@
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData,
   Maps(..), makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
-  ODE(..), makeODE, DocConfig(..), makeDocConfig,
+  ODE(..), makeODE, DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig,
   Modularity(..), InputModule(..), inputModule, Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
@@ -29,12 +29,12 @@ data Choices = Choices {
   dataInfo :: DataInfo,
   maps :: Maps,
   docConfig :: DocConfig,
-  ode :: ODE,
+  logConfig :: LogConfig,
+  auxFiles :: [AuxFile],
   srsConstraints :: Constraints,
+  ode :: ODE
   ------- Features that can be toggled on on off -------
-  logging :: [Logging],
-  logFile :: FilePath,
-  auxFiles :: [AuxFile]
+
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -185,38 +185,6 @@ data DocConfig = DocConfig {
 makeDocConfig :: [Comments] -> Verbosity -> Visibility -> DocConfig
 makeDocConfig = DocConfig
 
--- | SRS Constraints
-data Constraints = Constraints{
-  onSfwrConstraint :: ConstraintBehaviour,
-  onPhysConstraint :: ConstraintBehaviour
-}
--- | Constructor to create a Constraints
-makeConstraints :: ConstraintBehaviour -> ConstraintBehaviour -> Constraints
-makeConstraints = Constraints
-
--- | Constraint behaviour options within program.
-data ConstraintBehaviour = Warning
-                         | Exception
-
--- | Renders options for program implementation.
-instance RenderChoices ConstraintBehaviour where
-  showChs Warning = S "Warning"
-  showChs Exception = S "Exception"
-
--- | All Information needed to solve an ODE 
-data ODE = ODE{
-  -- FIXME: ODEInfos should be automatically built from Instance models when 
-  -- needed, but we can't do that yet so I'm passing it through Choices instead.
-  -- This choice should really just be for an ODEMethod
-  -- | ODE information.
-  odeInfo :: [ODEInfo],
-  -- | Preferentially-ordered list ODE libraries to try.
-  odeLib :: [ODELibPckg]
-}
--- | Constructor to create an ODE
-makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
-makeODE = ODE
-
 -- | Comment implementation options.
 data Comments = CommentFunc
               | CommentClass
@@ -245,6 +213,13 @@ data Visibility = Show
 instance RenderChoices Visibility where
   showChs Show = S "Show"
   showChs Hide = S "Hide"
+
+data LogConfig = LogConfig {
+  logging :: [Logging],
+  logFile :: FilePath
+}
+-- | Constructor to create a LogConfig
+makeLogConfig = LogConfig
 
 -- | Logging options for function calls and variable assignments.
 -- Eq instances required for Logging and Comments because generator needs to 
@@ -284,6 +259,38 @@ hasSampleInput [] = False
 hasSampleInput (SampleInput _:_) = True
 hasSampleInput (_:xs) = hasSampleInput xs
 
+-- | SRS Constraints
+data Constraints = Constraints{
+  onSfwrConstraint :: ConstraintBehaviour,
+  onPhysConstraint :: ConstraintBehaviour
+}
+-- | Constructor to create a Constraints
+makeConstraints :: ConstraintBehaviour -> ConstraintBehaviour -> Constraints
+makeConstraints = Constraints
+
+-- | Constraint behaviour options within program.
+data ConstraintBehaviour = Warning
+                         | Exception
+
+-- | Renders options for program implementation.
+instance RenderChoices ConstraintBehaviour where
+  showChs Warning = S "Warning"
+  showChs Exception = S "Exception"
+
+-- | All Information needed to solve an ODE 
+data ODE = ODE{
+  -- FIXME: ODEInfos should be automatically built from Instance models when 
+  -- needed, but we can't do that yet so I'm passing it through Choices instead.
+  -- This choice should really just be for an ODEMethod
+  -- | ODE information.
+  odeInfo :: [ODEInfo],
+  -- | Preferentially-ordered list ODE libraries to try.
+  odeLib :: [ODELibPckg]
+}
+-- | Constructor to create an ODE
+makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
+makeODE = ODE
+
 -- | Default choices to be used as the base from which design specifications 
 -- can be built.
 defaultChoices :: Choices
@@ -293,8 +300,7 @@ defaultChoices = Choices {
   dataInfo = makeData Bundled Inline Const,
   maps = makeMaps (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])])) spaceToCodeType,
   srsConstraints = makeConstraints Exception Warning,
-  logFile = "log.txt",
-  logging = [],
+  logConfig = makeLogConfig [] "log.txt",
   docConfig = makeDocConfig [] Verbose Hide,
   auxFiles = [ReadME],
   ode = makeODE [] []
@@ -314,8 +320,8 @@ choicesSent chs = map chsFieldSent [
   , (S "Comments", showChsList $ comments $ docConfig chs)
   , (S "Dox Verbosity", showChs $ doxVerbosity $ docConfig chs)
   , (S "Dates", showChs $ dates $ docConfig chs)
-  , (S "Log File Name", S $ logFile chs)
-  , (S "Logging", showChsList $ logging chs)
+  , (S "Log File Name", S $ logFile $ logConfig chs)
+  , (S "Logging", showChsList $ logging $ logConfig chs)
   , (S "Auxiliary Files", showChsList $ auxFiles chs)
   ]
 

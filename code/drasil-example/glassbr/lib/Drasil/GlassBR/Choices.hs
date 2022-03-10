@@ -4,7 +4,7 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..), makeArchit,
-  makeData, makeConstraints, makeDocConfig,
+  makeData, makeConstraints, makeDocConfig, makeLogConfig,
   defaultChoices)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -17,8 +17,7 @@ choices :: Choices
 choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
   architecture = makeArchit (Modular Separated) Program,
-  logFile = "log.txt",
-  logging = [LogVar, LogFunc],
+  logConfig = makeLogConfig [LogVar, LogFunc] "log.txt",
   docConfig = makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide,
   srsConstraints = makeConstraints Exception Exception,
   dataInfo = makeData Bundled Inline Const,

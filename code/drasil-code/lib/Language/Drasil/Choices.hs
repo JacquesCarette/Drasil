@@ -182,6 +182,7 @@ data DocConfig = DocConfig {
   dates :: Visibility
 }
 -- | Constructor to create a DocConfig
+makeDocConfig :: [Comments] -> Verbosity -> Visibility -> DocConfig
 makeDocConfig = DocConfig
 
 -- | SRS Constraints

@@ -12,6 +12,10 @@ import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
   asVC, funcDef, fDecDef, ffor, funcData, quantvar, 
   multiLine, packmod, repeated, singleLine)
 import Language.Drasil.CodeExpr
+import Language.Drasil.Development (showUID)
+
+
+import qualified Drasil.GlassBR.Unitals as U
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -159,7 +163,7 @@ extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
   ]
 
 interpY :: Func
-interpY = funcDef "interpY" 
+interpY = funcDef (showUID U.interpY)
   "Linearly interpolates a y value at given x and z values" 
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
@@ -185,7 +189,7 @@ interpY = funcDef "interpY"
   ]
 
 interpZ :: Func
-interpZ = funcDef "interpZ" 
+interpZ = funcDef (showUID U.interpZ)
   "Linearly interpolates a z value at given x and y values" 
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [

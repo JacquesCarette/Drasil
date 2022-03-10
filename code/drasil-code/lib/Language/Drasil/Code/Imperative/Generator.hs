@@ -26,7 +26,7 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..), Visibility(..),
-  DataInfo(..), Constraints(..), choicesSent)
+  DataInfo(..), Constraints(..), choicesSent, ODE(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
@@ -83,8 +83,8 @@ generator l dt sd chs spec = DrasilState {
   where (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
-        ((pth, elmap, lname), libLog) = runState (chooseODELib l (odeLib chs) 
-          (odes chs)) []
+        ((pth, elmap, lname), libLog) = runState (chooseODELib l (odeLib $ ode chs) 
+          (odeInfo $ ode chs)) []
         els = map snd elmap
         nms = [lname]
         mem = modExportMap spec chs modules' 

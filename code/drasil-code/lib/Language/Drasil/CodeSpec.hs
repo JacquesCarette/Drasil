@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
-import Language.Drasil.Choices (Choices(..), Maps(..))
+import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..))
 import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
@@ -97,7 +97,7 @@ codeSpec SI {_sys         = sys
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
       rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)
-        ++ map odeDef (odes chs)
+        ++ map odeDef (odeInfo $ ode chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs

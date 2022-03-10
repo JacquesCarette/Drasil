@@ -2,6 +2,7 @@
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData,
   Maps(..), makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
+  ODE(..), makeODE,
   Modularity(..), InputModule(..), inputModule, Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
@@ -27,13 +28,7 @@ data Choices = Choices {
   architecture :: Architecture,
   dataInfo :: DataInfo,
   maps :: Maps,
-  -- | Preferentially-ordered list ODE libraries to try.
-  odeLib :: [ODELibPckg],
-  -- FIXME: ODEInfos should be automatically built from Instance models when 
-  -- needed, but we can't do that yet so I'm passing it through Choices instead.
-  -- This choice should really just be for an ODEMethod
-  -- | ODE information.
-  odes :: [ODEInfo],
+  ode :: ODE,
   srsConstraints :: Constraints,
   ------- Features that can be toggled on on off -------
   comments :: [Comments],
@@ -200,6 +195,20 @@ instance RenderChoices ConstraintBehaviour where
   showChs Warning = S "Warning"
   showChs Exception = S "Exception"
 
+-- | All Information needed to solve an ODE 
+data ODE = ODE{
+  -- FIXME: ODEInfos should be automatically built from Instance models when 
+  -- needed, but we can't do that yet so I'm passing it through Choices instead.
+  -- This choice should really just be for an ODEMethod
+  -- | ODE information.
+  odeInfo :: [ODEInfo],
+  -- | Preferentially-ordered list ODE libraries to try.
+  odeLib :: [ODELibPckg]
+}
+-- | Constructor to create an ODE
+makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
+makeODE = ODE
+
 -- | Comment implementation options.
 data Comments = CommentFunc
               | CommentClass
@@ -282,8 +291,7 @@ defaultChoices = Choices {
   doxVerbosity = Verbose,
   dates = Hide,
   auxFiles = [ReadME],
-  odeLib = [],
-  odes = []
+  ode = makeODE [] []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

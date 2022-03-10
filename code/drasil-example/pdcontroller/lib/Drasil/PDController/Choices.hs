@@ -2,11 +2,11 @@ module Drasil.PDController.Choices where
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODELSodaPkg)
 import Drasil.PDController.Body (pidODEInfo, fullSI)
-import Language.Drasil.Code
-       (AuxFile(..), Choices(..), CodeSpec, Comments(..), ConstantRepr(..),
-        ConstantStructure(..), ConstraintBehaviour(..), ImplementationType(..),
-        InputModule(..), Lang(..), Modularity(..), Structure(..), Verbosity(..),
-        Visibility(..), codeSpec, defaultChoices, makeArchit, makeData, makeConstraints)
+import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..), 
+  ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..), 
+  ImplementationType(..), InputModule(..), Lang(..), Modularity(..), Structure(..), 
+  Verbosity(..), Visibility(..), codeSpec, defaultChoices, makeArchit, makeData, 
+  makeConstraints, makeODE)
 
 codeSpecs :: CodeSpec
 codeSpecs = codeSpec fullSI codeChoices []
@@ -23,6 +23,5 @@ codeChoices = defaultChoices{
   dates = Hide,
   srsConstraints = makeConstraints Exception Exception,
   auxFiles = [SampleInput "../../datafiles/pdcontroller/sampleInput.txt", ReadME],
-  odeLib = [scipyODELSodaPkg],
-  odes = [pidODEInfo]
+  ode = makeODE [pidODEInfo] [scipyODELSodaPkg]
 }

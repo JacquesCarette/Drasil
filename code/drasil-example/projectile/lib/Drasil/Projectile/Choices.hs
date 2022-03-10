@@ -6,7 +6,8 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, Architecture(..))
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
+  Architecture(..), makeData, DataInfo(..))
 import Language.Drasil.Generate (genCode)
 import GOOL.Drasil (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
@@ -34,12 +35,11 @@ codedDirName :: String -> Choices -> String
 codedDirName n Choices {
   architecture = a,
   logging = l,
-  inputStructure = is,
-  constStructure = cs,
-  constRepr = cr,
+  dataInfo = d,
   spaceMatch = sm} = 
-  intercalate "_" [n, codedMod (modularity a), codedImpTp (impType a), codedLog l, codedStruct is, 
-    codedConStruct cs, codedConRepr cr, codedSpaceMatch sm]
+  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog l, 
+    codedStruct $ inputStructure d, codedConStruct $ constStructure d, 
+    codedConRepr $ constRepr d, codedSpaceMatch sm]
 
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
@@ -77,21 +77,22 @@ choiceCombos :: [Choices]
 choiceCombos = [baseChoices, 
   baseChoices {
     architecture = makeArchit (Modular Combined) Program,
-    inputStructure = Bundled,
-    constStructure = Store Unbundled},
+    dataInfo = makeData Bundled (Store Unbundled) Var
+  },
   baseChoices {
     architecture = makeArchit (Modular Separated) Library,
-    constStructure = Store Unbundled,
-    spaceMatch = matchToFloats},
+    dataInfo = makeData Unbundled (Store Unbundled) Var,
+    spaceMatch = matchToFloats
+  },
   baseChoices {
     logging = [LogVar, LogFunc],
-    inputStructure = Bundled,
-    constStructure = Store Bundled,
-    constRepr = Const},
+    dataInfo = makeData Bundled (Store Bundled) Const
+  },
   baseChoices {
     logging = [LogVar, LogFunc],
-    inputStructure = Bundled,
-    spaceMatch = matchToFloats}]
+    dataInfo = makeData Bundled WithInputs Var,
+    spaceMatch = matchToFloats
+  }]
 
 matchToFloats :: SpaceMatch
 matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
@@ -100,6 +101,7 @@ baseChoices :: Choices
 baseChoices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
   architecture = makeArchit Unmodular Program,
+  dataInfo = makeData Unbundled WithInputs Var,
   logFile = "log.txt",
   logging = [],
   comments = [CommentFunc, CommentClass, CommentMod],
@@ -107,9 +109,6 @@ baseChoices = defaultChoices {
   dates = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  inputStructure = Unbundled,
-  constStructure = WithInputs,
-  constRepr = Var,
   conceptMatch = matchConcepts [(piConst, [Pi])],
   auxFiles = [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
 }

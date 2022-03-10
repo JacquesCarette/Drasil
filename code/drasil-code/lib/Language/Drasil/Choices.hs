@@ -257,6 +257,7 @@ defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
   architecture = makeArchit (Modular Combined) Program,
+  dataInfo = makeData Bundled Inline Const,
   logFile = "log.txt",
   logging = [],
   comments = [],
@@ -264,7 +265,6 @@ defaultChoices = Choices {
   dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
-  dataInfo = makeData Bundled Inline Const,
   conceptMatch = matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]),
   spaceMatch = spaceToCodeType, 
   auxFiles = [ReadME],

@@ -3,7 +3,8 @@ module Drasil.NoPCM.Choices where
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), AuxFile(..), Visibility(..), defaultChoices, makeArchit)
+  InputModule(..), AuxFile(..), Visibility(..), defaultChoices, makeArchit,
+  makeData)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
   apacheODEPckg, odeintPckg)
@@ -18,6 +19,7 @@ choices :: Choices
 choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java],
   architecture = makeArchit (Modular Combined) Program,
+  dataInfo = makeData Unbundled (Store Bundled) Const,
   logFile = "log.txt",
   logging = [],
   comments = [CommentFunc, CommentClass, CommentMod],
@@ -25,9 +27,6 @@ choices = defaultChoices {
   dates = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  inputStructure = Unbundled,
-  constStructure = Store Bundled,
-  constRepr = Const,
   auxFiles = [SampleInput "../../datafiles/nopcm/sampleInput.txt", ReadME],
   odeLib = [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg],
   odes = [noPCMODEInfo]

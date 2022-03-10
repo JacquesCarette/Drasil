@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.SpaceMatch (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Choices (Choices(..))
+import Language.Drasil.Choices (Choices(..), Maps(..))
 import Language.Drasil.Code.Imperative.DrasilState (GenState, MatchedSpaces, 
   addToDesignLog, addLoggedSpace)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -15,7 +15,7 @@ import Text.PrettyPrint.HughesPJ (Doc, text)
 
 -- | Concretizes the 'spaceMatch' in 'Choices' to a 'MatchedSpace' based on target language.
 chooseSpace :: Lang -> Choices -> MatchedSpaces
-chooseSpace lng chs = \s -> selectType lng s (spaceMatch chs s)
+chooseSpace lng chs = \s -> selectType lng s (spaceMatch (maps chs) s)
         -- Floats unavailable in Python
   where selectType :: Lang -> Space -> [CodeType] -> GenState CodeType
         selectType Python s (Float:ts) = do

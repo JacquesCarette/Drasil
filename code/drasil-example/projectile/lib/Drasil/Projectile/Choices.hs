@@ -7,7 +7,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
-  Architecture(..), makeData, DataInfo(..))
+  Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType)
 import Language.Drasil.Generate (genCode)
 import GOOL.Drasil (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
@@ -36,10 +36,10 @@ codedDirName n Choices {
   architecture = a,
   logging = l,
   dataInfo = d,
-  spaceMatch = sm} = 
+  maps = m} = 
   intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog l, 
     codedStruct $ inputStructure d, codedConStruct $ constStructure d, 
-    codedConRepr $ constRepr d, codedSpaceMatch sm]
+    codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
 
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
@@ -82,7 +82,7 @@ choiceCombos = [baseChoices,
   baseChoices {
     architecture = makeArchit (Modular Separated) Library,
     dataInfo = makeData Unbundled (Store Unbundled) Var,
-    spaceMatch = matchToFloats
+    maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   },
   baseChoices {
     logging = [LogVar, LogFunc],
@@ -91,7 +91,7 @@ choiceCombos = [baseChoices,
   baseChoices {
     logging = [LogVar, LogFunc],
     dataInfo = makeData Bundled WithInputs Var,
-    spaceMatch = matchToFloats
+    maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   }]
 
 matchToFloats :: SpaceMatch
@@ -109,6 +109,6 @@ baseChoices = defaultChoices {
   dates = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  conceptMatch = matchConcepts [(piConst, [Pi])],
+  maps = makeMaps (matchConcepts [(piConst, [Pi])]) spaceToCodeType,
   auxFiles = [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
 }

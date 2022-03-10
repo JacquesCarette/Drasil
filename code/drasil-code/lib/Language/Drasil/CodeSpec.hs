@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
-import Language.Drasil.Choices (Choices(..))
+import Language.Drasil.Choices (Choices(..), Maps(..))
 import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
@@ -93,7 +93,7 @@ codeSpec SI {_sys         = sys
            , _sysinfodb   = db} chs ms =
   let n = programName sys
       inputs' = map quantvar ins
-      const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid))
+      const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
       rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)

@@ -1,15 +1,15 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData,
-  Modularity(..), InputModule(..), inputModule, Structure(..), 
-  ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, 
+  Maps(..), makeMaps, spaceToCodeType,
+  Modularity(..), InputModule(..), inputModule, Structure(..),
+  ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
-  ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
+  ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
   choicesSent, showChs) where
 
 import Language.Drasil
-
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
@@ -26,14 +26,7 @@ data Choices = Choices {
   lang :: [Lang],
   architecture :: Architecture,
   dataInfo :: DataInfo,
-  -- | Map of 'UID's for Drasil concepts to code concepts.
-  -- Matching a 'UID' to a code concept means the code concept should be used
-  -- instead of the chunk associated with the 'UID'.
-  conceptMatch :: ConceptMatchMap,
-  -- | Map of 'Space's to 'CodeType's
-  -- Matching a 'Space' to a 'CodeType' means values of the 'Space' should have that
-  -- 'CodeType' in the generated code.
-  spaceMatch :: SpaceMatch,
+  maps :: Maps,
   -- | Preferentially-ordered list ODE libraries to try.
   odeLib :: [ODELibPckg],
   -- FIXME: ODEInfos should be automatically built from Instance models when 
@@ -67,22 +60,12 @@ data Architecture = Archt {
 makeArchit :: Modularity -> ImplementationType -> Architecture
 makeArchit = Archt
 
--- | Data of a program - how information should be encoded.
-data DataInfo = DataInfo {
-  inputStructure :: Structure,
-  constStructure :: ConstantStructure,
-  constRepr :: ConstantRepr
-}
--- | Constructor to create a DataInfo
-makeData :: Structure -> ConstantStructure -> ConstantRepr -> DataInfo
-makeData = DataInfo
-
 -- | Modularity of a program.
-data Modularity = Modular InputModule 
+data Modularity = Modular InputModule
                 | Unmodular
 
 -- | Renders the modularity of a program.
-instance RenderChoices Modularity where 
+instance RenderChoices Modularity where
   showChs Unmodular = S "Unmodular"
   showChs (Modular Combined) = S "Modular Combined"
   showChs (Modular Separated)= S "Modular Separated"
@@ -99,12 +82,31 @@ inputModule c = inputModule' $ modularity $ architecture c
   where inputModule' Unmodular = Combined
         inputModule' (Modular im) = im
 
+-- | Program implementation options.
+data ImplementationType = Library
+                        | Program
+
+-- | Renders options for program implementation.
+instance RenderChoices ImplementationType where
+  showChs Library = S "Library"
+  showChs Program = S "Program"
+
+-- | Data of a program - how information should be encoded.
+data DataInfo = DataInfo {
+  inputStructure :: Structure,
+  constStructure :: ConstantStructure,
+  constRepr :: ConstantRepr
+}
+-- | Constructor to create a DataInfo
+makeData :: Structure -> ConstantStructure -> ConstantRepr -> DataInfo
+makeData = DataInfo
+
 -- | Variable structure options.
 data Structure = Unbundled
                | Bundled
 
 -- | Renders the structure of variables in a program.
-instance RenderChoices Structure where 
+instance RenderChoices Structure where
   showChs Unbundled = S "Unbundled"
   showChs Bundled = S "Bundled"
 
@@ -114,7 +116,7 @@ data ConstantStructure = Inline
                        | Store Structure
 
 -- | Renders the structure of constants in a program.
-instance RenderChoices ConstantStructure where 
+instance RenderChoices ConstantStructure where
   showChs Inline = S "Inline"
   showChs WithInputs = S "WithInputs"
   showChs (Store Unbundled) = S "Store Unbundled"
@@ -125,9 +127,24 @@ data ConstantRepr = Var
                   | Const
 
 -- | Renders the representation of constants in a program.
-instance RenderChoices ConstantRepr where 
+instance RenderChoices ConstantRepr where
   showChs Var = S "Var"
   showChs Const = S "Const"
+
+-- | Maps for Concepts and Space 
+data Maps = Maps {
+  -- | Map of 'UID's for Drasil concepts to code concepts.
+  -- Matching a 'UID' to a code concept means the code concept should be used
+  -- instead of the chunk associated with the 'UID'.
+  conceptMatch :: ConceptMatchMap,
+  -- | Map of 'Space's to 'CodeType's
+  -- Matching a 'Space' to a 'CodeType' means values of the 'Space' should have that
+  -- 'CodeType' in the generated code.
+  spaceMatch :: SpaceMatch
+}
+-- | Constructor to create a Maps
+makeMaps :: ConceptMatchMap -> SpaceMatch -> Maps
+makeMaps = Maps
 
 -- | Specifies matches between chunks and 'CodeConcept's, meaning the target 
 -- language's pre-existing definition of the concept should be used instead of 
@@ -162,27 +179,18 @@ matchSpace s ts sm = \sp -> if sp == s then ts else sm sp
 
 -- | Builds a 'SpaceMatch' from an association list of 'Spaces' and 'CodeTypes'.
 matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
-matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType 
+matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
   where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
         matchSpaces' [] sm = sm
-
--- | Program implementation options.
-data ImplementationType = Library
-                        | Program
-
--- | Renders options for program implementation.
-instance RenderChoices ImplementationType where 
-  showChs Library = S "Library"
-  showChs Program = S "Program" 
 
 -- | Constraint behaviour options within program.
 data ConstraintBehaviour = Warning
                          | Exception
 
 -- | Renders options for program implementation.
-instance RenderChoices ConstraintBehaviour where 
+instance RenderChoices ConstraintBehaviour where
   showChs Warning = S "Warning"
-  showChs Exception = S "Exception" 
+  showChs Exception = S "Exception"
 
 -- | Comment implementation options.
 data Comments = CommentFunc
@@ -191,7 +199,7 @@ data Comments = CommentFunc
               deriving Eq
 
 -- | Renders options for implementation of comments.
-instance RenderChoices Comments where 
+instance RenderChoices Comments where
   showChs CommentFunc = S "CommentFunc"
   showChs CommentClass = S "CommentClass"
   showChs CommentMod = S "CommentMod"
@@ -200,16 +208,16 @@ instance RenderChoices Comments where
 data Verbosity = Verbose | Quiet
 
 -- | Renders options for doxygen verbosity.
-instance RenderChoices Verbosity where 
+instance RenderChoices Verbosity where
   showChs Verbose = S "Verbose"
-  showChs Quiet = S "Quiet" 
+  showChs Quiet = S "Quiet"
 
 -- | Doxygen date-field visibility options.
 data Visibility = Show
                 | Hide
 
 -- | Renders options for doxygen date-field visibility.
-instance RenderChoices Visibility where 
+instance RenderChoices Visibility where
   showChs Show = S "Show"
   showChs Hide = S "Hide"
 
@@ -221,19 +229,19 @@ data Logging = LogFunc
              deriving Eq
 
 -- | Renders options for program logging.
-instance RenderChoices Logging where 
+instance RenderChoices Logging where
   showChs LogFunc = S "LogFunc"
   showChs LogVar = S "LogVar"
 
 -- | Currently we only support one kind of auxiliary file: sample input file.
 -- To generate a sample input file compatible with the generated program,
 -- 'FilePath' is the path to the user-provided file containing a sample set of input data.
-data AuxFile = SampleInput FilePath 
-             | ReadME 
+data AuxFile = SampleInput FilePath
+             | ReadME
              deriving Eq
 
 -- | Renders options for auxiliary file generation.
-instance RenderChoices AuxFile where 
+instance RenderChoices AuxFile where
   showChs (SampleInput fp) = S "SampleInput" +:+ S fp
   showChs ReadME = S "ReadME"
 
@@ -265,15 +273,14 @@ defaultChoices = Choices {
   dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
-  conceptMatch = matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]),
-  spaceMatch = spaceToCodeType, 
+  maps = makeMaps (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])])) spaceToCodeType,
   auxFiles = [ReadME],
   odeLib = [],
   odes = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.
-choicesSent :: Choices -> [Sentence] 
+choicesSent :: Choices -> [Sentence]
 choicesSent chs = map chsFieldSent [
     (S "Languages", foldlSent_ $ map (S . show) $ lang chs)
   , (S "Modularity", showChs $ modularity $ architecture chs)
@@ -289,7 +296,7 @@ choicesSent chs = map chsFieldSent [
   , (S "Log File Name", S $ logFile chs)
   , (S "Logging", showChsList $ logging chs)
   , (S "Auxiliary Files", showChsList $ auxFiles chs)
-  ] 
+  ]
 
 -- | Helper to combine pairs of 'Sentence's for rendering 'Choices'.
 chsFieldSent :: (Sentence, Sentence) -> Sentence

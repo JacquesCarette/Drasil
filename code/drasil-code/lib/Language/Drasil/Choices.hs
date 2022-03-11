@@ -225,6 +225,7 @@ data LogConfig = LogConfig {
   logFile :: FilePath
 }
 -- | Constructor to create a LogConfig
+makeLogConfig :: [Logging] -> FilePath -> LogConfig
 makeLogConfig = LogConfig
 
 -- | Logging options for function calls and variable assignments.

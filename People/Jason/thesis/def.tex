@@ -31,7 +31,7 @@
 \newenvironment{code}{\captionsetup{type=listing,skip=14pt}}{}
 \SetupFloatingEnvironment{listing}{name=Source Code,listname=List of Source Codes}
 \newenvironment{haskell}[4]
-    {\VerbatimEnvironment\begin{code}\captionof{listing}{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
+    {\VerbatimEnvironment\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
     {\end{minted}\end{code}}
 
 % Haskell env original caption style: {\VerbatimEnvironment\begin{code}\caption[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}

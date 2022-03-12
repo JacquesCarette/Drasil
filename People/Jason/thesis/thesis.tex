@@ -1,5 +1,5 @@
 \documentclass[12pt,oneside]{book}
-% \usepackage{xparse}
+\usepackage{xparse}
 
 \usepackage[canadian]{babel}
 
@@ -9,12 +9,12 @@
 \usepackage{todonotes}
 
 \usepackage{proof}
+\usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{lmodern}
 \usepackage{lastpage}
 
-\usepackage{graphicx}
 \usepackage{caption}
 
 \usepackage{float}
@@ -84,6 +84,12 @@
 
 % Snippets
 \input{snippets}
+
+% For fancy graphs
+\usepackage{tikz}
+\usetikzlibrary{cd}
+\usepackage{quiver}
+\usetikzlibrary{babel} % Make sure quiver/tikz uses babel
 
 \title{
     {Title}\\

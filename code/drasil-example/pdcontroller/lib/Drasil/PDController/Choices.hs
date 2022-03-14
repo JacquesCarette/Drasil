@@ -6,7 +6,7 @@ import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..),
   ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..), 
   ImplementationType(..), InputModule(..), Lang(..), Modularity(..), Structure(..), 
   Verbosity(..), Visibility(..), codeSpec, defaultChoices, makeArchit, makeData, 
-  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats)
+  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats, ExtLib(..))
 
 codeSpecs :: CodeSpec
 codeSpecs = codeSpec fullSI codeChoices []
@@ -21,5 +21,5 @@ codeChoices = defaultChoices{
     (makeLogConfig [] "log.txt")
     [SampleInput "../../datafiles/pdcontroller/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
-  ode = makeODE [pidODEInfo] [scipyODELSodaPkg]
+  extLib = Math (makeODE [pidODEInfo] [scipyODELSodaPkg])
 }

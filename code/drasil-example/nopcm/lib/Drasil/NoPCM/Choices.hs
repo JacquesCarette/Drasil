@@ -4,7 +4,8 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), AuxFile(..), Visibility(..), defaultChoices, makeArchit,
-  makeData, makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats)
+  makeData, makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats,
+  ExtLib(..))
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
   apacheODEPckg, odeintPckg)
@@ -25,5 +26,5 @@ choices = defaultChoices {
     (makeLogConfig [] "log.txt")
     [SampleInput "../../datafiles/nopcm/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
-  ode = makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg] 
+  extLib = Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])
 }

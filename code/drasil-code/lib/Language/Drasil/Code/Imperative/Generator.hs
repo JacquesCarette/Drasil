@@ -7,17 +7,17 @@ import Language.Drasil
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
-import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
+import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
   genDoxConfig, genReadMe, genModuleWithImports)
 import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
   genModClasses)
-import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass, 
-  genConstMod, genInputClass, genInputConstraints, genInputDerived, 
-  genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
+import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
+  genConstMod, genInputClass, genInputConstraints, genInputDerived,
+  genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc,
   genOutputFormat, genOutputMod, genSampleInput)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   designLog, inMod, modExportMap, clsDefMap)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
@@ -25,15 +25,16 @@ import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..), Visibility(..),
-  DataInfo(..), Constraints(..), choicesSent, ODE(..), DocConfig(..), LogConfig(..), OptionalFeatures(..))
+import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
+  Visibility(..), DataInfo(..), Constraints(..), choicesSent, ODE(..), DocConfig(..),
+  LogConfig(..), OptionalFeatures(..), ExtLib(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
-import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
+import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..),
   ProgData(..), initialState, unCI)
 
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
   getCurrentDirectory)
 import Control.Lens ((^.))
 import Control.Monad.State (get, evalState, runState)
@@ -73,7 +74,7 @@ generator l dt sd chs spec = DrasilState {
   libEMap = lem,
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
-  
+
   -- stateful
   currentModule = "",
   currentClass = "",
@@ -83,11 +84,10 @@ generator l dt sd chs spec = DrasilState {
   where (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
-        ((pth, elmap, lname), libLog) = runState (chooseODELib l (odeLib $ ode chs) 
-          (odeInfo $ ode chs)) []
+        ((pth, elmap, lname), libLog) = runState (chooseODELib l $ extLib chs) []
         els = map snd elmap
         nms = [lname]
-        mem = modExportMap spec chs modules' 
+        mem = modExportMap spec chs modules'
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap spec chs modules'
         modules' = mods spec ++ concatMap (^. auxMods) els
@@ -98,16 +98,16 @@ generator l dt sd chs spec = DrasilState {
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will 
 -- be generated in.
-generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> 
-  (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
+generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
+  (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
   PackData) -> DrasilState -> IO ()
-generateCode l unReprProg unReprPack g = do 
+generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
-  let (pckg, ds) = runState (genPackage unReprProg) g 
-      code = makeCode (progMods $ packProg $ unReprPack pckg) 
-        ([ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $ 
+  let (pckg, ds) = runState (genPackage unReprProg) g
+      code = makeCode (progMods $ packProg $ unReprPack pckg)
+        ([ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
           ds ^. designLog] ++ packAux (unReprPack pckg))
   createCodeFiles code
   setCurrentDirectory workingDir
@@ -118,8 +118,8 @@ generateCode l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state 
 -- used by the language renderer.
-genPackage :: (OOProg progRepr, PackageSym packRepr) => 
-  (progRepr (Program progRepr) -> ProgData) -> 
+genPackage :: (OOProg progRepr, PackageSym packRepr) =>
+  (progRepr (Program progRepr) -> ProgData) ->
   GenState (packRepr (Package packRepr))
 genPackage unRepr = do
   g <- get
@@ -140,7 +140,7 @@ genPackage unRepr = do
         implementType = implType g,
         extLibNV = extLibNames g,
         extLibFP = libPaths g,
-        contributors = as, 
+        contributors = as,
         configFP = cfp,
         caseName = ""}
   return $ package pd (m:catMaybes [i,rm,d])
@@ -165,24 +165,24 @@ genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
   let n = pName $ codeSpec g
-      cls = any (`member` clsMap g) 
+      cls = any (`member` clsMap g)
         ["get_input", "derived_values", "input_constraints"]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
-    (genMainFunc 
-      : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g) 
-        ++ concatMap genModFuncs (modules g)) 
-      ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
-        genInputConstraints Pub]) ++ [genOutputFormat])) 
-    ([genInputClass Auxiliary, genConstClass Auxiliary] 
+    (genMainFunc
+      : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g)
+        ++ concatMap genModFuncs (modules g))
+      ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub,
+        genInputConstraints Pub]) ++ [genOutputFormat]))
+    ([genInputClass Auxiliary, genConstClass Auxiliary]
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
-      
+
 -- | Generates all modules for an SCS program.
 genModules :: (OOProg r) => GenState [SFile r]
 genModules = do
   g <- get
   mn     <- genMain
   inp    <- chooseInModule $ inMod g
-  con    <- genConstMod 
+  con    <- genConstMod
   cal    <- genCalcMod
   out    <- genOutputMod
   moddef <- traverse genModDef (modules g) -- hack ?

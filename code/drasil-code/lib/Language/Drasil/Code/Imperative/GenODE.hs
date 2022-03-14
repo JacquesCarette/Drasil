@@ -9,10 +9,10 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.CodeDefinition (odeDef)
 import Language.Drasil.Mod (Name, Version)
-import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 
 import Control.Monad.State (State, modify)
+import Language.Drasil.Choices (ExtLib(..), ODE(..))
 
 -- | Holds the generation information for an ordinary differential equation.
 type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))
@@ -23,17 +23,17 @@ type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))
 -- 'ODELibPckg' by concretizing the ExternalLibraryCall with each of the 'ODEInfo's
 -- The internal helper chooseODELib' keeps a read only preference list and a currently considered
 -- preference list (which can change), this facilitates the 'firstChoiceODELib' check.
-chooseODELib :: Lang -> [ODELibPckg] -> [ODEInfo] -> State [Sentence] ODEGenInfo
-chooseODELib _ _ [] = return (Nothing, [], ("",""))
-chooseODELib l olps odes = chooseODELib' olps olps
+chooseODELib :: Lang -> ExtLib -> State [Sentence] ODEGenInfo
+chooseODELib _ None = return (Nothing, [], ("",""))
+chooseODELib l (Math ode) = chooseODELib' (odeLib ode) (odeLib ode)
   where chooseODELib' :: [ODELibPckg] -> [ODELibPckg] -> State [Sentence] ODEGenInfo
         chooseODELib' _ [] = error $ "None of the chosen ODE libraries are " ++ 
           "compatible with " ++ show l
         chooseODELib' prefLibList (o:os) = if l `elem` compatibleLangs o 
           then do 
             modify (++ [firstChoiceODELib prefLibList o])
-            return (libPath o, map (\ode -> (codeName $ odeDef ode, 
-              genExternalLibraryCall (libSpec o) $ libCall o ode)) odes, 
+            return (libPath o, map (\ode' -> (codeName $ odeDef ode', 
+              genExternalLibraryCall (libSpec o) $ libCall o ode')) $ odeInfo ode, 
                 (libName o, libVers o)) 
           else modify (++ [incompatibleLib l o]) >> chooseODELib' prefLibList os
 

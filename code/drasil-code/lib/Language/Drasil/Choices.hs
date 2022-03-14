@@ -3,14 +3,14 @@ module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..), 
   makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE, 
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..), 
-  makeOptFeats, Modularity(..), InputModule(..), inputModule, Structure(..),
+  makeOptFeats, ExtLib(..), Modularity(..), InputModule(..), inputModule, Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
   choicesSent, showChs) where
 
-import Language.Drasil
+import Language.Drasil hiding (None)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
@@ -30,7 +30,7 @@ data Choices = Choices {
   maps :: Maps,
   optFeats :: OptionalFeatures,
   srsConstraints :: Constraints,
-  ode :: ODE
+  extLib :: ExtLib
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -284,6 +284,9 @@ instance RenderChoices ConstraintBehaviour where
   showChs Warning = S "Warning"
   showChs Exception = S "Exception"
 
+data ExtLib = None 
+            | Math ODE
+
 -- | All Information needed to solve an ODE 
 data ODE = ODE{
   -- FIXME: ODEInfos should be automatically built from Instance models when 
@@ -313,7 +316,7 @@ defaultChoices = Choices {
     (makeLogConfig [] "log.txt") 
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
-  ode = makeODE [] []
+  extLib = None
 }
 
 -- | Renders 'Choices' as 'Sentence's.

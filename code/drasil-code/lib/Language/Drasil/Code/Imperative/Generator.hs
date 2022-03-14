@@ -26,8 +26,8 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
-  Visibility(..), DataInfo(..), Constraints(..), choicesSent, ODE(..), DocConfig(..),
-  LogConfig(..), OptionalFeatures(..), ExtLib(..))
+  Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
+  LogConfig(..), OptionalFeatures(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 

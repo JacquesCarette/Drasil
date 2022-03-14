@@ -284,6 +284,7 @@ instance RenderChoices ConstraintBehaviour where
   showChs Warning = S "Warning"
   showChs Exception = S "Exception"
 
+-- | External Library Options
 data ExtLib = None 
             | Math ODE
 

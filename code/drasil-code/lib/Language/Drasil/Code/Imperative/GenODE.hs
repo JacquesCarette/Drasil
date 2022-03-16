@@ -23,9 +23,9 @@ type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))
 -- 'ODELibPckg' by concretizing the ExternalLibraryCall with each of the 'ODEInfo's
 -- The internal helper chooseODELib' keeps a read only preference list and a currently considered
 -- preference list (which can change), this facilitates the 'firstChoiceODELib' check.
-chooseODELib :: Lang -> ExtLib -> State [Sentence] ODEGenInfo
-chooseODELib _ None = return (Nothing, [], ("",""))
-chooseODELib l (Math ode) = chooseODELib' (odeLib ode) (odeLib ode)
+chooseODELib :: Lang -> Maybe ODE -> State [Sentence] ODEGenInfo
+chooseODELib _ Nothing = return (Nothing, [], ("",""))
+chooseODELib l (Just ode) = chooseODELib' (odeLib ode) (odeLib ode)
   where chooseODELib' :: [ODELibPckg] -> [ODELibPckg] -> State [Sentence] ODEGenInfo
         chooseODELib' _ [] = error $ "None of the chosen ODE libraries are " ++ 
           "compatible with " ++ show l

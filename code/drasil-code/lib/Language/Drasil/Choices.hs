@@ -30,7 +30,7 @@ data Choices = Choices {
   maps :: Maps,
   optFeats :: OptionalFeatures,
   srsConstraints :: Constraints,
-  extLib :: ExtLib
+  extLib :: [ExtLib]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -285,8 +285,7 @@ instance RenderChoices ConstraintBehaviour where
   showChs Exception = S "Exception"
 
 -- | External Library Options
-data ExtLib = None 
-            | Math ODE
+data ExtLib = Math ODE
 
 -- | All Information needed to solve an ODE 
 data ODE = ODE{
@@ -317,7 +316,7 @@ defaultChoices = Choices {
     (makeLogConfig [] "log.txt") 
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
-  extLib = None
+  extLib = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

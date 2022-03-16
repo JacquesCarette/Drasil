@@ -23,11 +23,9 @@ import Utils.Drasil (subsetOf)
 import Control.Lens ((^.))
 import Data.List (intercalate, nub, (\\))
 import qualified Data.Map as Map
-import Data.Maybe (mapMaybe)
+import Data.Maybe (mapMaybe, fromJust, isNothing)
 
 import Prelude hiding (const)
-
-import Language.Drasil.Data.ODEInfo (ODEInfo)
 
 -- | Program input.
 type Input = CodeVarChunk
@@ -81,9 +79,10 @@ assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
 
 -- | Get ODE from ExtLib
-getODE :: ExtLib -> [ODEInfo]
-getODE None = []
-getODE (Math ode) = odeInfo ode
+getODE :: [ExtLib] -> Maybe ODE
+getODE [] = Nothing
+getODE (Math ode: _) = Just ode
+-- getODE (_:xs) = getODE xs
 
 -- | Defines a 'CodeSpec' based on the 'SystemInformation', 'Choices', and 'Mod's
 -- defined by the user.
@@ -104,7 +103,8 @@ codeSpec SI {_sys         = sys
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
       rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)
-        ++ map odeDef (getODE $ extLib chs)
+        ++ if isNothing ode then [] else map odeDef (odeInfo $ fromJust ode)
+            where ode = getODE $ extLib chs
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs

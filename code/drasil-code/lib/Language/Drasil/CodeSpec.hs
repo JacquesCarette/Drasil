@@ -104,7 +104,7 @@ codeSpec SI {_sys         = sys
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
       rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)
         ++ if isNothing ode then [] else map odeDef (odeInfo $ fromJust ode)
-            where ode = getODE $ extLib chs
+            where ode = getODE $ extLibs chs
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs

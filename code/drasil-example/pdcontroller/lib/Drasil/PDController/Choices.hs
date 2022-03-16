@@ -21,5 +21,5 @@ codeChoices = defaultChoices{
     (makeLogConfig [] "log.txt")
     [SampleInput "../../datafiles/pdcontroller/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
-  extLib = [Math (makeODE [pidODEInfo] [scipyODELSodaPkg])]
+  extLibs = [Math (makeODE [pidODEInfo] [scipyODELSodaPkg])]
 }

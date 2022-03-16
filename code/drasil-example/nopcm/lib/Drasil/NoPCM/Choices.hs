@@ -26,5 +26,5 @@ choices = defaultChoices {
     (makeLogConfig [] "log.txt")
     [SampleInput "../../datafiles/nopcm/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
-  extLib = [Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
+  extLibs = [Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

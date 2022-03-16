@@ -30,7 +30,7 @@ data Choices = Choices {
   maps :: Maps,
   optFeats :: OptionalFeatures,
   srsConstraints :: Constraints,
-  extLib :: [ExtLib]
+  extLibs :: [ExtLib]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -316,7 +316,7 @@ defaultChoices = Choices {
     (makeLogConfig [] "log.txt") 
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
-  extLib = []
+  extLibs = []
 }
 
 -- | Renders 'Choices' as 'Sentence's.

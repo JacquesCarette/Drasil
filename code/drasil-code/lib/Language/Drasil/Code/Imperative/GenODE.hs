@@ -12,7 +12,7 @@ import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 
 import Control.Monad.State (State, modify)
-import Language.Drasil.Choices (ExtLib(..), ODE(..))
+import Language.Drasil.Choices (ODE(..))
 
 -- | Holds the generation information for an ordinary differential equation.
 type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))

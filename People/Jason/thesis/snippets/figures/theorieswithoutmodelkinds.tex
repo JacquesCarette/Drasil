@@ -1,8 +1,10 @@
-\begin{figure}
+% https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions#Figures
+% The "[H]" means ~"place it precisely here".
+
+\begin{figure}[H]
     \centering
     \caption{Original Theories}
     \label{fig:theoriesWithoutModelKinds}
-    % https://q.uiver.app/?q=WzAsNixbMCwwLCJFeHByIl0sWzEsMSwiUmVsYXRpb25Db25jZXB0Il0sWzEsMiwiU1JTIl0sWzIsMiwiTWF0aGVtYXRpY2FsXFxuZXdsaW5le30gS25vd2xlZGdlIl0sWzIsMywiUURlZmluaXRpb24iXSxbMiw0LCJDb2RlIl0sWzAsMV0sWzEsMl0sWzEsM10sWzMsNF0sWzQsNV1d
     \[\begin{tikzcd}[align=center]
         Expr \\
         & RelationConcept \\
@@ -16,3 +18,7 @@
         \arrow[from=4-3, to=5-3]
     \end{tikzcd}\]
 \end{figure}
+
+% tikzcd code mostly generated with:
+% https://q.uiver.app/?q=WzAsNixbMCwwLCJFeHByIl0sWzEsMSwiUmVsYXRpb25Db25jZXB0Il0sWzEsMiwiU1JTIl0sWzIsMiwiTWF0aGVtYXRpY2FsXFxuZXdsaW5le30gS25vd2xlZGdlIl0sWzIsMywiUURlZmluaXRpb24iXSxbMiw0LCJDb2RlIl0sWzAsMV0sWzEsMl0sWzEsM10sWzMsNF0sWzQsNV1d
+% if changes are needed, make sure that post-processing is still performed.

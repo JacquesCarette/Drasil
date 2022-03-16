@@ -285,7 +285,7 @@ instance RenderChoices ConstraintBehaviour where
   showChs Exception = S "Exception"
 
 -- | External Library Options
-data ExtLib = Math ODE
+newtype ExtLib = Math ODE
 
 -- | All Information needed to solve an ODE 
 data ODE = ODE{

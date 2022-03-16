@@ -10,3 +10,4 @@ thesis.pdf
 *.pyg
 *.synctex(busy)
 *.fot
+*.lof

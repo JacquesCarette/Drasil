@@ -2,12 +2,14 @@
 % Folders
 %------------------------------------------------------------------------------
 
-\newcommand{\codeSnippet}{snippets/code}
+\newcommand{\snippets}{snippets}
+\newcommand{\figureSnippet}{\snippets/figures}
+\newcommand{\codeSnippet}{\snippets/code}
 \newcommand{\currentCode}{\codeSnippet/current}
 \newcommand{\originalCode}{\codeSnippet/original}
 
 %------------------------------------------------------------------------------
-% Specific files
+% Code
 %------------------------------------------------------------------------------
 
 \newcommand{\currentExprHaskell}{\input{\currentCode/expr}}
@@ -30,3 +32,10 @@
 
 \newcommand{\originalRelationConcept}{\input{\originalCode/relationconcept}}
 \newcommand{\refOriginalRelationConcept}{\ref{lst:originalRelationConcept}}
+
+%------------------------------------------------------------------------------
+% Figures
+%------------------------------------------------------------------------------
+
+\newcommand{\theoriesWithoutModelKinds}{\input{\figureSnippet/theorieswithoutmodelkinds}}
+\newcommand{\refTheoriesWithoutModelKinds}{\ref{fig:theoriesWithoutModelKinds}}

@@ -91,6 +91,10 @@
 \usepackage{quiver}
 \usetikzlibrary{babel} % Make sure quiver/tikz uses babel
 
+% Make sure the floating lists (figures, source codes, and abbreviations) are
+% shown in the toc.
+\usepackage{tocbibind}
+
 \title{
     {Title}\\
     {McMaster University}
@@ -198,21 +202,21 @@ PAGES: \pageref{lastOfFrontMatter}, \pageref{LastPage}
 %------------------------------------------------------------------------------
 
 \chapter*{Lay Abstract}
-\input{chapters/lay_abstract}
+\input{front/lay_abstract}
 
 %------------------------------------------------------------------------------
 % Abstract
 %------------------------------------------------------------------------------
 
 \chapter{Abstract}
-\input{chapters/abstract}
+\input{front/abstract}
 
 %------------------------------------------------------------------------------
 % Acknowledgements
 %------------------------------------------------------------------------------
 
 \chapter{Acknowledgements}
-\input{chapters/acknowledgements}
+\input{front/acknowledgements}
 
 %------------------------------------------------------------------------------
 % Table of Content
@@ -249,11 +253,7 @@ PAGES: \pageref{lastOfFrontMatter}, \pageref{LastPage}
 %------------------------------------------------------------------------------
 
 \chapter{Declaration of Academic Achievement}
-
-Declaration of academic achievement. See McMaster's thesis guidelines for a more
-descriptive instruction.
-% https://gs.mcmaster.ca/app/uploads/2019/10/Prep_Guide_Masters_and_Doctoral_Theses_August-2021.pdf
-
+\input{front/declaration_of_academic_achievement}
 \label{lastOfFrontMatter}
 
 %------------------------------------------------------------------------------

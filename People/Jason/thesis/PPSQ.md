@@ -10,7 +10,8 @@ Flexibly generating a wide range of software artifacts from a single purely
 mathematical expression language is difficult. Specifically, from an "untyped"
 universal mathematical expression language.
 
-Using a single mathematical language to describe all computational models in ways that we can generate a plethora of software artifacts, is difficult.
+Using a single mathematical language to describe all computational models in
+ways that we can generate a plethora of software artifacts, is difficult.
 
 ## Knowledge Gap
 

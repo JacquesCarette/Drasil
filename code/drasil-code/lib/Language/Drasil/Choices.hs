@@ -344,20 +344,34 @@ defaultChoices = Choices {
 -- | Renders 'Choices' as 'Sentence's.
 choicesSent :: Choices -> [Sentence]
 choicesSent chs = map chsFieldSent [
-    (S "Languages", foldlSent_ $ map (S . show) $ lang chs)
-  , (S "Modularity", showChs $ modularity $ architecture chs)
-  , (S "Input Structure", showChs $ inputStructure $ dataInfo chs)
-  , (S "Constant Structure", showChs $ constStructure $ dataInfo chs)
-  , (S "Constant Representation", showChs $ constRepr $ dataInfo chs)
-  , (S "Implementation Type", showChs $ impType $ architecture chs)
-  , (S "Software Constraint Behaviour", showChs $ onSfwrConstraint $ srsConstraints chs)
-  , (S "Physical Constraint Behaviour", showChs $ onPhysConstraint $ srsConstraints chs)
-  , (S "Comments", showChsList $ comments $ docConfig $ optFeats chs)
-  , (S "Dox Verbosity", showChs $ doxVerbosity $ docConfig $ optFeats chs)
-  , (S "Dates", showChs $ dates $ docConfig $ optFeats chs)
-  , (S "Log File Name", S $ logFile $ logConfig $ optFeats chs)
-  , (S "Logging", showChsList $ logging $ logConfig $ optFeats chs)
-  , (S "Auxiliary Files", showChsList $ auxFiles $ optFeats chs)
+    (S "Languages", 
+      foldlSent_ $ map (S . show) $ lang chs), 
+    (S "Modularity", 
+      showChs $ modularity $ architecture chs), 
+    (S "Input Structure", 
+      showChs $ inputStructure $ dataInfo chs), 
+    (S "Constant Structure", 
+      showChs $ constStructure $ dataInfo chs), 
+    (S "Constant Representation", 
+      showChs $ constRepr $ dataInfo chs), 
+    (S "Implementation Type", 
+      showChs $ impType $ architecture chs), 
+    (S "Software Constraint Behaviour", 
+      showChs $ onSfwrConstraint $ srsConstraints chs), 
+    (S "Physical Constraint Behaviour", 
+      showChs $ onPhysConstraint $ srsConstraints chs), 
+    (S "Comments", 
+      showChsList $ comments $ docConfig $ optFeats chs), 
+    (S "Dox Verbosity", 
+      showChs $ doxVerbosity $ docConfig $ optFeats chs), 
+    (S "Dates", 
+      showChs $ dates $ docConfig $ optFeats chs), 
+    (S "Log File Name", 
+      S $ logFile $ logConfig $ optFeats chs), 
+    (S "Logging", 
+      showChsList $ logging $ logConfig $ optFeats chs), 
+    (S "Auxiliary Files", 
+      showChsList $ auxFiles $ optFeats chs)
   ]
 
 -- | Helper to combine pairs of 'Sentence's for rendering 'Choices'.

@@ -3,7 +3,8 @@ module Drasil.GlassBR.Choices where
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..),
+  ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..), makeArchit,
+  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats,
   defaultChoices)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -15,18 +16,12 @@ code = codeSpec fullSI choices allMods
 choices :: Choices
 choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
-  modularity = Modular Separated,
-  impType = Program,
-  logFile = "log.txt",
-  logging = [LogVar, LogFunc],
-  comments = [CommentFunc, CommentClass, CommentMod],
-  doxVerbosity = Quiet,
-  dates = Hide,
-  onSfwrConstraint = Exception,
-  onPhysConstraint = Exception,
-  inputStructure = Bundled,
-  constStructure = Inline,
-  constRepr = Const,
-  auxFiles = [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME] 
+  architecture = makeArchit (Modular Separated) Program,
+  dataInfo = makeData Bundled Inline Const,
+  optFeats = makeOptFeats
+    (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
+    (makeLogConfig [LogVar, LogFunc] "log.txt")
+    [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
+  srsConstraints = makeConstraints Exception Exception
 }
   

@@ -3,80 +3,73 @@
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Choices</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">CodeSpec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">codeSpec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Comments</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-4"></span><span>  </span><span class="annot"><span class="hs-identifier">Verbosity</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ConstraintBehaviour</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ImplementationType</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Lang</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-5"></span><span>  </span><span class="annot"><span class="hs-identifier">Modularity</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Structure</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ConstantStructure</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ConstantRepr</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-6"></span><span>  </span><span class="annot"><span class="hs-identifier">InputModule</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">AuxFile</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Visibility</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">defaultChoices</span></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.ExternalLibraries.ODELibraries</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">scipyODEPckg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">osloPckg</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">apacheODEPckg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">odeintPckg</span></span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Body.html"><span class="hs-identifier">Drasil.NoPCM.Body</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier">noPCMODEInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Body.html#fullSI"><span class="hs-identifier">fullSI</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>  </span><span class="annot"><span class="hs-identifier">InputModule</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">AuxFile</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Visibility</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">defaultChoices</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeArchit</span></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><span class="hs-identifier">makeData</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeConstraints</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeODE</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeDocConfig</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeLogConfig</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeOptFeats</span></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><span class="hs-identifier">ExtLib</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.ExternalLibraries.ODELibraries</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">scipyODEPckg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">osloPckg</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">apacheODEPckg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">odeintPckg</span></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="annot"><a href="Drasil.NoPCM.Choices.html#code"><span class="hs-identifier hs-type">code</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeSpec</span></span><span>
-</span><span id="line-14"></span><span id="code"><span class="annot"><span class="annottext">code :: CodeSpec
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Body.html"><span class="hs-identifier">Drasil.NoPCM.Body</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier">noPCMODEInfo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Body.html#fullSI"><span class="hs-identifier">fullSI</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><a href="Drasil.NoPCM.Choices.html#code"><span class="hs-identifier hs-type">code</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeSpec</span></span><span>
+</span><span id="line-16"></span><span id="code"><span class="annot"><span class="annottext">code :: CodeSpec
 </span><a href="Drasil.NoPCM.Choices.html#code"><span class="hs-identifier hs-var hs-var">code</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; Choices -&gt; [Mod] -&gt; CodeSpec
 </span><span class="hs-identifier hs-var">codeSpec</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
 </span><a href="Drasil.NoPCM.Body.html#fullSI"><span class="hs-identifier hs-var">fullSI</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
 </span><a href="Drasil.NoPCM.Choices.html#choices"><span class="hs-identifier hs-var">choices</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-15"></span><span class="hs-comment">-- Sub interpolation mod into list when possible</span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="annot"><a href="Drasil.NoPCM.Choices.html#choices"><span class="hs-identifier hs-type">choices</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span>
-</span><span id="line-18"></span><span id="choices"><span class="annot"><span class="annottext">choices :: Choices
+</span><span id="line-17"></span><span class="hs-comment">-- Sub interpolation mod into list when possible</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Drasil.NoPCM.Choices.html#choices"><span class="hs-identifier hs-type">choices</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span>
+</span><span id="line-20"></span><span id="choices"><span class="annot"><span class="annottext">choices :: Choices
 </span><a href="Drasil.NoPCM.Choices.html#choices"><span class="hs-identifier hs-var hs-var">choices</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices
 </span><span class="hs-identifier hs-var">defaultChoices</span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">lang :: [Lang]
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">lang :: [Lang]
 </span><span class="hs-identifier hs-var">lang</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Python</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Cpp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">CSharp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Java</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">modularity :: Modularity
-</span><span class="hs-identifier hs-var">modularity</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">InputModule -&gt; Modularity
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">architecture :: Architecture
+</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; ImplementationType -&gt; Architecture
+</span><span class="hs-identifier hs-var">makeArchit</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">InputModule -&gt; Modularity
 </span><span class="hs-identifier hs-var">Modular</span></span><span> </span><span class="annot"><span class="annottext">InputModule
-</span><span class="hs-identifier hs-var">Combined</span></span><span class="hs-special">,</span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">impType :: ImplementationType
-</span><span class="hs-identifier hs-var">impType</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ImplementationType
+</span><span class="hs-identifier hs-var">Combined</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ImplementationType
 </span><span class="hs-identifier hs-var">Program</span></span><span class="hs-special">,</span><span>
-</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">logFile :: FilePath
-</span><span class="hs-identifier hs-var">logFile</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;log.txt&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">logging :: [Logging]
-</span><span class="hs-identifier hs-var">logging</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">comments :: [Comments]
-</span><span class="hs-identifier hs-var">comments</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Comments
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">dataInfo :: DataInfo
+</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure -&gt; ConstantRepr -&gt; DataInfo
+</span><span class="hs-identifier hs-var">makeData</span></span><span> </span><span class="annot"><span class="annottext">Structure
+</span><span class="hs-identifier hs-var">Unbundled</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure
+</span><span class="hs-identifier hs-var">Store</span></span><span> </span><span class="annot"><span class="annottext">Structure
+</span><span class="hs-identifier hs-var">Bundled</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
+</span><span class="hs-identifier hs-var">Const</span></span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">optFeats :: OptionalFeatures
+</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DocConfig -&gt; LogConfig -&gt; [AuxFile] -&gt; OptionalFeatures
+</span><span class="hs-identifier hs-var">makeOptFeats</span></span><span>
+</span><span id="line-25"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Comments] -&gt; Verbosity -&gt; Visibility -&gt; DocConfig
+</span><span class="hs-identifier hs-var">makeDocConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Comments
 </span><span class="hs-identifier hs-var">CommentFunc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Comments
 </span><span class="hs-identifier hs-var">CommentClass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentMod</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">doxVerbosity :: Verbosity
-</span><span class="hs-identifier hs-var">doxVerbosity</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Verbosity
-</span><span class="hs-identifier hs-var">Quiet</span></span><span class="hs-special">,</span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">dates :: Visibility
-</span><span class="hs-identifier hs-var">dates</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Visibility
-</span><span class="hs-identifier hs-var">Hide</span></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">onSfwrConstraint :: ConstraintBehaviour
-</span><span class="hs-identifier hs-var">onSfwrConstraint</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstraintBehaviour
-</span><span class="hs-identifier hs-var">Warning</span></span><span class="hs-special">,</span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">onPhysConstraint :: ConstraintBehaviour
-</span><span class="hs-identifier hs-var">onPhysConstraint</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstraintBehaviour
-</span><span class="hs-identifier hs-var">Warning</span></span><span class="hs-special">,</span><span>
-</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">inputStructure :: Structure
-</span><span class="hs-identifier hs-var">inputStructure</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Unbundled</span></span><span class="hs-special">,</span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">constStructure :: ConstantStructure
-</span><span class="hs-identifier hs-var">constStructure</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure
-</span><span class="hs-identifier hs-var">Store</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Bundled</span></span><span class="hs-special">,</span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">constRepr :: ConstantRepr
-</span><span class="hs-identifier hs-var">constRepr</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
-</span><span class="hs-identifier hs-var">Const</span></span><span class="hs-special">,</span><span>
-</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">auxFiles :: [AuxFile]
-</span><span class="hs-identifier hs-var">auxFiles</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; AuxFile
+</span><span class="hs-identifier hs-var">CommentMod</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Verbosity
+</span><span class="hs-identifier hs-var">Quiet</span></span><span> </span><span class="annot"><span class="annottext">Visibility
+</span><span class="hs-identifier hs-var">Hide</span></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Logging] -&gt; FilePath -&gt; LogConfig
+</span><span class="hs-identifier hs-var">makeLogConfig</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;log.txt&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; AuxFile
 </span><span class="hs-identifier hs-var">SampleInput</span></span><span> </span><span class="annot"><span class="hs-string">&quot;../../datafiles/nopcm/sampleInput.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">AuxFile
 </span><span class="hs-identifier hs-var">ReadME</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">odeLib :: [ODELibPckg]
-</span><span class="hs-identifier hs-var">odeLib</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ODELibPckg
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">srsConstraints :: Constraints
+</span><span class="hs-identifier hs-var">srsConstraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstraintBehaviour -&gt; ConstraintBehaviour -&gt; Constraints
+</span><span class="hs-identifier hs-var">makeConstraints</span></span><span> </span><span class="annot"><span class="annottext">ConstraintBehaviour
+</span><span class="hs-identifier hs-var">Warning</span></span><span> </span><span class="annot"><span class="annottext">ConstraintBehaviour
+</span><span class="hs-identifier hs-var">Warning</span></span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">extLibs :: [ExtLib]
+</span><span class="hs-identifier hs-var">extLibs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ODE -&gt; ExtLib
+</span><span class="hs-identifier hs-var">Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[ODEInfo] -&gt; [ODELibPckg] -&gt; ODE
+</span><span class="hs-identifier hs-var">makeODE</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ODEInfo
+</span><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-var">noPCMODEInfo</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ODELibPckg
 </span><span class="hs-identifier hs-var">scipyODEPckg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ODELibPckg
 </span><span class="hs-identifier hs-var">osloPckg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ODELibPckg
 </span><span class="hs-identifier hs-var">apacheODEPckg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ODELibPckg
-</span><span class="hs-identifier hs-var">odeintPckg</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">odes :: [ODEInfo]
-</span><span class="hs-identifier hs-var">odes</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ODEInfo
-</span><a href="Drasil.NoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-var">noPCMODEInfo</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-35"></span><span class="hs-special">}</span></pre></body></html>
+</span><span class="hs-identifier hs-var">odeintPckg</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span class="hs-special">}</span></pre></body></html>

@@ -650,22 +650,49 @@ digraph alltypes {
 		subgraph choices{
 		Choices	[shape=oval, color=cyan3, label="Choices"];
 		Choices -> Lang;
-		Choices -> Modularity;
-		Choices -> Structure;
-		Choices -> ConstantStructure;
-		Choices -> ConstantRepr;
-		Choices -> ConceptMatchMap;
-		Choices -> SpaceMatch;
-		Choices -> ImplementationType;
-		Choices -> ODELibPckg;
-		Choices -> ODEInfo;
-		Choices -> ConstraintBehaviour;
-		Choices -> Comments;
-		Choices -> Verbosity;
-		Choices -> Visibility;
-		Choices -> Logging;
-		Choices -> FilePath;
-		Choices -> AuxFile;
+		Choices -> Architecture;
+		Choices -> DataInfo;
+		Choices -> Maps;
+		Choices -> OptionalFeatures;
+		Choices -> Constraints;
+		Choices -> ExtLib;
+		}
+		subgraph architecture{
+		Architecture	[shape=oval, color=cyan3, label="Architecture"];
+		Architecture -> Modularity;
+		Architecture -> ImplementationType;
+		}
+		subgraph datainfo{
+		DataInfo	[shape=oval, color=cyan3, label="DataInfo"];
+		DataInfo -> Structure;
+		DataInfo -> ConstantStructure;
+		DataInfo -> ConstantRepr;
+		}
+		subgraph maps{
+		Maps	[shape=oval, color=cyan3, label="Maps"];
+		Maps -> ConceptMatchMap;
+		Maps -> SpaceMatch;
+		}
+		subgraph optionalfeatures{
+		OptionalFeatures	[shape=oval, color=cyan3, label="OptionalFeatures"];
+		OptionalFeatures -> DocConfig;
+		OptionalFeatures -> LogConfig;
+		OptionalFeatures -> AuxFile;
+		}
+		subgraph docconfig{
+		DocConfig	[shape=oval, color=cyan3, label="DocConfig"];
+		DocConfig -> Comments;
+		DocConfig -> Verbosity;
+		DocConfig -> Visibility;
+		}
+		subgraph logconfig{
+		LogConfig	[shape=oval, color=cyan3, label="LogConfig"];
+		LogConfig -> Logging;
+		LogConfig -> FilePath;
+		}
+		subgraph constraints{
+		Constraints	[shape=oval, color=cyan3, label="Constraints"];
+		Constraints -> ConstraintBehaviour;
 		}
 		subgraph modularity{
 		Modularity	[shape=oval, color=darkviolet, label="Modularity"];
@@ -673,6 +700,9 @@ digraph alltypes {
 		}
 		subgraph inputmodule{
 		InputModule	[shape=oval, color=darkviolet, label="InputModule"];
+		}
+		subgraph implementationtype{
+		ImplementationType	[shape=oval, color=darkviolet, label="ImplementationType"];
 		}
 		subgraph structure{
 		Structure	[shape=oval, color=darkviolet, label="Structure"];
@@ -685,12 +715,6 @@ digraph alltypes {
 		}
 		subgraph codeconcept{
 		CodeConcept	[shape=oval, color=darkviolet, label="CodeConcept"];
-		}
-		subgraph implementationtype{
-		ImplementationType	[shape=oval, color=darkviolet, label="ImplementationType"];
-		}
-		subgraph constraintbehaviour{
-		ConstraintBehaviour	[shape=oval, color=darkviolet, label="ConstraintBehaviour"];
 		}
 		subgraph comments{
 		Comments	[shape=oval, color=darkviolet, label="Comments"];
@@ -707,6 +731,12 @@ digraph alltypes {
 		subgraph auxfile{
 		AuxFile	[shape=oval, color=darkviolet, label="AuxFile"];
 		AuxFile -> FilePath;
+		}
+		subgraph constraintbehaviour{
+		ConstraintBehaviour	[shape=oval, color=darkviolet, label="ConstraintBehaviour"];
+		}
+		subgraph extlib{
+		ExtLib	[shape=oval, color=darkgreen, label="ExtLib"];
 		}
 		subgraph conceptmatchmap{
 		ConceptMatchMap	[shape=oval, color=red2, label="ConceptMatchMap"];

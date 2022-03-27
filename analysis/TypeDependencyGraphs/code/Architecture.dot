@@ -1,0 +1,5 @@
+digraph architecture{
+Architecture	[shape=oval, color=cyan3, label="Architecture"];
+Architecture -> Modularity;
+Architecture -> ImplementationType;
+}

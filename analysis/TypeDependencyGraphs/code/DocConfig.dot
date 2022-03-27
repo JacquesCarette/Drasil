@@ -1,5 +1,6 @@
 digraph docconfig{
 DocConfig	[shape=oval, color=cyan3, label="DocConfig"];
-DocConfig -> String;
-DocConfig -> Bool;
+DocConfig -> Comments;
+DocConfig -> Verbosity;
+DocConfig -> Visibility;
 }

@@ -1,0 +1,5 @@
+digraph logconfig{
+LogConfig	[shape=oval, color=cyan3, label="LogConfig"];
+LogConfig -> Logging;
+LogConfig -> FilePath;
+}

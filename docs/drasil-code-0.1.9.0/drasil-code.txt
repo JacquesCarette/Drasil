@@ -40,70 +40,32 @@ readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
 -- | Defines the DataDesc for the file containing a sample data set, which
 --   a user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
-
--- | Global design choices (affect entire program)
 data Choices
-Choices :: [Lang] -> Modularity -> Structure -> ConstantStructure -> ConstantRepr -> ConceptMatchMap -> SpaceMatch -> ImplementationType -> [ODELibPckg] -> [ODEInfo] -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> Visibility -> [Logging] -> FilePath -> [AuxFile] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
 [lang] :: Choices -> [Lang]
 
--- | How the program should be modularized.
-[modularity] :: Choices -> Modularity
+-- | Architecture of the program, include modularity and implementation
+--   type
+[architecture] :: Choices -> Architecture
 
--- | Structure of inputs (bundled or not).
-[inputStructure] :: Choices -> Structure
+-- | Data structure and represent
+[dataInfo] :: Choices -> DataInfo
 
--- | Structure of constants (inlined or bundled or not, or stored with
---   inputs).
-[constStructure] :: Choices -> ConstantStructure
+-- | Maps for 'Drasil concepts' to 'code concepts' or <a>Space</a> to a
+--   'CodeType
+[maps] :: Choices -> Maps
 
--- | Representation of constants (as variables or as constants).
-[constRepr] :: Choices -> ConstantRepr
-
--- | Map of <a>UID</a>s for Drasil concepts to code concepts. Matching a
---   <a>UID</a> to a code concept means the code concept should be used
---   instead of the chunk associated with the <a>UID</a>.
-[conceptMatch] :: Choices -> ConceptMatchMap
-
--- | Map of <a>Space</a>s to <a>CodeType</a>s Matching a <a>Space</a> to a
---   <a>CodeType</a> means values of the <a>Space</a> should have that
---   <a>CodeType</a> in the generated code.
-[spaceMatch] :: Choices -> SpaceMatch
-
--- | Implementation type, program or library.
-[impType] :: Choices -> ImplementationType
-
--- | Preferentially-ordered list ODE libraries to try.
-[odeLib] :: Choices -> [ODELibPckg]
-
--- | ODE information.
-[odes] :: Choices -> [ODEInfo]
+-- | Setting for Softifacts that can be added to the program or left it out
+[optFeats] :: Choices -> OptionalFeatures
 
 -- | Constraint violation behaviour. Exception or Warning.
-[onSfwrConstraint] :: Choices -> ConstraintBehaviour
-[onPhysConstraint] :: Choices -> ConstraintBehaviour
+[srsConstraints] :: Choices -> Constraints
 
--- | Turns Doxygen comments for different code structures on or off.
-[comments] :: Choices -> [Comments]
-
--- | Standard output from running Doxygen: verbose or quiet?
-[doxVerbosity] :: Choices -> Verbosity
-
--- | Turns date field on or off in the generated module-level Doxygen
---   comments.
-[dates] :: Choices -> Visibility
-
--- | Turns different forms of logging on or off.
-[logging] :: Choices -> [Logging]
-
--- | Name of log file.
-[logFile] :: Choices -> FilePath
-
--- | Turns generation of different auxiliary (non-source-code) files on or
---   off.
-[auxFiles] :: Choices -> [AuxFile]
+-- | List of external libraries what to utilize
+[extLibs] :: Choices -> [ExtLib]
 
 -- | Comment implementation options.
 data Comments
@@ -130,6 +92,93 @@ Warning :: ConstraintBehaviour
 
 -- | Throw exception when constraint violated.
 Exception :: ConstraintBehaviour
+
+-- | Constructor to create a Architecture
+makeArchit :: Modularity -> ImplementationType -> Architecture
+
+-- | Architecture of a program
+data Architecture
+Archt :: Modularity -> ImplementationType -> Architecture
+
+-- | How the program should be modularized.
+[modularity] :: Architecture -> Modularity
+
+-- | Implementation type, program or library.
+[impType] :: Architecture -> ImplementationType
+
+-- | Data of a program - how information should be encoded.
+data DataInfo
+DataInfo :: Structure -> ConstantStructure -> ConstantRepr -> DataInfo
+
+-- | Structure of inputs (bundled or not).
+[inputStructure] :: DataInfo -> Structure
+
+-- | Structure of constants (inlined or bundled or not, or stored with
+--   inputs).
+[constStructure] :: DataInfo -> ConstantStructure
+
+-- | Representation of constants (as variables or as constants).
+[constRepr] :: DataInfo -> ConstantRepr
+
+-- | Constructor to create a DataInfo
+makeData :: Structure -> ConstantStructure -> ConstantRepr -> DataInfo
+
+-- | Maps for Concepts and Space
+data Maps
+Maps :: ConceptMatchMap -> SpaceMatch -> Maps
+
+-- | Map of <a>UID</a>s for Drasil concepts to code concepts. Matching a
+--   <a>UID</a> to a code concept means the code concept should be used
+--   instead of the chunk associated with the <a>UID</a>.
+[conceptMatch] :: Maps -> ConceptMatchMap
+
+-- | Map of <a>Space</a>s to <a>CodeType</a>s Matching a <a>Space</a> to a
+--   <a>CodeType</a> means values of the <a>Space</a> should have that
+--   <a>CodeType</a> in the generated code.
+[spaceMatch] :: Maps -> SpaceMatch
+
+-- | Constructor to create a Maps
+makeMaps :: ConceptMatchMap -> SpaceMatch -> Maps
+
+-- | Default mapping between <tt>Space</tt> and <a>CodeType</a>.
+spaceToCodeType :: Space -> [CodeType]
+
+-- | Constructor to create a Constraints
+makeConstraints :: ConstraintBehaviour -> ConstraintBehaviour -> Constraints
+
+-- | Constructor to create an ODE
+makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
+
+-- | Constructor to create a DocConfig
+makeDocConfig :: [Comments] -> Verbosity -> Visibility -> DocConfig
+
+-- | Constructor to create a LogConfig
+makeLogConfig :: [Logging] -> FilePath -> LogConfig
+
+-- | Log Configuration
+data LogConfig
+LogConfig :: [Logging] -> FilePath -> LogConfig
+
+-- | Turns different forms of logging on or off.
+[logging] :: LogConfig -> [Logging]
+
+-- | Name of log file.
+[logFile] :: LogConfig -> FilePath
+data OptionalFeatures
+OptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+[docConfig] :: OptionalFeatures -> DocConfig
+[logConfig] :: OptionalFeatures -> LogConfig
+
+-- | Turns generation of different auxiliary (non-source-code) files on or
+--   off.
+[auxFiles] :: OptionalFeatures -> [AuxFile]
+
+-- | Constructor to create a OptionalFeatures
+makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+
+-- | External Library Options
+newtype ExtLib
+Math :: ODE -> ExtLib
 
 -- | Program implementation options.
 data ImplementationType
@@ -217,10 +266,10 @@ type SpaceMatch = Space -> [CodeType]
 --   and <tt>CodeTypes</tt>.
 matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
 
--- | Currently we only support one kind of auxiliary file: sample input
---   file. To generate a sample input file compatible with the generated
---   program, <a>FilePath</a> is the path to the user-provided file
---   containing a sample set of input data.
+-- | Currently we only support two kind of auxiliary files: sample input
+--   file, readme. To generate a sample input file compatible with the
+--   generated program, <a>FilePath</a> is the path to the user-provided
+--   file containing a sample set of input data.
 data AuxFile
 SampleInput :: FilePath -> AuxFile
 ReadME :: AuxFile

@@ -1,20 +1,10 @@
 digraph choices{
 Choices	[shape=oval, color=cyan3, label="Choices"];
 Choices -> Lang;
-Choices -> Modularity;
-Choices -> Structure;
-Choices -> ConstantStructure;
-Choices -> ConstantRepr;
-Choices -> ConceptMatchMap;
-Choices -> SpaceMatch;
-Choices -> ImplementationType;
-Choices -> ODELibPckg;
-Choices -> ODEInfo;
-Choices -> ConstraintBehaviour;
-Choices -> Comments;
-Choices -> Verbosity;
-Choices -> Visibility;
-Choices -> Logging;
-Choices -> FilePath;
-Choices -> AuxFile;
+Choices -> Architecture;
+Choices -> DataInfo;
+Choices -> Maps;
+Choices -> OptionalFeatures;
+Choices -> Constraints;
+Choices -> ExtLib;
 }

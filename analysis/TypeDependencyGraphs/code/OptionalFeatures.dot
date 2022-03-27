@@ -1,0 +1,6 @@
+digraph optionalfeatures{
+OptionalFeatures	[shape=oval, color=cyan3, label="OptionalFeatures"];
+OptionalFeatures -> DocConfig;
+OptionalFeatures -> LogConfig;
+OptionalFeatures -> AuxFile;
+}

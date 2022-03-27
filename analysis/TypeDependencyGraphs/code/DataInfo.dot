@@ -1,0 +1,6 @@
+digraph datainfo{
+DataInfo	[shape=oval, color=cyan3, label="DataInfo"];
+DataInfo -> Structure;
+DataInfo -> ConstantStructure;
+DataInfo -> ConstantRepr;
+}

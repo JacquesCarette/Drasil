@@ -1,8 +1,8 @@
 module Drasil.NoPCM.ODEs (noPCMODEOpts, noPCMODEInfo) where
 
+import Language.Drasil (recip_, ExprC(mulRe, idx, sy, ($-)), LiteralC(int, exactDbl))
 import Language.Drasil.Code (odeInfo, odeOptions, quantvar, ODEInfo,
   ODEMethod(RK45), ODEOptions)
-import Language.Drasil.CodeExpr
 
 import Data.Drasil.Quantities.Physics (time)
 

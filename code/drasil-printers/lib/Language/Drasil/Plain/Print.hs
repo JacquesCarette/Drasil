@@ -3,7 +3,7 @@ module Language.Drasil.Plain.Print (
   -- * Types
   Linearity(..),
   -- * Functions
-  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc
+  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb
 ) where
 
 import Database.Drasil (ChunkDB)
@@ -22,7 +22,7 @@ import Prelude hiding ((<>))
 import Data.List (partition)
 import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double, 
   doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text, 
-  vcat)
+  vcat, render)
 
 -- | Data is either linear or not.
 data Linearity = Linear | Nonlinear
@@ -180,3 +180,7 @@ fenceDocR Paren = text ")"
 fenceDocR Curly = text "}"
 fenceDocR Norm = text "\\|"
 fenceDocR Abs = text "|"
+
+-- | Helper for printing Symbols
+showSymb :: Symbol -> String
+showSymb a = render $ symbolDoc a

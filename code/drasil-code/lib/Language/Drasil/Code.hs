@@ -3,11 +3,13 @@ module Language.Drasil.Code (
   makeCode, createCodeFiles, 
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
-  Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Logging(..), Modularity(..), Structure(..), 
-  ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
-  matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData, 
-  Visibility(..), defaultChoices, 
+  Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), makeArchit,
+  Architecture(..), DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType,
+  makeConstraints, makeODE, makeDocConfig, makeLogConfig, LogConfig(..), 
+  OptionalFeatures(..), makeOptFeats, ExtLib(..), ImplementationType(..), Logging(..), 
+  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
+  InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, 
+  AuxFile(..), getSampleData, Visibility(..), defaultChoices, 
   CodeSpec(..), funcUID, asVC, codeSpec,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
@@ -86,9 +88,13 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   ConstraintBehaviour(..), ImplementationType(..), Logging(..), Modularity(..), 
   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), 
-  getSampleData, Visibility(..), defaultChoices,)
-import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, asVC, 
-  codeSpec)
+  getSampleData, Visibility(..), defaultChoices, makeArchit, Architecture(..),
+  DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints,
+  makeODE, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
+  makeOptFeats, ExtLib(..))
+  
+import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, asVC, codeSpec)
+
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
 

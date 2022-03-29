@@ -5,17 +5,17 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Language.Drasil (QuantityDict, Space(..), implVar, nounPhraseSP,
-  label, sub, HasSymbol, HasUID, Symbol)
+  label, sub, HasSymbol(..), HasUID, Symbol, Stage(Implementation))
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
   asVC, funcDef, fDecDef, ffor, funcData, quantvar, 
   multiLine, packmod, repeated, singleLine)
 import Language.Drasil.CodeExpr
-import Language.Drasil.Development (showUID)
-
-
 import qualified Drasil.GlassBR.Unitals as U
+import Language.Drasil.Printers
+import Text.PrettyPrint.HughesPJ (render)
+
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -163,7 +163,7 @@ extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
   ]
 
 interpY :: Func
-interpY = funcDef (showUID U.interpY)
+interpY = funcDef (render $ symbolDoc (symbol U.interpY Implementation))
   "Linearly interpolates a y value at given x and z values" 
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
@@ -189,7 +189,7 @@ interpY = funcDef (showUID U.interpY)
   ]
 
 interpZ :: Func
-interpZ = funcDef (showUID U.interpZ)
+interpZ = funcDef (render $ symbolDoc (symbol U.interpZ Implementation))
   "Linearly interpolates a z value at given x and y values" 
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [

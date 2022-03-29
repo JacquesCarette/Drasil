@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.ConceptMatch (
 import Language.Drasil (UID, Sentence(S), (+:+), (+:+.))
 
 import Language.Drasil.Choices (Choices(..), CodeConcept(..), 
-    MatchedConceptMap, showChs)
+    MatchedConceptMap, showChs, Maps(..))
 
 import GOOL.Drasil (SValue, OOProg, MathConstant(..))
 
@@ -20,7 +20,7 @@ import Control.Monad.State (State, modify)
 -- The ConceptMatchMap from choices is passed to chooseConcept' internally, this way
 -- any 'CodeConcept' list can be matched to its appropiate 'UID'.
 chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
-chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch chs)
+chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch $ maps chs)
   where chooseConcept' :: UID -> [CodeConcept] -> State [Sentence] CodeConcept
         chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " ++ 
           "ConceptMatchMap"

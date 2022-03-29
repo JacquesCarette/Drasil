@@ -6,7 +6,10 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec)
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
+  Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
+  makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
+  makeOptFeats)
 import Language.Drasil.Generate (genCode)
 import GOOL.Drasil (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
@@ -32,16 +35,14 @@ genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName ful
 
 codedDirName :: String -> Choices -> String
 codedDirName n Choices {
-  modularity = m,
-  impType = it,
-  logging = l,
-  inputStructure = is,
-  constStructure = cs,
-  constRepr = cr,
-  spaceMatch = sm} = 
-  intercalate "_" [n, codedMod m, codedImpTp it, codedLog l, codedStruct is, 
-    codedConStruct cs, codedConRepr cr, codedSpaceMatch sm]
-  
+  architecture = a,
+  optFeats = o,
+  dataInfo = d,
+  maps = m} = 
+  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o, 
+    codedStruct $ inputStructure d, codedConStruct $ constStructure d, 
+    codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
+
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
 codedMod (Modular Combined) = "C"
@@ -77,23 +78,29 @@ codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
 choiceCombos :: [Choices]
 choiceCombos = [baseChoices, 
   baseChoices {
-    modularity = Modular Combined,
-    inputStructure = Bundled,
-    constStructure = Store Unbundled},
+    architecture = makeArchit (Modular Combined) Program,
+    dataInfo = makeData Bundled (Store Unbundled) Var
+  },
   baseChoices {
-    modularity = Modular Separated,
-    impType = Library,
-    constStructure = Store Unbundled,
-    spaceMatch = matchToFloats},
+    architecture = makeArchit (Modular Separated) Library,
+    dataInfo = makeData Unbundled (Store Unbundled) Var,
+    maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
+  },
   baseChoices {
-    logging = [LogVar, LogFunc],
-    inputStructure = Bundled,
-    constStructure = Store Bundled,
-    constRepr = Const},
+    dataInfo = makeData Bundled (Store Bundled) Const,
+    optFeats = makeOptFeats
+      (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
+      (makeLogConfig [LogVar, LogFunc] "log.txt")
+      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
+  },
   baseChoices {
-    logging = [LogVar, LogFunc],
-    inputStructure = Bundled,
-    spaceMatch = matchToFloats}]
+    dataInfo = makeData Bundled WithInputs Var,
+    maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats,
+    optFeats = makeOptFeats
+      (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
+      (makeLogConfig [LogVar, LogFunc] "log.txt")
+      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
+  }]
 
 matchToFloats :: SpaceMatch
 matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
@@ -101,18 +108,12 @@ matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
 baseChoices :: Choices
 baseChoices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
-  modularity = Unmodular,
-  impType = Program,
-  logFile = "log.txt",
-  logging = [],
-  comments = [CommentFunc, CommentClass, CommentMod],
-  doxVerbosity = Quiet,
-  dates = Hide,
-  onSfwrConstraint = Warning,
-  onPhysConstraint = Warning,
-  inputStructure = Unbundled,
-  constStructure = WithInputs,
-  constRepr = Var,
-  conceptMatch = matchConcepts [(piConst, [Pi])],
-  auxFiles = [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
+  architecture = makeArchit Unmodular Program,
+  dataInfo = makeData Unbundled WithInputs Var,
+  maps = makeMaps (matchConcepts [(piConst, [Pi])]) spaceToCodeType,
+  optFeats = makeOptFeats
+    (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
+    (makeLogConfig [] "log.txt")
+    [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+  srsConstraints = makeConstraints Warning Warning
 }

@@ -2,7 +2,7 @@
 -- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil
+import Language.Drasil hiding (None)
 import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
-import Language.Drasil.Choices (Choices(..))
+import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
 import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
@@ -78,6 +78,17 @@ type ConstantMap = Map.Map UID CodeDefinition
 assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
 
+-- | Get ODE from ExtLib
+getODE :: [ExtLib] -> Maybe ODE
+getODE [] = Nothing
+getODE (Math ode: _) = Just ode
+-- getODE (_:xs) = getODE xs
+
+-- | Maps ODE to their respective 'CodeDefinition'.
+mapODE :: Maybe ODE -> [CodeDefinition]
+mapODE Nothing = []
+mapODE (Just ode) = map odeDef $ odeInfo ode
+
 -- | Defines a 'CodeSpec' based on the 'SystemInformation', 'Choices', and 'Mod's
 -- defined by the user.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
@@ -93,11 +104,11 @@ codeSpec SI {_sys         = sys
            , _sysinfodb   = db} chs ms =
   let n = programName sys
       inputs' = map quantvar ins
-      const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid))
+      const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
       rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)
-        ++ map odeDef (odes chs)
+        ++ mapODE (getODE $ extLibs chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs

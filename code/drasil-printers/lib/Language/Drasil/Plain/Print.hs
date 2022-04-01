@@ -3,12 +3,13 @@ module Language.Drasil.Plain.Print (
   -- * Types
   Linearity(..),
   -- * Functions
-  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb
+  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb,
+  showHasSymbImpl
 ) where
 
 import Database.Drasil (ChunkDB)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
-import qualified Language.Drasil as L (Expr)
+import qualified Language.Drasil as L (Expr, HasSymbol(..))
 import qualified Language.Drasil.CodeExpr as C (CodeExpr)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
@@ -184,3 +185,7 @@ fenceDocR Abs = text "|"
 -- | Helper for printing Symbols
 showSymb :: Symbol -> String
 showSymb a = render $ symbolDoc a
+
+-- | Helper for printing a HasSymbol in Implementation Stage
+showHasSymbImpl :: L.HasSymbol x => x -> String
+showHasSymbImpl x = showSymb (L.symbol x Implementation)

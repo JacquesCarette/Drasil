@@ -20,7 +20,8 @@ module Language.Drasil.Printers (
   -- ** Types
   , Linearity(..)
   -- ** Functions
-  , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc, showSymb
+  , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc, showSymb,
+  showHasSymbImpl
   -- * TeX
   , genTeX
   -- * Jupyter
@@ -42,7 +43,7 @@ import Language.Drasil.JSON.Print (genJSON)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
   extLibSec, instDoc, regularSec, endNote)
 import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
-  codeExprDoc, symbolDoc, unitDoc, showSymb)
+  codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
   HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)

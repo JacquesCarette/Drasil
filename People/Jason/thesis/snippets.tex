@@ -13,39 +13,67 @@
 %------------------------------------------------------------------------------
 
 % "Current"
+%--------------------------------------
 
+% expr
 \newcommand{\currentExprHaskell}{\input{\currentCode/expr}}
 \newcommand{\refCurrentExprHaskell}{\ref{lst:curExpr}}
 
-\newcommand{\currentRelationConceptHaskell}{\input{\currentCode/relationconcept}}
-\newcommand{\refCurrentRelationConceptHaskell}{\ref{lst:curRelConcept}}
+% exprTTF
+\newcommand{\currentExprTTFHaskell}{\input{\currentCode/exprTTF}}
+\newcommand{\refCurrentExprTTFHaskell}{\ref{lst:curExprTTF}}
 
+% modelexpr
+\newcommand{\currentModelExprHaskell}{\input{\currentCode/modelexpr}}
+\newcommand{\refCurrentModelExprHaskell}{\ref{lst:curModelExpr}}
+
+% modelexprTTF
+\newcommand{\currentModelExprTTFHaskell}{\input{\currentCode/modelexprTTF}}
+\newcommand{\refCurrentModelExprTTFHaskell}{\ref{lst:curModelExprTTF}}
+
+% modelkinds
 \newcommand{\currentModelKindsHaskell}{\input{\currentCode/modelkinds}}
 \newcommand{\refCurrentModelKindsHaskell}{\ref{lst:curModelKinds}}
 
-% "Original"
+% qdefinition
+\newcommand{\currentQDefinitionHaskell}{\input{\currentCode/qdefinition}}
+\newcommand{\refCurrentQDefinitionHaskell}{\ref{lst:curQDefinition}}
 
+% relationconcept
+\newcommand{\currentRelationConceptHaskell}{\input{\currentCode/relationconcept}}
+\newcommand{\refCurrentRelationConceptHaskell}{\ref{lst:curRelConcept}}
+
+% "Original"
+%--------------------------------------
+
+% expr
 \newcommand{\originalExprHaskell}{\input{\originalCode/expr}}
 \newcommand{\refOriginalExprHaskell}{\ref{lst:origExpr}}
 
+% few expr smart constructors
 \newcommand{\originalFewExprSmartConstructorsHaskell}{\input{\originalCode/fewExprSmartConstructors}}
-\newcommand{\refOriginalFewExprSmartConstructorsHaskell}{\ref{lst:fewExprSmartConstructors}}
+\newcommand{\refOriginalFewExprSmartConstructorsHaskell}{\ref{lst:origFewExprSmartConstructors}}
 
+% qdefinition
 \newcommand{\originalQDefinitionHaskell}{\input{\originalCode/qdefinition}}
 \newcommand{\refOriginalQDefinitionHaskell}{\ref{lst:origQDefinition}}
 
+% relation
 \newcommand{\originalRelation}{\input{\originalCode/relation}}
-\newcommand{\refOriginalRelation}{\ref{lst:originalRelation}}
+\newcommand{\refOriginalRelation}{\ref{lst:origRelation}}
 
+% relationconcept
 \newcommand{\originalRelationConcept}{\input{\originalCode/relationconcept}}
-\newcommand{\refOriginalRelationConcept}{\ref{lst:originalRelationConcept}}
+\newcommand{\refOriginalRelationConcept}{\ref{lst:origRelationConcept}}
 
 %------------------------------------------------------------------------------
 % Figures
 %------------------------------------------------------------------------------
 
+% knowledge flow in theories without modelkinds
 \newcommand{\theoriesWithoutModelKinds}{\input{\figureSnippet/theorieswithoutmodelkinds}}
 \newcommand{\refTheoriesWithoutModelKinds}{\ref{fig:theoriesWithoutModelKinds}}
 
+% knowledge flow in theories with modelkinds
 \newcommand{\theoriesWithModelKinds}{\input{\figureSnippet/theorieswithmodelkinds}}
 \newcommand{\refTheoriesWithModelKinds}{\ref{fig:theoriesWithModelKinds}}

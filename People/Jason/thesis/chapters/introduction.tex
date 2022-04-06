@@ -1,66 +1,4 @@
-\section{Knowledge Capture \& Encoding}
-
-\intodo{How much of the below discussion is required?}
-
-As a software developer working to build a new piece of software, one might find
-that they are writing ``a lot of the same code'' as their or other pre-existing
-software projects. One might consider building a library, shared between all
-projects for some common functionality/tooling, this is a large improvement for
-their program --- being able to reuse their code is great for debugging and
-removing the possibility of bugs when stable and tested code is used.
-
-\intodo{Continue a bit, but try to keep it succinct}
-
-Commonly, one looks to use mature libraries and frameworks to underpin their
-projects, occasionally without guarantee that connecting these libraries is
-safe. As general purpose programming languages are often also used,
-misunderstandings of tacit project knowledge may also cause errors.
-Unfortunately, this programming methodology takes significant time until a
-working product is formed with minimal bugs.
-
-If one originally sets out to build a program that does something they
-understand very well and each component of every step of the grand scheme of the
-program was understood, the development of their related software should be a
-clear matter of principled engineering. However, with this existing programming
-methodology, it is not yet simple enough yet to get reliable programs.
-
-Optimally, they would use their natural language to perfectly describe their
-problem to their computer and have it magically give them a program that does
-exactly what they wanted. Unfortunately, it is difficult to have computers
-systematically understand and act on natural language as well as us humans can.
-However, we can mimic a computer ``understanding'' an equivalent speech through
-having the human write the same knowledge using a domain-specific language.
-Additionally, through sequencing and connecting domain-specific languages, we
-can effectively model what they are trying to build, allowing the computer to be
-able to better understand what they are trying to build. With enough effort, the
-computer should be able to generate some artifact that ultimately represents
-what they were trying to build. Note, however, that this idea likely only
-thrives in domains of knowledge that is ``well-understood''
-\cite{well-understood}.
-
-\intodo{Discuss the roles of the domain expert, the end-user (a modeller), and the final end-user (the softifact user)}
-% The domain-expert's job is to create the domain-specific languages and tools.
-% target: Importance of the domain-expert for the end-user, and results
-
 \section{Problem Statement}
-
-\intodo{Move more of this below content to intro}
-
-As a domain expert transcribing knowledge encodings of some well-understood
-domain, one will largely be discussing the ways in which pieces of knowledge are
-\textit{constructed} and \textit{relate to each other}. In order for this
-abstract knowledge encodings to be \textit{usable} in some way, it is vital to
-have ``names'' (\textit{types}) for the knowledge encodings. In working to
-capture the working knowledge of a domain, it's of utmost importance to ensure
-that all ``instances'' of your ``names'' (types) are \textit{always} usable in
-some meaningful way. In other words, all knowledge encodings should create a
-stringent, explicit set of rules for which all ``instances'' should conform to,
-and, arguably, also creates a justification for the need to create that
-particular knowledge/data type. As such, optimally, a domain expert would write
-their knowledge encodings and renderers in a general purpose programming
-language with a sound type system (e.g., Haskell, Agda, Java, etc.) --
-preferring ones with a type system based on formal type theories for their
-feature richness.
 
 In Drasil, we are focused on understanding families of scientific software, and
 creating systematic rules to generate families of software solutions (for any
@@ -68,7 +6,9 @@ instance of a scientific problem that requires a scientific software solution).
 Specifically, Drasil is focused on mathematics and physics-based models. In both
 areas, we are concerned with what \textit{kinds of theories} are
 well-understood, and ensuring that all created mathematical expressions are
-``valid''. \intodo{Still a bit awkward}
+``valid''.
+
+\intodo{Move above paragraph to the top of the ``Drasil'' section.}
 
 \section{Contributions of the Author}
 
@@ -87,6 +27,7 @@ well-understood, and ensuring that all created mathematical expressions are
 In chapter X, we discuss \dots
 \begin{enumerate}
       \setcounter{enumi}{1}
+      \item \autoref{chap:ideology}: discuss the ideology underpinning this work.
       \item \autoref{chap:drasil}: the Drasil project, it's history, and it's
             architecture.
       \item \autoref{chap:modelkinds}: how theories are encoded in Drasil, the
@@ -98,3 +39,5 @@ In chapter X, we discuss \dots
       \item \autoref{chap:futureWork}: discuss potential future work as a
             continuation of the progress made by the contributions of this work.
 \end{enumerate}
+
+\intodo{The above points are easy to merge. I should just do it, soon.}

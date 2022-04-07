@@ -32,16 +32,15 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 \begin{itemize}
 
 	\item In modelling any problem, one will, of course, model the work of their
-		  pencil and paper. Thankfully, with scientific problems, the
-		  well-understood ones will be codified\cite{well-understood}, and as
-		  such, are a good fit for Drasil, as it is intended to automatically
-		  generate software that performs calculations for a specific problem in
-		  the universe of generic programs supported.
+	      pencil and paper. Thankfully, with scientific problems, the
+	      well-understood ones will be codified\cite{well-understood}, and as
+	      such, are a good fit for Drasil, as it is intended to automatically
+	      generate software that performs calculations for a specific problem in
+	      the universe of generic programs supported.
 
 	\item In most, if not all, physics problems, a common language of mathematic
-	      calculation. In Drasil, this language is written as an \acf{adt}: 
-		  
-		  \currentExprHaskell
+	      calculation. In Drasil, this language is written as an \acf{adt} in
+	      \refOriginalExprHaskell{}.
 
 	\item Here, we explain that a mathematical expression is defined by the
 	      above \acf{ast}. The language contains the commonly found operations
@@ -49,10 +48,10 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 	      graduate-level scientific problems).
 
 	\item It's important that each knowledge encoding in Drasil exposes as much
-	      information as reasonably possible (and useful). \todo{This is still
-	      very vague} We want to expose the ``specifications'' of each piece of
-	      knowledge that we are encoding so that transformers and generators may
-	      appropriately make use of contained knowledge.
+	      information as reasonably possible (and useful). We want to expose the
+	      ``specifications'' of each piece of knowledge that we are encoding so
+	      that transformers and generators may appropriately make use of
+	      contained knowledge.
 
 	\item With mathematical models, it's very easy to write ``difficult to
 	      interpret'' expressions, and create expressions for which aren't
@@ -60,6 +59,23 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 	      pencil/mental mathematics before performing), either without extra
 	      surrounding information or simply too ``difficult'' (areas where we
 	      might find choices are especially difficult).
+
+	      \begin{itemize}
+
+		      \item When writing a pencil \& paper, we usually write with extra
+		            context (generally more information that needs to be read to
+		            fully understand some expression). We might also infer
+		            information about the model. Unfortunately, mechanizing
+		            inference is difficult, artificial learning is a whole field
+		            of study of its own. As such, we reverse the relationship of
+		            the inference by having knowledge container expose
+		            everything on its own.
+
+		      \item In other words, we replace Expr as a knowledge container,
+		            and restrict its usage to strictly ``expressions'', as
+		            opposed to ``expressions'' and information about models.
+
+	      \end{itemize}
 
 	\item Since we want to generate code that represents calculations of all
 	      sorts, it's important that the mathematical expression language we use
@@ -80,8 +96,6 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 		            asserting constraints at software runtime, but it's
 		            difficult to find a place for it to belong without extra
 		            context.
-
-		      \item \intodo{List problems}
 
 	      \end{itemize}
 
@@ -129,10 +143,10 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 		            originally contained in the expressions better. This is done
 		            through replacing ``RelationConcepts'' with ``ModelKinds'':
 
-			  \item \currentModelKindsHaskell
-			  
-			  \item \intodo{Discuss EquationalModels, EquationalRealms,
-			  	    EquationalConstraints, DEModel, NewDEModel, etc.}
+		      \item \currentModelKindsHaskell
+
+		      \item \intodo{Discuss EquationalModels, EquationalRealms,
+			            EquationalConstraints, DEModel, NewDEModel, etc.}
 
 	      \end{itemize}
 

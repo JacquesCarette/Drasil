@@ -71,9 +71,9 @@ describe the target program that simulates said models.
 \begin{itemize}
 
     \item Uses a series of \acfp{dsl} to build up the knowledge-base and
-          ``story'' of a scene/project, until sufficient knowledge is built such that
-          a generator may take the whole story and generate representational software
-          artifacts.
+          ``story'' of a scene/project, until sufficient knowledge is built such
+          that a generator may take the whole story and generate
+          representational software artifacts.
           \intodo{Should add an example of the encoding of a theory.}
 
     \item Generates OO programs; GOOL is used to generate code in C++/C, Java,
@@ -106,6 +106,22 @@ describe the target program that simulates said models.
               \item Projectile
           \end{itemize}
 
+    \item The calculation path relies (implicitly) on:
+          \begin{itemize}
+
+              \item The Exprs of the RelationConcept being of the form: $x =
+              f(a,b,c,...)$
+
+              \item The ODEs being described by the expression language, but we
+                    do not rely on being able to generate representing
+                    computational code due to needing extra external information
+                    (e.g., we require a supplementary packet of information
+                    [ODEInfo]).
+
+          \end{itemize}
+
 \end{itemize}
 
 \intodo{Short-term problems -- leading into topics}
+
+

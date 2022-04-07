@@ -1,65 +1,86 @@
 \section{Background: Problem}
 
 \begin{itemize}
-    
-    \item Writing invalid expressions is possible.
-    
-    \item Mentally tracking expression creations to ensure they follow the
-          implicit rules of the expression language is too difficult, and leads
-          to mental strain.
 
-    \item Compiling to ``lower languages'' requires special type checking before
-          compiling to them. \todo{Swift needed special Doubles}
-    
-    \item Dynamically checking for invalid expression states is possible, but
-          difficult and would result in increasingly difficult term tracking as
-          terms in the expression language grow/are added.
+      \item Writing invalid expressions is possible.
+            \begin{itemize}
 
-    \item In general, being able to express invalid expressions causes large
-          burden and mental overhead.
-    
+                  \item On paper, writing invalid expressions is as easy as
+                        making a typo, but complete gibberish can also be
+                        written. We rely on manually checking expressions to
+                        ensure that they are ``correct''. As the number of
+                        expressions grows, the cost of manually checking grows
+                        rapidly, and changes result in costly setbacks. Imagine
+                        systems with 10, 100, and 1000+ expressions, the cost
+                        grows rapidly.
+                  
+                  \item With computers, we can systematically check the validity
+                        of expressions by imposing various kinds of restrictions.
+
+            \end{itemize}
+
+      \item Mentally tracking expression creations to ensure they follow the
+            implicit rules of the expression language is too difficult, and leads
+            to mental strain.
+
+      \item Compiling to ``lower languages'' requires special type checking before
+            compiling to them. For example, the Swift code generator has to ensure
+            that there are no ambiguously typed numerals as the types of numerics
+            are not overloaded in Swift.
+
+      \item Dynamically checking for invalid expression states is possible, but
+            difficult and would result in increasingly difficult term tracking as
+            terms in the expression language grow/are added.
+
+      \item In general, being able to express invalid expressions causes large
+            burden and mental overhead.
+
 \end{itemize}
 
 
 \section{Requirements \& properties of a good solution}
 
 \begin{itemize}
-    
-    \item Invalid expressions should be irrepresentable in the various expression
-          languages (i.e., the expression types should strictly indicate valid
-          expression constructions), without loss of generality.
-    
-    \item Invalid expression formation attempts should be statically found and
-          reported by the compiler, at compile-time. This will move the
-          previously runtime errors to compile-time.
 
-    \item Invalid expression cases should not need to be considered when working
-          (e.g., case-ing) with expressions.
+      \item Invalid expressions should not be representable in the various
+            expression languages (i.e., the expression types should strictly
+            indicate valid expression constructions), without loss of
+            generality.
 
-    \item ``Safety = Preservation + Progress'' (\cite{harper2016pfpl}, Ch.6)
-    
-    \item \intodo{Expressions must be terminating.}
+      \item Invalid expression formation attempts should be statically found and
+            reported by the compiler, at compile-time. This will move the
+            previously runtime errors to compile-time.
+
+      \item Invalid expression cases should not need to be considered when working
+            (e.g., case-ing) with expressions.
+
+      \item ``Safety = Preservation + Progress'' (\cite{harper2016pfpl}, Ch.6)
+
+      \item \intodo{Expressions must be terminating.}
 
 \end{itemize}
 
 \section{Solution}
 
 \begin{itemize}
-    
-    \item Splitting Expr into 3 variants; Expr, CodeExpr, and ModelExpr.
-          This allows us to both segregate terms to particular domains, and add
-          weak typing where necessary, as required (e.g., areas where we might
-          require a dependently typed host language).
-          \begin{itemize}
-            \item \url{https://github.com/JacquesCarette/Drasil/issues/1220}
-          \end{itemize}
-    
-    \item Use TTF encodings of the smart constructors to lessen the cognitive
-          load of handling at least 3 different expression languages.
 
-    \item Statically type all 3 variants of Expr through GADTs.
+      \item Splitting Expr into 3 variants; Expr, CodeExpr, and ModelExpr.
+            This allows us to both segregate terms to particular domains, and add
+            weak typing where necessary, as required (e.g., areas where we might
+            require a dependently typed host language).
 
-    \item \intodo{Inference rule trees? Similar to PFPL textbook}
+            \begin{itemize}
+            
+                  \item \url{https://github.com/JacquesCarette/Drasil/issues/1220}
+            
+            \end{itemize}
+
+            \intodo{I think this ``solution'' point should be moved to \autoref{chap:modelkinds}}.
+
+      \item Use TTF encodings of the smart constructors to lessen the cognitive
+            load of handling at least 3 different expression languages.
+
+      \item Statically type all 3 variants of Expr through GADTs.
 
 \end{itemize}
 

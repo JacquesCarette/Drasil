@@ -5,7 +5,7 @@ natural language. Instead, the ideology focuses on creating principled stories
 of knowledge that we may use to generate software artifacts (amongst other
 knowledge).
 
-\section{On Developing Software}
+\section{On Developing Software}\label{sec:idlgy:on_developing_software}
 
 As a software developer working to build a new piece of software, one might
 sense that they are writing ``a lot of the same code'' as their or other
@@ -48,10 +48,10 @@ left with less than preferred time to work on the ``components that are
 interesting'' that they might never have built before or that they might not
 have connected together in the past.
 
-\section{Thoughts of Generation}
+\section{Thoughts of Generation}\label{sec:idlgy:thoughts_of_generation}
 
 The ideology foundational to this work is predicated on this simple idea that if
-we understand how some \textit{thing} works, and we can create a working model
+we understand how a \textit{thing} works, and we can create a working model
 describing it, then we should be able to encode it, describing everything about
 this model. Furthermore, if we understand how this \textit{thing} can be
 transformed into another \textit{thing}, then we should be able to describe the
@@ -66,11 +66,12 @@ artifacts). With a weak breadth and low depth of captured knowledge, the
 originating pool of knowledge may approximately appear as a description of the
 software artifacts generated. However, with a strong breadth and high depth of
 captured knowledge, the original pool of knowledge may appear far removed from
-the software artifacts generated. In this case, the stress of software
+the software artifacts generated (it may contain little to no discussion of the
+desired software artifacts at all). In this case, the stress of software
 development is alleviated entirely, and a ``perfect'' software artifact (or
 series of ``perfect'' software artifacts) is (are) constructed.
 
-\section{The Goal}
+\section{The Goal}\label{sec:idlgy:the_goal}
 
 If one originally sets out to build a program that does something they
 understand very well and each component of every step of the grand
@@ -84,7 +85,7 @@ problem to their computer and have it magically give them a program that does
 exactly what they wanted. Unfortunately, it is difficult to have computers
 systematically understand and act on natural language as well as us humans can.
 
-\section{Reconciliation -- ``Generate Everything''}
+\section{Reconciliation -- ``Generate Everything''}\label{sec:idlgy:generate_everything}
 
 While it is difficult to have a computer act on a huge set of natural language,
 we do have well-understood thoughts on specific \textit{terms} and how they can
@@ -106,23 +107,41 @@ better understand what they are trying to build.
 Note, however, that this idea likely only thrives in domains of knowledge that
 is ``well-understood'' \cite{well-understood}.
 
-\section{Feasibility}
+To sum up, this should appear, in theory, as a knowledge management
+system\todo{acronym}, where generation phases are passed through the knowledge
+registry until a final knowledge registry is constructed such that it satisfies
+the requirements of the user (e.g., generating some desired software artifacts).
 
-\begin{itemize}
+\section{Prospective Workflow \& Roles}\label{sec:idlgy:prospective_workflow}
 
-    \item Already proven for low depth -- see WordPress and other Content
-          Management Systems (CMSs).
+Following this ideology, there will be at least 3 key roles: the
+\textbf{knowledge encoder}, the \textbf{knowledge user}, and the final
+\textbf{software artifact user}. 
 
-    \item For higher depths, we need to restrict this to areas of
-          well-understood knowledge.
+The knowledge encoder should be a master of a particular domain. They are
+expected to encode the knowledge discussed in their respective domain in such a
+way that is accessible to those without knowledge of their domain. Additionally,
+they should encode information about the ways in which the knowledge can be
+transformed into other forms of knowledge (including that which is
+interdisciplinary). The knowledge they would be encoding should be as well-known
+and globally standardized as possible. As discussed in
+\autoref{sec:idlgy:generate_everything}, it is likely that the knowledge encoder
+will focus on writing a series of highly specific domain-specific languages,
+where the languages may be restricted to as specific as one term.
 
-\end{itemize}
+The knowledge user/orchestrator should at least be familiar with a particular
+domain, and have goals in mind for information that they would like to ``seed''
+into their knowledge management system. \todo{continue}
 
-\intodo{Discuss the roles of the domain expert, the end-user (a modeller), and
-    the final end-user (the softifact user)}
-% The domain-expert's job is to create the domain-specific languages and tools.
-% target: Importance of the domain-expert for the end-user, and results
+The final end-user should find the most delight from this ideology. If the tasks
+assigned to the knowledge encoders and the knowledge users are performed
+correctly, then the end-user should have strong confidence in the fruits of
+their labour as they were built with strict adherence to the knowledge captured
+at \textit{every step of the way}. As such, one should confidently expect the
+final software artifacts to be completely devoid of unexpected things (including
+errors, unconformities to specifications, etc.).
 
+%% TODO: Move the below stuff up
 As a domain expert transcribing knowledge encodings of some well-understood
 domain, one will largely be discussing the ways in which pieces of knowledge are
 \textit{constructed} and \textit{relate to each other}. In order for this
@@ -138,3 +157,15 @@ their knowledge encodings and renderers in a general purpose programming
 language with a sound type system (e.g., Haskell, Agda, Java, etc.) --
 preferring ones with a type system based on formal type theories for their
 feature richness.
+
+\section{Feasibility}\label{sec:idlgy:feasibility}
+
+\begin{itemize}
+
+    \item Already proven for low depth -- see WordPress\todo{cite} and other
+          Content Management Systems (CMSs).
+
+    \item For higher depths, we need to restrict this to areas of
+          well-understood knowledge.
+
+\end{itemize}

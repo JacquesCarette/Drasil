@@ -1,50 +1,113 @@
-The focus on this work is based on the ``simple'' idea that if you understand
-how you can do something, then you should be able to do something (\(p \implies
-p\)).
+The focus of this work is fundamentally based on the idea of ``generation.''
+However, unlike GitHub and OpenAI's Copilot, the ideology does not delve into
+artificial intelligence, and does not focus on ``autocompleting code'' by
+natural language. Instead, the ideology focuses on creating principled stories
+of knowledge that we may use to generate software artifacts (amongst other
+knowledge).
 
-\section{Knowledge Capture \& Encoding}
+\section{On Developing Software}
 
-As a software developer working to build a new piece of software, one might find
-that they are writing ``a lot of the same code'' as their or other pre-existing
-software projects. One might consider building a library, shared between all
-projects for some common functionality/tooling, this is a large improvement for
-their program --- being able to reuse their code is great for debugging and
-removing the possibility of bugs when stable and tested code is used.
-
-\intodo{It is also great for time spent, stability, less errors, saving time in
-    the future, creating more possibilities in locating areas where we can
-    abstract, and capturing tacit knowledge.}
+As a software developer working to build a new piece of software, one might
+sense that they are writing ``a lot of the same code'' as their or other
+pre-existing software projects. One might consider building a library, shared
+between all projects for some common functionality/tooling, this is a large
+improvement for their program --- being able to reuse their code is great for
+debugging and removing the possibility of bugs when stable and tested code is
+used. The library will surely save them time in the future once they've
+stabilized it to a reasonable degree, after which they will not need to worry
+about repeating the same errors they made when they were originally writing it.
+However, the library might not be portable across machines, the library might
+not make sense to those more or less familiar with certain ideas touched upon by
+the library, others might question the validity of the knowledge it pulls from,
+and the library might not be readily accessible to those not using the same
+programming language the library was written in (of course, they can write an
+FFI\todo{FFI acronym}, but this is a fairly complex task
+that many are unfamiliar with).
 
 Commonly, one looks to use mature libraries and frameworks to underpin their
 projects, occasionally without guarantee that connecting these libraries is
 safe. As general purpose programming languages are often also used,
 misunderstandings of tacit project knowledge may also cause errors.
 Unfortunately, this programming methodology takes significant time until a
-working product is formed with minimal bugs.
+working product is formed with minimal bugs, even when building on the shoulders
+of giants.
 
-\intodo{Above paragraph is awkward.}
+To resolve this, we believe we need to revisit the original sensation felt when
+code re-creation/duplication was recognized -- why does this sensation occur?
+
+The reason is obvious (ignoring the more obvious fact that they are aware of
+similarities between their code and that previously written)! They feel this
+sensation because they already understood it and had written it previously.
+Implicitly, when writing the software, the developer already had a tie between
+some algorithm and the code they had written (at times, specific to the
+programming language they had chosen to use).
+
+Unfortunately, a non-trivial amount of time is spent manually recreating the
+same piece of code from the same implicit knowledge-base, and the developer is
+left with less than preferred time to work on the ``components that are
+interesting'' that they might never have built before or that they might not
+have connected together in the past.
+
+\section{Thoughts of Generation}
+
+The ideology foundational to this work is predicated on this simple idea that if
+we understand how some \textit{thing} works, and we can create a working model
+describing it, then we should be able to encode it, describing everything about
+this model. Furthermore, if we understand how this \textit{thing} can be
+transformed into another \textit{thing}, then we should be able to describe the
+process of transformation as well. Finally, if we are able to do this en masse
+to a pool of \textit{various things}, we should be able to generate whole pools
+of \textit{other various things} from seedling pools.
+
+Applying this idea to the world of software, where we can create and model
+\textit{things} (henceforth referred to as ``knowledge''), we can take pools of
+knowledge and generate other pools of knowledge (including whole software
+artifacts). With a weak breadth and low depth of captured knowledge, the
+originating pool of knowledge may approximately appear as a description of the
+software artifacts generated. However, with a strong breadth and high depth of
+captured knowledge, the original pool of knowledge may appear far removed from
+the software artifacts generated. In this case, the stress of software
+development is alleviated entirely, and a ``perfect'' software artifact (or
+series of ``perfect'' software artifacts) is (are) constructed.
+
+\section{The Goal}
 
 If one originally sets out to build a program that does something they
-understand very well and each component of every step of the grand scheme of the
-program was understood, the development of their related software should be a
-clear matter of principled engineering. However, with this existing programming
-methodology, it is not yet simple enough yet to get reliable programs.
+understand very well and each component of every step of the grand
+scheme/algorithm of the program was understood, the development of their related
+software should be a clear matter of principled engineering. However, with the
+existing programming methodology, it is not yet simple enough to reliably
+produce error-free programs with no trade-offs.
 
 Optimally, they would use their natural language to perfectly describe their
 problem to their computer and have it magically give them a program that does
 exactly what they wanted. Unfortunately, it is difficult to have computers
 systematically understand and act on natural language as well as us humans can.
-However, we can mimic a computer ``understanding'' an equivalent speech through
-having the human write the same knowledge using a domain-specific language.
-Additionally, through sequencing and connecting domain-specific languages, we
-can effectively model what they are trying to build, allowing the computer to be
-able to better understand what they are trying to build. With enough effort, the
-computer should be able to generate some artifact that ultimately represents
-what they were trying to build. Note, however, that this idea likely only
-thrives in domains of knowledge that is ``well-understood''
-\cite{well-understood}.
 
-\intodo{Discuss the roles of the domain expert, the end-user (a modeller), and the final end-user (the softifact user)}
+\section{Reconciliation -- ``Generate Everything''}
+
+While it is difficult to have a computer act on a huge set of natural language,
+we do have well-understood thoughts on specific \textit{terms} and how they can
+be interpreted. More specifically, there are sub-languages of natural language
+that we can use to describe specific kinds of knowledge, and problems and
+solutions. Here, we recognize that selecting or creating domain-specific
+languages for specific buckets of knowledge and creating domain-specific
+languages that connect buckets of other domain-specific languages, we can
+effectively create rigid sub-languages of our natural language used to describe
+programs. These rigid sub-languages being encoded as domain-specific languages
+will have a well-defined and formalized AST\todo{AST acronym}, which allows us
+to write interpreters that can take them and transform them into other fragments
+of knowledge (us being most interested in ultimately generating software
+artifacts). Thus, with enough effort, and through sequencing and connecting
+terms of domain-specific languages, we can effectively model what the discussed
+software developers are trying to build, allowing the computer to be able to
+better understand what they are trying to build. 
+
+Note, however, that this idea likely only thrives in domains of knowledge that
+is ``well-understood'' \cite{well-understood}.
+
+\intodo{Discuss the roles of the domain expert, the end-user (a modeller), and
+    the final end-user (the softifact user)}
 % The domain-expert's job is to create the domain-specific languages and tools.
 % target: Importance of the domain-expert for the end-user, and results
 

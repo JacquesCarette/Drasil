@@ -20,7 +20,7 @@ data DocSection = IntrodSec IntrodSec
                 | BibSec
                 | ApndxSec ApndxSec
 
--- **TODO: Work on detail structure of notebooks
+-- *TODO: Work on detail structure of notebooks
 
 {--}
 
@@ -28,7 +28,8 @@ data DocSection = IntrodSec IntrodSec
 newtype IntrodSec = IntrodProg [Contents] 
 
 -- | Introduction subsections
-newtype InPurposeSub = InPurposeProg [Sentence] -- **maybe change to [Contents]  
+-- *TODO: maybe change to [Contents]
+newtype InPurposeSub = InPurposeProg [Sentence]   
 
 {--}
 

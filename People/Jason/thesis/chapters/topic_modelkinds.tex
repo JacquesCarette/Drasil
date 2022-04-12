@@ -1,5 +1,57 @@
 % ModelKinds -- Theory types / discrimination -- ``Expressions in context''
 
+In working to understand some phenomenon, we often look to our understanding of
+the phenomenon. In mathematics (amongst other fields, such as philosophy,
+physics, chemistry, biology, computer science, etc. [anything studied in a
+university?]), we often think about various phenomenon in terms of theories and
+axioms, where the theories and axioms are written using a global mathematical
+language with precise meanings and sharing no similarity to English and human to
+human communication languages.
+
+A language is used to describe a field of knowledge (theories and axioms). The
+language is typically tailored to the field of knowledge. One language of
+interest to this research is that of the mathematical language. A mathematical
+language is used in understanding theories and axioms. As mathematicians
+transferring knowledge to one another, we often use a written form of knowledge,
+though unlikely, potentially with a precise structure to our transcription of
+the knowledge, but still, the structure is textual. We might break up the
+transcription of the knowledge into sections. The sections of a theory might
+perhaps have a name, a description, a derivation, some information on it's
+origin (e.g., a reference), and some sort of information in a language we can
+use to convey the important information we decided to share. Of course, for a
+mathematical theory, a mathematical language would be used. Describing a
+programming language artifact, we might prefer to call our theories by a series
+of other names (e.g., functions/methods, constants, modules, statements,
+variables, etc.), and prefer to use the parts of the AST of a programming
+language to describe our theories.
+
+In Drasil, both of these languages are of great importance. The mathematical
+field of knowledge is directly used in at least two domains currently captured;
+the scientific theories, and GOOL\todo{cite}. Meanwhile, the programming
+language theory (artifacts) is only directly used in GOOL\todo{cite}, and it's
+various renderers. The SmithEtAl\todo{cite} generator uses knowledge transcribed
+as scientific requirements to automatically generate a series of
+representational software programs. In the SmithEtAl generator doing this, it
+requires both fields, extensively. The focus of the scientific requirements
+documents are to transcribe the relevant knowledge of a scientific system as
+developed by a domain/scientific expert. For example, \todo{SRS doc example} is
+used to fully explain \todo{something} such that a software developer can
+construct a program based on it. Of course, if the SRS document is to be truly
+sufficient for a software developer to unambiguously create a representational
+software artifact, then the software developer (who potentially knows nothing
+about the domain discussed in the SRS document) will need to be able to credibly
+transcribe everything into their program, matching the requirements as set by
+the SRS document. As Drasil is an apparatus for testing our understanding of
+phenomenon, the SmithEtAl template is being tested for it's confidence in this
+regard (and is being shown to work). However, if the process is to be truly
+``assembly-line''-able, then we should be able to mechanize it.
+
+In Drasil, a proof of concept of this understanding is being built. In
+particular, the SmithEtAl template is being attempted to be systematically used
+to generate a family of software artifacts in a variety of object-oriented
+programming languages\todo{oop} through building a single generic
+object-oriented programming language\todo{GOOL}.
+
 In order for Drasil to generate software artifacts that solve problems, it must
 have a way of discussing the space your problem lies in, and the ways it can be
 transformed into the working calculation steps that a software artifact can

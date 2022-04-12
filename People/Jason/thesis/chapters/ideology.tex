@@ -5,7 +5,8 @@ natural language. Instead, the ideology focuses on creating principled stories
 of knowledge that we may use to generate software artifacts (amongst other
 knowledge).
 
-\section{On Developing Software}\label{sec:idlgy:on_developing_software}
+\section{On Developing Software}
+\label{sec:idlgy:on_developing_software}
 
 As a software developer working to build a new piece of software, one might
 sense that they are writing ``a lot of the same code'' as their or other
@@ -21,8 +22,8 @@ not make sense to those more or less familiar with certain ideas touched upon by
 the library, others might question the validity of the knowledge it pulls from,
 and the library might not be readily accessible to those not using the same
 programming language the library was written in (of course, they can write an
-FFI\todo{FFI acronym}, but this is a fairly complex task
-that many are unfamiliar with).
+FFI\todo{FFI acronym}, but this is a fairly complex task that many are
+unfamiliar with).
 
 Commonly, one looks to use mature libraries and frameworks to underpin their
 projects, occasionally without guarantee that connecting these libraries is
@@ -48,7 +49,8 @@ left with less than preferred time to work on the ``components that are
 interesting'' that they might never have built before or that they might not
 have connected together in the past.
 
-\section{Thoughts of Generation}\label{sec:idlgy:thoughts_of_generation}
+\section{Thoughts of Generation}
+\label{sec:idlgy:thoughts_of_generation}
 
 The ideology foundational to this work is predicated on this simple idea that if
 we understand how a \textit{thing} works, and we can create a working model
@@ -71,7 +73,8 @@ desired software artifacts at all). In this case, the stress of software
 development is alleviated entirely, and a ``perfect'' software artifact (or
 series of ``perfect'' software artifacts) is (are) constructed.
 
-\section{The Goal}\label{sec:idlgy:the_goal}
+\section{The Goal}
+\label{sec:idlgy:the_goal}
 
 If one originally sets out to build a program that does something they
 understand very well and each component of every step of the grand
@@ -85,7 +88,8 @@ problem to their computer and have it magically give them a program that does
 exactly what they wanted. Unfortunately, it is difficult to have computers
 systematically understand and act on natural language as well as us humans can.
 
-\section{Reconciliation -- ``Generate Everything''}\label{sec:idlgy:generate_everything}
+\section{Reconciliation -- ``Generate Everything''}
+\label{sec:idlgy:generate_everything}
 
 While it is difficult to have a computer act on a huge set of natural language,
 we do have well-understood thoughts on specific \textit{terms} and how they can
@@ -112,7 +116,8 @@ system\todo{acronym}, where generation phases are passed through the knowledge
 registry until a final knowledge registry is constructed such that it satisfies
 the requirements of the user (e.g., generating some desired software artifacts).
 
-\section{Prospective Workflow \& Roles}\label{sec:idlgy:prospective_workflow}
+\section{Prospective Workflow \& Roles}
+\label{sec:idlgy:prospective_workflow}
 
 Following this ideology, there will be at least 3 key roles: the
 \textbf{knowledge encoder}, the \textbf{knowledge user}, and the final
@@ -158,7 +163,8 @@ language with a sound type system (e.g., Haskell, Agda, Java, etc.) --
 preferring ones with a type system based on formal type theories for their
 feature richness.
 
-\section{Feasibility}\label{sec:idlgy:feasibility}
+\section{Feasibility}
+\label{sec:idlgy:feasibility}
 
 \begin{itemize}
 
@@ -166,6 +172,14 @@ feature richness.
           Content Management Systems (CMSs).
 
     \item For higher depths, we need to restrict this to areas of
-          well-understood knowledge.
+          well-understood knowledge. However, if we can capture/understand the
+          simplicity associated with each  ``transformation''/``print''
+          operation, then we can create a system of stages that dictate
+          transformations/prints that simplify the knowledge requirements to
+          things that are very ``digestible'' for each domain expert. Awkwardly
+          worded, but, this way, we break up a huge transformation of knowledge
+          into many highly digestible smaller transformations that the domain
+          experts will think of as easy as WordPress converting basic SQL table
+          rows into HTML (e.g., high density knowlege -> low density knowledge).
 
 \end{itemize}

@@ -45,7 +45,7 @@ mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "
 
 -- | Holds individual case studies. System info may not be needed,
 -- but it is still nice to keep around for now.
-data CaseStudy = CS { 
+data CaseStudy = CS {
   -- | Each case study needs a name, so use system information. 
   sysInfoCS :: SystemInformation,
   -- | A case study may have different program names for the same example (ex. Projectile).
@@ -81,14 +81,13 @@ tableBody = map displayCS
 displayCS :: CaseStudy -> [Sentence]
 displayCS CS{progName = nm,
   choicesCS = Choices{
-    modularity=md,
-    impType=imp,
-    logging = lg,
-    inputStructure=instr,
-    constStructure=constr,
-    constRepr=conRep,
-    spaceMatch=realNum
-    }} = [nm, getMod md, getImp imp, getLog lg, getInstr instr, getConstr constr, getConRep conRep, getRealNum $ realNum Real]
+    architecture = a,
+    dataInfo = d,
+    maps = m,
+    optFeats = o
+    }} = [nm, getMod $ modularity a, getImp $ impType a, getLog $ logging $ logConfig o,
+          getInstr $ inputStructure d, getConstr $ constStructure d, getConRep $ constRepr d,
+           getRealNum (spaceMatch m Real)]
 
 -- * Case Studies Table Legend
 --

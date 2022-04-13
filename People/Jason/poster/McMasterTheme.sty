@@ -147,8 +147,15 @@
 
 % place logo to right of centered title
 \makeatletter
+
+\newcommand\projectlogo[1]{\renewcommand\@projectlogo{#1}}
+\newcommand\@projectlogo{}
+
 \renewcommand\TP@maketitle{%
     \centering
+    \tikz[remember picture,overlay]\node[anchor=south west,xshift=-0.45\linewidth,inner sep=0pt] {%
+        \@projectlogo
+    };
     \begin{minipage}[b]{0.8\linewidth}
         \centering
         \color{titlefgcolor}

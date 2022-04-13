@@ -61,11 +61,35 @@
     %----------------------------------
     \column{0.32}
 
-    \block{What is ``Drasil''?}{\blindtext}
+    \block{What is ``Drasil''?}{ Drasil is a framework for generating families
+        of software artifacts from a coherent knowledge base, following it's
+        mantra; ``Generate All The Things!''. Drasil uses a series of variably
+        sized Domain-Specific Languages (DSLs) to describe various fragments of
+        knowledge that domain experts and users alike may use to piece together
+        fragments of knowledge into a coherent ``story''. Through forming some
+        coherent ``story'' in a domain captured by Drasil, a representational
+        software artifact may be generated. Drasil currently focuses on
+        Scientific Computing Software (SCS), following Smith and Lai's Software
+        Requirements Specifications (SRS) template as described in
+        \cite{SmithAndLai2005}. Behind the scenes of the SRS, a mathematical
+        language is used to describe various theories, and have representational
+        software constructed via compiling to Generic Object-Oriented Language
+        (GOOL) \cite{Carette2020GOOL}. Through encoding knowledge in Drasil, an
+        increase in productivity (and maintainability) in building reliable and
+        traceable software artifacts is observed \cite{SzymczakEtAl2016},
+        specifically in SCS \cite{Smith2018}. }
 
-    \block{What's the problem?}{\blindtext}
+        % Currently focused on increasing productivity and maintainability in
+        % scientific software development by generating reliable and traceable
+        % software artifacts with a single Generic Object-Oriented Language (GOOL)
+        % \cite{Carette2020GOOL}, using a mathematical language to describe
+        % problem domains, and various staged generators to systematically
+        % generate artifacts conforming to the Smith and Lai's ``Software
+        % Requirements Specifications'' (SRS) template.
 
-    \block{Why do we care?}{\blindtext}
+    \block{What's the problem?}{}
+
+    \block{Why do we care?}{}
 
     %----------------------------------
     %- Second Column
@@ -115,25 +139,28 @@
         \vspace{-2em}
     }
 
-    \block{Comparison}{\blindtext[2]}
+    \block{Comparison}{}
 
     %----------------------------------
     %- Third Column
     %----------------------------------
     \column{0.32}
-    \block{}{\blindtext}
 
-    \block{Remarks}{\blindtext}
+    % \block{}{\blindtext}
 
-    \block{Acknowledgements}{ Lorem ipsum dolor sit amet, probo dolorem cu vis.
-        Cu mei audire fabulas scriptorem, cu has clita fabulas. Sea id veritus
-        maiorum indoctum, mea cu assum cetero. Ei posse movet maluisset vim.}
+    \block{Future Work}{
+        \begin{itemize}[leftmargin=*]
+            \item Something
+        \end{itemize}
+    }
+
+    \block{Acknowledgements}{}
 
     \block{References}{
-        \vspace{-1em}
-        \begin{footnotesize}
+        \vspace{-2em}
+        \begin{scriptsize}
             \printbibliography[heading=none]
-        \end{footnotesize}
+        \end{scriptsize}
     }
 \end{columns}
 \end{document}

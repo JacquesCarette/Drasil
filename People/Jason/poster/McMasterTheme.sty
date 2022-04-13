@@ -120,7 +120,7 @@
 
 % block
 \defineblockstyle{McMasterBlockStyle}{
-    titlewidthscale=0.9, bodywidthscale=1, roundedcorners=0
+    titlewidthscale=1, bodywidthscale=1, roundedcorners=0
 }{
     \draw[color=framecolor, fill=blockbodybgcolor,
     rounded corners=\blockroundedcorners] (blockbody.south west)
@@ -148,8 +148,8 @@
 % place logo to right of centered title
 \makeatletter
 \renewcommand\TP@maketitle{%
-   \centering
-   \begin{minipage}[b]{0.8\linewidth}
+    \centering
+    \begin{minipage}[b]{0.8\linewidth}
         \centering
         \color{titlefgcolor}
         {\bfseries \Huge \sc \@title \par}
@@ -159,7 +159,7 @@
         {\LARGE \@institute}
     \end{minipage}%
     \tikz[remember picture,overlay]\node[anchor=south east,xshift=0.45\linewidth,inner sep=0pt] {%
-       \@titlegraphic
+        \@titlegraphic
     };
 }
 \makeatother

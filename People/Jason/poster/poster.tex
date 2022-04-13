@@ -3,8 +3,7 @@
 % Modified by Jason Balaci
 % Last Modified: 2022-04-12
 
-% TODO: 17pt? 20pt?
-\documentclass[17pt,margin=1in,innermargin=-1in,blockverticalspace=-0.1in]{tikzposter}
+\documentclass[20pt,margin=1in,innermargin=-1in,blockverticalspace=-0.1in]{tikzposter}
 \geometry{paperwidth=36in,paperheight=24in}
 
 \usepackage[english]{babel}
@@ -37,8 +36,8 @@
 \usepackage[T1]{fontenc}
 
 \title{Capturing Mathematical Knowledge in Drasil: the Case of Theories}
-\author{Jason Balaci}
-\institute{McMaster University}
+\author{Jason Balaci, Jacques Carette}
+\institute{Department of Computing and Software, McMaster University}
 \titlegraphic{\includegraphics[width=0.16\textwidth]{assets/mcm-cas_left-wht_eps.eps}}
 
 % begin document
@@ -46,32 +45,45 @@
 \maketitle
 \centering
 \begin{columns}
+    %----------------------------------
+    %- First Column
+    %----------------------------------
     \column{0.32}
 
-    % Drasil Logo
-    \block{}{
-        \vspace{1em}
-        \begin{tikzfigure}[Big fancy graphic.]
-            \includegraphics[width=0.9\linewidth]{example-image}
+    \block{What is ``Drasil''?}{
+        \begin{tikzfigure}[Drasil]
+            \includegraphics[width=0.3\linewidth]{assets/Drasil Logo.png}
         \end{tikzfigure}
-        \vspace{1em}
+        
+        \blindtext
     }
 
-    \block{Something}{\blindtext}
+    \block{What's the problem?}{\blindtext}
 
+    \block{Why do we care?}{\blindtext}
+
+    %----------------------------------
+    %- Second Column
+    %----------------------------------
     \column{0.36}
-    \block{Results}{
-        \vspace{1em}
-        \begin{tikzfigure}[Big fancy graphic.]
-            \includegraphics[width=0.9\linewidth]{example-image}
-        \end{tikzfigure}
-        \vspace{1em}
-    }
+    
+    \block{Knowledge Flow}{\blindtext}
 
+    \block{Capturing Mathematical Knowledge}{\blindtext}
+
+    \block{Comparison}{\blindtext[2]}
+
+    %----------------------------------
+    %- Third Column
+    %----------------------------------
     \column{0.32}
+    \block{}{\blindtext}
+
     \block{Remarks}{\blindtext}
 
-    \block{Acknowledgements}{\blindtext}
+    \block{Acknowledgements}{ Lorem ipsum dolor sit amet, probo dolorem cu vis.
+        Cu mei audire fabulas scriptorem, cu has clita fabulas. Sea id veritus
+        maiorum indoctum, mea cu assum cetero. Ei posse movet maluisset vim.}
 
     \block{References}{
         \vspace{-1em}

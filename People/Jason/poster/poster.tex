@@ -1,0 +1,83 @@
+% Modified from https://www.overleaf.com/latex/templates/stockholm-university-poster-template/xsrhnggqmcsx
+% The author, Qi Dang, based their work on that of Jiyu Chen, as mentioned above.
+% Modified by Jason Balaci
+% Last Modified: 2022-04-12
+
+% TODO: 17pt? 20pt?
+\documentclass[17pt,margin=1in,innermargin=-1in,blockverticalspace=-0.1in]{tikzposter}
+\geometry{paperwidth=36in,paperheight=24in}
+
+\usepackage[english]{babel}
+\usepackage{blindtext}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=numeric]{biblatex}
+
+\usepackage{mwe} % for placeholder images
+
+\addbibresource{references.bib}
+
+\usepackage{McMasterTheme}
+\tikzposterlatexaffectionproofoff
+\usetheme{McMasterTheme}
+\usecolorstyle{McMasterStyle}
+\usetitlestyle{Filled}
+
+\usepackage[scaled]{helvet}
+\renewcommand\familydefault{\sfdefault} 
+\usepackage[T1]{fontenc}
+
+\title{Capturing Mathematical Knowledge in Drasil: the Case of Theories}
+\author{Jason Balaci}
+\institute{McMaster University}
+\titlegraphic{\includegraphics[width=0.16\textwidth]{assets/mcm-cas_left-wht_eps.eps}}
+
+% begin document
+\begin{document}
+\maketitle
+\centering
+\begin{columns}
+    \column{0.32}
+
+    % Drasil Logo
+    \block{}{
+        \vspace{1em}
+        \begin{tikzfigure}[Big fancy graphic.]
+            \includegraphics[width=0.9\linewidth]{example-image}
+        \end{tikzfigure}
+        \vspace{1em}
+    }
+
+    \block{Something}{\blindtext}
+
+    \column{0.36}
+    \block{Results}{
+        \vspace{1em}
+        \begin{tikzfigure}[Big fancy graphic.]
+            \includegraphics[width=0.9\linewidth]{example-image}
+        \end{tikzfigure}
+        \vspace{1em}
+    }
+
+    \column{0.32}
+    \block{Remarks}{\blindtext}
+
+    \block{Acknowledgements}{\blindtext}
+
+    \block{References}{
+        \vspace{-1em}
+        \begin{footnotesize}
+            \printbibliography[heading=none]
+        \end{footnotesize}
+    }
+\end{columns}
+\end{document}

@@ -1,0 +1,165 @@
+% SU Theme for the tikzposter
+% package.
+%
+% Modified from https://www.overleaf.com/latex/templates/university-of-melbourne-poster-template/swfmhrpvfryh
+% The original author is  Jiyu Chen
+% modified by Qi Dang
+% Last Modified: 2021-01-10
+%
+% Modified from https://www.overleaf.com/latex/templates/stockholm-university-poster-template/xsrhnggqmcsx
+% The author, Qi Dang, based their work on that of Jiyu Chen, as mentioned above.
+% Modified by Jason Balaci
+% Last Modified: 2022-04-12
+% 
+
+
+% -- McMaster Colours --
+
+% McMaster Palette based on https://brand.mcmaster.ca/element/colour-palette/
+
+% Heritage Colours
+\definecolor{McMasterHeritageMaroon}{HTML}{7A003C}
+\definecolor{McMasterHeritageGold}{HTML}{FDBF57}
+\definecolor{McMasterHeritageGrey}{HTML}{5E6A71}
+
+% Tints and Shades
+\definecolor{McMasterLightMaroon}{HTML}{ac1455}
+\definecolor{McMasterDarkMaroon}{HTML}{56002a}
+
+\definecolor{McMasterLightGrey}{HTML}{efefef}
+\definecolor{McMasterCoolGrey}{HTML}{dbdbdd}
+\definecolor{McMasterMediumGrey}{HTML}{aeb4b8}
+\definecolor{McMasterDarkGrey}{HTML}{222222}
+
+% Highlights
+\definecolor{McMasterWorldYellow}{HTML}{FFD100}
+\definecolor{McMasterWorldLime}{HTML}{D2D755}
+\definecolor{McMasterWorldSkyBlue}{HTML}{8BD3E6}
+
+% Darker Tones
+\definecolor{McMasterWorldRed}{HTML}{A6192E}
+\definecolor{McMasterWorldGreen}{HTML}{007B4B}
+\definecolor{McMasterWorldBlue}{HTML}{007096}
+
+
+% -- Other Colours --
+
+% emory secondary palette
+\definecolor{Cyan}{HTML}{00aeef} % Pantone Cyan
+\definecolor{SkyBlue}{HTML}{41b6e6} % Pantone 298
+\definecolor{Teal}{HTML}{487f84} % Pantone 5483
+\definecolor{KellyGreen}{HTML}{348338} % Pantone 7740
+\definecolor{SeaGreen}{HTML}{006c5b} % Pantone 568
+\definecolor{Olive}{HTML}{5c8118} % Pantone 370
+\definecolor{Orange}{HTML}{c35413} % Pantone 1595
+\definecolor{Red}{HTML}{da291c} % Pantone 485
+\definecolor{Magenta}{HTML}{c6007e} % Pantone 233
+\definecolor{Purple}{HTML}{6558b1} % Pantone 2102
+\definecolor{Grape}{HTML}{6d2077} % Pantone 259
+
+% neutrals palette
+\definecolor{Black}{HTML}{101820} % Pantone Black 6
+\definecolor{CoolGray5}{HTML}{b1b3b3} % Pantone Cool Gray 5
+\definecolor{CoolGray2}{HTML}{d0d0ce} % Pantone Cool Gray 2
+\definecolor{CoolGray1}{HTML}{d9d9d9} % Pantone Cool Gray 1
+
+% web palette
+\definecolor{LightYellow}{HTML}{ffde75}
+
+% tikzposter color palette
+
+\definecolorpalette{McMasterPalette} {
+    \definecolor{colorOne}{named}{McMasterHeritageMaroon}
+    \definecolor{colorTwo}{named}{McMasterHeritageMaroon}
+    \definecolor{colorThree}{named}{McMasterHeritageMaroon}
+}
+
+% tikzposter style
+\definecolorstyle{McMasterStyle} {
+    \usecolorpalette{McMasterPalette}
+}{
+    % background
+    \colorlet{backgroundcolor}{white}
+    \colorlet{framecolor}{white}
+    % title colors
+    \colorlet{titlefgcolor}{white}
+    \colorlet{titlebgcolor}{McMasterHeritageMaroon}
+    % block colors
+    \colorlet{blocktitlebgcolor}{colorOne}
+    \colorlet{blocktitlefgcolor}{white}
+    \colorlet{blockbodybgcolor}{white}
+    \colorlet{blockbodyfgcolor}{Black}
+    % innerblock colors
+    \colorlet{innerblocktitlebgcolor}{white}
+    \colorlet{innerblocktitlefgcolor}{Black}
+    \colorlet{innerblockbodybgcolor}{colorTwo}
+    \colorlet{innerblockbodyfgcolor}{Black}
+    % note colors
+    \colorlet{notefgcolor}{Black}
+    \colorlet{notebgcolor}{colorTwo}
+    \colorlet{noteframecolor}{colorTwo}
+}
+
+% -- STYLE --
+
+% background
+\definebackgroundstyle{McMasterBackgroundStyle}{
+    \draw[line width=0pt, color=framecolor, fill=backgroundcolor]
+    (bottomleft) rectangle (topright);
+}
+
+% title
+\definetitlestyle{McMasterTitleStyle}{
+    width=\textwidth, linewidth=5pt, titletotopverticalspace=0in
+}{
+    \begin{scope}[line width=\titlelinewidth,]
+    \draw[color=colorThree, fill=titlebgcolor,round cap-round cap, ]
+    (\titleposleft,\titleposbottom)--(\titleposright,\titleposbottom);
+    \end{scope}
+}
+
+% block
+\defineblockstyle{McMasterBlockStyle}{
+    titlewidthscale=0.9, bodywidthscale=1, roundedcorners=0
+}{
+    \draw[color=framecolor, fill=blockbodybgcolor,
+    rounded corners=\blockroundedcorners] (blockbody.south west)
+    rectangle (blockbody.north east);
+    \ifBlockHasTitle
+    \draw[color=framecolor, fill=blocktitlebgcolor,
+    rounded corners=\blockroundedcorners] (blocktitle.south west)
+    rectangle (blocktitle.north east);
+    \fi
+}
+
+% -- THEME -- 
+% McMaster Theme
+\definelayouttheme{McMasterTheme}{
+    \usecolorstyle[colorPalette=McMasterPalette]{McMasterStyle}
+    \usebackgroundstyle{McMasterBackgroundStyle}
+    \usetitlestyle{McMasterTitleStyle}
+    \useblockstyle{McMasterBlockStyle}
+    \useinnerblockstyle{Default}
+    \usenotestyle{Default}
+}
+
+% -- TITLE FORMAT --
+
+% place logo to right of centered title
+\makeatletter
+\renewcommand\TP@maketitle{%
+   \centering
+   \begin{minipage}[b]{0.8\linewidth}
+        \centering
+        \color{titlefgcolor}
+        {\bfseries \Huge \sc \@title \par}
+        \vspace*{1em}
+        {\huge \@author \par}
+        \vspace*{1em}
+        {\LARGE \@institute}
+    \end{minipage}%
+    \tikz[remember picture,overlay]\node[anchor=south east,xshift=0.45\linewidth,inner sep=0pt] {%
+       \@titlegraphic
+    };
+}
+\makeatother

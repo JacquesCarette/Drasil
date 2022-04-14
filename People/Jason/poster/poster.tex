@@ -170,25 +170,21 @@
     \block{What changed?}{
         \vspace{-1em}
         \begin{itemize}
-            \item +ModelKinds (concrete representation of known theories)
             \item Expression language division: \(\textit{Expr} \longrightarrow \textit{Expr'}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
                   \begin{itemize}
-                      \item \textit{Expr'}:
-                      \item \textit{ModelExpr}:
-                      \item \textit{CodeExpr}:
-                      \item +TTF Encodings of Expressions \cite{Carette2009}:
-                            Expression creation is just as easy as it ever was!
+                      \item \textit{Expr'}: Restricting the language to terms
+                            ``well-understood'', with a definite meaning and
+                            value.
+                      \item \textit{ModelExpr}: Restricting the language to
+                            terms with definite meanings, but not necessarily
+                            definite values.
+                      \item \textit{CodeExpr}: Restricting the language to terms
+                            that have a definite meaning and value to most
+                            general purpose programming languages, with some
+                            goodies for OOP.
                   \end{itemize}
-            \item Static checking of validity of theory models, ensuring reliable generation
-            \item Ease of creation; improving productivity
-            \item Creating a classification system (can be utilized more later)
-                  \begin{itemize}
-                      \item \textit{EquationalModel}:
-                      \item \textit{EquationalRealm}:
-                      \item \textit{EquationalConstraints}:
-                      \item \textit{DEModel}:
-                      \item \textit{OthModel}:
-                  \end{itemize}
+            \item Created Typed Tagless Final (TTF) \cite{Carette2009}
+                  encodings; Expression creation is just as easy as it ever was!
         \end{itemize}
     }
 
@@ -197,13 +193,37 @@
     %----------------------------------
     \column{0.32}
 
-    \block{Conclusions \& Future Work}{
+    \block{}{
+        \vspace{-1em}
         \begin{itemize}
-            \item In progress: Adding extra type information to expressions,
-                  allowing us to add type information to GOOL, and further
-                  improve static validity rules of various mathematical
-                  constructions. {\small This would resolve ``Close to stable''
-                  transformation blue arrow.}
+            \item Increasing the depth/breadth of knowledge contained
+            \item +ModelKinds (concrete representation of known theories)
+            \item Static checking of validity of theory models, ensuring reliable generation
+            \item Ease of creation
+            \item Removed brittle cast-like conversion of mathematical
+                  expressions into well-understood pieces of data.
+            \item Improving productivity, stability, and flexibility in usage
+            \item Creating a classification system (can be utilized more later)
+                  \begin{itemize}
+                      \item \textit{EquationalModel}: \(x = f(a, b, c, \ldots)\)
+                      \item \textit{EquationalRealm}: \(x = a \lor x = b \lor x = c \lor \ldots\)
+                      \item \textit{EquationalConstraints}: \(a \land b \land c \land \ldots\)
+                      \item \textit{DEModel}:
+                      \item \textit{OthModel}:
+                  \end{itemize}
+        \end{itemize}
+    }
+
+    \block{Conclusions \& Future Work}{
+        \vspace{-1em}
+        \begin{itemize}
+            \item Through capturing and classifying mathematical knowledge, we
+                  earn significant gains in flexibility, usage, and handling.
+            \item \textit{In progress}: Adding extra type information to
+                  expressions, allowing us to add type information to GOOL, and
+                  further improve static validity rules of various mathematical
+                  constructions.{\footnotesize This would resolve the ``Close to
+                          stable'' transformation blue arrow.}
         \end{itemize}
     }
 

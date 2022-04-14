@@ -49,7 +49,7 @@
 \author{Jason Balaci (balacij), Jacques Carette (carette)}
 \institute{Department of Computing and Software, McMaster University}
 \titlegraphic{\includegraphics[width=0.16\textwidth]{assets/mcm-cas_left-wht_eps.eps}}
-\projectlogo{\includegraphics[width=0.06\textwidth]{assets/Drasil Logo.png}}
+\projectlogo{\includegraphics[width=0.06\textwidth]{assets/Drasil Logo White.png}}
 
 % begin document
 \begin{document}
@@ -83,22 +83,14 @@
         studies, and documentation studies can be found on it's website;
         \url{https://jacquescarette.github.io/Drasil/}.}
 
-    % Currently focused on increasing productivity and maintainability in
-    % scientific software development by generating reliable and traceable
-    % software artifacts with a single Generic Object-Oriented Language (GOOL)
-    % \cite{Carette2020GOOL}, using a mathematical language to describe
-    % problem domains, and various staged generators to systematically
-    % generate artifacts conforming to the Smith and Lai's ``Software
-    % Requirements Specifications'' (SRS) template.
-
     \block{Research Motivation/Problem}{
         \begin{itemize}
             \item Only a handful of the case studies (?) generate code, because...
-                \begin{itemize}
-                    \item ODEs
-                    \item Reliability in terms
-                    \item Quantification
-                \end{itemize}
+                  \begin{itemize}
+                      \item ODEs
+                      \item Reliability in terms
+                      \item Quantification
+                  \end{itemize}
         \end{itemize}
     }
 
@@ -127,6 +119,12 @@
                 \arrow[color=green, from=1-2, to=2-1]
             \end{tikzcd}\]
         \vspace{-2.5em}
+
+        \small
+        \begin{tabular}{llllll}
+            \textcolor{green}{$\rightarrow$}    & Stable transformation   &
+            \textcolor{red}{$\rightsquigarrow$} & Unstable transformation & \tikz{\node[cloud, aspect=3, draw=orange] (c) at (0,0) {};} & Partially/implicitly captured \\
+        \end{tabular}
     }
 
     \block{Capturing Mathematical Knowledge}{
@@ -148,9 +146,15 @@
                 \arrow[color=green, from=2-2, to=2-1]
             \end{tikzcd}\]
         \vspace{-2em}
+
+        \small
+        \begin{tabular}{llll}
+            \textcolor{green}{$\rightarrow$} & Stable transformation & \textcolor{blue}{$\rightsquigarrow$} & ``Close to stable'' transformation \\
+        \end{tabular}
     }
 
     \block{What changed?}{
+        \vspace{-1em}
         \begin{itemize}
             \item +ModelKinds (concrete representation of known theories)
             \item \(\textit{Expr} \longrightarrow \textit{Expr}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
@@ -158,13 +162,13 @@
             \item Static checking of validity of theory models, ensuring reliable generation
             \item Ease of creation; improving productivity
             \item Creating a classification system (can be utilized more later)
-                \begin{itemize}
-                    \item \textit{EquationalModel}
-                    \item \textit{EquationalRealm}
-                    \item \textit{EquationalConstraints}
-                    \item \textit{DEModel}
-                    \item \textit{OthModel}
-                \end{itemize}
+                  \begin{itemize}
+                      \item \textit{EquationalModel}:
+                      \item \textit{EquationalRealm}:
+                      \item \textit{EquationalConstraints}:
+                      \item \textit{DEModel}:
+                      \item \textit{OthModel}:
+                  \end{itemize}
         \end{itemize}
     }
 
@@ -172,8 +176,6 @@
     %- Third Column
     %----------------------------------
     \column{0.32}
-
-    % \block{}{\blindtext}
 
     \block{Conclusions \& Future Work}{
         \begin{itemize}
@@ -186,6 +188,7 @@
         \renewcommand*{\bibfont}{\small}
         \printbibliography[heading=none]
     }
+
 \end{columns}
 
 \end{document}

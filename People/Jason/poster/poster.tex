@@ -53,7 +53,9 @@
 
 % begin document
 \begin{document}
+
 \maketitle
+
 \centering
 \begin{columns}
     %----------------------------------
@@ -61,8 +63,8 @@
     %----------------------------------
     \column{0.32}
 
-    \block{What is ``Drasil''?}{ Drasil is a framework for generating families
-        of software artifacts from a coherent knowledge base, following it's
+    \block{What is Drasil?}{ Drasil is a framework for generating families of
+        software artifacts from a coherent knowledge base, following it's
         mantra; ``Generate All The Things!''. Drasil uses a series of variably
         sized Domain-Specific Languages (DSLs) to describe various fragments of
         knowledge that domain experts and users alike may use to piece together
@@ -77,69 +79,94 @@
         (GOOL) \cite{Carette2020GOOL}. Through encoding knowledge in Drasil, an
         increase in productivity (and maintainability) in building reliable and
         traceable software artifacts is observed \cite{SzymczakEtAl2016},
-        specifically in SCS \cite{Smith2018}. }
+        specifically in SCS \cite{Smith2018}. Drasil's source code, case
+        studies, and documentation studies can be found on it's website;
+        \url{https://jacquescarette.github.io/Drasil/}.}
 
-        % Currently focused on increasing productivity and maintainability in
-        % scientific software development by generating reliable and traceable
-        % software artifacts with a single Generic Object-Oriented Language (GOOL)
-        % \cite{Carette2020GOOL}, using a mathematical language to describe
-        % problem domains, and various staged generators to systematically
-        % generate artifacts conforming to the Smith and Lai's ``Software
-        % Requirements Specifications'' (SRS) template.
+    % Currently focused on increasing productivity and maintainability in
+    % scientific software development by generating reliable and traceable
+    % software artifacts with a single Generic Object-Oriented Language (GOOL)
+    % \cite{Carette2020GOOL}, using a mathematical language to describe
+    % problem domains, and various staged generators to systematically
+    % generate artifacts conforming to the Smith and Lai's ``Software
+    % Requirements Specifications'' (SRS) template.
 
-    \block{What's the problem?}{}
-
-    \block{Why do we care?}{}
+    \block{Research Motivation/Problem}{
+        \begin{itemize}
+            \item Only a handful of the case studies (?) generate code, because...
+                \begin{itemize}
+                    \item ODEs
+                    \item Reliability in terms
+                    \item Quantification
+                \end{itemize}
+        \end{itemize}
+    }
 
     %----------------------------------
     %- Second Column
     %----------------------------------
     \column{0.36}
-    
+
     \block{Mathematical Knowledge Flow}{
+        \vspace{-1em}
         % Originally created with https://q.uiver.app/?q=WzAsNyxbOCw0XSxbMSwwLCJUaGVvcmllcyAoUmVsYXRpb25Db25jZXB0KSJdLFswLDAsIkV4cHJlc3Npb25zIChFeHByKSJdLFsyLDAsIk1hdGhlbWF0aWNhbCBLbm93bGVkZ2UiXSxbMiwxLCJRdWFudGl0eSBEZWZpbml0aW9ucyAoUURlZm5zKSJdLFsyLDIsIkNvZGUgKEdPT0wpIl0sWzEsMSwiU2NpZW50aWZpYyBSZXF1aXJlbWVudHMgU3BlY2lmaWNhdGlvbnMgKFNSUykiXSxbMiwxXSxbMSwzXSxbMyw0XSxbNCw1XSxbMSw2XV0=
         % But requires some post-processing
         \[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
-        	{\parbox{0.2\linewidth}{\centering Expression (Expr)}} 
-            \& {\parbox{0.25\linewidth}{\centering Theory (RelationConcept)}} 
-            \& |[draw=orange, cloud, aspect=2.8, inner sep=0pt]| {\parbox{0.2\linewidth}{\centering Mathematical Knowledge}} \\
-            
-        	{\parbox{0.25\linewidth}{\centering Scientific Requirements Specifications (SRS)}} 
-            \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}}
-            \& {\parbox{0.2\linewidth}{\centering Quantity Definition (QDefn)}} \\
-        	\&\& \\
-        	\arrow[color=green, from=1-1, to=1-2]
-        	\arrow[squiggly, color=red, from=1-2, to=1-3]
-        	\arrow[squiggly, color=red, from=1-3, to=2-3]
-        	\arrow[squiggly, color=red, from=2-3, to=2-2]
-        	\arrow[color=green, from=1-2, to=2-1]
-        \end{tikzcd}\]
+                {\parbox{0.2\linewidth}{\centering Expression (\textit{Expr})}}
+                \& {\parbox{0.24\linewidth}{\centering Theory \\(\textit{RelationConcept})}}
+                \& |[draw=orange, cloud, aspect=2.8, inner sep=0pt]| {\parbox{0.2\linewidth}{\centering Mathematical Knowledge}} \\
+
+                {\parbox{0.25\linewidth}{\centering Scientific Requirements Specifications (SRS)}}
+                \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}}
+                \& {\parbox{0.2\linewidth}{\centering Quantity Definition (\textit{QDefn})}} \\
+                \&\& \\
+                \arrow[color=green, from=1-1, to=1-2]
+                \arrow[squiggly, color=red, from=1-2, to=1-3]
+                \arrow[squiggly, color=red, from=1-3, to=2-3]
+                \arrow[squiggly, color=red, from=2-3, to=2-2]
+                \arrow[color=green, from=1-2, to=2-1]
+            \end{tikzcd}\]
         \vspace{-2.5em}
     }
 
     \block{Capturing Mathematical Knowledge}{
         % Originally created with https://q.uiver.app/?q=WzAsNixbMSwxLCJNYXRoZW1hdGljYWwgS25vd2xlZGdlIChNb2RlbEtpbmRzKSJdLFsxLDIsIkNvZGUgKEdPT0wpIl0sWzAsMCwiRXF1YXRpb25hbE1vZGVsIChRRGVmbikiXSxbMSwwLCJFcXVhdGlvbmFsUmVhbG0gKE11bHRpRGVmbikiXSxbMiwwLCJldGMuIl0sWzAsMiwiU1JTIl0sWzAsMSwiT25seSBFcXVhdGlvbmFsIl0sWzIsMF0sWzMsMF0sWzQsMF0sWzAsNV1d
         % But requires some post-processing
-
         \[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
-        	{\parbox{0.25\linewidth}{\centering EquationalModel (QDefn Expr)}}
-            \& {\parbox{0.25\linewidth}{\centering EquationalRealm (MultiDefn Expr/ModelExpr)}}
-            \& {\parbox{0.25\linewidth}{\centering etc.}} \\
-        	
-            {\parbox{0.1\linewidth}{\centering SRS}}
-            \& {\parbox{0.25\linewidth}{\centering Mathematical Knowledge (ModelKinds)}} 
-            \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}} \\
-        	
-            \arrow[squiggly, color=blue, from=2-2, to=2-3]
-        	\arrow[color=green, from=1-1, to=2-2]
-        	\arrow[color=green, from=1-2, to=2-2]
-        	\arrow[color=green, from=1-3, to=2-2]
-        	\arrow[color=green, from=2-2, to=2-1]
-        \end{tikzcd}\]
+                {\parbox{0.25\linewidth}{\centering EquationalModel (\textit{QDefn Expr})}}
+                \& {\parbox{0.25\linewidth}{\centering EquationalRealm (\textit{MultiDefn Expr/ModelExpr})}}
+                \& {\parbox{0.25\linewidth}{\centering etc.}} \\
+
+                {\parbox{0.1\linewidth}{\centering SRS}}
+                \& {\parbox{0.25\linewidth}{\centering Mathematical Knowledge (\textit{ModelKinds})}}
+                \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}} \\
+
+                \arrow[squiggly, color=blue, from=2-2, to=2-3]
+                \arrow[color=green, from=1-1, to=2-2]
+                \arrow[color=green, from=1-2, to=2-2]
+                \arrow[color=green, from=1-3, to=2-2]
+                \arrow[color=green, from=2-2, to=2-1]
+            \end{tikzcd}\]
         \vspace{-2em}
     }
 
-    \block{Comparison}{}
+    \block{What changed?}{
+        \begin{itemize}
+            \item +ModelKinds (concrete representation of known theories)
+            \item \(\textit{Expr} \longrightarrow \textit{Expr}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
+            \item +TTF Encodings of Expressions
+            \item Static checking of validity of theory models, ensuring reliable generation
+            \item Ease of creation; improving productivity
+            \item Creating a classification system (can be utilized more later)
+                \begin{itemize}
+                    \item \textit{EquationalModel}
+                    \item \textit{EquationalRealm}
+                    \item \textit{EquationalConstraints}
+                    \item \textit{DEModel}
+                    \item \textit{OthModel}
+                \end{itemize}
+        \end{itemize}
+    }
 
     %----------------------------------
     %- Third Column
@@ -148,19 +175,17 @@
 
     % \block{}{\blindtext}
 
-    \block{Future Work}{
-        \begin{itemize}[leftmargin=*]
+    \block{Conclusions \& Future Work}{
+        \begin{itemize}
             \item Something
         \end{itemize}
     }
 
-    \block{Acknowledgements}{}
-
     \block{References}{
-        \vspace{-2em}
-        \begin{scriptsize}
-            \printbibliography[heading=none]
-        \end{scriptsize}
+        \vspace{-1em}
+        \renewcommand*{\bibfont}{\small}
+        \printbibliography[heading=none]
     }
 \end{columns}
+
 \end{document}

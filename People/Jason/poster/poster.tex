@@ -145,8 +145,8 @@
         % Originally created with https://q.uiver.app/?q=WzAsNixbMSwxLCJNYXRoZW1hdGljYWwgS25vd2xlZGdlIChNb2RlbEtpbmRzKSJdLFsxLDIsIkNvZGUgKEdPT0wpIl0sWzAsMCwiRXF1YXRpb25hbE1vZGVsIChRRGVmbikiXSxbMSwwLCJFcXVhdGlvbmFsUmVhbG0gKE11bHRpRGVmbikiXSxbMiwwLCJldGMuIl0sWzAsMiwiU1JTIl0sWzAsMSwiT25seSBFcXVhdGlvbmFsIl0sWzIsMF0sWzMsMF0sWzQsMF0sWzAsNV1d
         % But requires some post-processing
         \[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
-                {\parbox{0.25\linewidth}{\centering EquationalModel (\textit{QDefn Expr})}}
-                \& {\parbox{0.25\linewidth}{\centering EquationalRealm (\textit{MultiDefn Expr/ModelExpr})}}
+                {\parbox{0.25\linewidth}{\centering EquationalModel (\textit{QDefn Expr'/ModelExpr})}}
+                \& {\parbox{0.25\linewidth}{\centering EquationalRealm (\textit{MultiDefn Expr'/ModelExpr})}}
                 \& {\parbox{0.25\linewidth}{\centering etc.}} \\
 
                 {\parbox{0.1\linewidth}{\centering SRS}}
@@ -171,12 +171,13 @@
         \vspace{-1em}
         \begin{itemize}
             \item +ModelKinds (concrete representation of known theories)
-            \item Expression language division: \(\textit{Expr} \longrightarrow \textit{Expr}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
+            \item Expression language division: \(\textit{Expr} \longrightarrow \textit{Expr'}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
                   \begin{itemize}
-                      \item \textit{Expr}:
+                      \item \textit{Expr'}:
                       \item \textit{ModelExpr}:
                       \item \textit{CodeExpr}:
-                      \item +TTF Encodings of Expressions
+                      \item +TTF Encodings of Expressions \cite{Carette2009}:
+                            Expression creation is just as easy as it ever was!
                   \end{itemize}
             \item Static checking of validity of theory models, ensuring reliable generation
             \item Ease of creation; improving productivity
@@ -198,13 +199,17 @@
 
     \block{Conclusions \& Future Work}{
         \begin{itemize}
-            \item Something
+            \item In progress: Adding extra type information to expressions,
+                  allowing us to add type information to GOOL, and further
+                  improve static validity rules of various mathematical
+                  constructions. {\small This would resolve ``Close to stable''
+                  transformation blue arrow.}
         \end{itemize}
     }
 
     \block{References}{
         \vspace{-1em}
-        \renewcommand*{\bibfont}{\small}
+        \renewcommand*{\bibfont}{\footnotesize}
         \printbibliography[heading=none]
     }
 

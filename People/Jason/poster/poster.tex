@@ -46,7 +46,7 @@
 \usepackage[T1]{fontenc}
 
 \title{Capturing Mathematical Knowledge in Drasil: the Case of Theories}
-\author{Jason Balaci (balacij), Jacques Carette (carette)}
+\author{Jason Balaci (balacij), Dr. Jacques Carette (carette)}
 \institute{Department of Computing and Software, McMaster University}
 \titlegraphic{\includegraphics[width=0.16\textwidth]{assets/mcm-cas_left-wht_eps.eps}}
 \projectlogo{\includegraphics[width=0.06\textwidth]{assets/Drasil Logo White.png}}
@@ -64,9 +64,9 @@
     \column{0.32}
 
     \block{What is Drasil?}{ Drasil is a framework for generating families of
-        software artifacts from a coherent knowledge base, following it's
-        mantra; ``Generate All The Things!''. Drasil uses a series of variably
-        sized Domain-Specific Languages (DSLs) to describe various fragments of
+        software artifacts from a coherent knowledge base, following its mantra;
+        ``Generate All The Things!''. Drasil uses a series of variably sized
+        Domain-Specific Languages (DSLs) to describe various fragments of
         knowledge that domain experts and users alike may use to piece together
         fragments of knowledge into a coherent ``story''. Through forming some
         coherent ``story'' in a domain captured by Drasil, a representational
@@ -80,7 +80,7 @@
         increase in productivity (and maintainability) in building reliable and
         traceable software artifacts is observed \cite{SzymczakEtAl2016},
         specifically in SCS \cite{Smith2018}. Drasil's source code, case
-        studies, and documentation studies can be found on it's website;
+        studies, and documentation studies can be found on its website;
         \url{https://jacquescarette.github.io/Drasil/}.}
 
     \block{Research Motivation/Problem}{
@@ -97,13 +97,17 @@
                       \item Not all expressions have definite values and are
                             immediately usable in all programming languages.
                   \end{itemize}
-            \item Only a handful of the case studies (?) generate code,
+            \item Only a handful of the case studies generate code,
                   because...
                   \begin{itemize}
-                      \item ODEs
-                      \item Reliability in terms
-                      \item Quantification
-                      \item Cognitive load
+                      \item Code is validated, and has rigid rules we must obey,
+                            leaving little to no room for error.
+                      \item Cognitive load of writing expressions in precise
+                            manners to accommodate the code generator would
+                            increase.
+                      \item Understanding \& usage of the expressions is weak
+                            and brittle as they don't expose sufficient
+                            information about the models.
                   \end{itemize}
         \end{itemize}
     }
@@ -196,25 +200,35 @@
     \block{}{
         \vspace{-1em}
         \begin{itemize}
-            \item Increasing the depth/breadth of knowledge contained
-            \item +ModelKinds (concrete representation of known theories)
-            \item Static checking of validity of theory models, ensuring reliable generation
-            \item Ease of creation
-            \item Removed brittle cast-like conversion of mathematical
-                  expressions into well-understood pieces of data.
+            \item Created a system of classifying \textit{theories}
+                  (\textit{ModelKinds})
+                  \begin{itemize}
+                      \item Increased the depth \& breadth of knowledge
+                            contained.
+                      \item First-class representation of theories, with their
+                            fundamental components flexibly usable. No more
+                            brittle cast-like conversion of mathematical
+                            expressions (low information density) to
+                            well-understood pieces of knowledge (high
+                            information density).
+                      \item Instances of theories usable in a wide variety of
+                            ways can be statically \& reliably checked for
+                            validity.
+                      \item Creating instances of theories comes with
+                            projectional editor-like ease.
+                  \end{itemize}
             \item Improving productivity, stability, and flexibility in usage
-            \item Creating a classification system (can be utilized more later)
+            \item Current theory types:
                   \begin{itemize}
                       \item \textit{EquationalModel}: \(x = f(a, b, c, \ldots)\)
                       \item \textit{EquationalRealm}: \(x = a \lor x = b \lor x = c \lor \ldots\)
                       \item \textit{EquationalConstraints}: \(a \land b \land c \land \ldots\)
-                      \item \textit{DEModel}:
-                      \item \textit{OthModel}:
+                      \item \textit{DEModel}: \(\ldots\frac{dy}{dx}\ldots\)
                   \end{itemize}
         \end{itemize}
     }
 
-    \block{Conclusions \& Future Work}{
+    \block{Conclusion \& Future Work}{
         \vspace{-1em}
         \begin{itemize}
             \item Through capturing and classifying mathematical knowledge, we

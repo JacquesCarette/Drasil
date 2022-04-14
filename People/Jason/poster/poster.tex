@@ -85,11 +85,25 @@
 
     \block{Research Motivation/Problem}{
         \begin{itemize}
-            \item Only a handful of the case studies (?) generate code, because...
+            \item A single mathematical expression language, and a single
+                  instance of a term from the language is used to describe
+                  theories (\textit{RelationConcept}) alongside a natural
+                  English description.
+                  \begin{itemize}
+                      \item Expressions must be precisely written in a manner
+                            ``digestible'' to the code generator so that a
+                            representational software code snippet can be
+                            constructed.
+                      \item Not all expressions have definite values and are
+                            immediately usable in all programming languages.
+                  \end{itemize}
+            \item Only a handful of the case studies (?) generate code,
+                  because...
                   \begin{itemize}
                       \item ODEs
                       \item Reliability in terms
                       \item Quantification
+                      \item Cognitive load
                   \end{itemize}
         \end{itemize}
     }
@@ -104,19 +118,19 @@
         % Originally created with https://q.uiver.app/?q=WzAsNyxbOCw0XSxbMSwwLCJUaGVvcmllcyAoUmVsYXRpb25Db25jZXB0KSJdLFswLDAsIkV4cHJlc3Npb25zIChFeHByKSJdLFsyLDAsIk1hdGhlbWF0aWNhbCBLbm93bGVkZ2UiXSxbMiwxLCJRdWFudGl0eSBEZWZpbml0aW9ucyAoUURlZm5zKSJdLFsyLDIsIkNvZGUgKEdPT0wpIl0sWzEsMSwiU2NpZW50aWZpYyBSZXF1aXJlbWVudHMgU3BlY2lmaWNhdGlvbnMgKFNSUykiXSxbMiwxXSxbMSwzXSxbMyw0XSxbNCw1XSxbMSw2XV0=
         % But requires some post-processing
         \[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
-                {\parbox{0.2\linewidth}{\centering Expression (\textit{Expr})}}
+                {\parbox{0.2\linewidth}{\centering Expression (\textit{Expr}) \\$+$ Description}}
                 \& {\parbox{0.24\linewidth}{\centering Theory \\(\textit{RelationConcept})}}
-                \& |[draw=orange, cloud, aspect=2.8, inner sep=0pt]| {\parbox{0.2\linewidth}{\centering Mathematical Knowledge}} \\
+                \& |[draw=orange, cloud, aspect=2.8, inner sep=0pt, line width=4]| {\parbox{0.18\linewidth}{\centering Mathematical Knowledge}} \\
 
                 {\parbox{0.25\linewidth}{\centering Scientific Requirements Specifications (SRS)}}
                 \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}}
                 \& {\parbox{0.2\linewidth}{\centering Quantity Definition (\textit{QDefn})}} \\
-                \&\& \\
-                \arrow[color=green, from=1-1, to=1-2]
-                \arrow[squiggly, color=red, from=1-2, to=1-3]
-                \arrow[squiggly, color=red, from=1-3, to=2-3]
-                \arrow[squiggly, color=red, from=2-3, to=2-2]
-                \arrow[color=green, from=1-2, to=2-1]
+
+                \arrow[line width=2, color=green, from=1-1, to=1-2]
+                \arrow[line width=2, squiggly, color=red, from=1-2, to=1-3]
+                \arrow[line width=2, squiggly, color=red, from=1-3, to=2-3]
+                \arrow[line width=2, squiggly, color=red, from=2-3, to=2-2]
+                \arrow[line width=2, color=green, from=1-2, to=2-1]
             \end{tikzcd}\]
         \vspace{-2.5em}
 
@@ -139,11 +153,11 @@
                 \& {\parbox{0.25\linewidth}{\centering Mathematical Knowledge (\textit{ModelKinds})}}
                 \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}} \\
 
-                \arrow[squiggly, color=blue, from=2-2, to=2-3]
-                \arrow[color=green, from=1-1, to=2-2]
-                \arrow[color=green, from=1-2, to=2-2]
-                \arrow[color=green, from=1-3, to=2-2]
-                \arrow[color=green, from=2-2, to=2-1]
+                \arrow[line width=2, squiggly, color=blue, from=2-2, to=2-3]
+                \arrow[line width=2, color=green, from=1-1, to=2-2]
+                \arrow[line width=2, color=green, from=1-2, to=2-2]
+                \arrow[line width=2, color=green, from=1-3, to=2-2]
+                \arrow[line width=2, color=green, from=2-2, to=2-1]
             \end{tikzcd}\]
         \vspace{-2em}
 
@@ -157,8 +171,13 @@
         \vspace{-1em}
         \begin{itemize}
             \item +ModelKinds (concrete representation of known theories)
-            \item \(\textit{Expr} \longrightarrow \textit{Expr}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
-            \item +TTF Encodings of Expressions
+            \item Expression language division: \(\textit{Expr} \longrightarrow \textit{Expr}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
+                  \begin{itemize}
+                      \item \textit{Expr}:
+                      \item \textit{ModelExpr}:
+                      \item \textit{CodeExpr}:
+                      \item +TTF Encodings of Expressions
+                  \end{itemize}
             \item Static checking of validity of theory models, ensuring reliable generation
             \item Ease of creation; improving productivity
             \item Creating a classification system (can be utilized more later)

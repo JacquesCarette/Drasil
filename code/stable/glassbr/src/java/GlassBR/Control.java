@@ -75,10 +75,10 @@ public class Control {
         outfile.print(LR);
         outfile.println(" in module Control");
         outfile.close();
-        boolean is_safeLR = Calculations.func_is_safeLR(LR, q);
+        boolean isSafeLR = Calculations.func_isSafeLR(LR, q);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'is_safeLR' assigned ");
-        outfile.print(is_safeLR);
+        outfile.print("var 'isSafeLR' assigned ");
+        outfile.print(isSafeLR);
         outfile.println(" in module Control");
         outfile.close();
         double P_b = Calculations.func_P_b(B);
@@ -87,12 +87,12 @@ public class Control {
         outfile.print(P_b);
         outfile.println(" in module Control");
         outfile.close();
-        boolean is_safePb = Calculations.func_is_safePb(inParams, P_b);
+        boolean isSafePb = Calculations.func_isSafePb(inParams, P_b);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'is_safePb' assigned ");
-        outfile.print(is_safePb);
+        outfile.print("var 'isSafePb' assigned ");
+        outfile.print(isSafePb);
         outfile.println(" in module Control");
         outfile.close();
-        OutputFormat.write_output(is_safePb, is_safeLR, P_b, J);
+        OutputFormat.write_output(isSafePb, isSafeLR, P_b, J);
     }
 }

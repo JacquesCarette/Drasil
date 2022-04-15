@@ -1,0 +1,58 @@
+name:                drasil-website
+version:             0.1.0.0
+github:              JacquesCarette/Drasil
+maintainer:          "Jacques Carette"
+synopsis:            Using the Drasil generators to create Drasil's website
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+- split
+- directory
+- drasil-data
+- drasil-database
+- drasil-docLang
+- drasil-code
+- drasil-gool
+- drasil-gen
+- drasil-lang
+- drasil-printers
+- drasil-sysinfo
+- drasil-theory
+- drasil-utils
+- sglpendulum
+- dblpendulum
+- gamephysics
+- glassbr
+- hghc
+- nopcm
+- pdcontroller
+- projectile
+- ssp
+- swhs
+- template
+
+library:
+  source-dirs: lib
+  when:
+  - condition: false
+    other-modules: Paths_drasil_website
+
+executables:
+  website:
+    main: Main
+    source-dirs: app
+    ghc-options:
+    - -Wall
+    - -Wredundant-constraints
+    - -threaded
+    - -O2
+    dependencies:
+    - drasil-website
+    when:
+    - condition: false
+      other-modules: Paths_drasil_website

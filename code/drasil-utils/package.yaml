@@ -2,7 +2,7 @@ name:                drasil-utils
 version:             0.1.1.0
 author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - Utils SubPackage
+synopsis:	     A framework for code and document generation for scientific software - Utils SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
@@ -11,22 +11,17 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
 - pretty
-- Decimal
-- drasil-lang
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 
 library:
-  source-dirs: ./
+  source-dirs: lib
   exposed-modules:
   - Utils.Drasil
-  - Utils.Drasil.Sentence
-  - Utils.Drasil.NounPhrase
-  - Utils.Drasil.Concepts
+  - Utils.Drasil.Document
   when:
   - condition: false
     other-modules: Paths_drasil_utils

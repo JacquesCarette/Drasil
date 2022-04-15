@@ -463,7 +463,7 @@ func func_LR(_ inParams: inout InputParameters, _ NFL: Double) throws -> Double 
     - Parameter q: applied load (demand): 3 second duration equivalent pressure (Pa)
     - Returns: 3 second load equivalent resistance safety requirement
 */
-func func_is_safeLR(_ LR: Double, _ q: Double) throws -> Bool {
+func func_isSafeLR(_ LR: Double, _ q: Double) throws -> Bool {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -472,7 +472,7 @@ func func_is_safeLR(_ LR: Double, _ q: Double) throws -> Bool {
         throw "Error opening file."
     }
     do {
-        try outfile.write(contentsOf: Data("function func_is_safeLR called with inputs: {".utf8))
+        try outfile.write(contentsOf: Data("function func_isSafeLR called with inputs: {".utf8))
         try outfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -568,7 +568,7 @@ func func_P_b(_ B: Double) throws -> Double {
     - Parameter P_b: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     - Returns: probability of glass breakage safety requirement
 */
-func func_is_safePb(_ inParams: inout InputParameters, _ P_b: Double) throws -> Bool {
+func func_isSafePb(_ inParams: inout InputParameters, _ P_b: Double) throws -> Bool {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -577,7 +577,7 @@ func func_is_safePb(_ inParams: inout InputParameters, _ P_b: Double) throws -> 
         throw "Error opening file."
     }
     do {
-        try outfile.write(contentsOf: Data("function func_is_safePb called with inputs: {".utf8))
+        try outfile.write(contentsOf: Data("function func_isSafePb called with inputs: {".utf8))
         try outfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."

@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+# For examples that generate code, walk through their generated source code folders,
+# and build them all.
+# For use with `make X_gool` & `make gool`.
+
 if [ -z "$EDIR" ]; then
   echo "Missing EDIR."
   exit 1

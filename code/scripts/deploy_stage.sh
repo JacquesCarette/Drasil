@@ -1,5 +1,15 @@
+#!/usr/bin/env bash
+
+# Get all files ready for deploy. Checks if website files exist,
+# and then copies each file to a deploy folder.
+
 if [ -z "$DEPLOY_FOLDER" ]; then
   echo "Need DEPLOY_FOLDER to know where to stage deploy."
+  exit 1
+fi
+
+if [ -z "$WEBSITE_FOLDER" ]; then
+  echo "Missing WEBSITE_FOLDER. Run make website."
   exit 1
 fi
 
@@ -10,6 +20,11 @@ fi
 
 if [ -z "$GRAPH_FOLDER" ]; then
   echo "Missing GRAPH_FOLDER."
+  exit 1
+fi
+
+if [ -z "$TRACEY_GRAPHS_FOLDER" ]; then
+  echo "Missing TRACEY_GRAPHS_FOLDER."
   exit 1
 fi
 
@@ -39,7 +54,8 @@ if [ -z "$MAKE" ]; then
 fi
 
 DOC_DEST=docs/
-SRS_DEST=srs/
+# SRS_DEST needs to be two levels deep for image filepaths to match those of the build folder
+SRS_DEST=SRS/srs
 DOX_DEST=doxygen/
 EXAMPLE_DEST=examples/
 CUR_DIR="$PWD/"
@@ -75,11 +91,11 @@ copy_examples() {
     # Only copy actual examples
     if [[ "$EXAMPLE_DIRS" == *"$example_name"* ]]; then
       mkdir -p "$EXAMPLE_DEST$example_name/$SRS_DEST"
-      if [ -d "$example/"SRS ]; then
-        cp "$example/"SRS/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      if [ -d "$example/"SRS/PDF ]; then
+        cp "$example/"SRS/PDF/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
       fi
-      if [ -d "$example/"Website/ ]; then
-        cp -r "$example/"Website/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      if [ -d "$example/"SRS/HTML ]; then
+        cp -r "$example/"SRS/HTML/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
       fi
       if [ -d "$example/"src ]; then
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
@@ -121,7 +137,7 @@ copy_images() {
     rm -rf "$CUR_DIR"deploy/images
   fi
   mkdir -p "$CUR_DIR"deploy/images
-  cp -r "$CUR_DIR"website/images/* "$CUR_DIR"deploy/images
+  cp -r "$CUR_DIR"drasil-website/WebInfo/images/* "$CUR_DIR"deploy/images
   
 }
 
@@ -130,17 +146,14 @@ copy_analysis() {
   cp -r "$CUR_DIR$ANALYSIS_FOLDER". "$ANALYSIS_FOLDER"
 }
 
-build_website() {
-  cd "$CUR_DIR"website
-  make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" DOX_FOLDER="$DOX_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
-  SRS_FOLDER_FRAG="$SRS_DEST" GRAPH_FOLDER="$GRAPH_FOLDER"
-  RET=$?
-  if [ $RET != 0 ]; then
-    echo "Build Failed. Bailing."
-    exit 1
-  fi
+copy_traceygraphs() {
+  rm -rf "$TRACEY_GRAPHS_FOLDER"
+  cp -r "$CUR_DIR$TRACEY_GRAPHS_FOLDER". "$TRACEY_GRAPHS_FOLDER"
+}
+
+copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"website/_site/. .
+  cp -r "$CUR_DIR$WEBSITE_FOLDER". .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src
@@ -154,5 +167,6 @@ copy_datafiles
 copy_examples
 copy_images
 copy_analysis
-build_website
+copy_traceygraphs
+copy_website
 cd "$CUR_DIR"

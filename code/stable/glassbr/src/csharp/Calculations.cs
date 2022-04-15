@@ -164,10 +164,10 @@ public class Calculations {
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return 3 second load equivalent resistance safety requirement
     */
-    public static Boolean func_is_safeLR(double LR, double q) {
+    public static Boolean func_isSafeLR(double LR, double q) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_is_safeLR called with inputs: {");
+        outfile.WriteLine("function func_isSafeLR called with inputs: {");
         outfile.Write("  LR = ");
         outfile.Write(LR);
         outfile.WriteLine(", ");
@@ -200,10 +200,10 @@ public class Calculations {
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
         \return probability of glass breakage safety requirement
     */
-    public static Boolean func_is_safePb(InputParameters inParams, double P_b) {
+    public static Boolean func_isSafePb(InputParameters inParams, double P_b) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_is_safePb called with inputs: {");
+        outfile.WriteLine("function func_isSafePb called with inputs: {");
         outfile.Write("  inParams = ");
         outfile.Write("Instance of InputParameters object");
         outfile.WriteLine(", ");

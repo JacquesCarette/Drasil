@@ -71,7 +71,7 @@ double func_LR(InputParameters &inParams, double NFL);
     \param q applied load (demand): 3 second duration equivalent pressure (Pa)
     \return 3 second load equivalent resistance safety requirement
 */
-bool func_is_safeLR(double LR, double q);
+bool func_isSafeLR(double LR, double q);
 
 /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     \param B risk of failure
@@ -84,6 +84,6 @@ double func_P_b(double B);
     \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     \return probability of glass breakage safety requirement
 */
-bool func_is_safePb(InputParameters &inParams, double P_b);
+bool func_isSafePb(InputParameters &inParams, double P_b);
 
 #endif

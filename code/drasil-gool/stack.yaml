@@ -31,9 +31,6 @@ resolver:
 #   - wai
 packages:
 - .
-- ../drasil-lang
-- ../drasil-metadata
-- ../drasil-theory
 - ../drasil-utils
 
 # Dependency packages to be pulled from upstream that are not in the resolver.

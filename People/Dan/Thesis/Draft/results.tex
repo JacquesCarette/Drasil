@@ -1,16 +1,74 @@
 \chapter{Results}
+\label{c:results}
+
+In this chapter we will discuss our observations following the reimplementation 
+of our case studies using Drasil. At present these observations are 
+anecdotal in nature as we have not yet been afforded the time to design more 
+rigorous experiments for data collection due to Drasil being very much in flux 
+and undergoing constant development. We will discuss more about experimental 
+data collection in ``Future Work"(Chapter~\ref{c:future}).
+
+\section{``Pervasive" Bugs} 
+
+One of the first, and most curious, observations made while using Drasil
+was that of so called \emph{pervasive bugs}. While we usually consider bugs to 
+be something we wish to avoid at all costs, this is a case where the 
+pervasiveness of bugs themselves is beneficial. Since we are generating 
+\emph{all} our \sfs{} from a single source, a bug in that source will 
+result in a bug occurring through \emph{every single softifact}. The major 
+consequence is that the bug now has increased visibility, so is more likely to 
+be discovered.
+
+\ds{Need a salient example of a pervasive bug we found here, or description of 
+a handl of "we found these along the way just because they were so readily 
+visible"}
+
+Pervasive bugs have another unique selling point. Consider a piece of software 
+developed using generally accepted processes like 
+waterfall or agile. After the initial implementation is complete, any 
+bugs found are typically fixed by updating the code and other pertinent 
+\sfs{}. As mentioned earlier, there are many instances, especially those 
+involving tight deadlines or where non-executable \sfs{} are not 
+prioritized, where the \sfs{} can fall out of sync with the implemented 
+solution. As such we may end up with inconsistent \sfs{} that are wrong in 
+(potentially) different ways. The following example involves the equation for 
+Non-Factored Load (NFL) taken from the GlassBR case study:
+\[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
+and its code representation (in python): 
+\lstinputlisting[language=Python, firstline=45, 
+lastline=46]{code/Calculations.py}
+At a glance, are the code and formula equivalent? 
+
+It is difficult to say without confirming the value of $E$ is defined as 
+$71.7\cdot{}10^{9}$, which is equivalent to the value used in the python code. 
+However, if both \sfs{} were generated using Drasil then we have added 
+confidence due to them being generated from the same source. Now if we 
+determine there is a bug, we can look at either the formula or implementation 
+-- whichever we are more comfortable debugging -- to determine how the source 
+should be updated. As such, pervasive bugs give us peace of mind that our 
+\sfs{} are consistent, even in the face of bugs.
 
 \section{Originals vs. Reimplementations}
 	Link to original case studies and reimplementations
 	Highlight key (important) changes with explanations
 	Show off major errors/oversights
-	Original softifacts LoC vs number of Drasil LoC to reimplement (and compare the output of Drasil - multiple languages, etc.)
-\section{“Pervasive” Bugs} 
-	- Sounds bad, but actually really good.
- - If a bug shows up in more places, it's more likely to be found.
- - Softifacts remain consistent, even if wrong.
+	Original \sfs{} LoC vs number of Drasil LoC to reimplement (and compare the 
+	output of Drasil - multiple languages, etc.)
+
 \section{Design for change}
-	GlassBR /1000 example
+	\ds{GlassBR /1000 example}
+
+Designing for change can be difficult, especially when dealing with software 
+with a long (10+ year) expected lifespan. Through our use of Drasil in updating 
+the case studies, it has become obvious that Drasil expedites our ability to 
+design for change.
+
+Having only a single source to update accelerates implementation of desired 
+changes, which we have demonstrated numerous times throughout Drasil's 
+development and the reimplementation of our case studies. One salient example 
+was in the GlassBR case study.
+
+\ds{Fill in the example details here}
 	
 \section{Usability}
 One of Drasil's biggest issues is that of usability. Unless one reads the source

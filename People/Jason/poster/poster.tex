@@ -79,16 +79,15 @@
         (GOOL) \cite{Carette2020GOOL}. Through encoding knowledge in Drasil, an
         increase in productivity (and maintainability) in building reliable and
         traceable software artifacts is observed \cite{SzymczakEtAl2016},
-        specifically in SCS \cite{Smith2018}. Drasil's source code, case
-        studies, and documentation studies can be found on its website;
+        specifically in SCS \cite{Smith2018}. Drasil's source code (Haskell),
+        case studies, and documentation studies can be found on its website;
         \url{https://jacquescarette.github.io/Drasil/}.}
 
     \block{Research Motivation/Problem}{
         \begin{itemize}
-            \item A single mathematical expression language, and a single
-                  instance of a term from the language is used to describe
-                  theories (\textit{RelationConcept}) alongside a natural
-                  English description.
+            \item \textit{Theories} are constructed using a natural English
+                  description and a single term from a single universal
+                  mathematical expression language.
                   \begin{itemize}
                       \item Expressions must be precisely written in a manner
                             ``digestible'' to the code generator so that a
@@ -100,14 +99,14 @@
             \item Only a handful of the case studies generate code,
                   because...
                   \begin{itemize}
-                      \item Code is validated, and has rigid rules we must obey,
-                            leaving little to no room for error.
+                      \item Understanding of the expressions is weak and brittle
+                            as they don't expose sufficient information about
+                            the theories.
+                      \item Software artifacts are validated, we must obey rigid
+                            rules of other languages.
                       \item Cognitive load of writing expressions in precise
                             manners to accommodate the code generator would
                             increase.
-                      \item Understanding \& usage of the expressions is weak
-                            and brittle as they don't expose sufficient
-                            information about the models.
                   \end{itemize}
         \end{itemize}
     }
@@ -146,6 +145,7 @@
     }
 
     \block{Capturing Mathematical Knowledge}{
+        \vspace{-1em}
         % Originally created with https://q.uiver.app/?q=WzAsNixbMSwxLCJNYXRoZW1hdGljYWwgS25vd2xlZGdlIChNb2RlbEtpbmRzKSJdLFsxLDIsIkNvZGUgKEdPT0wpIl0sWzAsMCwiRXF1YXRpb25hbE1vZGVsIChRRGVmbikiXSxbMSwwLCJFcXVhdGlvbmFsUmVhbG0gKE11bHRpRGVmbikiXSxbMiwwLCJldGMuIl0sWzAsMiwiU1JTIl0sWzAsMSwiT25seSBFcXVhdGlvbmFsIl0sWzIsMF0sWzMsMF0sWzQsMF0sWzAsNV1d
         % But requires some post-processing
         \[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
@@ -174,6 +174,7 @@
     \block{What changed?}{
         \vspace{-1em}
         \begin{itemize}
+            \item More static validation! Safer generation!
             \item Expression language division: \(\textit{Expr} \longrightarrow \textit{Expr'}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
                   \begin{itemize}
                       \item \textit{Expr'}: Restricting the language to terms
@@ -198,7 +199,7 @@
     \column{0.32}
 
     \block{}{
-        \vspace{-1em}
+        \vspace{-1.5em}
         \begin{itemize}
             \item Created a system of classifying \textit{theories}
                   (\textit{ModelKinds})
@@ -206,11 +207,11 @@
                       \item Increased the depth \& breadth of knowledge
                             contained.
                       \item First-class representation of theories, with their
-                            fundamental components flexibly usable. No more
-                            brittle cast-like conversion of mathematical
-                            expressions (low information density) to
+                            meaningful components fully exposed. No more
+                            brittle \textit{cast}-like conversion of mathematical
+                            expressions (low info. density) to
                             well-understood pieces of knowledge (high
-                            information density).
+                            info. density).
                       \item Instances of theories usable in a wide variety of
                             ways can be statically \& reliably checked for
                             validity.
@@ -226,18 +227,19 @@
                       \item \textit{DEModel}: \(\ldots\frac{dy}{dx}\ldots\)
                   \end{itemize}
         \end{itemize}
+        \vspace{-0.5em}
     }
 
     \block{Conclusion \& Future Work}{
         \vspace{-1em}
         \begin{itemize}
             \item Through capturing and classifying mathematical knowledge, we
-                  earn significant gains in flexibility, usage, and handling.
+                  earn significant gains in flexibility, usability, and productivity.
             \item \textit{In progress}: Adding extra type information to
                   expressions, allowing us to add type information to GOOL, and
                   further improve static validity rules of various mathematical
-                  constructions.{\footnotesize This would resolve the ``Close to
-                          stable'' transformation blue arrow.}
+                  constructions.
+            \item Teaching more theories to Drasil!
         \end{itemize}
     }
 

@@ -38,12 +38,6 @@ glass :: NamedChunk
 ptOfExplsn :: NamedChunk
 responseTy :: NamedChunk
 
-module Drasil.GlassBR.ModuleDefs
-allMods :: [Mod]
-implVars :: [QuantityDict]
-interpY :: Func
-interpZ :: Func
-
 module Drasil.GlassBR.References
 rbrtsn2012 :: Citation
 astm2009 :: Citation
@@ -106,6 +100,7 @@ tmLRe :: UnitalChunk
 nonFactorL :: UnitalChunk
 eqTNTWeight :: UnitalChunk
 unitless :: [QuantityDict]
+interps :: [QuantityDict]
 riskFun :: QuantityDict
 isSafePb :: QuantityDict
 isSafeProb :: QuantityDict
@@ -115,6 +110,8 @@ sdfTol :: QuantityDict
 dimlessLoad :: QuantityDict
 tolLoad :: QuantityDict
 lDurFac :: QuantityDict
+interpY :: QuantityDict
+interpZ :: QuantityDict
 gTF :: DefinedQuantityDict
 loadSF :: DefinedQuantityDict
 lBreak :: Symbol
@@ -179,6 +176,12 @@ module Drasil.GlassBR.TMods
 tMods :: [TheoryModel]
 pbIsSafe :: TheoryModel
 lrIsSafe :: TheoryModel
+
+module Drasil.GlassBR.ModuleDefs
+allMods :: [Mod]
+implVars :: [QuantityDict]
+interpY :: Func
+interpZ :: Func
 
 module Drasil.GlassBR.Goals
 goals :: [ConceptInstance]

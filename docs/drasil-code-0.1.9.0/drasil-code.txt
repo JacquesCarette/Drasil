@@ -294,16 +294,9 @@ data CodeSpec
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
 
--- | Used for implementation-stage functions that need to be displayed in
---   the SRS.
-funcUID' :: Func -> UID
-
 -- | Convert a <a>Func</a> to an implementation-stage <a>QuantityDict</a>
 --   representing the function.
 asVC :: Func -> QuantityDict
-
--- | Helper for <a>funcUID'</a>.
-asVC' :: Func -> QuantityDict
 
 -- | Defines a <a>CodeSpec</a> based on the <a>SystemInformation</a>,
 --   <a>Choices</a>, and <a>Mod</a>s defined by the user.

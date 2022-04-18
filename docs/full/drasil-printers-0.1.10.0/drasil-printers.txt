@@ -1201,6 +1201,12 @@ symbolDoc :: Symbol -> Doc
 -- | Helper for printing units in <a>Doc</a> format.
 unitDoc :: Linearity -> USymb -> Doc
 
+-- | Helper for printing Symbols
+showSymb :: Symbol -> String
+
+-- | Helper for printing a HasSymbol in Implementation Stage
+showHasSymbImpl :: HasSymbol x => x -> String
+
 
 -- | Defines functions to help debug examples. Generated files appear in
 --   .<i>code</i>debug.
@@ -1789,6 +1795,12 @@ symbolDoc :: Symbol -> Doc
 
 -- | Helper for printing units in <a>Doc</a> format.
 unitDoc :: Linearity -> USymb -> Doc
+
+-- | Helper for printing Symbols
+showSymb :: Symbol -> String
+
+-- | Helper for printing a HasSymbol in Implementation Stage
+showHasSymbImpl :: HasSymbol x => x -> String
 
 -- | Generates a LaTeX document.
 genTeX :: Document -> PrintingInformation -> Doc

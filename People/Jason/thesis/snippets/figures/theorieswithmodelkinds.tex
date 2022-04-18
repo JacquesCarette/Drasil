@@ -3,7 +3,7 @@
 
 \begin{figure}[H]
 	\centering
-	\caption{Mathematical Knowledge Flow with Capture}
+	\caption{Mathematical Knowledge Flow, with Formal Capture}
 	\label{fig:theoriesWithModelKinds}
 
 	% Originally created with https://q.uiver.app/?q=WzAsNixbMSwxLCJNYXRoZW1hdGljYWwgS25vd2xlZGdlIChNb2RlbEtpbmRzKSJdLFsxLDIsIkNvZGUgKEdPT0wpIl0sWzAsMCwiRXF1YXRpb25hbE1vZGVsIChRRGVmbikiXSxbMSwwLCJFcXVhdGlvbmFsUmVhbG0gKE11bHRpRGVmbikiXSxbMiwwLCJldGMuIl0sWzAsMiwiU1JTIl0sWzAsMSwiT25seSBFcXVhdGlvbmFsIl0sWzIsMF0sWzMsMF0sWzQsMF0sWzAsNV1d
@@ -14,7 +14,7 @@
 			\& {\parbox{0.25\linewidth}{\centering etc.}} \\
 
 			{\parbox{0.1\linewidth}{\centering SRS}}
-			\& {\parbox{0.25\linewidth}{\centering Mathematical Knowledge (\textit{ModelKinds})}}
+			\& |[draw=green, cloud, aspect=2.8, inner sep=0pt, line width=2]| {\parbox{0.25\linewidth}{\centering Mathematical Knowledge (\textit{ModelKinds})}}
 			\& {\parbox{0.1\linewidth}{\centering Code (GOOL)}} \\
 
 			\arrow[line width=1, squiggly, color=blue, from=2-2, to=2-3]
@@ -26,8 +26,10 @@
 	\vspace{-2em}
 
 	\footnotesize
-	\begin{tabular}{llll}
-		\textcolor{green}{$\rightarrow$} & Stable transformation & \textcolor{blue}{$\rightsquigarrow$} & ``Close to stable'' transformation \\
+	\begin{tabular}{llllll}
+		\textcolor{green}{$\rightarrow$}                           & Stable transformation    &
+		\textcolor{blue}{$\rightsquigarrow$}                       & Imperfect transformation &
+		\tikz{\node[cloud, aspect=3, draw=green] (c) at (0,0) {};} & Formally captured          \\ \\
 	\end{tabular}
 \end{figure}
 

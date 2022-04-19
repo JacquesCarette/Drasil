@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName),
   quantvar, codevars, codevars', DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Choices (Structure(..), InputModule(..), 
-  ConstantStructure(..), ConstantRepr(..))
+  ConstantStructure(..), ConstantRepr(..), InternalConcept(..), genICFuncName)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   inMod)
@@ -56,13 +56,13 @@ getInputFormatIns = do
   let getIns :: Structure -> InputModule -> [CodeVarChunk]
       getIns Bundled Separated = [quantvar inParams]
       getIns _ _ = []
-  getParams "get_input" In $ quantvar inFileName : getIns (inStruct g) (inMod g)
+  getParams (genICFuncName GetInput) In $ quantvar inFileName : getIns (inStruct g) (inMod g)
 
 -- | The outputs from the function for reading inputs are the inputs.
 getInputFormatOuts :: GenState [CodeVarChunk]
 getInputFormatOuts = do
   g <- get
-  getParams "get_input" Out $ extInputs $ codeSpec g
+  getParams (genICFuncName GetInput) Out $ extInputs $ codeSpec g
 
 -- | The inputs to the function for calculating derived inputs are any variables 
 -- used in the equations for the derived inputs.
@@ -72,13 +72,13 @@ getDerivedIns = do
   let s = codeSpec g
       dvals = derivedInputs s
       reqdVals = concatMap (flip codevars (sysinfodb s) . (^. codeExpr)) dvals
-  getParams "derived_values" In reqdVals
+  getParams (genICFuncName DerivedValues) In reqdVals
 
 -- | The outputs from the function for calculating derived inputs are the derived inputs.
 getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
   g <- get
-  getParams "derived_values" Out $ map codeChunk $ derivedInputs $ codeSpec g
+  getParams (genICFuncName DerivedValues) Out $ map codeChunk $ derivedInputs $ codeSpec g
 
 -- | The parameters to the function for checking constraints on the inputs are 
 -- any inputs with constraints, and any variables used in the expressions of 
@@ -91,7 +91,7 @@ getConstraintParams = do
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
       reqdVals = nub $ varsList ++ map quantvar (concatMap (`constraintvars` db)
         (getConstraints cm varsList))
-  getParams "input_constraints" In reqdVals
+  getParams (genICFuncName InputConstraints) In reqdVals
 
 -- | The parameters to a calculation function are any variables used in the 
 -- expression representing the calculation.
@@ -105,7 +105,7 @@ getCalcParams c = do
 getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
   g <- get
-  getParams "write_output" In $ outputs $ codeSpec g
+  getParams (genICFuncName WriteOutput) In $ outputs $ codeSpec g
 
 -- | Passes parameters that are inputs to 'getInputVars' for further processing.
 -- Passes parameters that are constants to 'getConstVars' for further processing.

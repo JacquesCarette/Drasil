@@ -8,13 +8,14 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs) where
+  choicesSent, showChs, InternalConcept(..), genICFuncName) where
 
 import Language.Drasil hiding (None)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
+import Language.Drasil.Mod (Name)
 
 import GOOL.Drasil (CodeType)
 
@@ -38,7 +39,9 @@ data Choices = Choices {
   -- | Constraint violation behaviour. Exception or Warning.
   srsConstraints :: Constraints,
   -- | List of external libraries what to utilize 
-  extLibs :: [ExtLib]
+  extLibs :: [ExtLib],
+  -- | List of modifiable function names
+  functionNames :: [(InternalConcept, Name)]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -338,7 +341,8 @@ defaultChoices = Choices {
     (makeLogConfig [] "log.txt") 
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
-  extLibs = []
+  extLibs = [], 
+  functionNames = fnList
 }
 
 -- | Renders 'Choices' as 'Sentence's.
@@ -363,3 +367,26 @@ choicesSent chs = map chsFieldSent [
 -- | Helper to combine pairs of 'Sentence's for rendering 'Choices'.
 chsFieldSent :: (Sentence, Sentence) -> Sentence
 chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
+
+-- | List of user defined function names.
+-- | List is populated with default values.
+fnList :: [(InternalConcept, Name)]
+fnList = [
+  (GetInput, "get_input"), 
+  (DerivedValues, "derived_values"), 
+  (InputConstraints, "input_constraints"), 
+  (WriteOutput, "write_output")]
+
+-- | Data type of user defined concepts
+data InternalConcept = InputConstraints | WriteOutput | DerivedValues 
+  | GetInput | InputParameters | InputFormat deriving Eq  
+
+-- | Returns user defined function Name
+genICFuncName :: InternalConcept -> Name
+genICFuncName ic = existsFuncName(lookup ic (functionNames defaultChoices))
+  
+-- | Helper function for genICFuncName
+existsFuncName :: (Maybe Name) -> Name
+existsFuncName (Just x) = x
+existsFuncName Nothing = error ("InternalConcept missing from defaultChoices functionNames")
+  

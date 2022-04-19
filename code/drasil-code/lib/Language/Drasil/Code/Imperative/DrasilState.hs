@@ -11,10 +11,10 @@ import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
-  AuxFile, Modularity(..), 
-  ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 
-  ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
-  InputModule(..), Logging, Structure(..), inputModule)
+  AuxFile, Modularity(..), ImplementationType(..), Comments, Verbosity, 
+  MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
+  InputModule(..), Logging, Structure(..), inputModule, InternalConcept(..), 
+  genICFuncName)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def, 
   CodeSpec(..),  getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..), 
@@ -220,7 +220,7 @@ getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ d
         dMod _ Bundled = []
         dMod Unmodular _ = [(dvNm, n)]
         dMod (Modular Combined) _ = [(dvNm, "InputParameters")]
-        dvNm = "derived_values"
+        dvNm = (genICFuncName DerivedValues)
 
 -- | Get derived values defined in a class (for @derived_values@).
 -- If there are no derived inputs, derived_values is not defined in any class.
@@ -230,7 +230,7 @@ getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ d
 getDerivedCls :: Choices -> [Derived] -> [ClassDef]
 getDerivedCls _ [] = []
 getDerivedCls chs _ = dCls (inputModule chs) (inputStructure $ dataInfo chs)
-  where dCls Combined Bundled = [("derived_values", "InputParameters")]
+  where dCls Combined Bundled = [(genICFuncName DerivedValues, "InputParameters")]
         dCls _ _ = []
 
 -- | Get input constraints to be exported (for @input_constraints@).
@@ -242,14 +242,14 @@ getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure
         cMod _ Bundled = []
         cMod Unmodular _ = [(icNm, n)]
         cMod (Modular Combined) _ = [(icNm, "InputParameters")]
-        icNm = "input_constraints"
+        icNm = genICFuncName InputConstraints
 
 -- | Get constraints defined in a class (for @input_constraints@).
 -- See 'getDerivedCls' for full logic details.
 getConstraintsCls :: Choices -> [ConstraintCE] -> [ClassDef]
 getConstraintsCls _   [] = []
 getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure $ dataInfo chs)
-  where cCls Combined Bundled = [("input_constraints", "InputParameters")]
+  where cCls Combined Bundled = [(genICFuncName InputConstraints, "InputParameters")]
         cCls _ _ = []
 
 -- | Get input format to be exported (for @get_input@).
@@ -261,14 +261,14 @@ getExpInputFormat n chs _ = fMod (modularity $ architecture chs) (inputStructure
         fMod _ Bundled = []
         fMod Unmodular _ = [(giNm, n)]
         fMod (Modular Combined) _ = [(giNm, "InputParameters")]
-        giNm = "get_input"
+        giNm = genICFuncName GetInput
 
 -- | Get input format defined in a class (for @get_input@).
 -- See 'getDerivedCls' for full logic details.
 getInputFormatCls :: Choices -> [Input] -> [ClassDef]
 getInputFormatCls _ [] = []
 getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure $ dataInfo chs)
-  where ifCls Combined Bundled = [("get_input", "InputParameters")]
+  where ifCls Combined Bundled = [(genICFuncName GetInput, "InputParameters")]
         ifCls _ _ = []
 
 -- | Gets exported calculations.
@@ -286,6 +286,6 @@ getExpCalcs n chs = map (\d -> (codeName d, calMod))
 -- Function is exported by OutputFormat module if program is 'Modular'.
 getExpOutput :: Name -> Choices -> [Output] -> [ModExp]
 getExpOutput _ _ [] = []
-getExpOutput n chs _ = [("write_output", oMod $ modularity $ architecture chs)]
+getExpOutput n chs _ = [(genICFuncName WriteOutput, oMod $ modularity $ architecture chs)]
   where oMod Unmodular = n
         oMod _ = "OutputFormat"

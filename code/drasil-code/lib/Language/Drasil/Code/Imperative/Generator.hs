@@ -27,7 +27,7 @@ import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
-  LogConfig(..), OptionalFeatures(..))
+  LogConfig(..), OptionalFeatures(..), InternalConcept(..), genICFuncName)
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
@@ -166,7 +166,8 @@ genUnmodular = do
   umDesc <- unmodularDesc
   let n = pName $ codeSpec g
       cls = any (`member` clsMap g)
-        ["get_input", "derived_values", "input_constraints"]
+        [genICFuncName GetInput, genICFuncName DerivedValues, 
+          genICFuncName InputConstraints]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
       : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g)

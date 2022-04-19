@@ -13,6 +13,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
+import Language.Drasil.Choices (InternalConcept(..), genICFuncName)
 
 import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..), 
   VariableValue(..), StatementSym(..), DeclStatement(..), convType)
@@ -35,16 +36,16 @@ getAllInputCalls = do
 
 -- | Generates a call to the function for reading inputs from a file.
 getInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
+getInputCall = getInOutCall (genICFuncName GetInput) getInputFormatIns getInputFormatOuts
 
 -- | Generates a call to the function for calculating derived inputs.
 getDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
+getDerivedCall = getInOutCall (genICFuncName DerivedValues) getDerivedIns getDerivedOuts
 
 -- | Generates a call to the function for checking constraints on the input.
 getConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getConstraintCall = do
-  val <- getFuncCall "input_constraints" void getConstraintParams
+  val <- getFuncCall (genICFuncName InputConstraints) void getConstraintParams
   return $ fmap valStmt val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the 
@@ -60,7 +61,7 @@ getCalcCall c = do
 -- | Generates a call to the function for printing outputs.
 getOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getOutputCall = do
-  val <- getFuncCall "write_output" void getOutputParams
+  val <- getFuncCall (genICFuncName WriteOutput) void getOutputParams
   return $ fmap valStmt val
 
 -- | Generates a function call given the name, return type, and arguments to 

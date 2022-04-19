@@ -38,7 +38,8 @@ import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..), 
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
-  InputModule(..), Logging(..), Structure(..), hasSampleInput)
+  InputModule(..), Logging(..), Structure(..), hasSampleInput, 
+  InternalConcept(..), genICFuncName)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (Linearity(Linear), codeExprDoc)
@@ -266,8 +267,8 @@ genInputConstructor = do
         ctor <- genConstructor "InputParameters" cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor
-  genCtor $ any (`elem` dl) ["get_input", "derived_values", 
-    "input_constraints"]
+  genCtor $ any (`elem` dl) [genICFuncName GetInput, 
+    genICFuncName DerivedValues, genICFuncName InputConstraints]
 
 -- | Generates a function for calculating derived inputs.
 genInputDerived :: (OOProg r) => ScopeTag ->
@@ -285,9 +286,9 @@ genInputDerived s = do
         outs <- getDerivedOuts
         bod <- mapM (\x -> genCalcBlock CalcAssign x (x ^. codeExpr)) dvals
         desc <- dvFuncDesc
-        mthd <- getFunc s "derived_values" desc ins outs bod
+        mthd <- getFunc s (genICFuncName DerivedValues) desc ins outs bod
         return $ Just mthd
-  genDerived $ "derived_values" `elem` defList g
+  genDerived $ (genICFuncName DerivedValues) `elem` defList g
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
@@ -308,10 +309,10 @@ genInputConstraints s = do
         sf <- sfwrCBody sfwrCs
         ph <- physCBody physCs
         desc <- inConsFuncDesc
-        mthd <- getFunc s "input_constraints" void desc (map pcAuto parms) 
+        mthd <- getFunc s (genICFuncName InputConstraints) void desc (map pcAuto parms) 
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ "input_constraints" `elem` defList g
+  genConstraints $ (genICFuncName InputConstraints) `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> 
@@ -422,9 +423,9 @@ genInputFormat s = do
         outs <- getInputFormatOuts
         bod <- readData dd
         desc <- inFmtFuncDesc
-        mthd <- getFunc s "get_input" desc ins outs bod
+        mthd <- getFunc s (genICFuncName GetInput) desc ins outs bod
         return $ Just mthd
-  genInFormat $ "get_input" `elem` defList g
+  genInFormat $ (genICFuncName GetInput) `elem` defList g
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices 
@@ -576,10 +577,10 @@ genOutputFormat = do
                    printFileLn v_outfile v
                  ] ) (outputs $ codeSpec g)
         desc <- woFuncDesc
-        mthd <- publicFunc "write_output" void desc (map pcAuto parms) Nothing 
+        mthd <- publicFunc (genICFuncName WriteOutput) void desc (map pcAuto parms) Nothing 
           [block $ [
           varDec var_outfile,
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd
-  genOutput $ Map.lookup "write_output" (eMap g)
+  genOutput $ Map.lookup (genICFuncName WriteOutput) (eMap g)

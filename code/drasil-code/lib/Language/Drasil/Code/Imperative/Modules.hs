@@ -13,8 +13,8 @@ import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, 
   inputClassDesc, inputConstraintsDesc, inputConstructorDesc, inputFormatDesc, 
   inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc, calcModDesc)
-import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
-  getAllInputCalls, getOutputCall)
+import Language.Drasil.Code.Imperative.FunctionCalls (genCalcCall,
+  genAllInputCalls, genOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule, 
   genModuleWithImports, primaryClass, auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
@@ -85,9 +85,9 @@ genMainFunc = do
           logInFile <- maybeLog v_filename
           co <- initConsts
           ip <- getInputDecl
-          ics <- getAllInputCalls
-          varDef <- mapM getCalcCall (execOrder $ codeSpec g)
-          wo <- getOutputCall
+          ics <- genAllInputCalls
+          varDef <- mapM genCalcCall (execOrder $ codeSpec g)
+          wo <- genOutputCall
           return $ Just $ (if CommentFunc `elem` commented g then docMain else 
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g) 
             ++ varDecDef v_filename (arg 0) 
@@ -263,7 +263,7 @@ genInputConstructor = do
       genCtor True = do 
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams    
-        ics <- getAllInputCalls
+        ics <- genAllInputCalls
         ctor <- genConstructor "InputParameters" cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor

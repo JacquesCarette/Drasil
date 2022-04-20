@@ -1,9 +1,12 @@
 The focus of this work is fundamentally based on the idea of ``generation.''
 However, unlike GitHub and OpenAI's Copilot, the ideology does not delve into
 artificial intelligence, and does not focus on ``autocompleting code'' by
-natural language. Instead, the ideology focuses on creating principled stories
-of knowledge that we may use to generate software artifacts (amongst other
-knowledge).
+natural language. Instead of working with the set of natural language, the
+ideology focuses on formalizing the meaning of specific subsets into principled
+stores. The principled stories are then intertwined and mixed until a coherent
+``whole story'' is formed, where we deterministically understand what can and
+cannot be done with the knowledge described (including, but not limited to,
+generating representational software artifacts and snippets).
 
 \section{On Developing Software}
 \label{sec:idlgy:on_developing_software}
@@ -17,21 +20,26 @@ debugging and removing the possibility of bugs when stable and tested code is
 used. The library will surely save them time in the future once they've
 stabilized it to a reasonable degree, after which they will not need to worry
 about repeating the same errors they made when they were originally writing it.
-However, the library might not be portable across machines, the library might
-not make sense to those more or less familiar with certain ideas touched upon by
-the library, others might question the validity of the knowledge it pulls from,
-and the library might not be readily accessible to those not using the same
-programming language the library was written in (of course, they can write an
-FFI\todo{FFI acronym}, but this is a fairly complex task that many are
-unfamiliar with).
+They will have made significant gains in their development environment and
+workflow. However, the library might not be portable across machines, the
+library might not make sense to those more or less familiar with certain ideas
+touched upon by the library, others might question the validity of the knowledge
+it pulls from, and the library might not be readily accessible to those not
+using the same programming language the library was written in. They can write
+an \acs{ffi}, but this is a fairly complex task that many are unfamiliar with,
+and which requires meticulous analysis to ensure compatibility and creates time
+expensive update procedures when foreign libraries are updated.
 
 Commonly, one looks to use mature libraries and frameworks to underpin their
 projects, occasionally without guarantee that connecting these libraries is
-safe. As general purpose programming languages are often also used,
-misunderstandings of tacit project knowledge may also cause errors.
-Unfortunately, this programming methodology takes significant time until a
-working product is formed with minimal bugs, even when building on the shoulders
-of giants.
+safe. A familiar example of this failure is the sinking of the Vasa
+\cite{wiki:Vasa_ship}, partially caused by different teams working together but
+using different ``feet'' units (the Swedish foot is 12'' while the Amsterdam
+foot is 11'') resulting in unintended weight distribution. As general purpose
+programming languages are often also used, misunderstandings of tacit project
+knowledge may also cause errors. Unfortunately, despite building on the
+shoulders of giants, this programming methodology takes significant time and
+stress until a working product is formed with minimal bugs.
 
 To resolve this, we believe we need to revisit the original sensation felt when
 code re-creation/duplication was recognized -- why does this sensation occur?
@@ -39,15 +47,16 @@ code re-creation/duplication was recognized -- why does this sensation occur?
 The reason is obvious (ignoring the more obvious fact that they are aware of
 similarities between their code and that previously written)! They feel this
 sensation because they already understood it and had written it previously.
-Implicitly, when writing the software, the developer already had a tie between
-some algorithm and the code they had written (at times, specific to the
-programming language they had chosen to use).
+Implicitly, when writing the software, the developer already had a mental
+connection between some algorithm and the code they had written (at times,
+specific to the programming language they had chosen to use) -- it might have
+already been \textit{well-understood} to them.
 
 Unfortunately, a non-trivial amount of time is spent manually recreating the
 same piece of code from the same implicit knowledge-base, and the developer is
-left with less than preferred time to work on the ``components that are
-interesting'' that they might never have built before or that they might not
-have connected together in the past.
+likely left with less than their preferred amount of time to work on the
+components that are interesting/important that they might never have built
+before or that they might not have connected together in the past.
 
 \section{Thoughts of Generation}
 \label{sec:idlgy:thoughts_of_generation}
@@ -59,19 +68,20 @@ this model. Furthermore, if we understand how this \textit{thing} can be
 transformed into another \textit{thing}, then we should be able to describe the
 process of transformation as well. Finally, if we are able to do this en masse
 to a pool of \textit{various things}, we should be able to generate whole pools
-of \textit{other various things} from seedling pools.
+of \textit{other various things} from empty, or minimal seedling pools.
 
 Applying this idea to the world of software, where we can create and model
 \textit{things} (henceforth referred to as ``knowledge''), we can take pools of
 knowledge and generate other pools of knowledge (including whole software
-artifacts). With a weak breadth and low depth of captured knowledge, the
-originating pool of knowledge may approximately appear as a description of the
-software artifacts generated. However, with a strong breadth and high depth of
-captured knowledge, the original pool of knowledge may appear far removed from
-the software artifacts generated (it may contain little to no discussion of the
-desired software artifacts at all). In this case, the stress of software
-development is alleviated entirely, and a ``perfect'' software artifact (or
-series of ``perfect'' software artifacts) is (are) constructed.
+artifacts). \todo{Discuss triform theories} With a weak breadth and low depth of
+captured knowledge, the originating pool of knowledge may approximately appear
+as a description of the software artifacts generated. However, with a strong
+breadth and high depth of captured knowledge, the original pool of knowledge may
+appear far removed from the software artifacts generated (it may contain little
+to no discussion of the desired software artifacts at all, or a precise
+description). In this case, the stress of software development is alleviated
+entirely, and a ``perfect'' software artifact (or series of ``perfect'' software
+artifacts) is (are) constructed.
 
 \section{The Goal}
 \label{sec:idlgy:the_goal}
@@ -81,12 +91,14 @@ understand very well and each component of every step of the grand
 scheme/algorithm of the program was understood, the development of their related
 software should be a clear matter of principled engineering. However, with the
 existing programming methodology, it is not yet simple enough to reliably
-produce error-free programs with no trade-offs.
+produce error-free programs with no trade-offs, and which precisely satisfy a
+set of requirements and follow a formal design.
 
 Optimally, they would use their natural language to perfectly describe their
 problem to their computer and have it magically give them a program that does
 exactly what they wanted. Unfortunately, it is difficult to have computers
 systematically understand and act on natural language as well as us humans can.
+However, specific subsets of natural language may be usable.
 
 \section{Reconciliation -- ``Generate Everything''}
 \label{sec:idlgy:generate_everything}
@@ -95,26 +107,25 @@ While it is difficult to have a computer act on a huge set of natural language,
 we do have well-understood thoughts on specific \textit{terms} and how they can
 be interpreted. More specifically, there are sub-languages of natural language
 that we can use to describe specific kinds of knowledge, and problems and
-solutions. Here, we recognize that selecting or creating domain-specific
-languages for specific buckets of knowledge and creating domain-specific
-languages that connect buckets of other domain-specific languages, we can
-effectively create rigid sub-languages of our natural language used to describe
-programs. These rigid sub-languages being encoded as domain-specific languages
-will have a well-defined and formalized AST\todo{AST acronym}, which allows us
-to write interpreters that can take them and transform them into other fragments
-of knowledge (us being most interested in ultimately generating software
+solutions. Here, we recognize that selecting or creating \aclp{dsl} for specific
+buckets of knowledge and creating \aclp{dsl} that connect buckets of other
+\aclp{dsl}, we can effectively create rigid sub-languages of our natural
+language used to describe programs. These rigid sub-languages being encoded as
+\aclp{dsl} will have a well-defined and formalized \acs{ast}, which allows us to
+write interpreters that can take them and transform them into other fragments of
+knowledge (us being most interested in ultimately generating software
 artifacts). Thus, with enough effort, and through sequencing and connecting
-terms of domain-specific languages, we can effectively model what the discussed
-software developers are trying to build, allowing the computer to be able to
-better understand what they are trying to build.
+terms of \aclp{dsl}, we can effectively model what the discussed software
+developers are trying to build, allowing the computer to be able to better
+understand what they are trying to build.
 
 Note, however, that this idea likely only thrives in domains of knowledge that
 is ``well-understood'' \cite{well-understood}.
 
-To sum up, this should appear, in theory, as a knowledge management
-system\todo{acronym}, where generation phases are passed through the knowledge
-registry until a final knowledge registry is constructed such that it satisfies
-the requirements of the user (e.g., generating some desired software artifacts).
+In theory, this should appear as a \ACF{kms}, where generation phases are passed
+through the knowledge registry until a final knowledge registry is constructed
+such that it satisfies the requirements of the user (e.g., generating some
+desired software artifacts).
 
 \section{Prospective Workflow \& Roles}
 \label{sec:idlgy:prospective_workflow}

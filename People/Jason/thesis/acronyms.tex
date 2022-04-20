@@ -4,13 +4,50 @@
 \newcommand{\newacr}[2]{\DeclareAcronym{#1}{short=\uppercase{#1},long=#2}}
 
 % Alphabetically sorted list of acronyms
-\newacr{adt}{Algebraic Datatype}
-\newacr{ast}{Algebraic Syntax Tree}
-\newacr{dsl}{Domain-Specific Language}
-\newacr{gadt}{Generalized Algebraic Datatype}
-\newacr{gool}{Generic Object-Oriented Language}
-\newacr{oo}{Object-Oriented}
-\newacr{scs}{Scientific Computing Software}
-\newacr{srs}{Software Requirements Specification}
-\newacr{ttf}{Typed Tagless Final}
-\newacr{uid}{Unique Identifier}
+\newacr{adt}{algebraic datatype}
+\newacr{ast}{algebraic syntax tree}
+\newacr{dsl}{domain-specific language}
+\newacr{ffi}{foreign function interface}
+\newacr{gadt}{generalized algebraic datatype}
+\newacr{gool}{generic object-oriented language}
+\newacr{kms}{knowledge management system}
+\newacr{oo}{object-oriented}
+\newacr{scs}{scientific computing software}
+\newacr{srs}{software requirements specification}
+\newacr{ttf}{typed tagless final}
+\newacr{uid}{unique identifier}
+
+%------------------------------------------------------------------------------
+%- Extra commands for more functionality -- in particular, capitalizing the
+%- long form of acronyms.
+%------------------------------------------------------------------------------
+
+% Defining \ACL - to capitalize all words in an acronym
+% Credits to: https://tex.stackexchange.com/a/257896
+\NewDocumentCommand\ACF{sm}{%
+  \begingroup
+    \acsetup{uppercase/cmd=\ecapitalisewords}%
+    \IfBooleanTF{#1}{\Acf*{#2}}{\Acf{#2}}%
+  \endgroup
+}
+
+\NewDocumentCommand\ACFP{sm}{%
+  \begingroup
+    \acsetup{uppercase/cmd=\ecapitalisewords}%
+    \IfBooleanTF{#1}{\Acfp*{#2}}{\Acfp{#2}}%
+  \endgroup
+}
+
+\NewDocumentCommand\ACL{sm}{%
+  \begingroup
+    \acsetup{uppercase/cmd=\ecapitalisewords}%
+    \IfBooleanTF{#1}{\Acl*{#2}}{\Acl{#2}}%
+  \endgroup
+}
+
+\NewDocumentCommand\ACLP{sm}{%
+  \begingroup
+    \acsetup{uppercase/cmd=\ecapitalisewords}%
+    \IfBooleanTF{#1}{\Aclp*{#2}}{\Aclp{#2}}%
+  \endgroup
+}

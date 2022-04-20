@@ -130,9 +130,13 @@ desired software artifacts).
 \section{Prospective Workflow \& Roles}
 \label{sec:idlgy:prospective_workflow}
 
+\intodo{Missing discussion of the workflow!}
+
 Following this ideology, there will be at least 3 key roles: the
 \textbf{knowledge encoder}, the \textbf{knowledge user}, and the final
-\textbf{software artifact user}. 
+\textbf{software artifact user}.
+
+\subsection{Knowledge Encoder (Domain Expert)}
 
 The knowledge encoder should be a master of a particular domain. They are
 expected to encode the knowledge discussed in their respective domain in such a
@@ -142,22 +146,32 @@ transformed into other forms of knowledge (including that which is
 interdisciplinary). The knowledge they would be encoding should be as well-known
 and globally standardized as possible. As discussed in
 \autoref{sec:idlgy:generate_everything}, it is likely that the knowledge encoder
-will focus on writing a series of highly specific domain-specific languages,
-where the languages may be restricted to as specific as one term.
+will focus on writing a series of highly specific \aclp{dsl}, where the
+languages may be restricted to as specific as one term or a handful.
+
+\subsection{Knowledge / Domain User \& Orchestrator}
 
 The knowledge user/orchestrator should at least be familiar with a particular
 domain, and have goals in mind for information that they would like to ``seed''
-into their knowledge management system. \todo{continue}
+into their knowledge management system. They should also hve a working
+understanding of what the end-user needs. From this, they should be able to
+connect the work of the domain expert into ``plug-n-play'' stories (arguably,
+compilers for the end-users to use), or be able to encode/reduce friction
+between knowledge encoded by domain experts.
 
-The final end-user should find the most delight from this ideology. If the tasks
-assigned to the knowledge encoders and the knowledge users are performed
-correctly, then the end-user should have strong confidence in the fruits of
-their labour as they were built with strict adherence to the knowledge captured
-at \textit{every step of the way}. As such, one should confidently expect the
-final software artifacts to be completely devoid of unexpected things (including
-errors, unconformities to specifications, etc.).
+\subsection{End-user}
 
-%% TODO: Move the below stuff up
+The final end-user should find the most delight from this ideology. They are the
+actual users of the software artifacts, perhaps tweaking the final build of the
+software artifacts to be accustomed to their workflow. If the tasks assigned to
+the knowledge encoders and the knowledge users are performed correctly, then the
+end-user should have strong confidence in the artifacts as they were built with
+strict adherence to the knowledge captured at \textit{every step of the way}. As
+such, one should confidently expect the final software artifacts to be
+completely devoid of unexpected things (including errors, unconformities to
+specifications, etc.).
+
+\intodo{Figure out where this below paragraph should belong}
 As a domain expert transcribing knowledge encodings of some well-understood
 domain, one will largely be discussing the ways in which pieces of knowledge are
 \textit{constructed} and \textit{relate to each other}. In order for this
@@ -165,33 +179,49 @@ abstract knowledge encodings to be \textit{usable} in some way, it is vital to
 have ``names'' (\textit{types}) for the knowledge encodings. In working to
 capture the working knowledge of a domain, it's of utmost importance to ensure
 that all ``instances'' of your ``names'' (types) are \textit{always} usable in
-some meaningful way. In other words, all knowledge encodings should create a
-stringent, explicit set of rules for which all ``instances'' should conform to,
-and, arguably, also creates a justification for the need to create that
-particular knowledge/data type. As such, optimally, a domain expert would write
-their knowledge encodings and renderers in a general purpose programming
-language with a sound type system (e.g., Haskell, Agda, Java, etc.) --
-preferring ones with a type system based on formal type theories for their
-feature richness.
+some meaningful way and that the knowledge is exposed in a usable way (e.g.,
+sufficiently through some sort of \acs{api}). In other words, all knowledge
+encodings should create a stringent, explicit set of rules for which all
+``instances'' should conform to, and, arguably, also creates a justification for
+the need to create that particular knowledge/data type. As such, optimally, a
+domain expert would write their knowledge encodings and renderers in a general
+purpose programming language with a sound type system (e.g., Haskell, Agda,
+Java, etc.) -- preferring ones with a type system based on formal type theories
+for their feature richness.
 
 \section{Feasibility}
 \label{sec:idlgy:feasibility}
 
+In order for us to discuss feasibility of this idealized prospective workflow,
+we must discuss the depth \& breadth of knowledge we need to make this feasible.
+Depth of knowledge refers to the vertical knowledge understood about a specific
+fragment of knowledge, and it's preciseness. For example, we may have a
+low-depth of knowledge \& claim that English sentences are a sequence of
+characters, or we might have a slightly deeper depth/understanding  of sentences
+by describing them as a language that follows a specific syntax rule set and
+using a specific set of words. Breadth of knowledge is the horizontal domain of
+knowledge, it is the various kinds of knowledge we have in a wide variety of
+subjects and domains.
+
 \begin{itemize}
 
-    \item Already proven for low depth -- see WordPress\todo{cite} and other
-          Content Management Systems (CMSs).
-          \intodo{Discuss ``depth'' and ``breadth'' more. What are they?}
+      \item Already proven for low depth -- see WordPress \cite{Wordpress} and
+            other \ACFP{cms}. WordPress contains very low depth but has a
+            sufficient breadth for websites such that many plugins can be used
+            to add extra depth and breadth as required to increase the usability
+            of the WordPress software for different needs, thus creating a
+            plethora of websites specialized to different requirements (such as
+            blogs, e-commerce websites, and online discussion forums).
 
-    \item For higher depths, we need to restrict this to areas of
-          well-understood knowledge. However, if we can capture/understand the
-          simplicity associated with each  ``transformation''/``print''
-          operation, then we can create a system of stages that dictate
-          transformations/prints that simplify the knowledge requirements to
-          things that are very ``digestible'' for each domain expert. Awkwardly
-          worded, but, this way, we break up a huge transformation of knowledge
-          into many highly digestible smaller transformations that the domain
-          experts will think of as easy as WordPress converting basic SQL table
-          rows into HTML (e.g., high density knowlege -> low density knowledge).
+      \item For higher depths, we need to restrict this to areas of
+            well-understood knowledge. However, if we can capture/understand the
+            simplicity associated with each  ``transformation''/``print''
+            operation, then we can create a system of stages that dictate
+            transformations/prints that simplify the knowledge requirements to
+            things that are very ``digestible'' for each domain expert. Awkwardly
+            worded, but, this way, we break up a huge transformation of knowledge
+            into many highly digestible smaller transformations that the domain
+            experts will think of as easy as WordPress converting basic SQL table
+            rows into HTML (e.g., high density knowlege -> low density knowledge).
 
 \end{itemize}

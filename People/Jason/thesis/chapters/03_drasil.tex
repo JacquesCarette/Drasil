@@ -10,15 +10,20 @@ describe the target program that simulates said models.
     \textit{currently} focused on physics, etc.}
 
 \begin{itemize}
+
     \item \porthref{public project
               webpage}{https://jacquescarette.github.io/Drasil/}
+
     \item \porthref{source code is hosted on
               GitHub}{https://github.com/JacquesCarette/Drasil}
+
     \item \porthref{internal source code documentation is available in the form
               of Haddock
               documentation}{https://jacquescarette.github.io/Drasil/docs/full/index.html}
+
     \item \porthref{public variant of source code documentation is also
               available}{https://jacquescarette.github.io/Drasil/docs/index.html}
+
     \item \porthref{public wiki is available on the same GitHub
               project}{https://github.com/JacquesCarette/Drasil/wiki}
           \begin{itemize}
@@ -26,21 +31,30 @@ describe the target program that simulates said models.
                         ``quick start'' guide is available on the
                         wiki.}{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}
           \end{itemize}
+
     \item Principal investigators: \porthref{Dr. Jacques
               Carette}{https://www.cas.mcmaster.ca/~carette/} \& \porthref{Dr.
               Spencer Smith}{https://www.cas.mcmaster.ca/~smiths/}
+
+    \item Follows the formalized \ACF{srs} template \cite{SmithAndLai2005}.
+
 \end{itemize}
 
 \section{Focus}
 
 \begin{itemize}
+
     \item Primarily for undergraduate-level science (primarily physics) problems
+
     \item Generating scientific software artifacts
           \begin{itemize}
               \item Develop a stable knowledge base for physics problems
+
               \item Develop a stable framework for laying cookie-cutter
                     problems.
+
               \item Make it as simple as using a projectional editor.
+
           \end{itemize}
 \end{itemize}
 
@@ -50,11 +64,11 @@ describe the target program that simulates said models.
     \item Approach to encoding knowledge -- e.g., ``bottom-up''
 \end{itemize}
 
-\section{Architecture}
+\section{State of Architecture}
 
 \begin{itemize}
 
-    \item Knowledge Encodings
+    \item Knowledge Encodings \& Organization
           \begin{itemize}
               \item Chunks
               \item ChunkDB
@@ -64,21 +78,17 @@ describe the target program that simulates said models.
 
     \item Haskell/GHC 8.8.4
 
-\end{itemize}
-
-\section{State}
-
-\begin{itemize}
-
     \item Uses a series of \ACFP{dsl} to build up the knowledge-base and
           ``story'' of a scene/project, until sufficient knowledge is built such
           that a generator may take the whole story and generate
           representational software artifacts.
           \intodo{Should add an example of the encoding of a theory.}
 
-    \item Generates OO programs; GOOL is used to generate code in C++/C, Java,
-          Python, Swift, and C\#.
-          \intodo{non-code artifacts}
+    \item Generates \acs{oo} programs; \acs{gool} is used to generate code in
+          C++/C, Java, Python, Swift, and C\#.
+
+    \item Doxygen, Markdown, HTML, TeX, Makefile, CSS, and more non-programming
+          software artifacts.
 
     \item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
           formed equations (e.g., simple LHS = complex RHS), and ODEs supported
@@ -110,13 +120,13 @@ describe the target program that simulates said models.
           \begin{itemize}
 
               \item The Exprs of the RelationConcept being of the form: $x =
-              f(a,b,c,...)$
+                        f(a,b,c,...)$
 
               \item The ODEs being described by the expression language, but we
                     do not rely on being able to generate representing
                     computational code due to needing extra external information
                     (e.g., we require a supplementary packet of information
-                    [ODEInfo]).
+                        [ODEInfo]).
 
           \end{itemize}
 

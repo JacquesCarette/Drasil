@@ -7,128 +7,138 @@ used to describe common undergraduate level physics models and problems and
 describe the target program that simulates said models.
 
 \intodo{Last sentence of above: be more generic, and then mention that it is
-    \textit{currently} focused on physics, etc.}
+      \textit{currently} focused on physics, etc.}
 
+\section{An Exploration}
+
+Originally known as Literate Scientific Software (LSS) \todo{cite}, Drasil is an
+exploration of this ideology. Drasil's largest domain of knowledge covered
+originates from LSS: scientific computing software (SCS). \porthref{Dr. Jacques
+      Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
+      Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
+Drasil. Deeply embedded in Haskell \todo{ref} (and currently built against
+\acs{ghc} \todo{ref} 8.8.4), Drasil currently focuses on building tooling around
+8 case studies, each following the formalized \ACF{srs} template
+\cite{SmithAndLai2005}:
+
+\intodo{Explain the focus of each case study in the list below:}
 \begin{itemize}
 
-    \item \porthref{public project
-              webpage}{https://jacquescarette.github.io/Drasil/}
+      \item Single Pendulum
 
-    \item \porthref{source code is hosted on
-              GitHub}{https://github.com/JacquesCarette/Drasil}
+      \item Double Pendulum
 
-    \item \porthref{internal source code documentation is available in the form
-              of Haddock
-              documentation}{https://jacquescarette.github.io/Drasil/docs/full/index.html}
+      \item GamePhysics
 
-    \item \porthref{public variant of source code documentation is also
-              available}{https://jacquescarette.github.io/Drasil/docs/index.html}
+      \item HGHC
 
-    \item \porthref{public wiki is available on the same GitHub
-              project}{https://github.com/JacquesCarette/Drasil/wiki}
-          \begin{itemize}
-              \item Specifically, \porthref{a workspace configuration and
-                        ``quick start'' guide is available on the
-                        wiki.}{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}
-          \end{itemize}
+      \item PDController
 
-    \item Principal investigators: \porthref{Dr. Jacques
-              Carette}{https://www.cas.mcmaster.ca/~carette/} \& \porthref{Dr.
-              Spencer Smith}{https://www.cas.mcmaster.ca/~smiths/}
+      \item SWHS
 
-    \item Follows the formalized \ACF{srs} template \cite{SmithAndLai2005}.
+      \item NoPCM
+
+      \item SSP
 
 \end{itemize}
 
-\section{Focus}
-
-\begin{itemize}
-
-    \item Primarily for undergraduate-level science (primarily physics) problems
-
-    \item Generating scientific software artifacts
-          \begin{itemize}
-              \item Develop a stable knowledge base for physics problems
-
-              \item Develop a stable framework for laying cookie-cutter
-                    problems.
-
-              \item Make it as simple as using a projectional editor.
-
-          \end{itemize}
-\end{itemize}
+Drasil is currently capable of generating usable software through compiling to
+\ACF{gool}, which is capable of producing Java, C++, Python, C\#
+\cite{MacLachlan2020}, and Swift (not discussed in MacLachlan's Master's thesis,
+but created by him as well, and available similarly). Drasil contains renderers
+for HTML, Makefile, basic Markdown (enough for README), GraphViz DOT (graph
+description language), plaintext documents, and \LaTeX\ / \TeX. Drasil's source
+code is publicly available on
+\porthref{GitHub}{https://github.com/JacquesCarette/Drasil}, and Drasil's
+documentation
+(\porthref{user-facing}{https://jacquescarette.github.io/Drasil/docs/index.html},
+and
+\porthref{internal}{https://jacquescarette.github.io/Drasil/docs/full/index.html})
+is available on the Drasil project
+\porthref{homepage}{https://jacquescarette.github.io/Drasil/}. A public Drasil
+wiki is hosted on the \porthref{same GitHub
+      project}{https://github.com/JacquesCarette/Drasil/wiki}, containing information
+on potential future Drasil projects, Drasil-related papers, a
+\porthref{developer workspace configuration and ``quick start''
+      guide}{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}, and a
+guide for \porthref{building your own project with
+      Drasil}{https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil}.
 
 \section{Methodology}
 
 \begin{itemize}
-    \item Approach to encoding knowledge -- e.g., ``bottom-up''
+
+      \item Primarily focused on undergraduate-level science (primarily physics)
+            problems
+
+      \item Generating scientific software artifacts
+            \begin{itemize}
+                  \item Develop a stable knowledge base for physics problems
+
+                  \item Develop a stable framework for laying cookie-cutter
+                        problems.
+
+                  \item Make it as simple as using a projectional editor.
+
+            \end{itemize}
+
+      \item Approach to encoding knowledge -- e.g., ``bottom-up''
+
 \end{itemize}
 
 \section{State of Architecture}
 
 \begin{itemize}
 
-    \item Knowledge Encodings \& Organization
-          \begin{itemize}
-              \item Chunks
-              \item ChunkDB
-          \end{itemize}
+      \item Knowledge Encodings \& Organization
+            \begin{itemize}
+                  \item Chunks
+                  \item ChunkDB
+            \end{itemize}
 
-    \item SmithEtAl template for SRS documents
+      \item SmithEtAl template for SRS documents
 
-    \item Haskell/GHC 8.8.4
+      \item Haskell/GHC 8.8.4
 
-    \item Uses a series of \ACFP{dsl} to build up the knowledge-base and
-          ``story'' of a scene/project, until sufficient knowledge is built such
-          that a generator may take the whole story and generate
-          representational software artifacts.
-          \intodo{Should add an example of the encoding of a theory.}
+      \item Uses a series of \ACFP{dsl} to build up the knowledge-base and
+            ``story'' of a scene/project, until sufficient knowledge is built such
+            that a generator may take the whole story and generate
+            representational software artifacts.
+            \intodo{Should add an example of the encoding of a theory.}
 
-    \item Generates \acs{oo} programs; \acs{gool} is used to generate code in
-          C++/C, Java, Python, Swift, and C\#.
+      \item Generates \acs{oo} programs; \acs{gool} is used to generate code in
+            C++/C, Java, Python, Swift, and C\#.
 
-    \item Doxygen, Markdown, HTML, TeX, Makefile, CSS, and more non-programming
-          software artifacts.
+      \item Doxygen, Markdown, HTML, TeX, Makefile, CSS, and more non-programming
+            software artifacts.
 
-    \item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
-          formed equations (e.g., simple LHS = complex RHS), and ODEs supported
-          by python libraries.
+      \item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
+            formed equations (e.g., simple LHS = complex RHS), and ODEs supported
+            by python libraries.
 
-    \item Multiple examples:
-          \begin{itemize}
-              \item DblPendulum
-              \item Game physics
-              \item GlassBR
-              \item HGHC
-              \item NoPCM
-              \item PDController
-              \item Projectile
-              \item SglPendulum
-              \item SSP
-              \item SWHS
-          \end{itemize}
+      \item \intodo{table of Case Study/Generates SRS/Code/Complete \checkmark{}s to fill in the boxes}
 
-    \item Multiple code generating examples (each with their own requirements):
-          \begin{itemize}
-              \item GlassBR
-              \item NoPCM
-              \item PDController
-              \item Projectile
-          \end{itemize}
+      \item Multiple code generating examples (each with their own requirements):
+            \begin{itemize}
+                  \item GlassBR
+                  \item NoPCM
+                  \item PDController
+                  \item Projectile
+            \end{itemize}
 
-    \item The calculation path relies (implicitly) on:
-          \begin{itemize}
+      \item The calculation path relies (implicitly) on:
+            \begin{itemize}
 
-              \item The Exprs of the RelationConcept being of the form: $x =
-                        f(a,b,c,...)$
+                  \item The Exprs of the RelationConcept being of the form: $x =
+                              f(a,b,c,...)$
 
-              \item The ODEs being described by the expression language, but we
-                    do not rely on being able to generate representing
-                    computational code due to needing extra external information
-                    (e.g., we require a supplementary packet of information
-                        [ODEInfo]).
+                  \item The ODEs being described by the expression language, but we
+                        do not rely on being able to generate representing
+                        computational code due to needing extra external information
+                        (e.g., we require a supplementary packet of information
+                              [ODEInfo]).
 
-          \end{itemize}
+            \end{itemize}
 
 \end{itemize}
 

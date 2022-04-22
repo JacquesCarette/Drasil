@@ -386,7 +386,7 @@ genICFuncName :: InternalConcept -> Name
 genICFuncName ic = existsFuncName(lookup ic (functionNames defaultChoices))
   
 -- | Helper function for genICFuncName
-existsFuncName :: (Maybe Name) -> Name
+existsFuncName :: Maybe Name -> Name
 existsFuncName (Just x) = x
-existsFuncName Nothing = error ("InternalConcept missing from defaultChoices functionNames")
+existsFuncName Nothing = error "InternalConcept missing from defaultChoices functionNames"
   

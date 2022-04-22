@@ -220,7 +220,7 @@ getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ d
         dMod _ Bundled = []
         dMod Unmodular _ = [(dvNm, n)]
         dMod (Modular Combined) _ = [(dvNm, "InputParameters")]
-        dvNm = (genICFuncName DerivedValues)
+        dvNm = genICFuncName DerivedValues
 
 -- | Get derived values defined in a class (for @derived_values@).
 -- If there are no derived inputs, derived_values is not defined in any class.

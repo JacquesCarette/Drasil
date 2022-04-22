@@ -74,9 +74,9 @@ inputConstructorDesc = do
       icDesc True = "checking " ++ pAndS ++ " on the input"
       dl = defList g
   return $ "Initializes input object by " ++ stringList [ 
-    ifDesc ((genICFuncName GetInput) `elem` dl),
-    idDesc ((genICFuncName DerivedValues) `elem` dl),
-    icDesc ((genICFuncName InputConstraints) `elem` dl)]
+    ifDesc (genICFuncName GetInput `elem` dl),
+    idDesc (genICFuncName DerivedValues `elem` dl),
+    icDesc (genICFuncName InputConstraints `elem` dl)]
 
 -- | Returns a description of what is contained in the Input Format module,
 -- if it exists.
@@ -85,7 +85,7 @@ inputFormatDesc = do
   g <- get
   let ifDesc False = ""
       ifDesc _ = "the function for reading inputs"
-  return $ ifDesc $ (genICFuncName GetInput) `elem` defList g
+  return $ ifDesc $ genICFuncName GetInput `elem` defList g
 
 -- | Returns a description of what is contained in the Derived Values module,
 -- if it exists.
@@ -94,7 +94,7 @@ derivedValuesDesc = do
   g <- get
   let dvDesc False = ""
       dvDesc _ = "the function for calculating derived values"
-  return $ dvDesc $ (genICFuncName DerivedValues) `elem` defList g
+  return $ dvDesc $ genICFuncName DerivedValues `elem` defList g
 
 -- | Returns a description of what is contained in the Input Constraints module,
 -- if it exists.
@@ -105,7 +105,7 @@ inputConstraintsDesc = do
   let icDesc False = ""
       icDesc _ = "the function for checking the " ++ pAndS ++ 
         " on the input"
-  return $ icDesc $ (genICFuncName InputConstraints) `elem` defList g
+  return $ icDesc $ genICFuncName InputConstraints `elem` defList g
 
 -- | Returns a description of what is contained in the Constants module,
 -- if it exists.
@@ -125,7 +125,7 @@ outputFormatDesc = do
   g <- get
   let ofDesc False = ""
       ofDesc _ = "the function for writing outputs"
-  return $ ofDesc $ (genICFuncName WriteOutput) `elem` defList g
+  return $ ofDesc $ genICFuncName WriteOutput `elem` defList g
 
 -- | Returns a description for the generated function that stores inputs,
 -- if it exists. Checks whether explicit inputs, derived inputs, and constants 
@@ -169,7 +169,7 @@ inFmtFuncDesc = do
   g <- get
   let ifDesc False = ""
       ifDesc _ = "Reads input from a file with the given file name"
-  return $ ifDesc $ (genICFuncName GetInput) `elem` defList g
+  return $ ifDesc $ genICFuncName GetInput `elem` defList g
 
 -- | Returns a description for the generated function that checks input constraints,
 -- if it exists.
@@ -179,7 +179,7 @@ inConsFuncDesc = do
   pAndS <- physAndSfwrCons
   let icDesc False = ""
       icDesc _ = "Verifies that input values satisfy the " ++ pAndS
-  return $ icDesc $ (genICFuncName InputConstraints) `elem` defList g
+  return $ icDesc $ genICFuncName InputConstraints `elem` defList g
 
 -- | Returns a description for the generated function that calculates derived inputs,
 -- if it exists.
@@ -189,7 +189,7 @@ dvFuncDesc = do
   let dvDesc False = ""
       dvDesc _ = "Calculates values that can be immediately derived from the" ++
         " inputs"
-  return $ dvDesc $ (genICFuncName DerivedValues) `elem` defList g
+  return $ dvDesc $ genICFuncName DerivedValues `elem` defList g
 
 -- | Description of the generated Calculations module.
 calcModDesc :: Description
@@ -201,7 +201,7 @@ woFuncDesc = do
   g <- get
   let woDesc False = ""
       woDesc _ = "Writes the output values to output.txt"
-  return $ woDesc $ (genICFuncName WriteOutput) `elem` defList g
+  return $ woDesc $ genICFuncName WriteOutput `elem` defList g
 
 -- | Returns the phrase "physical constraints" if there are any physical 
 -- constraints on the input and "software constraints" if there are any 

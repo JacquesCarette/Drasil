@@ -288,7 +288,7 @@ genInputDerived s = do
         desc <- dvFuncDesc
         mthd <- getFunc s (genICFuncName DerivedValues) desc ins outs bod
         return $ Just mthd
-  genDerived $ (genICFuncName DerivedValues) `elem` defList g
+  genDerived $ genICFuncName DerivedValues `elem` defList g
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
@@ -312,7 +312,7 @@ genInputConstraints s = do
         mthd <- getFunc s (genICFuncName InputConstraints) void desc (map pcAuto parms) 
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ (genICFuncName InputConstraints) `elem` defList g
+  genConstraints $ genICFuncName InputConstraints `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> 
@@ -425,7 +425,7 @@ genInputFormat s = do
         desc <- inFmtFuncDesc
         mthd <- getFunc s (genICFuncName GetInput) desc ins outs bod
         return $ Just mthd
-  genInFormat $ (genICFuncName GetInput) `elem` defList g
+  genInFormat $ genICFuncName GetInput `elem` defList g
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices 

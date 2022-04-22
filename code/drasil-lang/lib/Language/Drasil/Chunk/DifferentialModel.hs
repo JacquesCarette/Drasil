@@ -103,7 +103,7 @@ formMultiPoly :: DifferentialModel -> [ModelExpr]
 formMultiPoly d = map (\x -> formAPolynomial x (d ^. indepVar)) (d ^. polynomials)
 
 formASingleExpr :: [ModelExpr] -> ModelExpr
-formASingleExpr = foldr1 ($&&)
+formASingleExpr = foldl1 ($&&)
 
 setAllPolyToZero :: [ModelExpr] -> [ModelExpr]
 setAllPolyToZero = map (\x -> equiv $ x : [exactDbl 0])
@@ -127,13 +127,13 @@ formAPolynomial p indepVar =
 -- | Multiple all Terms
 multiAllTerms :: [Term] -> UnitalChunk -> ModelExpr
 multiAllTerms terms indepVar =
-  foldr1 addRe
+  foldl1 addRe
   $ map(`formATerm` indepVar) terms
 
 -- | Multiple all Variables
 multiAllVars :: [Variable] -> UnitalChunk -> ModelExpr
 multiAllVars vars indepVar =
-  foldr1 mulRe
+  foldl1 mulRe
   $ map (`formAVariable` indepVar) vars
 
 -- | Construct a Canonical form of ODE, e.g. ax0 + bx1 + cx2 + .... + c

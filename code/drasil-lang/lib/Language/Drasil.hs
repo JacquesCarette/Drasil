@@ -92,7 +92,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC, addRelToCC
   -- Language.Drasil.Chunk.DifferentialModel
-  , DifferentialModel, ($*), ($^^), ($+), makeASystemDE
+  , DifferentialModel, ($^^), makeASystemDE
 
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Quantity
@@ -334,7 +334,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
-import Language.Drasil.Chunk.DifferentialModel(DifferentialModel, ($*), ($^^), ($+), makeASystemDE)
+import Language.Drasil.Chunk.DifferentialModel(DifferentialModel, ($^^), makeASystemDE)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc',
   ucStaged, ucs, ucs', ucsWS, ucuc, ucw)

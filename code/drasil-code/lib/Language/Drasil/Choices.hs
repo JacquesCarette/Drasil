@@ -20,7 +20,8 @@ import Language.Drasil.Mod (Name)
 import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
-import Data.Map (Map, fromList)
+
+import Data.Map (Map, fromList, lookup)
 
 -- Full details of Choices documentation 
 -- https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -41,7 +42,7 @@ data Choices = Choices {
   -- | List of external libraries what to utilize 
   extLibs :: [ExtLib],
   -- | List of modifiable function names
-  functionNames :: [(InternalConcept, Name)]
+  functionNames :: Map InternalConcept Name
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -370,8 +371,8 @@ chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
 
 -- | List of user defined function names.
 -- | List is populated with default values.
-fnList :: [(InternalConcept, Name)]
-fnList = [
+fnList :: Map InternalConcept Name
+fnList = fromList [
   (GetInput, "get_input"), 
   (DerivedValues, "derived_values"), 
   (InputConstraints, "input_constraints"), 
@@ -379,11 +380,11 @@ fnList = [
 
 -- | Data type of user defined concepts
 data InternalConcept = InputConstraints | WriteOutput | DerivedValues 
-  | GetInput | InputParameters | InputFormat deriving Eq  
+  | GetInput | InputParameters | InputFormat deriving (Eq, Ord)  
 
 -- | Returns user defined function Name
 genICFuncName :: InternalConcept -> Name
-genICFuncName ic = existsFuncName(lookup ic (functionNames defaultChoices))
+genICFuncName ic = existsFuncName(Data.Map.lookup ic (functionNames defaultChoices))
   
 -- | Helper function for genICFuncName
 existsFuncName :: Maybe Name -> Name

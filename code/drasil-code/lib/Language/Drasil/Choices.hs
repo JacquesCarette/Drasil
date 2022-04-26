@@ -370,7 +370,7 @@ chsFieldSent :: (Sentence, Sentence) -> Sentence
 chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
 
 -- | List of user defined function names.
--- | List is populated with default values.
+-- List is populated with default values.
 fnList :: Map InternalConcept Name
 fnList = fromList [
   (GetInput, "get_input"), 

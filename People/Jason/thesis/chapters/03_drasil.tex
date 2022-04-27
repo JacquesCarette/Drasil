@@ -1,23 +1,22 @@
 \footnotetext[1]{\url{https://jacquescarette.github.io/Drasil/}}
 
 \begin{mdleftbar}
-      ``Drasil is a framework for generating families of software artifacts from a
-      coherent knowledge base, following its mantra, ``Generate All The Things!''.
-      Drasil uses a series of variably sized Domain-Specific Languages (DSLs) to
-      describe various fragments of knowledge that domain experts and users alike may
-      use to piece together fragments of knowledge into a coherent ``story''. Through
-      forming some coherent ``story'' in a domain captured by Drasil, a
-      representational software artifact may be generated. Drasil currently focuses on
-      Scientific Computing Software (SCS), following Smith and Lai's Software
-      Requirements Specifications (SRS) template as described in
-      \cite{SmithAndLai2005}. Behind the scenes of the SRS, a mathematical language is
-      used to describe various theories, and have representational software
-      constructed via compiling to Generic Object-Oriented Language (GOOL)
+      ``Drasil is a framework for generating families of software artifacts from
+      a coherent knowledge base, following its mantra, ``Generate All The
+      Things!''. Drasil uses a series of variably sized \ACFP{dsl} to describe
+      various fragments of knowledge that domain experts and users alike may use
+      to piece together fragments of knowledge into a coherent ``story''.
+      Through forming some coherent ``story'' in a domain captured by Drasil, a
+      representational software artifact may be generated. Drasil currently
+      focuses on \ACF{scs}, following Smith and Lai's \ACF{srs} template as
+      described in \cite{SmithAndLai2005}. Behind the scenes of the \acs{srs}, a
+      mathematical language is used to describe various theories, and have
+      representational software constructed via compiling to \ACF{gool}
       \cite{Carette2019}. Through encoding knowledge in Drasil, an increase in
-      productivity (and maintainability) in building reliable and traceable software
-      artifacts is observed \cite{SzymczakEtAl2016}, specifically in SCS
-      \cite{Smith2018}. Drasil's source code (Haskell), case studies, and
-      documentation studies can be found on its
+      productivity (and maintainability) in building reliable and traceable
+      software artifacts is observed \cite{SzymczakEtAl2016}, specifically in
+      \acs{scs} \cite{Smith2018}. Drasil's source code (Haskell), case studies,
+      and documentation studies can be found on its
       \porthreftm{website}{https://jacquescarette.github.io/Drasil/}.''
       \cite{Balaci2021Poster}
 \end{mdleftbar}
@@ -48,27 +47,9 @@ describe the target program that simulates said models.
       \textit{currently} focused on physics, etc.}
 
 
-\intodo{Explain the focus of each case study in the list below:}
+\intodo{Add citations to each row of the below:}
 
-\begin{longtable}[c]{|>{\raggedright}p{0.3\linewidth}|>{\raggedright\arraybackslash}p{0.54\linewidth}|}
-      \hline
-
-      \rowcolor{McMasterMediumGrey}
-      \textbf{Case Study}      & \textbf{Description} \\ \hline
-
-      \caseStudy{sglpendulum}  &                      \\ \hline
-      \caseStudy{dblpendulum}  &                      \\ \hline
-      \caseStudy{gamephysics}  &                      \\ \hline
-      \caseStudy{hghc}         &                      \\ \hline
-      \caseStudy{pdcontroller} &                      \\ \hline
-      \caseStudy{swhs}         &                      \\ \hline
-      \caseStudy{nopcm}        &                      \\ \hline
-      \caseStudy{ssp}          &                      \\
-
-      \hline
-      \caption{Drasil Case Studies}
-      \label{tab:drasilCaseStudies}
-\end{longtable}
+\caseStudiesTable
 
 Drasil is currently capable of generating usable software through compiling to
 \ACF{gool}, which is capable of producing Java, C++, Python, C\#

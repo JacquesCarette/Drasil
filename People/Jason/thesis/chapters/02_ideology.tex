@@ -1,12 +1,12 @@
 The focus of this work is fundamentally based on the idea of ``generation.''
-However, unlike GitHub and OpenAI's Copilot, the ideology does not delve into
-artificial intelligence, and does not focus on ``autocompleting code'' by
-natural language. Instead of working with the set of natural language, the
-ideology focuses on formalizing the meaning of specific subsets into principled
-stores. The principled stories are then intertwined and mixed until a coherent
-``whole story'' is formed, where we deterministically understand what can and
-cannot be done with the knowledge described (including, but not limited to,
-generating representational software artifacts and snippets).
+However, unlike GitHub and OpenAI's Copilot \todo{cite}, the ideology does not
+delve into artificial intelligence, and does not focus on ``autocompleting
+code'' by natural language. Instead of working with the set of natural language,
+the ideology focuses on formalizing the meaning of specific subsets into
+principled stores. The principled stories are then intertwined and mixed until a
+coherent ``whole story'' is formed, where we deterministically understand what
+can and cannot be done with the knowledge described (including, but not limited
+to, generating representational software artifacts and snippets).
 
 \section{On Developing Software}
 \label{sec:idlgy:on_developing_software}
@@ -197,31 +197,51 @@ we must discuss the depth \& breadth of knowledge we need to make this feasible.
 Depth of knowledge refers to the vertical knowledge understood about a specific
 fragment of knowledge, and it's preciseness. For example, we may have a
 low-depth of knowledge \& claim that English sentences are a sequence of
-characters, or we might have a slightly deeper depth/understanding  of sentences
-by describing them as a language that follows a specific syntax rule set and
-using a specific set of words. Breadth of knowledge is the horizontal domain of
-knowledge, it is the various kinds of knowledge we have in a wide variety of
-subjects and domains.
+characters, or we might have a slightly ``deeper'' depth/understanding  of
+sentences by describing them as a language that follows a specific syntax rule
+set and using a specific set of words. Breadth of knowledge is the horizontal
+domain of knowledge, it is the various kinds of knowledge we have in a wide
+variety of subjects and domains.
 
-\begin{itemize}
+In low-depth areas, we may observe that this ideology is very practical, and
+heavily used. Widely used \ACFP{cms}, such as WordPress \cite{WordPress} and
+Drupal \todo{cite}, and web frameworks, such as Django \todo{cite} and Laravel
+\todo{cite}, are arguably also following similar ideals as this ideology. They
+all typically provide a basic understanding of ``users'' of a hosted website,
+facilities to write HTML content in one way or another, plugins, and more. While
+some might be, these listed above are not specific to one specific use-case.
+They are very versatile and highly reusable for a wide variety of use-cases
+because they ship with low but sufficient depth of knowledge (though they might
+call it ``features''). Out of the box, these web technologies listed come with
+simple, common, functionality (features) and powerful extensibility through
+either plugins or through software extension and usage. With the basic tooling
+provided, users are able to rapidly deploy websites with content. Through
+extending the website's knowledge-base (e.g., plugins or software extension),
+they are able to obtain a wider breadth and deeper depth to the knowledge
+contained within them. Through this, the end-users are able to encode
+increasingly complex and different kinds of data into the systems to ultimately
+obtain increasingly specialized websites, such as technical blogs, eCommerce
+websites, online accounting software, online discussion forums, and more. In
+these technologies, knowledge depth typically remains ``shallow'', but through
+increasing breadth of knowledge, increasingly interesting websites may be
+created. The mechanized generation-related components of the ideology is also
+fairly shallow in this area, but, still, highly feasible.
 
-      \item Already proven for low depth -- see WordPress \cite{Wordpress} and
-            other \ACFP{cms}. WordPress contains very low depth but has a
-            sufficient breadth for websites such that many plugins can be used
-            to add extra depth and breadth as required to increase the usability
-            of the WordPress software for different needs, thus creating a
-            plethora of websites specialized to different requirements (such as
-            blogs, e-commerce websites, and online discussion forums).
-
-      \item For higher depths, we need to restrict this to areas of
-            well-understood knowledge. However, if we can capture/understand the
-            simplicity associated with each  ``transformation''/``print''
-            operation, then we can create a system of stages that dictate
-            transformations/prints that simplify the knowledge requirements to
-            things that are very ``digestible'' for each domain expert. Awkwardly
-            worded, but, this way, we break up a huge transformation of knowledge
-            into many highly digestible smaller transformations that the domain
-            experts will think of as easy as WordPress converting basic SQL table
-            rows into HTML (e.g., high density knowlege -> low density knowledge).
-
-\end{itemize}
+In areas of high knowledge density, as long as developers have infinite patience
+and can invest infinite time into transcribing knowledge and information into
+the software, anything is possible, and this ideology is very practical.
+Unfortunately, that situation is not quite realistic. As such, we should
+restrict our scope in high knowledge density areas to only those
+``well-understood'' \cite{well-understood}. \todo{Define well-understood}. In
+projects with high knowledge density, it's crucial to have clear and concise
+knowledge fragment encodings that allow users to directly interact with the
+decomposed simplicity associated with each ``transformation'' operation.
+Thankfully, since these domains are also typically codified (or easily
+codifiable), this is doable. Through capturing many series of incomplex
+transformations of knowledge into other forms, we are able to sequence and
+compose them until an ultimate large, normally complex and complicated,
+transformation is formed. Finally, through creating a directed discussion of
+ideas, we can form a stable knowledge-base from which we can draw information
+from it. One large feasible goal from it is to draw out usable software
+artifacts from it by poking and prodding in all areas needed until we can
+deterministically form them, as our needs demand.

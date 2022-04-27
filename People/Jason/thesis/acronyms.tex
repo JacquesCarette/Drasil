@@ -2,6 +2,7 @@
 % \DeclareAcronym{acronym}{short=short-version,long=long-version}
 
 \newcommand{\newacr}[2]{\DeclareAcronym{#1}{short=\uppercase{#1},long=#2}}
+\newcommand{\newacrs}[3]{\DeclareAcronym{#1}{short=#2,long=#3}}
 
 % Alphabetically sorted list of acronyms
 \newacr{adt}{algebraic datatype}
@@ -21,13 +22,13 @@
 \newacr{uid}{unique identifier}
 
 % Case Studies
-\newacr{sglpendulum}{single pendulum} % TODO: Fix abbreviation capitalization
-\newacr{dblpendulum}{double pendulum} % TODO: Fix abbreviation capitalization
-\newacr{gamephysics}{game physics} % TODO: Fix abbreviation capitalization
+\newacrs{sglpendulum}{SglPendulum}{single pendulum}
+\newacrs{dblpendulum}{DblPendulum}{double pendulum}
+\newacrs{gamephysics}{GamePhysics}{game physics}
 \newacr{hghc}{heat transfer coefficients related to clad} % TODO: Title?
-\newacr{pdcontroller}{pd controller} % TODO: title, and abbr. capitalization
+\newacrs{pdcontroller}{PDController}{PD controller}
 \newacr{swhs}{solar water heating system}
-\newacr{nopcm}{solar water heating system without pcm} % TODO: Custom uppercase, abbr. capitalization
+\newacrs{nopcm}{NoPCM}{solar water heating system without PCM}
 \newacr{ssp}{slope stability analysis program} % TODO: the "a" should not be capitalized
 
 %------------------------------------------------------------------------------

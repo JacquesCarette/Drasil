@@ -1,25 +1,25 @@
 \footnotetext[1]{\url{https://jacquescarette.github.io/Drasil/}}
 
 \begin{mdleftbar}
-``Drasil is a framework for generating families of software artifacts from a
-coherent knowledge base, following its mantra, ``Generate All The Things!''.
-Drasil uses a series of variably sized Domain-Specific Languages (DSLs) to
-describe various fragments of knowledge that domain experts and users alike may
-use to piece together fragments of knowledge into a coherent ``story''. Through
-forming some coherent ``story'' in a domain captured by Drasil, a
-representational software artifact may be generated. Drasil currently focuses on
-Scientific Computing Software (SCS), following Smith and Lai's Software
-Requirements Specifications (SRS) template as described in
-\cite{SmithAndLai2005}. Behind the scenes of the SRS, a mathematical language is
-used to describe various theories, and have representational software
-constructed via compiling to Generic Object-Oriented Language (GOOL)
-\cite{Carette2019}. Through encoding knowledge in Drasil, an increase in
-productivity (and maintainability) in building reliable and traceable software
-artifacts is observed \cite{SzymczakEtAl2016}, specifically in SCS
-\cite{Smith2018}. Drasil's source code (Haskell), case studies, and
-documentation studies can be found on its
-\porthreftm{website}{https://jacquescarette.github.io/Drasil/}.''
-\cite{Balaci2021Poster}
+      ``Drasil is a framework for generating families of software artifacts from a
+      coherent knowledge base, following its mantra, ``Generate All The Things!''.
+      Drasil uses a series of variably sized Domain-Specific Languages (DSLs) to
+      describe various fragments of knowledge that domain experts and users alike may
+      use to piece together fragments of knowledge into a coherent ``story''. Through
+      forming some coherent ``story'' in a domain captured by Drasil, a
+      representational software artifact may be generated. Drasil currently focuses on
+      Scientific Computing Software (SCS), following Smith and Lai's Software
+      Requirements Specifications (SRS) template as described in
+      \cite{SmithAndLai2005}. Behind the scenes of the SRS, a mathematical language is
+      used to describe various theories, and have representational software
+      constructed via compiling to Generic Object-Oriented Language (GOOL)
+      \cite{Carette2019}. Through encoding knowledge in Drasil, an increase in
+      productivity (and maintainability) in building reliable and traceable software
+      artifacts is observed \cite{SzymczakEtAl2016}, specifically in SCS
+      \cite{Smith2018}. Drasil's source code (Haskell), case studies, and
+      documentation studies can be found on its
+      \porthreftm{website}{https://jacquescarette.github.io/Drasil/}.''
+      \cite{Balaci2021Poster}
 \end{mdleftbar}
 
 \section{An Exploration}
@@ -27,8 +27,8 @@ documentation studies can be found on its
 Originally known as Literate Scientific Software (LSS) \todo{cite}, Drasil is an
 exploration of this ideology. Drasil's largest domain of knowledge covered
 originates from LSS: scientific computing software (SCS). \porthref{Dr. Jacques
-Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
-Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
+      Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
+      Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
 Drasil. Deeply embedded in Haskell \todo{ref} (and currently built against
 \acs{ghc} \todo{ref} 8.8.4), Drasil currently focuses on building tooling around
 8 case studies, each following the formalized \ACF{srs} template
@@ -50,22 +50,24 @@ describe the target program that simulates said models.
 
 \intodo{Explain the focus of each case study in the list below:}
 
-\[\begin{tabular}{|>{\raggedright}p{0.3\textwidth}|>{\raggedright\arraybackslash}p{0.54\textwidth}|}
+\begin{longtable}[c]{|>{\raggedright}p{0.3\linewidth}|>{\raggedright\arraybackslash}p{0.54\linewidth}|}
       \hline
 
-      \textbf{Case Study} & \textbf{Description} \\ \hline
+      \textbf{Case Study}      & \textbf{Description} \\ \hline
 
-      \caseStudy{sglpendulum} & \\ \hline
-      \caseStudy{dblpendulum} & \\ \hline
-      \caseStudy{gamephysics} & \\ \hline
-      \caseStudy{hghc} & \\ \hline
-      \caseStudy{pdcontroller} & \\ \hline
-      \caseStudy{swhs} & \\ \hline
-      \caseStudy{nopcm} & \\ \hline
-      \caseStudy{ssp} & \\
+      \caseStudy{sglpendulum}  &                      \\ \hline
+      \caseStudy{dblpendulum}  &                      \\ \hline
+      \caseStudy{gamephysics}  &                      \\ \hline
+      \caseStudy{hghc}         &                      \\ \hline
+      \caseStudy{pdcontroller} &                      \\ \hline
+      \caseStudy{swhs}         &                      \\ \hline
+      \caseStudy{nopcm}        &                      \\ \hline
+      \caseStudy{ssp}          &                      \\
 
       \hline
-\end{tabular}\]
+      \caption{Drasil Case Studies}
+      \label{tab:drasilCaseStudies}
+\end{longtable}
 
 Drasil is currently capable of generating usable software through compiling to
 \ACF{gool}, which is capable of producing Java, C++, Python, C\#
@@ -82,12 +84,12 @@ and
 is available on the Drasil project
 \porthref{homepage}{https://jacquescarette.github.io/Drasil/}. A public Drasil
 wiki is hosted on the \porthref{same GitHub
-project}{https://github.com/JacquesCarette/Drasil/wiki}, containing information
+      project}{https://github.com/JacquesCarette/Drasil/wiki}, containing information
 on potential future Drasil projects, Drasil-related papers, a
 \porthref{developer workspace configuration and ``quick start''
-guide}{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}, and a
+      guide}{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}, and a
 guide for \porthref{building your own project with
-Drasil}{https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil}.
+      Drasil}{https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil}.
 
 \section{Methodology}
 
@@ -142,10 +144,10 @@ Drasil}{https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-D
             supported by python libraries.
 
       \item \intodo{table of Case Study/Generates SRS/Code/Complete
-      \checkmark{}s to fill in the boxes}
+                  \checkmark{}s to fill in the boxes}
 
       \item Multiple code generating examples (each with their own
-      requirements):
+            requirements):
             \begin{itemize}
                   \item GlassBR
                   \item NoPCM

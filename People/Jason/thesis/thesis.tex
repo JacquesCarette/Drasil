@@ -17,7 +17,7 @@
 \usepackage{graphicx}
 \usepackage{lmodern}
 \usepackage{lastpage}
-
+\usepackage{longtable}
 
 % For quotes, I wanted to put the "left bar" style. For implementation, Gonzalo
 % Medina was very kind to create an example. It is based on:
@@ -251,8 +251,14 @@ PAGES: \pageref{lastOfFrontMatter}, \pageref{LastPage}
 % List of Figures
 %------------------------------------------------------------------------------
 
-\renewcommand{\listfigurename}{List of Illustrations, Charts, and Diagrams}
+% \renewcommand{\listfigurename}{List of Illustrations, Charts, and Diagrams}
 \listoffigures
+
+%------------------------------------------------------------------------------
+% List of Tables
+%------------------------------------------------------------------------------
+
+\listoftables
 
 %------------------------------------------------------------------------------
 % Table of Source Codes

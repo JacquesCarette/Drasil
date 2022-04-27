@@ -7,6 +7,7 @@ thesis.pdf
 *.acr
 *.ist
 *.lol
+*.lot
 *.pyg
 *.synctex(busy)
 *.fot

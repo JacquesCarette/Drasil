@@ -1,19 +1,19 @@
 module Drasil.GlassBR.Symbols where
 
 import Language.Drasil (QuantityDict, qw)
-import Language.Drasil.Code (Mod(Mod), asVC, asVC')
+import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.IMods (iMods)
-import Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ)
+import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.Unitals (inputDataConstraints, inputs, outputs, 
-  specParamVals, symbols, symbolsWithDefns, unitless, tmSymbols)
+  specParamVals, symbols, symbolsWithDefns, unitless, tmSymbols, interps)
 
 import Data.List ((\\))
 
 symbolsForTable :: [QuantityDict]
 symbolsForTable = inputs ++ outputs ++ tmSymbols ++ map qw specParamVals ++ 
   map qw symbolsWithDefns ++ map qw symbols ++ map qw unitless ++
-  map qw inputDataConstraints ++ map asVC' [interpY, interpZ]
+  map qw inputDataConstraints ++ interps
 
 thisSymbols :: [QuantityDict]
 thisSymbols = map qw iMods

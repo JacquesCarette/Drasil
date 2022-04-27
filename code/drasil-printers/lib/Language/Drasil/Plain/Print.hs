@@ -3,12 +3,13 @@ module Language.Drasil.Plain.Print (
   -- * Types
   Linearity(..),
   -- * Functions
-  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc
+  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb,
+  showHasSymbImpl
 ) where
 
 import Database.Drasil (ChunkDB)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
-import qualified Language.Drasil as L (Expr)
+import qualified Language.Drasil as L (Expr, HasSymbol(..))
 import qualified Language.Drasil.CodeExpr as C (CodeExpr)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
@@ -22,7 +23,7 @@ import Prelude hiding ((<>))
 import Data.List (partition)
 import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double, 
   doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text, 
-  vcat)
+  vcat, render)
 
 -- | Data is either linear or not.
 data Linearity = Linear | Nonlinear
@@ -180,3 +181,11 @@ fenceDocR Paren = text ")"
 fenceDocR Curly = text "}"
 fenceDocR Norm = text "\\|"
 fenceDocR Abs = text "|"
+
+-- | Helper for printing Symbols
+showSymb :: Symbol -> String
+showSymb a = render $ symbolDoc a
+
+-- | Helper for printing a HasSymbol in Implementation Stage
+showHasSymbImpl :: L.HasSymbol x => x -> String
+showHasSymbImpl x = showSymb (L.symbol x Implementation)

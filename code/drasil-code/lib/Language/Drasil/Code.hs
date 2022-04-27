@@ -10,7 +10,7 @@ module Language.Drasil.Code (
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, 
   AuxFile(..), getSampleData, Visibility(..), defaultChoices, 
-  CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec,
+  CodeSpec(..), funcUID, asVC, codeSpec,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -92,8 +92,9 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints,
   makeODE, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
   makeOptFeats, ExtLib(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, funcUID', asVC, asVC', 
-  codeSpec)
+  
+import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, asVC, codeSpec)
+
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
 

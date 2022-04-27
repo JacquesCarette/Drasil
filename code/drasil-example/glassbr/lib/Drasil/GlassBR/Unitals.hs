@@ -232,8 +232,11 @@ unitless :: [QuantityDict]
 unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad,  
   sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map qw [gTF, loadSF]
 
+interps :: [QuantityDict]
+interps = [interpY, interpZ]  
+
 riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
-  dimlessLoad, tolLoad, lDurFac :: QuantityDict
+  dimlessLoad, tolLoad, lDurFac, interpY, interpZ :: QuantityDict
 
 gTF, loadSF :: DefinedQuantityDict
 
@@ -250,6 +253,10 @@ isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance 
 isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
   (variable "isSafeLoad") Boolean
 
+interpY = vc "interpY" (nounPhraseSP "interpY") (variable "interpY") Real
+interpZ = vc "interpZ" (nounPhraseSP "interpZ") (variable "interpZ") Real
+
+
 lDurFac       = vc'' loadDurFactor (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
@@ -260,6 +267,8 @@ sdfTol = vc "sdfTol" (nounPhraseSP "stress distribution factor (Function) based 
 
 tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")
   (sub (eqSymb dimlessLoad) lTol) Real
+
+
 
 lBreak, lDur, lFail, lTol :: Symbol
 lBreak = label "b"

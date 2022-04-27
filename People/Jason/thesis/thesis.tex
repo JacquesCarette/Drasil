@@ -1,14 +1,18 @@
 \documentclass[12pt,oneside]{book}
+
+% Extra functionality for command parsing and colouring elements
 \usepackage{xparse}
 \usepackage[table]{xcolor}
 
-\usepackage[canadian]{babel}
-
+% Configure font and file encodings, and language as Canadian English
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[canadian]{babel}
 
+% TODO Notes!
 \usepackage{todonotes}
 
+% Math-related, but also generally helpful
 \usepackage{proof}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -17,15 +21,16 @@
 \usepackage{mathrsfs}
 \usepackage{graphicx}
 \usepackage{lmodern}
-\usepackage{lastpage}
 \usepackage{longtable}
+
+% Tiny package for easily grabbing the page count of the "main matter"
+\usepackage{lastpage}
 
 % For quotes, I wanted to put the "left bar" style. For implementation, Gonzalo
 % Medina was very kind to create an example. It is based on:
 % https://tex.stackexchange.com/a/50623
 \usepackage{framed}
 \usepackage{mdframed}
-
 \newmdenv[topline=false, rightline=false, bottomline=false,%
   linewidth=2pt, innerrightmargin=0pt, leftmargin=0pt,%
   innerleftmargin=5pt, skipabove=8pt, skipbelow=8pt]{mdleftbar}
@@ -51,6 +56,7 @@
 \usepackage[useregional]{datetime2}
 \DTMlangsetup[en-CA]{showdayofmonth=false}
 
+% Configure page shape
 \usepackage[
   a4paper,
   top=3.8cm,
@@ -61,6 +67,7 @@
 ]{geometry}
 \usepackage{afterpage}
 
+% Enable links within the document
 \usepackage{hyperref}
 \hypersetup{
   colorlinks=true,
@@ -71,7 +78,8 @@
 % Make footnote counter reset for each new page.
 \usepackage{footnpag}
 
-\usepackage{csquotes} % Required for biblatex
+% Required for biblatex, but also adds functionality for quotation
+\usepackage{csquotes}
 
 % Credit to Gabriel Devenyi for this bibliography cfg:
 % github.com/gdevenyi/mcmaster.latex
@@ -89,15 +97,13 @@
 % Fancy Headers
 \usepackage{fancyhdr}
 
-% List of Abbreviations and Symbols
+% For abbreviations, we use "acro" package, and mfirstuc to help capitalize long
+% versions normally
 \usepackage{array}
 \usepackage{mfirstuc}
 \MFUhyphentrue % tell mfirstuc to capitalize hyphenated words
 \usepackage{acro}
 \input{acronyms}
-
-% Tables
-\usepackage{makecell}
 
 % General Utility Functions
 \input{def}
@@ -108,7 +114,7 @@
 % McMaster Colours
 \input{mcmasterColours}
 
-% For fancy graphs
+% For fancy pictures
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,cd}
 \usepackage{quiver}
@@ -297,8 +303,8 @@ PAGES: \pageref{lastOfFrontMatter}, \pageref{LastPage}
 \mainmatter
 
 % START : HEADER %
-\fancyhead[R]{McMaster University -- Computing and Software}
-\fancyhead[L]{M.Sc. Thesis -- Jason Balaci}
+\fancyhead[R]{McMaster University — Computing and Software}
+\fancyhead[L]{M.Sc. Thesis — Jason Balaci}
 % END   : HEADER %
 
 \chapter{Introduction}

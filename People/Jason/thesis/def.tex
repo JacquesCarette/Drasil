@@ -1,4 +1,6 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % JUDGMENTS
+
 \newcommand{\newrule}[2]{\begin{equation} \infer{#2}{#1} \end{equation}} % Adds to automatically numbered equations
 \newcommand{\newlblrule}[3]{\begin{equation} \infer{#2}{#1} \label{#3}\end{equation}} % Adds to automatically numbered equations, with a label
 \newcommand{\exampleRule}[2]{\[ \infer{#2}{#1} \]} % Does not add a number to equations
@@ -11,22 +13,34 @@
 \newcommand{\numericTy}[1]{\ofTy{#1}{\texttt{Numerics($\Tau$)}}}
 \newcommand{\negNumericTy}[1]{\ofTy{#1}{\texttt{NumericsWithNegation($\Tau$)}}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MATH
+
 \newcommand{\bb}[1]{\mathbb{#1}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SYNTAX CHARTS
 \newcommand{\startSyntaxTable}{\begin{tabular}{ r c c l c l }}
 \newcommand{\newsyntaxRow}[5]{#1 & \( #2 \) & $::=$ & \texttt{#3} & $#4$ & #5 \\}
 \newcommand{\syntaxRow}[3]{& & $\vert$ & \texttt{#1} & $#2$ & #3 \\}
 \newcommand{\closeSyntaxTable}{\end{tabular}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Portable HREFs
-\newcommand{\porthref}[2]{\href{#2}{#1}\footnote{\url{#2}}}
-\newcommand{\porthreft}[3]{\href{#3}{#1}\footnote{\href{#3}{#2}}}
-\newcommand{\porthreftm}[2]{\href{#2}{#1}\footnotemark}
 
+% Common variant
+\newcommand{\porthref}[2]{\href{#2}{#1}\footnote{\url{#2}}}
+% Custom URLs
+\newcommand{\porthreft}[3]{\href{#3}{#1}\footnote{\href{#3}{#2}}}
+% Inside of some environments, footnote marks aren't registered properly, so we
+% need to manually write the "text" part
+\newcommand{\porthreftm}[2]{\href{#2}{#1}\footnotemark} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inlined TODOs
 \newcommand{\intodo}[1]{\todo[inline]{#1}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Haskell snippet
 \newenvironment{code}{\captionsetup{type=listing,skip=14pt}}{}
 \SetupFloatingEnvironment{listing}{name=Source Code,listname=List of Source Codes}

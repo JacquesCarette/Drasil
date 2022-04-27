@@ -18,8 +18,19 @@
 \usepackage{lmodern}
 \usepackage{lastpage}
 
-\usepackage{caption}
 
+% For quotes, I wanted to put the "left bar" style. For implementation, Gonzalo
+% Medina was very kind to create an example. It is based on:
+% https://tex.stackexchange.com/a/50623
+\usepackage{framed}
+\usepackage{mdframed}
+
+\newmdenv[topline=false, rightline=false, bottomline=false,%
+  linewidth=2pt, innerrightmargin=0pt, leftmargin=0pt,%
+  innerleftmargin=5pt, skipabove=8pt, skipbelow=8pt]{mdleftbar}
+
+% For nice captions and floating environments, such as for my code snippets
+\usepackage{caption}
 \usepackage{float}
 
 % For code highlighting

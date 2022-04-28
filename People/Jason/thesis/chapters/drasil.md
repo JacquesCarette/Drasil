@@ -31,3 +31,11 @@ of the program can be determined and coherently connected together.
 Embedded in Haskell, Drasil is a framework for encoding knowledge (currently
 known as _chunks_), manipulating knowledge, and creating usable transformers
 that convert registered knowledge into usable software artifacts. 
+
+## Questions-guide
+
+1. What is Drasil?
+2. Where can I learn more about Drasil?
+3. At a design level, how does Drasil work?
+4. What can Drasil currently do?
+5. What challenges does Drasil currently face?

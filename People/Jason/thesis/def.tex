@@ -1,4 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% QUESTION DIRECTED WRITING
+\newif\ifshowquestions
+\showquestionstrue
+
+\ifshowquestions
+  \newenvironment{writingquestions}{\begin{mdquestions}\textbf{Writing Questions:}\begin{itemize}}{\end{itemize}\end{mdquestions}}
+\else
+  \excludecomment{writingquestions}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CASE STUDIES
 \newcommand{\caseStudy}[1]{\ACL{#1} (\textit{\acs{#1}})}
 

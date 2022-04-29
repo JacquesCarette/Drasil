@@ -66,6 +66,7 @@ helloListSlice = listSlice (var "mySlicedList" (listType double))
   (Just (litInt 3)) Nothing
 
 -- | Create an If statement.
+{-# ANN module "HLint: ignore Evaluate" #-}
 helloIfBody :: (OOProg r) => MSBody r
 helloIfBody = addComments "If body" (body [
   block [

@@ -4,10 +4,12 @@
 \showquestionstrue
 
 \ifshowquestions
-  \newenvironment{writingquestions}{\begin{mdquestions}\textbf{Writing Questions:}\begin{itemize}}{\end{itemize}\end{mdquestions}}
+  \newenvironment{writingquestions}{\begin{mdquestions}\centering\textbf{Writing Questions}\begin{itemize}}{\end{itemize}\end{mdquestions}}
 \else
   \excludecomment{writingquestions}
 \fi
+
+\newcommand{\wqanswer}[1]{\textit{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CASE STUDIES

@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.DifferentialModel (
     -- * Chunk Type
     DifferentialModel,
     -- * Input Language
-    ($*),($^^),($+),
+    ($^^),
     -- * Constructors
     makeASystemDE
     ) where
@@ -19,59 +19,34 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($&&)))
+import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($.), matrix, columnVec))
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
-import Language.Drasil.Literal.Class (exactDbl)
 
--- Variable is a index of dependent variables with its nth degree of derivative
-data Variable = V{
+-- Unknown is a index of dependent variables with its nth degree of derivative
+data Unknown = UK{
   _depVar :: ConstrConcept,
   _degree :: Int
 }
-makeLenses ''Variable
-
--- Term is a coefficient with list of its variables
-data Term = T{
-  _coeff :: Expr,
-  _variables :: [Variable]
-}
-makeLenses ''Term
-
--- Polynomial is a list of term with its constant
-data Polynomial = P{
-  _terms :: [Term],
-  _constant :: Expr
-}
-makeLenses ''Polynomial
+makeLenses ''Unknown
 
 {-
-  Input Language mimic Variable
+  Input Language represent a derivative of a dependent variable
   e.g. depVar $^^ d, 
   depVar is the dependent variable, d is the dth derivative
 -}
-($^^) :: ConstrConcept -> Int -> Variable
-($^^) = V
+($^^) :: ConstrConcept -> Int -> Unknown
+($^^) = UK
 
-{-
-  Input Language mimic Term
-  e.g. c $* v, 
-  c is the coefficient, v are all variables
--}
-($*):: Expr -> [Variable] -> Term
-($*) = T
-
-{-
-  Input Language mimic Polynomial
-  e.g. t $+ c, 
-  t are all terms, c is the constant
--}
-($+) :: [Term] -> Expr -> Polynomial
-($+) = P
-
-data DifferentialModel = System {
+data DifferentialModel = SystemOfLinearODEs {
+  -- independent variable, usually time
   _indepVar :: UnitalChunk,
-  _polynomials :: [Polynomial],
+  -- coefficients matrix
+  _coefficients :: [[Expr]],
+  -- Unknowns column vector
+  _unknowns :: [Unknown],
+  -- Constant Column vector 
+  _constants :: [Expr],
   _conc :: ConceptChunk
 }
 makeLenses ''DifferentialModel
@@ -86,86 +61,41 @@ instance NamedIdea     DifferentialModel where term = conc . term
 instance Idea          DifferentialModel where getA = getA . view conc
 -- | Finds the definition contained in the 'ConceptChunk' used to make the 'DifferentialModel'.
 instance Definition    DifferentialModel where defn = conc . defn
-instance ConceptDomain DifferentialModel where cdom = cdom . view conc
 -- | Finds the domain of the 'ConceptChunk' used to make the 'DifferentialModel'.
+instance ConceptDomain DifferentialModel where cdom = cdom . view conc
 -- | Convert the 'DifferentialModel' into the model expression language.
--- | Set Canonical form of ODE to Zero, e.g. ax0 + bx1 + cx2 + .... + c = 0
 instance Express       DifferentialModel where express = formStdODE
 
--- | Construct a Canonical form of System ODE with one or more polynomial DE, 
--- | A polynomial is sum of one or more variable multiplied by coefficients
--- | DE follow this format ax0 + bx1 + cx2 + .... + c = 0
--- | x0 is the highest order, x1 is the second highest order, and so on. The c is the constant.
+-- | Set the expression be a system of linear ODE to Ax = b
+-- | A is a known m*n matrix that contains coefficients, 
+-- | x is an n-vector that contain derivatives of dependent variables
+-- | b is an m-vector that contain constants
 formStdODE :: DifferentialModel -> ModelExpr
-formStdODE d = formASingleExpr $ setAllPolyToZero $ formMultiPoly d
+formStdODE d 
+    | size == 1 = formASingleODE (head (d ^. coefficients)) unknownVec (d ^. constants)
+    | otherwise = equiv (coeffsMatix $. columnVec unknownVec : constantVec) 
+    where size = length (d ^. coefficients)
+          coeffsMatix = express(matrix (d ^. coefficients))
+          unknownVec = formAllUnknown (d ^. unknowns) (d ^. indepVar)
+          constantVec = [express (columnVec (d ^. constants))]
 
-formMultiPoly :: DifferentialModel -> [ModelExpr]
-formMultiPoly d = map (\x -> formAPolynomial x (d ^. indepVar)) (d ^. polynomials)
+formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
+formASingleODE coeffs unks consts = equiv (lhs : rhs)
+  where lhs = foldl1 addRe (zipWith (\x y -> (express x) `mulRe` y) coeffs unks)
+        rhs = map express consts
 
-formASingleExpr :: [ModelExpr] -> ModelExpr
-formASingleExpr = foldl1 ($&&)
+-- Form a n-vector of derivatives dependent variables
+formAllUnknown :: [Unknown] -> UnitalChunk -> [ModelExpr]
+formAllUnknown unks ind = map (`formAUnknown` ind) unks
 
-setAllPolyToZero :: [ModelExpr] -> [ModelExpr]
-setAllPolyToZero = map (\x -> equiv $ x : [exactDbl 0])
+-- Form a derivative of a dependent variable
+formAUnknown :: Unknown -> UnitalChunk -> ModelExpr
+formAUnknown unk = nthderiv
+                    (toInteger (unk ^. degree))
+                    (sy (qw (unk ^. depVar)))
 
--- Form a variable in ModelExpr shape
-formAVariable :: Variable -> UnitalChunk -> ModelExpr
-formAVariable var = nthderiv
-                    (toInteger (var ^. degree))
-                    (sy (qw (var ^. depVar)))
-
--- Form a term in ModelExpr shape
-formATerm :: Term -> UnitalChunk -> ModelExpr
-formATerm t indepVar =
-  express (t ^. coeff) `mulRe` multiAllVars (t ^.variables) indepVar
-
--- Form a polynomial in ModelExpr shape
-formAPolynomial :: Polynomial-> UnitalChunk -> ModelExpr
-formAPolynomial p indepVar =
-  multiAllTerms (p ^. terms) indepVar `addRe` express (p ^. constant)
-
--- | Multiple all Terms
-multiAllTerms :: [Term] -> UnitalChunk -> ModelExpr
-multiAllTerms terms indepVar =
-  foldl1 addRe
-  $ map(`formATerm` indepVar) terms
-
--- | Multiple all Variables
-multiAllVars :: [Variable] -> UnitalChunk -> ModelExpr
-multiAllVars vars indepVar =
-  foldl1 mulRe
-  $ map (`formAVariable` indepVar) vars
-
--- | Construct a Canonical form of ODE, e.g. ax0 + bx1 + cx2 + .... + c
--- | x0 is the highest order, x1 is the second higest order, and so on. The c is the constant.
--- formStdODE :: DifferentialModel -> ModelExpr
--- formStdODE d = equiv $ (addCoes d `addRe` express (d ^. constant)) : [exactDbl 0]
-
--- | Construct a form of ODE with constant on the rhs
--- formConODE :: DifferentialModel -> ModelExpr
--- formConODE d = equiv $ addCoes d : [express (d ^. constant)]
-
--- | Add coefficients together by restructuring each CoeffDeriv
--- addCoes :: DifferentialModel -> ModelExpr
--- addCoes p = foldr1 addRe $
---             map(\x ->
---                   express (x ^. coeff)
---                   `mulRe`
---                   nthderiv
---                     (toInteger (x ^. degree))
---                     (sy (qw (d ^. depVar)))
---                     (d ^. indepVar)
---                )
---                (d ^. coefficients)
-
--- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), DepVar ('ModelExpr'),
--- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').
-makeASystemDE :: UnitalChunk -> [Polynomial] -> String -> NP -> Sentence -> DifferentialModel
-makeASystemDE dmIndepVar dmPoly dmID dmTerm dmDefn =
-  System dmIndepVar dmPoly (dccWDS dmID dmTerm dmDefn)
-
--- getDepVar :: DifferentialModel -> [ConstrConcept]
--- getDepVar 
-
--- getParameters:: DifferentialModel -> [Quantity]
--- getParameters 
+-- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), coefficients ('[[Expr]]'),
+-- | unknowns ('[Unknown]'), constants ('[Expr]'), UID ('String'), term ('NP'), definition ('Sentence').
+makeASystemDE :: UnitalChunk -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
+makeASystemDE dmIndepVar dmcoeffs dmUnk dmConst dmID dmTerm dmDefn =
+  SystemOfLinearODEs dmIndepVar dmcoeffs dmUnk dmConst(dccWDS dmID dmTerm dmDefn)

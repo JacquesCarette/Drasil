@@ -97,5 +97,15 @@ formAUnknown unk = nthderiv
 -- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), coefficients ('[[Expr]]'),
 -- | unknowns ('[Unknown]'), constants ('[Expr]'), UID ('String'), term ('NP'), definition ('Sentence').
 makeASystemDE :: UnitalChunk -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
-makeASystemDE dmIndepVar dmcoeffs dmUnk dmConst dmID dmTerm dmDefn =
-  SystemOfLinearODEs dmIndepVar dmcoeffs dmUnk dmConst(dccWDS dmID dmTerm dmDefn)
+makeASystemDE dmIndepVar dmcoeffs dmUnk dmConst dmID dmTerm dmDefn 
+ | length dmcoeffs /= length dmConst = 
+  error "Length of coefficients matrix should equal to the length of the constant vector"
+ | isCoeffsMatchUnkowns dmcoeffs dmUnk = 
+  error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
+ | otherwise = SystemOfLinearODEs dmIndepVar dmcoeffs dmUnk dmConst(dccWDS dmID dmTerm dmDefn)
+
+isCoeffsMatchUnkowns :: [[Expr]] -> [Unknown] -> Bool
+isCoeffsMatchUnkowns [] _ = error "Coefficients matrix can not be empty"
+isCoeffsMatchUnkowns _ [] = error "Unknowns column vector can not be empty"
+isCoeffsMatchUnkowns xs unks = foldr (\ x -> (&&) (length x == length unks)) True xs
+

@@ -107,5 +107,4 @@ makeASystemDE dmIndepVar dmcoeffs dmUnk dmConst dmID dmTerm dmDefn
 isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
 isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
 isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
-isCoeffsMatchUnknowns xs unks = foldr (\ x -> (&&) (length x == length unks)) True xs
-
+isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)) True coeffs

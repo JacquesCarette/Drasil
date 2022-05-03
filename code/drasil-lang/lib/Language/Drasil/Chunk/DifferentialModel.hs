@@ -100,12 +100,12 @@ makeASystemDE :: UnitalChunk -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -
 makeASystemDE dmIndepVar dmcoeffs dmUnk dmConst dmID dmTerm dmDefn 
  | length dmcoeffs /= length dmConst = 
   error "Length of coefficients matrix should equal to the length of the constant vector"
- | isCoeffsMatchUnkowns dmcoeffs dmUnk = 
+ | not $ isCoeffsMatchUnknowns dmcoeffs dmUnk = 
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
  | otherwise = SystemOfLinearODEs dmIndepVar dmcoeffs dmUnk dmConst(dccWDS dmID dmTerm dmDefn)
 
-isCoeffsMatchUnkowns :: [[Expr]] -> [Unknown] -> Bool
-isCoeffsMatchUnkowns [] _ = error "Coefficients matrix can not be empty"
-isCoeffsMatchUnkowns _ [] = error "Unknowns column vector can not be empty"
-isCoeffsMatchUnkowns xs unks = foldr (\ x -> (&&) (length x == length unks)) True xs
+isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
+isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
+isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
+isCoeffsMatchUnknowns xs unks = foldr (\ x -> (&&) (length x == length unks)) True xs
 

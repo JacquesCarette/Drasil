@@ -72,8 +72,8 @@ scipyCall info = externalLibCall [
     (returnExprListFill $ odeSyst info)],
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
-      [initVal info, tInit info],
-    initSolListWithValFill (depVar info) (initVal info),
+      [matrix[initVal info], tInit info],
+    initSolListWithValFill (depVar info) (matrix[initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
       (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
       (depVar info)]]
@@ -110,8 +110,8 @@ scipyCallTest info = externalLibCall [
     (returnExprListFill $ odeSyst info)],
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
-      [matrix[[initVal info]], tInit info],
-    initSolListWithValFill (depVar info) (matrix[[initVal info]]),
+      [matrix[initVal info], tInit info],
+    initSolListWithValFill (depVar info) (matrix[initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
       (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
       (depVar info)]]
@@ -144,7 +144,7 @@ scipyLSodaCall info = externalLibCall [
   mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill
       (map unnamedParamFill [depVar info, indepVar info])
       (returnExprListFill $ odeSyst info),
-      basicArgFill (matrix [[initVal info, initValFstOrd $ odeOpts info]]),
+      basicArgFill (matrix [initVal info]),
       basicArgFill (sy xAxis)],
   mandatoryStepFill $ initSolWithValFill (depVar info)
       (idx (sy transpose) (int 0))
@@ -252,7 +252,7 @@ oslo = externalLib [
 
 osloCall :: ODEInfo -> ExternalLibraryCall
 osloCall info = externalLibCall [
-  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ initVal info],
+  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ matrix[initVal info]],
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
     libCallFill [basicArgFill $ tInit info,
       functionArgFill (map unnamedParamFill [indepVar info, vecDepVar info]) $
@@ -400,8 +400,8 @@ apacheODECall info = externalLibCall [
         methodInfoFill [] [fixedStatementFill],
         methodInfoFill (map (unnamedParamFill . listToArray) [depVar info, ddep])
           [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]])
-      : map basicArgFill [tInit info, matrix [[initVal info]], tFinal info,
-        matrix [[initVal info]]],
+      : map basicArgFill [tInit info, matrix [initVal info], tFinal info,
+        matrix [initVal info]],
     assignSolFromObjFill $ depVar info]]
   where chooseMethod Adams = 0
         chooseMethod RK45 = 1
@@ -535,7 +535,7 @@ odeintCall info = externalLibCall [
         (zip (otherVars info) (map sy $ otherVars info)) [],
       methodInfoFill [unnamedParamPBVFill $ depVar info, unnamedParamFill ddep]
         [assignArrayIndexFill ddep (odeSyst info)]]) :
-    map basicArgFill [matrix [[initVal info]], tInit info, tFinal info,
+    map basicArgFill [matrix [initVal info], tInit info, tFinal info,
       stepSize $ odeOpts info] ++ [
     customObjArgFill [privStateVar $ depVar info] (customClassFill [
       constructorInfoFill [unnamedParamFill $ depVar info]

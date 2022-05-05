@@ -1,12 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % QUESTION DIRECTED WRITING
-\newif\ifshowquestions
-\showquestionstrue
-
-\ifshowquestions
-  \newenvironment{writingquestions}{\begin{mdquestions}\centering\textbf{Writing Questions}\begin{itemize}}{\end{itemize}\end{mdquestions}}
+\ifshowwritingdirectives
+  \newenvironment{writingdirectives}{\begin{mdwritingdirectives}\centering\textbf{Writing Directives}\begin{itemize}}{\end{itemize}\end{mdwritingdirectives}}
 \else
-  \excludecomment{writingquestions}
+  \excludecomment{writingdirectives}
 \fi
 
 \newcommand{\wqanswer}[1]{\textit{#1}}

@@ -11,8 +11,8 @@ import Drasil.PDController.Unitals (qdSetPointTD, qdPropGain, qdDerivGain,
 
 
 pidODEOptions :: ODEOptions
-pidODEOptions
-  = odeOptions RK45 (sy odeAbsTolConst) (sy odeRelTolConst) (sy qdStepTime)
+pidODEOptions = odeOptions 
+  RK45 (sy odeAbsTolConst) (sy odeRelTolConst) (sy qdStepTime)
 
 -- This is a second order ODE. The equation should be in the form of
 -- variable substitution, i.e. u = y'. However here the the equation

@@ -2,12 +2,12 @@
 % Folders
 %------------------------------------------------------------------------------
 
-\newcommand{\snippets}{snippets}
-\newcommand{\figureSnippet}{\snippets/figures}
-\newcommand{\tableSnippet}{\snippets/tables}
-\newcommand{\codeSnippet}{\snippets/code}
-\newcommand{\currentCode}{\codeSnippet/current}
-\newcommand{\originalCode}{\codeSnippet/original}
+\newcommand{\assets}{assets}
+\newcommand{\figureAssets}{\assets/figures}
+\newcommand{\tableAssets}{\assets/tables}
+\newcommand{\codeAssets}{\assets/code}
+\newcommand{\currentCode}{\codeAssets/current}
+\newcommand{\originalCode}{\codeAssets/original}
 
 %------------------------------------------------------------------------------
 % Code
@@ -72,11 +72,11 @@
 %------------------------------------------------------------------------------
 
 % knowledge flow in theories without modelkinds
-\newcommand{\theoriesWithoutModelKinds}{\input{\figureSnippet/theorieswithoutmodelkinds}}
+\newcommand{\theoriesWithoutModelKinds}{\input{\figureAssets/theorieswithoutmodelkinds}}
 \newcommand{\refTheoriesWithoutModelKinds}{\autoref{fig:theoriesWithoutModelKinds}}
 
 % knowledge flow in theories with modelkinds
-\newcommand{\theoriesWithModelKinds}{\input{\figureSnippet/theorieswithmodelkinds}}
+\newcommand{\theoriesWithModelKinds}{\input{\figureAssets/theorieswithmodelkinds}}
 \newcommand{\refTheoriesWithModelKinds}{\autoref{fig:theoriesWithModelKinds}}
 
 %------------------------------------------------------------------------------
@@ -84,5 +84,5 @@
 %------------------------------------------------------------------------------
 
 % List of case studies, and their goals/focus
-\newcommand{\caseStudiesTable}{\input{\tableSnippet/caseStudies}}
+\newcommand{\caseStudiesTable}{\input{\tableAssets/caseStudies}}
 \newcommand{\refCaseStudies}{\autoref{tab:drasilCaseStudies}}

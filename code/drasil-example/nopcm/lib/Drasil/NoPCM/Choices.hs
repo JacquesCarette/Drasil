@@ -7,7 +7,7 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   makeData, makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats,
   ExtLib(..))
 
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckgTest, osloPckg, 
   apacheODEPckg, odeintPckg)
 
 import Drasil.NoPCM.Body (noPCMODEInfo, fullSI)
@@ -26,5 +26,5 @@ choices = defaultChoices {
     (makeLogConfig [] "log.txt")
     [SampleInput "../../datafiles/nopcm/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
-  extLibs = [Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
+  extLibs = [Math (makeODE [noPCMODEInfo] [scipyODEPckgTest, osloPckg, apacheODEPckg, odeintPckg])]
 }

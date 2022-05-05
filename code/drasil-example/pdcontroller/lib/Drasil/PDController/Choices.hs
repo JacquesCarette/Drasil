@@ -1,6 +1,6 @@
 module Drasil.PDController.Choices where
 
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODELSodaPkg)
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckgTest)
 import Drasil.PDController.Body (pidODEInfo, fullSI)
 import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..), 
   ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..), 
@@ -21,5 +21,5 @@ codeChoices = defaultChoices{
     (makeLogConfig [] "log.txt")
     [SampleInput "../../datafiles/pdcontroller/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
-  extLibs = [Math (makeODE [pidODEInfo] [scipyODELSodaPkg])]
+  extLibs = [Math (makeODE [pidODEInfo] [scipyODEPckgTest])]
 }

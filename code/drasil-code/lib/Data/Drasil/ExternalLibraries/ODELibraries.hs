@@ -1,7 +1,7 @@
 -- | Define and collect information about ODEs and ODE solvers from various libraries.
 module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * SciPy Library (Python)
-  scipyODEPckg, scipyODESymbols, scipyODELSodaPkg,
+  scipyODEPckg, scipyODESymbols, scipyODELSodaPkg, scipyODEPckgTest,
   -- * Oslo Library (C#)
   osloPckg, osloSymbols, arrayVecDepVar,
   -- * Apache Commons (Java)
@@ -74,6 +74,44 @@ scipyCall info = externalLibCall [
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
       [initVal info, tInit info],
     initSolListWithValFill (depVar info) (initVal info),
+    solveAndPopulateWhileFill (libCallFill []) (tFinal info)
+      (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
+      (depVar info)]]
+  where chooseMethod Adams = (0, solveMethodFill)
+        chooseMethod BDF = (1, solveMethodFill)
+        chooseMethod RK45 = (2, solveMethodFill)
+        solveMethodFill = callStepFill $ libCallFill $ map basicArgFill
+          [absTol $ odeOpts info, relTol $ odeOpts info]
+
+-- scipy Test
+scipyODEPckgTest :: ODELibPckg
+scipyODEPckgTest = mkODELibNoPath "SciPy" "1.4.1" scipyODETest scipyCallTest [Python]
+
+scipyODETest :: ExternalLibrary
+scipyODETest = externalLib [
+  mandatoryStep $ callStep $ libFunctionWithResult scipyImport
+    odefunc [
+      functionArg f (map unnamedParam [Real, Array Real])
+      returnExprList] r,
+  choiceStep [
+    setIntegratorMethod [vode, methodArg "adams", atol, rtol],
+    setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
+    setIntegratorMethod [lockedArg (str "dopri5"), atol, rtol]],
+  mandatorySteps [callStep $ libMethod scipyImport r
+      setInitVal [inlineArg $ Array Real, inlineArg Real],
+    initSolListWithVal,
+    solveAndPopulateWhile (libMethod scipyImport r successful []) r t
+      (libMethod scipyImport r integrateStep [inlineArg Real]) y]]
+
+scipyCallTest :: ODEInfo -> ExternalLibraryCall
+scipyCallTest info = externalLibCall [
+  mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill
+    (map unnamedParamFill [indepVar info, depVar info])
+    (returnExprListFill $ odeSyst info)],
+  uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
+  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
+      [matrix[[initVal info]], tInit info],
+    initSolListWithValFill (depVar info) (matrix[[initVal info]]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
       (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
       (depVar info)]]

@@ -25,7 +25,7 @@
 
       \end{itemize}
 
-      \item General Movements:
+      \item General Structure:
       \begin{itemize}
 
             \item Introduction:
@@ -45,17 +45,18 @@
             \item PPSQ: should be within first 3 pages of thesis, after intro +
                   background information.
 
-            \item Research design and context: description of where the research takes
-                  place (Drasil), introducing methodology briefly
+            \item Research design and context: description of where the research
+                  takes place (Drasil), introducing methodology briefly
 
-            \item Assumptions, limitations, scope of research, and expected outcomes:
-                  what do we need from this work
+            \item Assumptions, limitations, scope of research, and expected
+                  outcomes: what do we need from this work
 
             \item Overview of chapters
 
       \end{itemize}
 
-      \item Last Paragraph: summarize key points of chapter, link to next chapter
+      \item Last Paragraph: summarize key points of chapter, link to next
+      chapter
 
       \item What is the context of this research? What is it about?
 
@@ -74,9 +75,61 @@
 
 \end{writingdirectives}
 
+As the world increasingly relies on software and non-executable software
+artifacts, the software becomes increasingly scrutinized in multiple facets.
+Does a piece of software do what I want/need? Is it stable? Is it reliable? What
+methods does it use? What do its components mean? Are its outputs accurate and
+precise? Is it performant? Is it efficient? Further, to each answer, one might
+ask: How do we know? Often, we look to the source code and its development to
+justify responses to these questions. Where a requirements specification and a
+software design is built, we can spend time investigating that the source code
+conforms to the manuals, and that the manuals form satisfactory answers to our
+questions. Where a manual is not built, we must spend time studying source code
+to respond to these questions, perhaps even comparing them to a control group
+program. However, this is terribly arduous process. Realistically, the answers
+to these questions should have been already well-understood before the final
+software product was formed, even if the answer was to ignore the question until
+later. Drasil \cite{Drasil2021} looks to form answers to these same questions
+through \textit{definition}. Using generative techniques, Drasil builds software
+that conforms to specifications \textit{perfectly} by having all relevant
+information of the specifications and how they translate into some software
+artifacts well-understood to Drasil. This thesis aims to explore these ideas
+through exploring capturing mathematical knowledge in Drasil.
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
+
+In the land of scientific software, mathematical knowledge and it's conversion
+into software is of utmost importance to ensure the software is:
+
+\intodo{I think I saw some better worded goals previously? TODO: Check Dan's work and Brook's work}
+\begin{enumerate}
+
+      \item \textbf{Ready \& Safely Usable} The software should be able to
+            easily reach the runtime phase, and should never run into unexpected
+            issues at runtime.
+
+      \item \textbf{Reliable} The user of the software should be able to trust
+            and feel comfortable that the software does as expected.
+
+      \item \textbf{Accurate} The software should be a correct depiction of all
+            aspects of the needs of the software.
+
+      \item \textbf{Traceable} Partially related to being accurate, the
+            ``accuracy'' should be traceable to the knowledge used to form the
+            software.
+
+      \item \textbf{Performant and efficient} The software should be slim, use
+            only as much system resources as needed, and perform tasks within a
+            reasonably usable and actionable time.
+
+\end{enumerate}
+
+In particular, this work aims to extend the mathematical knowledge captured in
+Drasil, so that Drasil may reliably and flexibly generate a plethora of
+\acs{stem}-related software artifacts.
+
+\intodo{Re-write the below.}
 
 In Drasil, we are focused on understanding families of scientific software, and
 creating systematic rules to generate families of software solutions (for any
@@ -85,8 +138,6 @@ Specifically, Drasil is focused on mathematics and physics-based models. In both
 areas, we are concerned with what \textit{kinds of theories} are
 well-understood, and ensuring that all created mathematical expressions are
 ``valid''.
-
-\intodo{Re-write the above.}
 
 \section{Contributions of the Author}
 \label{sec:intro:contributions}

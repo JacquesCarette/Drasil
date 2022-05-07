@@ -9,12 +9,12 @@
     % Originally created with https://q.uiver.app/?q=WzAsNyxbOCw0XSxbMSwwLCJUaGVvcmllcyAoUmVsYXRpb25Db25jZXB0KSJdLFswLDAsIkV4cHJlc3Npb25zIChFeHByKSJdLFsyLDAsIk1hdGhlbWF0aWNhbCBLbm93bGVkZ2UiXSxbMiwxLCJRdWFudGl0eSBEZWZpbml0aW9ucyAoUURlZm5zKSJdLFsyLDIsIkNvZGUgKEdPT0wpIl0sWzEsMSwiU2NpZW50aWZpYyBSZXF1aXJlbWVudHMgU3BlY2lmaWNhdGlvbnMgKFNSUykiXSxbMiwxXSxbMSwzXSxbMyw0XSxbNCw1XSxbMSw2XV0=
     % But requires some post-processing
     \[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
-            {\parbox{0.2\linewidth}{\centering Expression (\textit{Expr}) \\$+$ Description}}
+            {\parbox{0.2\linewidth}{\centering Expression (\textit{Expr}) \\$+$ Description (Sentence)}}
             \& {\parbox{0.24\linewidth}{\centering Theory \\(\textit{RelationConcept})}}
             \& |[draw=orange, cloud, aspect=2.8, inner sep=0pt, line width=2]| {\parbox{0.18\linewidth}{\centering Mathematical Knowledge}} \\
 
-            {\parbox{0.25\linewidth}{\centering Scientific Requirements Specifications (SRS)}}
-            \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}}
+            {\parbox{0.25\linewidth}{\centering \ACF{srs}}}
+            \& {\parbox{0.1\linewidth}{\centering Code (\acs{gool})}}
             \& {\parbox{0.2\linewidth}{\centering Quantity Definition (\textit{QDefn})}} \\
 
             \arrow[line width=1, color=green, from=1-1, to=1-2]
@@ -31,6 +31,3 @@
         \tikz{\node[cloud, aspect=3, draw=orange] (c) at (0,0) {};} & Informally captured \\
     \end{tabular}
 \end{figure}
-
-\intodo{Add ``Description (Sentence)'' as a component of a RelationConcept.}
-\intodo{Use the acronyms package for the above figure}

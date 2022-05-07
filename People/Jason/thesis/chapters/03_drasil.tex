@@ -25,28 +25,22 @@
 \section{An Exploration}
 
 Originally known as Literate Scientific Software (LSS) \todo{cite}, Drasil is an
-exploration of this ideology. Drasil's largest domain of knowledge covered
-originates from LSS: scientific computing software (SCS). \porthref{Dr. Jacques
-      Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
-      Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
-Drasil. Deeply embedded in Haskell \cite{Haskell2010} (and currently built
-against \acs{ghc} $8.8.4$ \cite{GHC884}), Drasil currently focuses on building
-tooling around 8 case studies, each following the formalized \ACF{srs} template
+exploration of this ideology described in \Cref{chap:ideology}. Drasil's largest
+domain of knowledge covered originates from LSS: scientific computing software
+(SCS). \porthref{Dr. Jacques Carette}{https://www.cas.mcmaster.ca/~carette/} and
+\porthref{Dr. Spencer Smith}{https://www.cas.mcmaster.ca/~smiths/} are the
+principal investigators of Drasil. With a focus on building \ACF{scs}, Drasil
+uses knowledge to build software conforming to a scientists \ACF{srs} document
+by ``learning'' about the knowledge required to form the document, and
+generating a representational software as a result. This approach requires that
+there is sufficient implicit and explicit knowledge around the \acs{srs}
+document such that a user/developer/machine may follow it without any ambiguity.
+Drasil is currently focused on building common undergraduate-level physics
+models and problems, and generating software that solves them. Deeply embedded
+in Haskell \cite{Haskell2010} (and currently built against \acs{ghc} $8.8.4$
+\cite{GHC884}), Drasil currently focuses on building tooling around 8 case
+studies, each following the formalized \ACF{srs} template
 \cite{SmithAndLai2005}:
-
-\intodo{Rewrite the below paragraph...}
-
-With a focus on building Scientific Computing Software,
-Drasil\thinspace\cite{Drasil2021} is an exploration of the ideology described in
-\autoref{chap:ideology}. Rather than building one's software project in any
-single or combination of general purpose programming language, the usage of a
-sequence of domain-specific languages together in Drasil-based projects can be
-used to describe common undergraduate level physics models and problems and
-describe the target program that simulates said models.
-
-\intodo{Last sentence of above: be more generic, and then mention that it is
-      \textit{currently} focused on physics, etc.}
-
 
 \intodo{Add citations to each row of the below:}
 

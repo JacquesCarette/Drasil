@@ -10,9 +10,6 @@
 \usepackage[T1]{fontenc}
 \usepackage[canadian]{babel}
 
-% TODO Notes!
-\usepackage{todonotes}
-
 % Math-related, but also generally helpful
 \usepackage{proof}
 \usepackage{amsmath}
@@ -144,18 +141,27 @@
 \date{\today}
 
 % START : TODO LIST SETUP
-\setlength{\marginparwidth}{3.5cm}
-\reversemarginpar % place on left-hand side
+% TODO Notes!
+\ifshowwritingdirectives
+  \usepackage{todonotes}
+  \setlength{\marginparwidth}{3.5cm}
+  \reversemarginpar % place on left-hand side
+\else
+  \usepackage[disable]{todonotes}
+\fi
 % END   : TODO LIST SETUP
 
 \begin{document}
 
 \frontmatter
 
-% START : TODO LIST ; commented out because I don't find the list of them to be very helpful
-\todototoc
-\listoftodos
-\newpage
+% START : TODO LIST
+% Only show it if the "show writing directives" flag is enabled
+\ifshowwritingdirectives
+  \todototoc
+  \listoftodos
+  \newpage
+\fi
 % END   : TODO LIST
 
 

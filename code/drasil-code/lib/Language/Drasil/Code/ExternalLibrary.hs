@@ -248,12 +248,6 @@ appendCurrSol :: CodeExpr -> Step
 appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> appendCurrSolFS curr s
     (_,_) -> error "Fill for appendCurrSol should provide one CodeChunk and no Exprs")
-  
--- | test
-appendCurrSolList :: CodeExpr -> Step
-appendCurrSolList curr = statementStep (\cdchs es -> case (cdchs, es) of
-    ([s], []) -> appendCurrSolL curr s
-    (_,_) -> error "Fill for appendCurrSol should provide one CodeChunk and no Exprs")
 
 -- | Specifies a statement where a solution list is populated by iterating 
 --   through a solution array.
@@ -286,10 +280,10 @@ initSolListFromArray a = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[]) -> FAsg s (matrix [[idx (sy a) (int 0)]])
   (_,_) -> error "Fill for initSolListFromArray should provide one CodeChunk and no Exprs")
 
--- | Specifies a statement where a solution list is initialized with a value.
+-- | Specifies a statement where a solution list is initialized with the first value.
 initSolListWithVal :: Step
 initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[v]) -> FDecDef s (matrix [[v]])
+  ([s],[v]) -> FDecDef s (matrix [[idx v (int 0)]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
 -- | A solve and populate loop. 'FunctionInterface' for loop condition, 'CodeChunk' for solution object, 
@@ -300,7 +294,7 @@ solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk ->
 solveAndPopulateWhile lc ob iv slv popArr = loopStep [lc] (\case 
   [ub] -> field ob iv $< ub
   _ -> error "Fill for solveAndPopulateWhile should provide one Expr") 
-  [callStep slv, appendCurrSolList (field ob popArr)]
+  [callStep slv, appendCurrSol (field ob popArr)]
 
 -- | Specifies a statement where a list is returned, where each value of the list
 -- is explicitly defined.
@@ -312,9 +306,6 @@ returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
 -- | A statement where a current solution is appended to a solution list.
 appendCurrSolFS :: CodeExpr -> CodeVarChunk -> FuncStmt
 appendCurrSolFS cs s = FAppend (sy s) (idx cs (int 0))
-
-appendCurrSolL :: CodeExpr -> CodeVarChunk -> FuncStmt
-appendCurrSolL cs s = FAppend (sy s) cs
 
 -- | Specifies a use-case-independent statement that returns a value.
 fixedReturn :: CodeExpr -> Step

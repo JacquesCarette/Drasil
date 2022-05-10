@@ -98,7 +98,7 @@ scipyODETest = externalLib [
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
     setIntegratorMethod [lockedArg (str "dopri5"), atol, rtol]],
   mandatorySteps [callStep $ libMethod scipyImport r
-      setInitVal [inlineArg $ Array Real, inlineArg Real],
+      setInitVal [inlineArg Real, inlineArg Real],
     initSolListWithVal,
     solveAndPopulateWhile (libMethod scipyImport r successful []) r t
       (libMethod scipyImport r integrateStep [inlineArg Real]) y]]

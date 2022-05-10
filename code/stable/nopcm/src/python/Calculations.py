@@ -27,21 +27,21 @@ def func_tau_W(C_W, h_C, A_C, m_W):
 
 ## \brief Calculates temperature of the water: the average kinetic energy of the particles within the water (degreeC)
 # \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
-# \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
 # \param T_init initial temperature: the temperature at the beginning of the simulation (degreeC)
+# \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
 # \param A_tol absolute tolerance
 # \param R_tol relative tolerance
 # \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
 # \param tau_W ODE parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s)
 # \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
-def func_T_W(T_C, t_final, T_init, A_tol, R_tol, t_step, tau_W):
+def func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W):
     def f(t, T_W):
         return [1.0 / tau_W * (T_C - T_W[0])]
     
     r = scipy.integrate.ode(f)
     r.set_integrator("dopri5", atol=A_tol, rtol=R_tol)
-    r.set_initial_value(T_init, 0.0)
-    T_W = [T_init]
+    r.set_initial_value([T_init], 0.0)
+    T_W = [[T_init][0]]
     while r.successful() and r.t < t_final:
         r.integrate(r.t + t_step)
         T_W.append(r.y[0])

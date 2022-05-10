@@ -164,10 +164,49 @@ without any external assistance (e.g., to clear up ambiguities).
 
 \section{State of Architecture}
 
-Drasil encodes/organizes data, called \textit{chunks} (alternatively,
-\textit{fragments of knowledge}, and used interchangeably for the purposes of
-this work), by their Haskell-level type. A focused \textit{ChunkDB} datatype
-contains all information about a knowledge system.
+Drasil collects foundational knowledge about a \acs{srs} inside a                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+\textit{ChunkDB}, a funnel for \textit{Chunks}, our language/knowledge encodings
+(also known as ``knowledge fragments'', and will be used interchangeably for the
+purposes of this work). In Haskell, \Chunk{}s are any data that one may
+register in the \ChunkDB{}:
+
+\intodo{Code snippet: ChunkDB original definition.}
+
+A \ChunkDB{} is currently limited to the above chunks, but one should assume
+that more data types are also \textit{chunks} because this is merely a temporary
+restriction at the moment. Relating back to the ideology (as discussed in
+\autoref{chap:ideology}), in Drasil, the \ChunkDB{} is where the knowledge is
+collected, placed, and grown (generated). \textit{Transformers} are used to
+operate on the \Chunk{}s in the \ChunkDB{}. The transformers take in some
+knowledge, optional \textit{refinement} information, and convert it into some
+other knowledge fragment. Oddly\todo{Is it odd though? Or expected?}, these
+transformations are seemingly ``against the grain'' of the ``bottom-up''
+information gathering, whereby areas of precise and highly specific fragments of
+knowledge have their key components used in generating something in another
+language. The produced fragments are directed by the developer. By composing a
+series of miniature, bite-sized, transformations, we are able to create large
+and highly complex (but well-thought-out and understood).
+
+The largest, most prominent transformer used in Drasil is that of the SmithEtAl
+knowledge transformer. Currently represented using the entry point to Haskell
+programs, the \inlineHs{main :: IO ()} function is representative of the
+transformation capabilities of our understanding of our case studies into
+sufficient \acs{srs} documents, and ready-to-use software.
+
+\intodo{Code snippet: ``main'' function of one of the case studies.}
+
+\todo{Ref. ``main'' function code snippet} displays an example, from the
+\acs{glassbr} case study, of what a transformer looks like in Drasil. This
+transformer takes knowledge collected, configures a ``print job''/transformation
+for the desired outputs, and performs an \inlineHs{IO ()} effect that dumps an
+\acs{srs} and a software artifact to the host computer, in the local working
+directory. \todo{continue here}
+
+\intodo{Code snippet: ``PrintingInformation'' \& ``SystemInformation''}
+
+\intodo{Code snippet: ``genSRS''}
+
+\intodo{Code snippet: ``genCode''}
 
 \intodo{coloured diagram showing flow of information and how general information
       flow works}

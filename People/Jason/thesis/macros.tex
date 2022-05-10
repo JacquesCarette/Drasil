@@ -62,6 +62,11 @@
     {\VerbatimEnvironment\singlespacing\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
     {\end{minted}\end{code}\doublespacing}
 
+\newcommand{\inlineHs}[1]{\mintinline{haskell}|#1|}
+
+\newcommand{\ChunkDB}{\inlineHs{ChunkDB}}
+\newcommand{\Chunk}{\inlineHs{Chunk}}
+
 % Haskell env original caption style: {\VerbatimEnvironment\begin{code}\caption[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
 
 % TODO: Figure out how I can properly space the label between "Source Code X.X:

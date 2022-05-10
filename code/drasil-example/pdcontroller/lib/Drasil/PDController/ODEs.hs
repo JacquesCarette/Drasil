@@ -25,7 +25,7 @@ pidODEInfo = odeInfo
   [quantvar ipPropGain, quantvar ipDerivGain, quantvar ipSetPt]
   (exactDbl 0)
   (sy qdSimTime)
-  [(exactDbl 0), (exactDbl 0)]
+  [exactDbl 0, exactDbl 0]
   [idx (sy opProcessVariable) (int 1),
   neg ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` idx (sy opProcessVariable) (int 1))   -- ? CHECK: Seems like `neg` does not generate generate sufficient parentheses?
   $- ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` idx (sy opProcessVariable) (int 0))

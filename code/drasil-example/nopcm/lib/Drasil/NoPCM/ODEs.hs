@@ -21,6 +21,6 @@ noPCMODEInfo = odeInfo
   [quantvar tauW, quantvar tempC] 
   (exactDbl 0) 
   (sy timeFinal) 
-  [(sy tempInit)]
+  [sy tempInit]
   [recip_ (sy tauW) `mulRe` (sy tempC $- idx (sy tempW) (int 0))] 
   noPCMODEOpts

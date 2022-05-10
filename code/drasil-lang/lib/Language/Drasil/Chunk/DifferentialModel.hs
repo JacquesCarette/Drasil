@@ -81,7 +81,7 @@ formStdODE d
 
 formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
 formASingleODE coeffs unks consts = equiv (lhs : rhs)
-  where lhs = foldl1 addRe (zipWith (\x y -> (express x) `mulRe` y) coeffs unks)
+  where lhs = foldl1 addRe (zipWith (\x y -> express x `mulRe` y) coeffs unks)
         rhs = map express consts
 
 -- Form a n-vector of derivatives dependent variables

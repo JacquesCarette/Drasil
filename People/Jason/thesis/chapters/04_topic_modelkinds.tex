@@ -3,7 +3,7 @@
 In working to understand some phenomenon, we often look to our understanding of
 the phenomenon. In mathematics (amongst other fields, such as philosophy,
 physics, chemistry, biology, computer science, etc. [anything studied in a
-university?]), we often think about various phenomenon in terms of theories and
+		university?]), we often think about various phenomenon in terms of theories and
 axioms, where the theories and axioms are written using a global mathematical
 language with precise meanings and sharing no similarity to English and human to
 human communication languages.
@@ -27,24 +27,24 @@ language to describe our theories.
 
 In Drasil, both of these languages are of great importance. The mathematical
 field of knowledge is directly used in at least two domains currently captured;
-the scientific theories, and GOOL\todo{cite}. Meanwhile, the programming
-language theory (artifacts) is only directly used in GOOL\todo{cite}, and it's
-various renderers. The SmithEtAl\todo{cite} generator uses knowledge transcribed
-as scientific requirements to automatically generate a series of
+the scientific theories, and \acs{gool}\todo{cite GOOL}. Meanwhile, the
+programming language theory (artifacts) is only directly used in GOOL, and it's
+various renderers. The SmithEtAl \cite{SmithAndLai2005} generator uses knowledge
+transcribed as scientific requirements to automatically generate a series of
 representational software programs. In the SmithEtAl generator doing this, it
 requires both fields, extensively. The focus of the scientific requirements
 documents are to transcribe the relevant knowledge of a scientific system as
-developed by a domain/scientific expert. For example, \todo{SRS doc example} is
-used to fully explain \todo{something} such that a software developer can
-construct a program based on it. Of course, if the SRS document is to be truly
-sufficient for a software developer to unambiguously create a representational
-software artifact, then the software developer (who potentially knows nothing
-about the domain discussed in the SRS document) will need to be able to credibly
-transcribe everything into their program, matching the requirements as set by
-the SRS document. As Drasil is an apparatus for testing our understanding of
-phenomenon, the SmithEtAl template is being tested for it's confidence in this
-regard (and is being shown to work). However, if the process is to be truly
-``assembly-line''-able, then we should be able to mechanize it.
+developed by a domain/scientific expert. For example, \todo{SRS document
+	example} is used to fully explain \todo{something} such that a software
+developer can construct a program based on it. Of course, if the SRS document is
+to be truly sufficient for a software developer to unambiguously create a
+representational software artifact, then the software developer (who potentially
+knows nothing about the domain discussed in the SRS document) will need to be
+able to credibly transcribe everything into their program, matching the
+requirements as set by the SRS document. As Drasil is an apparatus for testing
+our understanding of phenomenon, the SmithEtAl template is being tested for it's
+confidence in this regard (and is being shown to work). However, if the process
+is to be truly ``assembly-line''-able, then we should be able to mechanize it.
 
 In Drasil, a proof of concept of this understanding is being built. In
 particular, the SmithEtAl template is being attempted to be systematically used
@@ -182,6 +182,19 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 	      the different levels of interpretation through a common type (either
 	      using the GADT, or the TTF constraints).
 
+	\item Splitting Expr into 3 variants; Expr, CodeExpr, and ModelExpr. This
+	      allows us to both segregate terms to particular domains, and add weak
+	      typing where necessary, as required (e.g., areas where we might
+	      require a dependently typed host language).
+
+	      \begin{itemize}
+
+		      \item
+		            \url{https://github.com/JacquesCarette/Drasil/issues/1220}
+
+	      \end{itemize}
+
+
 	\item Replacing ``RelationConcepts'':
 
 	      \begin{itemize}
@@ -202,10 +215,10 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 		      \item \intodo{Discuss EquationalModels, EquationalRealms,
 			            EquationalConstraints, DEModel, NewDEModel, etc.}
 
-			  \item We can still push out ModelExprs and Exprs from things where
-	         		necessary, if they can be explained using them.
+		      \item We can still push out ModelExprs and Exprs from things where
+		            necessary, if they can be explained using them.
 
-			  \item \intodo{Justify type parameters everywhere}
+		      \item \intodo{Justify type parameters everywhere}
 
 	      \end{itemize}
 

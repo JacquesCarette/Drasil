@@ -9,12 +9,13 @@
 
                   \item UID collisions
 
-                  \item Difficult to ascertain what a specific chunk type is from a
-                        UID
+                  \item Difficult to ascertain what a specific chunk type is
+                        from a UID
 
-                  \item ``ChunkDB'' is not a stable core across Drasil-like projects
-                        (ones that thrive on the same ``knowledge-based programming''
-                        ideology). ChunkDBs are essentially the ``scope'' of a system.
+                  \item ``ChunkDB'' is not a stable core across Drasil-like
+                        projects (ones that thrive on the same ``knowledge-based
+                        programming'' ideology). ChunkDBs are essentially the
+                        ``scope'' of a system.
 
             \end{itemize}
 
@@ -36,13 +37,13 @@
       \item But wait! We're missing a few things from chunks:
             \begin{itemize}
 
-                  \item What knowledge does the chunk rely on already having been
-                        ``registered'' in the database and ready?
+                  \item What knowledge does the chunk rely on already having
+                        been ``registered'' in the database and ready?
 
                   \item They should have UIDs; where's our guarantee?
 
-                  \item Debugging will be difficult; need an interface to dump all
-                        information of a chunk quickly.
+                  \item Debugging will be difficult; need an interface to dump
+                        all information of a chunk quickly.
 
             \end{itemize}
 
@@ -64,9 +65,10 @@
 
             \end{itemize}
 
-      \item Well, at the very least, now we're able to merge the ``chunk'' maps and
-            fix many of the pre-existing problems (we're almost there!). However,
-            now we're relying too much on Haskell. How do we explain those parts?
+      \item Well, at the very least, now we're able to merge the ``chunk'' maps
+            and fix many of the pre-existing problems (we're almost there!).
+            However, now we're relying too much on Haskell. How do we explain
+            those parts?
 
       \item Also, what are UIDs really? Do their information carry any real
             information? \textit{Rigid designators}.
@@ -79,22 +81,22 @@
 
 \begin{itemize}
 
-      \item With the above new definition of ``chunks'', they still remain a very
-            vague idea, and still \textit{deeply embedded} (a place to recognize an
-            encoding might be appropriate!) in Haskell.
+      \item With the above new definition of ``chunks'', they still remain a
+            very vague idea, and still \textit{deeply embedded} (a place to
+            recognize an encoding might be appropriate!) in Haskell.
 
       \item What are the kinds of chunks that can exist? What can be in a chunk,
             and what are we missing from the existing list of chunks?
 
-      \item The problem with that is that we lose a lot of information by writing
-            Haskell, and leaving the knowledge in the form of Haskell.
+      \item The problem with that is that we lose a lot of information by
+            writing Haskell, and leaving the knowledge in the form of Haskell.
 
       \item We need to de-embed all chunks so that we can obtain a tangible
             understanding of them.
 
       \item Through de-embedding the chunks, we will also be forced to de-embed
             everything with it. This is including the ways in which we transform
-            and generate ``new''-ish knowledge (not necessarily new types/kinds of
-            knowledge, but new instances of types).
+            and generate ``new''-ish knowledge (not necessarily new types/kinds
+            of knowledge, but new instances of types).
 
 \end{itemize}

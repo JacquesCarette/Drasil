@@ -24,17 +24,17 @@
 
 \section{An Exploration}
 
-Originally known as \ACF{lss} \todo{cite}, Drasil is an exploration of this
+Originally known as \ACF{lss} \todo{cite LSS}, Drasil is an exploration of this
 ideology described in \Cref{chap:ideology}. Drasil's largest domain of knowledge
 covered originates from \acs{lss}: \acl{scs}. \porthref{Dr. Jacques
       Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
       Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
 Drasil. Drasil is deeply embedded in Haskell \cite{Haskell2010}, relying on
-Stack \todo{cite}, and compiling against \acs{ghc} 8.8.4 \cite{GHC884}. Haskell
-is the language of choice for various reasons, but the most important reasons
-are regarding its paradigm: purely functional, with immutable data and a strong,
-sound type system based on Church's type theory (a.k.a., simple type theory)
-\todo{cite}.
+Stack \todo{cite Stack}, and compiling against \acs{ghc} 8.8.4 \cite{GHC884}.
+Haskell is the language of choice for various reasons, but the most important
+reasons are regarding its paradigm: purely functional, with immutable data and a
+strong, sound type system based on Church's type theory (a.k.a., simple type
+theory) \todo{cite Church's type theory}.
 
 Drasil is currently capable of generating usable software through compiling to
 \ACF{gool}, which is capable of producing Java, C++, Python, C\#
@@ -65,9 +65,9 @@ scientific software based on solving undergraduate-level physics problems. A
 ``control'' program and \acs{srs} are manually created and used as a baseline
 target for the final artifact. Development is focused on creating a system of
 justification for each component of the baseline program, following a
-``bottom-up'' agile \todo{agile... I think?} development approach. Drasil has
-been constructed following the demands and requirements of eight (8) case
-studies:
+``bottom-up'' agile \todo{Double check if it is indeed an agile approach}
+development approach. Drasil has been constructed following the demands and
+requirements of eight (8) case studies:
 
 \caseStudiesTable
 
@@ -133,7 +133,7 @@ This approach requires that there is sufficient implicit and explicit knowledge
 around the \acs{srs} document such that a user/developer/machine may follow it,
 without any external assistance (e.g., to clear up ambiguities).
 
-\intodo{Use the below words somehow, or get rid of them!}
+\intodo{Use the below notes somehow, or get rid of them!}
 
 \begin{itemize}
 
@@ -155,7 +155,7 @@ without any external assistance (e.g., to clear up ambiguities).
 
 \begin{figure}[H]
       \centering
-      \caption{Drasil's Logo}
+      \caption{Drasils Logo}
       \label{fig:drasilLogo}
       \includegraphics[width=0.6\linewidth]{\drasilLogo}
 \end{figure}
@@ -163,6 +163,16 @@ without any external assistance (e.g., to clear up ambiguities).
 \drasilPersonification
 
 \section{State of Architecture}
+
+Drasil encodes/organizes data, called \textit{chunks} (alternatively,
+\textit{fragments of knowledge}, and used interchangeably for the purposes of
+this work), by their Haskell-level type. A focused \textit{ChunkDB} datatype
+contains all information about a knowledge system.
+
+\intodo{coloured diagram showing flow of information and how general information
+      flow works}
+
+\caseStudiesCodeTable
 
 \begin{itemize}
 
@@ -172,15 +182,11 @@ without any external assistance (e.g., to clear up ambiguities).
                   \item ChunkDB
             \end{itemize}
 
-      \item SmithEtAl template for SRS documents
-
-      \item Haskell/GHC 8.8.4
-
       \item Uses a series of \ACFP{dsl} to build up the knowledge-base and
             ``story'' of a scene/project, until sufficient knowledge is built
             such that a generator may take the whole story and generate
             representational software artifacts.
-            \intodo{Should add an example of the encoding of a theory.}
+            \intodo{I should add an example of the encoding of a theory.}
 
       \item Generates \acs{oo} programs; \acs{gool} is used to generate code in
             C++/C, Java, Python, Swift, and C\#.
@@ -216,9 +222,3 @@ without any external assistance (e.g., to clear up ambiguities).
             \end{itemize}
 
 \end{itemize}
-
-\caseStudiesCodeTable
-
-\intodo{Short-term problems -- leading into topics}
-
-

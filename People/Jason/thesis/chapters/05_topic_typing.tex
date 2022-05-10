@@ -13,24 +13,25 @@
                         rapidly, and changes result in costly setbacks. Imagine
                         systems with 10, 100, and 1000+ expressions, the cost
                         grows rapidly.
-                  
+
                   \item With computers, we can systematically check the validity
-                        of expressions by imposing various kinds of restrictions.
+                        of expressions by imposing various kinds of
+                        restrictions.
 
             \end{itemize}
 
       \item Mentally tracking expression creations to ensure they follow the
-            implicit rules of the expression language is too difficult, and leads
-            to mental strain.
+            implicit rules of the expression language is too difficult, and
+            leads to mental strain.
 
-      \item Compiling to ``lower languages'' requires special type checking before
-            compiling to them. For example, the Swift code generator has to ensure
-            that there are no ambiguously typed numerals as the types of numerics
-            are not overloaded in Swift.
+      \item Compiling to ``lower languages'' requires special type checking
+            before compiling to them. For example, the Swift code generator has
+            to ensure that there are no ambiguously typed numerals as the types
+            of numerics are not overloaded in Swift.
 
       \item Dynamically checking for invalid expression states is possible, but
-            difficult and would result in increasingly difficult term tracking as
-            terms in the expression language grow/are added.
+            difficult and would result in increasingly difficult term tracking
+            as terms in the expression language grow/are added.
 
       \item In general, being able to express invalid expressions causes large
             burden and mental overhead.
@@ -51,31 +52,16 @@
             reported by the compiler, at compile-time. This will move the
             previously runtime errors to compile-time.
 
-      \item Invalid expression cases should not need to be considered when working
-            (e.g., case-ing) with expressions.
+      \item Invalid expression cases should not need to be considered when
+            working (e.g., case-ing) with expressions.
 
       \item ``Safety = Preservation + Progress'' (\cite{Harper2016}, Ch.6)
-
-      \item \intodo{Expressions must be terminating.}
 
 \end{itemize}
 
 \section{Solution}
 
 \begin{itemize}
-
-      \item Splitting Expr into 3 variants; Expr, CodeExpr, and ModelExpr.
-            This allows us to both segregate terms to particular domains, and add
-            weak typing where necessary, as required (e.g., areas where we might
-            require a dependently typed host language).
-
-            \begin{itemize}
-            
-                  \item \url{https://github.com/JacquesCarette/Drasil/issues/1220}
-            
-            \end{itemize}
-
-            \intodo{I think this ``solution'' point should be moved to \autoref{chap:modelkinds}}.
 
       \item Use TTF encodings of the smart constructors to lessen the cognitive
             load of handling at least 3 different expression languages.

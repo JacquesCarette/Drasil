@@ -1,7 +1,7 @@
 -- | Define and collect information about ODEs and ODE solvers from various libraries.
 module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * SciPy Library (Python)
-  scipyODEPckg, scipyODESymbols, scipyODELSodaPkg, scipyODEPckgTest,
+  scipyODEPckg, scipyODESymbols,
   -- * Oslo Library (C#)
   osloPckg, osloSymbols, arrayVecDepVar,
   -- * Apache Commons (Java)
@@ -25,7 +25,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn,
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
-  returnExprList, fixedReturn, initSolWithVal,
+  returnExprList, fixedReturn,
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill,
   mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill,
   userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill,
@@ -36,7 +36,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill,
   CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
-  mkODELibNoPath, pubStateVar, privStateVar, initSolWithValFill,
+  mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
 import Language.Drasil.CodeExpr
 import Language.Drasil.Code.Expr.Development
@@ -83,78 +83,8 @@ scipyCall info = externalLibCall [
         solveMethodFill = callStepFill $ libCallFill $ map basicArgFill
           [absTol $ odeOpts info, relTol $ odeOpts info]
 
--- scipy Test
-scipyODEPckgTest :: ODELibPckg
-scipyODEPckgTest = mkODELibNoPath "SciPy" "1.4.1" scipyODETest scipyCallTest [Python]
-
-scipyODETest :: ExternalLibrary
-scipyODETest = externalLib [
-  mandatoryStep $ callStep $ libFunctionWithResult scipyImport
-    odefunc [
-      functionArg f (map unnamedParam [Real, Array Real])
-      returnExprList] r,
-  choiceStep [
-    setIntegratorMethod [vode, methodArg "adams", atol, rtol],
-    setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
-    setIntegratorMethod [lockedArg (str "dopri5"), atol, rtol]],
-  mandatorySteps [callStep $ libMethod scipyImport r
-      setInitVal [inlineArg Real, inlineArg Real],
-    initSolListWithVal,
-    solveAndPopulateWhile (libMethod scipyImport r successful []) r t
-      (libMethod scipyImport r integrateStep [inlineArg Real]) y]]
-
-scipyCallTest :: ODEInfo -> ExternalLibraryCall
-scipyCallTest info = externalLibCall [
-  mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill
-    (map unnamedParamFill [indepVar info, depVar info])
-    (returnExprListFill $ odeSyst info)],
-  uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
-  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
-      [matrix[initVal info], tInit info],
-    initSolListWithValFill (depVar info) (matrix[initVal info]),
-    solveAndPopulateWhileFill (libCallFill []) (tFinal info)
-      (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
-      (depVar info)]]
-  where chooseMethod Adams = (0, solveMethodFill)
-        chooseMethod BDF = (1, solveMethodFill)
-        chooseMethod RK45 = (2, solveMethodFill)
-        solveMethodFill = callStepFill $ libCallFill $ map basicArgFill
-          [absTol $ odeOpts info, relTol $ odeOpts info]
-
--- | This package solves a system of ODEs using the scipy odeint method.
--- The odeint method solves the ode using the LSoda solver.
-scipyODELSodaPkg :: ODELibPckg
-scipyODELSodaPkg = mkODELibNoPath "SciPy" "1.4.1" scipyLSodaODE scipyLSodaCall [Python]
-
-scipyLSodaODE :: ExternalLibrary
-scipyLSodaODE = externalLib [
-  mandatoryStep $ callStep $ libFunctionWithResult numpyImport
-    arange [inlineArg Real, inlineArg Real, inlineArg Real] xAxis,
-  mandatoryStep $ callStep $ libFunctionWithResult scipyImport
-    odeintFunc [
-      functionArg f (map unnamedParam [Array Real, Real])
-      returnExprList, inlineArg (Array Real), inlineArg (Array Real)] ut,
-  mandatoryStep initSolWithVal
-    ]
-
-scipyLSodaCall :: ODEInfo -> ExternalLibraryCall
-scipyLSodaCall info = externalLibCall [
-  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
-      [tInit info, tFinal info, stepSize $ odeOpts info]],
-  mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill
-      (map unnamedParamFill [depVar info, indepVar info])
-      (returnExprListFill $ odeSyst info),
-      basicArgFill (matrix [initVal info]),
-      basicArgFill (sy xAxis)],
-  mandatoryStepFill $ initSolWithValFill (depVar info)
-      (idx (sy transpose) (int 0))
-    ]
-
 scipyImport :: String
 scipyImport = "scipy.integrate"
-
-numpyImport :: String
-numpyImport = "numpy"
 
 atol, rtol, vode :: Argument
 vode = lockedArg (str "vode")

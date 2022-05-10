@@ -162,13 +162,13 @@ without any external assistance (e.g., to clear up ambiguities).
 
 \drasilPersonification
 
-\section{State of Architecture}
+\section{Architecture}
 
-Drasil collects foundational knowledge about a \acs{srs} inside a                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+Drasil collects foundational knowledge about a \acs{srs} inside a
 \textit{ChunkDB}, a funnel for \textit{Chunks}, our language/knowledge encodings
 (also known as ``knowledge fragments'', and will be used interchangeably for the
-purposes of this work). In Haskell, \Chunk{}s are any data that one may
-register in the \ChunkDB{}:
+purposes of this work). In Haskell, \Chunk{}s are any data that one may register
+in the \ChunkDB{}:
 
 \intodo{Code snippet: ChunkDB original definition.}
 
@@ -193,14 +193,15 @@ programs, the \inlineHs{main :: IO ()} function is representative of the
 transformation capabilities of our understanding of our case studies into
 sufficient \acs{srs} documents, and ready-to-use software.
 
-\intodo{Code snippet: ``main'' function of one of the case studies.}
+\intodo{Code snippet: ``main'' function of GlassBR.}
 
-\todo{Ref. ``main'' function code snippet} displays an example, from the
+\todo{Ref. ``main'' function code snippet above.} displays an example, from the
 \acs{glassbr} case study, of what a transformer looks like in Drasil. This
 transformer takes knowledge collected, configures a ``print job''/transformation
-for the desired outputs, and performs an \inlineHs{IO ()} effect that dumps an
-\acs{srs} and a software artifact to the host computer, in the local working
-directory. \todo{continue here}
+for the desired outputs as prescribed by an orchestrating developer, and
+performs an \inlineHs{IO ()} effect that dumps an \acs{srs} and a software
+artifact to the host computer, in the local working directory. \todo{continue
+here}
 
 \intodo{Code snippet: ``PrintingInformation'' \& ``SystemInformation''}
 
@@ -214,12 +215,6 @@ directory. \todo{continue here}
 \caseStudiesCodeTable
 
 \begin{itemize}
-
-      \item Knowledge Encodings \& Organization
-            \begin{itemize}
-                  \item Chunks
-                  \item ChunkDB
-            \end{itemize}
 
       \item Uses a series of \ACFP{dsl} to build up the knowledge-base and
             ``story'' of a scene/project, until sufficient knowledge is built

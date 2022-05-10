@@ -39,8 +39,9 @@ import Drasil.PDController.SpSysDesc
        (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants, pidDqdConstants)
+  inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
+import Language.Drasil.Code (quantvar, listToArray)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -96,63 +97,59 @@ mkSRS
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: SystemInformation
-si
-  = SI{_sys = pidControllerSystem, _kind = Doc.srs, _authors = [naveen],
-       _purpose = [], _quants = symbolsAll,
-       _concepts = [] :: [DefinedQuantityDict],
-       _datadefs = dataDefinitions, _instModels = [],
-       _configFiles = [], _inputs = inputs, _outputs = outputs,
-       _defSequence = [] :: [Block SimpleQDef],
-       _constraints = map cnstrw inpConstrained, _constants = pidConstants,
-       _sysinfodb = symbMap, _usedinfodb = usedDB, refdb = refDB}
+si = SI {
+  _sys = pidControllerSystem,
+  _kind = Doc.srs,
+  _authors = [naveen],
+  _purpose = [],
+  _quants = symbolsAll,
+  _concepts = [] :: [DefinedQuantityDict],
+  _datadefs = dataDefinitions,
+  _instModels = [],
+  _configFiles = [],
+  _inputs = inputs,
+  _outputs = outputs,
+  _defSequence = [] :: [Block SimpleQDef],
+  _constraints = map cnstrw inpConstrained,
+  _constants = pidConstants,
+  _sysinfodb = symbMap,
+  _usedinfodb = usedDB,
+   refdb = refDB}
 
 symbolsAll :: [QuantityDict]
-symbolsAll
-  = symbols ++
-      scipyODESymbols ++
-        osloSymbols ++
-          apacheODESymbols ++
-            odeintSymbols ++
-              map qw [arrayVecDepVar pidODEInfo] ++
-                map qw pidDqdConstants ++ map qw pidConstants
+symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
+  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
+  ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
 symbMap :: ChunkDB
-symbMap
-  = cdb (map qw physicscon ++ symbolsAll ++ map qw [mass])
-      (nw pidControllerSystem :
-         [nw program, nw angular, nw linear] ++
-           map nw doccon ++
-             map nw doccon' ++
-               concepts ++
-                 map nw mathcon ++
-                   map nw mathcon' ++
-                     map nw [second, kilogram] ++
-                       map nw symbols ++ map nw physicscon ++ map nw acronyms
-                       ++ map nw physicalcon)
-      (map cw inpConstrained ++ srsDomains)
-      (map unitWrapper [second, kilogram])
-      dataDefinitions
-      instanceModels
-      genDefns
-      theoreticalModels
-      conceptInstances
-      ([] :: [Section])
-      ([] :: [LabelledContent])
-      ([] :: [Reference])
+symbMap = cdb (map qw physicscon ++ symbolsAll ++ map qw [mass])
+  (nw pidControllerSystem : [nw program, nw angular, nw linear] 
+  ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
+  ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
+  ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
+  (map cw inpConstrained ++ srsDomains)
+  (map unitWrapper [second, kilogram])
+  dataDefinitions
+  instanceModels
+  genDefns
+  theoreticalModels
+  conceptInstances
+  ([] :: [Section])
+  ([] :: [LabelledContent])
+  ([] :: [Reference])
 
 usedDB :: ChunkDB
-usedDB
-  = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
-      ([] :: [ConceptChunk])
-      ([] :: [UnitDefn])
-      ([] :: [DataDefinition])
-      ([] :: [InstanceModel])
-      ([] :: [GenDefn])
-      ([] :: [TheoryModel])
-      ([] :: [ConceptInstance])
-      ([] :: [Section])
-      ([] :: [LabelledContent])
-      ([] :: [Reference])
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
+  ([] :: [ConceptChunk])
+  ([] :: [UnitDefn])
+  ([] :: [DataDefinition])
+  ([] :: [InstanceModel])
+  ([] :: [GenDefn])
+  ([] :: [TheoryModel])
+  ([] :: [ConceptInstance])
+  ([] :: [Section])
+  ([] :: [LabelledContent])
+  ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations conceptInstances

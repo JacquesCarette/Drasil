@@ -56,9 +56,6 @@ eBalanceOnWtrRC =
           unknowns = [tempW $^^ 1, tempW $^^ 0]
           constants = [recip_ (sy tauW) `mulRe` sy tempC]
 
-balWtrExpr :: PExpr
-balWtrExpr = neg (recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time))
-
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
   [ch tauW `S.is` S "calculated from", refS balanceDecayRate],

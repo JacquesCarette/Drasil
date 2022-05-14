@@ -84,13 +84,13 @@ public class InputParameters {
             System.out.println(".");
             throw new Exception("InputError");
         }
-        if (!(1.0 / 100.0 <= t_step && t_step < t_sim)) {
+        if (!(1.0 / 1000.0 <= t_step && t_step < t_sim)) {
             System.out.print("t_step has value ");
             System.out.print(t_step);
             System.out.print(", but is expected to be ");
             System.out.print("between ");
-            System.out.print(1.0 / 100.0);
-            System.out.print(" ((1)/(100))");
+            System.out.print(1.0 / 1000.0);
+            System.out.print(" ((1)/(1000))");
             System.out.print(" and ");
             System.out.print(t_sim);
             System.out.print(" (t_sim)");

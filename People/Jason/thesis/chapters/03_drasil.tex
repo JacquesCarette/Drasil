@@ -172,42 +172,58 @@ in the \ChunkDB{}:
 
 \intodo{Code snippet: ChunkDB original definition.}
 
-A \ChunkDB{} is currently limited to the above chunks, but one should assume
-that more data types are also \textit{chunks} because this is merely a temporary
-restriction at the moment. Relating back to the ideology (as discussed in
-\autoref{chap:ideology}), in Drasil, the \ChunkDB{} is where the knowledge is
-collected, placed, and grown (generated). \textit{Transformers} are used to
-operate on the \Chunk{}s in the \ChunkDB{}. The transformers take in some
-knowledge, optional \textit{refinement} information, and convert it into some
-other knowledge fragment. Oddly\todo{Is it odd though? Or expected?}, these
-transformations are seemingly ``against the grain'' of the ``bottom-up''
-information gathering, whereby areas of precise and highly specific fragments of
-knowledge have their key components used in generating something in another
-language. The produced fragments are directed by the developer. By composing a
-series of miniature, bite-sized, transformations, we are able to create large
-and highly complex (but well-thought-out and understood).
+A \ChunkDB{} is currently limited to the above listed chunks\todo{ref. code
+snippet of ChunkDB}, but one should assume that more data types are also
+\textit{chunks} because this is merely a temporary restriction at the moment.
+Relating back to the ideology (as discussed in \autoref{chap:ideology}), in
+Drasil, the \ChunkDB{} is where the knowledge is collected, placed, and grown
+(generated). \textit{Transformers} are used to operate on the \Chunk{}s in the
+\ChunkDB{}. The transformers take in some knowledge, optional
+\textit{refinement} information, and convert it into some other knowledge
+fragment. Oddly\todo{Is it odd though? Or expected?}, these transformations are
+seemingly ``against the grain'' of the ``bottom-up'' information gathering,
+whereby areas of precise and highly specific fragments of knowledge have their
+key components used in generating something in another language. The produced
+fragments are directed by the developer. By composing a series of miniature,
+bite-sized, transformations, we are able to create large and highly complex (but
+well-thought-out and understood).
 
-The largest, most prominent transformer used in Drasil is that of the SmithEtAl
-knowledge transformer. Currently represented using the entry point to Haskell
-programs, the \inlineHs{main :: IO ()} function is representative of the
-transformation capabilities of our understanding of our case studies into
-sufficient \acs{srs} documents, and ready-to-use software.
+The largest, most prominent transformer used in Drasil is that of the
+\textit{SmithEtAl} knowledge transformer. It is currently represented using the
+entry point to Haskell programs, the \inlineHs{main :: IO ()} function is
+representative of the transformation capabilities of our understanding of our
+case studies into sufficient \acs{srs} documents, and ready-to-use software.
 
 \intodo{Code snippet: ``main'' function of GlassBR.}
 
 \todo{Ref. ``main'' function code snippet above.} displays an example, from the
 \acs{glassbr} case study, of what a transformer looks like in Drasil. This
-transformer takes knowledge collected, configures a ``print job''/transformation
-for the desired outputs as prescribed by an orchestrating developer, and
-performs an \inlineHs{IO ()} effect that dumps an \acs{srs} and a software
-artifact to the host computer, in the local working directory. \todo{continue
-here}
-
-\intodo{Code snippet: ``PrintingInformation'' \& ``SystemInformation''}
+transformer takes knowledge collected, configures a transformation task for the
+desired outputs, as prescribed by an orchestrating developer, and performs an
+\inlineHs{IO ()} effect that dumps an \acs{srs} and a software artifact to the
+host computer, in the local working directory. The data collected in the
+\ChunkDB{}s are collected at Drasil Haskell-level compile-time, instead of the
+Drasil run-time, because the chunks are captured within Haskell source code
+instead of an external resource.
 
 \intodo{Code snippet: ``genSRS''}
 
 \intodo{Code snippet: ``genCode''}
+
+\intodo{Code snippet: ``PrintingInformation'', ``SystemInformation'', \& ``Choices''}
+
+\intodo{Discuss how PrintingInformation, SystemInformation, and Choices are used
+      to configure a SmithEtAl transformer run.}
+
+The \acs{srs} and software artifacts are optional features. They are also not
+always guaranteed to function merely because they were executed. It is up to the
+knowledge transcribers to ensure that the body of knowledge recorded is
+logically consistent and well-understood to Drasil. In particular, the SmithEtAl
+transformer requires that the recorded \textit{theories}/models are consistent,
+and that, together, they are able to produce a meta-level holistic single theory
+that connects a list of inputs to a list of outputs of a desired calculation.
+The calculations should also be reasonably convertible in some programming
+language if we decide to use the calculations for code generation as well.
 
 \intodo{coloured diagram showing flow of information and how general information
       flow works}
@@ -231,15 +247,6 @@ here}
       \item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
             formed equations (e.g., simple LHS = complex RHS), and ODEs
             supported by python libraries.
-
-      \item Multiple code generating examples (each with their own
-            requirements):
-            \begin{itemize}
-                  \item GlassBR
-                  \item NoPCM
-                  \item PDController
-                  \item Projectile
-            \end{itemize}
 
       \item The calculation path relies (implicitly) on:
             \begin{itemize}

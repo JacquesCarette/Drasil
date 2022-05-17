@@ -34,7 +34,8 @@ Stack \todo{cite Stack}, and compiling against \acs{ghc} 8.8.4 \cite{GHC884}.
 Haskell is the language of choice for various reasons, but the most important
 reasons are regarding its paradigm: purely functional, with immutable data and a
 strong, sound type system based on Church's type theory (a.k.a., simple type
-theory) \todo{cite Church's type theory}.
+theory) \todo{cite Church's type theory}. This provides a sound system
+developers may use to classify, create, and work with knowledge.
 
 Drasil is currently capable of generating usable software through compiling to
 \ACF{gool}, which is capable of producing Java, C++, Python, C\#
@@ -49,10 +50,10 @@ documentation
 and
 \porthref{internal}{https://jacquescarette.github.io/Drasil/docs/full/index.html})
 is available on the Drasil project
-\porthref{homepage}{https://jacquescarette.github.io/Drasil/}. A public Drasil
-wiki is hosted on the \porthref{same GitHub
-      project}{https://github.com/JacquesCarette/Drasil/wiki}, containing information
-on potential future Drasil projects, Drasil-related papers, a
+\porthref{homepage}{https://jacquescarette.github.io/Drasil/}. Drasils public
+wiki is hosted on the same \porthref{GitHub
+      repository}{https://github.com/JacquesCarette/Drasil/wiki}, containing
+information on potential future Drasil projects, Drasil-related papers, a
 \porthref{developer workspace configuration and ``quick start''
       guide}{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}, and a
 guide for \porthref{building your own project with
@@ -60,11 +61,11 @@ guide for \porthref{building your own project with
 
 \section{Methodology}
 
-Drasils development is typically guided by case studies, focusing on building
-scientific software based on solving undergraduate-level physics problems. A
-``control'' program and \acs{srs} are manually created and used as a baseline
-target for the final artifact. Development is focused on creating a system of
-justification for each component of the baseline program, following a
+Drasils development is strongly influenced by its case studies, which focus on
+building scientific software based on solving undergraduate-level physics
+problems. A ``control'' program and \acs{srs} are manually created and used as a
+baseline target for the final artifact. Development is focused on creating a
+system of justification for each component of the baseline program, following a
 ``bottom-up'' agile \todo{Double check if it is indeed an agile approach}
 development approach. Drasil has been constructed following the demands and
 requirements of eight (8) case studies:
@@ -75,11 +76,31 @@ requirements of eight (8) case studies:
 
 Once baseline/target artifacts are constructed, the essence of the artifacts are
 dissected and broken into various \textit{fragments} of knowledge. The fragments
-of knowledge are continuously broken up and understood (via captured through
-creating knowledge encodings) until a sufficient holistic understanding is
-formed, generalized, and proven to be capable of re-generating the baseline
-artifacts. Hopefully, at the end, the baseline artifacts will have their flaws
-highlighted and resolved in the resolved in the produced artifacts.
+of knowledge are continuously broken up and explored/understood (via capture
+through creating knowledge encodings in Haskell) until a sufficient holistic
+understanding is formed, generalized, and proven to be capable of re-generating
+the baseline artifacts. Hopefully, at the end, the baseline artifacts will have
+their flaws highlighted and resolved in the produced artifacts.
+
+In the end of the bottom-up gathering approach, there will need to be knowledge
+encodings for, at least:
+
+\begin{enumerate}
+
+      \item the artifact-knowlege encodings -- Java, JSON, Python, HTML, SVG,
+            etc. all use a different language.
+
+      \item the meta-level knowledge encodings -- information lost in the
+            implementations of specific programs needs to be regained so that we
+            can reconstruct it in the original (and other) languages, where
+            possible.
+
+\end{enumerate}
+
+To some degree, the artifact-knowledge encodings may be thought of as a
+``phenomenon'' to Drasil. They may become part of the meta-level knowledge
+encodings as well, but they are also generally where the side-effects of Drasil
+appear, and file artifacts created.
 
 \subsection{Example}
 
@@ -98,14 +119,14 @@ viewing (read-only). Thus, a PDF is appropriate, but also inappropriate due to
 its complexity, and, hence, we look to constructing \acs{srs} documents using a
 series of files built with a textual markup language, and designating that a
 secondary compiler should be used to compile the files into a PDF. Naturally,
-\LaTeX and \TeX are the immediately desired textual markup languages for their
-usability in scientific scenes, portability, and free nature, unlike proprietary
-languages. For a software artifact, there are likely a few relevant fragments,
-but those most immediately important are the language (programming or otherwise)
-of the software artifacts and the method to use the software artifact.
-Generating a Java program will require for Drasil to have a working encoding of
-Java programs, and a means of directing users on how to use a residual Java
-program.
+\LaTeX{}, \TeX{}, and \acs{html} are the immediately desired textual markup
+languages for their usability in scientific scenes, portability, large
+user-base, and free nature (as opposed to proprietary languages). For a software
+artifact, there are likely a few relevant fragments, but those most immediately
+important are the language (programming or otherwise) of the software artifacts
+and the method to use and compile the software artifact. Generating a Java
+program will require for Drasil to have a working encoding of Java programs, and
+a means of directing users on how to use a residual Java program.
 
 Once satisfactory encodings of file types are formed, we must look to the
 purpose of the files and justify their existence. While a JSON file is strictly
@@ -115,43 +136,35 @@ to, and/or used in, a Java program. Therefore, we must create a system of
 reasoning for why files belong where they do (this might be a part of the
 language encoding itself as well). For executable software artifacts, the desire
 is to have an end-user \textit{execute} the final software artifacts produced,
-and thus we must gain information on what the user expects, desires, and, where
-feasible, creating a conceptual understanding how a program meets their
+and thus we must gain information on what the user expects, and desires. Where
+feasible, also creating a conceptual understanding how a program meets their
 expectations and desires. With each of Drasil's case studies, a series of
 \textit{inputs} are provided to an executable program, and the program is
 expected to produce \textit{outputs} that somehow make use of the inputs.
 Drasils case studies form a system of relations for each study that relates the
 inputs to the outputs.
 
-As Drasil is focused on forming scientific software, the ``system of relations''
-is generally a language of forming a sequence of mathematical calculations.
+As Drasil is focused on forming scientific software that adheres to a specific
+\acs{srs} template \cite{SmithAndLai2005}, the ``system of relations'' is
+generally a language of forming a sequence of mathematical calculations.
 Knowledge is continuously captured until a sufficient fundamental knowledge-base
 is formed such that a user may generate families of software problems using any
-relevant domain knowledge.
+relevant domain knowledge. In Drasils case studies, the knowledge capture is
+heavily influenced by the \acs{srs} template \cite{SmithAndLai2005}.
 
 This approach requires that there is sufficient implicit and explicit knowledge
 around the \acs{srs} document such that a user/developer/machine may follow it,
-without any external assistance (e.g., to clear up ambiguities).
+without any external assistance (e.g., to clear up ambiguities). This ultimately
+relies on developing a stable framework for collecting a collection of
+``cookie-cutter'' pieces of knowledge, and interacting with them. By breaking
+down knowledge into small units of knowledge, the end-result development cycle
+should appear similar to using a projectional editor with appropriate \acs{ide}
+tooling.
 
-\intodo{Use the below notes somehow, or get rid of them!}
-
-\begin{itemize}
-
-      \item Generating scientific software artifacts
-            \begin{itemize}
-
-                  \item Develop a stable framework for laying cookie-cutter
-                        problems.
-
-                  \item Make it as simple as using a projectional editor.
-
-            \end{itemize}
-
-      \item Typically, the pieces of knowledge that are ``closer'' to the final
-            stages of the generation process have a ``lower informational
-            density''.
-
-\end{itemize}
+\intodo{Add an example of an SRS document, and explain how there is sufficient
+      information in it such that we can use it to generate representational
+      software that solves the relevant problems, with little or no manual/extra
+      information (excluding design choices of the desired software artifacts).}
 
 \begin{figure}[H]
       \centering
@@ -164,34 +177,40 @@ without any external assistance (e.g., to clear up ambiguities).
 
 \section{Architecture}
 
-Drasil collects foundational knowledge about a \acs{srs} inside a
-\textit{ChunkDB}, a funnel for \textit{Chunks}, our language/knowledge encodings
-(also known as ``knowledge fragments'', and will be used interchangeably for the
-purposes of this work). In Haskell, \Chunk{}s are any data that one may register
-in the \ChunkDB{}:
+Drasil relies on a domain expert encoding knowledge as a deeply embedded
+\ACF{dsl} or record in Haskell. Instances of the knowledge also appear in the
+Haskell source code. When knowledge is encoded in Drasil, we refer to it as a
+\textit{Chunk} or \textit{knowledge fragment} (they will be used interchangeably
+for the purposes of this thesis). The chunks relevant Haskell-level type is its
+classifier, and each chunk must have a \ACF{uid} so that one might be able to
+refer to a specific occurrence of knowledge. Chunks are funneled into a
+\textit{Chunk Database} (in Haskell, a \ChunkDB{}).
 
 \intodo{Code snippet: ChunkDB original definition.}
 
 A \ChunkDB{} is currently limited to the above listed chunks\todo{ref. code
-snippet of ChunkDB}, but one should assume that more data types are also
-\textit{chunks} because this is merely a temporary restriction at the moment.
-Relating back to the ideology (as discussed in \autoref{chap:ideology}), in
-Drasil, the \ChunkDB{} is where the knowledge is collected, placed, and grown
-(generated). \textit{Transformers} are used to operate on the \Chunk{}s in the
-\ChunkDB{}. The transformers take in some knowledge, optional
-\textit{refinement} information, and convert it into some other knowledge
-fragment. Oddly\todo{Is it odd though? Or expected?}, these transformations are
-seemingly ``against the grain'' of the ``bottom-up'' information gathering,
-whereby areas of precise and highly specific fragments of knowledge have their
-key components used in generating something in another language. The produced
-fragments are directed by the developer. By composing a series of miniature,
-bite-sized, transformations, we are able to create large and highly complex (but
-well-thought-out and understood).
+      snippet of ChunkDB}, but one should assume that more data types are also
+\textit{chunks} because this is merely a temporary restriction at the
+moment. Relating back to the ideology (as discussed in
+\autoref{chap:ideology}), in Drasil, the \ChunkDB{} is where the knowledge
+is collected, placed, and grown (generated). \textit{Transformers} are
+used to operate on the \Chunk{}s in the \ChunkDB{}. The transformers take
+in some knowledge, optional \textit{refinement} information, and convert
+it into some other knowledge fragment. Oddly\todo{Is it odd though? Or
+      expected?}, these transformations are seemingly ``against the grain'' of
+the ``bottom-up'' information gathering. Areas of precise and
+highly specific fragments of knowledge have their key components used in
+generating something in another language (this typically involves some
+sort of information loss/strip in order to restrict the knowledge for a
+specific purpose). The produced fragments are directed by the developer.
+By composing a series of miniature, ``bite-sized'', transformations, we are
+able to create large and highly complex (but well-thought-out and
+understood).
 
 The largest, most prominent transformer used in Drasil is that of the
 \textit{SmithEtAl} knowledge transformer\todo{I'm naming this, which I really
-shouldn't be doing, but I need a name to refer to the SRS+Code generator we have
-at the moment.}. It is currently represented using the entry point to Haskell
+      shouldn't be doing, but I need a name to refer to the SRS+Code generator we have
+      at the moment.}. It is currently represented using the entry point to Haskell
 programs, the \inlineHs{main :: IO ()} function is representative of the
 transformation capabilities of our understanding of our case studies into
 sufficient \acs{srs} documents, and ready-to-use software.
@@ -203,10 +222,14 @@ sufficient \acs{srs} documents, and ready-to-use software.
 transformer takes knowledge collected, configures a transformation task for the
 desired outputs, as prescribed by an orchestrating developer, and performs an
 \inlineHs{IO ()} effect that dumps an \acs{srs} and a software artifact to the
-host computer, in the local working directory. The data collected in the
+host computer, in the local working directory. While not seemingly coupled, they
+indeed are. The code generator focuses on understanding fragments/ideas relevant
+to generating the \acs{srs}, with more stringent rules than the \acs{srs}
+generator to create a coherent software artifact. The data collected in the
 \ChunkDB{}s are collected at Drasil Haskell-level compile-time, instead of the
 Drasil run-time, because the chunks are captured within Haskell source code
-instead of an external resource.
+instead of an external resource. In other words, the data is embedded in Haskell
+itself.
 
 \intodo{Code snippet: ``genSRS''}
 
@@ -238,13 +261,15 @@ language if we decide to use the calculations for code generation as well.
             ``story'' of a scene/project, until sufficient knowledge is built
             such that a generator may take the whole story and generate
             representational software artifacts.
-            \intodo{I should add an example of the encoding of a theory.}
 
       \item Generates \acs{oo} programs; \acs{gool} is used to generate code in
             C++/C, Java, Python, Swift, and C\#.
 
-      \item Doxygen, Markdown, HTML, TeX, Makefile, CSS, and more
+      \item Generates Doxygen, Markdown, HTML, TeX, Makefile, CSS, and more
             non-programming software artifacts.
+
+      \item Notable type of knowledge for code generation: theories/models.
+            \intodo{I should add an example of the encoding of a theory.}
 
       \item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
             formed equations (e.g., simple LHS = complex RHS), and ODEs

@@ -180,7 +180,7 @@ findHighestOrder = foldr1 (\x y -> if x ^. (unk . degree) >= y ^. (unk . degree)
 -- | Create all possible unknowns based on the highest order
 createAllUnknowns :: Unknown -> [Unknown]
 createAllUnknowns highestUnk
-  | highestUnk ^. degree  == 1  = [highestUnk]
+  | highestUnk ^. degree  == 0  = [highestUnk]
   | otherwise = highestUnk : createAllUnknowns ((highestUnk ^. depVar) $^^ (highestUnk ^. degree - 1))
 
 -- | Create Coefficients base on all possible unknowns

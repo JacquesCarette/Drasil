@@ -24,18 +24,19 @@
 
 \section{An Exploration}
 
-Originally known as \ACF{lss} \todo{cite LSS}, Drasil is an exploration of this
+Originally known as \ACF{lss}\todo{Cite LSS}, Drasil is an exploration of this
 ideology described in \Cref{chap:ideology}. Drasil's largest domain of knowledge
 covered originates from \acs{lss}: \acl{scs}. \porthref{Dr. Jacques
       Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
       Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
 Drasil. Drasil is deeply embedded in Haskell \cite{Haskell2010}, relying on
-Stack \todo{cite Stack}, and compiling against \acs{ghc} 8.8.4 \cite{GHC884}.
+Stack\todo{Cite Stack}, and compiling against \acs{ghc} 8.8.4 \cite{GHC884}.
 Haskell is the language of choice for various reasons, but the most important
 reasons are regarding its paradigm: purely functional, with immutable data and a
 strong, sound type system based on Church's type theory (a.k.a., simple type
-theory) \todo{cite Church's type theory}. This provides a sound system
-developers may use to classify, create, and work with knowledge.
+theory)\todo{Cite Church's type theory, and somewhere that notes that Haskell is
+      indeed based on it}. This provides a sound system developers may use to
+classify, create, and work with knowledge.
 
 Drasil is currently capable of generating usable software through compiling to
 \ACF{gool}, which is capable of producing Java, C++, Python, C\#
@@ -197,14 +198,14 @@ moment. Relating back to the ideology (as discussed in
 is collected, placed, and grown (generated). \textit{Transformers} are
 used to operate on the \Chunk{}s in the \ChunkDB{}. The transformers take
 in some knowledge, optional \textit{refinement} information, and convert
-it into some other knowledge fragment. Oddly\todo{Is it odd though? Or
-      expected?}, these transformations are seemingly ``against the grain'' of
-the ``bottom-up'' information gathering. Areas of precise and
-highly specific fragments of knowledge have their key components used in
-generating something in another language (this typically involves some
-sort of information loss/strip in order to restrict the knowledge for a
-specific purpose). The produced fragments are directed by the developer.
-By composing a series of miniature, ``bite-sized'', transformations, we are
+it into some other knowledge fragment. Oddly\todo{Is it odd or expected?},
+these transformations are seemingly ``against the grain'' of the
+``bottom-up'' information gathering. Areas of precise and highly specific
+fragments of knowledge have their key components used in generating
+something in another language (this typically involves some sort of
+information loss/strip in order to restrict the knowledge for a specific
+purpose). The produced fragments are directed by the developer. By
+composing a series of miniature, ``bite-sized'', transformations, we are
 able to create large and highly complex (but well-thought-out and
 understood).
 

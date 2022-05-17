@@ -41,12 +41,14 @@ imPDRC
       "imPDRC"
       (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
-      where lhs = [(exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))]
+      where lhs = [(exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1))]
                   $+ (exactDbl 1 $* (opProcessVariable $^^ 2))
+                  $+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
             rhs = sy qdSetPointTD `mulRe` sy qdPropGain
-      -- where coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
-      --       unknowns = [opProcessVariable $^^ 2, opProcessVariable $^^ 1, opProcessVariable $^^ 0]
-      --       constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
+      -- Matrix form: 
+      -- coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
+      -- unknowns = [opProcessVariable $^^ 2, opProcessVariable $^^ 1, opProcessVariable $^^ 0]
+      -- constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
 
 imDeriv :: Derivation
 imDeriv

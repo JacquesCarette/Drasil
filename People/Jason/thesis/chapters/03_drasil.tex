@@ -102,16 +102,17 @@ To some degree, the artifact-knowledge encodings may be thought of as a
 encodings as well, but they are also generally where the side-effects of Drasil
 appear, and file artifacts created.
 
-\subsection{Example}
+\subsection{Overview}
 
 The most immediate fragments of relevant knowledge are those that discuss the
 produced artifacts. Naturally, Drasil is limited to software-based side effects,
 but focused on producing \textit{files} on a computer.
 
 The case studies are focused on constructing scientific software that follow a
-precise \acs{srs} \cite{SmithAndLai2005}. Therefore, all artifacts are produced
-with the goal of providing a user with a (i) \acl{srs}, and (ii) a usable
-software that adheres to the \acl{srs}.
+precise \acs{srs} \cite{SmithAndLai2005}\todo{Discuss Dr.Smiths template a bit
+      more, I need to explain the sections quickly}. Therefore, all artifacts are
+produced with the goal of providing a user with a (i) \acl{srs}, and (ii) a
+usable software that adheres to the \acl{srs}.
 
 The encodings of the desired artifact files are next most important. For
 example, an \acs{srs} artifact is typically a file that an end-user will be
@@ -255,18 +256,29 @@ language if we decide to use the calculations for code generation as well.
 
 \caseStudiesCodeTable
 
+\intodo{note somewhere that NoPCM does not build Swift code due to the lack of a
+      connected ODE library/solver, which is outside of the scope of this work.}
+
 \begin{itemize}
 
       \item Uses a series of \ACFP{dsl} to build up the knowledge-base and
             ``story'' of a scene/project, until sufficient knowledge is built
-            such that a generator may take the whole story and generate
-            representational software artifacts.
+            such that a generator may take the ``whole story'' and generate
+            representational software artifacts. This can be seen more clearly
+            by observing an \acs{srs} example.
 
       \item Generates \acs{oo} programs; \acs{gool} is used to generate code in
             C++/C, Java, Python, Swift, and C\#.
 
       \item Generates Doxygen, Markdown, HTML, TeX, Makefile, CSS, and more
             non-programming software artifacts.
+
+      \item The \acs{srs} is generated in both HTML and PDF flavours.
+
+      \item Briefly discuss the SmithEtAl \acs{srs} template. The \acs{srs}
+            template dissects scientific software into well-understood
+            components, which should provide sufficient information for a
+            developer to build a representational software product.
 
       \item Notable type of knowledge for code generation: theories/models.
             \intodo{I should add an example of the encoding of a theory.}

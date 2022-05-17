@@ -1,25 +1,23 @@
 % ModelKinds -- Theory types / discrimination -- ``Expressions in context''
 
-In working to understand some phenomenon, we often look to our understanding of
-the phenomenon. In mathematics (amongst other fields, such as philosophy,
-physics, chemistry, biology, computer science, etc. [anything studied in a
-		university?]), we often think about various phenomenon in terms of theories and
-axioms, where the theories and axioms are written using a global mathematical
-language with precise meanings and sharing no similarity to English and human to
-human communication languages.
-
-A language is used to describe a field of knowledge (theories and axioms). The
-language is typically tailored to the field of knowledge. One language of
-interest to this research is that of the mathematical language. A mathematical
-language is used in understanding theories and axioms. As mathematicians
-transferring knowledge to one another, we often use a written form of knowledge,
-though unlikely, potentially with a precise structure to our transcription of
-the knowledge, but still, the structure is textual. We might break up the
-transcription of the knowledge into sections. The sections of a theory might
-perhaps have a name, a description, a derivation, some information on it's
-origin (e.g., a reference), and some sort of information in a language we can
-use to convey the important information we decided to share. Of course, for a
-mathematical theory, a mathematical language would be used. Describing a
+In working to understand some phenomenon, we often look to the boundaries of our
+understandings of the phenomenon -- the open-ended questions. In any domain of
+knowledge (such as mathematics, philosophy, physics, chemistry, biology,
+computer science, etc.\todo{Anything studied in a university?}), we often think
+about various phenomenon in logical terms of theories and axioms, where the
+theories and axioms are written using a global logical language with precise
+meanings. The language is typically tailored to the field of knowledge. As this
+work pertains to Drasil, one language of interest to this research is that of
+the mathematical language. A mathematical language is heavily used in science,
+conveying important theories, axioms, corollaries, amongst other things. As
+mathematicians transferring knowledge to one another, we often use a written
+form of knowledge, though unlikely, potentially with a precise structure to our
+transcription of the knowledge, but still, the structure is textual. We might
+break up the transcription of the knowledge into sections. The sections of a
+theory might perhaps have a name, a description, a derivation, some information
+on it's origin (e.g., a reference), and some sort of information in a language
+we can use to convey the important information we decided to share. Of course,
+for a mathematical theory, a mathematical language would be used. Describing a
 programming language artifact, we might prefer to call our theories by a series
 of other names (e.g., functions/methods, constants, modules, statements,
 variables, etc.), and prefer to use the parts of the AST of a programming
@@ -27,29 +25,30 @@ language to describe our theories.
 
 In Drasil, both of these languages are of great importance. The mathematical
 field of knowledge is directly used in at least two domains currently captured;
-the scientific theories, and \acs{gool}\todo{cite GOOL}. Meanwhile, the
-programming language theory (artifacts) is only directly used in GOOL, and it's
-various renderers. The SmithEtAl \cite{SmithAndLai2005} generator uses knowledge
-transcribed as scientific requirements to automatically generate a series of
-representational software programs. In the SmithEtAl generator doing this, it
-requires both fields, extensively. The focus of the scientific requirements
-documents are to transcribe the relevant knowledge of a scientific system as
-developed by a domain/scientific expert. For example, \todo{SRS document
-	example} is used to fully explain \todo{something} such that a software
-developer can construct a program based on it. Of course, if the SRS document is
-to be truly sufficient for a software developer to unambiguously create a
-representational software artifact, then the software developer (who potentially
-knows nothing about the domain discussed in the SRS document) will need to be
-able to credibly transcribe everything into their program, matching the
-requirements as set by the SRS document. As Drasil is an apparatus for testing
-our understanding of phenomenon, the SmithEtAl template is being tested for it's
-confidence in this regard (and is being shown to work). However, if the process
-is to be truly ``assembly-line''-able, then we should be able to mechanize it.
+the scientific theories, and \acs{gool}\cite{Carette2019}. Meanwhile, the
+programming language theory (artifacts) is only directly used in \acs{gool}, and
+it's various renderers. The SmithEtAl \acs{srs} \cite{SmithAndLai2005} template
+generator uses knowledge transcribed as scientific requirements to automatically
+generate a series of representational software programs. In the SmithEtAl
+generator doing this, Drasil requires a comprehensive understanding of both
+fields. The focus of the scientific requirements documents are to transcribe the
+relevant knowledge of a scientific system as developed by a domain/scientific
+expert. For example, \todo{SRS document example} is used to fully explain
+\todo{something} such that a software developer can construct a program based on
+it. Of course, if the SRS document is to be truly sufficient for a software
+developer to unambiguously create a representational software artifact, then the
+software developer (who potentially knows nothing about the domain discussed in
+the \acs{srs} document) will need to be able to credibly transcribe everything
+into their program, matching the requirements as set by the \acs{srs} document.
+As Drasil is an apparatus for testing our understanding of phenomenon, the
+SmithEtAl template is being tested for its confidence in this regard (and is
+being shown to work). However, if the process is to be truly
+``assembly-line''-able, then we should be able to mechanize it.
 
 In Drasil, a proof of concept of this understanding is being built. In
 particular, the SmithEtAl template is being attempted to be systematically used
 to generate a family of software artifacts in a variety of \acl{oo} programming
-languages through building a single \ACL{gool}.
+languages through building \ACF{gool} programs.
 
 In order for Drasil to generate software artifacts that solve problems, it must
 have a way of discussing the space your problem lies in, and the ways it can be
@@ -101,18 +100,17 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 	      in a well-understood physics textbook (here, with a focus on
 	      graduate-level scientific problems).
 
-	\item It's important that each knowledge encoding in Drasil exposes as much
+	\item It is important that each knowledge encoding in Drasil exposes as much
 	      information as reasonably possible (and useful). We want to expose the
 	      ``specifications'' of each piece of knowledge that we are encoding so
 	      that transformers and generators may appropriately make use of
 	      contained knowledge.
 
-	\item With mathematical models, it's very easy to write ``difficult to
-	      interpret'' expressions, and create expressions for which aren't
-	      directly calculable (i.e., things that require an extra paper and
-	      pencil/mental mathematics before performing), either without extra
-	      surrounding information or simply too ``difficult'' (areas where we
-	      might find choices are especially difficult).
+	\item It is very easy to write ``difficult/impossible to interpret''
+	      expressions. For example, it is possible to create expressions for
+	      which aren't directly calculable (i.e., things that require an extra
+	      paper and pencil/mental mathematics before performing), either without
+	      extra surrounding information or simply impossible.
 
 	      \begin{itemize}
 
@@ -123,7 +121,8 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 		            inference is difficult, artificial learning is a whole field
 		            of study of its own. As such, we reverse the relationship of
 		            the inference by having knowledge container expose
-		            everything on its own.
+		            everything on its own. We additionally expect knowledge as a
+		            requisite to working with the model.
 
 		      \item In other words, we replace Expr as a knowledge container,
 		            and restrict its usage to strictly ``expressions'', as
@@ -137,14 +136,14 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 	      in a concise and easy-to-digest manner.
 
 	\item For example, assuming the following expressions are written using the
-	      existing mathematical Expr language in Drasil...
+	      existing mathematical Expr language in Drasil\ldots{}
 	      \begin{itemize}
 
 		      \item While \(y = x\) might conventionally be seen as ``y is equal
 		            to x'', we might want, in our model, for it to be understood
 		            as ``x is defined by y'' but displayed differently.
 
-		      \item \(a = b = c = ... = d\) can be ambiguously read ...
+		      \item \(a = b = c = ... = d\) can be ambiguously read\ldots{}
 
 		      \item Truth statements such as \(y < x\) might be usable in
 		            asserting constraints at software runtime, but it's

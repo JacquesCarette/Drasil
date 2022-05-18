@@ -129,6 +129,9 @@
 % shown in the toc.
 \usepackage{tocbibind}
 
+% 
+\usepackage{chngcntr}
+
 % Set double spacing
 \usepackage{setspace}
 \doublespacing
@@ -326,6 +329,10 @@
 
 \appendix
 \chapter{Appendix}
+\renewcommand{\thechapter}{A}
+\counterwithin{figure}{chapter} % chapter, or section?
+\counterwithin{table}{chapter} % chapter, or section?
+\counterwithin{listing}{chapter} % chapter, or section?
 \input{chapters/appendix}
 
 \end{document}

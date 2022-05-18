@@ -6,93 +6,120 @@ knowledge. In any domain of knowledge (such as mathematics, philosophy, physics,
 chemistry, biology, computer science, or any other studied subject), we often
 think about various phenomenon in logical terms of theories and axioms, where
 the theories and axioms are written using a global logical language with precise
-meanings. The language is typically tailored to the field of knowledge. As this
-work pertains to Drasil, one language of interest to this research is that of
-the mathematical language. A mathematical language is heavily used in science,
-conveying important theories, axioms, corollaries, amongst other things. As
-mathematicians transferring knowledge to one another, we often use a written
-form of knowledge, though unlikely, potentially with a precise structure to our
-transcription of the knowledge, but still, the structure is textual. We might
-break up the transcription of the knowledge into sections. The sections of a
-theory might perhaps have a name, a description, a derivation, some information
-on it's origin (e.g., a reference), and some sort of information in a language
-we can use to convey the important information we decided to share. Of course,
-for a mathematical theory, a mathematical language would be used. Describing a
-programming language artifact, we might prefer to call our theories by a series
-of other names (e.g., functions/methods, constants, modules, statements,
-variables, etc.), and prefer to use the parts of the AST of a programming
-language to describe our theories.
+meanings\todo{I almost make it sound like we're not using English/Any other
+	language to communicate ideas, I should clarify this.}. The language is
+typically tailored to the field of knowledge. As this work pertains to Drasil,
+one language of interest to this research is that of the mathematical language.
+A mathematical language is heavily used in science, conveying important
+theories, axioms, corollaries, amongst other things. As mathematicians
+transferring knowledge to one another, we often use a written form of knowledge,
+though unlikely, potentially, with a precise structure to our transcription of
+the knowledge, but still, the structure is textual. We might break up the
+transcription of the knowledge into sections. The sections of a theory may have
+a name, a natural language description, a derivation, some information regarding
+its origin (e.g., a reference), and a formalization of the theories important
+information in a precise language. Of course, for a mathematical theory, a
+mathematical language would be used. Describing a programming language artifact,
+we might prefer to call our theories by a series of other names (e.g.,
+functions/methods, constants, modules, packages, libraries, \acsp{api},
+\acsp{ast}.
 
 In Drasil, both of these languages are of great importance. The mathematical
-field of knowledge is directly used in at least two domains currently captured;
-the scientific theories, and \acs{gool}\cite{Carette2019}. Meanwhile, the
+field of knowledge is directly used in at least two domains currently captured:
+the scientific theories, and \acs{gool} \cite{Carette2019}. Meanwhile, the
 programming language theory (artifacts) is only directly used in \acs{gool}, and
-it's various renderers. The SmithEtAl \acs{srs} \cite{SmithAndLai2005} template
+its various renderers. The SmithEtAl \acs{srs} \cite{SmithAndLai2005} template
 generator uses knowledge transcribed as scientific requirements to automatically
-generate a series of representational software programs. In the SmithEtAl
-generator doing this, Drasil requires a comprehensive understanding of both
-fields. The focus of the scientific requirements documents are to transcribe the
-relevant knowledge of a scientific system as developed by a domain/scientific
-expert. For example, \todo{SRS document example} is used to fully explain
-\todo{something} such that a software developer can construct a program based on
-it. Of course, if the SRS document is to be truly sufficient for a software
-developer to unambiguously create a representational software artifact, then the
-software developer (who potentially knows nothing about the domain discussed in
-the \acs{srs} document) will need to be able to credibly transcribe everything
-into their program, matching the requirements as set by the \acs{srs} document.
-As Drasil is an apparatus for testing our understanding of phenomenon, the
-SmithEtAl template is being tested for its confidence in this regard (and is
-being shown to work). However, if the process is to be truly
-``assembly-line''-able, then we should be able to mechanize it.
+generate a series of representational software programs. Thankfully, Smith and
+Lai \cite{SmithAndLai2005} break down theories relevant to \acs{scs} into at
+least four (4) kinds for their \acs{srs} template:
 
-In Drasil, a proof of concept of this understanding is being built. In
-particular, the SmithEtAl template is being attempted to be systematically used
-to generate a family of software artifacts in a variety of \acl{oo} programming
-languages through building \ACF{gool} programs.
+\todo{Define the 4 kinds of models here.}
+\begin{enumerate}
 
-In order for Drasil to generate software artifacts that solve problems, it must
-have a way of discussing the space your problem lies in, and the ways it can be
-transformed into the working calculation steps that a software artifact can
-follow to solve your problem.
+	\item \textbf{Theory Models}:
 
-\begin{itemize}
+	\item \textbf{General Definitions}:
 
-	\item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
-	      formed equations (e.g., simple LHS = complex RHS), and ODEs
-	      supported by python libraries.
+	\item \textbf{Instance Models}:
 
-	\item The calculation path relies (implicitly) on:
-	      \begin{itemize}
+	\item \textbf{Data Definitions}:
 
-		      \item The Exprs of the RelationConcept being of the form: $x =
-			            f(a,b,c,...)$
+\end{enumerate}
 
-		      \item The ODEs being described by the expression language, but
-		            we do not rely on being able to generate representing
-		            computational code due to needing extra external
-		            information (e.g., we require a supplementary packet of
-		            information [ODEInfo]).
+\intodo{Example of a theory/instance model here.}
 
-	      \end{itemize}
+\intodo{Insider knowledge: the theories are actively being re-thought.}
 
-\end{itemize}
+Since the SmithEtAl generator focuses itself on knowledge captured in the form
+of the \acs{srs} template, Drasil requires a comprehensive understanding of both
+fields in order to generate representational software for the \acs{srs}. The
+focus of the scientific requirements documents are to transcribe the relevant
+knowledge of a \acs{scs} system as developed by a domain/scientific expert. For
+example, \todo{SRS document example} is used to fully explain \todo{something}
+such that a software developer can construct a program based on it. Of course,
+if the \acs{srs} document is to be truly sufficient for a software developer to
+unambiguously create a representational software artifact, then the software
+developer (who potentially knows nothing about the domain discussed in the
+\acs{srs} document) will need to be able to credibly transcribe everything into
+their program, matching the requirements as set by the \acs{srs} document.
+Drasil is an apparatus for testing our understanding of these scenarios, rather
+than having a read-only ``view'' of the scientists/domain experts knowledge
+available to the software developer, the knowledge itself is available, in its
+most raw encoded form.
 
-\section{A Unified Language}
+Drasil relies on searching for a calculation path that relates the inputs and
+outputs designated in an \acs{srs} document. The relations are based on the
+grounded theories (\textit{Instance Models}) designated in the \acs{srs}. The
+relations themselves are currently required to be of the form \(x = f(a, b, c,
+\ldots{})\), with some exceptions made for \acsp{ode}. \acsp{ode} are being
+actively developed to remove the manually written exceptions made for them
+(outside the scope of this work).
+
+Instance Models, General Definitions, and Data Definitions each rely on a
+\textit{Relation Concept} (\RelationConcept{}): a notable and named mathematical
+relation with a description and abbreviated name. A \RelationConcept{} is
+modelled as a \Relation{} coupled with a \ConceptChunk{} (\todo{Add ConceptChunk
+	original definition to thesis appendix.}, a named \textit{thing} with a name,
+abbreviation, and natural language description):
+
+\originalRelationConcept{}
+
+The \Relation{}s \todo{add a reference to an appendix entry for the ``type
+	Relation = Expr'' definition} in the \RelationConcept{} are, fundamentally,
+just an instance of a universal mathematical language which conveys their
+information, but given a type synonym to indicate that the instance should
+be a mathematical relation.
+
+\section{A Universal Math Language}
 \label{sec:modelkinds:language}
 
 \originalExprHaskell
 
-The original smart constructors were specific to Expr:
+The mathematical language used in Drasil is universally used, covering a wide
+range of knowledge, including facilities for creating commonly used primitive
+data types, operations, and functions  in mathematics, physics, and computer
+science and programming languages. For example, \todo{An expression.} is
+transcribed in Drasil as follows:
 
-\originalFewExprSmartConstructorsHaskell
+\intodo{Transcription of the above expression.}
 
-Theories were transcribed using ``RelationConcepts'':
+This transcription relies on smart constructors, such as \todo{Ref. a new
+	appendix entry for new smart constructors.}. The smart constructors used are
+all specialized to \Expr{} and perform simplifications along the way (such
+as folding \(1 \cdot x\) into \(x\)).
 
-\originalRelationConcept
+\section{A Universal Theory Language}
 
-Where ``Relations'' are merely an alias for Expr:
+As Drasils theories rely heavily on \Relation{}s (and \RelationConcept{}s)
+(\todo{Ref. the definitions of DDs, IMs, GDs, and TMs}), we may observe that the
+theories are an accurate reflection of writing out mathematics involved as one
+might write them down on paper: exactly as they please. In modelling any
+problem, one will, of course, model the work of their pencil and paper. This is
+exactly what occurs here. Theories here are shallow representations of
+knowledge, that mimic your pencil and paper.
 
-\originalRelation{}
+\intodo{Rewrite the point form notes in the ModelKinds section.}
 
 \theoriesWithoutModelKinds
 
@@ -244,7 +271,5 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 	      \end{itemize}
 
 \end{itemize}
-
-\subsection{Continued}
 
 \intodo{Remaining problems}

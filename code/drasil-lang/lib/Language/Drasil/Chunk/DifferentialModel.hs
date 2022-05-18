@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.DifferentialModel (
     -- * Input Language
     ($^^), ($*), ($+),
     -- * Constructors
-    makeASystemDE, makeASingleDE, makeASingleDETest
+    makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE, makeASingleDETest
     ) where
 
 import Control.Lens (makeLenses, (^.), view)
@@ -25,12 +25,8 @@ import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl))
 import Data.List (find)
 
--- Unknown is nth degree of derivative of its dependent variables 
-data Unknown = UK{
-  _depVar :: ConstrConcept,
-  _degree :: Int
-}
-makeLenses ''Unknown
+-- Unknown is nth degree of derivative of its dependent variable 
+type Unknown = Int
 
 -- Term is the relation of a coefficient and an unknown
 data Term = T{
@@ -48,7 +44,7 @@ type LHS = [Term]
   depVar is the dependent variable, d is the dth derivative
 -}
 ($^^) :: ConstrConcept -> Int -> Unknown
-($^^) = UK
+($^^) _ unk = unk
 
 {-
   Input Language represent Term which a coefficient multiple an unknown
@@ -72,6 +68,8 @@ type LHS = [Term]
 data DifferentialModel = SystemOfLinearODEs {
   -- independent variable, usually time
   _indepVar :: UnitalChunk,
+  -- Dependent variable, it is a vector
+  _depVar :: ConstrConcept,
   -- coefficients matrix
   _coefficients :: [[Expr]],
   -- Unknowns column vector
@@ -82,13 +80,27 @@ data DifferentialModel = SystemOfLinearODEs {
 }
 makeLenses ''DifferentialModel
 
+{-
+  Information for solving an initial value problem
+-}
 data InitialValueProblem = IVP{
+  _initTime :: Expr,
+  _finalTime :: Expr,
+  _initValue :: [Expr]
 }
 
-data ODESolverFormat = ODESolverFormat{
-  coefficients1 :: [[Expr]],
-  unknowns1 :: [Int],
-  constants1 :: [Expr]
+{-
+  Acceptable format for ODE solvers
+  X' = AX + B
+  A  is coefficient matrix with identity matrix
+  X  is unknown column vector after reduce the highest order
+  B  is constant column vector with identity matrix
+  X' is a column vector of first-order unknowns
+-}
+data ODESolverFormat = X'{
+  _coeffVects :: [[Expr]],
+  _unknownVect :: [Int],
+  _constantVect :: [Expr]
 }
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DifferentialModel'.
@@ -106,71 +118,75 @@ instance ConceptDomain DifferentialModel where cdom = cdom . view conc
 -- | Convert the 'DifferentialModel' into the model expression language.
 instance Express       DifferentialModel where express = formStdODE
 
+
 -- | Set the expression be a system of linear ODE to Ax = b
--- | A is a known m*n matrix that contains coefficients, 
--- | x is an n-vector that contain derivatives of dependent variables
--- | b is an m-vector that contain constants
 formStdODE :: DifferentialModel -> ModelExpr
 formStdODE d
     | size == 1 = formASingleODE (head (d ^. coefficients)) unknownVec (d ^. constants)
     | otherwise = equiv (coeffsMatix $. columnVec unknownVec : constantVec)
     where size = length (d ^. coefficients)
           coeffsMatix = express(matrix (d ^. coefficients))
-          unknownVec = formAllUnknown (d ^. unknowns) (d ^. indepVar)
+          unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
           constantVec = [express (columnVec (d ^. constants))]
 
+-- | Set the single ODE to a flat equation form, rhs = lhs 
 formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
 formASingleODE coeffs unks consts = equiv (lhs : rhs)
   where lhs = foldl1 addRe (map (\x-> express (fst x) `mulRe` snd x) $ filterZeroCoeff coeffs unks)
         rhs = map express consts
 
--- Remove zero coefficients for display purpose
+-- | Remove zero coefficients for display purpose
 filterZeroCoeff :: [Expr] -> [ModelExpr] -> [(Expr, ModelExpr)]
 filterZeroCoeff es mes = filter (\x -> fst x /= exactDbl 0) $ zip es mes
 
--- Form a n-vector of derivatives dependent variables
-formAllUnknown :: [Unknown] -> UnitalChunk -> [ModelExpr]
-formAllUnknown unks ind = map (`formAUnknown` ind) unks
+-- | Form a n-vector of derivatives dependent variables
+formAllUnknown :: [Unknown] -> ConstrConcept -> UnitalChunk -> [ModelExpr]
+formAllUnknown unks dep ind = map (\x -> formAUnknown x dep ind) unks
 
--- Form a derivative of a dependent variable
-formAUnknown :: Unknown -> UnitalChunk -> ModelExpr
-formAUnknown unk = nthderiv
-                    (toInteger (unk ^. degree))
-                    (sy (qw (unk ^. depVar)))
+-- | Form a derivative of a dependent variable
+formAUnknown :: Unknown -> ConstrConcept-> UnitalChunk -> ModelExpr
+formAUnknown unk dep = nthderiv (toInteger unk) (sy (qw dep))
 
--- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), coefficients ('[[Expr]]'),
--- | unknowns ('[Unknown]'), constants ('[Expr]'), UID ('String'), term ('NP'), definition ('Sentence').
-makeASystemDE :: UnitalChunk -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
-makeASystemDE indepVar coeffs unks const id term defn
+{-
+  Create a 'DifferentialModel' by giving a independent variable, a dependent variable 
+  a canonical matrix form, and conceptChuck.
+  canonical matrix form: Ax = b
+    A is a known m*n matrix that contains coefficients, 
+    x is an n-vector that contain derivatives of dependent variables
+    b is an m-vector that contain constants
+  conceptChuck: 
+    uid ('String'), term ('NP'), definition ('Sentence').
+-}
+makeASystemDE :: UnitalChunk -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
+makeASystemDE indepVar depVar coeffs unks const id term defn
  | length coeffs /= length const =
   error "Length of coefficients matrix should equal to the length of the constant vector"
  | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs indepVar coeffs unks const(dccWDS id term defn)
+ | otherwise = SystemOfLinearODEs indepVar depVar coeffs unks const(dccWDS id term defn)
 
 -- | Create a single ODE with its left hand side and right hand side
-makeASingleDE :: UnitalChunk -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
-makeASingleDE indepVar lhs const id term defn
+makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
+makeASingleDE indepVar depVar lhs const id term defn
  | length coeffs /= length [const] =
   error "Length of coefficients matrix should equal to the length of the constant vector"
  | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs indepVar coeffs unks [const](dccWDS id term defn)
-  where unks = createAllUnknowns(findHighestOrder lhs ^. unk)
+ | otherwise = SystemOfLinearODEs indepVar depVar coeffs unks [const](dccWDS id term defn)
+  where unks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar
         coeffs = [createCoefficients lhs unks]
 
-makeASingleDETest :: UnitalChunk -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
-makeASingleDETest indepVar lhs const id term dmDefn
+makeASingleDETest :: UnitalChunk -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
+makeASingleDETest indepVar depVar lhs const id term dmDefn
  | length coeffs /= length transConsts =
-  error $ "Length of coefficients matrix should equal to the length of the constant vector" ++ show (length (coeffs)) ++ show (length transConsts)
+  error $ "Length of coefficients matrix should equal to the length of the constant vector" -- ++ show (length (coeffs)) ++ show (length transConsts)
  | not $ isCoeffsMatchUnknowns coeffs transUnks =
-  error $ "The length of each row vector in coefficients need to equal to the length of unknowns vector" ++ show (length (last coeffs)) ++ show (length transUnks)
- | otherwise = SystemOfLinearODEs indepVar coeffs transUnks transConsts(dccWDS id term dmDefn)
-  where allUnks = createAllUnknowns(findHighestOrder lhs ^. unk)
+  error $ "The length of each row vector in coefficients need to equal to the length of unknowns vector" -- ++ show (length (last coeffs)) ++ show (length transUnks)
+ | otherwise = SystemOfLinearODEs indepVar depVar coeffs transUnks transConsts(dccWDS id term dmDefn)
+  where allUnks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar
         transUnks = transUnknowns allUnks
         coeffs = addIdentityCoeffs [transCoefficients $ createCoefficients lhs allUnks] (length transUnks) 0
         transConsts = addIdentityConsts [const] (length transUnks)
-        -- coeffs = addIdentityCoeffs [transCoefficients $ createCoefficients lhs unk] 1 $ length unk
 
 -- | Function to check whether dimension of coefficient is match with the unknown vector
 isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
@@ -180,14 +196,14 @@ isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)
 
 -- | Find the highest order in left hand side
 findHighestOrder :: LHS -> Term
-findHighestOrder = foldr1 (\x y -> if x ^. (unk . degree) >= y ^. (unk . degree) then x else y)
+findHighestOrder = foldr1 (\x y -> if x ^. unk >= y ^. unk then x else y)
 
 -- | Create all possible unknowns based on the highest order.
 -- | The order of the result list is from the highest degree to zero degree.
-createAllUnknowns :: Unknown -> [Unknown]
-createAllUnknowns highestUnk
-  | highestUnk ^. degree  == 0  = [highestUnk]
-  | otherwise = highestUnk : createAllUnknowns ((highestUnk ^. depVar) $^^ (highestUnk ^. degree - 1))
+createAllUnknowns :: Unknown -> ConstrConcept -> [Unknown]
+createAllUnknowns highestUnk depVar
+  | highestUnk  == 0  = [highestUnk]
+  | otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depVar
 
 -- | Create Coefficients base on all possible unknowns
 -- | The order of the result list is from the highest degree to zero degree.
@@ -203,7 +219,7 @@ genCoefficient (Just x) = x ^. coeff
 
 -- | Find the term that match with the unknown
 findCoefficient :: Unknown -> LHS -> Maybe Term
-findCoefficient u = find(\x -> x ^. (unk . depVar) == u ^. depVar && x ^. (unk . degree) == u ^. degree)
+findCoefficient u = find(\x -> x ^. unk == u)
 
 -- | Delete the highest order
 transUnknowns :: [Unknown] -> [Unknown]
@@ -236,3 +252,14 @@ addIdentityValue n es = fst splits ++ [exactDbl 1] ++ tail (snd splits)
 -- | len is the size of new constant vector
 addIdentityConsts :: [Expr] -> Int -> [Expr]
 addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr
+
+-- | Construct an ODESolverFormat for solving the ODE.
+makeAODESolverFormat :: DifferentialModel -> ODESolverFormat
+makeAODESolverFormat dm = X' transEs transUnks transConsts
+  where transUnks = dm ^. unknowns
+        transEs = addIdentityCoeffs [transCoefficients $ head (dm ^. coefficients)] (length transUnks) 0
+        transConsts = addIdentityConsts (dm ^. constants) (length transUnks)
+
+-- | Construct an InitialValueProblem.
+makeAIVP :: Expr -> Expr -> [Expr] -> InitialValueProblem
+makeAIVP = IVP

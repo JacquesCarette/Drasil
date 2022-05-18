@@ -167,15 +167,19 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 		            context (generally more information that needs to be read to
 		            fully understand some expression). We might also infer
 		            information about the model. Unfortunately, mechanizing
-		            inference is difficult, artificial learning is a whole field
-		            of study of its own. As such, we reverse the relationship of
-		            the inference by having knowledge container expose
-		            everything on its own. We additionally expect knowledge as a
-		            requisite to working with the model.
+		            inference, without any sort of context or other knowledge,
+		            is difficult, artificial learning is a whole field of study
+		            of its own, and we're not interested in it here! As such, we
+		            reverse the relationship of the inference by having
+		            knowledge container expose everything on its own. We
+		            additionally expect knowledge as a requisite to working with
+		            the model.
 
-		      \item In other words, we replace Expr as a knowledge container,
-		            and restrict its usage to strictly ``expressions'', as
-		            opposed to ``expressions'' and information about models.
+		      \item In other words, we replace Expr as the expressive language
+		            of knowledge (with a new kinds of knowledge encodings
+		            [chunks]), and restrict its usage to strictly some
+		            ``mathematical expressions'', as opposed to ``expressions'',
+		            and meta-level information about the expressions and model.
 
 	      \end{itemize}
 
@@ -190,7 +194,9 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 
 		      \item While \(y = x\) might conventionally be seen as ``y is equal
 		            to x'', we might want, in our model, for it to be understood
-		            as ``x is defined by y'' but displayed differently.
+		            as ``x is defined by y'' but displayed differently. Here,
+		            \(=\) is also shown to have been previously abused by being
+		            equality instead of definition.
 
 		      \item \(a = b = c = ... = d\) can be ambiguously read\ldots{}
 

@@ -63,10 +63,11 @@ guide for \porthref{building your own project with
 \section{Methodology}
 
 Drasils development is strongly influenced by its case studies, which focus on
-building scientific software based on solving undergraduate-level physics
-problems. A ``control'' program and \acs{srs} are manually created and used as a
-baseline target for the final artifact. Development is focused on creating a
-system of justification for each component of the baseline program, following a
+building \ACF{scs} based on solving undergraduate-level physics problems, and
+using a formalized \acs{scs} \ACF{srs} template \cite{SmithAndLai2005}. A
+``control'' program and \acs{srs} are manually created and used as a baseline
+target for the final artifact. Development is focused on creating a system of
+justification for each component of the baseline program, following a
 ``bottom-up'' agile \todo{Double check if it is indeed an agile approach}
 development approach. Drasil has been constructed following the demands and
 requirements of eight (8) case studies:
@@ -110,10 +111,12 @@ produced artifacts. Naturally, Drasil is limited to software-based side effects,
 but focused on producing \textit{files} on a computer.
 
 The case studies are focused on constructing scientific software that follow a
-precise \acs{srs} \cite{SmithAndLai2005}\todo{Discuss Dr.Smiths template a bit
-      more, I need to explain the sections quickly}. Therefore, all artifacts are
-produced with the goal of providing a user with a (i) \acl{srs}, and (ii) a
-usable software that adheres to the \acl{srs}.
+precise \acs{srs} \cite{SmithAndLai2005}\intodo{Discuss Dr. Smiths template a bit
+      more, I need to explain the sections quickly, give an example, and explain that
+      it dissects SCS into well-understood components, which should provide sufficient
+      information for a developer to build a representational software}. Therefore,
+all artifacts are produced with the goal of providing a user with a (i)
+\acl{srs}, and (ii) a usable software that adheres to the \acl{srs}.
 
 The encodings of the desired artifact files are next most important. For
 example, an \acs{srs} artifact is typically a file that an end-user will be
@@ -185,8 +188,13 @@ Haskell source code. When knowledge is encoded in Drasil, we refer to it as a
 \textit{Chunk} or \textit{knowledge fragment} (they will be used interchangeably
 for the purposes of this thesis). The chunks relevant Haskell-level type is its
 classifier, and each chunk must have a \ACF{uid} so that one might be able to
-refer to a specific occurrence of knowledge. Chunks are funneled into a
-\textit{Chunk Database} (in Haskell, a \ChunkDB{}).
+refer to a specific occurrence of knowledge. The primitive data held within the
+chunks rely on Haskells primitives, \acsp{adt}, and \acsp{gadt}. Each chunk is a
+Haskell record, consisting of other encoded data, including instances of
+\ACFP{dsl}s encoded in Drasil. As chunk types are created, connected, composed,
+referenced, and intertwined, cookie-cutter principles stories become possible,
+similar to projectional-style editing. Chunks are funneled into a \textit{Chunk
+      Database} (in Haskell, a \ChunkDB{}).
 
 \intodo{Code snippet: ChunkDB original definition.}
 
@@ -252,54 +260,49 @@ that connects a list of inputs to a list of outputs of a desired calculation.
 The calculations should also be reasonably convertible in some programming
 language if we decide to use the calculations for code generation as well.
 
-\intodo{coloured diagram showing flow of information and how general information
-      flow works}
+\intodo{Coloured diagram showing flow of information and how general information
+      flow works.}
 
 \caseStudiesCodeTable
 
-\intodo{note somewhere that NoPCM does not build Swift code due to the lack of a
-      connected ODE library/solver, which is outside of the scope of this work.}
+\Cref{tab:drasilCaseStudiesCode} shows a quick overview of what final artifacts
+Drasil is capable of generating for each case study. The \acs{srs} is the
+simplest to generate because it is not tested for logical consistency and
+usability by a software developer. As such, the \acs{srs} is built for each for
+case study. Some case studies (\acs{gamephysics}, \acs{hghc}, and
+\acs{ssp}\todo{I think it's just these 3 case studies that are incomplete, but
+      double check!}) are still actively being developed, but are left incomplete at
+the time of writing. The \acs{srs} is currently generated in both \LaTeX{}\ and
+\acs{html} flavours, with the \LaTeX{}\ variant having supplementary build
+information for building to a single \acs{pdf} file, and the \acs{html} variant
+accessible from a web browser compliant with \acs{html} version 5 standards. The
+\acs{glassbr}, \acs{projectile}, \acs{pdcontroller}, and \acs{nopcm} case
+studies each are capable of generating representational software. \acs{nopcm} is
+usable in all languages supported by \acs{gool} except for Swift due to the lack
+of a Drasil-supported \acs{ode} solving library for the Swift \acs{gool}
+renderer. \acs{pdcontroller} was built outside of the normal means of Drasils
+case studies development, being built by a student\todo{Cite Naveens work.} at
+McMaster University for a class taken. Code generation for \acs{pdcontroller} is
+not impossible, it just requires more investigation for the needs of the case
+study. However, both the issues related to \acs{nopcm} and \acs{pdcontroller}
+are outside the scope of this work.
 
-\begin{itemize}
+The code generator works by following the requirements as set in the \acs{srs}
+document, applying transformations until a sufficient knowledge-base can be
+formed such that a residual \acs{oo} program can be generated via \acs{gool}.
+The \acs{srs} document (and relevant encodings of the knowledge in the \acs{srs}
+documents) outlines the input and output variables of a \acs{scs}. The Data
+Definitions\todo{Link to an example in the Appendix?}, Instance Models\todo{Link
+      to an example in the Appendix?}, and symbols are all used to form a
+``calculation path'' that relates the inputs to the outputs of the desired
+software artifact. If such calculation path cannot be found, then no program
+will be generated, and an error will be displayed to the user at Drasils runtime
+(e.g., it is not checked at Drasil compile-time). Each executable software
+artifact produced is coupled with a means (currently, a generated Makefile) to
+run and, where required, build the software artifact. Additionally, where
+supported, Doxygen\todo{cite} is also configured and built\todo{Double check
+      what we do with the Doxygen}.
 
-      \item Uses a series of \ACFP{dsl} to build up the knowledge-base and
-            ``story'' of a scene/project, until sufficient knowledge is built
-            such that a generator may take the ``whole story'' and generate
-            representational software artifacts. This can be seen more clearly
-            by observing an \acs{srs} example.
-
-      \item Generates \acs{oo} programs; \acs{gool} is used to generate code in
-            C++/C, Java, Python, Swift, and C\#.
-
-      \item Generates Doxygen, Markdown, HTML, TeX, Makefile, CSS, and more
-            non-programming software artifacts.
-
-      \item The \acs{srs} is generated in both HTML and PDF flavours.
-
-      \item Briefly discuss the SmithEtAl \acs{srs} template. The \acs{srs}
-            template dissects scientific software into well-understood
-            components, which should provide sufficient information for a
-            developer to build a representational software product.
-
-      \item Notable type of knowledge for code generation: theories/models.
-            \intodo{I should add an example of the encoding of a theory.}
-
-      \item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
-            formed equations (e.g., simple LHS = complex RHS), and ODEs
-            supported by python libraries.
-
-      \item The calculation path relies (implicitly) on:
-            \begin{itemize}
-
-                  \item The Exprs of the RelationConcept being of the form: $x =
-                              f(a,b,c,...)$
-
-                  \item The ODEs being described by the expression language, but
-                        we do not rely on being able to generate representing
-                        computational code due to needing extra external
-                        information (e.g., we require a supplementary packet of
-                        information [ODEInfo]).
-
-            \end{itemize}
-
-\end{itemize}
+The remaining case studies that do not generate code are still left. Issues
+related to their encodings of mathematical knowledge plague their usability in
+the generation process.

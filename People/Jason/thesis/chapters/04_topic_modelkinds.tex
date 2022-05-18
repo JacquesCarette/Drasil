@@ -55,6 +55,28 @@ have a way of discussing the space your problem lies in, and the ways it can be
 transformed into the working calculation steps that a software artifact can
 follow to solve your problem.
 
+\begin{itemize}
+
+	\item Creates a ``calculation path'' for a series of $x = f(a,b,c,...)$
+	      formed equations (e.g., simple LHS = complex RHS), and ODEs
+	      supported by python libraries.
+
+	\item The calculation path relies (implicitly) on:
+	      \begin{itemize}
+
+		      \item The Exprs of the RelationConcept being of the form: $x =
+			            f(a,b,c,...)$
+
+		      \item The ODEs being described by the expression language, but
+		            we do not rely on being able to generate representing
+		            computational code due to needing extra external
+		            information (e.g., we require a supplementary packet of
+		            information [ODEInfo]).
+
+	      \end{itemize}
+
+\end{itemize}
+
 \section{A Unified Language}
 \label{sec:modelkinds:language}
 

@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.DifferentialModel (
     -- * Input Language
     ($^^), ($*), ($+),
     -- * Constructors
-    makeASystemDE, makeASingleDE
+    makeASystemDE, makeASingleDE, makeASingleDETest
     ) where
 
 import Control.Lens (makeLenses, (^.), view)
@@ -19,7 +19,7 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($.), matrix, columnVec))
+import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($.), matrix, columnVec, ($/)))
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl))
@@ -141,23 +141,36 @@ formAUnknown unk = nthderiv
 -- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), coefficients ('[[Expr]]'),
 -- | unknowns ('[Unknown]'), constants ('[Expr]'), UID ('String'), term ('NP'), definition ('Sentence').
 makeASystemDE :: UnitalChunk -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
-makeASystemDE dmIndepVar dmcoeffs dmUnk dmConst dmID dmTerm dmDefn
- | length dmcoeffs /= length dmConst =
+makeASystemDE indepVar coeffs unks const id term defn
+ | length coeffs /= length const =
   error "Length of coefficients matrix should equal to the length of the constant vector"
- | not $ isCoeffsMatchUnknowns dmcoeffs dmUnk =
+ | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs dmIndepVar dmcoeffs dmUnk dmConst(dccWDS dmID dmTerm dmDefn)
+ | otherwise = SystemOfLinearODEs indepVar coeffs unks const(dccWDS id term defn)
 
 -- | Create a single ODE with its left hand side and right hand side
 makeASingleDE :: UnitalChunk -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
-makeASingleDE dmIndepVar dmLHS dmConst dmID dmTerm dmDefn
- | length dmcoeffs /= length [dmConst] =
+makeASingleDE indepVar lhs const id term defn
+ | length coeffs /= length [const] =
   error "Length of coefficients matrix should equal to the length of the constant vector"
- | not $ isCoeffsMatchUnknowns dmcoeffs dmUnk =
+ | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs dmIndepVar dmcoeffs dmUnk [dmConst](dccWDS dmID dmTerm dmDefn)
-  where dmUnk = createAllUnknowns(findHighestOrder dmLHS ^. unk)
-        dmcoeffs = [createCoefficients dmLHS dmUnk]
+ | otherwise = SystemOfLinearODEs indepVar coeffs unks [const](dccWDS id term defn)
+  where unks = createAllUnknowns(findHighestOrder lhs ^. unk)
+        coeffs = [createCoefficients lhs unks]
+
+makeASingleDETest :: UnitalChunk -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
+makeASingleDETest indepVar lhs const id term dmDefn
+ | length coeffs /= length transConsts =
+  error $ "Length of coefficients matrix should equal to the length of the constant vector" ++ show (length (coeffs)) ++ show (length transConsts)
+ | not $ isCoeffsMatchUnknowns coeffs transUnks =
+  error $ "The length of each row vector in coefficients need to equal to the length of unknowns vector" ++ show (length (last coeffs)) ++ show (length transUnks)
+ | otherwise = SystemOfLinearODEs indepVar coeffs transUnks transConsts(dccWDS id term dmDefn)
+  where allUnks = createAllUnknowns(findHighestOrder lhs ^. unk)
+        transUnks = transUnknowns allUnks
+        coeffs = addIdentityCoeffs [transCoefficients $ createCoefficients lhs allUnks] (length transUnks) 0
+        transConsts = addIdentityConsts [const] (length transUnks)
+        -- coeffs = addIdentityCoeffs [transCoefficients $ createCoefficients lhs unk] 1 $ length unk
 
 -- | Function to check whether dimension of coefficient is match with the unknown vector
 isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
@@ -165,47 +178,61 @@ isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
 isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
 isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)) True coeffs
 
--- | Transform LHS to a collection of Expr
-transToExprList :: LHS -> [Expr]
-transToExprList = map (^. coeff)
-
--- | Transform LHS to a collection of Unknown
-transToUnkList:: LHS -> [Unknown]
-transToUnkList = map (^. unk)
-
 -- | Find the highest order in left hand side
 findHighestOrder :: LHS -> Term
 findHighestOrder = foldr1 (\x y -> if x ^. (unk . degree) >= y ^. (unk . degree) then x else y)
 
--- | Create all possible unknowns based on the highest order
+-- | Create all possible unknowns based on the highest order.
+-- | The order of the result list is from the highest degree to zero degree.
 createAllUnknowns :: Unknown -> [Unknown]
 createAllUnknowns highestUnk
   | highestUnk ^. degree  == 0  = [highestUnk]
   | otherwise = highestUnk : createAllUnknowns ((highestUnk ^. depVar) $^^ (highestUnk ^. degree - 1))
 
 -- | Create Coefficients base on all possible unknowns
+-- | The order of the result list is from the highest degree to zero degree.
 createCoefficients :: LHS -> [Unknown] -> [Expr]
 createCoefficients [] _ = error "Left hand side is an empty list"
 createCoefficients _ [] = []
 createCoefficients lhs (x:xs) = genCoefficient (findCoefficient x lhs) : createCoefficients lhs xs
 
+-- | Get the coefficient, if it is Nothing, return zero
 genCoefficient :: Maybe Term -> Expr
 genCoefficient Nothing = exactDbl 0
 genCoefficient (Just x) = x ^. coeff
 
+-- | Find the term that match with the unknown
 findCoefficient :: Unknown -> LHS -> Maybe Term
 findCoefficient u = find(\x -> x ^. (unk . depVar) == u ^. depVar && x ^. (unk . degree) == u ^. degree)
 
--- find the highest order in single ode
--- create all unknowns
--- check any unknowns not exist, add to zero coefficient
+-- | Delete the highest order
+transUnknowns :: [Unknown] -> [Unknown]
+transUnknowns = tail
 
--- transDEToSolverFormat :: [[Expr]] -> [Unknown] -> [Expr] -> ODESolverFormat
--- transDEToSolverFormat map first and foldl with concatTwoSystemDE
+-- | Reduce the delete coefficient to one, delete it
+transCoefficients :: [Expr] -> [Expr]
+transCoefficients es
+  | head es == exactDbl 1 = tail es
+  | otherwise = tail $ map ($/ head es) es
 
---reduceHighOrderODE :: [Expr] -> [Unknown] -> [Expr] -> ODESolverFormat
---reduceHighOrderODE es us cs = 
+-- | Add Identity Matrix to Coefficients
+-- | len is the length of the identity row,
+-- | index is the location of identity value (start with 0)
+addIdentityCoeffs :: [[Expr]] -> Int -> Int -> [[Expr]]
+addIdentityCoeffs es len index
+  | len == index + 1 = es
+  | otherwise = addIdentityCoeffs (constIdentityRowVect len index : es) len (index + 1)
 
--- get the hightest order
+-- | Construct an identity row vector.
+constIdentityRowVect :: Int -> Int -> [Expr]
+constIdentityRowVect len index = addIdentityValue index $ replicate len $ exactDbl 0
 
--- concatTwoSystemDE :: ODESolverFormat -> ODESolverFormat -> ODEReducedFormat
+-- | Recreate the identity row vector with identity value 
+addIdentityValue :: Int -> [Expr] -> [Expr]
+addIdentityValue n es = fst splits ++ [exactDbl 1] ++ tail (snd splits)
+  where splits = splitAt n es
+
+-- | Add Identity Matrix to Constants
+-- | len is the size of new constant vector
+addIdentityConsts :: [Expr] -> Int -> [Expr]
+addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr

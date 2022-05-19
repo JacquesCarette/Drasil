@@ -184,7 +184,7 @@ in \RelationConcept{}s. Namely,
 	      \end{itemize}
 
 	\item Drasil is limited to using theories with expressions written in a very
-	      precise form: \(x = f(a, b, c, \ldots{})\)
+	      precise form: \(x = f(a, b, c, \ldots{})\) \todo{Discuss \QDefinition{}s.}
 
 	      \begin{itemize}
 
@@ -200,12 +200,29 @@ in \RelationConcept{}s. Namely,
 
 	      \end{itemize}
 
+	\item Existing transformation of \RelationConcept{}s into \acs{gool} relies
+	      on unstable transformation caused by need to write in a precise digestible
+	      form, with no static checks done at compile-time.
+
 \end{enumerate}
 
 Therefore, mathematical knowledge flow is unstable in Drasil, as shown in
-\refTheoriesWithoutModelKinds{}.
+\refTheoriesWithoutModelKinds{}. The focal issue with the existing way theories
+are encoded is that the \textit{theories (\RelationConcept{}s) do not contain
+	the meaningful usable mathematical knowledge at all}. The mathematical knowledge
+is implicitly held within the Haskell-based functions\todo{I need to phrase this
+	better, but, the Haskell calculation functionality should be used as
+	infrequently as possible.}. In order to proceed, this mathematical knowledge
+must be reconciled and merged with the \RelationConcept{}s in some capacity.
 
 \theoriesWithoutModelKinds{}
+
+\section{Reconciling Mathematical Knowledge}
+
+Incorporating \ModelKinds{} and reaping its benefits, we obtain, approximately,
+the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
+
+\theoriesWithModelKinds{}
 
 \intodo{Rewrite the point form notes in the ModelKinds section.}
 
@@ -213,23 +230,11 @@ Therefore, mathematical knowledge flow is unstable in Drasil, as shown in
 
 \begin{itemize}
 
-	\item In modelling any problem, one will, of course, model the work of their
-	      pencil and paper. Thankfully, with scientific problems, the
-	      well-understood ones will be codified\cite{well-understood}, and as
-	      such, are a good fit for Drasil, as it is intended to automatically
-	      generate software that performs calculations for a specific problem in
-	      the universe of generic programs supported.
-
 	\item It is important that each knowledge encoding in Drasil exposes as much
 	      information as reasonably possible (and useful). We want to expose the
 	      ``specifications'' of each piece of knowledge that we are encoding so
 	      that transformers and generators may appropriately make use of
 	      contained knowledge.
-
-	\item Since we want to generate code that represents calculations of all
-	      sorts, it's important that the mathematical expression language we use
-	      to write calculations expose sufficient information to the generator
-	      in a concise and easy-to-digest manner.
 
 	\item For example, assuming the following expressions are written using the
 	      existing mathematical Expr language in Drasil\ldots{}
@@ -313,14 +318,14 @@ Therefore, mathematical knowledge flow is unstable in Drasil, as shown in
 		      \item We can still push out ModelExprs and Exprs from things where
 		            necessary, if they can be explained using them.
 
-		      \item \intodo{Justify type parameters everywhere}
+		      \item The type parameters used should not be worried about. The
+		            holes used are primarily used for \Expr{} and \ModelExpr{}, where
+		            \Expr{} indicates that the model is usable in code generation,
+		            while \ModelExpr{} indicates that it is not usable in code
+		            generation.
 
 	      \end{itemize}
 
 \end{itemize}
-
-With ModelKinds, we, approximately, obtain the following:
-
-\theoriesWithModelKinds{}
 
 \intodo{Remaining problems}

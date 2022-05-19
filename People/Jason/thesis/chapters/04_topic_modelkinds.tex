@@ -173,23 +173,15 @@ in \RelationConcept{}s. Namely,
 		            additionally expect knowledge as a requisite to working with
 		            the model.
 
-<<<<<<< HEAD
 		      \item Transformation requires a comprehensive understanding of the inputs to
 		            outputs translation, but much of the input knowledge requires complex
 		            analysis that would only appear in the transformer, discarding its
 		            usability elsewhere — information loss.
 
-		      \item \Expr{} alone is a bad conveyor of knowledge of theories,
-		            similar to normal pencil-and-paper mathematical expressions,
-		            without extra information, the expression alone may be
-		            ineffectual or nearly unusable in code generation.
-=======
-		      \item In other words, we replace Expr as the expressive language
-		            of knowledge (with a new kinds of knowledge encodings
-		            [chunks]), and restrict its usage to strictly some
-		            ``mathematical expressions'', as opposed to ``expressions'',
-		            and meta-level information about the expressions and model.
->>>>>>> dedfdc0946aba28b6e5c0a6ee1ffd5488b1be43d
+		      \item An \Expr{} alone is a weak conveyor of the inner knowledge
+		            of theories, similar to normal pencil-and-paper mathematical
+		            expressions, without extra information, the expression alone
+		            may be ineffectual or nearly unusable in code generation.
 
 	      \end{itemize}
 
@@ -329,6 +321,12 @@ the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
 		            through replacing ``RelationConcepts'' with ``ModelKinds'':
 
 		      \item \currentModelKindsHaskell{}
+			  
+		      \item In other words, we replace Expr as the expressive language
+		            of knowledge (with a new kinds of knowledge encodings
+		            [chunks]), and restrict its usage to strictly some
+		            ``mathematical expressions'', as opposed to ``expressions'',
+		            and meta-level information about the expressions and model.
 
 		      \item \intodo{Discuss EquationalModels, EquationalRealms,
 			            EquationalConstraints, DEModel, NewDEModel, etc.}

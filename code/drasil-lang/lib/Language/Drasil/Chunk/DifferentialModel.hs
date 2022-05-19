@@ -1,12 +1,13 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.DifferentialModel (
-    -- * Chunk Type
-    DifferentialModel,
-    -- * Input Language
-    ($^^), ($*), ($+),
-    -- * Constructors
-    makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE, makeASingleDETest
-    ) where
+  -- * Export Data Type
+  DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..),
+  -- * Input Language
+  ($^^), ($*), ($+),
+  -- * Constructors
+  makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE, makeASingleDETest,
+  formEquations
+) where
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
@@ -19,14 +20,15 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($.), matrix, columnVec, ($/)))
+import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($.), matrix,
+  columnVec, ($/), idx), neg)
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
-import Language.Drasil.Literal.Class (LiteralC(exactDbl))
+import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
 import Data.List (find)
 
 -- Unknown is nth degree of derivative of its dependent variable 
-type Unknown = Int
+type Unknown = Integer
 
 -- Term is the relation of a coefficient and an unknown
 data Term = T{
@@ -43,7 +45,7 @@ type LHS = [Term]
   e.g. depVar $^^ d, 
   depVar is the dependent variable, d is the dth derivative
 -}
-($^^) :: ConstrConcept -> Int -> Unknown
+($^^) :: ConstrConcept -> Integer -> Unknown
 ($^^) _ unk = unk
 
 {-
@@ -75,8 +77,8 @@ data DifferentialModel = SystemOfLinearODEs {
   -- Unknowns column vector
   _unknowns :: [Unknown],
   -- Constant Column vector 
-  _constants :: [Expr],
-  _conc :: ConceptChunk
+  _dmConstants :: [Expr],
+  _dmconc :: ConceptChunk
 }
 makeLenses ''DifferentialModel
 
@@ -84,9 +86,9 @@ makeLenses ''DifferentialModel
   Information for solving an initial value problem
 -}
 data InitialValueProblem = IVP{
-  _initTime :: Expr,
-  _finalTime :: Expr,
-  _initValue :: [Expr]
+  initTime :: Expr,
+  finalTime :: Expr,
+  initValues :: [Expr]
 }
 
 {-
@@ -98,36 +100,35 @@ data InitialValueProblem = IVP{
   X' is a column vector of first-order unknowns
 -}
 data ODESolverFormat = X'{
-  _coeffVects :: [[Expr]],
-  _unknownVect :: [Int],
-  _constantVect :: [Expr]
+  coeffVects :: [[Expr]],
+  unknownVect :: [Integer],
+  constantVect :: [Expr]
 }
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DifferentialModel'.
-instance HasUID        DifferentialModel where uid = conc . uid
+instance HasUID        DifferentialModel where uid = dmconc . uid
 -- | Equal if 'UID's are equal.
 instance Eq            DifferentialModel where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the term ('NP') of the 'ConceptChunk' used to make the 'DifferentialModel'.
-instance NamedIdea     DifferentialModel where term = conc . term
+instance NamedIdea     DifferentialModel where term = dmconc . term
 -- | Finds the idea contained in the 'ConceptChunk' used to make the 'DifferentialModel'.
-instance Idea          DifferentialModel where getA = getA . view conc
+instance Idea          DifferentialModel where getA = getA . view dmconc
 -- | Finds the definition contained in the 'ConceptChunk' used to make the 'DifferentialModel'.
-instance Definition    DifferentialModel where defn = conc . defn
+instance Definition    DifferentialModel where defn = dmconc . defn
 -- | Finds the domain of the 'ConceptChunk' used to make the 'DifferentialModel'.
-instance ConceptDomain DifferentialModel where cdom = cdom . view conc
+instance ConceptDomain DifferentialModel where cdom = cdom . view dmconc
 -- | Convert the 'DifferentialModel' into the model expression language.
 instance Express       DifferentialModel where express = formStdODE
-
 
 -- | Set the expression be a system of linear ODE to Ax = b
 formStdODE :: DifferentialModel -> ModelExpr
 formStdODE d
-    | size == 1 = formASingleODE (head (d ^. coefficients)) unknownVec (d ^. constants)
-    | otherwise = equiv (coeffsMatix $. columnVec unknownVec : constantVec)
-    where size = length (d ^. coefficients)
-          coeffsMatix = express(matrix (d ^. coefficients))
-          unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
-          constantVec = [express (columnVec (d ^. constants))]
+  | size == 1 = formASingleODE (head (d ^. coefficients)) unknownVec (d ^. dmConstants)
+  | otherwise = equiv (coeffsMatix $. columnVec unknownVec : constantVec)
+  where size = length (d ^. coefficients)
+        coeffsMatix = express(matrix (d ^. coefficients))
+        unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
+        constantVec = [express (columnVec (d ^. dmConstants))]
 
 -- | Set the single ODE to a flat equation form, rhs = lhs 
 formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
@@ -225,11 +226,11 @@ findCoefficient u = find(\x -> x ^. unk == u)
 transUnknowns :: [Unknown] -> [Unknown]
 transUnknowns = tail
 
--- | Reduce the delete coefficient to one, delete it
+-- | Reduce the target coefficient to one, delete it, apply negative
 transCoefficients :: [Expr] -> [Expr]
 transCoefficients es
-  | head es == exactDbl 1 = tail es
-  | otherwise = tail $ map ($/ head es) es
+  | head es == exactDbl 1 = map (\x -> neg (x)) $ tail es
+  | otherwise = map (\x -> neg (x)) $ tail $ map ($/ head es) es
 
 -- | Add Identity Matrix to Coefficients
 -- | len is the length of the identity row,
@@ -256,9 +257,21 @@ addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr
 -- | Construct an ODESolverFormat for solving the ODE.
 makeAODESolverFormat :: DifferentialModel -> ODESolverFormat
 makeAODESolverFormat dm = X' transEs transUnks transConsts
-  where transUnks = dm ^. unknowns
+  where transUnks = transUnknowns $ dm ^. unknowns
         transEs = addIdentityCoeffs [transCoefficients $ head (dm ^. coefficients)] (length transUnks) 0
-        transConsts = addIdentityConsts (dm ^. constants) (length transUnks)
+        transConsts = addIdentityConsts (dm ^. dmConstants) (length transUnks)
+
+--formEquations :: [[Expr]] -> [Unknown] -> [Expr] -> [Expr]
+formEquations :: [[Expr]] -> [Unknown] -> [Expr] -> ConstrConcept-> [Expr]
+formEquations [] _ _ _ = []
+formEquations _ [] _ _ = []
+formEquations _ _ [] _ = []
+formEquations (ex:exs) unks (y:ys) depVar =
+  (if y == exactDbl 0 then finalExpr else finalExpr `addRe` y) : formEquations exs unks ys depVar
+  where indexUnks = map (idx (sy depVar) . int) unks
+        filteredExprs = filter (\x -> fst x /= exactDbl 0) (zip ex indexUnks)
+        termExprs = map (uncurry mulRe) filteredExprs
+        finalExpr = foldl1 addRe termExprs
 
 -- | Construct an InitialValueProblem.
 makeAIVP :: Expr -> Expr -> [Expr] -> InitialValueProblem

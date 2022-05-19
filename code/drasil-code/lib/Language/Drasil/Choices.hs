@@ -8,7 +8,7 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..), genICFuncName, bckfnList, listStrIC) where
+  choicesSent, showChs, InternalConcept(..), genICFuncName, listStrIC) where
 
 import Language.Drasil hiding (None)
 import Language.Drasil.Code.Code (spaceToCodeType)

@@ -183,6 +183,12 @@ in \RelationConcept{}s. Namely,
 		            expressions, without extra information, the expression alone
 		            may be ineffectual or nearly unusable in code generation.
 
+		      \item It is important that each knowledge encoding in Drasil exposes as much
+		            information as reasonably possible (and useful). We want to expose the
+		            ``specifications'' of each piece of knowledge that we are encoding so
+		            that transformers and generators may appropriately make use of
+		            contained knowledge.
+
 	      \end{itemize}
 
 	\item Drasil is limited to using theories with expressions written in a very
@@ -221,6 +227,33 @@ must be reconciled and merged with the \RelationConcept{}s in some capacity.
 
 \section{Reconciling Mathematical Knowledge}
 
+Fundamentally, the issue lies in that the information exposed for Drasil to make
+use of is too ``shallow''. At the moment, the available tools' type signatures
+(\todo{Show a type signature}) would appear as something too amazing, so much so
+in fact, that one would (and should) question its accuracy. A hypothetical type
+signature, \inlineHs{RelationConcept -> Code}, is quite far fetched. Not all
+expressions that can possibly be contained in a \RelationConcept{} are usable in
+code generation\todo{Note somewhere in the thesis above that when we discuss
+``code'', we really mean \acs{oo} programs and snippets}.
+
+Relating back to \refTheoriesWithoutModelKinds{}, we may observe that there is a
+transformation from \textit{Theory} to \textit{Mathematical Knowledge}. This may
+seem peculiar because one would expect the \textit{theory} to really be the
+\textit{mathematical knowledge}. Presently, the mathematical knowledge is
+implicitly built into transformers that work with \RelationConcept{}s
+(theories). The explicit information is \textit{lost} in the Haskell-level
+transformation function that makes generation possible. To resolve this, we need
+to reconcile \textit{theories} with \textit{mathematical knowledge},
+strengthening the \textit{depth of knowledge} contained in a theory. Should this
+occur, we should observe \refTheoriesWithoutModelKinds{} having the
+\textit{Theory} and \textit{Mathematical Knowledge} nodes merged, and have the
+expressions understood to only be one of many possible ``views'' of higher-level
+usable knowledge. In other words, the expressions would not be used to transfer
+knowledge any longer, but they might remain as one component of it.
+ 
+
+
+
 \intodo{Continue writing here.}
 
 Incorporating \ModelKinds{} and reaping its benefits, we obtain, approximately,
@@ -233,12 +266,6 @@ the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
 \section{Problem}
 
 \begin{itemize}
-
-	\item It is important that each knowledge encoding in Drasil exposes as much
-	      information as reasonably possible (and useful). We want to expose the
-	      ``specifications'' of each piece of knowledge that we are encoding so
-	      that transformers and generators may appropriately make use of
-	      contained knowledge.
 
 	\item For example, assuming the following expressions are written using the
 	      existing mathematical Expr language in Drasil\ldots{}
@@ -321,10 +348,10 @@ the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
 		            through replacing ``RelationConcepts'' with ``ModelKinds'':
 
 		      \item \currentModelKindsHaskell{}
-			  
+
 		      \item In other words, we replace Expr as the expressive language
 		            of knowledge (with a new kinds of knowledge encodings
-		            [chunks]), and restrict its usage to strictly some
+			            [chunks]), and restrict its usage to strictly some
 		            ``mathematical expressions'', as opposed to ``expressions'',
 		            and meta-level information about the expressions and model.
 

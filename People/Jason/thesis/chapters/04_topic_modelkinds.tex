@@ -137,10 +137,9 @@ in \RelationConcept{}s. Namely,
 
 \begin{enumerate}
 
-	\item The transformation of \(\RelationConcept{} \rightarrow
-	      \acs{gool}\) is not \textit{total} (e.g., not all terms of
-	      the \Expr{} language can be mapped into a representational
-	      \acs{gool} term).
+	\item The transformation of \(\RelationConcept{} \rightarrow \acs{gool}\) is
+	      not \textit{total} (e.g., not all terms of the \Expr{} language can be
+	      mapped into a representational \acs{gool} term).
 
 	      \begin{itemize}
 
@@ -173,26 +172,29 @@ in \RelationConcept{}s. Namely,
 		            additionally expect knowledge as a requisite to working with
 		            the model.
 
-		      \item Transformation requires a comprehensive understanding of the inputs to
-		            outputs translation, but much of the input knowledge requires complex
-		            analysis that would only appear in the transformer, discarding its
-		            usability elsewhere — information loss.
+		      \item Transformation requires a comprehensive understanding of the
+		            inputs to outputs translation, but much of the input
+		            knowledge requires complex analysis that would only appear
+		            in the transformer, discarding its usability elsewhere —
+		            information loss.
 
 		      \item An \Expr{} alone is a weak conveyor of the inner knowledge
 		            of theories, similar to normal pencil-and-paper mathematical
 		            expressions, without extra information, the expression alone
 		            may be ineffectual or nearly unusable in code generation.
 
-		      \item It is important that each knowledge encoding in Drasil exposes as much
-		            information as reasonably possible (and useful). We want to expose the
-		            ``specifications'' of each piece of knowledge that we are encoding so
-		            that transformers and generators may appropriately make use of
-		            contained knowledge.
+		      \item It is important that each knowledge encoding in Drasil
+		            exposes as much information as reasonably possible (and
+		            useful). We want to expose the ``specifications'' of each
+		            piece of knowledge that we are encoding so that transformers
+		            and generators may appropriately make use of contained
+		            knowledge.
 
 	      \end{itemize}
 
 	\item Drasil is limited to using theories with expressions written in a very
-	      precise form: \(x = f(a, b, c, \ldots{})\) \todo{Discuss \QDefinition{}s.}
+	      precise form: \(x = f(a, b, c, \ldots{})\) \todo{Discuss
+		      \QDefinition{}s.}
 
 	      \begin{itemize}
 
@@ -209,8 +211,8 @@ in \RelationConcept{}s. Namely,
 	      \end{itemize}
 
 	\item Existing transformation of \RelationConcept{}s into \acs{gool} relies
-	      on unstable transformation caused by need to write in a precise digestible
-	      form, with no static checks done at compile-time.
+	      on unstable transformation caused by need to write in a precise
+	      digestible form, with no static checks done at compile-time.
 
 \end{enumerate}
 
@@ -234,7 +236,7 @@ in fact, that one would (and should) question its accuracy. A hypothetical type
 signature, \inlineHs{RelationConcept -> Code}, is quite far fetched. Not all
 expressions that can possibly be contained in a \RelationConcept{} are usable in
 code generation\todo{Note somewhere in the thesis above that when we discuss
-``code'', we really mean \acs{oo} programs and snippets}.
+	``code'', we really mean \acs{oo} programs and snippets}.
 
 Relating back to \refTheoriesWithoutModelKinds{}, we may observe that there is a
 transformation from \textit{Theory} to \textit{Mathematical Knowledge}. This may
@@ -249,10 +251,27 @@ occur, we should observe \refTheoriesWithoutModelKinds{} having the
 \textit{Theory} and \textit{Mathematical Knowledge} nodes merged, and have the
 expressions understood to only be one of many possible ``views'' of higher-level
 usable knowledge. In other words, the expressions would not be used to transfer
-knowledge any longer, but they might remain as one component of it.
- 
+knowledge any longer, but they might remain as one component of it. Through
+resolving these issues, we will have deeper knowledge available at Drasils
+compile-time, and we will be able to better understand which theories are usable
+in code generation, and which aren't. Additionally, we will be able to better
+handle more \textit{kinds} of theories.
 
+\subsection{``Classifying All The Theories''}
 
+Issues occurring due to weak knowledge capture may be resolved through strong
+knowledge capture. Beginning with the existing case studies of Drasil, we will
+attempt to classify our existing knowledge better. We aim to make
+\RelationConcept{} a ``view'' of other ``higher-order''\todo{Seems weird to say
+	higher-order, need something else most likely.} knowledge encodings.
+
+\currentModelKindsHaskell{}
+
+\refCurrentModelKindsHaskell{} displays the creation of \ModelKind{} and
+\ModelKinds{}.
+
+\intodo{I should create a new acronym, SEFPM, to indicate ``Slightly Edited to
+	Fit Page Margins'', and use it everywhere.}
 
 \intodo{Continue writing here.}
 
@@ -362,10 +381,10 @@ the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
 		            necessary, if they can be explained using them.
 
 		      \item The type parameters used should not be worried about. The
-		            holes used are primarily used for \Expr{} and \ModelExpr{}, where
-		            \Expr{} indicates that the model is usable in code generation,
-		            while \ModelExpr{} indicates that it is not usable in code
-		            generation.
+		            holes used are primarily used for \Expr{} and \ModelExpr{},
+		            where \Expr{} indicates that the model is usable in code
+		            generation, while \ModelExpr{} indicates that it is not
+		            usable in code generation.
 
 	      \end{itemize}
 

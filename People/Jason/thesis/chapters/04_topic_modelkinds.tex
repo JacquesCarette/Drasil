@@ -96,11 +96,16 @@ be a mathematical relation.
 
 \originalExprHaskell
 
-The mathematical language used in Drasil is universally used, covering a wide
-range of knowledge, including facilities for creating commonly used primitive
-data types, operations, and functions  in mathematics, physics, and computer
-science and programming languages. For example, \todo{An expression.} is
-transcribed in Drasil as follows:
+\Expr{} (defined above, in \refOriginalExprHaskell{} with an \acs{adt})
+represents the hypothetical mathematical language used to discuss the
+mathematics relevant to common \acs{scs}, specifically, at least to
+under/graduate-level physics problems. The language contains the commonly found
+operations in a well-understood physics textbook (here, with a focus on
+graduate-level scientific problems). The mathematical language is universal,
+covering a wide range of knowledge, including facilities for creating commonly
+used primitive data types, operations, and functions  in mathematics, physics,
+and computer science and programming languages. For example, \todo{An
+	expression.} is transcribed in Drasil as follows:
 
 \intodo{Transcription of the above expression.}
 
@@ -109,7 +114,7 @@ This transcription relies on smart constructors, such as \todo{Ref. a new
 all specialized to \Expr{} and perform simplifications along the way (such
 as folding \(1 \cdot x\) into \(x\)).
 
-\section{A Universal Theory Language}
+\section{A Universal Theory Description Language}
 
 As Drasils theories rely heavily on \Relation{}s (and \RelationConcept{}s)
 (\todo{Ref. the definitions of DDs, IMs, GDs, and TMs}), we may observe that the
@@ -119,41 +124,34 @@ problem, one will, of course, model the work of their pencil and paper. This is
 exactly what occurs here. Theories here are shallow representations of
 knowledge, that mimic your pencil and paper.
 
-\intodo{Rewrite the point form notes in the ModelKinds section.}
+\section{Usage: Converting to Software}
 
-\theoriesWithoutModelKinds
+Drasil relies on converting the various kinds of theories described in the
+\acs{srs} template \cite{SmithAndLai2005}, essentially encoded in Drasil as
+\RelationConcept{}s, into representational code.
 
-With ModelKinds, we, approximately, obtain the following:
+\intodo{Example of an IM being converted into Java code.}
 
-\theoriesWithModelKinds
+Unfortunately, issues occur when attempting to convert the knowledge contained
+in \RelationConcept{}s. Namely,
 
-We split up Expr into 3 kinds of expression languages that better fit our needs.
+\begin{enumerate}
 
-\section{Problem}
+	\item The transformation of \(\RelationConcept{} \rightarrow
+	      \acs{gool}\) is not \textit{total} (e.g., not all terms of
+	      the \Expr{} language can be mapped into a representational
+	      \acs{gool} term).
 
-\begin{itemize}
+	      \begin{itemize}
 
-	\item In modelling any problem, one will, of course, model the work of their
-	      pencil and paper. Thankfully, with scientific problems, the
-	      well-understood ones will be codified\cite{well-understood}, and as
-	      such, are a good fit for Drasil, as it is intended to automatically
-	      generate software that performs calculations for a specific problem in
-	      the universe of generic programs supported.
+		      \item Not all terms of the \Expr{} language have a definite value.
 
-	\item In most, if not all, physics problems, a common language of mathematic
-	      calculation. In Drasil, this language is written as an \ACF{adt} in
-	      \refOriginalExprHaskell{}.
+		      \item Some terms in \Expr{} require extra information before they
+		            can be converted into code. At times, this information is a
+		            conscious choice that the developer should be making instead
+		            of imposed on them.
 
-	\item Here, we explain that a mathematical expression is defined by the
-	      above \acf{ast}. The language contains the commonly found operations
-	      in a well-understood physics textbook (here, with a focus on
-	      graduate-level scientific problems).
-
-	\item It is important that each knowledge encoding in Drasil exposes as much
-	      information as reasonably possible (and useful). We want to expose the
-	      ``specifications'' of each piece of knowledge that we are encoding so
-	      that transformers and generators may appropriately make use of
-	      contained knowledge.
+	      \end{itemize}
 
 	\item It is very easy to write ``difficult/impossible to interpret''
 	      expressions. For example, it is possible to create expressions for
@@ -173,11 +171,60 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 		            everything on its own. We additionally expect knowledge as a
 		            requisite to working with the model.
 
-		      \item In other words, we replace Expr as a knowledge container,
-		            and restrict its usage to strictly ``expressions'', as
-		            opposed to ``expressions'' and information about models.
+		      \item Transformation requires a comprehensive understanding of the inputs to
+		            outputs translation, but much of the input knowledge requires complex
+		            analysis that would only appear in the transformer, discarding its
+		            usability elsewhere — information loss.
+
+		      \item \Expr{} alone is a bad conveyor of knowledge of theories,
+		            similar to normal pencil-and-paper mathematical expressions,
+		            without extra information, the expression alone may be
+		            ineffectual or nearly unusable in code generation.
 
 	      \end{itemize}
+
+	\item Drasil is limited to using theories with expressions written in a very
+	      precise form: \(x = f(a, b, c, \ldots{})\)
+
+	      \begin{itemize}
+
+		      \item The \(=\) sign is being overloaded here to mean definition,
+		            when it is supposed to mean equality. While \(y = x\) might
+		            conventionally be seen as ``y is equal to x'', we might
+		            want, in our model, for it to be understood as ``x is
+		            defined by y'' but displayed differently.
+
+		      \item Any other form of theories are unusable. Equational
+		            constraints at the very least should be immediately usable
+		            in creating assertions in the generated code.
+
+	      \end{itemize}
+
+\end{enumerate}
+
+Therefore, mathematical knowledge flow is unstable in Drasil, as shown in
+\refTheoriesWithoutModelKinds{}.
+
+\theoriesWithoutModelKinds{}
+
+\intodo{Rewrite the point form notes in the ModelKinds section.}
+
+\section{Problem}
+
+\begin{itemize}
+
+	\item In modelling any problem, one will, of course, model the work of their
+	      pencil and paper. Thankfully, with scientific problems, the
+	      well-understood ones will be codified\cite{well-understood}, and as
+	      such, are a good fit for Drasil, as it is intended to automatically
+	      generate software that performs calculations for a specific problem in
+	      the universe of generic programs supported.
+
+	\item It is important that each knowledge encoding in Drasil exposes as much
+	      information as reasonably possible (and useful). We want to expose the
+	      ``specifications'' of each piece of knowledge that we are encoding so
+	      that transformers and generators may appropriately make use of
+	      contained knowledge.
 
 	\item Since we want to generate code that represents calculations of all
 	      sorts, it's important that the mathematical expression language we use
@@ -187,10 +234,6 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 	\item For example, assuming the following expressions are written using the
 	      existing mathematical Expr language in Drasil\ldots{}
 	      \begin{itemize}
-
-		      \item While \(y = x\) might conventionally be seen as ``y is equal
-		            to x'', we might want, in our model, for it to be understood
-		            as ``x is defined by y'' but displayed differently.
 
 		      \item \(a = b = c = ... = d\) can be ambiguously read\ldots{}
 
@@ -251,6 +294,10 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 		            theories and data structures leads to many problems and
 		            difficulties in interpretation alone.
 
+		      \item In other words, we replace Expr as a knowledge container,
+		            and restrict its usage to strictly ``expressions'', as
+		            opposed to ``expressions'' and information about models.
+
 		      \item Replacing raw expressions with ``encodings one step higher''
 		            that can push out the same raw expressions as a property of
 		            the higher-level encodings will allow us to quickly
@@ -271,5 +318,9 @@ We split up Expr into 3 kinds of expression languages that better fit our needs.
 	      \end{itemize}
 
 \end{itemize}
+
+With ModelKinds, we, approximately, obtain the following:
+
+\theoriesWithModelKinds{}
 
 \intodo{Remaining problems}

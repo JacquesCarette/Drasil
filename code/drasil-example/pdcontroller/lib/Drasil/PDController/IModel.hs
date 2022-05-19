@@ -36,12 +36,13 @@ imPDRC :: DifferentialModel
 imPDRC
   = makeASingleDE
       time
+      opProcessVariable
       lhs
       rhs
       "imPDRC"
       (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
-      where lhs = [(exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1))]
+      where lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)]
                   $+ (exactDbl 1 $* (opProcessVariable $^^ 2))
                   $+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
             rhs = sy qdSetPointTD `mulRe` sy qdPropGain

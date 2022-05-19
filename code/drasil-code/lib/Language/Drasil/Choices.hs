@@ -395,5 +395,5 @@ data InternalConcept = InputConstraints | WriteOutput | DerivedValues
 
 -- | Returns user defined function Name
 genICFuncName :: InternalConcept -> Name
-genICFuncName ic = (functionNames defaultChoices) ! ic
+genICFuncName ic = functionNames defaultChoices ! ic
   

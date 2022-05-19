@@ -40,11 +40,11 @@ getInConstructorParams = do
   ifPs <- getInputFormatIns
   dvPs <- getDerivedIns
   icPs <- getConstraintParams
-  let cname = "InputParameters"
+  let cname = InputParameters
       getCParams False = []
       getCParams True = ifPs ++ dvPs ++ icPs
-  ps <- getParams cname In $ getCParams (cname `elem` defList g)
-  return $ filter ((Just cname /=) . flip Map.lookup (clsMap g) . codeName) ps
+  ps <- getParams (genICFuncName InputParameters) In $ getCParams (cname `elem` defList g)
+  return $ filter ((Just (genICFuncName InputParameters) /=) . flip Map.lookup (clsMap g) . codeName) ps
 
 -- | The inputs to the function for reading inputs are the input file name, and
 -- the 'inParams' object if inputs are bundled and input components are separated.
@@ -147,7 +147,7 @@ getInputVars _ _ _ _ [] = return []
 getInputVars _ _ Unbundled _ cs = return cs
 getInputVars n pt Bundled Var _ = do
   g <- get
-  let cname = "InputParameters"
+  let cname = genICFuncName InputParameters
   return [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
 getInputVars _ _ Bundled Const _ = return []
 

@@ -112,7 +112,7 @@ getInputDecl = do
   v_params <- mkVar (quantvar inParams)
   constrParams <- getInConstructorParams 
   cps <- mapM mkVal constrParams
-  let cname = "InputParameters"
+  let cname = genICFuncName InputParameters
       getDecl ([],[]) = constIns (partition (flip member (eMap g) . 
         codeName) (map quantvar $ constants $ codeSpec g)) (conRepr g) 
         (conStruct g)
@@ -187,8 +187,8 @@ genInputModSeparated = do
   dvDesc <- modDesc (liftS derivedValuesDesc)
   icDesc <- modDesc (liftS inputConstraintsDesc)
   sequence 
-    [genModule "InputParameters" ipDesc [] [genInputClass Primary],
-    genModule "InputFormat" ifDesc [genInputFormat Pub] [],
+    [genModule (genICFuncName InputParameters) ipDesc [] [genInputClass Primary],
+    genModule (genICFuncName InputFormat) ifDesc [genInputFormat Pub] [],
     genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
     genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
 
@@ -196,7 +196,7 @@ genInputModSeparated = do
 genInputModCombined :: (OOProg r) => GenState [SFile r]
 genInputModCombined = do
   ipDesc <- modDesc inputParametersDesc
-  let cname = "InputParameters"
+  let cname = genICFuncName InputParameters
       genMod :: (OOProg r) => Maybe (SClass r) ->
         GenState (SFile r)
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub, 
@@ -229,7 +229,7 @@ genInputClass scp = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       methods :: (OOProg r) => GenState [SMethod r]
-      methods = if cname `elem` defList g 
+      methods = if InputParameters `elem` defList g 
         then concat <$> mapM (fmap maybeToList) [genInputConstructor, 
         genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv] 
         else return []
@@ -250,7 +250,7 @@ genInputClass scp = do
         c <- f cname Nothing icDesc (inputVars ++ constVars) methods
         return $ Just c
   genClass (filt ins) (filt cs)
-  where cname = "InputParameters"
+  where cname = genICFuncName InputParameters
 
 -- | Generates a constructor for the input class, where the constructor calls the 
 -- input-related functions. Returns 'Nothing' if no input-related functions are
@@ -264,11 +264,11 @@ genInputConstructor = do
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams    
         ics <- genAllInputCalls
-        ctor <- genConstructor "InputParameters" cdesc (map pcAuto cparams)
+        ctor <- genConstructor (genICFuncName InputParameters) cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor
-  genCtor $ any (`elem` dl) [genICFuncName GetInput, 
-    genICFuncName DerivedValues, genICFuncName InputConstraints]
+  genCtor $ any (`elem` dl) [GetInput, 
+    DerivedValues, InputConstraints]
 
 -- | Generates a function for calculating derived inputs.
 genInputDerived :: (OOProg r) => ScopeTag ->
@@ -288,7 +288,7 @@ genInputDerived s = do
         desc <- dvFuncDesc
         mthd <- getFunc s (genICFuncName DerivedValues) desc ins outs bod
         return $ Just mthd
-  genDerived $ genICFuncName DerivedValues `elem` defList g
+  genDerived $ DerivedValues `elem` defList g
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
@@ -312,7 +312,7 @@ genInputConstraints s = do
         mthd <- getFunc s (genICFuncName InputConstraints) void desc (map pcAuto parms) 
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ genICFuncName InputConstraints `elem` defList g
+  genConstraints $ InputConstraints `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> 
@@ -425,7 +425,7 @@ genInputFormat s = do
         desc <- inFmtFuncDesc
         mthd <- getFunc s (genICFuncName GetInput) desc ins outs bod
         return $ Just mthd
-  genInFormat $ genICFuncName GetInput `elem` defList g
+  genInFormat $ GetInput `elem` defList g
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices 

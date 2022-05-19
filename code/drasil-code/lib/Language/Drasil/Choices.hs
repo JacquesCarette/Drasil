@@ -8,7 +8,7 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..), genICFuncName) where
+  choicesSent, showChs, InternalConcept(..), genICFuncName, bckfnList, listStrIC) where
 
 import Language.Drasil hiding (None)
 import Language.Drasil.Code.Code (spaceToCodeType)
@@ -16,12 +16,13 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Name)
+import Data.Maybe (mapMaybe)
 
 import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
 
-import Data.Map (Map, fromList, lookup)
+import Data.Map (Map, fromList, (!), lookup, toList)
 
 -- Full details of Choices documentation 
 -- https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -376,7 +377,17 @@ fnList = fromList [
   (GetInput, "get_input"), 
   (DerivedValues, "derived_values"), 
   (InputConstraints, "input_constraints"), 
-  (WriteOutput, "write_output")]
+  (WriteOutput, "write_output"),
+  (InputParameters, "InputParameters"),
+  (InputFormat, "InputFormat")]
+
+-- | Helper function for InternalConcept String Map  
+listStrIC :: [String] -> [InternalConcept]
+listStrIC = mapMaybe (flip Data.Map.lookup . fromList . map swap $ toList fnList)
+
+-- | Helper function for listStrIC
+swap :: (a, b) -> (b, a)
+swap (a, b) = (b, a)
 
 -- | Data type of user defined concepts
 data InternalConcept = InputConstraints | WriteOutput | DerivedValues 
@@ -384,10 +395,5 @@ data InternalConcept = InputConstraints | WriteOutput | DerivedValues
 
 -- | Returns user defined function Name
 genICFuncName :: InternalConcept -> Name
-genICFuncName ic = existsFuncName(Data.Map.lookup ic (functionNames defaultChoices))
-  
--- | Helper function for genICFuncName
-existsFuncName :: Maybe Name -> Name
-existsFuncName (Just x) = x
-existsFuncName Nothing = error "InternalConcept missing from defaultChoices functionNames"
+genICFuncName ic = (functionNames defaultChoices) ! ic
   

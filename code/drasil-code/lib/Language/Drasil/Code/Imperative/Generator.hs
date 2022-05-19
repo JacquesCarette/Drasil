@@ -27,7 +27,7 @@ import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
-  LogConfig(..), OptionalFeatures(..), InternalConcept(..), genICFuncName)
+  LogConfig(..), OptionalFeatures(..), InternalConcept(..), genICFuncName, listStrIC)
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
@@ -73,8 +73,7 @@ generator l dt sd chs spec = DrasilState {
   eMap = mem,
   libEMap = lem,
   clsMap = cdm,
-  defList = nub $ keys mem ++ keys cdm,
-
+  defList = nub $ listStrIC (keys mem ++ keys cdm),
   -- stateful
   currentModule = "",
   currentClass = "",

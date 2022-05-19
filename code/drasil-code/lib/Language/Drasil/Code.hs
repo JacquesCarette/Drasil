@@ -23,7 +23,7 @@ module Language.Drasil.Code (
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn, initSolWithVal,
+  returnExprList, fixedReturn, fixedReturn', initSolWithVal,
   ExternalLibraryCall, StepGroupFill(..), StepFill(..), FunctionIntFill(..), 
   ArgumentFill(..), ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..),
   externalLibCall, choiceStepsFill, choiceStepFill, mandatoryStepFill, 
@@ -33,7 +33,7 @@ module Language.Drasil.Code (
   implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
   populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
-  returnExprListFill, fixedStatementFill, initSolWithValFill,
+  returnExprListFill, fixedStatementFill, fixedStatementFill', initSolWithValFill,
   Lang(..),
   PackageSym(..), AuxiliarySym(..),
   AuxData(..), PackData(..),
@@ -69,7 +69,7 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn, initSolWithVal)
+  returnExprList, fixedReturn, fixedReturn', initSolWithVal)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..), externalLibCall, 
@@ -80,7 +80,7 @@ import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
   initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
-  fixedStatementFill, initSolWithValFill)
+  fixedStatementFill, fixedStatementFill', initSolWithValFill)
 
 import Language.Drasil.Code.Lang (Lang(..))
 

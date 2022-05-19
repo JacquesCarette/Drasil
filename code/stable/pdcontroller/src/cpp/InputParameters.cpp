@@ -58,13 +58,13 @@ void input_constraints(double r_t, double K_d, double K_p, double t_step, double
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(1.0 / 100.0 <= t_step && t_step < t_sim)) {
+    if (!(1.0 / 1000.0 <= t_step && t_step < t_sim)) {
         std::cout << "t_step has value ";
         std::cout << t_step;
         std::cout << ", but is expected to be ";
         std::cout << "between ";
-        std::cout << (1.0 / 100.0);
-        std::cout << " ((1)/(100))";
+        std::cout << (1.0 / 1000.0);
+        std::cout << " ((1)/(1000))";
         std::cout << " and ";
         std::cout << t_sim;
         std::cout << " (t_sim)";

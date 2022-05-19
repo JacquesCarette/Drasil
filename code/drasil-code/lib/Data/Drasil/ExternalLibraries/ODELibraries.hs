@@ -25,7 +25,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn,
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
-  returnExprList, fixedReturn,
+  returnExprList, fixedReturn',
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill,
   mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill,
   userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill,
@@ -33,7 +33,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   customClassFill, implementationFill, constructorInfoFill, methodInfoFill,
   appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
-  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill,
+  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill', 
   CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
   mkODELibNoPath, pubStateVar, privStateVar,
@@ -305,7 +305,7 @@ apacheODE = externalLib [
       fode] "Class representing an ODE system" ode odeCtor (implementation fode
         [constructorInfo odeCtor [] [],
         methodInfo getDimension "returns the ODE system dimension"
-          [] "dimension of the ODE system" [fixedReturn (int 1)],
+          [] "dimension of the ODE system" [fixedReturn'],
         methodInfoNoReturn computeDerivatives
           "function representation of an ODE system"
           [lockedParam t, unnamedParam (Array Real), unnamedParam (Array Real)]
@@ -327,7 +327,7 @@ apacheODECall info = externalLibCall [
       (implementationFill [
         constructorInfoFill (map userDefinedParamFill $ otherVars info)
           (zip (otherVars info) (map sy $ otherVars info)) [],
-        methodInfoFill [] [fixedStatementFill],
+        methodInfoFill [] [fixedStatementFill' $ int $ toInteger $ length $ initVal info],
         methodInfoFill (map (unnamedParamFill . listToArray) [depVar info, ddep])
           [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]])
       : map basicArgFill [tInit info, matrix [initVal info], tFinal info,

@@ -7,7 +7,7 @@ import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..),
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats, ExtLib(..))
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
-  odeintPckg)
+  apacheODEPckg, odeintPckg)
 import Drasil.PDController.Body (pidODEInfo, fullSI)
 
 codeSpecs :: CodeSpec
@@ -15,7 +15,7 @@ codeSpecs = codeSpec fullSI codeChoices []
 
 codeChoices :: Choices
 codeChoices = defaultChoices{
-  lang = [Python, Cpp, CSharp],
+  lang = [Python, CSharp, Java, Cpp],
   architecture = makeArchit (Modular Combined) Program,
   dataInfo = makeData Unbundled (Store Bundled) Const,
   optFeats = makeOptFeats
@@ -23,5 +23,5 @@ codeChoices = defaultChoices{
     (makeLogConfig [] "log.txt")
     [SampleInput "../../datafiles/pdcontroller/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
-  extLibs = [Math (makeODE [pidODEInfo] [scipyODEPckg, osloPckg, odeintPckg])]
+  extLibs = [Math (makeODE [pidODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

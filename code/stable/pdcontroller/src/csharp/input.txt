@@ -5,6 +5,6 @@
 # Proportional Gain
 20.0
 # Step Time (s)
-1.0e-2
+1.0e-3
 # Simulation Time (s)
 10.0

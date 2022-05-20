@@ -58,6 +58,8 @@
 % Haskell snippet
 \newenvironment{code}{\captionsetup{type=listing,skip=14pt}}{}
 \SetupFloatingEnvironment{listing}{name=Source Code,listname=List of Source Codes}
+\crefname{listing}{source code}{source codes}
+\Crefname{listing}{Source Code}{Source Codes}
 \newenvironment{haskell}[4]
     {\VerbatimEnvironment\singlespacing\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
     {\end{minted}\end{code}\doublespacing}

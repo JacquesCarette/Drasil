@@ -89,10 +89,11 @@ artifacts) is (are) constructed.
 If one originally sets out to build a program that does something they
 understand very well and each component of every step of the grand
 scheme/algorithm of the program was understood, the development of their related
-software should be a ``clear matter of principled engineering'' \todo{cite
-    github README?}. However, with the existing programming methodology, it is not
-yet simple enough to reliably produce error-free programs with no trade-offs,
-and which precisely satisfy a set of requirements and follow a formal design.
+software should be a ``clear matter of principled engineering'' \todo{Cite
+    GitHub README? I really don't remember where I read this now\ldots{}}. However,
+with the existing programming methodology, it is not yet simple enough to
+reliably produce error-free programs with no trade-offs, and which precisely
+satisfy a set of requirements and follow a formal design.
 
 Optimally, they would use their natural language to perfectly describe their
 problem to their computer and have it magically give them a program that does
@@ -100,7 +101,7 @@ exactly what they wanted. Unfortunately, it is difficult to have computers
 systematically understand and act on natural language as well as us humans can.
 However, specific subsets of natural language may be usable.
 
-\section{Reconciliation -- ``Generate Everything''}
+\section{Reconciliation — ``Generate Everything''}
 \label{sec:idlgy:generate_everything}
 
 While it is difficult to have a computer act on a huge set of natural language,
@@ -133,8 +134,8 @@ desired software artifacts).
 \intodo{Discuss ``idealized'' workflow.}
 
 Following this ideology, there will be at least 3 key roles: the
-\textbf{knowledge encoder}, the \textbf{knowledge user}, and the final
-\textbf{software artifact user}.
+\textbf{knowledge encoder}, the \textbf{knowledge user}, and the
+\textbf{end-user} of the produced software artifact.
 
 \subsection{Knowledge Encoder (Domain Expert)}
 
@@ -186,7 +187,7 @@ encodings should create a stringent, explicit set of rules for which all
 the need to create that particular knowledge/data type. As such, optimally, a
 domain expert would write their knowledge encodings and renderers in a general
 purpose programming language with a sound type system (e.g., Haskell
-\cite{Haskell2010}, Agda \cite{Norell2007}, etc.) -- preferring ones with a type
+\cite{Haskell2010}, Agda \cite{Norell2007}, etc.) — preferring ones with a type
 system based on formal type theories for their feature richness.
 
 \section{Feasibility}
@@ -228,10 +229,10 @@ interesting websites may be created. The mechanized generation-related
 components of the ideology is also fairly shallow in this area, but, still,
 highly feasible.
 
-\intodo{realistically, almost any area of generation can be a ``low-depth''/breadth area too}
+\intodo{Realistically, almost any area of generation can be a ``low-depth''/breadth area too}
 
-\intodo{add to high knowledge density examples: \url{https://en.wikipedia.org/wiki/Algebraic_modeling_language}}
-\intodo{add to high knowledge density examples: \url{https://github.com/McMasterU/HashedExpression}}
+\intodo{Add to high knowledge density examples: \url{https://en.wikipedia.org/wiki/Algebraic_modeling_language}}
+\intodo{Add to high knowledge density examples: \url{https://github.com/McMasterU/HashedExpression}}
 
 In areas of high knowledge density, as long as developers have infinite patience
 and can invest infinite time into transcribing knowledge and information into
@@ -252,19 +253,22 @@ One large feasible goal from it is to draw out usable software artifacts from it
 by poking and prodding in all areas needed until we can deterministically form
 them, as our needs demand.
 
-Perhaps oversimplifying\todo{Not really?}, but, the essence of this ideology
-lies in naturally obtaining mechanization techniques through formalizing
-\textit{everything}. The ideology forces us to question modern software
-development practices: cognitive stress and normal errors aside, if a developer
-doesn't \textit{truly understand} the knowledge they are encoding in a software
-product, then it should be normal to expect logical issues and an ``imperfect''
-program. A formalized-knowledge-first approach to software development should
+The essence of this ideology lies in naturally obtaining mechanization
+techniques through formalizing \textit{everything}. The ideology forces us to
+question modern software development practices: cognitive stress and normal
+errors aside, if a developer doesn't \textit{truly understand} the knowledge
+they are encoding in a software product, then it should be normal to expect
+logical issues and an ``imperfect'' program. Taking cognitive stress into
+consideration, there should be considerably less as knowledge only need be
+transcribed once, and re-used infinitely. Through mechanization, cognitive
+stress of re-writing knowledge is alleviated afterwards for all proceeding
+instances. A formalized-knowledge-first approach to software development should
 highlight areas of issue (poor understanding), never produce bugs, and create
 software with the same quality as the encoded knowledge.
 
-\intodo{The ideology also vaguely relates to the question ``Which programming
-    language do I pick for my project?''. This is a silly question under this
-    ideology. There is no 1 single language that we even use to describe
+\intodo{The ideology also relates to the question of ``which programming
+    language do I pick for my project?''. This is a moot question under this
+    ideology. There is no one (1) single language that we even use to describe
     everything, so how can we possibly write all kinds of software for all kinds
     of knowledge? In a sense, the ideology ``leans into it'' by saying you
-    shouldn't be choosing just one.}
+    shouldn't be limited to choosing just one (1).}

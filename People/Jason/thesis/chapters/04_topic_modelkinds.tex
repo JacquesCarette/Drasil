@@ -230,12 +230,14 @@ must be reconciled and merged with the \RelationConcept{}s in some capacity.
 \section{Reconciling Mathematical Knowledge}
 
 Fundamentally, the issue lies in that the information exposed for Drasil to make
-use of is too ``shallow''. At the moment, the available tools' type signatures
-(\todo{Show a type signature}) would appear as something too amazing, so much so
-in fact, that one would (and should) question its accuracy. A hypothetical type
-signature, \inlineHs{RelationConcept -> Code}, is quite far fetched. Not all
-expressions that can possibly be contained in a \RelationConcept{} are usable in
-code generation\todo{Note somewhere in the thesis above that when we discuss
+use of is too ``shallow''. The raw expressions are great for viewing and
+human-guided inference, but not for a computer to systematically use to generate
+things. At the moment, the available tools' type signatures (\todo{Show a type
+	signature}) would appear as something too amazing, so much so in fact, that one
+would (and should) question its accuracy. A hypothetical type signature,
+\inlineHs{RelationConcept -> Code}, is quite far fetched. Not all expressions
+that can possibly be contained in a \RelationConcept{} are usable in code
+generation\todo{Note somewhere in the thesis above that when we discuss
 	``code'', we really mean \acs{oo} programs and snippets}.
 
 Relating back to \refTheoriesWithoutModelKinds{}, we may observe that there is a
@@ -255,9 +257,11 @@ knowledge any longer, but they might remain as one component of it. Through
 resolving these issues, we will have deeper knowledge available at Drasils
 compile-time, and we will be able to better understand which theories are usable
 in code generation, and which aren't. Additionally, we will be able to better
-handle more \textit{kinds} of theories.
+handle more \textit{kinds} of theories without needing to create complex
+traversal and analysis algorithms to recognize when certain kinds of theories
+were transcribed in the expressions.
 
-\section{``Classifying All The Theories''}
+\section{``Classify All The Theories''}
 
 Issues occurring due to weak knowledge capture may be resolved through strong
 knowledge capture. Beginning with the existing case studies of Drasil, we will
@@ -267,13 +271,33 @@ attempt to classify our existing knowledge better. We aim to make
 
 \currentModelKindsHaskell{}
 
-\refCurrentModelKindsHaskell{} displays the creation of \ModelKind{} and
-\ModelKinds{}.
-
 \intodo{I should create a new acronym, SEtFPM, to indicate ``Slightly Edited to
 	Fit Page Margins'', and use it everywhere.}
 
+\refCurrentModelKindsHaskell{} displays the creation of \ModelKind{} and
+\ModelKinds{}.
+
 \intodo{Continue writing here.}
+
+\subsection{Symbol Definitions}
+
+\intodo{Describe EquationalModels}
+
+\subsection{Symbol Constraints}
+
+\intodo{Describe EquationalConstraints}
+
+\subsection{Realms}
+
+\intodo{Describe EquationalRealms}
+
+\subsection{\acsp{ode}}
+
+\intodo{Describe DEModel and NewDEModel}
+
+\subsection{Leftovers}
+
+\intodo{Discuss the last 1-2 kinds of models left}
 
 Incorporating \ModelKinds{} and reaping its benefits, we obtain, approximately,
 the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
@@ -304,22 +328,6 @@ the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
 		            context.
 
 	      \end{itemize}
-
-\end{itemize}
-
-\section{Requirements \& properties of a good solution}
-
-\begin{itemize}
-
-	\item Expressions are great for viewing, but not for a computer to
-	      systematically use to generate things.
-
-	\item Theories should expose more information about themselves so that we
-	      can directly interpret them without needing to traverse over an
-	      expression.
-
-	\item Specifically, more expressions should be usable in code generation,
-	      amongst other things.
 
 \end{itemize}
 
@@ -365,8 +373,6 @@ the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
 		            identify, discriminate, and efficiently use the information
 		            originally contained in the expressions better. This is done
 		            through replacing ``RelationConcepts'' with ``ModelKinds'':
-
-		      \item \currentModelKindsHaskell{}
 
 		      \item In other words, we replace Expr as the expressive language
 		            of knowledge (with a new kinds of knowledge encodings

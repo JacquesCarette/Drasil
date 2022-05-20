@@ -240,6 +240,10 @@ that can possibly be contained in a \RelationConcept{} are usable in code
 generation\todo{Note somewhere in the thesis above that when we discuss
 	``code'', we really mean \acs{oo} programs and snippets}.
 
+\section{Language Division}
+
+\intodo{Discuss how the mathematical language needed to be split up into 3 variants.}
+
 Relating back to \refTheoriesWithoutModelKinds{}, we may observe that there is a
 transformation from \textit{Theory} to \textit{Mathematical Knowledge}. This may
 seem peculiar because one would expect the \textit{theory} to really be the
@@ -267,7 +271,16 @@ Issues occurring due to weak knowledge capture may be resolved through strong
 knowledge capture. Beginning with the existing case studies of Drasil, we will
 attempt to classify our existing knowledge better. We aim to make
 \RelationConcept{} a ``view'' of other ``higher-order''\todo{Seems weird to say
-	higher-order, need something else most likely.} knowledge encodings.
+	higher-order, need something else most likely.} knowledge encodings. In other
+words, we replace \Expr{} as a knowlege container, and restrict its usage to
+strictly ``mathematical expressions'', as opposed to ``expressions'' and
+information about models/theories. One notable change is that we will require
+the new theory knowledge containers to be able to fully re-create the original
+shallow/raw \Expr{}s as a property of the new theory encodings. The once
+meta-level knowledge of the theories, lost in the Haskell implementation,
+becomes exposed and understood to Drasil. Ultimately, this is done through
+replacing \RelationConcept{} usage with \ModelKind{}, an aggregation of existing
+Drasil-related knowledge of mathematical theories.
 
 \currentModelKindsHaskell{}
 
@@ -291,7 +304,7 @@ attempt to classify our existing knowledge better. We aim to make
 
 \intodo{Describe EquationalRealms}
 
-\subsection{\acsp{ode}}
+\subsection{Differential Equations}
 
 \intodo{Describe DEModel and NewDEModel}
 
@@ -358,30 +371,6 @@ the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
 	\item Replacing ``RelationConcepts'':
 
 	      \begin{itemize}
-
-		      \item Using raw expressions to transcribe whole mathematical
-		            theories and data structures leads to many problems and
-		            difficulties in interpretation alone.
-
-		      \item In other words, we replace Expr as a knowledge container,
-		            and restrict its usage to strictly ``expressions'', as
-		            opposed to ``expressions'' and information about models.
-
-		      \item Replacing raw expressions with ``encodings one step higher''
-		            that can push out the same raw expressions as a property of
-		            the higher-level encodings will allow us to quickly
-		            identify, discriminate, and efficiently use the information
-		            originally contained in the expressions better. This is done
-		            through replacing ``RelationConcepts'' with ``ModelKinds'':
-
-		      \item In other words, we replace Expr as the expressive language
-		            of knowledge (with a new kinds of knowledge encodings
-			            [chunks]), and restrict its usage to strictly some
-		            ``mathematical expressions'', as opposed to ``expressions'',
-		            and meta-level information about the expressions and model.
-
-		      \item \intodo{Discuss EquationalModels, EquationalRealms,
-			            EquationalConstraints, DEModel, NewDEModel, etc.}
 
 		      \item We can still push out ModelExprs and Exprs from things where
 		            necessary, if they can be explained using them.

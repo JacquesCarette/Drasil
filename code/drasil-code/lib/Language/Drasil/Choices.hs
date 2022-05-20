@@ -17,12 +17,12 @@ import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Name)
 import Data.Maybe (mapMaybe)
+import Data.Map (Map, fromList, (!), lookup, toList)
+import Data.Tuple (swap)
 
 import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
-
-import Data.Map (Map, fromList, (!), lookup, toList)
 
 -- Full details of Choices documentation 
 -- https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -384,10 +384,6 @@ fnList = fromList [
 -- | Helper function for InternalConcept String Map  
 listStrIC :: [String] -> [InternalConcept]
 listStrIC = mapMaybe (flip Data.Map.lookup . fromList . map swap $ toList fnList)
-
--- | Helper function for listStrIC
-swap :: (a, b) -> (b, a)
-swap (a, b) = (b, a)
 
 -- | Data type of user defined concepts
 data InternalConcept = InputConstraints | WriteOutput | DerivedValues 

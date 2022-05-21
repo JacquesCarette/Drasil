@@ -280,8 +280,8 @@
 \mainmatter
 
 % START : HEADER %
-\fancyhead[R]{McMaster University — Computing and Software}
-\fancyhead[L]{M.Sc. Thesis — Jason Balaci}
+\fancyhead[R]{\thesisInstitution{} — \thesisInstitutionDepartmentShort{}}
+\fancyhead[L]{\thesisTargetDegreeNameShort{} Thesis — \thesisAuthorName{}}
 % END   : HEADER %
 
 \chapter{Introduction}
@@ -330,9 +330,9 @@
 \appendix
 \chapter{Appendix}
 \renewcommand{\thechapter}{A}
-\counterwithin{figure}{chapter} % chapter, or section?
-\counterwithin{table}{chapter} % chapter, or section?
-\counterwithin{listing}{chapter} % chapter, or section?
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
+\counterwithin{listing}{chapter}
 \input{chapters/appendix}
 
 \end{document}

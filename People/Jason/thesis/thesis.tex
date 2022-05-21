@@ -1,5 +1,12 @@
 \documentclass[12pt,oneside]{book}
 
+% Make \today only show month and year
+\usepackage[useregional]{datetime2}
+\DTMlangsetup[en-CA]{showdayofmonth=false}
+
+% Manifest data
+\input{manifest}
+
 % Extra functionality for command parsing, colouring elements, and commentary
 \usepackage{xparse}
 \usepackage[table]{xcolor}
@@ -53,10 +60,6 @@
 % \usepackage{fontspec}
 % \setmonofont{mononoki}
 
-% Make \today only show month and year
-\usepackage[useregional]{datetime2}
-\DTMlangsetup[en-CA]{showdayofmonth=false}
-
 % Configure page shape
 \usepackage[
   a4paper,
@@ -73,7 +76,9 @@
 \hypersetup{
   colorlinks=true,
   linkcolor=red,
-  breaklinks=true
+  breaklinks=true,
+  pdftitle={\thesisTitle{}},
+  pdfauthor={\thesisAuthorName{}}
 }
 \usepackage[nameinlink]{cleveref} % Fixes capitalization of internal references
 
@@ -106,9 +111,6 @@
 \MFUhyphentrue % tell mfirstuc to capitalize hyphenated words
 \usepackage{acro}
 \input{acronyms}
-
-% Manifest data
-\input{manifest}
 
 % General Utility Functions
 \input{macros}

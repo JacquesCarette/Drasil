@@ -150,7 +150,7 @@ mkGraphsTable typePath clsInstPath pkgs = LlC $ llcc tableGraphRef $ Table
   (graphTable "datatype" typePath "classInst" clsInstPath pkgs) -- Create the body of the table
   (S "Type Graphs") True -- Label the table
 
-  -- | Table of graphs reference.
+-- | Table of graphs reference.
 tableGraphRef :: Reference
 tableGraphRef = makeTabRef "TableOfGraphs"
 

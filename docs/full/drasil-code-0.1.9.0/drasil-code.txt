@@ -515,7 +515,7 @@ module Language.Drasil.Data.ODEInfo
 
 -- | Structure to hold ODE information.
 data ODEInfo
-ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
+ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 
 -- | Independent variable.
 [indepVar] :: ODEInfo -> CodeVarChunk
@@ -529,7 +529,7 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
 [tFinal] :: ODEInfo -> CodeExpr
 
 -- | Initial value of an ODE.
-[initVal] :: ODEInfo -> CodeExpr
+[initVal] :: ODEInfo -> [CodeExpr]
 
 -- | ODE equations.
 [odeSyst] :: ODEInfo -> [CodeExpr]
@@ -539,9 +539,9 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
 [odeOpts] :: ODEInfo -> ODEOptions
 
 -- | Basic <a>ODEInfo</a> constructor.
-odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
+odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 data ODEOptions
-ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
+ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 
 -- | Solution method.
 [solveMethod] :: ODEOptions -> ODEMethod
@@ -555,11 +555,8 @@ ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptio
 -- | Step size.
 [stepSize] :: ODEOptions -> CodeExpr
 
--- | Holds the initial value of a second order ODE.
-[initValFstOrd] :: ODEOptions -> CodeExpr
-
 -- | Basic <a>ODEOptions</a> constructor
-odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
+odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 
 -- | Methods for solving ODEs. Includes Runge-Kutta 4-5, Backwards
 --   Differentiation Formula, or Adams' method.
@@ -907,9 +904,13 @@ solveAndPopulateWhileFill :: FunctionIntFill -> CodeExpr -> FunctionIntFill -> C
 --   list of <a>CodeExpr</a>s to return.
 returnExprListFill :: [CodeExpr] -> StepFill
 
--- | Corresponds to ExternalLibrary's <tt>fixedStatement</tt>. No
---   parameters because the statement is not use-case-dependent.
+-- | Corresponds to ExternalLibrary's <tt>fixedReturn</tt>. No parameters
+--   because the statement is not use-case-dependent.
 fixedStatementFill :: StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>fixedReturn'</tt>.
+--   use-case-specific a <a>CodeExpr</a> that parameterize the statement.
+fixedStatementFill' :: CodeExpr -> StepFill
 
 -- | Corresponds to ExternalLibrary's <tt>initSolWithVal</tt>. Provides the
 --   <a>CodeVarChunk</a> for one solution and one <a>CodeExpr</a> for the
@@ -1121,8 +1122,8 @@ assignSolFromObj :: CodeVarChunk -> Step
 --   first element of an array.
 initSolListFromArray :: CodeVarChunk -> Step
 
--- | Specifies a statement where a solution list is initialized with a
---   value.
+-- | Specifies a statement where a solution list is initialized with the
+--   first value.
 initSolListWithVal :: Step
 
 -- | A solve and populate loop. <a>FunctionInterface</a> for loop
@@ -1135,8 +1136,12 @@ solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> Fu
 --   the list is explicitly defined.
 returnExprList :: Step
 
--- | Specifies a use-case-independent statement that returns a value.
+-- | Specifies a use-case-independent statement that returns a fixed value.
 fixedReturn :: CodeExpr -> Step
+
+-- | Specifies a use-case-dependent statement that returns a non-fixed
+--   value.
+fixedReturn' :: Step
 
 -- | Specifies a statement where a single solution is initialized with a
 --   value.
@@ -2746,8 +2751,8 @@ assignSolFromObj :: CodeVarChunk -> Step
 --   first element of an array.
 initSolListFromArray :: CodeVarChunk -> Step
 
--- | Specifies a statement where a solution list is initialized with a
---   value.
+-- | Specifies a statement where a solution list is initialized with the
+--   first value.
 initSolListWithVal :: Step
 
 -- | A solve and populate loop. <a>FunctionInterface</a> for loop
@@ -2760,8 +2765,12 @@ solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> Fu
 --   the list is explicitly defined.
 returnExprList :: Step
 
--- | Specifies a use-case-independent statement that returns a value.
+-- | Specifies a use-case-independent statement that returns a fixed value.
 fixedReturn :: CodeExpr -> Step
+
+-- | Specifies a use-case-dependent statement that returns a non-fixed
+--   value.
+fixedReturn' :: Step
 
 -- | Specifies a statement where a single solution is initialized with a
 --   value.
@@ -2929,9 +2938,13 @@ solveAndPopulateWhileFill :: FunctionIntFill -> CodeExpr -> FunctionIntFill -> C
 --   list of <a>CodeExpr</a>s to return.
 returnExprListFill :: [CodeExpr] -> StepFill
 
--- | Corresponds to ExternalLibrary's <tt>fixedStatement</tt>. No
---   parameters because the statement is not use-case-dependent.
+-- | Corresponds to ExternalLibrary's <tt>fixedReturn</tt>. No parameters
+--   because the statement is not use-case-dependent.
 fixedStatementFill :: StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>fixedReturn'</tt>.
+--   use-case-specific a <a>CodeExpr</a> that parameterize the statement.
+fixedStatementFill' :: CodeExpr -> StepFill
 
 -- | Corresponds to ExternalLibrary's <tt>initSolWithVal</tt>. Provides the
 --   <a>CodeVarChunk</a> for one solution and one <a>CodeExpr</a> for the
@@ -3004,7 +3017,7 @@ field :: CodeExprC r => CodeVarChunk -> CodeVarChunk -> r
 
 -- | Structure to hold ODE information.
 data ODEInfo
-ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
+ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 
 -- | Independent variable.
 [indepVar] :: ODEInfo -> CodeVarChunk
@@ -3018,7 +3031,7 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
 [tFinal] :: ODEInfo -> CodeExpr
 
 -- | Initial value of an ODE.
-[initVal] :: ODEInfo -> CodeExpr
+[initVal] :: ODEInfo -> [CodeExpr]
 
 -- | ODE equations.
 [odeSyst] :: ODEInfo -> [CodeExpr]
@@ -3028,9 +3041,9 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
 [odeOpts] :: ODEInfo -> ODEOptions
 
 -- | Basic <a>ODEInfo</a> constructor.
-odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
+odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 data ODEOptions
-ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
+ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 
 -- | Solution method.
 [solveMethod] :: ODEOptions -> ODEMethod
@@ -3044,11 +3057,8 @@ ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptio
 -- | Step size.
 [stepSize] :: ODEOptions -> CodeExpr
 
--- | Holds the initial value of a second order ODE.
-[initValFstOrd] :: ODEOptions -> CodeExpr
-
 -- | Basic <a>ODEOptions</a> constructor
-odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
+odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 
 -- | Methods for solving ODEs. Includes Runge-Kutta 4-5, Backwards
 --   Differentiation Formula, or Adams' method.
@@ -3113,10 +3123,6 @@ scipyODEPckg :: ODELibPckg
 
 -- | Collects variables needed for SciPy's ODEs as <a>QuantityDict</a>s.
 scipyODESymbols :: [QuantityDict]
-
--- | This package solves a system of ODEs using the scipy odeint method.
---   The odeint method solves the ode using the LSoda solver.
-scipyODELSodaPkg :: ODELibPckg
 
 -- | <a>Oslo</a> ODE library package.
 osloPckg :: ODELibPckg

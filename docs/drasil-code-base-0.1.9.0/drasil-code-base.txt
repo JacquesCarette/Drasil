@@ -522,6 +522,15 @@ vec2D :: ExprC r => r -> r -> r
 --   </pre>
 dgnl2x2 :: ExprC r => r -> r -> r
 
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
+
+-- | Change row vector to column vector
+toColumn :: ExprC r => [r] -> [[r]]
+
 -- | Applies a given function with a list of parameters.
 apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
 

@@ -2942,17 +2942,16 @@ digraph alltypes {
 		}
 	}
 	subgraph differentialmodel {
-		subgraph coeffderiv{
-		CoeffDeriv	[shape=oval, color=cyan3, label="CoeffDeriv"];
-		CoeffDeriv -> Expr;
-		CoeffDeriv -> Int;
+		subgraph unknown{
+		Unknown	[shape=oval, color=cyan3, label="Unknown"];
+		Unknown -> ConstrConcept;
+		Unknown -> Int;
 		}
 		subgraph differentialmodel{
 		DifferentialModel	[shape=oval, color=cyan3, label="DifferentialModel"];
 		DifferentialModel -> UnitalChunk;
-		DifferentialModel -> ConstrConcept;
-		DifferentialModel -> CoeffDeriv;
 		DifferentialModel -> Expr;
+		DifferentialModel -> Unknown;
 		DifferentialModel -> ConceptChunk;
 		}
 	}

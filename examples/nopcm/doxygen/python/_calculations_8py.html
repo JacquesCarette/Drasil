@@ -82,9 +82,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ac05a9ae1b124c0c7361edc78b9f17c75"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#ac05a9ae1b124c0c7361edc78b9f17c75">Calculations.func_tau_W</a> (C_W, h_C, A_C, m_W)</td></tr>
 <tr class="memdesc:ac05a9ae1b124c0c7361edc78b9f17c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates ODE parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s)  <a href="_calculations_8py.html#ac05a9ae1b124c0c7361edc78b9f17c75">More...</a><br /></td></tr>
 <tr class="separator:ac05a9ae1b124c0c7361edc78b9f17c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71e13dac9ffdf2b0cfcf21c66ae03d8b"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#a71e13dac9ffdf2b0cfcf21c66ae03d8b">Calculations.func_T_W</a> (T_C, t_final, T_init, A_tol, R_tol, t_step, tau_W)</td></tr>
-<tr class="memdesc:a71e13dac9ffdf2b0cfcf21c66ae03d8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates temperature of the water: the average kinetic energy of the particles within the water (degreeC)  <a href="_calculations_8py.html#a71e13dac9ffdf2b0cfcf21c66ae03d8b">More...</a><br /></td></tr>
-<tr class="separator:a71e13dac9ffdf2b0cfcf21c66ae03d8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53c3784c4c6db3a75b001ba189f5e78c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#a53c3784c4c6db3a75b001ba189f5e78c">Calculations.func_T_W</a> (T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W)</td></tr>
+<tr class="memdesc:a53c3784c4c6db3a75b001ba189f5e78c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates temperature of the water: the average kinetic energy of the particles within the water (degreeC)  <a href="_calculations_8py.html#a53c3784c4c6db3a75b001ba189f5e78c">More...</a><br /></td></tr>
+<tr class="separator:a53c3784c4c6db3a75b001ba189f5e78c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides functions for calculating the outputs. </p>
@@ -128,8 +128,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a71e13dac9ffdf2b0cfcf21c66ae03d8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71e13dac9ffdf2b0cfcf21c66ae03d8b">&#9670;&nbsp;</a></span>func_T_W()</h2>
+<a id="a53c3784c4c6db3a75b001ba189f5e78c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53c3784c4c6db3a75b001ba189f5e78c">&#9670;&nbsp;</a></span>func_T_W()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -144,13 +144,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>t_final</em>, </td>
+          <td class="paramname"><em>T_init</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>T_init</em>, </td>
+          <td class="paramname"><em>t_final</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -188,8 +188,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">T_C</td><td>temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC) </td></tr>
-    <tr><td class="paramname">t_final</td><td>final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s) </td></tr>
     <tr><td class="paramname">T_init</td><td>initial temperature: the temperature at the beginning of the simulation (degreeC) </td></tr>
+    <tr><td class="paramname">t_final</td><td>final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s) </td></tr>
     <tr><td class="paramname">A_tol</td><td>absolute tolerance </td></tr>
     <tr><td class="paramname">R_tol</td><td>relative tolerance </td></tr>
     <tr><td class="paramname">t_step</td><td>time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s) </td></tr>

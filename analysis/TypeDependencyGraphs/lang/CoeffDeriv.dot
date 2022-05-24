@@ -1,5 +1,0 @@
-digraph coeffderiv{
-CoeffDeriv	[shape=oval, color=cyan3, label="CoeffDeriv"];
-CoeffDeriv -> Expr;
-CoeffDeriv -> Int;
-}

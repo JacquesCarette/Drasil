@@ -7,7 +7,7 @@ CI	[shape=oval, color=turquoise4, label="CI"];
 ConstrainedChunk	[shape=oval, color=turquoise4, label="ConstrainedChunk"];
 ConstrConcept	[shape=oval, color=turquoise4, label="ConstrConcept"];
 DefinedQuantityDict	[shape=oval, color=turquoise4, label="DefinedQuantityDict"];
-CoeffDeriv	[shape=oval, color=turquoise4, label="CoeffDeriv"];
+Unknown	[shape=oval, color=turquoise4, label="Unknown"];
 DifferentialModel	[shape=oval, color=turquoise4, label="DifferentialModel"];
 QDefinition	[shape=oval, color=turquoise4, label="QDefinition"];
 NamedChunk	[shape=oval, color=turquoise4, label="NamedChunk"];

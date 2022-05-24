@@ -5,7 +5,9 @@ Drasil [![Build Status](https://github.com/JacquesCarette/Drasil/actions/workflo
 Generate all the Things! Visit [our website](https://jacquescarette.github.io/Drasil/) to see all of the currently generated artifacts.
 
 <p align="center">
-<img src="code/drasil-website/WebInfo/images/Icon.png" alt="Drasil Tree" width="200" />
+    <a href="https://jacquescarette.github.io/Drasil/">
+        <img src="code/drasil-website/WebInfo/images/Icon.png" alt="Drasil Tree" width="200" />
+    </a>
 </p>
 
 ## Table of Contents

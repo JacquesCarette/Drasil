@@ -66,11 +66,11 @@ tableOfGraphsTitle :: Sentence
 
 -- | Helper to create a graph table based on the kind (either "datatype" or
 --   "classInst"), path, and packages.
-graphTable :: String -> FilePath -> [String] -> [[Sentence]]
+graphTable :: String -> FilePath -> String -> FilePath -> [String] -> [[Sentence]]
 
 -- | Helper to create a row in a graph table. Based on the kind of table we
 --   want, the file path to that graph, and the package name.
-graphTableEntry :: String -> FilePath -> String -> [Sentence]
+graphTableEntry :: String -> FilePath -> String -> FilePath -> String -> [Sentence]
 
 -- | Helper to create a reference that points to the graph specified by its
 --   kind (either "datatype" or "classInst"), prefix (either an empty
@@ -79,23 +79,18 @@ getGraphsInTableRef :: String -> String -> FilePath -> String -> Reference
 
 -- | Type dependency table description. Includes information about the
 --   colour scheme and what the graph actually means.
-tableOfTypeGraphsDesc :: Sentence
-
--- | Creates a table that links to all generated type graphs.
-mkTypeGraphTable :: FilePath -> [String] -> Contents
-
--- | Type graph table reference.
-tableTypeGraphRef :: Reference
+tableOfGraphsDescType :: Sentence
 
 -- | Class-Instance table description. Includes information about the
 --   colour scheme and what the graph actually means.
-tableOfClassIGraphsDesc :: Sentence
+tableOfGraphsDescClassInst :: Sentence
 
--- | Creates a table that links to all generated class-instance graphs.
-mkClassInstTable :: FilePath -> [String] -> Contents
+-- | Creates a table that links to all generated type and class instance
+--   graphs.
+mkGraphsTable :: FilePath -> FilePath -> [String] -> Contents
 
--- | Class-instance table reference.
-classIGraphRef :: Reference
+-- | Table of graphs reference.
+tableGraphRef :: Reference
 
 -- | Creates the Package Dependency Graphs section.
 graphSec :: FilePath -> [String] -> Section

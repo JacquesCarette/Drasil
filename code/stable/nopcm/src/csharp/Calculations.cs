@@ -38,15 +38,15 @@ public class Calculations {
     
     /** \brief Calculates temperature of the water: the average kinetic energy of the particles within the water (degreeC)
         \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
-        \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
         \param T_init initial temperature: the temperature at the beginning of the simulation (degreeC)
+        \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
         \param A_tol absolute tolerance
         \param R_tol relative tolerance
         \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
         \param tau_W ODE parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s)
         \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
     */
-    public static List<double> func_T_W(double T_C, double t_final, double T_init, double A_tol, double R_tol, double t_step, double tau_W) {
+    public static List<double> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W) {
         List<double> T_W;
         Func<double, Vector, Vector> f = (t, T_W_vec) => {
             return new Vector(1.0 / tau_W * (T_C - T_W_vec[0]));
@@ -55,7 +55,7 @@ public class Calculations {
         opts.AbsoluteTolerance = A_tol;
         opts.RelativeTolerance = R_tol;
         
-        Vector initv = new Vector(T_init);
+        Vector initv = new Vector(new double[] {T_init});
         IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
         IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_final, t_step);
         T_W = new List<double> {};

@@ -3,9 +3,9 @@ module Language.Drasil.Chunk.DifferentialModel (
     -- * Chunk Type
     DifferentialModel,
     -- * Input Language
-    ($*),
+    ($^^),
     -- * Constructors
-    makeLinear
+    makeASystemDE
     ) where
 
 import Control.Lens (makeLenses, (^.), view)
@@ -19,33 +19,36 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (mulRe, addRe, sy)
+import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($.), matrix, columnVec))
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
-import Language.Drasil.Literal.Class (exactDbl)
+
+-- Unknown is a index of dependent variables with its nth degree of derivative
+data Unknown = UK{
+  _depVar :: ConstrConcept,
+  _degree :: Int
+}
+makeLenses ''Unknown
 
 {-
-  Input Language minic mathematic equation
-  e.g. exactDbl 1 $* 1, 
-  exactDbl 1 is coefficient term, 1 is the first derivative
+  Input Language represent a derivative of a dependent variable
+  e.g. depVar $^^ d, 
+  depVar is the dependent variable, d is the dth derivative
 -}
+($^^) :: ConstrConcept -> Int -> Unknown
+($^^) = UK
 
-data CoeffDeriv = CD{
-                      _coeff :: Expr,
-                      _degree :: Int
-                    }
-makeLenses ''CoeffDeriv
-
-($*) :: Expr -> Int -> CoeffDeriv
-($*) = CD
-
-data DifferentialModel = Linear {
-                                  _indepVar :: UnitalChunk,
-                                  _depVar :: ConstrConcept,
-                                  _coefficients :: [CoeffDeriv],
-                                  _constant :: Expr,
-                                  _conc :: ConceptChunk
-                                }
+data DifferentialModel = SystemOfLinearODEs {
+  -- independent variable, usually time
+  _indepVar :: UnitalChunk,
+  -- coefficients matrix
+  _coefficients :: [[Expr]],
+  -- Unknowns column vector
+  _unknowns :: [Unknown],
+  -- Constant Column vector 
+  _constants :: [Expr],
+  _conc :: ConceptChunk
+}
 makeLenses ''DifferentialModel
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DifferentialModel'.
@@ -58,36 +61,50 @@ instance NamedIdea     DifferentialModel where term = conc . term
 instance Idea          DifferentialModel where getA = getA . view conc
 -- | Finds the definition contained in the 'ConceptChunk' used to make the 'DifferentialModel'.
 instance Definition    DifferentialModel where defn = conc . defn
-instance ConceptDomain DifferentialModel where cdom = cdom . view conc
 -- | Finds the domain of the 'ConceptChunk' used to make the 'DifferentialModel'.
+instance ConceptDomain DifferentialModel where cdom = cdom . view conc
 -- | Convert the 'DifferentialModel' into the model expression language.
--- | Set Canonical form of ODE to Zero, e.g. ax0 + bx1 + cx2 + .... + c = 0
 instance Express       DifferentialModel where express = formStdODE
 
--- | Construct a Canonical form of ODE, e.g. ax0 + bx1 + cx2 + .... + c
--- | x0 is the highest order, x1 is the second higest order, and so on. The c is the constant.
+-- | Set the expression be a system of linear ODE to Ax = b
+-- | A is a known m*n matrix that contains coefficients, 
+-- | x is an n-vector that contain derivatives of dependent variables
+-- | b is an m-vector that contain constants
 formStdODE :: DifferentialModel -> ModelExpr
-formStdODE d = equiv $ (addCoes d `addRe` express (d ^. constant)) : [exactDbl 0]
+formStdODE d 
+    | size == 1 = formASingleODE (head (d ^. coefficients)) unknownVec (d ^. constants)
+    | otherwise = equiv (coeffsMatix $. columnVec unknownVec : constantVec) 
+    where size = length (d ^. coefficients)
+          coeffsMatix = express(matrix (d ^. coefficients))
+          unknownVec = formAllUnknown (d ^. unknowns) (d ^. indepVar)
+          constantVec = [express (columnVec (d ^. constants))]
 
--- | Construct a form of ODE with constant on the rhs
--- formConODE :: DifferentialModel -> ModelExpr
--- formConODE d = equiv $ addCoes d : [express (d ^. constant)]
+formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
+formASingleODE coeffs unks consts = equiv (lhs : rhs)
+  where lhs = foldl1 addRe (zipWith (\x y -> express x `mulRe` y) coeffs unks)
+        rhs = map express consts
 
--- | Add coefficients together by restructuring each CoeffDeriv
-addCoes :: DifferentialModel -> ModelExpr
-addCoes d = foldr1 addRe $
-            map(\x ->
-                  express (x ^. coeff)
-                  `mulRe`
-                  nthderiv
-                    (toInteger (x ^. degree))
-                    (sy (qw (d ^. depVar)))
-                    (d ^. indepVar)
-               )
-               (d ^. coefficients)
+-- Form a n-vector of derivatives dependent variables
+formAllUnknown :: [Unknown] -> UnitalChunk -> [ModelExpr]
+formAllUnknown unks ind = map (`formAUnknown` ind) unks
 
--- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), DepVar ('ModelExpr'),
--- | Coefficients ('[Expr]'), Constant ('Expr'), UID ('String'), term ('NP'), definition ('Sentence').
-makeLinear :: UnitalChunk -> ConstrConcept -> [CoeffDeriv] -> Expr -> String -> NP -> Sentence -> DifferentialModel
-makeLinear dmIndepVar dmDepVar dmCoeff dmConst dmID dmTerm dmDefn =
-  Linear dmIndepVar dmDepVar dmCoeff dmConst (dccWDS dmID dmTerm dmDefn)
+-- Form a derivative of a dependent variable
+formAUnknown :: Unknown -> UnitalChunk -> ModelExpr
+formAUnknown unk = nthderiv
+                    (toInteger (unk ^. degree))
+                    (sy (qw (unk ^. depVar)))
+
+-- | Create a 'DifferentialModel' from a given indepVar ('UnitalChunk'), coefficients ('[[Expr]]'),
+-- | unknowns ('[Unknown]'), constants ('[Expr]'), UID ('String'), term ('NP'), definition ('Sentence').
+makeASystemDE :: UnitalChunk -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
+makeASystemDE dmIndepVar dmcoeffs dmUnk dmConst dmID dmTerm dmDefn 
+ | length dmcoeffs /= length dmConst = 
+  error "Length of coefficients matrix should equal to the length of the constant vector"
+ | not $ isCoeffsMatchUnknowns dmcoeffs dmUnk = 
+  error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
+ | otherwise = SystemOfLinearODEs dmIndepVar dmcoeffs dmUnk dmConst(dccWDS dmID dmTerm dmDefn)
+
+isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
+isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
+isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
+isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)) True coeffs

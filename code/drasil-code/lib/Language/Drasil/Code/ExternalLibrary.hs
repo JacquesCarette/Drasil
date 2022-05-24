@@ -11,7 +11,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn, initSolWithVal
+  returnExprList, fixedReturn, fixedReturn', initSolWithVal
 ) where
 
 import Language.Drasil (Space, HasSpace(typ))
@@ -248,7 +248,7 @@ appendCurrSol :: CodeExpr -> Step
 appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> appendCurrSolFS curr s
     (_,_) -> error "Fill for appendCurrSol should provide one CodeChunk and no Exprs")
-  
+
 -- | Specifies a statement where a solution list is populated by iterating 
 --   through a solution array.
 populateSolList :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk -> [Step]
@@ -280,10 +280,10 @@ initSolListFromArray a = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[]) -> FAsg s (matrix [[idx (sy a) (int 0)]])
   (_,_) -> error "Fill for initSolListFromArray should provide one CodeChunk and no Exprs")
 
--- | Specifies a statement where a solution list is initialized with a value.
+-- | Specifies a statement where a solution list is initialized with the first value.
 initSolListWithVal :: Step
 initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[v]) -> FDecDef s (matrix [[v]])
+  ([s],[v]) -> FDecDef s (matrix [[idx v (int 0)]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
 -- | A solve and populate loop. 'FunctionInterface' for loop condition, 'CodeChunk' for solution object, 
@@ -307,9 +307,15 @@ returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
 appendCurrSolFS :: CodeExpr -> CodeVarChunk -> FuncStmt
 appendCurrSolFS cs s = FAppend (sy s) (idx cs (int 0))
 
--- | Specifies a use-case-independent statement that returns a value.
+-- | Specifies a use-case-independent statement that returns a fixed value.
 fixedReturn :: CodeExpr -> Step
 fixedReturn = lockedStatement . FRet
+
+-- | Specifies a use-case-dependent statement that returns a non-fixed value.
+fixedReturn' :: Step
+fixedReturn' = statementStep (\cdchs [e] -> case (cdchs, e) of
+  ([], _) -> FRet e
+  (_,_) -> error "Fill for fixedReturn' should provide no CodeChunk")
 
 -- | Specifies a statement step.
 statementStep :: ([CodeVarChunk] -> [CodeExpr] -> FuncStmt) -> Step

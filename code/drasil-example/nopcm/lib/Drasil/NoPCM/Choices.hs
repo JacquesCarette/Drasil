@@ -7,9 +7,8 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   makeData, makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats,
   ExtLib(..))
 
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
   apacheODEPckg, odeintPckg)
-
 import Drasil.NoPCM.Body (noPCMODEInfo, fullSI)
 
 code :: CodeSpec

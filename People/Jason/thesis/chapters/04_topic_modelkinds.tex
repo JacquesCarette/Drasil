@@ -242,6 +242,52 @@ generation\todo{Note somewhere in the thesis above that when we discuss
 
 \section{Language Division}
 
+\begin{itemize}
+
+	\item In generating families of software artifacts via \acs{gool} that solve
+	      scientific problems, we need for the generated expressions to all have
+	      definite values\todo{I need some sort of citation for this.}.
+
+	\item At the moment, \Expr{} is the language we use to discuss all the
+	      things we've shown interest in exploring through our case studies.
+
+	\item Of course, \Expr{} contains some things without definite values. For
+	      example,
+	      \begin{itemize}
+
+		      \item \intodo{Go through ModelExpr and add them here.}
+
+	      \end{itemize}
+
+	\item The information is already there, it's just not yet \textit{exposed}.
+
+	\item There are many ways we can expose this information, but we've chosen
+	      to expose it via language division. \Expr{} has its indefinite values
+	      split off into \ModelExpr{} (\refCurrentModelExprHaskell{}), a deeply
+	      embedded universal mathematical language. As we desire for it to be
+	      equally usable as \Expr{}, it is, essentially, the original \Expr{}
+	      without the language terms related to ``code''\todo{e.g., \ldots{}}.
+
+	\item In order to alleviate the stress involved with writing out the same
+	      expression in 2 different languages, we use a \ACF{ttf} encoding of
+	      the two (2) languages (\refCurrentExprTTFHaskell{} and
+	      \refCurrentModelExprTTFHaskell{}).
+
+	\item The \acs{ttf} encoding allows us to seamlessly write expressions in
+	      either, or both, languages at the same time. \ModelExpr{}s \acs{ttf}
+	      encoding strictly contains the terms unique to \ModelExpr{}. As such,
+	      the \acs{ttf} encoding won't allow terms from \ModelExpr{} to be
+	      interpreted into \Expr{} unless they have a definite value.
+
+	\item Continuing, we've noticed that there are residual terms left in
+	      \Expr{} that don't quite relate to mathematics, but to ``code''
+	      specifically. As such, we continue the division by moving those less
+	      related into their own language, specifically tailored to ``code''
+	      expressions: \CodeExpr{} (\todo{refCurrentCodeExprHaskell).
+
+\end{itemize}
+
+
 \intodo{Discuss how the mathematical language needed to be split up into 3 variants.}
 
 Relating back to \refTheoriesWithoutModelKinds{}, we may observe that there is a
@@ -284,9 +330,6 @@ Drasil-related knowledge of mathematical theories.
 
 \currentModelKindsHaskell{}
 
-\intodo{I should create a new acronym, SEtFPM, to indicate ``Slightly Edited to
-	Fit Page Margins'', and use it everywhere.}
-
 \refCurrentModelKindsHaskell{} displays the creation of \ModelKind{} and
 \ModelKinds{}.
 
@@ -294,23 +337,43 @@ Drasil-related knowledge of mathematical theories.
 
 \subsection{Quantity Definitions}
 
-\intodo{Describe EquationalModels}
+\begin{itemize}
+
+	\item \EquationalModel{}s
+
+\end{itemize}
 
 \subsection{Constraints}
 
-\intodo{Describe EquationalConstraints}
+\begin{itemize}
+
+	\item \EquationalConstraints{}
+
+\end{itemize}
 
 \subsection{Definition Realms}
 
-\intodo{Describe EquationalRealms}
+\begin{itemize}
+
+	\item \EquationalRealm{}s
+
+\end{itemize}
 
 \subsection{Differential Equations}
 
-\intodo{Describe DEModel and NewDEModel}
+\begin{itemize}
+
+	\item \DEModel{} and \NewDEModel{}
+
+\end{itemize}
 
 \subsection{Leftovers}
 
-\intodo{Discuss the last 1-2 kinds of models left}
+\begin{itemize}
+
+	\item \OthModel{} \ldots{}
+
+\end{itemize}
 
 Incorporating \ModelKinds{} and reaping its benefits, we obtain, approximately,
 the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.

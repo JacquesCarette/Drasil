@@ -254,7 +254,7 @@ without definite values. For example, \Expr{} (\refOriginalExprHaskell{})
 discusses derivations, integrations, spaces as primitive/literal values (largely
 symbolic, and unavailable in \acs{oo} languages), definition statements,
 equivalence\todo{I guess it's less-so about definite value, moreso about lack of
-representation in \acs{oo} languages.}, and infinite series. Realistically, this
+	representation in \acs{oo} languages.}, and infinite series. Realistically, this
 information already \textit{exists} in Drasil, but it is not strongly enforced
 at Drasils Haskell-level compile-time. In other words, the information is not
 \textit{exposed} to Haskells type system, but to Drasils runtime.
@@ -266,43 +266,30 @@ division.
 
 \languageDivision{}
 
-\intodo{Re-write the below point-form notes.}
+\Expr{} has its indefinite values split off into \ModelExpr{}
+(\refCurrentModelExprHaskell{}), a deeply embedded universal mathematical
+language. As we desire for it to be equally usable as \Expr{}, it is,
+essentially, the original \Expr{} without the language terms related to
+``code''\todo{e.g., \ldots{}}. In order to alleviate the stress involved with
+writing out the same expression in two (2) different languages, we use a
+\ACF{ttf} encoding of the two (2) languages (\refCurrentExprTTFHaskell{} and
+\refCurrentModelExprTTFHaskell{}). The \acs{ttf} encoding allows us to
+seamlessly write expressions in either, or both, languages at the same time.
+\ModelExpr{}s \acs{ttf} encoding strictly contains the terms unique to
+\ModelExpr{}. As such, the \acs{ttf} encoding won't allow terms from
+\ModelExpr{} to be interpreted into \Expr{} unless they have a definite value
+because it will be impossible to describe the terms unique to \ModelExpr{} in
+terms of the \Expr{} language.
 
-\begin{itemize}
+Continuing, we've noticed that there are residual terms left in \Expr{} that
+don't quite relate to mathematics, but to ``code'' specifically (here, ``code''
+meaning the \acs{oo} ``code''). As such, we continue the division by moving
+those less related into their own language, specifically tailored to ``code''
+expressions: \CodeExpr{} (\todo{refCurrentCodeExprHaskell}).
 
-	\item There are many ways we can expose this information, but we've chosen
-	      to expose it via language division. \Expr{} has its indefinite values
-	      split off into \ModelExpr{} (\refCurrentModelExprHaskell{}), a deeply
-	      embedded universal mathematical language. As we desire for it to be
-	      equally usable as \Expr{}, it is, essentially, the original \Expr{}
-	      without the language terms related to ``code''\todo{e.g., \ldots{}}.
-
-	\item In order to alleviate the stress involved with writing out the same
-	      expression in 2 different languages, we use a \ACF{ttf} encoding of
-	      the two (2) languages (\refCurrentExprTTFHaskell{} and
-	      \refCurrentModelExprTTFHaskell{}).
-
-	\item The \acs{ttf} encoding allows us to seamlessly write expressions in
-	      either, or both, languages at the same time. \ModelExpr{}s \acs{ttf}
-	      encoding strictly contains the terms unique to \ModelExpr{}. As such,
-	      the \acs{ttf} encoding won't allow terms from \ModelExpr{} to be
-	      interpreted into \Expr{} unless they have a definite value.
-
-	\item Continuing, we've noticed that there are residual terms left in
-	      \Expr{} that don't quite relate to mathematics, but to ``code''
-	      specifically. As such, we continue the division by moving those less
-	      related into their own language, specifically tailored to ``code''
-	      expressions: \CodeExpr{} (\todo{refCurrentCodeExprHaskell}).
-
-	\item Finally, we end up with 3 languages: \Expr{}
-	      (\refCurrentExprHaskell{}), \ModelExpr{}
-	      (\refCurrentModelExprHaskell{}), and \CodeExpr{}
-	      (\todo{refCurentCodeExprHaskell}).
-
-\end{itemize}
-
-
-\intodo{Discuss how the mathematical language needed to be split up into 3 variants.}
+Finally, we end up with 3 languages, as shown in \refLanguageDivision{}: \Expr{}
+(\refCurrentExprHaskell{}), \ModelExpr{} (\refCurrentModelExprHaskell{}), and
+\CodeExpr{} (\todo{refCurentCodeExprHaskell}).
 
 Relating back to \refTheoriesWithoutModelKinds{}, we may observe that there is a
 transformation from \textit{Theory} to \textit{Mathematical Knowledge}. This may

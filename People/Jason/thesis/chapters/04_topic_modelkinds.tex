@@ -242,26 +242,33 @@ generation\todo{Note somewhere in the thesis above that when we discuss
 
 \section{Language Division}
 
+\acs{gool} currently bears the burden of creating a family of software artifacts
+through describing a single \acs{gool} program. As we are specifically
+interested in \acs{scs}, this work bears the burden of ensuring that the
+conversion of the knowledge contained in the SmithEtAl template
+\cite{SmithAndLai2005} is stable and reliable. At the moment, it is possible to
+describe mathematical expressions that are completely unusable in \acs{gool}
+because \acsp{gool} primary targets are languages that rely on expressions with,
+at least, definite values. Of course, \Expr{} already contains terms that are
+without definite values. For example, \Expr{} (\refOriginalExprHaskell{})
+discusses derivations, integrations, spaces as primitive/literal values (largely
+symbolic, and unavailable in \acs{oo} languages), definition statements,
+equivalence\todo{I guess it's less-so about definite value, moreso about lack of
+representation in \acs{oo} languages.}, and infinite series. Realistically, this
+information already \textit{exists} in Drasil, but it is not strongly enforced
+at Drasils Haskell-level compile-time. In other words, the information is not
+\textit{exposed} to Haskells type system, but to Drasils runtime.
+
+In order to ensure that developers can only write ``usable'' grounded theories
+(``InstanceModels'') for the code generator to use, we have chosen to expose
+this information. In particular, we have chosen to expose it via language
+division.
+
+\languageDivision{}
+
 \intodo{Re-write the below point-form notes.}
 
 \begin{itemize}
-
-	\item In generating families of software artifacts via \acs{gool} that solve
-	      scientific problems, we need for the generated expressions to all have
-	      definite values\todo{I need some sort of citation for this.}.
-
-	\item At the moment, \Expr{} is the language we use to discuss all the
-	      things we've shown interest in exploring through our case studies.
-
-	\item Of course, \Expr{} contains some things without definite values. For
-	      example,
-	      \begin{itemize}
-
-		      \item \intodo{Go through ModelExpr and add them here.}
-
-	      \end{itemize}
-
-	\item The information is already there, it's just not yet \textit{exposed}.
 
 	\item There are many ways we can expose this information, but we've chosen
 	      to expose it via language division. \Expr{} has its indefinite values
@@ -285,7 +292,7 @@ generation\todo{Note somewhere in the thesis above that when we discuss
 	      \Expr{} that don't quite relate to mathematics, but to ``code''
 	      specifically. As such, we continue the division by moving those less
 	      related into their own language, specifically tailored to ``code''
-	      expressions: \CodeExpr{} (\todo{refCurrentCodeExprHaskell).
+	      expressions: \CodeExpr{} (\todo{refCurrentCodeExprHaskell}).
 
 	\item Finally, we end up with 3 languages: \Expr{}
 	      (\refCurrentExprHaskell{}), \ModelExpr{}

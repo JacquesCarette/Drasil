@@ -22,7 +22,7 @@ data ODEInfo = ODEInfo {
   tInit :: CodeExpr,
   tFinal :: CodeExpr,
   -- | Initial value of an ODE.
-  initVal :: CodeExpr,
+  initVal :: [CodeExpr],
   -- | ODE equations.
   odeSyst :: [CodeExpr],
   -- | Various options related to the ODE, including solution method, step size, initial value of a second order ODE, etc.
@@ -31,7 +31,7 @@ data ODEInfo = ODEInfo {
 
 -- | Basic 'ODEInfo' constructor.
 odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> 
-  CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
+  [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 odeInfo = ODEInfo
 
 data ODEOptions = ODEOpts {
@@ -42,13 +42,11 @@ data ODEOptions = ODEOpts {
   -- | Relative tolerance.
   relTol :: CodeExpr,
   -- | Step size.
-  stepSize :: CodeExpr,
-  -- | Holds the initial value of a second order ODE.
-  initValFstOrd :: CodeExpr
+  stepSize :: CodeExpr
 }
 
 -- | Basic 'ODEOptions' constructor
-odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
+odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 odeOptions = ODEOpts
 
 -- | Methods for solving ODEs. Includes Runge-Kutta 4-5, Backwards Differentiation Formula, or Adams' method.

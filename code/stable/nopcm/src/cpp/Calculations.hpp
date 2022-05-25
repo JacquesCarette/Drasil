@@ -36,14 +36,14 @@ double func_tau_W(double C_W, double h_C, double A_C, double m_W);
 
 /** \brief Calculates temperature of the water: the average kinetic energy of the particles within the water (degreeC)
     \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
-    \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
     \param T_init initial temperature: the temperature at the beginning of the simulation (degreeC)
+    \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
     \param A_tol absolute tolerance
     \param R_tol relative tolerance
     \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
     \param tau_W ODE parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s)
     \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
 */
-vector<double> func_T_W(double T_C, double t_final, double T_init, double A_tol, double R_tol, double t_step, double tau_W);
+vector<double> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W);
 
 #endif

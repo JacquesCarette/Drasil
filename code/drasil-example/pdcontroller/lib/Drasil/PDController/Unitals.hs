@@ -89,10 +89,11 @@ ipSetPt = constrained' (dqdNoUnit setPoint symYrT Real) [gtZeroConstr] (exactDbl
 ipSetPtUnc = uq ipSetPt defaultUncrt
 qdSetPointTD = qw ipSetPt
 
-ipStepTime
-  = constrained' (ucs' stepTime symTStep Real second)
-      [physc $ Bounded (Inc, frac 1 100) (Exc, sy ipSimTime)]
-      (dbl 0.01)
+--FIXME: the original timeStep is 0.01, this will trigger an error in Java ODE solver
+--change it from 0.01 to 0.001 is a temporary fix to make ODE solver working
+ipStepTime = constrained' (ucs' stepTime symTStep Real second)
+  [physc $ Bounded (Inc, frac 1 1000) (Exc, sy ipSimTime)]
+  (dbl 0.001)
 ipStepTimeUnc = uq ipStepTime defaultUncrt
 qdStepTime = qw ipStepTime
 

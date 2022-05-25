@@ -196,6 +196,15 @@ class ExprC r where
   --   [0, 2] ]
   dgnl2x2 :: r -> r -> r
   
+  -- | Create a row vector
+  rowVec :: [r] -> r
+
+  -- | Create a column vector
+  columnVec :: [r] -> r
+
+  -- | Change row vector to column vector
+  toColumn ::  [r] -> [[r]]
+
   -- Some helper functions to do function application
   
   -- FIXME: These constructors should check that the UID is associated with a
@@ -389,6 +398,16 @@ instance ExprC Expr where
   --   [0, 2] ]
   dgnl2x2 a  = m2x2 a (int 0) (int 0)
   
+  -- | Create a row vector
+  rowVec a = matrix [a]
+
+  -- | Create a column vector
+  columnVec a = matrix $ toColumn a
+
+  -- | Change row vector to column vector
+  toColumn [] = []
+  toColumn (x:xs) = [x]:toColumn xs
+
   -- Some helper functions to do function application
   
   -- FIXME: These constructors should check that the UID is associated with a
@@ -580,6 +599,16 @@ instance ExprC M.ModelExpr where
   -- [ [1, 0],
   --   [0, 2] ]
   dgnl2x2 a  = m2x2 a (int 0) (int 0)
+
+  -- | Create a row vector
+  rowVec a = matrix [a]
+
+  -- | Create a column vector
+  columnVec a = matrix $ toColumn a
+
+  -- | Change row vector to column vector
+  toColumn [] = []
+  toColumn (x:xs) = [x]:toColumn xs
 
   -- Some helper functions to do function application
 

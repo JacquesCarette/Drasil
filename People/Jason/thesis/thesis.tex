@@ -1,16 +1,16 @@
 \documentclass[12pt,oneside]{book}
 
+% Extra functionality for command parsing, colouring elements, and commentary
+\usepackage{xparse}
+\usepackage[table]{xcolor}
+\usepackage{comment}
+
 % Make \today only show month and year
 \usepackage[useregional]{datetime2}
 \DTMlangsetup[en-CA]{showdayofmonth=false}
 
 % Manifest data
 \input{manifest}
-
-% Extra functionality for command parsing, colouring elements, and commentary
-\usepackage{xparse}
-\usepackage[table]{xcolor}
-\usepackage{comment}
 
 % Configure font and file encodings, and language as Canadian English
 \usepackage[T1]{fontenc}

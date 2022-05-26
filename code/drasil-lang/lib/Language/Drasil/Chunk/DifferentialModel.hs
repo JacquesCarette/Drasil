@@ -229,8 +229,9 @@ transUnknowns = tail
 -- | Reduce the target coefficient to one, delete it, apply negative
 transCoefficients :: [Expr] -> [Expr]
 transCoefficients es
-  | head es == exactDbl 1 = map (\x -> if x == exactDbl 0 then exactDbl 0 else neg x) $ tail es
-  | otherwise = map (\x -> if x == exactDbl 0 then exactDbl 0 else neg x) $ tail $ map ($/ head es) es
+  | head es == exactDbl 1 = mapNeg $ tail es
+  | otherwise = mapNeg $ tail $ map ($/ head es) es
+    where mapNeg = map (\x -> if x == exactDbl 0 then exactDbl 0 else neg x)
 
 -- | Add Identity Matrix to Coefficients
 -- | len is the length of the identity row,

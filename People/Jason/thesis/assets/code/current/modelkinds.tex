@@ -29,7 +29,8 @@ data ModelKinds e where
   -- ^ TODO: Remove (after having removed all instances of it).
 
 
--- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
+-- | 'ModelKinds' carrier, used to carry commonly overwritten 
+--   information from the IMs/TMs/GDs.
 data ModelKind e = MK {
   _mk     :: ModelKinds e,
   _mkUID  :: UID,
@@ -37,5 +38,5 @@ data ModelKind e = MK {
 }
 \end{haskell}
 
-\intodo{First TODO in \Cref{lst:curModelKinds} is seemingly wrong, would it be
-  unethical to remove it?}
+\intodo{First TODO in \Cref{lst:curModelKinds} is seemingly wrong, I need to
+  clarify that with NewDEModel vs DEModel}

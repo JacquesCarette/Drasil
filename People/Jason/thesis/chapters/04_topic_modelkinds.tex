@@ -1,5 +1,8 @@
 % ModelKinds -- Theory types / discrimination -- ``Expressions in context''
 
+\chapter{Framing Theories}
+\label{chap:modelkinds}
+
 In working to understand some phenomenon, we often look to the boundaries of our
 understandings of the phenomenon — the open-ended questions and gaps in our
 knowledge. In any domain of knowledge (such as mathematics, philosophy, physics,
@@ -65,6 +68,11 @@ least four (4) kinds for their \acs{srs} template:
 \end{enumerate}
 
 \intodo{Example of a theory/instance model here.}
+
+The Instance Models and Data Definitions are to be directly used in the solving
+algorithm for the whole system, while the General Definitions and Theory Models
+provide justification for the existence of the Instance Models, and the Data
+Definitions are provided and relatively unimportant/uncritical to the system.
 
 Since the SmithEtAl generator focuses itself on knowledge captured in the form
 of the \acs{srs} template, Drasil requires a comprehensive understanding of both
@@ -226,6 +234,10 @@ in \RelationConcept{}s. Namely,
 		            constraints at the very least should be immediately usable
 		            in creating assertions in the generated code.
 
+		      \item The conversion relied on the \intodo{relToQD} hack.\todo{Add
+			            code snippet of original relToQD and discuss how it
+			            wasn't a sustainable solution for the long-term.}
+
 	      \end{itemize}
 
 	\item Existing transformation of \RelationConcept{}s into \acs{gool} relies
@@ -297,7 +309,12 @@ seamlessly write expressions in either, or both, languages at the same time.
 \ModelExpr{}. As such, the \acs{ttf} encoding won't allow terms from
 \ModelExpr{} to be interpreted into \Expr{} unless they have a definite value
 because it will be impossible to describe the terms unique to \ModelExpr{} in
-terms of the \Expr{} language.
+terms of the \Expr{} language. However, it is possible (and is done normally) to
+convert \Expr{}s into \ModelExpr{}s for usage in generating the \acs{srs}
+documents, which primarily expect \ModelExpr{}s for transcribing mathematical
+expressions. Furthermore, with \ModelExpr{}, we may use instances of \todo{ref
+	Current Express Typeclass} to define how various chunks can be described
+visually, using this mathematical modelling language.
 
 Continuing, we've noticed that there are residual terms left in \Expr{} that
 don't quite relate to mathematics, but to ``code'' specifically (here, ``code''
@@ -307,21 +324,25 @@ expressions: \CodeExpr{} (\todo{refCurrentCodeExprHaskell}).
 
 Finally, we end up with 3 languages, as shown in \refLanguageDivision{}: \Expr{}
 (\refCurrentExprHaskell{}), \ModelExpr{} (\refCurrentModelExprHaskell{}), and
-\CodeExpr{} (\todo{refCurentCodeExprHaskell}).
+\CodeExpr{} (\todo{refCurentCodeExprHaskell}). Each language has its own
+specific domain, and, although there is some overlap between each, we are able
+to enforce weaker rules on each formation through their \acs{ttf} instances if
+needed.
 
 Relating back to \refTheoriesWithoutModelKinds{}, we may observe that there is a
-transformation from \textit{Theory} to \textit{Mathematical Knowledge}. This may
-seem peculiar because one would expect the \textit{theory} to really be the
-\textit{mathematical knowledge}. Presently, the mathematical knowledge is
-implicitly built into transformers that work with \RelationConcept{}s
-(theories). The explicit information is \textit{lost} in the Haskell-level
-transformation function that makes generation possible. To resolve this, we need
-to reconcile \textit{theories} with \textit{mathematical knowledge},
-strengthening the \textit{depth of knowledge} contained in a theory. Should this
-occur, we should observe \refTheoriesWithoutModelKinds{} having the
-\textit{Theory} and \textit{Mathematical Knowledge} nodes merged, and have the
-expressions understood to only be one of many possible ``views'' of higher-level
-usable knowledge. In other words, the expressions would not be used to transfer
+transformation from \textit{Theory} (realistically, these expression languages
+discussed) to \textit{Mathematical Knowledge}. This may seem peculiar because
+one would expect the \textit{theory} to really be the \textit{mathematical
+	knowledge}. Presently, the mathematical knowledge is implicitly built into
+transformers that work with \RelationConcept{}s (theories). The explicit
+information is \textit{lost} in the Haskell-level transformation function that
+makes generation possible. To resolve this, we need to reconcile
+\textit{theories} with \textit{mathematical knowledge}, strengthening the
+\textit{depth of knowledge} contained in a theory. Should this occur, we should
+observe \refTheoriesWithoutModelKinds{} having the \textit{Theory} and
+\textit{Mathematical Knowledge} nodes merged, and have the expressions
+understood to only be one of many possible ``views'' of higher-level usable
+knowledge. In other words, the expressions would not be used to transfer
 knowledge any longer, but they might remain as one component of it. Through
 resolving these issues, we will have deeper knowledge available at Drasils
 compile-time, and we will be able to better understand which theories are usable
@@ -353,16 +374,25 @@ creation of \ModelKind{} and \ModelKinds{}. Please note that this aggregation is
 based purely on the existing model examples in the existing Drasil case studies,
 and the existing models are \textit{incomplete} in the larger scope.
 
+\intodo{What must each kind of model provide for them to be candidates for a
+	ModelKind type?}
+
 \currentModelKindsHaskell{}
 
 \subsection{Quantity Definitions}
 
-\EquationalModel{}s are theories that contain information about definitions of
-symbols, built using a \QDefinition{}\todo{refCurrentQDefinitionHaskell}. If an
-\EquationalModel{} deals with theoretical symbols and is defined using either a
-\ModelExpr{} or an \Expr{}, it may be used in Theory Models and General
-Definitions. If an \EquationalModel{} is defined using an \Expr{} and deals with
-only the non-abstract\todo{Is there a name for this?} symbols, then the
+Assume \(y = x\) is transcribed as a \RelationConcept{}: while \(y = x\) might
+conventionally be seen as ``y is equal to x'', we might want, in our model, for
+it to be understood as ``x is defined by y'' but displayed differently. Here,
+\(=\) is overloaded as ``definition'', instead of what \(=\) was defined as in
+\Expr{}, as an ``equality'' operator. To resolve this overloading and weak
+knowledge capture of definitions, we create \EquationalModel{}s: theories that
+contain information about definitions of symbols, built using a
+\QDefinition{}\todo{refCurrentQDefinitionHaskell}. If an \EquationalModel{}
+deals with theoretical symbols and is defined using either a \ModelExpr{} or an
+\Expr{}, it may be used in Theory Models and General Definitions. If an
+\EquationalModel{} is defined using an \Expr{} and deals with only the
+non-abstract\todo{Is there a name for this?} symbols, then the
 \EquationalModel{} is usable for code generation. At the moment, there is no
 information attached to symbols yet regarding whether they are abstract or not,
 so that portion of the rule is not enforced.
@@ -377,7 +407,9 @@ using \EquationalConstraints{}, which are built on
 \ConstraintSet{}s\todo{refCurrentConstraintSetHaskell}. At the moment, these are
 not used in code generation, and are pending design for usage in code generation
 as the translation from them into software is unclear and may be interpreted
-differently by readers.
+differently by readers. This model can, and should, eventually also be usable in
+code generation once there is interest in creating runtime assertions of
+symbols.
 
 \intodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
 	the SRS.}
@@ -389,24 +421,34 @@ multiple ways for a particular theoretical symbol to be defined. This is
 captured in Drasil by \EquationalRealm{}s: modelled after realms\todo{Cite
 	realms?}. This model kind is intended specifically for retaining information
 about conscious choices made along the way to create Instance Models. An
-\EquationalRealm{} is based on a \MultiDefn{}\todo{refCurrentMultiDefnHaskell}.
+\EquationalRealm{} is based on a \MultiDefn{}\todo{ref Current MultiDefn
+	Haskell}, and is intended for forming \QDefinition{}s through choosing
+definitions, through refinements, from the \MultiDefn{}s.
 
 \intodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
 
 \subsection{Differential Equations}
 
-\intodo{Continue writing here.}
-
-\begin{itemize}
-
-	\item \DEModel{} and \NewDEModel{}
-
-\end{itemize}
+\DEModel{} is the simple \RelationConcept{}-style capture of differential
+equation-related theories, and only exists as a placeholder until all
+differential equation models are converted into one of the other \ModelKinds{}.
+For related solving of differential equations, \DEModel{} relies, implicitly, on
+a developer writing a related \ODEInfo{}\todo{ref Current ODEInfo} packet which
+the code generator can use to solve the system.\todo{Rewrite above to be more
+	descriptive.} Actively being reconstructed in Drasil\todo{Cite Dongs work?},
+\NewDEModel{} is the replacement for \DEModel{}, aiming to expose more
+information about well-understood differential equations and related areas.
+\NewDEModel{} will eventually be renamed to \DEModel{} once all existing
+\DEModel{} models have been upgraded.
 
 \intodo{Example of a DEModel/NewDEModel and a RelationConcept in Haskell code,
 	the SRS, and the related ODEInfo and code.}
 
 \subsection{Leftovers}
+
+\intodo{Instead of writing anything here, I'm going to re-evaluate the existing
+	leftover models and see if they can be replaced with any of the existing or
+	if they need a new one.}
 
 \begin{itemize}
 
@@ -414,80 +456,46 @@ about conscious choices made along the way to create Instance Models. An
 
 \end{itemize}
 
-Incorporating \ModelKinds{} and reaping its benefits, we obtain, approximately,
-the flow of mathematical knowledge as shown in \refTheoriesWithModelKinds{}.
+\section{Theories Undiscussed}
+
+\ModelKinds{} is an enumeration of the currently handled model types. Each
+``model'' is meant to expose information to the Haskell compiler and for other
+fragments of knowledge to make use of. \ModelKinds{} is obviously an incomplete
+enumeration, and will grow as we need more kinds of models.
+
+Through incorporating \ModelKinds{} and reaping its benefits, we obtain,
+approximately, the flow of mathematical knowledge as shown below, in
+\refTheoriesWithModelKinds{}.
 
 \theoriesWithModelKinds{}
 
-\intodo{Explain why \refTheoriesWithModelKinds{} is better than
+Comparing \refTheoriesWithModelKinds{} with \refTheoriesWithoutModelKinds{}, we
+observe a decrease in the scary orange colouring! The focal difference in the
+two figures (and the working pre-existing and current) lies in the understanding
+of a theory. Previously, the ``theory'' was captured by the \RelationConcept{}s
+themselves, captured fully by a single \Expr{} (the original universal version).
+The mathematical knowledge of the theory was never explicitly captured and
+relied on brittle
+
+\intodo{Continue writing here.}
+
+\intodo{Explain why \refTheoriesWithModelKinds{} is an improvement over
 	\refTheoriesWithoutModelKinds{}.}
 
-\intodo{Rewrite the point form notes in the ModelKinds section.}
+\intodo{What do we learn from doing this conversion, about the greater part
+	about encoding knowledge?}
 
-\section{Problem}
+\intodo{Future Work: As ModelKinds is written using a GADT, it is difficult to
+	extend its functionality. A work in progress re-design of ModelKinds,
+	relying on \acs{ghc}s ConstraintKinds, uses Haskell-level typeclasses to
+	describe what a model satisfying the needs of being a ``ModelKind'' must
+	provide in order to be treated as a ``ModelKind''. These typeclass instances
+	may be thought of as proofs that satisfy the requirements.}
 
-\begin{itemize}
+\intodo{Future Work: The type parameters (in ModelKinds, QDefinition, and
+	MultiDefn) used should not be worried about. The holes used are primarily
+	used for \Expr{} and \ModelExpr{}, where \Expr{} indicates that the model is
+	usable in code generation, while \ModelExpr{} indicates that it is not
+	usable in code generation.}
 
-	\item For example, assuming the following expressions are written using the
-	      existing mathematical Expr language in Drasil\ldots{}
-	      \begin{itemize}
-
-		      \item While \(y = x\) might conventionally be seen as ``y is equal
-		            to x'', we might want, in our model, for it to be understood
-		            as ``x is defined by y'' but displayed differently. Here,
-		            \(=\) is also shown to have been previously abused by being
-		            equality instead of definition.
-
-		      \item \(a = b = c = ... = d\) can be ambiguously read\ldots{}
-
-		      \item Truth statements such as \(y < x\) might be usable in
-		            asserting constraints at software runtime, but it's
-		            difficult to find a place for it to belong without extra
-		            context.
-
-	      \end{itemize}
-
-\end{itemize}
-
-\section{Solution}
-
-\begin{itemize}
-
-	\item Mathematical expressions may have definitive meanings at different
-	      levels of interpretation. Splitting our focal expression language into
-	      3 variants is easy thanks to GADTs and TTF \cite{Carette2009};
-	      CodeExpr, ModelExpr, and Expr. This will allow us to restrict terms to
-	      the different levels of interpretation through a common type (either
-	      using the GADT, or the TTF constraints).
-
-	\item Splitting Expr into 3 variants; Expr, CodeExpr, and ModelExpr. This
-	      allows us to both segregate terms to particular domains, and add weak
-	      typing where necessary, as required (e.g., areas where we might
-	      require a dependently typed host language).
-
-	      \begin{itemize}
-
-		      \item
-		            \url{https://github.com/JacquesCarette/Drasil/issues/1220}
-
-	      \end{itemize}
-
-
-	\item Replacing ``RelationConcepts'':
-
-	      \begin{itemize}
-
-		      \item We can still push out ModelExprs and Exprs from things where
-		            necessary, if they can be explained using them.
-
-		      \item The type parameters used should not be worried about. The
-		            holes used are primarily used for \Expr{} and \ModelExpr{},
-		            where \Expr{} indicates that the model is usable in code
-		            generation, while \ModelExpr{} indicates that it is not
-		            usable in code generation.
-
-	      \end{itemize}
-
-\end{itemize}
-
-\intodo{Remaining problems}
+\intodo{Focal remaining problem: type information is neglected.}

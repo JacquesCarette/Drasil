@@ -59,8 +59,8 @@ CodeFuncChunk -> Callable;
 CodeFuncChunk -> Eq;
 CodeFuncChunk -> MayHaveUnit;
 CodeExpr -> CodeExprC;
-LL.Literal -> CanGenCode;
-LD.Expr -> CanGenCode;
+LL_Literal -> CanGenCode;
+LD_Expr -> CanGenCode;
 CodeExpr -> LiteralC;
 CodeExpr -> ExprC;
 }

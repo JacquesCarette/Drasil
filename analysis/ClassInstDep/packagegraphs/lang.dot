@@ -482,7 +482,7 @@ UnlabelledContent -> HasContents;
 Contents -> HasContents;
 LabelledContent -> Referable;
 Expr -> ExprC;
-M.ModelExpr -> ExprC;
+M_ModelExpr -> ExprC;
 Expr -> Eq;
 Expr -> LiteralC;
 Literal -> LiteralC;

@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.DifferentialModel (
   -- * Input Language
   ($^^), ($*), ($+),
   -- * Constructors
-  makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE, makeASingleDETest,
+  makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE,
   formEquations
 ) where
 
@@ -46,7 +46,7 @@ type LHS = [Term]
   depVar is the dependent variable, d is the dth derivative
 -}
 ($^^) :: ConstrConcept -> Integer -> Unknown
-($^^) _ unk = unk
+($^^) _ unk' = unk'
 
 {-
   Input Language represent Term which a coefficient multiple an unknown
@@ -82,9 +82,8 @@ data DifferentialModel = SystemOfLinearODEs {
 }
 makeLenses ''DifferentialModel
 
-{-
-  Information for solving an initial value problem
--}
+
+-- Information for solving an initial value problem
 data InitialValueProblem = IVP{
   initTime :: Expr,
   finalTime :: Expr,
@@ -146,7 +145,7 @@ formAllUnknown unks dep ind = map (\x -> formAUnknown x dep ind) unks
 
 -- | Form a derivative of a dependent variable
 formAUnknown :: Unknown -> ConstrConcept-> UnitalChunk -> ModelExpr
-formAUnknown unk dep = nthderiv (toInteger unk) (sy (qw dep))
+formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (qw dep))
 
 {-
   Create a 'DifferentialModel' by giving a independent variable, a dependent variable 
@@ -159,35 +158,23 @@ formAUnknown unk dep = nthderiv (toInteger unk) (sy (qw dep))
     uid ('String'), term ('NP'), definition ('Sentence').
 -}
 makeASystemDE :: UnitalChunk -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
-makeASystemDE indepVar depVar coeffs unks const id term defn
- | length coeffs /= length const =
+makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
+ | length coeffs /= length const' =
   error "Length of coefficients matrix should equal to the length of the constant vector"
  | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs indepVar depVar coeffs unks const(dccWDS id term defn)
+ | otherwise = SystemOfLinearODEs indepVar' depVar' coeffs unks const'(dccWDS id' term' defn')
 
 -- | Create a single ODE with its left hand side and right hand side
 makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
-makeASingleDE indepVar depVar lhs const id term defn
- | length coeffs /= length [const] =
+makeASingleDE indepVar'' depVar'' lhs const'' id'' term'' defn''
+ | length coeffs /= length [const''] =
   error "Length of coefficients matrix should equal to the length of the constant vector"
  | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs indepVar depVar coeffs unks [const](dccWDS id term defn)
-  where unks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar
+ | otherwise = SystemOfLinearODEs indepVar'' depVar'' coeffs unks [const''](dccWDS id'' term'' defn'')
+  where unks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar''
         coeffs = [createCoefficients lhs unks]
-
-makeASingleDETest :: UnitalChunk -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
-makeASingleDETest indepVar depVar lhs const id term dmDefn
- | length coeffs /= length transConsts =
-  error $ "Length of coefficients matrix should equal to the length of the constant vector" -- ++ show (length (coeffs)) ++ show (length transConsts)
- | not $ isCoeffsMatchUnknowns coeffs transUnks =
-  error $ "The length of each row vector in coefficients need to equal to the length of unknowns vector" -- ++ show (length (last coeffs)) ++ show (length transUnks)
- | otherwise = SystemOfLinearODEs indepVar depVar coeffs transUnks transConsts(dccWDS id term dmDefn)
-  where allUnks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar
-        transUnks = transUnknowns allUnks
-        coeffs = addIdentityCoeffs [transCoefficients $ createCoefficients lhs allUnks] (length transUnks) 0
-        transConsts = addIdentityConsts [const] (length transUnks)
 
 -- | Function to check whether dimension of coefficient is match with the unknown vector
 isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
@@ -202,9 +189,9 @@ findHighestOrder = foldr1 (\x y -> if x ^. unk >= y ^. unk then x else y)
 -- | Create all possible unknowns based on the highest order.
 -- | The order of the result list is from the highest degree to zero degree.
 createAllUnknowns :: Unknown -> ConstrConcept -> [Unknown]
-createAllUnknowns highestUnk depVar
+createAllUnknowns highestUnk depv
   | highestUnk  == 0  = [highestUnk]
-  | otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depVar
+  | otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depv
 
 -- | Create Coefficients base on all possible unknowns
 -- | The order of the result list is from the highest degree to zero degree.
@@ -262,17 +249,28 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
         transEs = addIdentityCoeffs [transCoefficients $ head (dm ^. coefficients)] (length transUnks) 0
         transConsts = addIdentityConsts (dm ^. dmConstants) (length transUnks)
 
---formEquations :: [[Expr]] -> [Unknown] -> [Expr] -> [Expr]
+{-
+  Form well-formatted ODE equations which the ODE solvers can solve. For example:  
+  A                 *  X      + B     = X'
+
+  0  1      0   0      x'''     0       equation 1
+  0  0      1   0      x''      0       equation 2
+  0  0      0   1      x'       0       equation 3 
+  -8 sin(t) -3  0      x        t^2     equation 4 
+
+  A: [[Expr]], X: [Unknown], B: [Expr]
+  return [equation 1, equation 2, equation 3, equation 4]
+-}
 formEquations :: [[Expr]] -> [Unknown] -> [Expr] -> ConstrConcept-> [Expr]
 formEquations [] _ _ _ = []
 formEquations _ [] _ _ = []
 formEquations _ _ [] _ = []
-formEquations (ex:exs) unks (y:ys) depVar =
-  (if y == exactDbl 0 then finalExpr else finalExpr `addRe` y) : formEquations exs unks ys depVar
-  where indexUnks = map (idx (sy depVar) . int) unks
-        filteredExprs = filter (\x -> fst x /= exactDbl 0) (zip ex indexUnks)
-        termExprs = map (uncurry mulRe) filteredExprs
-        finalExpr = foldl1 addRe termExprs
+formEquations (ex:exs) unks (y:ys) depVa =
+  (if y == exactDbl 0 then finalExpr else finalExpr `addRe` y) : formEquations exs unks ys depVa
+  where indexUnks = map (idx (sy depVa) . int) unks -- create X
+        filteredExprs = filter (\x -> fst x /= exactDbl 0) (zip ex indexUnks) -- remove zero coefficients
+        termExprs = map (uncurry mulRe) filteredExprs -- multiple coefficient with depend variables
+        finalExpr = foldl1 addRe termExprs -- add terms together
 
 -- | Construct an InitialValueProblem.
 makeAIVP :: Expr -> Expr -> [Expr] -> InitialValueProblem

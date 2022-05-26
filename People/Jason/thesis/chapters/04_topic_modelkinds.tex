@@ -34,22 +34,37 @@ generate a series of representational software programs. Thankfully, Smith and
 Lai \cite{SmithAndLai2005} break down theories relevant to \acs{scs} into at
 least four (4) kinds for their \acs{srs} template:
 
-\todo{Define the 4 kinds of models here.}
+\intodo{There is a better discussion of these 4 on GitHub (Issue \#2599).}
+\intodo{Insider knowledge: the 3 ``models'' are actively being re-thought, and
+	\textit{are} being renamed to just ``theories''.}
+
 \begin{enumerate}
 
-	\item \textbf{Theory Models}:
+	\item \textbf{Theory Models}: A ``theory presentation'' \todo{Cite ``Theory
+		      Presentation'', I'm not quite sure what to cite for this yet}: an
+	      abstract theory, highly general and unspecific, with room for
+	      refinement. Typically, these are names coupled with information
+	      contained as axioms and data that make up a coherent story, but
+	      that are too vague to be immediately usable by the developers
+	      other than for refining into Instance Models.
 
-	\item \textbf{General Definitions}:
+	\item \textbf{General Definitions}: A partially refined theory, typically
+	      bearing a stronger relation to the context of the \acs{srs} than the
+	      Theory Models. However, still, these are generally theoretical and
+	      abstract, much like Theory Models.
 
-	\item \textbf{Instance Models}:
+	\item \textbf{Instance Models}: A fully refined theory, derived from the
+	      Theory Models and General Definitions, and directly usable by
+	      implementors of the \acs{srs}.
 
-	\item \textbf{Data Definitions}:
+	\item \textbf{Data Definitions}: Symbols that are defined with basic
+	      expressions of other symbols and inputs. Typically, these are
+	      definitions that are ``given'', and used for making inputs easier to
+	      work with for the instance models.
 
 \end{enumerate}
 
 \intodo{Example of a theory/instance model here.}
-
-\intodo{Insider knowledge: the theories are actively being re-thought.}
 
 Since the SmithEtAl generator focuses itself on knowledge captured in the form
 of the \acs{srs} template, Drasil requires a comprehensive understanding of both

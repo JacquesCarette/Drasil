@@ -10,17 +10,16 @@ import Drasil.DblPendulum.Unitals(massObj_1, massObj_2, lenRod_1, lenRod_2, pend
 import Prelude hiding (sin, cos)
 
 dblPenODEOpts :: ODEOptions
-dblPenODEOpts = odeOptions RK45 (dbl 0.001) (dbl 0.001) (dbl 0.01)
+dblPenODEOpts = odeOptions RK45 (dbl 0.00001) (dbl 0.00001) (dbl 0.1)
 
 dblPenODEInfo :: ODEInfo
 dblPenODEInfo = odeInfo
   (quantvar time)
   (quantvar pendDisAngle)
-  [quantvar massObj_1,
-    quantvar massObj_2, quantvar lenRod_1, quantvar lenRod_2]
+  [quantvar massObj_1, quantvar massObj_2, quantvar lenRod_1, quantvar lenRod_2]
   (exactDbl 0)
   (exactDbl 30) -- final time
-  [dbl 1.3463968515384828, exactDbl 0, dbl 2.356194490192345, exactDbl 0]
+  [dbl 1.3463968515384828, exactDbl 0, dbl 2.356194490192345, exactDbl 0] -- unit in radian
   [ o1,
     neg g `mulRe`
       (two `mulRe` m1 `addRe` m2) `mulRe` sin t1 $-

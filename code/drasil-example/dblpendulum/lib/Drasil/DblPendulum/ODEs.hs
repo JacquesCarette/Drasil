@@ -1,6 +1,6 @@
 module Drasil.DblPendulum.ODEs (dblPenODEOpts, dblPenODEInfo) where
 
-import Language.Drasil (recip_, ExprC(..), LiteralC(int, exactDbl, dbl), square)
+import Language.Drasil (ExprC(..), LiteralC(int, exactDbl, dbl), square)
 import Language.Drasil.Code (odeInfo, odeOptions, quantvar, ODEInfo,
   ODEMethod(RK45), ODEOptions)
 

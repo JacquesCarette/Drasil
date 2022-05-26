@@ -14,11 +14,10 @@ import Drasil.DblPendulum.ODEs (dblPenODEInfo)
 
 code :: CodeSpec
 code = codeSpec fullSI choices []
--- Sub interpolation mod into list when possible
 
 choices :: Choices
 choices = defaultChoices {
-  lang = [Python],
+  lang = [Python, Cpp, CSharp, Java],
   architecture = makeArchit (Modular Combined) Program,
   dataInfo = makeData Unbundled (Store Bundled) Const,
   optFeats = makeOptFeats

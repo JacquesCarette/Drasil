@@ -9,7 +9,7 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst, requirement, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
-import Data.Drasil.SI_Units (metre, degree, kilogram, newton)
+import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
 import Data.Drasil.Concepts.Physics (twoD)
@@ -145,11 +145,11 @@ angularVel_2 = makeUCWDS "w_2" (nounPhraseSent $ phraseNP (QP.angularVelocity `t
 
 pendDisAngle_1 = makeUCWDS "theta_1" (nounPhraseSent $ phraseNP (angle `the_ofThe` firstRod))
         (S "The" +:+ phraseNP (angle `the_ofThe` firstRod))
-        (sub lTheta label1) degree
+        (sub lTheta label1) radian
 
 pendDisAngle_2 = makeUCWDS "theta_2" (nounPhraseSent $ phraseNP (angle `the_ofThe` secondRod))
         (S "The" +:+ phraseNP (angle `the_ofThe` secondRod))
-        (sub lTheta label2) degree
+        (sub lTheta label2) radian
 
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
@@ -184,5 +184,5 @@ pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
   "Column vector of displacement of rods with its derivatives" 
-  lTheta degree (Vect Rational)
+  lTheta radian (Vect Real)
   [physc $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

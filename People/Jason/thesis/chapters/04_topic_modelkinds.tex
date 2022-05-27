@@ -18,14 +18,14 @@ theories, axioms, corollaries, amongst other things. As mathematicians
 transferring knowledge to one another, we often use a written form of knowledge,
 though unlikely, potentially, with a precise structure to our transcription of
 the knowledge, but still, the structure is textual. We might break up the
-transcription of the knowledge into sections. The sections of a theory may have
-a name, a natural language description, a derivation, some information regarding
-its origin (e.g., a reference), and a formalization of the theories important
-information in a precise language. Of course, for a mathematical theory, a
-mathematical language would be used. Describing a programming language artifact,
-we might prefer to call our theories by a series of other names (e.g.,
-functions/methods, constants, modules, packages, libraries, \acsp{api},
-\acsp{ast}.
+transcription of the knowledge into its logical constituents. The components of
+a theory may be a name, a natural language description, a derivation, some
+information regarding its origin (e.g., a reference), and a formalization of the
+theories important information in a precise language. Of course, for a
+mathematical theory, a mathematical language would be used. Describing a
+programming language artifact, we might prefer to call our theories by a series
+of other names (e.g., functions/methods, constants, modules, packages,
+libraries, \acsp{api}, \acsp{ast}.
 
 In Drasil, both of these languages are of great importance. The mathematical
 field of knowledge is directly used in at least two domains currently captured:
@@ -78,7 +78,8 @@ Since the SmithEtAl generator focuses itself on knowledge captured in the form
 of the \acs{srs} template, Drasil requires a comprehensive understanding of both
 fields in order to generate representational software for the \acs{srs}. The
 focus of the scientific requirements documents are to transcribe the relevant
-knowledge of a \acs{scs} system as developed by a domain/scientific expert. For
+knowledge of a \acs{scs} system for end-user developers to satisfy when
+developing \acs{scs}, and as developed by a domain/scientific expert. For
 example, \todo{SRS document example} is used to fully explain \todo{something}
 such that a software developer can construct a program based on it. Of course,
 if the \acs{srs} document is to be truly sufficient for a software developer to
@@ -114,21 +115,27 @@ just an instance of a universal mathematical language which conveys their
 information, but given a type synonym to indicate that the instance should
 be a mathematical relation.
 
+\intodo{Theory Models as well rely on this same mathematical language used in
+	\RelationConcept{}s to describe their own theories as well. The encoding is
+	slightly better as it exposes more of the expressions, but, still, the
+	expressions are left problematic.}
+
 \section{A Universal Math Language}
 \label{sec:modelkinds:language}
 
 \originalExprHaskell
 
-\Expr{} (defined above, in \refOriginalExprHaskell{} with an \acs{adt})
-represents the hypothetical mathematical language used to discuss the
-mathematics relevant to common \acs{scs}, specifically, at least to
-under/graduate-level physics problems. The language contains the commonly found
-operations in a well-understood physics textbook (here, with a focus on
-graduate-level scientific problems). The mathematical language is universal,
-covering a wide range of knowledge, including facilities for creating commonly
-used primitive data types, operations, and functions  in mathematics, physics,
-and computer science and programming languages. For example, \todo{An
-	expression.} is transcribed in Drasil as follows:
+\Expr{} (defined above, in \refOriginalExprHaskell{} with an \acs{adt}\todo{I
+	should probably discuss the ADT portion a bit more.}) represents the
+hypothetical mathematical language used to discuss the mathematics relevant to
+common \acs{scs}, specifically, at least to under/graduate-level physics
+problems. The language contains the commonly found operations in a
+well-understood physics textbook (here, with a focus on graduate-level
+scientific problems). The mathematical language is universal, covering a wide
+range of knowledge, including facilities for creating commonly used primitive
+data types, operations, and functions  in mathematics, physics, and computer
+science and programming languages. For example, \todo{An expression.} is
+transcribed in Drasil as follows:
 
 \intodo{Transcription of the above expression.}
 
@@ -145,7 +152,7 @@ theories are an accurate reflection of writing out mathematics involved as one
 might write them down on paper: exactly as they please. In modelling any
 problem, one will, of course, model the work of their pencil and paper. This is
 exactly what occurs here. Theories here are shallow representations of
-knowledge, that mimic your pencil and paper.
+knowledge, that mimic your pencil and papers work to a clueless reader.
 
 \section{Usage: Converting to Software}\todo{\ldots{} and \acs{srs} sections}
 
@@ -159,12 +166,12 @@ Unfortunately, issues occur when attempting to convert the knowledge contained
 in \RelationConcept{}s. Namely,
 
 \intodo{I should probably rewrite the below point form notes as paragraphs as
-	well.}
+	well, even though I originally intended to have it as a numbered list.}
 
 \begin{enumerate}
 
 	\item The transformation of \(\RelationConcept{} \rightarrow \acs{gool}\) is
-	      not \textit{total} (e.g., not all terms of the \Expr{} language can be
+	      not \textit{total} (i.e., not all terms of the \Expr{} language can be
 	      mapped into a representational \acs{gool} term).
 
 	      \begin{itemize}
@@ -186,9 +193,10 @@ in \RelationConcept{}s. Namely,
 
 	      \begin{itemize}
 
-		      \item When writing a pencil \& paper, we usually write with extra
-		            context (generally more information that needs to be read to
-		            fully understand some expression). We might also infer
+		      \item When writing with pencil and paper, we usually write with
+		            extra context (generally more information that needs to be
+		            read to fully understand some expression), assuming the
+		            reader understands that context. We might also infer
 		            information about the model. Unfortunately, mechanizing
 		            inference, without any sort of context or other knowledge,
 		            is difficult, artificial learning is a whole field of study
@@ -236,13 +244,21 @@ in \RelationConcept{}s. Namely,
 
 		      \item The conversion relied on the \intodo{relToQD} hack.\todo{Add
 			            code snippet of original relToQD and discuss how it
-			            wasn't a sustainable solution for the long-term.}
+			            wasn't a sustainable solution for the long-term. relToQD
+			            was exactly the implicit knowledge I mentioned, it
+			            assumes, without statically checking consistency, that
+			            the Relations/Exprs provided as input for code
+			            generation were all of the form (\(y = f(\ldots{})\).}
+
+		      \item The above is what leads to the brittle untotal conversion of
+		            theories to code.
 
 	      \end{itemize}
 
 	\item Existing transformation of \RelationConcept{}s into \acs{gool} relies
 	      on unstable transformation caused by need to write in a precise
 	      digestible form, with no static checks done at compile-time.
+	      \intodo{Mention ODE -> code generation.}
 
 \end{enumerate}
 
@@ -261,38 +277,40 @@ must be reconciled and merged with the \RelationConcept{}s in some capacity.
 
 Fundamentally, the issue lies in that the information exposed for Drasil to make
 use of is too ``shallow''. The raw expressions are great for viewing and
-human-guided inference, but not for a computer to systematically use to generate
-things. At the moment, the available tools' type signatures (\todo{Show a type
-	signature}) would appear as something too amazing, so much so in fact, that one
-would (and should) question its accuracy. A hypothetical type signature,
-\inlineHs{RelationConcept -> Code}, is quite far fetched. Not all expressions
-that can possibly be contained in a \RelationConcept{} are usable in code
-generation\todo{Note somewhere in the thesis above that when we discuss
-	``code'', we really mean \acs{oo} programs and snippets}.
+human-guided inference by experts, but not an inexperienced person, or for a
+computer to systematically use to generate things. At the moment, the available
+tools' type signatures (\todo{Show a type signature}) would appear as something
+too amazing, so much so in fact, that one would (and should) question its
+accuracy. A hypothetical type signature, \inlineHs{RelationConcept -> Code}, is
+quite far fetched. Not all expressions that can possibly be contained in a
+\RelationConcept{} are usable in code generation\todo{Note somewhere in the
+	thesis above that when we discuss ``code'', we really mean \acs{oo} programs and
+	snippets}.
 
 \section{Language Division}
 
 \acs{gool} currently bears the burden of creating a family of software artifacts
 through describing a single \acs{gool} program. As we are specifically
-interested in \acs{scs}, this work bears the burden of ensuring that the
-conversion of the knowledge contained in the SmithEtAl template
-\cite{SmithAndLai2005} is stable and reliable. At the moment, it is possible to
-describe mathematical expressions that are completely unusable in \acs{gool}
-because \acsp{gool} primary targets are languages that rely on expressions with,
-at least, definite values. Of course, \Expr{} already contains terms that are
-without definite values. For example, \Expr{} (\refOriginalExprHaskell{})
-discusses derivations, integrations, spaces as primitive/literal values (largely
-symbolic, and unavailable in \acs{oo} languages), definition statements,
-equivalence\todo{I guess it's less-so about definite value, moreso about lack of
-	representation in \acs{oo} languages.}, and infinite series. Realistically, this
-information already \textit{exists} in Drasil, but it is not strongly enforced
-at Drasils Haskell-level compile-time. In other words, the information is not
+interested in generating families of \acs{scs} through strong knowledge capture,
+this work partially bears the burden of testing to ensure that the conversion of
+the knowledge contained in the SmithEtAl template \cite{SmithAndLai2005} is
+stable and reliable. At the moment, it is possible to describe mathematical
+expressions that are completely unusable in \acs{gool} because \acsp{gool}
+primary targets are languages that rely on expressions with, at least, definite
+values. Of course, \Expr{} already contains terms that are without definite
+values. For example, \Expr{} (\refOriginalExprHaskell{}) discusses derivations,
+integrations, spaces as primitive/literal values (largely symbolic, and
+unavailable in \acs{oo} languages), definition statements, equivalence\todo{I
+	guess it's less-so about definite value, moreso about lack of representation in
+	\acs{oo} languages.}, and infinite series. Realistically, this information
+already \textit{exists} in Drasil, but it is not strongly enforced at Drasils
+Haskell-level compile-time. In other words, the information is not
 \textit{exposed} to Haskells type system, but to Drasils runtime.
 
 In order to ensure that developers can only write ``usable'' grounded theories
 (``InstanceModels'') for the code generator to use, we have chosen to expose
-this information. In particular, we have chosen to expose it via language
-division.
+this information to the compiler. In particular, we have chosen to expose it via
+language division and type information.
 
 \languageDivision{}
 
@@ -300,7 +318,7 @@ division.
 (\refCurrentModelExprHaskell{}), a deeply embedded universal mathematical
 language. As we desire for it to be equally usable as \Expr{}, it is,
 essentially, the original \Expr{} without the language terms related to
-``code''\todo{e.g., \ldots{}}. In order to alleviate the stress involved with
+``code''\todo{i.e., \ldots{}}. In order to alleviate the stress involved with
 writing out the same expression in two (2) different languages, we use a
 \ACF{ttf} encoding of the two (2) languages (\refCurrentExprTTFHaskell{} and
 \refCurrentModelExprTTFHaskell{}). The \acs{ttf} encoding allows us to
@@ -320,11 +338,11 @@ Continuing, we've noticed that there are residual terms left in \Expr{} that
 don't quite relate to mathematics, but to ``code'' specifically (here, ``code''
 meaning the \acs{oo} ``code''). As such, we continue the division by moving
 those less related into their own language, specifically tailored to ``code''
-expressions: \CodeExpr{} (\todo{refCurrentCodeExprHaskell}).
+expressions: \CodeExpr{} (\todo{ref Current CodeExpr Haskell}).
 
 Finally, we end up with 3 languages, as shown in \refLanguageDivision{}: \Expr{}
 (\refCurrentExprHaskell{}), \ModelExpr{} (\refCurrentModelExprHaskell{}), and
-\CodeExpr{} (\todo{refCurentCodeExprHaskell}). Each language has its own
+\CodeExpr{} (\todo{ref Curent CodeExpr Haskell}). Each language has its own
 specific domain, and, although there is some overlap between each, we are able
 to enforce weaker rules on each formation through their \acs{ttf} instances if
 needed.
@@ -332,11 +350,12 @@ needed.
 Relating back to \refTheoriesWithoutModelKinds{}, we may observe that there is a
 transformation from \textit{Theory} (realistically, these expression languages
 discussed) to \textit{Mathematical Knowledge}. This may seem peculiar because
-one would expect the \textit{theory} to really be the \textit{mathematical
+one might expect the \textit{theory} to be precisely the \textit{mathematical
 	knowledge}. Presently, the mathematical knowledge is implicitly built into
 transformers that work with \RelationConcept{}s (theories). The explicit
-information is \textit{lost} in the Haskell-level transformation function that
-makes generation possible. To resolve this, we need to reconcile
+information is \textit{lost} in both the Haskell-level transformation function
+that makes generation possible and the external knowledge used to create the
+actual expression itself. To resolve this, we need to reconcile
 \textit{theories} with \textit{mathematical knowledge}, strengthening the
 \textit{depth of knowledge} contained in a theory. Should this occur, we should
 observe \refTheoriesWithoutModelKinds{} having the \textit{Theory} and
@@ -367,7 +386,7 @@ meta-level knowledge of the theories, lost in the Haskell implementation,
 becomes exposed and understood to Drasil. Ultimately, this is done through
 replacing \RelationConcept{} usage with \ModelKind{}, an aggregation of existing
 Drasil-related knowledge of mathematical theories. \ModelKind{} is defined using
-an \acs{gadt}, with one (1) type parameter. The type parameter is currently used
+a \acs{gadt}, with one (1) type parameter. The type parameter is currently used
 to determine whether the model is ``fully refined''/``grounded'' or not, and,
 hence, usable in code generation. \refCurrentModelKindsHaskell{} displays the
 creation of \ModelKind{} and \ModelKinds{}. Please note that this aggregation is
@@ -388,14 +407,15 @@ it to be understood as ``x is defined by y'' but displayed differently. Here,
 \Expr{}, as an ``equality'' operator. To resolve this overloading and weak
 knowledge capture of definitions, we create \EquationalModel{}s: theories that
 contain information about definitions of symbols, built using a
-\QDefinition{}\todo{refCurrentQDefinitionHaskell}. If an \EquationalModel{}
+\QDefinition{}\todo{ref Current QDefinition Haskell}. If an \EquationalModel{}
 deals with theoretical symbols and is defined using either a \ModelExpr{} or an
 \Expr{}, it may be used in Theory Models and General Definitions. If an
 \EquationalModel{} is defined using an \Expr{} and deals with only the
 non-abstract\todo{Is there a name for this?} symbols, then the
 \EquationalModel{} is usable for code generation. At the moment, there is no
-information attached to symbols yet regarding whether they are abstract or not,
-so that portion of the rule is not enforced.
+information attached to symbols yet regarding whether they are abstract or
+instanced, so that portion of the rule is not enforced\todo{Future Work: make
+	typed distinction between abstract and instanced symbols}.
 
 \intodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and the
 	generated code.}
@@ -403,13 +423,13 @@ so that portion of the rule is not enforced.
 \subsection{Constraints}
 
 Theories that define expressions that constrain models in some way are defined
-using \EquationalConstraints{}, which are built on
-\ConstraintSet{}s\todo{refCurrentConstraintSetHaskell}. At the moment, these are
-not used in code generation, and are pending design for usage in code generation
-as the translation from them into software is unclear and may be interpreted
-differently by readers. This model can, and should, eventually also be usable in
-code generation once there is interest in creating runtime assertions of
-symbols.
+using \EquationalConstraints{}, which are built on \ConstraintSet{}s\todo{ref
+	Current ConstraintSet Haskell} \todo{Describe what a ConstraintSet actually
+	is.}. At the moment, these are not used in code generation, and are pending
+design for usage in code generation as the translation from them into software
+is unclear and may be interpreted differently by readers. This model can, and
+should, eventually also be usable in code generation once there is interest in
+creating runtime assertions of symbols.
 
 \intodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
 	the SRS.}
@@ -419,11 +439,12 @@ symbols.
 The Theory Models and General Definition Models are unrefined, and may contain
 multiple ways for a particular theoretical symbol to be defined. This is
 captured in Drasil by \EquationalRealm{}s: modelled after realms\todo{Cite
-	realms?}. This model kind is intended specifically for retaining information
-about conscious choices made along the way to create Instance Models. An
-\EquationalRealm{} is based on a \MultiDefn{}\todo{ref Current MultiDefn
-	Haskell}, and is intended for forming \QDefinition{}s through choosing
-definitions, through refinements, from the \MultiDefn{}s.
+	realms? If so, from Dr. Carette and Yasmines paper?}. This model kind is
+intended specifically for retaining information about conscious choices made
+along the way to create Instance Models. An \EquationalRealm{} is based on a
+\MultiDefn{}\todo{ref Current MultiDefn Haskell}, and is intended for forming
+\QDefinition{}s through choosing definitions, through refinements, from the
+\MultiDefn{}s.
 
 \intodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
 
@@ -461,7 +482,7 @@ information about well-understood differential equations and related areas.
 \ModelKinds{} is an enumeration of the currently handled model types. Each
 ``model'' is meant to expose information to the Haskell compiler and for other
 fragments of knowledge to make use of. \ModelKinds{} is obviously an incomplete
-enumeration, and will grow as we need more kinds of models.
+enumeration, and will grow as the need for more kinds of models arises.
 
 Through incorporating \ModelKinds{} and reaping its benefits, we obtain,
 approximately, the flow of mathematical knowledge as shown below, in
@@ -474,8 +495,9 @@ observe a decrease in the scary orange colouring! The focal difference in the
 two figures (and the working pre-existing and current) lies in the understanding
 of a theory. Previously, the ``theory'' was captured by the \RelationConcept{}s
 themselves, captured fully by a single \Expr{} (the original universal version).
-The mathematical knowledge of the theory was never explicitly captured and
-relied on brittle
+The mathematical knowledge of the theory was never explicitly captured, and
+usage of theories relied on brittle transformations and implicit expectations of
+the written transcriptions.
 
 \intodo{Continue writing here.}
 

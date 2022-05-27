@@ -127,15 +127,15 @@ be a mathematical relation.
 
 \Expr{} (defined above, in \refOriginalExprHaskell{} with an \acs{adt}\todo{I
 	should probably discuss the ADT portion a bit more.}) represents the
-hypothetical mathematical language used to discuss the mathematics relevant to
-common \acs{scs}, specifically, at least to under/graduate-level physics
+hypothetical mathematical language used to discuss the mathematics relevant
+to common \acs{scs}, specifically, at least to under/graduate-level physics
 problems. The language contains the commonly found operations in a
 well-understood physics textbook (here, with a focus on graduate-level
-scientific problems). The mathematical language is universal, covering a wide
-range of knowledge, including facilities for creating commonly used primitive
-data types, operations, and functions  in mathematics, physics, and computer
-science and programming languages. For example, \todo{An expression.} is
-transcribed in Drasil as follows:
+scientific problems). The mathematical language is universal, covering a
+wide range of knowledge, including facilities for creating commonly used
+primitive data types, operations, and functions  in mathematics, physics,
+and computer science and programming languages. For example, \todo{An
+	expression.} is transcribed in Drasil as follows:
 
 \intodo{Transcription of the above expression.}
 
@@ -248,7 +248,10 @@ in \RelationConcept{}s. Namely,
 			            was exactly the implicit knowledge I mentioned, it
 			            assumes, without statically checking consistency, that
 			            the Relations/Exprs provided as input for code
-			            generation were all of the form (\(y = f(\ldots{})\).}
+			            generation were all of the form (\(y = f(\ldots{})\).
+			            See
+			            \url{https://github.com/JacquesCarette/Drasil/issues/628}
+			            for more information about state of relToQD w.r.t. RCs.}
 
 		      \item The above is what leads to the brittle untotal conversion of
 		            theories to code.
@@ -314,6 +317,8 @@ language division and type information.
 
 \languageDivision{}
 
+\intodo{Re: TTF: What Haskell/GHC language extensions did we need to use?}
+
 \Expr{} has its indefinite values split off into \ModelExpr{}
 (\refCurrentModelExprHaskell{}), a deeply embedded universal mathematical
 language. As we desire for it to be equally usable as \Expr{}, it is,
@@ -375,10 +380,10 @@ were transcribed in the expressions.
 Issues occurring due to weak knowledge capture may be resolved through strong
 knowledge capture. Beginning with the existing case studies of Drasil, we will
 attempt to classify our existing knowledge better. We aim to make
-\RelationConcept{} a ``view'' of other ``higher-order''\todo{Seems weird to say
-	higher-order, need something else most likely.} knowledge encodings. In other
-words, we replace \Expr{} as a knowlege container, and restrict its usage to
-strictly ``mathematical expressions'', as opposed to ``expressions'' and
+\RelationConcept{} a ``view'' of other ``higher-order''\todo{Seems inaccurate to
+	say higher-order, need something else most likely.} knowledge encodings. In
+other words, we replace \Expr{} as a knowlege container, and restrict its usage
+to strictly ``mathematical expressions'', as opposed to ``expressions'' and
 information about models/theories. One notable change is that we will require
 the new theory knowledge containers to be able to fully re-create the original
 shallow/raw \Expr{}s as a property of the new theory encodings. The once
@@ -394,7 +399,9 @@ based purely on the existing model examples in the existing Drasil case studies,
 and the existing models are \textit{incomplete} in the larger scope.
 
 \intodo{What must each kind of model provide for them to be candidates for a
-	ModelKind type?}
+	ModelKind type? One: they must be able to re-create the original Expr they
+	had been encoded as, in the new ModelExpr language, via their ``Express''
+	instance.}
 
 \currentModelKindsHaskell{}
 
@@ -417,8 +424,8 @@ information attached to symbols yet regarding whether they are abstract or
 instanced, so that portion of the rule is not enforced\todo{Future Work: make
 	typed distinction between abstract and instanced symbols}.
 
-\intodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and the
-	generated code.}
+\intodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and
+	the generated code.}
 
 \subsection{Constraints}
 
@@ -492,32 +499,65 @@ approximately, the flow of mathematical knowledge as shown below, in
 
 Comparing \refTheoriesWithModelKinds{} with \refTheoriesWithoutModelKinds{}, we
 observe a decrease in the scary orange colouring! The focal difference in the
-two figures (and the working pre-existing and current) lies in the understanding
-of a theory. Previously, the ``theory'' was captured by the \RelationConcept{}s
-themselves, captured fully by a single \Expr{} (the original universal version).
-The mathematical knowledge of the theory was never explicitly captured, and
-usage of theories relied on brittle transformations and implicit expectations of
-the written transcriptions.
+two figures (and the difference between the work pre-existing and current) lies
+in the understanding of a theory. Previously, the ``theory'' was captured by the
+\RelationConcept{}s themselves, captured fully by a single \Expr{} (the original
+universal version). The mathematical knowledge of the theory was never
+explicitly captured, and usage of theories was unsustainable due to reliance on
+brittle transformations \todo{ref Original relToQD Haskell} and implicit
+expectations of the written transcriptions. Now, the theories and the
+mathematical knowledge are unified with information exposed both by dissection
+of components as record entries, and by creating type information for
+classifying theories and relevant information. Notably, from the new encodings
+of the theories, we are still able to recreate the original \Expr{}s (or, now
+\ModelExpr{}s) that once represented them.
 
-\intodo{Continue writing here.}
-
-\intodo{Explain why \refTheoriesWithModelKinds{} is an improvement over
-	\refTheoriesWithoutModelKinds{}.}
+\intodo{Side-by-side figure comparison of \refTheoriesWithModelKinds{} and
+	\refTheoriesWithoutModelKinds{}}
 
 \intodo{What do we learn from doing this conversion, about the greater part
-	about encoding knowledge?}
+	about encoding knowledge? \ldots{}}
 
-\intodo{Future Work: As ModelKinds is written using a GADT, it is difficult to
-	extend its functionality. A work in progress re-design of ModelKinds,
-	relying on \acs{ghc}s ConstraintKinds, uses Haskell-level typeclasses to
-	describe what a model satisfying the needs of being a ``ModelKind'' must
-	provide in order to be treated as a ``ModelKind''. These typeclass instances
-	may be thought of as proofs that satisfy the requirements.}
+From this, we obtain a new general rule for future knowledge
+dissection/capture/encoding: when extracting information about the formation of
+certain language snippets and classifying that contextual information, we must
+ensure that we have obtained a generic means (algorithm) for reproducing the
+originating term from an instance of the new contextual information\todo{This is
+	awkwardly worded.}. In other words, there should be a generic method to
+reproduce the original information from the new information -- this is finding
+areas where we can add to the generation possibilities of Drasil.
 
-\intodo{Future Work: The type parameters (in ModelKinds, QDefinition, and
-	MultiDefn) used should not be worried about. The holes used are primarily
-	used for \Expr{} and \ModelExpr{}, where \Expr{} indicates that the model is
-	usable in code generation, while \ModelExpr{} indicates that it is not
-	usable in code generation.}
+\section{Residual Issues}
 
-\intodo{Focal remaining problem: type information is neglected.}
+While the information is now encoded, it is not without its own issues:
+
+\begin{enumerate}
+
+	\item As \ModelKinds{} is written using a GADT, it is difficult to extend
+	      its functionality (the ``expression problem''\todo{Cite the original
+		      expression problem paper.}). A work in progress re-design of
+	      \ModelKinds{}, relying on \acs{ghc}s \ConstraintKinds{}\todo{Should I
+		      cite something about \ConstraintKinds{}?} language extension, uses
+	      Haskell-level typeclasses to describe what a model satisfying the
+	      needs of being a ``model kind'' must provide in order to be treated as
+	      a ``model kind''. These typeclass instances may be thought of as
+	      proofs that satisfy the requirements.
+
+	\item The type parameter in \ModelKinds{} is peculiar. It is used to
+	      indicate usability of a certain model in code generation through
+	      either having an \Expr{} or a \ModelExpr{}. A \inlineHs{ModelKind
+		      Expr} indicates that a model is usable in code generation, while a
+	      \inlineHs{ModelKind ModelExpr} indicates that the model is not to be
+	      used in code generation.
+
+	\item While we've gained information about the reason what the expressions
+	      described, the expression language, as a whole, allows for poorly
+	      typed expressions to be formed. We lack enforcement regarding the
+	      validity of \Expr{} as ``expressions''.
+
+\end{enumerate}
+
+However, these first two (2) issues are relatively unimportant for now. (1) has
+a proof of concept solution (as discussed above), and (2) is a matter of the
+Haskell implementation we choose. (3) is the next area of focus in regard to
+expressions.

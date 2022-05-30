@@ -10,7 +10,7 @@ import Drasil.DblPendulum.Unitals(massObj_1, massObj_2, lenRod_1, lenRod_2, pend
 import Prelude hiding (sin, cos)
 
 dblPenODEOpts :: ODEOptions
-dblPenODEOpts = odeOptions RK45 (dbl 0.000001) (dbl 0.000001) (dbl 0.01)
+dblPenODEOpts = odeOptions RK45 (dbl 0.000001) (dbl 0.000001) (dbl 0.001) -- java ode require smaller than 0.001
 
 dblPenODEInfo :: ODEInfo
 dblPenODEInfo = odeInfo

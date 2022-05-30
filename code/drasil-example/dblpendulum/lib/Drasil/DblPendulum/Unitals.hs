@@ -154,13 +154,14 @@ pendDisAngle_2 = makeUCWDS "theta_2" (nounPhraseSent $ phraseNP (angle `the_ofTh
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
 
-lRod, label1, label2, labelx, labely, initial:: Symbol
+lRod, label1, label2, labelx, labely, initial, lTheta':: Symbol
 lRod = label "rod"
 labelx = label "x"
 labely = label "y"
 initial = label "i"
 label1  = Integ 1
 label2  = Integ 2
+lTheta'  = label "theta"
 
 ----------------
 -- CONSTRAINT --
@@ -184,5 +185,5 @@ pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
   "Column vector of displacement of rods with its derivatives" 
-  lTheta radian (Vect Real)
+  lTheta' radian (Vect Real)
   [physc $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

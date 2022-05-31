@@ -14,7 +14,7 @@ import Constants
 # \return Process Variable: The output value from the power plant
 def func_y_t(K_d, K_p, r_t, t_sim, t_step):
     def f(t, y_t):
-        return [y_t[1], -1.0 + K_d * y_t[1] + -20.0 + K_p * y_t[0] + r_t * K_p]
+        return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
     
     r = scipy.integrate.ode(f)
     r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)

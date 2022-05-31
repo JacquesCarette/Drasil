@@ -540,6 +540,7 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
 
 -- | Basic <a>ODEInfo</a> constructor.
 odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
+odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
 data ODEOptions
 ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 
@@ -3042,6 +3043,7 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
 
 -- | Basic <a>ODEInfo</a> constructor.
 odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
+odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
 data ODEOptions
 ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 

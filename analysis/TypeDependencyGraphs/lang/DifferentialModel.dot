@@ -1,6 +1,7 @@
 digraph differentialmodel{
 DifferentialModel	[shape=oval, color=cyan3, label="DifferentialModel"];
 DifferentialModel -> UnitalChunk;
+DifferentialModel -> ConstrConcept;
 DifferentialModel -> Expr;
 DifferentialModel -> Unknown;
 DifferentialModel -> ConceptChunk;

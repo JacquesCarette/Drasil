@@ -195,10 +195,6 @@ tmSOSystemRC :: RelationConcept
 soSystemRel :: Relation
 soSystemDesc :: Sentence
 
-module Drasil.PDController.ODEs
-pidODEOptions :: ODEOptions
-pidODEInfo :: ODEInfo
-
 module Drasil.PDController.GenDefs
 genDefns :: [GenDefn]
 gdPowerPlant :: GenDefn
@@ -254,6 +250,11 @@ portability :: ConceptInstance
 security :: ConceptInstance
 maintainability :: ConceptInstance
 verifiability :: ConceptInstance
+
+module Drasil.PDController.ODEs
+pidODEOptions :: ODEOptions
+pdIVP :: InitialValueProblem
+pidODEInfo :: ODEInfo
 
 module Drasil.PDController.Body
 pidODEInfo :: ODEInfo

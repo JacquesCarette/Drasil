@@ -5,6 +5,8 @@ digraph alltypes {
 	}
 	subgraph body {
 	}
+	subgraph coicehs {
+	}
 	subgraph concepts {
 	}
 	subgraph datadefs {
@@ -20,6 +22,8 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph odes {
 	}
 	subgraph references {
 	}

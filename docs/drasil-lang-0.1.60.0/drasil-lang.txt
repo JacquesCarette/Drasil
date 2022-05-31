@@ -1628,8 +1628,8 @@ applyWithNamedArgs :: (ExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName 
 
 -- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
 sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
-infixr 9 $&&
 infixl 7 $/
+infixr 9 $&&
 infixr 8 $^
 infixr 4 $=
 infixr 9 $||
@@ -2037,13 +2037,37 @@ makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 --   a <a>Concept</a>, new <tt>UID</tt> and relation.
 addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
 data DifferentialModel
-($^^) :: ConstrConcept -> Int -> Unknown
+SystemOfLinearODEs :: UnitalChunk -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr] -> ConceptChunk -> DifferentialModel
+[_indepVar] :: DifferentialModel -> UnitalChunk
+[_depVar] :: DifferentialModel -> ConstrConcept
+[_coefficients] :: DifferentialModel -> [[Expr]]
+[_unknowns] :: DifferentialModel -> [Unknown]
+[_dmConstants] :: DifferentialModel -> [Expr]
+[_dmconc] :: DifferentialModel -> ConceptChunk
+data ODESolverFormat
+X' :: [[Expr]] -> [Integer] -> [Expr] -> ODESolverFormat
+[coeffVects] :: ODESolverFormat -> [[Expr]]
+[unknownVect] :: ODESolverFormat -> [Integer]
+[constantVect] :: ODESolverFormat -> [Expr]
+data InitialValueProblem
+IVP :: Expr -> Expr -> [Expr] -> InitialValueProblem
+[initTime] :: InitialValueProblem -> Expr
+[finalTime] :: InitialValueProblem -> Expr
+[initValues] :: InitialValueProblem -> [Expr]
+($^^) :: ConstrConcept -> Integer -> Unknown
+($*) :: Expr -> Unknown -> Term
+($+) :: [Term] -> Term -> LHS
 
--- | Create a <a>DifferentialModel</a> from a given indepVar
---   (<a>UnitalChunk</a>), coefficients ('[[Expr]]'), | unknowns
---   ('[Unknown]'), constants ('[Expr]'), UID (<a>String</a>), term
---   (<a>NP</a>), definition (<a>Sentence</a>).
-makeASystemDE :: UnitalChunk -> [[Expr]] -> [Unknown] -> [Expr] -> String -> NP -> Sentence -> DifferentialModel
+-- | Construct an ODESolverFormat for solving the ODE.
+makeAODESolverFormat :: DifferentialModel -> ODESolverFormat
+
+-- | Construct an InitialValueProblem.
+makeAIVP :: Expr -> Expr -> [Expr] -> InitialValueProblem
+formEquations :: [[Expr]] -> [Unknown] -> [Expr] -> ConstrConcept -> [Expr]
+makeASystemDE :: UnitalChunk -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr] -> String -> NP -> Sentence -> DifferentialModel
+
+-- | Create a single ODE with its left hand side and right hand side
+makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr -> String -> NP -> Sentence -> DifferentialModel
 
 -- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
 --   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from

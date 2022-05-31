@@ -574,6 +574,8 @@ digraph alltypes {
 		}
 		subgraph odemethod{
 		ODEMethod	[shape=oval, color=darkviolet, label="ODEMethod"];
+		ODEMethod -> DifferentialModel;
+		ODEMethod -> CodeExpr;
 		}
 	}
 	subgraph odelibpckg {

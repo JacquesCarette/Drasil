@@ -71,17 +71,35 @@ digraph alltypes {
 		}
 	}
 	subgraph differentialmodel {
-		subgraph unknown{
-		Unknown	[shape=oval, color=cyan3, label="Unknown"];
-		Unknown -> ConstrConcept;
-		Unknown -> Int;
+		subgraph term{
+		Term	[shape=oval, color=cyan3, label="Term"];
+		Term -> Expr;
+		Term -> Unknown;
 		}
 		subgraph differentialmodel{
 		DifferentialModel	[shape=oval, color=cyan3, label="DifferentialModel"];
 		DifferentialModel -> UnitalChunk;
+		DifferentialModel -> ConstrConcept;
 		DifferentialModel -> Expr;
 		DifferentialModel -> Unknown;
 		DifferentialModel -> ConceptChunk;
+		}
+		subgraph initialvalueproblem{
+		InitialValueProblem	[shape=oval, color=cyan3, label="InitialValueProblem"];
+		InitialValueProblem -> Expr;
+		}
+		subgraph odesolverformat{
+		ODESolverFormat	[shape=oval, color=cyan3, label="ODESolverFormat"];
+		ODESolverFormat -> Expr;
+		ODESolverFormat -> Integer;
+		}
+		subgraph unknown{
+		Unknown	[shape=oval, color=red2, label="Unknown"];
+		Unknown -> Integer;
+		}
+		subgraph lhs{
+		LHS	[shape=oval, color=red2, label="LHS"];
+		LHS -> Term;
 		}
 	}
 	subgraph eq {

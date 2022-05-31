@@ -111,55 +111,60 @@ forall a. a -&gt; Maybe a
 </span><span id="line-36"></span><span id="imPDRC"><span class="annot"><span class="annottext">imPDRC :: DifferentialModel
 </span><a href="Drasil.PDController.IModel.html#imPDRC"><span class="hs-identifier hs-var hs-var">imPDRC</span></a></span></span><span>
 </span><span id="line-37"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
--&gt; [[Expr]]
--&gt; [Unknown]
--&gt; [Expr]
+-&gt; ConstrConcept
+-&gt; LHS
+-&gt; Expr
 -&gt; String
 -&gt; NP
 -&gt; Sentence
 -&gt; DifferentialModel
-</span><span class="hs-identifier hs-var">makeASystemDE</span></span><span>
+</span><span class="hs-identifier hs-var">makeASingleDE</span></span><span>
 </span><span id="line-38"></span><span>      </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span>
-</span><span id="line-39"></span><span>      </span><span class="annot"><span class="annottext">[[Expr]]
-</span><a href="#local-6989586621679088621"><span class="hs-identifier hs-var">coeffs</span></a></span><span>
-</span><span id="line-40"></span><span>      </span><span class="annot"><span class="annottext">[Unknown]
-</span><a href="#local-6989586621679088620"><span class="hs-identifier hs-var">unknowns</span></a></span><span>
-</span><span id="line-41"></span><span>      </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679088619"><span class="hs-identifier hs-var">constants</span></a></span><span>
+</span><span id="line-39"></span><span>      </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span>
+</span><span id="line-40"></span><span>      </span><span class="annot"><span class="annottext">LHS
+</span><a href="#local-6989586621679088569"><span class="hs-identifier hs-var">lhs</span></a></span><span>
+</span><span id="line-41"></span><span>      </span><span class="annot"><span class="annottext">Expr
+</span><a href="#local-6989586621679088568"><span class="hs-identifier hs-var">rhs</span></a></span><span>
 </span><span id="line-42"></span><span>      </span><span class="annot"><span class="hs-string">&quot;imPDRC&quot;</span></span><span>
 </span><span id="line-43"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Computation of the Process Variable as a function of time&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span>      </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-45"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088621"><span class="annot"><span class="annottext">coeffs :: [[Expr]]
-</span><a href="#local-6989586621679088621"><span class="hs-identifier hs-var hs-var">coeffs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span id="line-45"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088569"><span class="annot"><span class="annottext">lhs :: LHS
+</span><a href="#local-6989586621679088569"><span class="hs-identifier hs-var hs-var">lhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">Output -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Integer -&gt; Term
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Integer -&gt; Integer
+</span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-46"></span><span>                  </span><span class="annot"><span class="annottext">LHS -&gt; Term -&gt; LHS
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Integer -&gt; Term
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Integer -&gt; Integer
+</span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-47"></span><span>                  </span><span class="annot"><span class="annottext">LHS -&gt; Term -&gt; LHS
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">20</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">Output -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-46"></span><span>            </span><span id="local-6989586621679088620"><span class="annot"><span class="annottext">unknowns :: [Unknown]
-</span><a href="#local-6989586621679088620"><span class="hs-identifier hs-var hs-var">unknowns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Int -&gt; Unknown
-</span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Int -&gt; Unknown
-</span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Int -&gt; Unknown
-</span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span>            </span><span id="local-6989586621679088619"><span class="annot"><span class="annottext">constants :: [Expr]
-</span><a href="#local-6989586621679088619"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Output -&gt; Expr
+</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Integer -&gt; Term
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Integer -&gt; Integer
+</span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-48"></span><span>            </span><span id="local-6989586621679088568"><span class="annot"><span class="annottext">rhs :: Expr
+</span><a href="#local-6989586621679088568"><span class="hs-identifier hs-var hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Output -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -167,17 +172,21 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Output -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-48"></span><span>
-</span><span id="line-49"></span><span class="annot"><a href="Drasil.PDController.IModel.html#imDeriv"><span class="hs-identifier hs-type">imDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-50"></span><span id="imDeriv"><span class="annot"><span class="annottext">imDeriv :: Derivation
+</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span>
+</span><span id="line-49"></span><span>      </span><span class="hs-comment">-- Matrix form: </span><span>
+</span><span id="line-50"></span><span>      </span><span class="hs-comment">-- coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]</span><span>
+</span><span id="line-51"></span><span>      </span><span class="hs-comment">-- unknowns = [opProcessVariable $^^ 2, opProcessVariable $^^ 1, opProcessVariable $^^ 0]</span><span>
+</span><span id="line-52"></span><span>      </span><span class="hs-comment">-- constants = [sy qdSetPointTD `mulRe` sy qdPropGain]</span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span class="annot"><a href="Drasil.PDController.IModel.html#imDeriv"><span class="hs-identifier hs-type">imDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-55"></span><span id="imDeriv"><span class="annot"><span class="annottext">imDeriv :: Derivation
 </span><a href="Drasil.PDController.IModel.html#imDeriv"><span class="hs-identifier hs-var hs-var">imDeriv</span></a></span></span><span>
-</span><span id="line-51"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><span id="line-56"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-52"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+</span><span id="line-57"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
 forall a. [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.PDController.IModel.html#imDerivStmts"><span class="hs-identifier hs-var">imDerivStmts</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
@@ -185,29 +194,29 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.PDController.IModel.html#imDerivEqns"><span class="hs-identifier hs-var">imDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="annot"><a href="Drasil.PDController.IModel.html#imDerivStmts"><span class="hs-identifier hs-type">imDerivStmts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-55"></span><span id="imDerivStmts"><span class="annot"><span class="annottext">imDerivStmts :: [Sentence]
+</span><span id="line-58"></span><span>
+</span><span id="line-59"></span><span class="annot"><a href="Drasil.PDController.IModel.html#imDerivStmts"><span class="hs-identifier hs-type">imDerivStmts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-60"></span><span id="imDerivStmts"><span class="annot"><span class="annottext">imDerivStmts :: [Sentence]
 </span><a href="Drasil.PDController.IModel.html#imDerivStmts"><span class="hs-identifier hs-var hs-var">imDerivStmts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.IModel.html#derivStmt1"><span class="hs-identifier hs-var">derivStmt1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.IModel.html#derivStmt2"><span class="hs-identifier hs-var">derivStmt2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.IModel.html#derivStmt3"><span class="hs-identifier hs-var">derivStmt3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.IModel.html#derivStmt4"><span class="hs-identifier hs-var">derivStmt4</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-56"></span><span>
-</span><span id="line-57"></span><span class="annot"><a href="Drasil.PDController.IModel.html#imDerivEqns"><span class="hs-identifier hs-type">imDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span id="imDerivEqns"><span class="annot"><span class="annottext">imDerivEqns :: [ModelExpr]
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="annot"><a href="Drasil.PDController.IModel.html#imDerivEqns"><span class="hs-identifier hs-type">imDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-63"></span><span id="imDerivEqns"><span class="annot"><span class="annottext">imDerivEqns :: [ModelExpr]
 </span><a href="Drasil.PDController.IModel.html#imDerivEqns"><span class="hs-identifier hs-var hs-var">imDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn1"><span class="hs-identifier hs-var">derivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn2"><span class="hs-identifier hs-var">derivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn3"><span class="hs-identifier hs-var">derivEqn3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn4"><span class="hs-identifier hs-var">derivEqn4</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-59"></span><span>
-</span><span id="line-60"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivStmt1"><span class="hs-identifier hs-type">derivStmt1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-61"></span><span id="derivStmt1"><span class="annot"><span class="annottext">derivStmt1 :: Sentence
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivStmt1"><span class="hs-identifier hs-type">derivStmt1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-66"></span><span id="derivStmt1"><span class="annot"><span class="annottext">derivStmt1 :: Sentence
 </span><a href="Drasil.PDController.IModel.html#derivStmt1"><span class="hs-identifier hs-var hs-var">derivStmt1</span></a></span></span><span>
-</span><span id="line-62"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-67"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-63"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-68"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
@@ -221,7 +230,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidCL"><span class="hs-identifier hs-var">pidCL</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-64"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-69"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is the product of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -230,7 +239,7 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.PDController.DataDefs.html#ddErrSig"><span class="hs-identifier hs-var">ddErrSig</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-65"></span><span>         </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-70"></span><span>         </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#controlVariable"><span class="hs-identifier hs-var">controlVariable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
@@ -239,7 +248,7 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><a href="Drasil.PDController.DataDefs.html#ddCtrlVar"><span class="hs-identifier hs-var">ddCtrlVar</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-66"></span><span>         </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-71"></span><span>         </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.andThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -247,15 +256,15 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.PDController.GenDefs.html#gdPowerPlant"><span class="hs-identifier hs-var">gdPowerPlant</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-67"></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn1"><span class="hs-identifier hs-type">derivEqn1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-69"></span><span id="derivEqn1"><span class="annot"><span class="annottext">derivEqn1 :: ModelExpr
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn1"><span class="hs-identifier hs-type">derivEqn1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-74"></span><span id="derivEqn1"><span class="annot"><span class="annottext">derivEqn1 :: ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn1"><span class="hs-identifier hs-var hs-var">derivEqn1</span></a></span></span><span>
-</span><span id="line-70"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
+</span><span id="line-75"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span>
-</span><span id="line-71"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-76"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -266,7 +275,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-72"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-77"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -282,7 +291,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-73"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-78"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
@@ -301,17 +310,17 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">20</span></span><span class="hs-special">)</span><span>
-</span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivStmt2"><span class="hs-identifier hs-type">derivStmt2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-76"></span><span id="derivStmt2"><span class="annot"><span class="annottext">derivStmt2 :: Sentence
+</span><span id="line-79"></span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivStmt2"><span class="hs-identifier hs-type">derivStmt2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-81"></span><span id="derivStmt2"><span class="annot"><span class="annottext">derivStmt2 :: Sentence
 </span><a href="Drasil.PDController.IModel.html#derivStmt2"><span class="hs-identifier hs-var hs-var">derivStmt2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Substituting the values and rearranging the equation&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span>
-</span><span id="line-77"></span><span>
-</span><span id="line-78"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn2"><span class="hs-identifier hs-type">derivEqn2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-79"></span><span id="derivEqn2"><span class="annot"><span class="annottext">derivEqn2 :: ModelExpr
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn2"><span class="hs-identifier hs-type">derivEqn2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-84"></span><span id="derivEqn2"><span class="annot"><span class="annottext">derivEqn2 :: ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn2"><span class="hs-identifier hs-var hs-var">derivEqn2</span></a></span></span><span>
-</span><span id="line-80"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
+</span><span id="line-85"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -322,7 +331,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span>
-</span><span id="line-81"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-86"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -342,7 +351,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-82"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-87"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -357,7 +366,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-83"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-88"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -373,7 +382,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-84"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-89"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -388,28 +397,28 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
-</span><span id="line-85"></span><span>
-</span><span id="line-86"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivStmt3"><span class="hs-identifier hs-type">derivStmt3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-87"></span><span id="derivStmt3"><span class="annot"><span class="annottext">derivStmt3 :: Sentence
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivStmt3"><span class="hs-identifier hs-type">derivStmt3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-92"></span><span id="derivStmt3"><span class="annot"><span class="annottext">derivStmt3 :: Sentence
 </span><a href="Drasil.PDController.IModel.html#derivStmt3"><span class="hs-identifier hs-var hs-var">derivStmt3</span></a></span></span><span>
-</span><span id="line-88"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-93"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Computing the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Output -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdInvLaplaceTransform"><span class="hs-identifier hs-var">qdInvLaplaceTransform</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-89"></span><span>     </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
+</span><span id="line-94"></span><span>     </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><a href="Drasil.PDController.TModel.html#tmInvLaplace"><span class="hs-identifier hs-var">tmInvLaplace</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of the equation&quot;</span></span><span>
-</span><span id="line-90"></span><span>
-</span><span id="line-91"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn3"><span class="hs-identifier hs-type">derivEqn3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-92"></span><span id="derivEqn3"><span class="annot"><span class="annottext">derivEqn3 :: ModelExpr
+</span><span id="line-95"></span><span>
+</span><span id="line-96"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn3"><span class="hs-identifier hs-type">derivEqn3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-97"></span><span id="derivEqn3"><span class="annot"><span class="annottext">derivEqn3 :: ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn3"><span class="hs-identifier hs-var hs-var">derivEqn3</span></a></span></span><span>
-</span><span id="line-93"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
+</span><span id="line-98"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
@@ -421,7 +430,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span>
-</span><span id="line-94"></span><span>      </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
+</span><span id="line-99"></span><span>      </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -437,7 +446,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-95"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-100"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -452,7 +461,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-96"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-101"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -466,7 +475,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-97"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-102"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -481,13 +490,13 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
-</span><span id="line-98"></span><span>
-</span><span id="line-99"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivStmt4"><span class="hs-identifier hs-type">derivStmt4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-100"></span><span id="derivStmt4"><span class="annot"><span class="annottext">derivStmt4 :: Sentence
+</span><span id="line-103"></span><span>
+</span><span id="line-104"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivStmt4"><span class="hs-identifier hs-type">derivStmt4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-105"></span><span id="derivStmt4"><span class="annot"><span class="annottext">derivStmt4 :: Sentence
 </span><a href="Drasil.PDController.IModel.html#derivStmt4"><span class="hs-identifier hs-var hs-var">derivStmt4</span></a></span></span><span>
-</span><span id="line-101"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-106"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-102"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-107"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
@@ -498,21 +507,21 @@ forall t. Express t =&gt; t -&gt; Sentence
 </span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is a step function and a constant&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-103"></span><span>         </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+</span><span id="line-108"></span><span>         </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aSP"><span class="hs-identifier hs-var">aSP</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-104"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-109"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Therefore the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-105"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-110"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;differential of the set point is zero. Hence the equation&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-106"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-111"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;reduces to&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-107"></span><span>
-</span><span id="line-108"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn4"><span class="hs-identifier hs-type">derivEqn4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-109"></span><span id="derivEqn4"><span class="annot"><span class="annottext">derivEqn4 :: ModelExpr
+</span><span id="line-112"></span><span>
+</span><span id="line-113"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn4"><span class="hs-identifier hs-type">derivEqn4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-114"></span><span id="derivEqn4"><span class="annot"><span class="annottext">derivEqn4 :: ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn4"><span class="hs-identifier hs-var hs-var">derivEqn4</span></a></span></span><span>
-</span><span id="line-110"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
+</span><span id="line-115"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
@@ -524,7 +533,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span>
-</span><span id="line-111"></span><span>      </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
+</span><span id="line-116"></span><span>      </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -540,7 +549,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-112"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-117"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -555,7 +564,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">Output
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-113"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-118"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -570,4 +579,4 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
-</span><span id="line-114"></span></pre></body></html>
+</span><span id="line-119"></span></pre></body></html>

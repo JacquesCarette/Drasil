@@ -1,5 +1,4 @@
 digraph unknown{
-Unknown	[shape=oval, color=cyan3, label="Unknown"];
-Unknown -> ConstrConcept;
-Unknown -> Int;
+Unknown	[shape=oval, color=red2, label="Unknown"];
+Unknown -> Integer;
 }

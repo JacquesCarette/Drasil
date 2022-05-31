@@ -61,6 +61,7 @@ symbols :: [QuantityDict]
 acronyms :: [CI]
 inputs :: [QuantityDict]
 outputs :: [QuantityDict]
+constants :: [ConstQDef]
 units :: [UnitalChunk]
 unitalChunks :: [UnitalChunk]
 lenRod_1 :: UnitalChunk
@@ -94,16 +95,20 @@ label2 :: Symbol
 labelx :: Symbol
 labely :: Symbol
 initial :: Symbol
+lTheta' :: Symbol
 lenRodCon_1 :: ConstrConcept
 lenRodCon_2 :: ConstrConcept
 pendDisAngleCon_1 :: ConstrConcept
 pendDisAngleCon_2 :: ConstrConcept
 massCon_1 :: ConstrConcept
 massCon_2 :: ConstrConcept
-angAccelOutCon_1 :: ConstrConcept
-angAccelOutCon_2 :: ConstrConcept
 inConstraints :: [UncertQ]
 outConstraints :: [UncertQ]
+pendDisAngle :: ConstrConcept
+
+module Drasil.DblPendulum.ODEs
+dblPenODEOpts :: ODEOptions
+dblPenODEInfo :: ODEInfo
 
 module Drasil.DblPendulum.DataDefs
 dataDefs :: [DataDefinition]
@@ -224,6 +229,7 @@ fullSI :: SystemInformation
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: SystemInformation
+symbolsAll :: [QuantityDict]
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 stdFields :: Fields
@@ -244,3 +250,7 @@ prob :: Sentence
 terms :: [ConceptChunk]
 physSystParts :: [Sentence]
 tMods :: [TheoryModel]
+
+module Drasil.DblPendulum.Choices
+code :: CodeSpec
+choices :: Choices

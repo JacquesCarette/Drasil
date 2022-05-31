@@ -1,0 +1,4 @@
+digraph lhs{
+LHS	[shape=oval, color=red2, label="LHS"];
+LHS -> Term;
+}

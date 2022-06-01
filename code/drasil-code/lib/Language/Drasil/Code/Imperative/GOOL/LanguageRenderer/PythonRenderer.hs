@@ -59,4 +59,4 @@ instance AuxiliarySym PythonProject where
 
 -- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable
-pyRunnable = interpMM "python"
+pyRunnable = interpMM "python3"

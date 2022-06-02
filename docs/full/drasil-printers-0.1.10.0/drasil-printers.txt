@@ -1059,11 +1059,8 @@ modelExpr :: ModelExpr -> PrintingInformation -> Expr
 --   layout AST.
 assocExpr :: Ops -> Int -> [ModelExpr] -> PrintingInformation -> Expr
 
--- | Helper for rendering printable expressions.
-addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [Expr]
-
 -- | Add add symbol only when the second Expr is not negation
-addExprFilter :: [Expr] -> [Expr]
+addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [Expr]
 
 -- | Helper for rendering printable expressions.
 mulExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [Expr]

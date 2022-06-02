@@ -18,6 +18,7 @@ import qualified Drasil.SSP.Body as SSP (fullSI)
 import qualified Drasil.SWHS.Body as SWHS (fullSI)
 
 -- import choices for code generation
+import qualified Drasil.DblPendulum.Choices as DblPendulum (choices)
 import qualified Drasil.GlassBR.Choices as GlassBR (choices)
 import qualified Drasil.NoPCM.Choices as NoPCM (choices)
 import qualified Drasil.PDController.Choices as PDController (codeChoices)
@@ -61,7 +62,7 @@ allExampleDesc = [dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDes
 -- | Records example choices. The order of the list must match up with
 -- that in `allExampleSI`, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
-allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
+allExampleChoices = [[DblPendulum.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
 allExamples :: [SystemInformation] -> [Sentence] -> [[Choices]] -> FilePath -> FilePath -> [Example]

@@ -189,16 +189,12 @@ modelExpr (ForAll c s de)            sm = P.Row [
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm prec) exprs
 
--- | Helper for rendering printable expressions.
-addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
-addExpr exprs o sm = addExprFilter (map (modelExpr' sm (precA o)) exprs)
-
 -- | Add add symbol only when the second Expr is not negation 
-addExprFilter :: [P.Expr] -> [P.Expr]
-addExprFilter [] = []
-addExprFilter [x] = [x]
-addExprFilter (x1:P.Row[P.MO P.Neg, x2]:xs) = x1 : addExprFilter (P.Row[P.MO P.Neg, x2] : xs)
-addExprFilter (x:xs) = x : P.MO P.Add : addExprFilter xs
+addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
+addExpr [] _ _ = []
+addExpr [x] o sm = [modelExpr' sm (precA o) x]
+addExpr (x1:(UnaryOp Neg x2):xs) o sm = modelExpr' sm (precA o) x1 : addExpr (UnaryOp Neg x2:xs) o sm
+addExpr (x:xs) o sm = modelExpr' sm (precA o) x : P.MO P.Add: addExpr xs o sm
 
 -- | Helper for rendering printable expressions.
 mulExpr ::  [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]

@@ -6,7 +6,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
-import Data.Drasil.SI_Units (metre, degree, radian)
+import Data.Drasil.SI_Units (metre, radian)
 import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel,
   xAccel, yVel, xVel, iyPos, yPos, time, torque, momentOfInertia, angularDisplacement,
@@ -45,7 +45,7 @@ lenRod = makeUCWDS "l_rod" (cn "length of the rod")
 
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of the pendulum")
         (phraseNP (angle `the_ofThe` pendulum))
-        (sub lTheta lP) degree
+        (sub lTheta lP) radian
 
 initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
         (phraseNP (NP.the (CM.iAngle `of_` pendulum)))

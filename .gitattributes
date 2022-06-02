@@ -1,11 +1,11 @@
 *.sh text eol=lf
 *.cls linguist-vendored
 *.bst linguist-vendored
+Papers/** linguist-documentation
 People/** linguist-documentation
 Presentations/** linguist-documentation
+WindowsFix/** linguist-vendored
 code/stable/** linguist-generated
-code/datafiles/nopcm/cpp/** linguist-vendored
-code/datafiles/nopcm/csharp/** linguist-vendored
-code/datafiles/nopcm/java/** linguist-vendored
+code/datafiles/** linguist-vendored
 doc/** linguist-documentation
 notes/** linguist-documentation

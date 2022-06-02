@@ -38,6 +38,6 @@ public class ODE implements FirstOrderDifferentialEquations {
     */
     public void computeDerivatives(double t, double[] y_t, double[] dy_t) {
         dy_t[0] = y_t[1];
-        dy_t[1] = -(1.0 + K_d) * y_t[1] - (20.0 + K_p) * y_t[0] + r_t * K_p;
+        dy_t[1] = -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p;
     }
 }

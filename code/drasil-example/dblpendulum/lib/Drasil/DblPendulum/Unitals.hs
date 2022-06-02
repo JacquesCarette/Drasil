@@ -9,7 +9,7 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst, requirement, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
-import Data.Drasil.SI_Units (metre, degree, kilogram, newton)
+import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
 import Data.Drasil.Concepts.Physics (twoD)
@@ -18,20 +18,24 @@ import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
 import Drasil.DblPendulum.Concepts (firstRod, secondRod, firstObject, secondObject, horizontalPos,
   verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
+import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
 
 symbols:: [QuantityDict]
-symbols = map qw unitalChunks ++ map qw unitless
+symbols = map qw unitalChunks ++ map qw unitless ++ [qw pendDisAngle] ++ map qw constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
-inputs = map qw [lenRod_1, lenRod_2, pendDisAngle_1, pendDisAngle_2, massObj_1, massObj_2] 
+inputs = map qw [lenRod_1, lenRod_2, massObj_1, massObj_2] 
 
 outputs :: [QuantityDict]
-outputs = map qw [angularAccel_1, angularAccel_2]
+outputs = [qw pendDisAngle]
+
+constants :: [ConstQDef]
+constants = [gravitationalAccelConst]
 
 units :: [UnitalChunk]
 units = map ucw unitalChunks
@@ -41,7 +45,7 @@ unitalChunks = [
   lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2,
   xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
-  angularAccel_1, angularAccel_2, tension_1, tension_2,
+  angularAccel_1, angularAccel_2, tension_1, tension_2, 
   QPP.mass, QP.force, QP.gravitationalAccel, QP.tension, QP.acceleration,
   QP.time, QP.velocity, QP.position]
   
@@ -141,40 +145,45 @@ angularVel_2 = makeUCWDS "w_2" (nounPhraseSent $ phraseNP (QP.angularVelocity `t
 
 pendDisAngle_1 = makeUCWDS "theta_1" (nounPhraseSent $ phraseNP (angle `the_ofThe` firstRod))
         (S "The" +:+ phraseNP (angle `the_ofThe` firstRod))
-        (sub lTheta label1) degree
+        (sub lTheta label1) radian
 
 pendDisAngle_2 = makeUCWDS "theta_2" (nounPhraseSent $ phraseNP (angle `the_ofThe` secondRod))
         (S "The" +:+ phraseNP (angle `the_ofThe` secondRod))
-        (sub lTheta label2) degree
+        (sub lTheta label2) radian
 
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
 
-lRod, label1, label2, labelx, labely, initial:: Symbol
+lRod, label1, label2, labelx, labely, initial, lTheta':: Symbol
 lRod = label "rod"
 labelx = label "x"
 labely = label "y"
 initial = label "i"
 label1  = Integ 1
 label2  = Integ 2
+lTheta'  = label "theta"
 
 ----------------
 -- CONSTRAINT --
 ----------------
-lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2, massCon_1, massCon_2,
-  angAccelOutCon_1, angAccelOutCon_2 :: ConstrConcept
+lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2, massCon_1, massCon_2 
+  :: ConstrConcept
 lenRodCon_1       = constrained' lenRod_1 [gtZeroConstr] (dbl 1)
 lenRodCon_2       = constrained' lenRod_2 [gtZeroConstr] (dbl 1)
 pendDisAngleCon_1 = constrained' pendDisAngle_1 [gtZeroConstr] (dbl 30)
 pendDisAngleCon_2 = constrained' pendDisAngle_2 [gtZeroConstr] (dbl 30)
 massCon_1         = constrained' massObj_1 [gtZeroConstr] (dbl 0.5)
 massCon_2         = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
-angAccelOutCon_1  = constrained' angularAccel_1 [gtZeroConstr] (exactDbl 0)
-angAccelOutCon_2  = constrained' angularAccel_2 [gtZeroConstr] (exactDbl 0)
 
 inConstraints :: [UncertQ]
-inConstraints = map (`uq` defaultUncrt) [lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2,
-  massCon_1, massCon_2]
+inConstraints = map (`uq` defaultUncrt) [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
 
 outConstraints :: [UncertQ]
-outConstraints = map (`uq` defaultUncrt) [angAccelOutCon_1, angAccelOutCon_2]
+outConstraints = map (`uq` defaultUncrt) [pendDisAngleCon_1, pendDisAngleCon_2]
+
+pendDisAngle :: ConstrConcept
+pendDisAngle = cuc' "pendDisAngle"
+  (nounPhraseSP "dependent variables")
+  "Column vector of displacement of rods with its derivatives" 
+  lTheta' radian (Vect Real)
+  [physc $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

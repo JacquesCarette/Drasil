@@ -1,33 +1,25 @@
 module Drasil.PDController.ODEs where
 
-import Language.Drasil.Code (odeInfo, odeOptions, quantvar, ODEInfo,
+import Language.Drasil.Code (odeInfo', odeOptions, quantvar, ODEInfo,
     ODEMethod(RK45), ODEOptions)
-import Language.Drasil.CodeExpr
+import Language.Drasil.CodeExpr (LiteralC(exactDbl), ExprC(sy))
 
-import Data.Drasil.Quantities.Physics (time)
 import Drasil.PDController.Unitals (qdSetPointTD, qdPropGain, qdDerivGain,
-    qdSimTime, ipSetPt, ipDerivGain, ipPropGain, opProcessVariable,
-    qdStepTime, odeRelTolConst, odeAbsTolConst)
+    qdSimTime, qdStepTime, odeRelTolConst, odeAbsTolConst)
+import Language.Drasil(InitialValueProblem, makeAIVP)
+import Drasil.PDController.IModel(imPDRC)
 
 
 pidODEOptions :: ODEOptions
 pidODEOptions = odeOptions 
   RK45 (sy odeAbsTolConst) (sy odeRelTolConst) (sy qdStepTime)
 
--- This is a second order ODE. The equation should be in the form of
--- variable substitution, i.e. u = y'. However here the the equation
--- can be defined in terms of the dependent variable itself because of the 
--- way scipy expects the function in python. 
+pdIVP :: InitialValueProblem
+pdIVP = makeAIVP (exactDbl 0) (sy qdSimTime) [exactDbl 0, exactDbl 0]
+
 pidODEInfo :: ODEInfo
-pidODEInfo = odeInfo 
-  (quantvar time) 
-  (quantvar opProcessVariable)
-  [quantvar ipPropGain, quantvar ipDerivGain, quantvar ipSetPt]
-  (exactDbl 0)
-  (sy qdSimTime)
-  [exactDbl 0, exactDbl 0]
-  [idx (sy opProcessVariable) (int 1),
-  neg ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` idx (sy opProcessVariable) (int 1))   -- ? CHECK: Seems like `neg` does not generate generate sufficient parentheses?
-  $- ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` idx (sy opProcessVariable) (int 0))
-  `addRe` (sy qdSetPointTD `mulRe` sy qdPropGain)]
+pidODEInfo = odeInfo'
+  [quantvar qdPropGain, quantvar qdDerivGain, quantvar qdSetPointTD]
   pidODEOptions
+  imPDRC
+  pdIVP

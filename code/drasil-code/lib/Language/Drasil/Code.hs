@@ -40,7 +40,7 @@ module Language.Drasil.Code (
   CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar, 
   listToArray,
   field,
-  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), 
+  ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
   unPP, unJP, unCSP, unCPPP, unSP
   -- Language.Drasil.Chunk.NamedArgument
@@ -110,7 +110,7 @@ import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 
 import Language.Drasil.CodeExpr (field)
 
-import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, ODEOptions(..), 
+import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, 
   mkODELibNoPath)

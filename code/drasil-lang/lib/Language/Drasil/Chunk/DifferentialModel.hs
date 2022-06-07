@@ -250,13 +250,21 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
         transConsts = addIdentityConsts (dm ^. dmConstants) (length transUnks)
 
 {-
-  Form well-formatted ODE equations which the ODE solvers can solve. For example:  
+  Form well-formatted ODE equations which the ODE solvers can solve. For example:
+
+  the original fourth-order ODE: 
+  y'''' + 3y′′ − sin(t)y′ + 8y = t2
+
+  can be re-written to
+
   A                 *  X      + B     = X'
 
-  0  1      0   0      x'''     0       equation 1
-  0  0      1   0      x''      0       equation 2
-  0  0      0   1      x'       0       equation 3 
-  -8 sin(t) -3  0      x        t^2     equation 4 
+  0  0      1   0      x₄       0       equation 1
+  0  1      0   0      x₃       0       equation 2
+  1  0      0   0      x₂       0       equation 3 
+  0 -3  sin(t) -8      x₁       t^2     equation 4 
+
+  X = x₄,x₃,x₂,x₁ and x₁ = y, x₂ = y', x₃ = y'', x₄ = y'''
 
   A: [[Expr]], X: [Unknown], B: [Expr]
   return [equation 1, equation 2, equation 3, equation 4]

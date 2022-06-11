@@ -139,7 +139,7 @@ and computer science and programming languages. For example, \todo{An
 
 \intodo{Transcription of the above expression.}
 
-This transcription relies on smart constructors, such as \todo{Ref. a new
+This transcription relies on smart constructors, such as \todo{Ref\. a new
 	appendix entry for new smart constructors.}. The smart constructors used are
 all specialized to \Expr{} and perform simplifications along the way (such
 as folding \(1 \cdot x\) into \(x\)).
@@ -147,9 +147,9 @@ as folding \(1 \cdot x\) into \(x\)).
 \section{A Universal Theory Description Language}
 
 As Drasils theories rely heavily on \Relation{}s (and \RelationConcept{}s)
-(\todo{Ref. the definitions of DDs, IMs, GDs, and TMs}), we may observe that the
-theories are an accurate reflection of writing out mathematics involved as one
-might write them down on paper: exactly as they please. In modelling any
+(\todo{Ref\. the definitions of DDs, IMs, GDs, and TMs}), we may observe that
+the theories are an accurate reflection of writing out mathematics involved as
+one might write them down on paper: exactly as they please. In modelling any
 problem, one will, of course, model the work of their pencil and paper. This is
 exactly what occurs here. Theories here are shallow representations of
 knowledge, that mimic your pencil and papers work to a clueless reader.
@@ -320,7 +320,8 @@ language division and type information.
 \intodo{Re: TTF: What Haskell/GHC language extensions did we need to use?}
 
 \Expr{} has its indefinite values split off into \ModelExpr{}
-(\refCurrentModelExprHaskell{}), a deeply embedded universal mathematical
+(\refCurrentModelExprHaskell{})\todo{List notable terms moved, Deriv, Continuous
+	vs Discrete ranges, Space, etc}, a deeply embedded universal mathematical
 language. As we desire for it to be equally usable as \Expr{}, it is,
 essentially, the original \Expr{} without the language terms related to
 ``code''\todo{i.e., \ldots{}}. In order to alleviate the stress involved with
@@ -431,12 +432,12 @@ instanced, so that portion of the rule is not enforced\todo{Future Work: make
 
 Theories that define expressions that constrain models in some way are defined
 using \EquationalConstraints{}, which are built on \ConstraintSet{}s\todo{ref
-	Current ConstraintSet Haskell} \todo{Describe what a ConstraintSet actually
-	is.}. At the moment, these are not used in code generation, and are pending
-design for usage in code generation as the translation from them into software
-is unclear and may be interpreted differently by readers. This model can, and
-should, eventually also be usable in code generation once there is interest in
-creating runtime assertions of symbols.
+	Current ConstraintSet Haskell}\todo{Describe what a ConstraintSet actually is.}.
+At the moment, these are not used in code generation, and are pending design for
+usage in code generation as the translation from them into software is unclear
+and may be interpreted differently by readers. This model can, and should,
+eventually also be usable in code generation once there is interest in creating
+runtime assertions of symbols.
 
 \intodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
 	the SRS.}

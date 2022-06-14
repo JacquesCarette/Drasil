@@ -287,6 +287,11 @@ formEquations (ex:exs) unks (y:ys) depVa =
         termExprs = map (uncurry mulRe) filteredExprs -- multiple coefficient with depend variables
         finalExpr = foldl1 addRe termExprs -- add terms together
 
--- | Construct an InitialValueProblem.
+{-
+  Construct an InitialValueProblem.
+  the first Expr: start time
+  the second Expr: final time
+  [Expr] : initial values
+-}
 makeAIVP :: Expr -> Expr -> [Expr] -> InitialValueProblem
 makeAIVP = IVP

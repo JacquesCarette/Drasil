@@ -245,7 +245,7 @@ addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr
 -- | divide the leading coefficient of the highest order in constant
 divideCosntants :: Expr -> Expr -> Expr
 divideCosntants a b
-  | b == exactDbl 0 = error "Divisor cab't be zero"
+  | b == exactDbl 0 = error "Divisor can't be zero"
   | b == exactDbl 1 = a
   | otherwise       = a $/ b
 

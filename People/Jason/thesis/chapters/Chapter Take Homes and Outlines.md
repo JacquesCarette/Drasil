@@ -2,9 +2,13 @@
 
 1. Introduction:
 
-    Take home: 
+    Take home: A single universal mathematical expression language is
+    insufficient to describe theories and all of their meta-level information.
 
-    Outline:
+    Outline: Terse introduction to Drasil and Drasils ideology, followed by a
+    discussion of the immediate issues associated with this research (encoding
+    theories with expressions, need for typing rules, and need for term
+    restriction to particular domains [i.e., CodeExpr/Expr/ModelExpr]).
 	
 2. Ideology:
 
@@ -12,7 +16,11 @@
     owners. The quality of their communication will be a direct reflection of
     the quality of the created software artifacts.
 
-    Outline:
+    Outline: Discussion of communication and logistical issues associated with
+    modern software development, followed by a discussion of an idealized
+    workflow for product owners (i.e., using technical/formal languages to
+    describe each component, including how those languages can be converted into
+    softifacts).
 
 3. Drasil:
 
@@ -25,7 +33,8 @@
     form families of software artifacts, from which a user can create specific
     artifacts by making choices.
 
-    Outline:
+    Outline: General introduction to Drasils origins, research team, area, and
+    goals, development methodology, architecture, and current issues.
 
 4. Framing Theories:
 
@@ -41,7 +50,10 @@
     implicit information, explicit, we are able to formalize more relationships
     between theories and other things (such as views and uses of them).
 
-    Outline:
+    Outline: Discussing the issue of theories encoded as expressions requiring
+    too much inference (which, naturally, a computer cannot make without
+    external information), and how we can make the required implicit information
+    (that which is required for inference), explicit information.
 
 5. Typing Expressions:
 
@@ -53,7 +65,12 @@
     expressions are valid or not, before attempting to use them for code
     generation.
 
-    Outline:
+    Outline: Discussing the issue of stress associated with writing expressions
+    without any sort of internal validation before external usage. Code
+    generation requires expressions be well-formed, we can ease the cognitive
+    stress associated with this by adding some sort of type checking mechanism.
+    Along these lines, we will be discussing judgment rules and the syntax rules
+    we will form.
 
 6. Knowledge Management:
 
@@ -64,16 +81,21 @@
     (ChunkDB). To remedy this, we may ignore the type of stored chunks and rely
     on typed references that can interpret the chunks as originally needed.
 
-    Outline:
+    Outline: The majority of this chapter will be about the "take-home" message,
+    and then continue to mention some residual issues: What makes up a chunk?
+    What is a UID? How should information be encoded in Drasil?
 
 7. Future Work:
 
-    Outline:
+    Take home: There are remaining issues from the previous chapters and more
+    knowledge we may encode. The depth and breadth of domain knowledge covered
+    can be generally improved, but we can also work towards what has been
+    embedded in Haskell.
+
+    Outline: N/A.
 
 8. Conclusion:
 
-    Outline:
-
-I imagine the "take home" of the "Conclusion" chapter would be a re-statement of
-the introductions, and I couldn't quite think of a prime "take home" yet for the
-"Future Work".
+    Take home & Outline: _I imagine the take-home message of the "Conclusion"
+    chapter would be a re-statement of the "take home" of the "Introduction."
+    The outline will likely need to be based on everything else._

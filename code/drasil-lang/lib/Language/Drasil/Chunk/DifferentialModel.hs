@@ -163,6 +163,8 @@ makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
   error "Length of coefficients matrix should equal to the length of the constant vector"
  | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
+ | not $ isUnknownDescending unks =
+  error "The order of giving unknowns need to be descending"
  | otherwise = SystemOfLinearODEs indepVar' depVar' coeffs unks const'(dccWDS id' term' defn')
 
 -- | Create a single ODE with its left hand side and right hand side
@@ -181,6 +183,12 @@ isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
 isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
 isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
 isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)) True coeffs
+
+-- | Function to check whether the of giving unknown is descending
+isUnknownDescending :: [Unknown] -> Bool
+isUnknownDescending [] = True
+isUnknownDescending [_] = True
+isUnknownDescending (x:y:xs) = x > y && isUnknownDescending xs
 
 -- | Find the highest order in left hand side
 findHighestOrder :: LHS -> Term

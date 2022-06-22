@@ -57,3 +57,5 @@ haskell
 typeclass
 typeclasses
 GADT
+irrepresentable
+Untyped

@@ -20,42 +20,29 @@
 
     Outline: Discussion of communication and logistical issues associated with
     modern software development, followed by a discussion of an idealized
-    workflow for product owners (i.e., using technical/formal languages to
-    describe each component, including how those languages can be converted into
-    softifacts).
+    development methodology.
 
     A “product owner” is any person involved with the creation of some software
-    product, including, but not limited to, the actual "owners" (requestors) of
-    the software, the communicators of the needs of the software, and the
-    authors that realize the needs of software, into software.
+    product. For example, a product owner might be the licensed “owners” of the
+    software, the communicators of the requirements of the software, the authors
+    that convert the requirements into software, or developers of shared
+    libraries.
 
 3. Drasil:
 
     Take home: Drasil is an exploration of the ideology discussed in Chapter 2.
     The goal of Drasil is to generalize and generate families of software
     artifacts by capturing and formalizing knowledge using domain-specific
-    languages.
+    languages. Drasil generates scientific software that solves scientific
+    problems laid out in a formal software requirements specification manual.
     
     Outline: General introduction to Drasils origins, research area, and goals,
     development methodology, architecture, and current issues.
 
 4. Framing Theories:
 
-    Old “Take home”: Since humans can infer knowledge from small “views” of a
-    larger picture, transferring equational knowledge using equations is
-    possible amongst those familiar with the specific “views.” For example,
-    transferring `y = m * x + b` is easy for us to recognize as the equation of
-    a line, but changing the variables or the form (e.g., using point-slope
-    form, intercept form, etc.) will make it more difficult. To formalize the
-    translation of specific kinds of theories into various forms (e.g.,
-    different forms, teaching material, solving software, etc.), the implicit
-    information, which we would infer from theories, needs to become explicit.
-    Through making the implicit information, explicit, we are able to formalize
-    more relationships between theories and other things (such as views and uses
-    of them).
-
-    New “Take home”: Explanation and rationalization of the content of theories
-    and their relationship to other aspects of Drasil.
+    Take home: Explanation and rationalization of the content of theories and
+    their relationship to other aspects of Drasil.
 
     Outline: Discussing the issue of theories encoded as expressions requiring
     too much inference (which, naturally, a computer cannot make without
@@ -64,29 +51,16 @@
 
 5. Typing Expressions:
 
-    Take home: Expression formation has specific rules we follow, or else the
-    expression we write are invalid/incomprehensible (and these validity rules
-    also apply to the programming language artifacts we generate). To ease the
-    cognitive stress of writing valid/comprehensible expressions, we can create
-    validation checks and make them static. In doing this, we will know which
-    expressions are valid or not, before attempting to use them for code
-    generation.
+    Take home: Untyped expressions cause problems too late in the development
+    process, so now they are typed.
+    
+    Outline: Discussion of type systems, the current issues faced, and how we
+    can type the relevant expression language in Drasil.
 
-    Outline: Discussing the issue of stress associated with writing expressions
-    without any sort of internal validation before external usage. Code
-    generation requires expressions be well-formed, we can ease the cognitive
-    stress associated with this by adding some sort of type checking mechanism.
-    Along these lines, we will be discussing judgment rules and the syntax rules
-    we will form.
+6. 'Storing All The Knowledge':
 
-6. Knowledge Management:
-
-    Take home: In working with many domains of knowledge, we naturally work with
-    many types of knowledge (chunks). As we continue to teach Drasil about each
-    domain, the globe of types expands. However, the existing method of storing
-    these chunks only allows for a limited number of types to be recorded
-    (ChunkDB). To remedy this, we may ignore the type of stored chunks and rely
-    on typed references that can interpret the chunks as originally needed.
+    Take home: Solve the scalability problem of dozens of tables by using a
+    “dynamically typed” approach and have a single database.
 
     Outline: The majority of this chapter will be about the “take-home” message,
     and then continue to mention some residual issues: What makes up a chunk?
@@ -94,15 +68,23 @@
 
 7. Future Work:
 
-    Take home: There are remaining issues from the previous chapters and more
-    knowledge we may encode. The depth and breadth of domain knowledge covered
-    can be generally improved, but we can also work towards what has been
-    embedded in Haskell.
+    Take home: 
+    
+    - ModelKinds: the models can continue to be examined, and more relationships
+      between them and 'code' can be made, so that they can find their way into
+      the generated source code. 
+        
+    - Typing: more terms can be added, typed representations of external
+      functions and variables can be added, and numeric expressions lack
+      information about dimension and units.
+
+    - ChunkDB: UIDs and the Chunk types themselves are left largely as
+      'unknowns'.
 
     Outline: N/A.
 
 8. Conclusion:
 
-    Take home & Outline: _I imagine the take-home message of the “Conclusion”
-    chapter would be a re-statement of the “take home” of the “Introduction.”
-    The outline will likely need to be based on everything else._
+    Take home: _I imagine the take-home message of the “Conclusion” chapter
+    would be a re-statement of the “take home” of the “Introduction.” The
+    outline will likely need to be based on everything else._

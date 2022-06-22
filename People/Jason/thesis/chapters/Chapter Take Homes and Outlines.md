@@ -69,20 +69,22 @@
 7. Future Work:
 
     Take home: 
-    
-    - ModelKinds: the models can continue to be examined, and more relationships
-      between them and 'code' can be made, so that they can find their way into
-      the generated source code. 
-        
-    - Typing: more terms can be added, typed representations of external
-      functions and variables can be added, and numeric expressions lack
-      information about dimension and units.
-
-    - ChunkDB: UIDs and the Chunk types themselves are left largely as
-      'unknowns'.
+      - ModelKinds: the models can continue to be examined, and more relationships
+        between them and 'code' can be made, so that they can find their way into
+        the generated source code. 
+          
+      - Typing: more terms can be added, typed representations of external
+        functions and variables can be added, and numeric expressions lack
+        information about dimension and units.
+  
+      - ChunkDB: UIDs and the Chunk types themselves are left largely as
+        'unknowns'.
 
     Outline: N/A.
 
 8. Conclusion:
 
-    Take home: Re-statement of achievements.
+   Take home: Re-statement of achievements:
+     - ModelKinds implementation
+     - Typing the expression language
+     - Enabled dynamic chunk registration, and typed UID references

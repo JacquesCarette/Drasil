@@ -25,7 +25,7 @@ theories important information in a precise language. Of course, for a
 mathematical theory, a mathematical language would be used. Describing a
 programming language artifact, we might prefer to call our theories by a series
 of other names (e.g., functions/methods, constants, modules, packages,
-libraries, \acsp{api}, \acsp{ast}.
+libraries, \acsp{api}, \acsp{ast}).
 
 In Drasil, both of these languages are of great importance. The mathematical
 field of knowledge is directly used in at least two domains currently captured:
@@ -248,7 +248,7 @@ in \RelationConcept{}s. Namely,
 			            was exactly the implicit knowledge I mentioned, it
 			            assumes, without statically checking consistency, that
 			            the Relations/Exprs provided as input for code
-			            generation were all of the form (\(y = f(\ldots{})\).
+			            generation were all of the form: \(y = f(\ldots{})\).
 			            See
 			            \url{https://github.com/JacquesCarette/Drasil/issues/628}
 			            for more information about state of relToQD w.r.t. RCs.}
@@ -348,7 +348,7 @@ expressions: \CodeExpr{} (\todo{ref Current CodeExpr Haskell}).
 
 Finally, we end up with 3 languages, as shown in \refLanguageDivision{}: \Expr{}
 (\refCurrentExprHaskell{}), \ModelExpr{} (\refCurrentModelExprHaskell{}), and
-\CodeExpr{} (\todo{ref Curent CodeExpr Haskell}). Each language has its own
+\CodeExpr{} (\todo{ref Current CodeExpr Haskell}). Each language has its own
 specific domain, and, although there is some overlap between each, we are able
 to enforce weaker rules on each formation through their \acs{ttf} instances if
 needed.
@@ -383,7 +383,7 @@ knowledge capture. Beginning with the existing case studies of Drasil, we will
 attempt to classify our existing knowledge better. We aim to make
 \RelationConcept{} a ``view'' of other ``higher-order''\todo{Seems inaccurate to
 	say higher-order, need something else most likely.} knowledge encodings. In
-other words, we replace \Expr{} as a knowlege container, and restrict its usage
+other words, we replace \Expr{} as a knowledge container, and restrict its usage
 to strictly ``mathematical expressions'', as opposed to ``expressions'' and
 information about models/theories. One notable change is that we will require
 the new theory knowledge containers to be able to fully re-create the original
@@ -525,7 +525,7 @@ certain language snippets and classifying that contextual information, we must
 ensure that we have obtained a generic means (algorithm) for reproducing the
 originating term from an instance of the new contextual information\todo{This is
 	awkwardly worded.}. In other words, there should be a generic method to
-reproduce the original information from the new information -- this is finding
+reproduce the original information from the new information — this is finding
 areas where we can add to the generation possibilities of Drasil.
 
 \section{Residual Issues}

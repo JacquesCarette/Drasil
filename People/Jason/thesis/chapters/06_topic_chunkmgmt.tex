@@ -5,21 +5,21 @@
 
 \begin{itemize}
 
-      \item UIDs
+      \item \UID{}s
 
-      \item ChunkDB: Multiple maps from UIDs to single types
+      \item ChunkDB: Multiple maps from \UID{}s to single types
 
       \item Problems occur:
             \begin{itemize}
 
-                  \item UID collisions
+                  \item \UID{} collisions
 
                   \item Difficult to ascertain what a specific chunk type is
-                        from a UID
+                        from a \UID{}
 
                   \item ``ChunkDB'' is not a stable core across Drasil-like
                         projects (ones that thrive on the same ``knowledge-based
-                        programming'' ideology). ChunkDBs are essentially the
+                        programming'' ideology). \ChunkDB{}s are essentially the
                         ``scope'' of a system.
 
             \end{itemize}
@@ -29,13 +29,13 @@
 
                   \item Merge the maps!
 
-                  \item The key would be the same; a UID.
+                  \item The key would be the same; a \UID{}.
 
                   \item The value type?
 
-                  \item An existentially quantified Data.Typeable.Typeable!
+                  \item An existentially quantified \inlineHs{Data.Typeable.Typeable}!
 
-                  \item e.g., ``data Chunk = forall a. Typeable => Chunk a''
+                  \item e.g., \inlineHs{data Chunk = forall a. Typeable => Chunk a}.
 
             \end{itemize}
 
@@ -45,15 +45,14 @@
                   \item What knowledge does the chunk rely on already having
                         been ``registered'' in the database and ready?
 
-                  \item They should have UIDs; where's our guarantee?
+                  \item They should have \UID{}s; where's our guarantee?
 
                   \item Debugging will be difficult; need an interface to dump
                         all information of a chunk quickly.
 
             \end{itemize}
 
-      \item Ok, revise: ``data Chunk = forall a. (Typeable a, HasUID a,
-            HasChunkRefs a, Dumpable a) => Chunk a''
+      \item Ok, revise: \inlineHs{data Chunk = forall a. (Typeable a, HasUID a, HasChunkRefs a, Dumpable a) => Chunk a}
 
       \item Ok, much better now.
 
@@ -75,7 +74,7 @@
             However, now we're relying too much on Haskell. How do we explain
             those parts?
 
-      \item Also, what are UIDs really? Do their information carry any real
+      \item Also, what are \UID{}s really? Do their information carry any real
             information? \textit{Rigid designators}.
 
 \end{itemize}

@@ -1,9 +1,11 @@
-# Chapter "Take Homes" and Outlines
+# Chapter “Take-Homes” and Outlines
 
 1. Introduction:
 
     Take home: A single universal mathematical expression language is
     insufficient to describe theories and all of their meta-level information.
+    Additionally, we must add type information to languages so that we can make
+    invalid expressions irrepresentable.
 
     Outline: Terse introduction to Drasil and Drasils ideology, followed by a
     discussion of the immediate issues associated with this research (encoding
@@ -22,33 +24,38 @@
     describe each component, including how those languages can be converted into
     softifacts).
 
+    A “product owner” is any person involved with the creation of some software
+    product, including, but not limited to, the actual "owners" (requestors) of
+    the software, the communicators of the needs of the software, and the
+    authors that realize the needs of software, into software.
+
 3. Drasil:
 
-    Take home: We can generalize and generate families of software artifacts by
-    capturing and formalizing knowledge, using domain-specific languages to make
-    them feel "natural."
+    Take home: Drasil is an exploration of the ideology discussed in Chapter 2.
+    The goal of Drasil is to generalize and generate families of software
+    artifacts by capturing and formalizing knowledge using domain-specific
+    languages.
     
-    Alternative take home: Formalizing knowledge (captured in the form of a
-    series of domain-specific languages) and their relationships allows us to
-    form families of software artifacts, from which a user can create specific
-    artifacts by making choices.
-
-    Outline: General introduction to Drasils origins, research team, area, and
-    goals, development methodology, architecture, and current issues.
+    Outline: General introduction to Drasils origins, research area, and goals,
+    development methodology, architecture, and current issues.
 
 4. Framing Theories:
 
-    Take home: Since humans can infer knowledge from small "views" of a larger
-    picture, transferring equational knowledge using equations is possible
-    amongst those familiar with the specific "views". For example, transferring
-    `y = m * x + b` is easy for us to recognize as the equation of a line, but
-    changing the variables or the form (e.g., using point-slope form, intercept
-    form, etc.) will make it more difficult. To formalize the translation of
-    specific kinds of theories into various forms (e.g., different forms,
-    teaching material, solving software, etc.), the implicit information, which
-    we would infer from theories, needs to become explicit. Through making the
-    implicit information, explicit, we are able to formalize more relationships
-    between theories and other things (such as views and uses of them).
+    Old “Take home”: Since humans can infer knowledge from small “views” of a
+    larger picture, transferring equational knowledge using equations is
+    possible amongst those familiar with the specific “views.” For example,
+    transferring `y = m * x + b` is easy for us to recognize as the equation of
+    a line, but changing the variables or the form (e.g., using point-slope
+    form, intercept form, etc.) will make it more difficult. To formalize the
+    translation of specific kinds of theories into various forms (e.g.,
+    different forms, teaching material, solving software, etc.), the implicit
+    information, which we would infer from theories, needs to become explicit.
+    Through making the implicit information, explicit, we are able to formalize
+    more relationships between theories and other things (such as views and uses
+    of them).
+
+    New “Take home”: Explanation and rationalization of the content of theories
+    and their relationship to other aspects of Drasil.
 
     Outline: Discussing the issue of theories encoded as expressions requiring
     too much inference (which, naturally, a computer cannot make without
@@ -81,9 +88,9 @@
     (ChunkDB). To remedy this, we may ignore the type of stored chunks and rely
     on typed references that can interpret the chunks as originally needed.
 
-    Outline: The majority of this chapter will be about the "take-home" message,
+    Outline: The majority of this chapter will be about the “take-home” message,
     and then continue to mention some residual issues: What makes up a chunk?
-    What is a UID? How should information be encoded in Drasil?
+    What is a UID? How should we encode information in Drasil?
 
 7. Future Work:
 
@@ -96,6 +103,6 @@
 
 8. Conclusion:
 
-    Take home & Outline: _I imagine the take-home message of the "Conclusion"
-    chapter would be a re-statement of the "take home" of the "Introduction."
+    Take home & Outline: _I imagine the take-home message of the “Conclusion”
+    chapter would be a re-statement of the “take home” of the “Introduction.”
     The outline will likely need to be based on everything else._

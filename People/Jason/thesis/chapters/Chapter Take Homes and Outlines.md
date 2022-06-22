@@ -85,6 +85,4 @@
 
 8. Conclusion:
 
-    Take home: _I imagine the take-home message of the “Conclusion” chapter
-    would be a re-statement of the “take home” of the “Introduction.” The
-    outline will likely need to be based on everything else._
+    Take home: Re-statement of achievements.

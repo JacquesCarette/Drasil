@@ -19,9 +19,10 @@ mathematical knowledge into other forms because, we, lack information about
 their structure (leading to inflexible conversions to other forms), don't
 statically know when expressions are admissible in different contexts (e.g., in
 code generation, derivations, etc.), and we don't know when are well-formed
-(well-typed). Additionally, as more types of knowledge are codified (and typed),
-Drasils knowledge database faces difficulties in scaling due to its
-typed-collection nature.
+(well-typed). As more theories are codified and typed, Drasils knowledge
+database faces difficulties in scaling since it relies on a single unique map
+for each type of knowledge, resulting in an ever-growing list of maps and a
+tediously precise means of knowledge collection and reference.
 
 Research questions:
 

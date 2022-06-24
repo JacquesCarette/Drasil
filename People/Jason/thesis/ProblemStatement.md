@@ -30,22 +30,22 @@ Research questions:
    multiple contexts. But not all expressions are valid in all contexts. How do
    we 'fix' that? 
 
-      (~Answered by the division of Expr into CodeExpr/Expr/ModelExpr)
+      (Answered by the division of Expr into CodeExpr/Expr/ModelExpr)
 
 2. Drasil's current encoding of "theories" are essentially black boxes. We would
    like to be able to use some structural information present in the short list
    of the 'kinds' of theories that show up in scientific computing. How do we
    codify that?
 
-      (~Answered by the creation of ModelKinds)
+      (Answered by the creation of ModelKinds)
 
 3. How can we ensure that our language(s) of simple mathematical expressions
    encode 'valid' expressions?
 
-      (~Answered by the typing of Expr)
+      (Answered by the typing of Expr)
 
 4. Our current "typed" approach to collecting different kinds of data is hard to
    extend. How can we make it easier to extend?
 
-      (~Answered by upgrading ChunkDB to accept almost any type that obeys
+      (Answered by upgrading ChunkDB to accept almost any type that obeys
       certain requirements)

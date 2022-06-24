@@ -78,6 +78,21 @@
 
 \end{writingdirectives}
 
+\intodo{Add links to where these above writing directives were derived from.}
+
+The usual means of building software involves multiple artifacts (such as
+specifications and code) that contain duplicate information that is also
+supposed to be linked (\textit{traceability}). Drasil aims to use a generative
+approach to de-duplicate this information and make traceability more immediate.
+
+For any ``software'', its artifacts (such as specifications and code) are linked
+together by a common thread of knowledge. This knowledge typically ends up used
+in the production of the software artifacts, and, often, appears in different
+forms and is duplicated, in the produced artifacts. Drasil\cite{Drasil2021} aims
+to use a generative approach to de-duplicate this information and make the
+\textit{traceability} of knowledge more immediate. Drasil currently studies
+generating \ACF{scs} conforming to a \ACF{srs}. This work aims to
+
 As the world increasingly relies on software and non-executable software
 artifacts, the software becomes increasingly scrutinized in multiple facets.
 Does a piece of software do what I want/need? Is it stable? Is it reliable? What
@@ -94,61 +109,79 @@ to these questions should have been already well-understood before the final
 software product was formed, even if the answer was to ignore the question until
 later. Drasil \cite{Drasil2021} looks to form answers to these same questions
 through \textit{definition}. Using generative techniques, Drasil builds software
-that conforms to specifications \textit{perfectly} by having all relevant
-information of the specifications and how they translate into some software
-artifacts well-understood to Drasil. This thesis aims to explore these ideas
-through exploring capturing mathematical knowledge in Drasil.
+that conforms to specifications by having all relevant information of the
+specifications and how they translate into some software artifacts
+well-understood to Drasil. This thesis aims to explore these ideas through
+exploring capturing mathematical knowledge in Drasil.
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
 
-In the land of scientific software, mathematical knowledge and it's conversion
-into software is of utmost importance to ensure the software is:
+Drasil has de-duplicated knowledge across \acs{scs} artifacts relevant to
+specifications and code. Through codifying knowledge and collecting a coherent
+set of information in a knowledge database, we are able to generate a wide
+variety of software artifacts (e.g., \acs{oo} programs [Java, C$++$, Python,
+            Swift, and C\#] with guided usage via Makefiles, and requirements specifications
+      [HTML and TeX]). This codified knowledge was de-duplicated from an originating
+set of artifacts via bottom-up gathering, however, we should be able to use the
+same knowledge to generate more artifacts in different languages, flavours, and
+with more options. However, each desired artifact language has its own way of
+encoding information (such as mathematical expressions). This leaves us needing
+to teach Drasil more about the targeted languages (and, at times, about the
+existing codified knowledge) in order to reliably generate usable artifacts.
+Mathematical expression and theory encoding becomes a key point of interest for
+us because they are used in across the board (e.g., derivations, code,
+constraints, definitions, etc.). Drasil relies on a single universal untyped
+mathematical language to describe general mathematical knowledge (theories).
+Unfortunately, this results in unreliable and brittle conversions of
+mathematical knowledge into other forms because, we, lack information about
+their structure (leading to inflexible conversions to other forms), don't
+statically know when expressions are admissible in different contexts (e.g., in
+code generation, derivations, etc.), and we don't know when are well-formed
+(well-typed). As more theories are codified and typed, Drasils knowledge
+database faces difficulties in scaling since it relies on a single unique map
+for each type of knowledge, resulting in an ever-growing list of maps and a
+tediously precise means of knowledge collection and reference.
 
-\intodo{I think I saw some better worded goals previously? TODO: Check Dan's work and Brook's work}
+\section{Research Questions}
+
 \begin{enumerate}
 
-      \item \textbf{Ready \& Safely Usable} The software should be able to
-            easily reach the runtime phase, and should never run into unexpected
-            issues at runtime.
+      \item[\namedlabel{rq:one}{RQ1}] Drasil has a language of simple
+            mathematical expressions that are used in multiple contexts. But not
+            all expressions are valid in all contexts. How do we fix that?
 
-      \item \textbf{Reliable} The user of the software should be able to trust
-            and feel comfortable that the software does as expected.
+      \item[\namedlabel{rq:two}{RQ2}] Drasil's current encoding of "theories"
+            are essentially black boxes. We would like to be able to use some
+            structural information present in the short list of the ``kinds'' of
+            theories that show up in scientific computing. How do we codify
+            that?
 
-      \item \textbf{Accurate} The software should be a correct depiction of all
-            aspects of the needs of the software.
+      \item[\namedlabel{rq:three}{RQ3}] How can we ensure that our language(s)
+            of simple mathematical expressions admits only valid expressions?
 
-      \item \textbf{Traceable} Partially related to being accurate, the
-            ``accuracy'' should be traceable to the knowledge used to form the
-            software.
-
-      \item \textbf{Performant and efficient} The software should be slim, use
-            only as much system resources as needed, and perform tasks within a
-            reasonably usable and actionable time.
+      \item[\namedlabel{rq:four}{RQ4}] Our current ``typed'' approach to
+            collecting different kinds of data is hard to extend. How can we
+            make it easier to extend?
 
 \end{enumerate}
-
-As part of Drasil's focus, this mathematical knowledge must become sufficiently
-codified such that users may be able to automatically build a program that
-satisfies an \acs{srs} document. In other words, building programs exactly
-according to the precise problem it solves by understanding the relevant
-definitions and descriptions (using a specific \acs{srs}). By doing this, Drasil
-will be able to reliably and flexibly generate a host of \acs{stem}-related
-software artifacts.
 
 \section{Contributions of the Author}
 \label{sec:intro:contributions}
 
-Dr. Jacques Carette had already built a prototype solution \todo{cite appendix
-entry of code? I'm not sure, yet, how I should cite what Dr. Carette had already
-written.} for the issue of transcribed theories in Drasil not exposing enough
-information for reliable code generation (as discussed in
-\Cref{chap:modelkinds}). Relying on Dr. Jacques Carettes prototype, A current
-implementation and other re-designs in the works have been developed by the
-author of this work. Both issues discussed in \Cref{chap:modelkinds} and
-\Cref{chap:typedExpr} were discussed before the author had joined the Drasil
-research group. Drasil, and the expression language in particular, had been
-constructed before this work.
+\intodo{\ref{rq:four} Link each sentence in the contributions section to the
+      rqs.}
+
+Dr. Jacques Carette built a prototype solution\todo{Cite appendix entry of
+      code?. How should I cite what Dr. Carette had already written?} for the
+issue of transcribed theories in Drasil not exposing enough information
+for reliable code generation (as discussed in \Cref{chap:modelkinds}).
+Relying on Dr. Jacques Carettes prototype, A current implementation and
+other re-designs in the works have been developed by the author of this
+work. Both issues discussed in \Cref{chap:modelkinds} and
+\Cref{chap:typedExpr} were discussed before the author had joined the
+Drasil research group. Drasil, and the expression language in particular,
+had been constructed before this work.
 
 \section{Thesis Outline}
 \label{sec:intro:outline}

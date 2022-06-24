@@ -83,6 +83,16 @@
 }
 \usepackage[nameinlink]{cleveref} % Fixes capitalization of internal references
 
+% Allow labelling enum items: Credits to: https://texblog.org/2012/03/21/cross-referencing-list-items/
+\usepackage{enumitem}
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+    \textbf{#2}%
+    \def\@currentlabel{#2}%
+    \phantomsection\label{#1}\endgroup
+}
+\makeatother
+
 % Make footnote counter reset for each new page.
 \usepackage{footnpag}
 

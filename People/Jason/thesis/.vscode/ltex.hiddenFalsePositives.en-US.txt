@@ -1,0 +1,6 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QUses a series of dsl to build up the knowledge-base and “story” of a scene/project, until sufficient knowledge is built such that a generator may take the whole story and generate representational software artifacts.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qshowdayofmonth=false\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Q[topline=false, rightline=false, bottomline=false,linewidth=2pt, innerrightmargin=0pt, leftmargin=0pt,innerleftmargin=5pt, skipabove=8pt, skipbelow=8pt]mdleftbar\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Q[linewidth=2pt, linecolor=green, backgroundcolor=green!8, roundcorner=10pt, skipabove=8pt, skipbelow=8pt]mdwritingdirectives\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThese writing directives are based the content of a video by Dr. Cecile Badenhorst (\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q) and a post about writing introductions by UNSW: \\E(?:Dummy|Ina|Jimmy-)[0-9]+$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\Q[topline=false, rightline=false, bottomline=false,linewidth=2pt, innerrightmargin=0pt, leftmargin=0pt,innerleftmargin=5pt, skipabove=8pt, skipbelow=8pt]mdleftbar\\E$"}

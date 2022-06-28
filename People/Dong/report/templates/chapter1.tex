@@ -29,7 +29,18 @@ To take an example, in above equation, \[y_t\] is the dependent variable, and \[
 \end{bmatrix}
 \]
 
-Base on this analysis, we decide to create a datatype called ``DifferentialModel'' to capture the ODE knowledge. The ``DifferentialModel'' consists of the independent variable, the dependent variable, the coefficient matrix, the unknown vector, the constant vector, and its meta data.
+Base on this analysis, we decide to create a datatype \textbf{called} \verb|DifferentialModel| to capture the ODE knowledge. The \verb|DifferentialModel| consists of the independent variable, the dependent variable, the coefficient matrix, the unknown vector, the constant vector, and its meta data.
+
+\begin{lstlisting}[language=HaskellUlisses, frame=single]
+data DifferentialModel = SystemOfLinearODEs {
+	_indepVar :: UnitalChunk,
+	_depVar :: ConstrConcept,
+	_coefficients :: [[Expr]],
+	_unknowns :: [Unknown],
+	_dmConstants :: [Expr],
+	_dmconc :: ConceptChunk
+}
+\end{lstlisting}
 
 %% Matrix
 % \[

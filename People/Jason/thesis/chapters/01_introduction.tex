@@ -3,8 +3,7 @@
 
 \begin{writingdirectives}
 
-      \item \textit{These writing directives are based the content of a video by
-            Dr. Cecile Badenhorst
+      \item \textit{Based on the content of a video by Dr. Cecile Badenhorst
             (\url{https://www.youtube.com/watch?v=c2oGY1c51jc}) and a post about
             writing introductions by UNSW:
             \url{https://www.student.unsw.edu.au/introductions}}
@@ -84,24 +83,35 @@
 
 \end{writingdirectives}
 
-\iffalse
-      The usual means of building software involves multiple artifacts (such as
-      specifications and code) that contain duplicate information that is also
-      supposed to be linked (\textit{traceability}). Drasil aims to use a generative
-      approach to de-duplicate this information and make traceability more immediate.
-\fi
+The usual means of building software involves multiple artifacts (such as
+specifications and code) that contain duplicate information that is also
+supposed to be linked (\textit{traceability}). Drasil aims to use a generative
+approach to de-duplicate this information and make traceability more immediate.
+Drasil currently uses a stable scientific knowledge-base to generate families of
+\ACF{scs} conforming to a \ACF{srs}\cite{SmithAndLai2005}.
 
-A common thread of knowledge links together all software artifacts. Software
-developers pull on this thread to produce software artifacts, but the thread is
-lost on the authors, isn't effectively shared, and artifacts quickly becomes out
-of date as more is understood or requirements changed. Typically, this knowledge
-is duplicated across many artifacts (such as specifications and code). Through
-codifying domain knowledge, Drasil\cite{Drasil2021} aims to use a generative
-approach to \textit{de-duplicate} this information, and generate software
-artifacts that are \textit{traceable}, \textit{reusable}, \textit{maintainable},
-and \textit{consistent}, against a stable body of knowledge. Drasil currently
-focuses on \ACF{scs} conforming to a specific \ACF{srs}
-template\cite{SmithAndLai2005}.
+\iffalse
+      % Potential replacement for the above paragraph
+      The usual means of building software involves multiple artifacts (such as
+      specifications and code) that contain duplicate information that is
+      supposed to be linked (\textit{traceability}). Drasil aims to capture the
+      information and knowledge necessary to create these artifacts, and
+      re-generate the artifacts, making traceability more immediate.
+
+      % A less-specific introduction
+      A common thread of knowledge links together all software artifacts.
+      Software developers pull on this thread to produce software artifacts, but
+      the thread is lost on the authors, isn't effectively shared, and artifacts
+      quickly becomes out of date as more is understood or requirements changed.
+      Typically, this knowledge is duplicated across many artifacts (such as
+      specifications and code). Through codifying domain knowledge,
+      Drasil\cite{Drasil2021} aims to use a generative approach to
+      \textit{de-duplicate} this information, and generate software artifacts
+      that are \textit{traceable}, \textit{reusable}, \textit{maintainable}, and
+      \textit{consistent}, against a stable body of knowledge. Drasil currently
+      focuses on \ACF{scs} conforming to a specific \ACF{srs}
+      template\cite{SmithAndLai2005}.
+\fi
 
 We will explore capturing mathematical theories frequently pulled from in
 building \acs{scs}, make mathematical expressions typed, restrict expression
@@ -111,30 +121,33 @@ usage to appropriate contexts, and scale Drasils knowledge database.
 \label{sec:intro:problemStatement}
 
 Drasil has de-duplicated knowledge across \acs{scs} artifacts relevant to
-specifications and code. Through codifying knowledge and collecting a coherent
-set of information in a knowledge database, we are able to generate a wide
-variety of software artifacts (e.g., \acs{oo} programs via \acs{gool} with
-guided usage via Makefiles, and requirements specifications [HTML and TeX]).
-This codified knowledge was de-duplicated from an originating set of artifacts
-via bottom-up gathering, however, we should be able to use the same knowledge to
-generate more artifacts in different languages, flavours, and with more options.
-However, each desired artifact language has its own way of encoding information
-(such as mathematical expressions). This leaves us needing to teach Drasil more
-about the targeted languages (and, at times, about the existing codified
-knowledge) in order to reliably generate usable artifacts. Mathematical
-expression and theory encoding becomes a key point of interest for us because
-they are used in across the board (e.g., derivations, code, constraints,
-definitions, etc.). Drasil relies on a single universal untyped mathematical
-language to describe general mathematical knowledge (theories). Unfortunately,
-this results in unreliable conversions of mathematical knowledge into other
-forms because, we, lack information about their structure (leading to inflexible
-conversions to other forms), don't statically know when expressions are
-admissible in different contexts (e.g., in code generation, derivations, etc.),
-and we don't know when are well-formed (well-typed). As more theories are
-codified and typed, Drasils knowledge database faces difficulties in scaling
-since it relies on a single unique map for each type of knowledge, resulting in
-an ever-growing list of maps and a tediously precise means of knowledge
-collection and reference.
+specifications and code. Through codifying knowledge and creating coherent
+``stories'', we are able to generate a wide variety of software artifacts (e.g.,
+\acs{oo} programs via \acs{gool} with guided usage via Makefiles, and
+requirements specifications [HTML and TeX]). This codified knowledge was
+de-duplicated from an originating set of artifacts via bottom-up gathering,
+however, we should be able to use the same knowledge to generate more artifacts
+in different languages, flavours, and with more options. However, each desired
+artifact language has its own way of encoding information (such as mathematical
+expressions). This leaves us needing to teach Drasil more about the targeted
+languages (and, at times, about the existing codified knowledge) in order to
+reliably generate usable artifacts. Mathematical expression and theory encoding
+becomes a key point of interest for us because they are used in across the board
+(e.g., derivations, code, constraints, definitions, etc.). Drasil relies on a
+single universal untyped mathematical language to describe general mathematical
+knowledge (theories). As a result, transforming theories into other forms (such
+as code) is complex, inflexible, and unreliable because the encodings lack
+information about the meaningful structure of the theories and how and when they
+are usable or valid. Continuing, as we encode more \textit{types} of information
+in Drasil, we face difficulties in placing parameterized types into Drasils
+active knowledge database and need it to scale.
+
+\iffalse
+      As more theories are codified and typed, Drasils knowledge database faces
+      difficulties in scaling since it relies on a single unique map for each
+      type of knowledge, resulting in an ever-growing list of maps and a
+      tediously precise means of knowledge collection and reference.
+\fi
 
 \section{Research Questions}
 \label{sec:intro:researchquestions}
@@ -145,7 +158,7 @@ collection and reference.
             mathematical expressions that are used in multiple contexts. But not
             all expressions are valid in all contexts. How do we fix that?
 
-      \item[\namedlabel{rq:two}{RQ2}] Drasil's current encoding of "theories"
+      \item[\namedlabel{rq:two}{RQ2}] Drasil's current encoding of ``theories''
             are essentially black boxes. We would like to be able to use some
             structural information present in the short list of the ``kinds'' of
             theories that show up in scientific computing. How do we codify
@@ -207,6 +220,5 @@ in Drasil (\ref{rq:two}), the issues associated with using a single universal
 mathematical language to describe theories (\ref{rq:one}), and how we can
 resolve these problems. \Cref{chap:typedExpr} describes issues associated with
 the formation of mathematical expressions (\ref{rq:three}).
-\Cref{chap:storingChunks} focuses on how knowledge is stored in Drasil, and how
-we can scale Drasils database of knowledge against future growth in domain
-knowledge.
+\Cref{chap:storingChunks} focuses on how Drasil stores information, and how it
+can be scaled.

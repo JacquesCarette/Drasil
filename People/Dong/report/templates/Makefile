@@ -6,7 +6,7 @@ BIBSRC = Thesis_Main
 
 RMDIR = rm -rf
 
-run: build clean
+run: build
 
 build: 
 	$(LATEX_CMD) $(SRC)

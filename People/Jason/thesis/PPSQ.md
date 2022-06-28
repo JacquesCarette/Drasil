@@ -14,10 +14,10 @@ an "untyped" universal mathematical expression language.
 models in ways that we can generate a plethora of software artifacts, is
 difficult.
 
-* What does it mean to "teach Drasil" about things? _It means Drasil having a method of **communicating** about the various **things**. Thankfully, it happens in such a way that is coherent to us, and follows our logical rules. Think of "APIs" as languages of sorts... kinda._ 
+* What does it mean to "teach Drasil" about things? _It means Drasil having a method of **communicating** about the various **things**. Thankfully, it happens in such a way that is coherent to us, and follows our logical rules. Think of “APIs” as languages of sorts… kinda._ 
   * What is a domain-specific language?
   * How are domain-specific languages taught to Drasil? How do we embed them?
-* What is a "language"?
+* What is a “language”?
   * What is a "mathematical language"?
     * What is a "single universal mathematical language"?
       * Pros and cons?

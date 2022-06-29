@@ -82,3 +82,9 @@ untyped
 expressibility
 Badenhorst
 Roadmap
+GlassBR
+DDs
+GDs
+TMs
+InstanceModels
+Haskells

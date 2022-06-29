@@ -49,7 +49,7 @@
 \usepackage{float}
 
 % For code highlighting
-\usepackage[newfloat]{minted}
+\usepackage[newfloat,outputdir=build]{minted}
 % Credits to Arash Esbati (https://tex.stackexchange.com/a/254177) for the
 % listings-related component of minted usage.
 
@@ -157,7 +157,6 @@
 \date{\thesisSubmissionMonthYear{}}
 
 % START : TODO LIST SETUP
-% TODO Notes!
 \ifshowwritingdirectives
   \usepackage{todonotes}
   \setlength{\marginparwidth}{3.5cm}
@@ -267,9 +266,8 @@
 % List of Abbreviations and Symbols
 %------------------------------------------------------------------------------
 
-% TODO: make sure that all acronyms are actually used.
 \printacronyms[
-  display=all,
+  display=used, % Change value 'used' to 'all' if you want to show unused acronyms
   template=longtable,
   heading=chapter,
   name=List of Abbreviations and Symbols

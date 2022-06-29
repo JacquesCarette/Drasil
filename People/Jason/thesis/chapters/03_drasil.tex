@@ -27,19 +27,24 @@
 
 \section{An Exploration}
 
-Originally known as \ACF{lss}\todo{Cite LSS}, Drasil is an exploration of this
-ideology described in \Cref{chap:ideology}. Drasil's largest domain of knowledge
+Originally known as \ACF{lss}\todo{Cite LSS, or remove this bit of information
+      if there's nothing to cite.}, Drasil is an exploration of this ideology
+described in \Cref{chap:ideology}. Drasil's largest domain of knowledge
 covered originates from \acs{lss}: \acl{scs}. \porthref{Dr. Jacques
       Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
-      Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
-Drasil. Drasil is deeply embedded in Haskell \cite{Haskell2010}, relying on
-Stack \cite{HaskellStack}, and compiling against \acs{ghc} 8.8.4 \cite{GHC884}.
-Haskell is the language of choice for various reasons, but the most important
-reasons are regarding its paradigm: purely functional, with immutable data and a
-strong, sound type system based on Church's type theory (a.k.a., simple type
-theory)\todo{Cite Church's type theory, and somewhere that notes that Haskell is
-      indeed based on it}. This provides a sound system developers may use to
-classify, create, and work with knowledge.
+      Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal
+investigators of Drasil. Drasil is deeply embedded in Haskell
+\cite{Haskell2010}, relying on Stack \cite{HaskellStack}, and compiling
+against \acs{ghc} 8.8.4 \cite{GHC884}. Haskell is the language of choice
+for various reasons, but the most important reasons are regarding its
+paradigm: purely functional, with immutable data and a strong, sound type
+system based on Hindley-Milner type system\todo{Cite Hindley-Milner type
+      theory.}\todo{Cite ``Haskell 2010'' specification being based on
+      Hindley-Milner type theory.}. This provides a sound system developers may
+use to classify, create, and work with knowledge.
+
+\intodo{I should note that when I refer to ``Haskell,'' I'm referring to Haskell
+      2010 specification and the GHC compiler version 8.}
 
 Drasil is currently capable of generating usable software through compiling to
 \ACF{gool}, which is capable of producing Java, C++, Python, C\#
@@ -71,9 +76,8 @@ using a formalized \acs{scs} \ACF{srs} template \cite{SmithAndLai2005}. A
 ``control'' program and \acs{srs} are manually created and used as a baseline
 target for the final artifact. Development is focused on creating a system of
 justification for each component of the baseline program, following a
-``bottom-up'' agile \todo{Double check if it is indeed an agile approach}
-development approach. Drasil has been constructed following the demands and
-requirements of eight (8) case studies:
+``bottom-up'' agile development approach. Drasil has been constructed following
+the demands and requirements of eight (8) case studies:
 
 \caseStudiesTable
 
@@ -230,7 +234,7 @@ sufficient \acs{srs} documents, and ready-to-use software.
 
 \intodo{Code snippet: ``main'' function of GlassBR.}
 
-\todo{Ref. ``main'' function code snippet above.} displays an example, from the
+\todo{Ref\. ``main'' function code snippet above.} displays an example, from the
 \acs{glassbr} case study, of what a transformer looks like in Drasil. This
 transformer takes knowledge collected, configures a transformation task for the
 desired outputs, as prescribed by an orchestrating developer, and performs an
@@ -272,23 +276,22 @@ language if we decide to use the calculations for code generation as well.
 Drasil is capable of generating for each case study. The \acs{srs} is the
 simplest to generate because it is not tested for logical consistency and
 usability by a software developer. As such, the \acs{srs} is built for each for
-case study. Some case studies (\acs{gamephysics}, \acs{hghc}, and
-\acs{ssp}\todo{I think it's just these 3 case studies that are incomplete, but
-      double check!}) are still actively being developed, but are left incomplete at
-the time of writing. The \acs{srs} is currently generated in both \LaTeX{}\ and
-\acs{html} flavours, with the \LaTeX{}\ variant having supplementary build
-information for building to a single \acs{pdf} file, and the \acs{html} variant
-accessible from a web browser compliant with \acs{html} version 5 standards. The
-\acs{glassbr}, \acs{projectile}, \acs{pdcontroller}, and \acs{nopcm} case
-studies each are capable of generating representational software. \acs{nopcm} is
-usable in all languages supported by \acs{gool} except for Swift due to the lack
-of a Drasil-supported \acs{ode} solving library for the Swift \acs{gool}
-renderer. \acs{pdcontroller} was built outside of the normal means of Drasils
-case studies development, being built by a student\todo{Cite Naveens work.} at
-McMaster University for a class taken. Code generation for \acs{pdcontroller} is
-not impossible, it just requires more investigation for the needs of the case
-study. However, both the issues related to \acs{nopcm} and \acs{pdcontroller}
-are outside the scope of this work.
+case study. Some case studies (\acs{gamephysics}, \acs{hghc}, and \acs{ssp}) are
+still actively being developed, but are left incomplete at the time of writing.
+The \acs{srs} is currently generated in both \LaTeX{}\ and \acs{html} flavours,
+with the \LaTeX{}\ variant having supplementary build information for building
+to a single \acs{pdf} file, and the \acs{html} variant accessible from a web
+browser compliant with \acs{html} version 5 standards. The \acs{glassbr},
+\acs{projectile}, \acs{pdcontroller}, and \acs{nopcm} case studies each are
+capable of generating representational software. \acs{nopcm} is usable in all
+languages supported by \acs{gool} except for Swift due to the lack of a
+Drasil-supported \acs{ode} solving library for the Swift \acs{gool} renderer.
+\acs{pdcontroller} was built outside of the normal means of Drasils case studies
+development, being built by a student\todo{Cite Naveens work.} at McMaster
+University for a class taken. Code generation for \acs{pdcontroller} is not
+impossible, it just requires more investigation for the needs of the case study.
+However, both the issues related to \acs{nopcm} and \acs{pdcontroller} are
+outside the scope of this work.
 
 The code generator works by following the requirements as set in the \acs{srs}
 document, applying transformations until a sufficient knowledge-base can be
@@ -302,9 +305,8 @@ software artifact. If such calculation path cannot be found, then no program
 will be generated, and an error will be displayed to the user at Drasils runtime
 (e.g., it is not checked at Drasil compile-time). Each executable software
 artifact produced is coupled with a means (currently, a generated Makefile) to
-run and, where required, build the software artifact. Additionally, where
-supported, Doxygen\todo{cite} is also configured and built\todo{Double check
-      what we do with the Doxygen}.
+run and, where required, build the software artifact. Additionally, for
+supported languages, Doxygen \cite{Doxygen} configurations may be built.
 
 The remaining case studies that do not generate code are still left. Issues
 related to their encodings of mathematical knowledge plague their usability in

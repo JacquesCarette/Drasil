@@ -20,7 +20,7 @@ getting_started:
 	@echo "3. Add chapter snippets to 'chapters/', and '\input' each one in 'chapters.tex'."
 	@echo "4. Add references to 'references.bib'."
 
-build:
+build: # '-output-directory=build' is a special name and is referenced from '\usepackage{minted}'region in 'thesis.tex'
 	latexmk -output-directory=build -pdf -interaction=nonstopmode thesis.tex --shell-escape
 
 clean:

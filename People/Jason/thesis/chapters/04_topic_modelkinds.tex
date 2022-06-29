@@ -8,24 +8,21 @@ understandings of the phenomenon — the open-ended questions and gaps in our
 knowledge. In any domain of knowledge (such as mathematics, philosophy, physics,
 chemistry, biology, computer science, or any other studied subject), we often
 think about various phenomenon in logical terms of theories and axioms, where
-the theories and axioms are written using a global logical language with precise
-meanings\todo{I almost make it sound like we're not using English/Any other
-	language to communicate ideas, I should clarify this.}. The language is
-typically tailored to the field of knowledge. As this work pertains to Drasil,
-one language of interest to this research is that of the mathematical language.
-A mathematical language is heavily used in science, conveying important
-theories, axioms, corollaries, amongst other things. As mathematicians
-transferring knowledge to one another, we often use a written form of knowledge,
-though unlikely, potentially, with a precise structure to our transcription of
-the knowledge, but still, the structure is textual. We might break up the
-transcription of the knowledge into its logical constituents. The components of
-a theory may be a name, a natural language description, a derivation, some
-information regarding its origin (e.g., a reference), and a formalization of the
-theories important information in a precise language. Of course, for a
-mathematical theory, a mathematical language would be used. Describing a
-programming language artifact, we might prefer to call our theories by a series
-of other names (e.g., functions/methods, constants, modules, packages,
-libraries, \acsp{api}, \acsp{ast}).
+the theories and axioms are written using a formal \acs{dsl} tailored to the
+field of knowledge. As this work pertains to Drasil, one language of interest to
+this research is that of the mathematical language. A mathematical language is
+heavily used in science, conveying important theories, axioms, corollaries,
+amongst other things. As mathematicians transferring knowledge to one another,
+we often use a written form of knowledge, though unlikely, potentially, with a
+precise structure to our transcription of the knowledge, but still, the
+structure is textual. We might break up the transcription of the knowledge into
+its logical constituents. The components of a theory may be a name, a natural
+language description, a derivation, some information regarding its origin (e.g.,
+a reference), and a formalization of the theories important information in a
+precise language. Of course, for a mathematical theory, a mathematical language
+would be used. Describing a programming language artifact, we might prefer to
+call our theories by a series of other names (e.g., functions/methods,
+constants, modules, packages, libraries, \acsp{api}, \acsp{ast}).
 
 In Drasil, both of these languages are of great importance. The mathematical
 field of knowledge is directly used in at least two domains currently captured:
@@ -37,24 +34,23 @@ generate a series of representational software programs. Thankfully, Smith and
 Lai \cite{SmithAndLai2005} break down theories relevant to \acs{scs} into at
 least four (4) kinds for their \acs{srs} template:
 
-\intodo{There is a better discussion of these 4 on GitHub (Issue \#2599).}
 \intodo{Insider knowledge: the 3 ``models'' are actively being re-thought, and
 	\textit{are} being renamed to just ``theories''.}
 
 \begin{enumerate}
 
 	\item \textbf{Theory Models}: A ``theory presentation'' \todo{Cite ``Theory
-		      Presentation'', I'm not quite sure what to cite for this yet}: an
-	      abstract theory, highly general and unspecific, with room for
-	      refinement. Typically, these are names coupled with information
-	      contained as axioms and data that make up a coherent story, but
-	      that are too vague to be immediately usable by the developers
-	      other than for refining into Instance Models.
+		      Presentations.''}: an abstract theory, highly general and
+	      unspecific, with room for refinement. Typically, these are names
+	      coupled with information contained as axioms and data that make up
+	      a coherent story, but that are too vague to be immediately usable
+	      by the developers other than for refining into Instance Models.
 
-	\item \textbf{General Definitions}: A partially refined theory, typically
-	      bearing a stronger relation to the context of the \acs{srs} than the
-	      Theory Models. However, still, these are generally theoretical and
-	      abstract, much like Theory Models.
+	\item \textbf{General Definitions}: A partially refined\todo{Discuss what
+		      refinement means here.} theory, typically bearing a stronger relation
+	      to the context of the \acs{srs} than the Theory Models. However,
+	      still, these are generally theoretical and abstract, much like Theory
+	      Models.
 
 	\item \textbf{Instance Models}: A fully refined theory, derived from the
 	      Theory Models and General Definitions, and directly usable by
@@ -103,17 +99,16 @@ actively developed to remove the manually written exceptions made for them
 Instance Models, General Definitions, and Data Definitions each rely on a
 \textit{Relation Concept} (\RelationConcept{}): a notable and named mathematical
 relation with a description and abbreviated name. A \RelationConcept{} is
-modelled as a \Relation{} coupled with a \ConceptChunk{} (\todo{Add ConceptChunk
-	original definition to thesis appendix.}, a named \textit{thing} with a name,
+modelled as a \Relation{} coupled with a \ConceptChunk{}
+(\refOriginalConceptChunkHaskell{}, a named \textit{thing} with a name,
 abbreviation, and natural language description):
 
 \originalRelationConcept{}
 
-The \Relation{}s \todo{add a reference to an appendix entry for the ``type
-	Relation = Expr'' definition} in the \RelationConcept{} are, fundamentally,
-just an instance of a universal mathematical language which conveys their
-information, but given a type synonym to indicate that the instance should
-be a mathematical relation.
+The \Relation{}s (\refOriginalRelation{}) in the \RelationConcept{} are,
+fundamentally, just an instance of a universal mathematical language which
+conveys their information, but given a type synonym to indicate that the
+instance should be a mathematical relation.
 
 \intodo{Theory Models as well rely on this same mathematical language used in
 	\RelationConcept{}s to describe their own theories as well. The encoding is
@@ -242,14 +237,13 @@ in \RelationConcept{}s. Namely,
 		            constraints at the very least should be immediately usable
 		            in creating assertions in the generated code.
 
-		      \item The conversion relied on the \intodo{relToQD} hack.\todo{Add
-			            code snippet of original relToQD and discuss how it
-			            wasn't a sustainable solution for the long-term. relToQD
-			            was exactly the implicit knowledge I mentioned, it
-			            assumes, without statically checking consistency, that
-			            the Relations/Exprs provided as input for code
-			            generation were all of the form: \(y = f(\ldots{})\).
-			            See
+		      \item The conversion relied on the \relToQD{} hack.\todo{Add code
+			            snippet of original relToQD and discuss how it wasn't a
+			            sustainable solution for the long-term. relToQD was
+			            exactly the implicit knowledge I mentioned, it assumes,
+			            without statically checking consistency, that the
+			            Relations/Exprs provided as input for code generation
+			            were all of the form: \(y = f(\ldots{})\). See
 			            \url{https://github.com/JacquesCarette/Drasil/issues/628}
 			            for more information about state of relToQD w.r.t. RCs.}
 
@@ -282,13 +276,12 @@ Fundamentally, the issue lies in that the information exposed for Drasil to make
 use of is too ``shallow''. The raw expressions are great for viewing and
 human-guided inference by experts, but not an inexperienced person, or for a
 computer to systematically use to generate things. At the moment, the available
-tools' type signatures (\todo{Show a type signature}) would appear as something
-too amazing, so much so in fact, that one would (and should) question its
-accuracy. A hypothetical type signature, \inlineHs{RelationConcept -> Code}, is
-quite far fetched. Not all expressions that can possibly be contained in a
-\RelationConcept{} are usable in code generation\todo{Note somewhere in the
-	thesis above that when we discuss ``code'', we really mean \acs{oo} programs and
-	snippets}.
+tools' type signatures would appear as something too amazing, so much so in
+fact, that one would (and should) question its accuracy. A hypothetical type
+signature, \inlineHs{RelationConcept -> Code}, is quite far fetched. Not all
+expressions that can possibly be contained in a \RelationConcept{} are usable in
+code generation\todo{Note somewhere in the thesis above that when we discuss
+	``code'', we really mean \acs{oo} programs and snippets}.
 
 \section{Language Division}
 
@@ -312,7 +305,7 @@ Haskell-level compile-time. In other words, the information is not
 
 In order to ensure that developers can only write ``usable'' grounded theories
 (``InstanceModels'') for the code generator to use, we have chosen to expose
-this information to the compiler. In particular, we have chosen to expose it via
+this information to the compiler. Specifically, we have chosen to expose it via
 language division and type information.
 
 \languageDivision{}
@@ -336,9 +329,11 @@ because it will be impossible to describe the terms unique to \ModelExpr{} in
 terms of the \Expr{} language. However, it is possible (and is done normally) to
 convert \Expr{}s into \ModelExpr{}s for usage in generating the \acs{srs}
 documents, which primarily expect \ModelExpr{}s for transcribing mathematical
-expressions. Furthermore, with \ModelExpr{}, we may use instances of \todo{ref
-	Current Express Typeclass} to define how various chunks can be described
+expressions. Furthermore, with \ModelExpr{}, we may use instances of \Express{}
+(\refCurrentExpressHaskell{}) to define how various chunks can be described
 visually, using this mathematical modelling language.
+
+\currentExpressHaskell{}
 
 Continuing, we've noticed that there are residual terms left in \Expr{} that
 don't quite relate to mathematics, but to ``code'' specifically (here, ``code''
@@ -381,8 +376,7 @@ were transcribed in the expressions.
 Issues occurring due to weak knowledge capture may be resolved through strong
 knowledge capture. Beginning with the existing case studies of Drasil, we will
 attempt to classify our existing knowledge better. We aim to make
-\RelationConcept{} a ``view'' of other ``higher-order''\todo{Seems inaccurate to
-	say higher-order, need something else most likely.} knowledge encodings. In
+\RelationConcept{} a ``view'' of other more information-dense encodings. In
 other words, we replace \Expr{} as a knowledge container, and restrict its usage
 to strictly ``mathematical expressions'', as opposed to ``expressions'' and
 information about models/theories. One notable change is that we will require
@@ -408,6 +402,8 @@ and the existing models are \textit{incomplete} in the larger scope.
 
 \subsection{Quantity Definitions}
 
+\currentQDefinitionHaskell{}
+
 Assume \(y = x\) is transcribed as a \RelationConcept{}: while \(y = x\) might
 conventionally be seen as ``y is equal to x'', we might want, in our model, for
 it to be understood as ``x is defined by y'' but displayed differently. Here,
@@ -415,7 +411,7 @@ it to be understood as ``x is defined by y'' but displayed differently. Here,
 \Expr{}, as an ``equality'' operator. To resolve this overloading and weak
 knowledge capture of definitions, we create \EquationalModel{}s: theories that
 contain information about definitions of symbols, built using a
-\QDefinition{}\todo{ref Current QDefinition Haskell}. If an \EquationalModel{}
+\QDefinition{} (\refCurrentQDefinitionHaskell{}). If an \EquationalModel{}
 deals with theoretical symbols and is defined using either a \ModelExpr{} or an
 \Expr{}, it may be used in Theory Models and General Definitions. If an
 \EquationalModel{} is defined using an \Expr{} and deals with only the
@@ -463,12 +459,11 @@ equation-related theories, and only exists as a placeholder until all
 differential equation models are converted into one of the other \ModelKinds{}.
 For related solving of differential equations, \DEModel{} implicitly relies on a
 developer writing a related \ODEInfo{}\todo{ref Current ODEInfo} packet which
-the code generator can use to solve the system.\todo{Rewrite above to be more
-	descriptive.} Actively being reconstructed in Drasil\todo{Cite Dongs work?},
-\NewDEModel{} is the replacement for \DEModel{}, aiming to expose more
-information about well-understood differential equations and related areas.
-\NewDEModel{} will eventually be renamed to \DEModel{} once all existing
-\DEModel{} models have been upgraded.
+the code generator can use to solve the system. Actively being reconstructed in
+Drasil\todo{Cite Dongs work?}, \NewDEModel{} is the replacement for \DEModel{},
+aiming to expose more information about well-understood differential equations
+and related areas. \NewDEModel{} will eventually be renamed to \DEModel{} once
+all existing \DEModel{} models have been upgraded.
 
 \intodo{Example of a DEModel/NewDEModel and a RelationConcept in Haskell code,
 	the SRS, and the related ODEInfo and code.}
@@ -523,10 +518,10 @@ From this, we obtain a new general rule for future knowledge
 dissection/capture/encoding: when extracting information about the formation of
 certain language snippets and classifying that contextual information, we must
 ensure that we have obtained a generic means (algorithm) for reproducing the
-originating term from an instance of the new contextual information\todo{This is
-	awkwardly worded.}. In other words, there should be a generic method to
-reproduce the original information from the new information — this is finding
-areas where we can add to the generation possibilities of Drasil.
+originating term from an instance of the new contextual information. In other
+words, there should be a generic method to reproduce the original information
+from the new information — this is finding areas where we can add to the
+generation possibilities of Drasil.
 
 \section{Residual Issues}
 
@@ -537,8 +532,8 @@ While the information is now encoded, it is not without its own issues:
 	\item As \ModelKinds{} is written using a GADT, it is difficult to extend
 	      its functionality (the ``expression problem''\todo{Cite the original
 		      expression problem paper.}). A work in progress re-design of
-	      \ModelKinds{}, relying on \acs{ghc}s \ConstraintKinds{}\todo{Should I
-		      cite something about \ConstraintKinds{}?} language extension, uses
+	      \ModelKinds{}, relying on \acs{ghc}s \ConstraintKinds{}\todo{Cite
+		      GHC docs about \ConstraintKinds{}.} language extension, uses
 	      Haskell-level typeclasses to describe what a model satisfying the
 	      needs of being a ``model kind'' must provide in order to be treated as
 	      a ``model kind''. These typeclass instances may be thought of as

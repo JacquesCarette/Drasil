@@ -128,9 +128,9 @@ To take (matrix form~\ref{eq_odeexmaple}) as an example. Replacing symbols with 
 		\textbf{Variable} & \textbf{Equivalent in Drasil} \\
 		\toprule
 		$K_d$ & qdDerivGain\\
-		\[y_t\] & opProcessVariable\\
-		\[K_p\] & qdPropGain\\
-		\[r_t\] & qdSetPointTD\\
+		$y_t$ & opProcessVariable\\
+		$K_p$ & qdPropGain\\
+		$r_t$ & qdSetPointTD\\
 		\bottomrule	
 	\end{tabular}	
 	\caption{A sample table}	
@@ -146,6 +146,76 @@ rhs = sy qdSetPointTD `mulRe` sy qdPropGain
 \end{lstlisting}
 
 lhs represents the left hand side and rhs represents the right hand side. lhs is a type of LHS, and LHS is synonym for \verb|[Term]|. rhs is just a \verb|Expr|. In line 1, the whole syntax create a single list of \verb|Term|. In side of this single \verb|Term|, everything before the \verb|$*| is the coefficient, and everything after the \verb|$*| is the \verb|Unknown|. The coefficient is \verb|1 + Kd|, and the \verb|Unknown| is the first derivative of $y_t$. In line 2, everything after the \verb|$+| is a \verb|Term|. By using \verb|$+|, we append a \verb|Term| into a list of \verb|Term|.
+
+\section{Two Constructors}
+The first constructor is \verb|makeASystemDE|. A user can set the coefficient matrix, unknown vector, and constant vector by explicitly giving \verb|[[Expr]]|, \verb|[Unknown]|, and \verb|[Expr]|. There will be several guards to check wether inputs is well-formed.
+
+1. matrix and constant vector: \verb|_coefficients| is a m * n matrix and \verb|_dmConstants| is a m vector. This guard make sure they have the same m dimension. If there is error says "Length of coefficients matrix should equal to the length of the constant vector", it means \verb|_coefficients| and \verb|_dmConstants| has different m dimension, and it violates mathematical rules.
+
+2. each row in matrix and unknown vector: \verb|_coefficients| use list of list to represent a m * n matrix. It means each list in \verb|_coefficients| will have the same length n, and \verb|_unknowns| is n vector. Therefore, the length of each row in the \verb|_coefficients| should be equal to the length of \verb|_unknowns|. The following code will create a math expression to indicate wether inputs for \verb|_coefficients| and \verb|_unknowns| are valid.
+
+\begin{lstlisting}[language=HaskellUlisses]
+isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
+isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
+isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
+isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)) True coeffs
+\end{lstlisting}
+
+If there is error says "The length of each row vector in coefficients need to equal to the length of unknowns vector", it means \verb|_coefficients| and \verb|_unknowns| violate mathematical rules.
+
+3. the order of unknown vector: this guard is designed for simplifying implementation. We have no control on what users give to us. There are infinite ways to represent a linear equation in the form of **Ax** = **b**, so we strictly ask users put the order of the unknown vector descending. This design choice will help to simply the later transformation from **Ax** = **b** to **X**' = **AX** + **c** (link here). If there is error says "The order of giving unknowns need to be descending", it means the order of unknown vector is not descending.
+
+The following is the example how to directly set the coefficient matrix, unknown vector, and constant vector
+
+\begin{lstlisting}[language=HaskellUlisses]
+coeffs = [[exactDbl 1, recip_ (sy tauW)]]
+unknowns = [1, 0]
+constants = [recip_ (sy tauW) `mulRe` sy tempC]
+\end{lstlisting}
+
+In \verb|makeASystemDE|, it requires users to input the unknown descending.
+
+The second constructor is called \verb|makeASingleDE|. This constructor uses the input language to simplify the input of a single ODE. The following is the example how to use input language to create a \verb|DifferentialModel|.
+
+reference ??
+\begin{lstlisting}[language=HaskellUlisses]
+lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)]
+ $+ (exactDbl 1 $* (opProcessVariable $^^ 2))
+ $+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
+rhs = sy qdSetPointTD `mulRe` sy qdPropGain
+\end{lstlisting}
+
+In \verb|makeASingleDE|, users don't necessary to input the unknown vector in descending order. Any order will be fine, because we will sort out the unknown vector base on its derivative and build the coefficient matrix accordingly. Once users enter the ODE equations by using the input language, there are several steps to generate its data represent.
+
+First, we create a descending unknown vector base on the highest order of the derivatives. For example, the highest order in the lhs is 2, then we will generate 2, 1 and 0 derivative respectively.
+
+\begin{lstlisting}[language=HaskellUlisses]
+unks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar''
+
+findHighestOrder :: LHS -> Term
+findHighestOrder = foldr1 (\x y -> if x ^. unk >= y ^. unk then x else y)
+
+createAllUnknowns :: Unknown -> ConstrConcept -> [Unknown]
+createAllUnknowns highestUnk depv
+| highestUnk  == 0  = [highestUnk]
+| otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depv
+\end{lstlisting}
+
+Second, we will create the coefficient matrix base on the descending unknown vector. For each derivative, we search it coefficient base on the order of derivative.
+
+\begin{lstlisting}[language=HaskellUlisses]
+coeffs = [createCoefficients lhs unks]
+
+createCoefficients :: LHS -> [Unknown] -> [Expr]
+createCoefficients [] _ = error "Left hand side is an empty list"
+createCoefficients _ [] = []
+createCoefficients lhs (x:xs) = genCoefficient (findCoefficient x lhs) : createCoefficients lhs xs
+\end{lstlisting}
+
+It would be tedious to require users to input a matrix form for a single ODE. Therefore, we create an input language to make it easier to input such equations.
+
+\section{Display Matrix}
+After users enter ODE equations, we display them in SRS. There are two different ways to display equations, matrix and linear equations.
 
 %% Matrix
 % \[

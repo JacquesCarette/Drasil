@@ -203,26 +203,24 @@ referenced, and intertwined, cookie-cutter principles stories become possible,
 similar to projectional-style editing. Chunks are funneled into a \textit{Chunk
       Database} (in Haskell, a \ChunkDB{}).
 
-\intodo{Code snippet: ChunkDB original definition.}
+\originalChunkDBHaskell{}
 
-A \ChunkDB{} is currently limited to the above listed chunks\todo{ref. code
-      snippet of ChunkDB}, but one should assume that more data types are also
-\textit{chunks} because this is merely a temporary restriction at the
-moment. Relating back to the ideology (as discussed in
-\autoref{chap:ideology}), in Drasil, the \ChunkDB{} is where the knowledge
-is collected, placed, and grown (generated). \textit{Transformers} are
-used to operate on the \Chunk{}s in the \ChunkDB{}. The transformers take
-in some knowledge, optional \textit{refinement} information, and convert
-it into some other knowledge fragment. Oddly\todo{Is it odd or expected?},
-these transformations are seemingly ``against the grain'' of the
-``bottom-up'' information gathering. Areas of precise and highly specific
-fragments of knowledge have their key components used in generating
-something in another language (this typically involves some sort of
-information loss/strip in order to restrict the knowledge for a specific
-purpose). The produced fragments are directed by the developer. By
-composing a series of miniature, ``bite-sized'', transformations, we are
-able to create large and highly complex (but well-thought-out and
-understood).
+A \ChunkDB{} is currently limited to the above listed chunks
+(\refOriginalChunkDBHaskell{}), but one should assume that more data types are
+also \textit{chunks} because this is merely a temporary restriction at the
+moment. Relating back to the ideology (as discussed in \autoref{chap:ideology}),
+in Drasil, the \ChunkDB{} is where the knowledge is collected, placed, and grown
+(generated). \textit{Transformers} are used to operate on the \Chunk{}s in the
+\ChunkDB{}. The transformers take in some knowledge, optional
+\textit{refinement} information, and convert it into some other knowledge
+fragment. Oddly\todo{Is it odd or expected?}, these transformations are
+seemingly ``against the grain'' of the ``bottom-up'' information gathering.
+Areas of precise and highly specific fragments of knowledge have their key
+components used in generating something in another language (this typically
+involves some sort of information loss/strip in order to restrict the knowledge
+for a specific purpose). The produced fragments are directed by the developer.
+By composing a series of miniature, ``bite-sized'', transformations, we are able
+to create large and highly complex (but well-thought-out and understood).
 
 The largest, most prominent transformer used in Drasil is that of the
 \textit{SmithEtAl} knowledge transformer\todo{I'm naming this, which I really

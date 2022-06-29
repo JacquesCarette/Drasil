@@ -1,4 +1,7 @@
 \chapter{ODE Data Represent}
+Intro
+
+\section{Matrix Form}
 In general, a equation contains a left hand expression, a right hand expression, and a equal sign. The left hand expression and the right hand expression connect with each other by equal sign. We can write a linger ODE in a shape of
 
 \begin{equation} \label{eq_matrixform}
@@ -11,7 +14,8 @@ On the left hand side, A is a known m * n matrix and b is an m-vector. On the ri
 	y_t'' + (1 + K_d)y_t' + (20 + K_p)y_t = r_t K_p
 \end{equation}
 
-To take an example, in above equation, \[y_t\] is the dependent variable, and \[K_d, K_p, r_t\] are constant variables. We can write this equation in a form of (matrix form~\ref{eq_matrixform})
+To take an example, in above equation, $y_t$ is the dependent variable, and 
+$K_d$, $K_p$, and $r_t$ are constant variables. We can write this equation in a form of (matrix form~\ref{eq_matrixform})
 
 \[
 \begin{bmatrix}
@@ -42,7 +46,6 @@ data DifferentialModel = SystemOfLinearODEs {
 }
 \end{lstlisting}
 
-\setlength\LTcapwidth{\linewidth}
 \begin{table}
 	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
 		\textbf{Variable} & \textbf{Semantics} \\
@@ -53,12 +56,96 @@ data DifferentialModel = SystemOfLinearODEs {
 		\verb|_unknowns| & represent the unknown vector, it is x in (matrix form~\ref{eq_matrixform}). The \verb|Unknown| is synonym of Integer, it indicates nth order of derivative of the dependent variable \\
 		\verb|_dmConstants| & represent the constant vector, it is b in (matrix form~\ref{eq_matrixform}). It is a list of \verb|Expr| \\
 		\verb|_dmconc| &  ConceptChunk records a concept !!citation in here!! \\
-
 		\bottomrule	
 	\end{tabular}	
 	\caption{A sample table}	
 	\label{tab_sample}
 \end{table}
+
+Currently, the \verb|DifferentialModel| only capture knowledge of ODEs with one dependent variable. This is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of the ODEs, and eventually lead to solve a system of linear ODE with multiple dependent variables.
+
+\section{Input Language}
+We introduced an input language to simplify the input a single ODE, because it could be over complicated for users to input a single ODE in to a matrix form. The structure of the input language will mimic the mathematical expression of linear differential equation that was bases on GAMYGDALA~\citep{popescu2014gamygdala}
+
+\begin{equation} \label{eq_linearDE}
+	a_n(t)y^n(t) + a_{n-1}(t)y^{n-1}(t) + \dots + a_1(t)y'(t) + a_0(t)y(t) = g(t)
+\end{equation}
+
+The left hand side of equations is a collection of terms. A term consist a coefficient and a derivative of the dependent variable. The following is the detail of code for new type introduced
+
+\begin{lstlisting}[language=HaskellUlisses]
+type Unknown = Integer
+data Term = T{
+	_coeff :: Expr,
+	_unk :: Unknown
+}
+type LHS = [Term]
+\end{lstlisting}
+
+
+\begin{table}
+	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+		\textbf{Variable} & \textbf{Semantics} \\
+		\toprule
+		\verb|LHS| & reflects to left hand side, and consist of a sequence of \verb|Term|.\\
+		\verb|Term| & contains a \verb|Unknown|, and a \verb|Expr|.\\
+		\verb|Unknown| & is a integer, indicate nth derivative of the dependent variable.\\
+		\bottomrule	
+	\end{tabular}	
+	\caption{A sample table}	
+	\label{tab_inputtype}
+\end{table}
+
+The following are new operators introduced
+\begin{lstlisting}[language=HaskellUlisses]
+($^^) :: ConstrConcept -> Integer -> Unknown
+($^^) _ unk' = unk'
+
+($*) :: Expr -> Unknown -> Term
+($*) = T
+
+($+) :: [Term] -> Term -> LHS
+($+) xs x  = xs ++ [x]
+\end{lstlisting}
+
+\begin{table}
+	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+		\textbf{Operator} & \textbf{Semantics} \\
+		\toprule
+		\verb|$^^| & take a \verb|ConstrConcept| and \verb|Integer| to form a \verb|Unknown|. The \verb|ConstrConcept| is the dependent variable and \verb|Integer| is the order of nth derivative. Eg, depVar \verb|$^^| d, means nth derivative of depVar.\\
+		\verb|$*| & take a \verb|Expr| and \verb|Unknown| to form a \verb|Term|. The \verb|Expr| is the coefficient and \verb|Unknown| is the nth derivative.\\
+		\verb|$+| & take a \verb|[Term]| and \verb|Term| to form a new \verb|[Term]| by appending \verb|Term| to \verb|[Term]|.\\
+		\bottomrule	
+	\end{tabular}	
+	\caption{A sample table}	
+	\label{tab_inputtype}
+\end{table}
+
+To take (matrix form~\ref{eq_odeexmaple}) as an example. Replacing symbols with equivalent variable in the Drasil framework.
+
+\begin{table}
+	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+		\textbf{Variable} & \textbf{Equivalent in Drasil} \\
+		\toprule
+		$K_d$ & qdDerivGain\\
+		\[y_t\] & opProcessVariable\\
+		\[K_p\] & qdPropGain\\
+		\[r_t\] & qdSetPointTD\\
+		\bottomrule	
+	\end{tabular}	
+	\caption{A sample table}	
+	\label{tab_inputtype}
+\end{table}
+
+we can write them as the following
+\begin{lstlisting}[language=HaskellUlisses]
+lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)] --line 1
+ $+ (exactDbl 1 $* (opProcessVariable $^^ 2)) -- line 2
+ $+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
+rhs = sy qdSetPointTD `mulRe` sy qdPropGain
+\end{lstlisting}
+
+lhs represents the left hand side and rhs represents the right hand side. lhs is a type of LHS, and LHS is synonym for \verb|[Term]|. rhs is just a \verb|Expr|. In line 1, the whole syntax create a single list of \verb|Term|. In side of this single \verb|Term|, everything before the \verb|$*| is the coefficient, and everything after the \verb|$*| is the \verb|Unknown|. The coefficient is \verb|1 + Kd|, and the \verb|Unknown| is the first derivative of $y_t$. In line 2, everything after the \verb|$+| is a \verb|Term|. By using \verb|$+|, we append a \verb|Term| into a list of \verb|Term|.
 
 %% Matrix
 % \[

@@ -31,7 +31,7 @@ To take an example, in above equation, \[y_t\] is the dependent variable, and \[
 
 Base on this analysis, we decide to create a datatype \textbf{called} \verb|DifferentialModel| to capture the ODE knowledge. The \verb|DifferentialModel| consists of the independent variable, the dependent variable, the coefficient matrix, the unknown vector, the constant vector, and its meta data.
 
-\begin{lstlisting}[language=HaskellUlisses, frame=single]
+\begin{lstlisting}[language=HaskellUlisses]
 data DifferentialModel = SystemOfLinearODEs {
 	_indepVar :: UnitalChunk,
 	_depVar :: ConstrConcept,
@@ -41,6 +41,24 @@ data DifferentialModel = SystemOfLinearODEs {
 	_dmconc :: ConceptChunk
 }
 \end{lstlisting}
+
+\setlength\LTcapwidth{\linewidth}
+\begin{table}
+	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+		\textbf{Variable} & \textbf{Semantics} \\
+		\toprule
+		\verb|_indepVar| & represent the independent variable in ODE, and it is usually time. UnitalChunk is a Quantity(concept with a symbolic representation) with a Unit\\
+		\verb|_depVar| & represent the dependent variable in ODE \\
+		\verb|_coefficients| & represent the coefficient of the ODE, it is A in (matrix form~\ref{eq_matrixform}). A list of lists represent a matrix. \verb|Expr| is a type encode mathematical expression. \\
+		\verb|_unknowns| & represent the unknown vector, it is x in (matrix form~\ref{eq_matrixform}). The \verb|Unknown| is synonym of Integer, it indicates nth order of derivative of the dependent variable \\
+		\verb|_dmConstants| & represent the constant vector, it is b in (matrix form~\ref{eq_matrixform}). It is a list of \verb|Expr| \\
+		\verb|_dmconc| &  ConceptChunk records a concept !!citation in here!! \\
+
+		\bottomrule	
+	\end{tabular}	
+	\caption{A sample table}	
+	\label{tab_sample}
+\end{table}
 
 %% Matrix
 % \[

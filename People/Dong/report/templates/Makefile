@@ -9,7 +9,7 @@ RMDIR = rm -rf
 run: build
 
 build: 
-	$(LATEX_CMD) $(SRC)
+	$(LATEX_CMD) -shell-escape $(SRC)
 
 bib: 
 	$(LATEX_BIB) $(BIBSRC)

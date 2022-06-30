@@ -426,16 +426,16 @@ instanced, so that portion of the rule is not enforced\todo{Future Work: make
 
 \subsection{Constraints}
 
-\intodo{Code snippet: ConstraintSet definition.}
+\currentConstraintSetHaskell{}
 
 Theories that define expressions that constrain models in some way are defined
-using \EquationalConstraints{}, which are built on \ConstraintSet{}s\todo{ref
-	Current ConstraintSet Haskell}\todo{Describe what a ConstraintSet actually is.}.
-At the moment, these are not used in code generation, and are pending design for
-usage in code generation as the translation from them into software is unclear
-and may be interpreted differently by readers. This model can, and should,
-eventually also be usable in code generation once there is interest in creating
-runtime assertions of symbols.
+using \EquationalConstraints{}, which use \ConstraintSet{}s under the hood
+(\refCurrentConstraintSetHaskell{})\todo{Describe what a ConstraintSet actually
+is.}. At the moment, these are not used in code generation, and are pending
+design for usage in code generation as the translation from them into software
+is unclear and may be interpreted differently by readers. This model can, and
+should, eventually also be usable in code generation once there is interest in
+creating runtime assertions of symbols.
 
 \intodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
 	the SRS.}

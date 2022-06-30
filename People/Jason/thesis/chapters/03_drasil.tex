@@ -232,21 +232,20 @@ programs, the \inlineHs{main :: IO ()} function is representative of the
 transformation capabilities of our understanding of our case studies into
 sufficient \acs{srs} documents, and ready-to-use software.
 
-\intodo{Code snippet: ``main'' function of GlassBR.}
+\currentGlassBRMainFHaskell{}
 
-\todo{Ref\. ``main'' function code snippet above.} displays an example, from the
-\acs{glassbr} case study, of what a transformer looks like in Drasil. This
-transformer takes knowledge collected, configures a transformation task for the
-desired outputs, as prescribed by an orchestrating developer, and performs an
-\inlineHs{IO ()} effect that dumps an \acs{srs} and a software artifact to the
-host computer, in the local working directory. While not seemingly coupled, they
-indeed are. The code generator focuses on understanding fragments/ideas relevant
-to generating the \acs{srs}, with more stringent rules than the \acs{srs}
-generator to create a coherent software artifact. The data collected in the
-\ChunkDB{}s are collected at Drasil Haskell-level compile-time, instead of the
-Drasil run-time, because the chunks are captured within Haskell source code
-instead of an external resource. In other words, the data is embedded in Haskell
-itself.
+\refCurrentGlassBRMainHaskell{} displays an example, from the \acs{glassbr} case
+study, of what a transformer looks like in Drasil. This transformer takes
+knowledge collected, configures a transformation task for the desired outputs,
+as prescribed by an orchestrating developer, and performs an \inlineHs{IO ()}
+effect that dumps an \acs{srs} and a software artifact to the host computer, in
+the local working directory. While not seemingly coupled, they indeed are. The
+code generator focuses on understanding fragments/ideas relevant to generating
+the \acs{srs}, with more stringent rules than the \acs{srs} generator to create
+a coherent software artifact. The data collected in the \ChunkDB{}s are
+collected at Drasil Haskell-level compile-time, instead of the Drasil run-time,
+because the chunks are captured within Haskell source code instead of an
+external resource. In other words, the data is embedded in Haskell itself.
 
 \intodo{Code snippet: ``genSRS''}
 

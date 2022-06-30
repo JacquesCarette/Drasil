@@ -11,7 +11,7 @@ what can do now
 # Content
 
 ## Internal data represent, AX = c, 
-In general, a equation contains a left hand expression, a right hand expression, and a equal sign. The left hand expression and the right hand expression connect with each other by equal sign. We can write a linger ODE in a shape of **Ax** = **b** (Scientific computing citation p48).On the left hand side, A is a known m * n matrix and b is an m-vector. On the right hand side x is an n-vector.
+In general, a equation contains a left hand expression, a right hand expression, and a equal sign. The left hand expression and the right hand expression connect with each other by equal sign. We can write a linear ODE in a shape of **Ax** = **b** (Scientific computing citation p48).On the left hand side, A is a known m * n matrix and b is an m-vector. On the right hand side x is an n-vector.
 
 The A is commonly know as coefficient matrix, b is the constant vector, and x is the unknown vector.
 

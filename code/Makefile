@@ -232,6 +232,13 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 # then make pdfs from the generated TeX files.
 tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
+# Generate graph of package dependencies
+packagedeps: 
+	@echo ----------------------------
+	@echo Generating package dependency graph
+	@echo ----------------------------
+	@stack dot --prune dblpendulum,gamephysics,glassbr,hghc,nopcm,pdcontroller,projectile,sglpendulum,ssp,swhs,template | dot -Tpng -o dependencies.png
+	
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#

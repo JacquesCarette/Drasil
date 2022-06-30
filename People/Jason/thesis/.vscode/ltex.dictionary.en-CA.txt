@@ -90,3 +90,5 @@ InstanceModels
 Haskells
 tagless
 Tagless
+DefiningExpr
+ConstraintKinds

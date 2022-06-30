@@ -426,6 +426,8 @@ instanced, so that portion of the rule is not enforced\todo{Future Work: make
 
 \subsection{Constraints}
 
+\intodo{Code snippet: ConstraintSet definition.}
+
 Theories that define expressions that constrain models in some way are defined
 using \EquationalConstraints{}, which are built on \ConstraintSet{}s\todo{ref
 	Current ConstraintSet Haskell}\todo{Describe what a ConstraintSet actually is.}.
@@ -440,6 +442,8 @@ runtime assertions of symbols.
 
 \subsection{Definition Realms}
 
+\currentDefiningExprHaskell{}
+
 \currentMultiDefnHaskell{}
 
 The Theory Models and General Definition Models are unrefined, and may contain
@@ -449,8 +453,8 @@ captured in Drasil by \EquationalRealm{}s: modelled after realms\todo{Cite
 intended specifically for retaining information about conscious choices made
 along the way to create Instance Models. An \EquationalRealm{} is based on a
 \MultiDefn{} (\refCurrentMultiDefnHaskell{}), and is intended for forming
-\QDefinition{}s through choosing definitions, through refinements, from the
-\MultiDefn{}s.
+\QDefinition{}s through choosing definitions (encoded as \DefiningExpr{}s,
+\refCurrentDefiningExprHaskell{}), through refinements, from the \MultiDefn{}s.
 
 \intodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
 

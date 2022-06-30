@@ -64,3 +64,5 @@ code/Website
 *.synctex.gz
 *.lof
 *.lot
+*.pygtex
+*.pygstyle

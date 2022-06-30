@@ -1,4 +1,20 @@
 \chapter{Your Appendix}
 \label{appendix_a}
 
-Your appendix goes here.
+This appendix provides detailed explanations of various parts of DifferentialModel.
+
+\section{Type in DifferentialModel}
+\begin{table}
+	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+		\textbf{Type} & \textbf{Semantics} \\
+		\toprule
+		\verb|UnitalChunk| & concepts with quantities that must have a unit definition.\\
+		\verb|ConstrConcept| & conceptual symbolic quantities with Constraints and maybe a reasonable value.\\
+		\verb|Expr| & a type encode mathematical expression. \\
+		\verb|ConceptChunk| & a concept that contains an idea, a definition, and an associated domain of knowledge\\
+        \verb|Unknown|& synonym of Integer\\
+		\bottomrule	
+	\end{tabular}	
+	\caption{Type use in DifferentialModel}	
+	\label{tab_demodeltype}
+\end{table}

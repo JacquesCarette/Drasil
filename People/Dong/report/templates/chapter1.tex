@@ -1,40 +1,39 @@
 \chapter{ODE Data Represent}
-Intro
+In the Drasil framework, there is a single data structure containing all the information for all products, and we call it System Information. The giant system information collects a multitude of pieces of information; whenever we need it, we extract the information from the System Information. In previous research, we store all ordinary differential equations (ODEs) information in this database. However, that information existed in the form of plain text. In other words, we explicitly wrote ODEs in the text without any advanced data structure. Although this method maintains the relationship of ODEs, it restricts any transformation of ODEs. Therefore, the Drasil team decide to create a new data structure to store ODEs information. This chapter will describe how to store an ordinary differential equation (ODE) in the Drasil framework. 
 
 \section{Matrix Form}
-In general, a equation contains a left hand expression, a right hand expression, and a equal sign. The left hand expression and the right hand expression connect with each other by equal sign. We can write a linear ODE in a shape of
+In general, an equation contains a left-hand expression, a right-hand expression, and an equal sign. The left-hand and right-hand expressions connect by an equal sign. A linear ODE also has its left-hand and right-hand sides. Each side has its unique shape. We can write a linear ODE in the shape of
 
 \begin{equation} \label{eq_matrixform}
 	\boldsymbol{Ax} = \boldsymbol{b}
 \end{equation}
 
-On the left hand side, A is a known m * n matrix and b is an m-vector. On the right hand side x is an n-vector. The A is commonly know as coefficient matrix, b is the constant vector, and x is the unknown vector.
+On the left-hand side, A is an m * n matrix, and b is an m-vector. On the right-hand side, x is an n-vector. The A is commonly known as the coefficient matrix, b is the constant vector, and x is the unknown vector.
 
+Given the following (example~\ref{eq_odeexmaple}),
 \begin{equation} \label{eq_odeexmaple}
 	y_t'' + (1 + K_d)y_t' + (20 + K_p)y_t = r_t K_p
 \end{equation}
 
-To take an (example~\ref{eq_odeexmaple}), $y_t$ is the dependent variable, and 
-$K_d$, $K_p$, and $r_t$ are constant variables. We can write this equation in a form of (matrix form~\ref{eq_matrixform}).
+$y_t$ is the dependent variable, and $K_d$, $K_p$, and $r_t$ are constant variables. We can write this equation as following 
 
-\[
-\begin{bmatrix}
-    1, & 1 + K_{d}, & 20 + K_{p}
-\end{bmatrix}
-\cdot
-\begin{bmatrix}
-    y_{t}''  \\
-    y_{t}'   \\
-    y_{t}  
-\end{bmatrix}
-=
-\begin{bmatrix}
-    r_{t} K_{p} 
-\end{bmatrix}
-\]
+\begin{equation} \label{eq_matrixformexmaple}
+	\begin{bmatrix}
+		1, & 1 + K_{d}, & 20 + K_{p}
+	\end{bmatrix}
+	\cdot
+	\begin{bmatrix}
+		y_{t}''  \\
+		y_{t}'   \\
+		y_{t}  
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		r_{t} K_{p} 
+	\end{bmatrix}
+\end{equation}
 
-Base on this analysis, we decide to create a datatype called \verb|DifferentialModel| to capture the ODE knowledge. The \verb|DifferentialModel| consists of the independent variable, the dependent variable, the coefficient matrix, the unknown vector, the constant vector, and its meta data.
-
+Base on what described above, we decide to create a datatype called \verb|DifferentialModel| to preserve ODEs information. The \verb|DifferentialModel| has six records, and here are the representing code for \verb|DifferentialModel|
 \begin{haskell1}
 data DifferentialModel = SystemOfLinearODEs {
 	_indepVar :: UnitalChunk,
@@ -46,32 +45,36 @@ data DifferentialModel = SystemOfLinearODEs {
 }
 \end{haskell1}
 
-\begin{table}
-	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
-		\textbf{Variable} & \textbf{Semantics} \\
-		\toprule
-		\verb|_indepVar| & represent the independent variable in ODE, and it is usually time. UnitalChunk is a Quantity(concept with a symbolic representation) with a Unit\\
-		\verb|_depVar| & represent the dependent variable in ODE \\
-		\verb|_coefficients| & represent the coefficient of the ODE, it is A in (matrix form~\ref{eq_matrixform}). A list of lists represent a matrix. \verb|Expr| is a type encode mathematical expression. \\
-		\verb|_unknowns| & represent the unknown vector, it is x in (matrix form~\ref{eq_matrixform}). The \verb|Unknown| is synonym of Integer, it indicates nth order of derivative of the dependent variable \\
-		\verb|_dmConstants| & represent the constant vector, it is b in (matrix form~\ref{eq_matrixform}). It is a list of \verb|Expr| \\
-		\verb|_dmconc| &  ConceptChunk records a concept !!citation in here!! \\
-		\bottomrule	
-	\end{tabular}	
-	\caption{A sample table}	
-	\label{tab_sample}
-\end{table}
+% \begin{table}
+% 	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+% 		\textbf{Variable} & \textbf{Semantics} \\
+% 		\toprule
+% 		\verb|_indepVar| & represent the independent variable in ODE, and it is usually time. UnitalChunk is a Quantity(concept with a symbolic representation) with a Unit\\
+% 		\verb|_depVar| & represent the dependent variable in ODE \\
+% 		\verb|_coefficients| & represent the coefficient of the ODE, it is A in (matrix form~\ref{eq_matrixform}). A list of lists represent a matrix. \verb|Expr| is a type encode mathematical expression. \\
+% 		\verb|_unknowns| & represent the unknown vector, . The \verb|Unknown| is synonym of Integer, it indicates nth order of derivative of the dependent variable \\
+% 		\verb|_dmConstants| & represent the constant vector, it is b in (matrix form~\ref{eq_matrixform}). It is a list of \verb|Expr| \\
+% 		\verb|_dmconc| &  ConceptChunk records a concept !!citation in here!! \\
+% 		\bottomrule	
+% 	\end{tabular}	
+% 	\caption{Description of DifferentialModel data type}	
+% 	\label{tab_demodel}
+% \end{table}
 
-Currently, the \verb|DifferentialModel| only capture knowledge of ODEs with one dependent variable. This is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of the ODEs, and eventually lead to solve a system of linear ODE with multiple dependent variables.
+Previous on this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk already existed in Drasil. The Unknown type created in this experiment.Their semantics will show up in (Appendix A ~\ref{tab_demodeltype})
+
+The \verb|_indepVar| represent the independent variable in an ODE, and it is usually time. The \verb|_depVar| represent the dependent variable in ODE. The \verb|_coefficients| is a list of list \verb|Expr|, and it represent the coefficient of the ODE, it is \textbf{A} in (matrix form~\ref{eq_matrixform}). The \verb|_unknowns| is a list of Unknown. Since \verb|Unknown| type is synonym of Integer, it indicates a list of nth order of derivative of the dependent variable. It is \textbf{x} in (matrix form~\ref{eq_matrixform}). The \verb|_dmConstants| represent the constant vector, it is \textbf{b} in (matrix form~\ref{eq_matrixform}). The \verb|_dmconc| contains meta data of this model.
+
+Currently, the \verb|DifferentialModel| only capture knowledge of ODEs with one dependent variable. This is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of all ODEs, and eventually lead to solve a system of linear ODE with multiple dependent variables.
 
 \section{Input Language}
-We introduced an input language to simplify the input a single ODE, because it could be over complicated for users to input a single ODE in to a matrix form. The structure of the input language will mimic the mathematical expression of linear differential equation that was bases on GAMYGDALA~\citep{popescu2014gamygdala}
+Because it could be over complicated for users to input a single ODE in to a matrix form, we will introduce an input language to simplify the input a single ODE. The structure of the input language will mimic the mathematical expression of linear differential equation that was bases on GAMYGDALA~\citep{popescu2014gamygdala}
 
 \begin{equation} \label{eq_linearDE}
 	a_n(t)y^n(t) + a_{n-1}(t)y^{n-1}(t) + \dots + a_1(t)y'(t) + a_0(t)y(t) = g(t)
 \end{equation}
 
-The left hand side of equations is a collection of terms. A term consist a coefficient and a derivative of the dependent variable. The following is the detail of code for new type introduced
+The left-hand side of equations is a collection of terms. A term consist a coefficient and a derivative of the dependent variable. The following is the detail of code for new type introduced
 
 \begin{haskell1}
 type Unknown = Integer
@@ -86,7 +89,7 @@ type LHS = [Term]
 	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
 		\textbf{Variable} & \textbf{Semantics} \\
 		\toprule
-		\verb|LHS| & reflects to left hand side, and consist of a sequence of \verb|Term|.\\
+		\verb|LHS| & reflects to left-hand side, and consist of a sequence of \verb|Term|.\\
 		\verb|Term| & contains a \verb|Unknown|, and a \verb|Expr|.\\
 		\verb|Unknown| & is a integer, indicate nth derivative of the dependent variable.\\
 		\bottomrule	
@@ -144,7 +147,7 @@ lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)] --line 1
 rhs = sy qdSetPointTD `mulRe` sy qdPropGain
 \end{haskell1}
 
-lhs represents the left hand side and rhs represents the right hand side. lhs is a type of LHS, and LHS is synonym for \verb|[Term]|. rhs is just a \verb|Expr|. In line 1, the whole syntax create a single list of \verb|Term|. In side of this single \verb|Term|, everything before the \verb|$*| is the coefficient, and everything after the \verb|$*| is the \verb|Unknown|. The coefficient is \verb|1 + Kd|, and the \verb|Unknown| is the first derivative of $y_t$. In line 2, everything after the \verb|$+| is a \verb|Term|. By using \verb|$+|, we append a \verb|Term| into a list of \verb|Term|.
+lhs represents the left-hand side and rhs represents the right-hand side. lhs is a type of LHS, and LHS is synonym for \verb|[Term]|. rhs is just a \verb|Expr|. In line 1, the whole syntax create a single list of \verb|Term|. In side of this single \verb|Term|, everything before the \verb|$*| is the coefficient, and everything after the \verb|$*| is the \verb|Unknown|. The coefficient is \verb|1 + Kd|, and the \verb|Unknown| is the first derivative of $y_t$. In line 2, everything after the \verb|$+| is a \verb|Term|. By using \verb|$+|, we append a \verb|Term| into a list of \verb|Term|.
 
 \section{Two Constructors}
 The first constructor is \verb|makeASystemDE|. A user can set the coefficient matrix, unknown vector, and constant vector by explicitly giving \verb|[[Expr]]|, \verb|[Unknown]|, and \verb|[Expr]|. There will be several guards to check wether inputs is well-formed.
@@ -206,7 +209,7 @@ Second, we will create the coefficient matrix base on the descending unknown vec
 coeffs = [createCoefficients lhs unks]
 
 createCoefficients :: LHS -> [Unknown] -> [Expr]
-createCoefficients [] _ = error "Left hand side is an empty list"
+createCoefficients [] _ = error "Left-hand side is an empty list"
 createCoefficients _ [] = []
 createCoefficients lhs (x:xs) = genCoefficient (findCoefficient x lhs) : createCoefficients lhs xs
 \end{haskell1}

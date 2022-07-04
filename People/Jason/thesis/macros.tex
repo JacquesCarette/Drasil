@@ -61,7 +61,7 @@
 \crefname{listing}{source code}{source codes}
 \Crefname{listing}{Source Code}{Source Codes}
 \newenvironment{haskell}[4]
-    {\VerbatimEnvironment\singlespacing\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
+    {\VerbatimEnvironment\singlespacing\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt,breaklines]{haskell}}
     {\end{minted}\end{code}\doublespacing}
 
 \newcommand{\inlineHs}[1]{\mintinline{haskell}|#1|}

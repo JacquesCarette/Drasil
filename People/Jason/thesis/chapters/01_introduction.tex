@@ -83,12 +83,39 @@
 
 \end{writingdirectives}
 
-The usual means of building software involves multiple artifacts (such as
-specifications and code) that contain duplicate information that is also
-supposed to be linked (\textit{traceability}). Drasil aims to use a generative
-approach to de-duplicate this information and make traceability more immediate.
-Drasil currently uses a stable scientific knowledge-base to generate families of
-\ACF{scs} conforming to a \ACF{srs}\cite{SmithAndLai2005}.
+When developing software, developers pull information from a common pool of
+domain-specific knowledge, including the requirements and related fields (such
+as physics and financial mathematics). The pool is common, but not necessarily
+formally shared, leading to issues in synchronization, communication, and
+understanding, all of which harm the final software produced in some way. As
+knowledge changes, software artifacts are slow-moving to adjust, requiring
+continued development. For well-understood domains, such as \ACF{scs}, where
+there exists commonly agreed upon ``knowledge'' and software is somehow usable,
+Drasil aims to capture domain-specific knowledge and use a generative approach
+to build software as \textit{view} of the captured knowledge.
+
+Currently focusing on \acs{scs}, Drasil uses a stable scientific knowledge-base
+to generate families of \acs{scs} conforming to a \ACF{srs}
+\cite{SmithAndLai2005}. By formalizing the language associated with an \acf{srs}
+document (such as symbols, units, mathematical expressions, theories, etc.) and
+how the language terms translate into other languages, Drasil is capable of
+generating \acs{scs} conforming to a \acf{srs}, improving consistency,
+traceability, understandability, maintainability, and reusability of the
+\acf{scs} (but, more importantly, of the domain-specific knowledge as a whole,
+as well).
+
+Specifically, in this thesis, we will explore capturing mathematical theories
+frequently pulled from in building \acs{scs}, typing mathematical expressions,
+restricting mathematical expression usage to appropriate contexts, and scaling
+Drasils knowledge database.
+
+\intodo{\textit{From Dr. Carette}: The usual means of building software involves
+      multiple artifacts (such as specifications and code) that contain
+      duplicate information that is also supposed to be linked
+      (\textit{traceability}). Drasil aims to use a generative approach to
+      de-duplicate this information and make traceability more immediate. Drasil
+      currently uses a stable scientific knowledge-base to generate families of
+      \ACF{scs} conforming to a \ACF{srs}\cite{SmithAndLai2005}.}
 
 \iffalse
       % Potential replacement for the above paragraph
@@ -113,14 +140,51 @@ Drasil currently uses a stable scientific knowledge-base to generate families of
       template\cite{SmithAndLai2005}.
 \fi
 
-We will explore capturing mathematical theories frequently pulled from in
-building \acs{scs}, typing mathematical expressions, restricting expression
-usage to appropriate contexts, and scaling Drasils knowledge database.
-
 \section{Background}
 \label{sec:intro:background}
 
-\intodo{Background section.}
+Intended to ``generate all the things''\footnote{``Generate All the Things'' is
+      Drasils tagline.}, Drasil
+\footnote{\url{https://jacquescarette.github.io/Drasil/}} is a Haskell-based
+\cite{Haskell2010} software suite studying how knowledge capture may improve
+modern software development. ``Knowledge'' is considered ``captured'' in Drasil
+by codifying it and its relations to other things using \ACFP{dsl} encoded as
+Haskells data types. For example, ``quantities,'' as we've currently needed from
+a physics-based point-of-view, are encoded as:
+
+\intodo{Code snippet: QuantityDicts}
+
+And an instance of a ``quantity'' might appear as:
+
+\intodo{Code snippet: instance of a QuantityDict.}
+
+The ways that we can translate ``quantities'' into other ``things'' are encoded
+as Haskell-level functions and instances of typeclasses, such as:
+
+\intodo{Code snippet: example of how QuantityDicts are converted into at least 1
+      or 2 other things (e.g., SRS rows, symbols, etc.).}
+
+Drasil is developed through a ``bottom-up'' methodology against several
+\acs{scs} case studies (\refCaseStudiesTable{}), capturing and de-duplicating
+knowledge as needed to re-generate the original artifacts, and, more in a wide
+variety of similarly applicable languages (such as \acs{html}, \LaTeX{}, Java,
+C/C\+\+, etc.).
+
+For example, the \ACF{glassbr} case study (examining predicting whether a glass
+slab can withstand an explosive blast) had software artifacts manually
+written\footnote{\url{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}}.
+A coherent net of knowledge/discussion (a ``story'') is then formed by
+dissecting the artifacts, understanding why each piece existed, what it relates
+to and how, and how it can be translated into other things. The original
+artifacts are then re-generated in a wider
+variety\footnote{\url{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}}
+of other languages by codifying how the net of knowledge can be translated into
+other languages.
+
+However, not all the case studies are capable of generating software artifacts
+yet (\refCaseStudiesCodeTable{}). Each for their own reason, but we will focus
+on a critical common denominator between them all: capturing mathematical
+knowledge needed for reliably generating \acs{scs}.
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
@@ -189,7 +253,7 @@ relation to Drasils development (time measured by their git blob hash):
 onboarded to Drasil. The ``current'' code includes my work, at least, but might
 also include the work of others who were also contributing to the project while
 I was actively contributing. The work of others might include, but not limited
-to, code formatting, code commenting, and extensions. 
+to, code formatting, code commenting, and extensions.
 
 Drasil has existed since 2014, and has already seen success in its case studies,
 which are used to guide the development of Drasil. Drasils focus on \acs{scs}

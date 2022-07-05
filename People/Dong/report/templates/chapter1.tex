@@ -77,48 +77,15 @@ type LHS = [Term]
 ($+) xs x  = xs ++ [x]
 \end{haskell1}
 
-The \verb|LHS| reflects to left-hand side in the (linear DE~\ref{eq_linearDE}), and consist of a sequence of \verb|Term|. Inside of a \verb|Term|, it has a \verb|Expr| and a \verb|Unknown|. The \verb|Expr| is the coefficient of this specific term, and the \verb|Unknown| indicates the nth derivative of the dependent variable. The following are new operators introduced for the input language.
-
-The operator of \verb|$^^| take a \verb|ConstrConcept| and \verb|Integer| to form a \verb|Unknown|. The \verb|ConstrConcept| is the dependent variable and \verb|Integer| is the order of the responsible derivative. This operator will \textbf{ignore} the input of ConstrConcept (the dependent variable), because we only study how to represent ODE when it only has one dependent variable. The depednet variable information will store in \verb|_depVar|, and it is locate in \verb|DifferentialModel| level. However, The operator of \verb|$^^| will make the code more like natural expression with a dummy dependent variable show up before derivative during the input stage. Next, the \verb|$*| take a \verb|Expr| and \verb|Unknown| to form a \verb|Term|. The \verb|Expr| is the coefficient and \verb|Unknown| is the nth derivative. Last, the \verb|$+| take a list of \verb|Term| and one \verb|Term| to form a new \verb|[Term]| by appending the \verb|Term| to the list of \verb|Term|.
-
-% \begin{table}
-% 	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
-% 		\textbf{Operator} & \textbf{Semantics} \\
-% 		\toprule
-% 		\verb|$^^| & take a \verb|ConstrConcept| and \verb|Integer| to form a \verb|Unknown|. The \verb|ConstrConcept| is the dependent variable and \verb|Integer| is the order of nth derivative. Eg, depVar \verb|$^^| d, means nth derivative of depVar.\\
-% 		\verb|$*| & take a \verb|Expr| and \verb|Unknown| to form a \verb|Term|. The \verb|Expr| is the coefficient and \verb|Unknown| is the nth derivative.\\
-% 		\verb|$+| & take a \verb|[Term]| and \verb|Term| to form a new \verb|[Term]| by appending \verb|Term| to \verb|[Term]|.\\
-% 		\bottomrule	
-% 	\end{tabular}	
-% 	\caption{A sample table}	
-% 	\label{tab_inputtype}
-% \end{table}
-
-To take (matrix form~\ref{eq_odeexmaple}) as an example. Replacing symbols with equivalent variable in the Drasil framework.
-
-\begin{table}
-	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
-		\textbf{Variable} & \textbf{Equivalent in Drasil} \\
-		\toprule
-		$K_d$ & qdDerivGain\\
-		$y_t$ & opProcessVariable\\
-		$K_p$ & qdPropGain\\
-		$r_t$ & qdSetPointTD\\
-		\bottomrule	
-	\end{tabular}	
-	\caption{A sample table}	
-	\label{tab_inputtype}
-\end{table}
-
-we can write them as the following
+The \verb|LHS|, short name for left-hand side, is a list of \verb|Term|. Each \verb|Term| has of a \verb|Expr| and \verb|Unknown|. Most of creation of new operators are inspire by a normal form of (linear ODE~\ref{eq_linearDE}). Then, the \verb|$^^| operator connect a dependent variable and the order of its derivative. The \verb|$*| operator create a term by connecting a coefficient and an unknown variable. Last, the \verb|$^^| operator connect all terms together. Let write pseudo code the example (matrix form~\ref{eq_odeexmaple}) in the newly introduced input lanuguge. 
 \begin{haskell1}
-lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)] --line 1
- $+ (exactDbl 1 $* (opProcessVariable $^^ 2)) -- line 2
- $+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
-rhs = sy qdSetPointTD `mulRe` sy qdPropGain
+lhs = [1 $* (y_t $^^ 2)] 
+	$+ (1 + K_d) $* (y_t $^^ 1)
+	$+ (20 + K_p) $* (y_t $^^ 0)
+rhs = r_t K_p
 \end{haskell1}
 
-lhs represents the left-hand side and rhs represents the right-hand side. lhs is a type of LHS, and LHS is synonym for \verb|[Term]|. rhs is just a \verb|Expr|. In line 1, the whole syntax create a single list of \verb|Term|. In side of this single \verb|Term|, everything before the \verb|$*| is the coefficient, and everything after the \verb|$*| is the \verb|Unknown|. The coefficient is \verb|1 + Kd|, and the \verb|Unknown| is the first derivative of $y_t$. In line 2, everything after the \verb|$+| is a \verb|Term|. By using \verb|$+|, we append a \verb|Term| into a list of \verb|Term|.
+The full detail of input lanuage for PD\_Contoller example will show up in (Appendix ~\ref{appendix_a})
 
 \section{Two Constructors}
 The first constructor is \verb|makeASystemDE|. A user can set the coefficient matrix, unknown vector, and constant vector by explicitly giving \verb|[[Expr]]|, \verb|[Unknown]|, and \verb|[Expr]|. There will be several guards to check wether inputs is well-formed.
@@ -189,20 +156,3 @@ It would be tedious to require users to input a matrix form for a single ODE. Th
 
 \section{Display Matrix}
 After users enter ODE equations, we display them in SRS. There are two different ways to display equations, matrix and linear equations.
-
-%% Matrix
-% \[
-% \begin{bmatrix}
-%     x_{11}       & x_{12} & x_{13} & \dots & x_{1n} \\
-%     x_{21}       & x_{22} & x_{23} & \dots & x_{2n} \\
-%     \hdotsfor{5} \\
-%     x_{d1}       & x_{d2} & x_{d3} & \dots & x_{dn}
-% \end{bmatrix}
-% =
-% \begin{bmatrix}
-%     x_{11} & x_{12} & x_{13} & \dots  & x_{1n} \\
-%     x_{21} & x_{22} & x_{23} & \dots  & x_{2n} \\
-%     \vdots & \vdots & \vdots & \ddots & \vdots \\
-%     x_{d1} & x_{d2} & x_{d3} & \dots  & x_{dn}
-% \end{bmatrix}
-% \]

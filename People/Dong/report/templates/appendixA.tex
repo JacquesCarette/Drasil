@@ -18,3 +18,14 @@ This appendix provides detailed explanations of various parts of DifferentialMod
 	\caption{Type use in DifferentialModel}	
 	\label{tab_demodeltype}
 \end{table}
+
+\begin{haskell1}
+-- $K_d$ is qdDerivGain
+-- $y_t$ is opProcessVariable
+-- $K_p$ is qdPropGain
+-- $r_t$ is qdSetPointTD
+lhs = [exactDbl 1 $* (opProcessVariable $^^ 2)]
+	$+ (exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1))
+	$+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
+rhs = sy qdSetPointTD `mulRe` sy qdPropGain
+\end{haskell1}

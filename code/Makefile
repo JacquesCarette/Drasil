@@ -237,7 +237,7 @@ packagedeps:
 	@echo ----------------------------
 	@echo Generating package dependency graph
 	@echo ----------------------------
-	@stack dot --prune dblpendulum,gamephysics,glassbr,hghc,nopcm,pdcontroller,projectile,sglpendulum,ssp,swhs,template | dot -Tpng -o dependencies.png
+	@stack dot --prune dblpendulum,gamephysics,glassbr,hghc,nopcm,pdcontroller,projectile,sglpendulum,ssp,swhs,template,drasil-website | tred | dot -Tpng -o dependencies.png
 	
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#

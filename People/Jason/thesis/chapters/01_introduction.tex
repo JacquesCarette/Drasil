@@ -92,7 +92,8 @@ knowledge changes, software artifacts are slow-moving to adjust, requiring
 continued development. For well-understood domains, such as \ACF{scs}, where
 there exists commonly agreed upon ``knowledge'' and software is somehow usable,
 Drasil aims to capture domain-specific knowledge and use a generative approach
-to build software as \textit{view} of the captured knowledge.
+to build software as \textit{view} of the captured knowledge. Drasil is a suite
+for \textit{generative software development}.
 
 Currently focusing on \acs{scs}, Drasil uses a stable scientific knowledge-base
 to generate families of \acs{scs} conforming to a \ACF{srs}
@@ -143,8 +144,9 @@ Drasils knowledge database.
 \section{Background}
 \label{sec:intro:background}
 
-Intended to ``generate all the things''\footnote{``Generate All the Things'' is
-      Drasils tagline.}, Drasil
+\footnotetext{``Generate All the Things'' is Drasils tagline.}
+
+Intended to ``generate all the things''\footnotemark{}, Drasil
 \footnote{\url{https://jacquescarette.github.io/Drasil/}} is a Haskell-based
 \cite{Haskell2010} software suite studying how knowledge capture may improve
 modern software development. ``Knowledge'' is considered ``captured'' in Drasil
@@ -184,39 +186,60 @@ other languages.
 However, not all the case studies are capable of generating software artifacts
 yet (\refCaseStudiesCodeTable{}). Each for their own reason, but we will focus
 on a critical common denominator between them all: capturing mathematical
-knowledge needed for reliably generating \acs{scs}.
+knowledge for reliable \acs{scs} artifact generation (and more).
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
 
-Drasil has de-duplicated knowledge across \acs{scs} artifacts relevant to
-specifications and code. Through codifying knowledge and creating coherent
-``stories'', we are able to generate a wide variety of software artifacts (e.g.,
-\acs{oo} programs via \acs{gool} with guided usage via Makefiles, and
-requirements specifications [HTML and TeX]). This codified knowledge was
-de-duplicated from an originating set of artifacts via bottom-up gathering,
-however, we should be able to use the same knowledge to generate more artifacts
-in different languages, flavours, and with more options. However, each desired
-artifact language has its own way of encoding information (such as mathematical
-expressions). This leaves us needing to teach Drasil more about the targeted
-languages (and, at times, about the existing codified knowledge) in order to
-reliably generate usable artifacts. Mathematical expression and theory encoding
-becomes a key point of interest for us because they are used in across the board
-(e.g., derivations, code, constraints, definitions, etc.). Drasil relies on a
-single universal untyped mathematical language to describe general mathematical
-knowledge (theories). As a result, transforming theories into other forms (such
-as code) is complex, inflexible, and unreliable because the encodings lack
-information about the meaningful structure of the theories and how and when they
-are usable or valid. Continuing, as we encode more \textit{types} of information
-in Drasil, we face difficulties in placing parameterized types into Drasils
-active knowledge database and need it to scale.
-
 \iffalse
-      As more theories are codified and typed, Drasils knowledge database faces
-      difficulties in scaling since it relies on a single unique map for each
-      type of knowledge, resulting in an ever-growing list of maps and a
-      tediously precise means of knowledge collection and reference.
+      Drasil has de-duplicated knowledge across \acs{scs} artifacts relevant to
+      specifications and code. Through codifying knowledge and creating coherent
+      ``stories'', Drasil is able to generate a wide variety of software
+      artifacts (e.g., \acs{oo} programs via \acs{gool} with guided usage via
+      Makefiles, and requirements specifications [HTML and TeX]). This codified
+      knowledge was de-duplicated from an originating set of artifacts via
+      bottom-up gathering, however, we should be able to use the same knowledge
+      to generate more artifacts in different languages, flavours, and with more
+      options. However, each desired artifact language has its own way of
+      encoding information (such as mathematical expressions). This leaves us
+      needing to teach Drasil more about the targeted languages (and, at times,
+      about the existing codified knowledge) in order to reliably generate
+      usable artifacts.
 \fi
+
+\begin{itemize}
+
+      \item As Drasil focuses on generative software development of \acs{scs},
+            scientific knowledge capture is at the forefront of its priority
+            list because the preciseness and specificity of the \acsp{dsl} used
+            is directly associated with the capabilities of the instances.
+
+            Mathematical expression and theory encoding becomes a key point of
+            interest for us because they are used in across the board (e.g.,
+            derivations, code, constraints, definitions, etc.).
+
+      \item As general-purpose programming languages are to domain-specific
+            programming languages, a single universal mathematical language is
+            to theory-specific language.
+
+      \item Drasil relies on a single universal untyped mathematical language to
+            describe general mathematical knowledge (theories).
+
+            As a result, transforming encoded theories into other forms (such as
+            code) is a complex task (similar to the complexity associated with
+            transpiling a general-purpose program into another). The task is
+            inflexible and arduous in nature because of a clear lack of
+            information about the meaningful structure of the theories and how
+            and when they are usable or valid.
+
+      \item Additionally, as we encode more kinds of knowledge in Drasil, we
+            face difficulties in scaling its knowledge database.
+
+\end{itemize}
+
+Continuing, as we encode more \textit{types} of information in Drasil, we face
+difficulties in placing parameterized types into Drasils active knowledge
+database and need it to scale.
 
 \section{Research Questions}
 \label{sec:intro:researchquestions}
@@ -247,8 +270,8 @@ active knowledge database and need it to scale.
 
 In listed code snippets, I will refer to at least two major points of time in
 relation to Drasils development (time measured by their git blob hash):
-``current''\footnote{Blob: dc3674274edb00b1ae0d63e04ba03729e1dbc6f9} and
-``original''\footnote{Blob: 9c26b43d3e30c3f618e534a3f176a5152729af74}. The
+``current''\footnote{Blob hash: dc3674274edb00b1ae0d63e04ba03729e1dbc6f9} and
+``original''\footnote{Blob hash: 9c26b43d3e30c3f618e534a3f176a5152729af74}. The
 ``original'' code refers to a code snippet as it was written before I was
 onboarded to Drasil. The ``current'' code includes my work, at least, but might
 also include the work of others who were also contributing to the project while

@@ -93,8 +93,10 @@
 }
 \makeatother
 
-% Make footnote counter reset for each new page.
-\usepackage{footnpag}
+\ifresetfootnotecounter
+  % Make footnote counter reset for each new page.
+  \usepackage{footnpag}
+\fi
 
 % Required for biblatex, but also adds functionality for quotation
 \usepackage{csquotes}

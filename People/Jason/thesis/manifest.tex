@@ -1,3 +1,7 @@
+%------------------------------------------------------------------------------
+% Your Information
+%------------------------------------------------------------------------------
+
 \newcommand{\thesisTitle}{Adding Types and Theory Kinds to Drasil}
 \newcommand{\thesisHalfTitle}{\thesisTitle}
 
@@ -19,9 +23,23 @@
 \newcommand{\thesisSubmissionYear}{\the\year{}}
 \newcommand{\thesisSubmissionMonthYear}{\today}
 
-% QUESTION-DIRECTED WRITING SWITCH
+%------------------------------------------------------------------------------
+% Metadata
+%------------------------------------------------------------------------------
+
+% Label placed on the last page of the front matter
+\newcommand{\thesisLastPageOfFrontMatterLabel}{chap:declaration_of_academic_achievement}
+
+%------------------------------------------------------------------------------
+% Options
+%------------------------------------------------------------------------------
+
+% QUESTION-DIRECTED WRITING & TO-DOS SWITCH
 \newif\ifshowwritingdirectives
 \showwritingdirectivestrue % Show questions
 % \showwritingdirectivesfalse % Don't show questions
 
-\newcommand{\thesisLastPageOfFrontMatterLabel}{chap:declaration_of_academic_achievement}
+% Reset footnote numbering for each page
+\newif\ifresetfootnotecounter
+% \resetfootnotecountertrue % Reset footnote numbering on each page
+\resetfootnotecounterfalse % Don't reset footnote numbering on each page

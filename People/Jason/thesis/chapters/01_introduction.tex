@@ -144,21 +144,22 @@ Drasils knowledge database.
 \section{Background}
 \label{sec:intro:background}
 
-\footnotetext{``Generate All the Things'' is Drasils tagline.}
 
-Intended to ``generate all the things''\footnotemark{}, Drasil
-\footnote{\url{https://jacquescarette.github.io/Drasil/}} is a Haskell-based
-\cite{Haskell2010} software suite studying how knowledge capture may improve
-modern software development. ``Knowledge'' is considered ``captured'' in Drasil
-by codifying it and its relations to other things using \ACFP{dsl} encoded as
-Haskells data types. For example, ``quantities,'' as we've currently needed from
-a physics-based point-of-view, are encoded as:
+Intended to ``generate all the things''\footnote{``Generate All the Things'' is
+      Drasils tagline.},
+\porthref{Drasil}{https://jacquescarette.github.io/Drasil/} is a
+Haskell-based \cite{Haskell2010} software suite studying how knowledge
+capture may improve modern software development. ``Knowledge'' is
+considered ``captured'' in Drasil by codifying it and its relations to
+other things using \ACFP{dsl} encoded as Haskells data types. For example,
+``quantities'' (\QuantityDict{}s), as we've currently needed from a
+physics-based point-of-view, are encoded as:
 
-\intodo{Code snippet: QuantityDicts}
+\originalQuantityDictHaskell{}
 
-And an instance of a ``quantity'' might appear as:
+And an instance of a ``quantity'' might appear as:\\
 
-\intodo{Code snippet: instance of a QuantityDict.}
+\originalQuantityDictExampleHaskell{}
 
 The ways that we can translate ``quantities'' into other ``things'' are encoded
 as Haskell-level functions and instances of typeclasses, such as:
@@ -176,15 +177,15 @@ C/C\+\+, C\#, Python, etc.). Similarly, textual markup can be exported in
 similar languages, such as \acs{html} and \LaTeX{}.
 
 For example, the \ACF{glassbr} case study (examining predicting whether a glass
-slab can withstand an explosive blast) had software artifacts manually
-written\footnote{\url{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}}.
-A coherent net of knowledge/discussion (a ``story'') is then formed by
-dissecting the artifacts, understanding why each piece existed, what it relates
-to and how, and how it can be translated into other things. The original
-artifacts are then re-generated in a wider
-variety\footnote{\url{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}}
-of other languages by codifying how the net of knowledge can be translated into
-other languages.
+slab can withstand an explosive blast) had \porthref{software
+      artifacts}{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}
+manually written. A coherent net of knowledge/discussion (a ``story'') is then
+formed by dissecting the artifacts, understanding why each piece existed, what
+it relates to and how, and how it can be translated into other things. The
+original artifacts are then
+\porthref{re-generated}{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}
+in a wider variety of other languages by codifying how the net of knowledge can
+be translated into other languages.
 
 However, not all the case studies are capable of generating software artifacts
 yet (\refCaseStudiesCodeTable{}). Each for their own reason, but we will focus
@@ -223,8 +224,8 @@ the domain of scientific knowledge is at the forefront of its priority list. The
 depth and breadth of the network of domains is directly related to how many
 opportunities for domain-specific transformations we can perform on a specific
 pool of knowledge\todo{I feel like I should be able to cite Czarnecki2005 again
-      here, but this isn't really how he worded it, is it fair cite him here, or
-      should I provide my own justification?}.
+      here, but this isn't really how he worded it, is it fair to cite him here,
+      or should I provide my own justification?}.
 
 Drasil currently relies on a single universal untyped mathematical language to
 describe general mathematical knowledge (including, but not limited to,

@@ -33,7 +33,7 @@ $y_t$ is the dependent variable, and $K_d$, $K_p$, and $r_t$ are constant variab
 	\end{bmatrix}
 \end{equation}
 
-The relationship between (matrix form~\ref{eq_matrixform}) and (example~\ref{eq_matrixformexmaple}) is not hard to find out. Firstly, the coefficient matrix A is 1 * 3 matrix that consists with $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector is a 3 * 1 vector with $y_t''$, $y_t'$, and $y_t$. Last, the constant vector is a 1 * 1 vector with $r_t K_p$. The (matrix form~\ref{eq_matrixform}) very well capture all the knowledge we need to present an ODE. Therefore, we decide to create a datatype called \verb|DifferentialModel| to preserve ODEs information. The \verb|DifferentialModel| has six records, and here are the representing code for \verb|DifferentialModel|.
+The relationship between the matrix form~\ref{eq_matrixform} and the example~\ref{eq_matrixformexmaple} is not hard to find out. Firstly, the coefficient matrix A is 1 * 3 matrix that consists with $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector is a 3 * 1 vector with $y_t''$, $y_t'$, and $y_t$. Last, the constant vector is a 1 * 1 vector with $r_t K_p$. The matrix form~\ref{eq_matrixform} very well capture all the knowledge we need to present an ODE. Therefore, we decide to create a datatype called \verb|DifferentialModel| to preserve ODEs information. The \verb|DifferentialModel| has six records, and here are the representing code for \verb|DifferentialModel|.
 \begin{haskell1}
 data DifferentialModel = SystemOfLinearODEs {
 	_indepVar :: UnitalChunk,
@@ -45,14 +45,15 @@ data DifferentialModel = SystemOfLinearODEs {
 }
 \end{haskell1}
 
-Previous on this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk already existed in Drasil. The Unknown type created in this experiment.Their semantics will show up in (Appendix A ~\ref{tab_demodeltype})
+Previous on this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk already existed in Drasil. The Unknown type created in this experiment.Their semantics will show up in Appendix A ~\ref{tab_demodeltype}
 
-The \verb|_indepVar| represent the independent variable in an ODE, and it is usually time. The \verb|_depVar| represent the dependent variable in ODE. The \verb|_coefficients| is a list of list \verb|Expr|, and it represents the coefficient of the ODE. The \verb|_unknowns| is a list of \verb|Unknown|, each \verb|Unknown| indicate nth order of derivative of the dependent variable. The \verb|_dmConstants| is an \verb|Expr|, and it represents the constant vector. Last, the \verb|_dmconc| contains meta data of this model. To represent (example~\ref{eq_matrixformexmaple}) in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is a 1 *3 matrix, \verb|_unknowns| is 3 * 1 vector, \verb|_dmConstants| is a 1 * 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describe what is this model.
+The \verb|_indepVar| represent the independent variable in an ODE, and it is usually time. The \verb|_depVar| represent the dependent variable in ODE. The \verb|_coefficients| is a list of list \verb|Expr|, and it represents the coefficient of the ODE. The \verb|_unknowns| is a list of \verb|Unknown|, each \verb|Unknown| indicate nth order of derivative of the dependent variable. The \verb|_dmConstants| is an \verb|Expr|, and it represents the constant vector. Last, the \verb|_dmconc| contains meta data of this model. To represent example~\ref{eq_matrixformexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is a 1 *3 matrix, \verb|_unknowns| is 3 * 1 vector, \verb|_dmConstants| is a 1 * 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describe what is this model.
 
 Currently, the \verb|DifferentialModel| only capture knowledge of ODEs with one dependent variable. This is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of all ODEs, and eventually lead to solve a system of linear ODE with multiple dependent variables.
 
 \section{Input Language}
-There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form, so introducing an input language could to simplify inputting a single ODE. What will this input language looks like? The (example~\ref{eq_odeexmaple}) represents a linear second-order ODE, and how to represent a linear nth-order ODE? Base on Paul's Online Notes~\citep{paullinearode}, all linear ODEs can be write in shape of 
+\label{sec_input}
+There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form, so introducing an input language could to simplify inputting a single ODE. What will this input language looks like? The example~\ref{eq_odeexmaple} represents a linear second-order ODE, and how to represent a linear nth-order ODE? Base on Paul's Online Notes~\citep{paullinearode}, all linear ODEs can be write in shape of 
 \begin{equation} \label{eq_linearDE}
 	a_n(t)y^n(t) + a_{n-1}(t)y^{n-1}(t) + \dots + a_1(t)y'(t) + a_0(t)y(t) = g(t)
 \end{equation}
@@ -77,82 +78,33 @@ type LHS = [Term]
 ($+) xs x  = xs ++ [x]
 \end{haskell1}
 
-The \verb|LHS|, short name for left-hand side, is a list of \verb|Term|. Each \verb|Term| has of a \verb|Expr| and \verb|Unknown|. Most of creation of new operators are inspire by a normal form of (linear ODE~\ref{eq_linearDE}). Then, the \verb|$^^| operator connect a dependent variable and the order of its derivative. The \verb|$*| operator create a term by connecting a coefficient and an unknown variable. Last, the \verb|$^^| operator connect all terms together. Let write pseudo code the example (matrix form~\ref{eq_odeexmaple}) in the newly introduced input lanuguge. 
+The \verb|LHS|, short name for left-hand side, is a list of \verb|Term|. Each \verb|Term| has of a \verb|Expr| and \verb|Unknown|. Most of creation of new operators are inspire by a normal form of linear ODE~\ref{eq_linearDE}. Then, the \verb|$^^| operator connect a dependent variable and the order of its derivative. The \verb|$*| operator create a term by connecting a coefficient and an unknown variable. Last, the \verb|$^^| operator connect all terms together. Let write pseudo code for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input lanuguge. The full detail of input lanuage for PD\_Contoller example will show up in Appendix ~\ref{appendix_a}.
+
 \begin{haskell1}
-lhs = [1 $* (y_t $^^ 2)] 
+lhs = [1 $* (y_t $^^ 2)] -- $\label{myline}$
 	$+ (1 + K_d) $* (y_t $^^ 1)
 	$+ (20 + K_p) $* (y_t $^^ 0)
 rhs = r_t K_p
 \end{haskell1}
 
-The full detail of input lanuage for PD\_Contoller example will show up in (Appendix ~\ref{appendix_a})
-
 \section{Two Constructors}
-The first constructor is \verb|makeASystemDE|. A user can set the coefficient matrix, unknown vector, and constant vector by explicitly giving \verb|[[Expr]]|, \verb|[Unknown]|, and \verb|[Expr]|. There will be several guards to check wether inputs is well-formed.
+There are two constructors to create a \verb|DifferentialModel|. They are using for different design purposes. The first constructor is \verb|makeASystemDE|. A user can set the coefficient matrix, unknown vector, and constant vector by explicitly giving \verb|[[Expr]]|, \verb|[Unknown]|, and \verb|[Expr]|. There will be several guards to check wheather inputs are well-formed.
 
-1. matrix and constant vector: \verb|_coefficients| is a m * n matrix and \verb|_dmConstants| is a m vector. This guard make sure they have the same m dimension. If there is error says "Length of coefficients matrix should equal to the length of the constant vector", it means \verb|_coefficients| and \verb|_dmConstants| has different m dimension, and it violates mathematical rules.
+1. The dimension of coefficent matrix and constant vector need to match. The \verb|_coefficients| is a m * n matrix and \verb|_dmConstants| is a m vector. This guard make sure they have the same m dimension. If there is error says "Length of coefficients matrix should equal to the length of the constant vector", it means \verb|_coefficients| and \verb|_dmConstants| has different m dimension, and it violates mathematical rules.
 
-2. each row in matrix and unknown vector: \verb|_coefficients| use list of list to represent a m * n matrix. It means each list in \verb|_coefficients| will have the same length n, and \verb|_unknowns| is n vector. Therefore, the length of each row in the \verb|_coefficients| should be equal to the length of \verb|_unknowns|. The following code will create a math expression to indicate wether inputs for \verb|_coefficients| and \verb|_unknowns| are valid.
+2. The dimension of each row in coefficent matrix and unknown vector need to match. The \verb|_coefficients| use a list of list to represent a m * n matrix. It means each list in \verb|_coefficients| will have the same length n, and \verb|_unknowns| is an n-vector. Therefore, the length of each row in the \verb|_coefficients| should equal to the length of \verb|_unknowns|. If there is error says "The length of each row vector in coefficients need to equal to the length of unknowns vector", it means \verb|_coefficients|and \verb|_unknowns| violate mathematical rules.
 
-\begin{haskell1}
-isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
-isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
-isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
-isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)) True coeffs
-\end{haskell1}
+3. The order of unknown vector need to be descending due to design decisions. We have no control on what user will give to us, and there are infinite ways to represent a linear equations in the matrix form~\ref{eq_matrixform}. We strictly ask user to input the unknown vector descending, so we can maintain the shape of a normal form of linear ODE~\ref{eq_linearDE}. This design choice will simplify the implementation for solving a linear ODE numerically in Chapter 3. If there is error says "The order of giving unknowns need to be descending", it means the order of unknown vector is not descending.
 
-If there is error says "The length of each row vector in coefficients need to equal to the length of unknowns vector", it means \verb|_coefficients| and \verb|_unknowns| violate mathematical rules.
-
-3. the order of unknown vector: this guard is designed for simplifying implementation. We have no control on what users give to us. There are infinite ways to represent a linear equation in the form of **Ax** = **b**, so we strictly ask users put the order of the unknown vector descending. This design choice will help to simply the later transformation from **Ax** = **b** to **X**' = **AX** + **c** (link here). If there is error says "The order of giving unknowns need to be descending", it means the order of unknown vector is not descending.
-
-The following is the example how to directly set the coefficient matrix, unknown vector, and constant vector
+The following is the pseudo code show how to directly set the coefficient matrix, unknown vector, and constant vector for example~\ref{eq_odeexmaple}. The full detail of how to directly set the coefficient matrix, unknown vector, and constant vector for PD\_Contoller example will show up in Appendix~\ref{appendix_a}.
 
 \begin{haskell1}
-coeffs = [[exactDbl 1, recip_ (sy tauW)]]
-unknowns = [1, 0]
-constants = [recip_ (sy tauW) `mulRe` sy tempC]
+coefficent = [[1, 1 + K_d, 20 + K_p]]
+unknowns   = [2, 1, 0]
+constants  = [r_t K_p]
 \end{haskell1}
 
-In \verb|makeASystemDE|, it requires users to input the unknown descending.
-
-The second constructor is called \verb|makeASingleDE|. This constructor uses the input language to simplify the input of a single ODE. The following is the example how to use input language to create a \verb|DifferentialModel|.
-
-reference ??
-\begin{haskell1}
-lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)]
- $+ (exactDbl 1 $* (opProcessVariable $^^ 2))
- $+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
-rhs = sy qdSetPointTD `mulRe` sy qdPropGain
-\end{haskell1}
-
-In \verb|makeASingleDE|, users don't necessary to input the unknown vector in descending order. Any order will be fine, because we will sort out the unknown vector base on its derivative and build the coefficient matrix accordingly. Once users enter the ODE equations by using the input language, there are several steps to generate its data represent.
-
-First, we create a descending unknown vector base on the highest order of the derivatives. For example, the highest order in the lhs is 2, then we will generate 2, 1 and 0 derivative respectively.
-
-\begin{haskell1}
-unks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar''
-
-findHighestOrder :: LHS -> Term
-findHighestOrder = foldr1 (\x y -> if x ^. unk >= y ^. unk then x else y)
-
-createAllUnknowns :: Unknown -> ConstrConcept -> [Unknown]
-createAllUnknowns highestUnk depv
-| highestUnk  == 0  = [highestUnk]
-| otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depv
-\end{haskell1}
-
-Second, we will create the coefficient matrix base on the descending unknown vector. For each derivative, we search it coefficient base on the order of derivative.
-
-\begin{haskell1}
-coeffs = [createCoefficients lhs unks]
-
-createCoefficients :: LHS -> [Unknown] -> [Expr]
-createCoefficients [] _ = error "Left-hand side is an empty list"
-createCoefficients _ [] = []
-createCoefficients lhs (x:xs) = genCoefficient (findCoefficient x lhs) : createCoefficients lhs xs
-\end{haskell1}
-
-It would be tedious to require users to input a matrix form for a single ODE. Therefore, we create an input language to make it easier to input such equations.
+The second constructor is called \verb|makeASingleDE|. This constructor uses the input language~\ref{sec_input} to simplify the input of a single ODE. In \verb|makeASingleDE|, the coefficient matrix, unknown vector, and constant vector are build base on data that restricts by the input language. Users no longer to set the data by directly giving values. All data for the coefficient matrix, unknown vector, and constant vector will be generated  accordingly. The constructor first create a descending unknown vector base on the highest number of its derivatives. For example, if the highest order in the lhs~\ref{myline} is 2, then we will generate a list contains 2, 1 and 0. Then, we will create the coefficient matrix by finding its related coefficient base on the descending order of the unknown vector. One advantage of this design choice is that it is easier to input a single ODE with the input language. The second advantage is that users no longer required to input unknown vector in descending order. Any order of the unknown vector will be fine because we will generate the data of \verb|DifferentialModel|.
 
 \section{Display Matrix}
 After users enter ODE equations, we display them in SRS. There are two different ways to display equations, matrix and linear equations.

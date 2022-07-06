@@ -144,7 +144,6 @@ Drasils knowledge database.
 \section{Background}
 \label{sec:intro:background}
 
-
 Intended to ``generate all the things''\footnote{``Generate All the Things'' is
       Drasils tagline.},
 \porthref{Drasil}{https://jacquescarette.github.io/Drasil/} is a
@@ -167,14 +166,17 @@ as Haskell-level functions and instances of typeclasses, such as:
 \intodo{Code snippet: example of how QuantityDicts are converted into at least 1
       or 2 other things (e.g., SRS rows, symbols, etc.).}
 
-Drasil is developed through a ``bottom-up'' methodology against several
-\acs{scs} case studies (\refCaseStudiesTable{}), capturing and de-duplicating
-knowledge as needed to re-generate the original artifacts and more, in a wide
-variety of similarly applicable languages. For example, Drasil makes use of the
-similarities of \ACF{oo} languages by forming expressions in \ACF{gool} before
-compiling to the specific instances of \acs{oo} languages (such as Java,
-C/C\+\+, C\#, Python, etc.). Similarly, textual markup can be exported in
-similar languages, such as \acs{html} and \LaTeX{}.
+These codified pieces of ``knowledge'' are known as \textit{chunks} in Drasil,
+and are collected in a single database (\refOriginalChunkDBHaskell) of typed
+maps of chunks, referenced by their \ACFP{uid}. Drasil is developed through a
+``bottom-up'' methodology against several \acs{scs} case studies
+(\refCaseStudiesTable{}), capturing and de-duplicating knowledge as needed to
+re-generate the original artifacts and more, in a wide variety of similarly
+applicable languages. For example, Drasil makes use of the similarities of
+\ACF{oo} languages by forming expressions in \ACF{gool} before compiling to the
+specific instances of \acs{oo} languages (such as Java, C/C\+\+, C\#, Python,
+etc.). Similarly, textual markup can be exported in similar languages, such as
+\acs{html} and \LaTeX{}.
 
 For example, the \ACF{glassbr} case study (examining predicting whether a glass
 slab can withstand an explosive blast) had \porthref{software
@@ -211,13 +213,21 @@ knowledge for reliable \acs{scs} artifact generation (and more).
       usable artifacts.
 \fi
 
-Domain-specific abstractions are what enable \textit{domain-specific
-      interpretation and transformation} (e.g., optimization, analysis, error
-checking, tool support, etc.) \cite{Czarnecki2005}, which is what sets
+Domain-specific abstractions are what enable domain-specific
+\textit{interpretation and transformation} (e.g., optimization, analysis, error
+checking, tool support, etc.) \cite{Czarnecki2005}. The capture of
+domain-specific knowledge (through abstractions) is which is what sets
 \acsp{dsl} apart from general-purpose programming languages. Drasil relies on a
-\textit{network of domains} (a network of domains of knowledge that somehow
-relate other domains of knowledge in their own) to enable the complex
-informational transformation needed to convert an \acs{srs} document into code.
+\textit{network of domains} (a network of domain knowledge connected by
+\aclp{dsl}) to enable the complex information transformation needed to convert
+an \acs{srs} document into code. In Drasil, this roughly appears as
+\refRoughNetworkOfDomains{}, where the nodes are domains, and the arrows
+represent mappings between them. However, this sketch is only rough;
+realistically, the individual nodes are the ``domains of the \aclp{dsl}'' (i.e.,
+the top-level domains they belong to, and not an accurate depiction of all the
+\aclp{dsl} that actually exist in Drasil).
+
+\roughNetworkOfDomains{}
 
 As Drasil focuses on the generative software development of \acs{scs}, capturing
 the domain of scientific knowledge is at the forefront of its priority list. The
@@ -228,26 +238,41 @@ pool of knowledge\todo{I feel like I should be able to cite Czarnecki2005 again
       or should I provide my own justification?}.
 
 Drasil currently relies on a single universal untyped mathematical language to
-describe general mathematical knowledge (including, but not limited to,
-equations, relations, theories, derivations, constraints, and definitions). As
-general-purpose programming languages are to domain-specific languages, a single
-universal mathematical language is to structured theory knowledge. In other
-words, Drasils reliance on a single mathematical language is limiting because of
-the complexity associated with interpreting its terms, which lack information
-about the \textit{domain}.
+describe general scientific and mathematical knowledge (including, but not
+limited to, equations, relations, theories, derivations, constraints, and
+definitions).
+
+\intodo{Code snippet: Encoding of a theory using a relationconcept.}
+
+However, as general-purpose programming languages are to domain-specific
+languages, a single universal mathematical language is to a series of formalized
+and structured theory-specific languages. In other words, Drasils reliance on a
+single mathematical language is limiting because of the complexity associated
+with interpreting its terms, which lack information about the \textit{domain}
+(science and mathematics).
 
 As a result, transforming encoded theories into other forms (such as code) is a
 complex task (similar to the complexity associated with transpiling a
 general-purpose program into another\todo{An exercise in futility!}). Drasil is
-unable to make intended/appropriate usage of encoded mathematical theories
-because of a lack of structural mathematical information. Additionally, as
-Drasil lacks type information about its mathematical expression language,
-invalid expressions are possible to be written causing further issues in
-reliable formation and transformation into usable high-quality \acs{scs}.
+unable to make intended and appropriate usage of the encoded mathematical
+theories because of a lack of information about the structure of the
+mathematical expressions. Since the language is also universal, there is
+difficulty in separation of expression term-concern (you wouldn't worry about
+derivatives if you were writing down expressions on your standard calculator,
+because your calculator likely doesn't understand what derivatives are!). For
+example, converting a universal mathematical language into Java will be
+difficult, as there are many terms not immediately expressible. Additionally,
+due to Drasils lack of type information about its mathematical expression
+language, invalid expressions (and hence, domain knowledge) are possible to be
+written, causing further issues in reliable formation and transformation into
+usable high-quality \acs{scs}. Together, these issues fundamentally have to do
+with the depth and breadth of the scientific knowledge: we aim to enable Drasils
+network of domain knowledge to grow, and grow it (to some degree).
 
 Finally, as Drasils network of domains continues to grow in different aspects
-(such as creating type parameters), Drasil faces difficulties in scaling its
-database of knowledge against these large changes.
+(such as creating new kinds of chunks, and creating type parameters for existing
+chunks), Drasil faces difficulties in scaling its database of knowledge because
+of its typed nature.
 
 \section{Research Questions}
 \label{sec:intro:researchquestions}

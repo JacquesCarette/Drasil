@@ -94,3 +94,16 @@ DefiningExpr
 ConstraintKinds
 reusability
 de-duplicating
+ghc
+gd
+gadt
+ffi
+dsl
+cms
+ast
+api
+ssp
+swhs
+hghc
+modelkinds
+Vasa

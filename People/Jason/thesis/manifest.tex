@@ -27,7 +27,11 @@
 % Metadata
 %------------------------------------------------------------------------------
 
-% Label placed on the last page of the front matter
+% The label placed on the last page of the front matter is used to find how many
+% pages belong in the front matter (which are numbered with roman numerals
+% instead of the traditional arabic numbering system). You only need to update
+% this label value IF the "Declaration of Academic Achievement" is not the last
+% page of your front matter.
 \newcommand{\thesisLastPageOfFrontMatterLabel}{chap:declaration_of_academic_achievement}
 
 %------------------------------------------------------------------------------
@@ -36,8 +40,8 @@
 
 % QUESTION-DIRECTED WRITING & TO-DOS SWITCH
 \newif\ifshowwritingdirectives
-\showwritingdirectivestrue % Show questions
-% \showwritingdirectivesfalse % Don't show questions
+\showwritingdirectivestrue % Show questions and to-do notes
+% \showwritingdirectivesfalse % Don't show questions and to-do notes
 
 % Reset footnote numbering for each page
 \newif\ifresetfootnotecounter

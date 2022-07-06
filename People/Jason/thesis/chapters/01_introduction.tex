@@ -168,9 +168,12 @@ as Haskell-level functions and instances of typeclasses, such as:
 
 Drasil is developed through a ``bottom-up'' methodology against several
 \acs{scs} case studies (\refCaseStudiesTable{}), capturing and de-duplicating
-knowledge as needed to re-generate the original artifacts, and, more in a wide
-variety of similarly applicable languages (such as \acs{html}, \LaTeX{}, Java,
-C/C\+\+, etc.).
+knowledge as needed to re-generate the original artifacts and more, in a wide
+variety of similarly applicable languages. For example, Drasil makes use of the
+similarities of \ACF{oo} languages by forming expressions in \ACF{gool} before
+compiling to the specific instances of \acs{oo} languages (such as Java,
+C/C\+\+, C\#, Python, etc.). Similarly, textual markup can be exported in
+similar languages, such as \acs{html} and \LaTeX{}.
 
 For example, the \ACF{glassbr} case study (examining predicting whether a glass
 slab can withstand an explosive blast) had software artifacts manually
@@ -207,42 +210,48 @@ knowledge for reliable \acs{scs} artifact generation (and more).
       usable artifacts.
 \fi
 
-\begin{itemize}
+Domain-specific abstractions are what enable \textit{domain-specific
+interpretation and transformation} (e.g., optimization, analysis, error
+checking, tool support, etc.) \cite{Czarnecki2005}, which is what sets
+\acsp{dsl} apart from general-purpose programming languages. Drasil relies on a
+\textit{network of domains} (a network of domains of knowledge that somehow
+relate other domains of knowledge in their own) to enable the complex
+informational transformation needed to convert an \acs{srs} document into code.
 
-      \item As Drasil focuses on generative software development of \acs{scs},
-            scientific knowledge capture is at the forefront of its priority
-            list because the preciseness and specificity of the \acsp{dsl} used
-            is directly associated with the capabilities of the instances.
+As Drasil focuses on the generative software development of \acs{scs}, capturing
+the domain of scientific knowledge is at the forefront of its priority list. The
+depth and breadth of the network of domains is directly related to how many
+opportunities for domain-specific transformations we can perform on a specific
+pool of knowledge\todo{I feel like I should be able to cite Czarnecki2005 again
+here, but this isn't really how he worded it, is it fair cite him here, or
+should I provide my own justification?}.
 
-            Mathematical expression and theory encoding becomes a key point of
-            interest for us because they are used in across the board (e.g.,
-            derivations, code, constraints, definitions, etc.).
+Drasil currently relies on a single universal untyped mathematical language to
+describe general mathematical knowledge (including, but not limited to,
+equations, relations, theories, derivations, constraints, and definitions). As
+general-purpose programming languages are to domain-specific languages, a single
+universal mathematical language is to structured theory knowledge. In other
+words, Drasils reliance on a single mathematical language is limiting because of
+the complexity associated with interpreting its terms, which lack information
+about the \textit{domain}.
 
-      \item As general-purpose programming languages are to domain-specific
-            programming languages, a single universal mathematical language is
-            to theory-specific language.
+As a result, transforming encoded theories into other forms (such as code) is a
+complex task (similar to the complexity associated with transpiling a
+general-purpose program into another\todo{An exercise in futility!}). Drasil is
+unable to make intended/appropriate usage of encoded mathematical theories
+because of a lack of structural mathematical information. Additionally, as
+Drasil lacks type information about its mathematical expression language,
+invalid expressions are possible to be written causing further issues in
+reliable formation and transformation into usable high-quality \acs{scs}.
 
-      \item Drasil relies on a single universal untyped mathematical language to
-            describe general mathematical knowledge (theories).
-
-            As a result, transforming encoded theories into other forms (such as
-            code) is a complex task (similar to the complexity associated with
-            transpiling a general-purpose program into another). The task is
-            inflexible and arduous in nature because of a clear lack of
-            information about the meaningful structure of the theories and how
-            and when they are usable or valid.
-
-      \item Additionally, as we encode more kinds of knowledge in Drasil, we
-            face difficulties in scaling its knowledge database.
-
-\end{itemize}
-
-Continuing, as we encode more \textit{types} of information in Drasil, we face
-difficulties in placing parameterized types into Drasils active knowledge
-database and need it to scale.
+Finally, as Drasils network of domains continues to grow in different aspects
+(such as creating type parameters), Drasil faces difficulties in scaling its
+database of knowledge against these large changes.
 
 \section{Research Questions}
 \label{sec:intro:researchquestions}
+
+\intodo{Below points: change IDs.}
 
 \begin{enumerate}
 

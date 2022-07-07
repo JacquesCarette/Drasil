@@ -5,6 +5,7 @@
 \usepackage{natbib} % Bibliography formatting
 \usepackage{setspace} % Allows double spacing but skips headers/footers
 \setcounter{tocdepth}{1} % Limits the TOC to chapter and section names
+\setcounter{chapter}{-1}
 
 % Additional packages
 \usepackage{graphicx} % Allows the inclusion of figures
@@ -52,6 +53,10 @@
   \academicstatement{academicachievementdeclaration}
 \afterpreface
   
+  \include{background}                  
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
   
   \include{introduction}                  
         \setcounter{figure}{0}

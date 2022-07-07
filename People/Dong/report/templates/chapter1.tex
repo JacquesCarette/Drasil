@@ -45,9 +45,9 @@ data DifferentialModel = SystemOfLinearODEs {
 }
 \end{haskell1}
 
-Previous to this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk already existed in Drasil. We created an \verb|Unknown| type for this experiment.Their semantics will show up in Appendix A ~\ref{tab_demodeltype}
+Previous to this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk already existed in Drasil. We created an \verb|Unknown| type for this experiment. Their semantics will show up in Appendix A ~\ref{tab_demodeltype}
 
-The \verb|_indepVar| represents the independent variable in an ODE, and it is usually time. The \verb|_depVar| represents the dependent variable in ODE. The \verb|_coefficients| is a list of list \verb|Expr|, and it represents the coefficient of the ODE. The \verb|_unknowns| is a list of \verb|Unknown|, and each \verb|Unknown| indicates an nth order of derivative of the dependent variable. The \verb|_dmConstants| is an \verb|Expr|, and it represents the constant vector. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_matrixformexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is a 1 *3 matrix, \verb|_unknowns| is a 3 * 1 vector, \verb|_dmConstants| is a 1 * 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is.
+The \verb|_indepVar| represents the independent variable in an ODE, and it is usually time. The \verb|_depVar| represents the dependent variable in an ODE. The \verb|_coefficients| is a list of lists \verb|Expr|, and it represents the coefficient matrix in an ODE. The \verb|_unknowns| is a list of \verb|Unknown|, and each \verb|Unknown| indicates an nth order of derivative of the dependent variable. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_matrixformexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 *3 matrix, \verb|_unknowns| is the 3 * 1 vector, \verb|_dmConstants| is the 1 * 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is.
 
 Currently, the \verb|DifferentialModel| only captures the knowledge of ODEs with one dependent variable, and it is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of all ODEs and eventually lead to solving a system of linear ODE with multiple dependent variables.
 
@@ -58,7 +58,7 @@ There are many reasons why we want to provide an input language for users to inp
 	a_n(t)y^n(t) + a_{n-1}(t)y^{n-1}(t) + \dots + a_1(t)y'(t) + a_0(t)y(t) = g(t)
 \end{equation}
 
-On the left-hand side, the expression is a collection of terms. Each term consists of a coefficient and a derivative of the dependent variable. With ideas of term, coefficient, and derivative, we create new datatypes to mimic the mathematical expression of linear ODEs. The following is the detail of the code for new data types and operators.
+On the left-hand side of the linear equation~\ref{eq_linearDE}, the expression is a collection of terms. Each term consists of a coefficient and a derivative of the dependent variable. With ideas of term, coefficient, and derivative, we create new data types to mimic the mathematical expression of a linear ODE. The following is the detail of the code for new data types and operators.
 
 \begin{haskell1}
 type Unknown = Integer
@@ -78,7 +78,7 @@ type LHS = [Term]
 ($+) xs x  = xs ++ [x]
 \end{haskell1}
 
-The \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. New operators are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator connects a dummy dependent variable and the order of its derivative. We call it a dummy dependent variable because it is a placeholder to increase users' readability. The \verb|$*| operator creates a term by combining a coefficient and an unknown variable. Last, the \verb|$^^| operator connects all terms. Let's write pseudo code for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PD\_Controller example will show up in Appendix ~\ref{appendix_a}.
+For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator connects a dummy dependent variable and the order of its derivative. We call it a dummy dependent variable because it is a placeholder to increase users' readability. The \verb|$*| operator creates a term by combining a coefficient matrix and an unknown variable. Last, the \verb|$+| operator connects all terms. Let's write pseudo code for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PD\_Controller example will show up in Appendix ~\ref{appendix_a}.
 
 \begin{haskell1}
 lhs = [1 $* (y_t $^^ 2)] -- $\label{myline}$

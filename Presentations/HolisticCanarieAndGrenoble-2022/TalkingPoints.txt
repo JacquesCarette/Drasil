@@ -1,18 +1,17 @@
 01. A Holistic Approach to Pain Relief for Research Software Developers
 	- thank you for your attention
-	- this is my first in-person talk in over two years, so I apologize if I'm a little rusty
 	- analogy between holistic medicine and techniques for research software development
-	%- holistic medicine combines traditional and alternative medicine
+	- holistic medicine combines traditional and alternative medicine
 	- in this talk the analogy is emphasizing the combination aspect; 
         %- it depends
-        %  on each person's perspective whether the proposed "treatments" are traditional
-        %  or alternative.
+          on each person's perspective whether the proposed "treatments" are traditional
+          or alternative.
 
 02. Outline
 	- discussing goal and the pain points that get in the way and then treatment options
-	- ask for a show of hands on 
+	%- ask for a show of hands on - not an option for UGA talk
 		- LP (including Jupyter notebooks)
-		- Code Gen (including Maple or Matlab)
+		- Code Gen (including Maple, Matlab, Simulink)
 	- combining LP and Code Gen
 
 03. Health Goals
@@ -48,7 +47,7 @@
 	- lack of dev exp -- NEUTRAL -- offers no design advice, have to be clever, 
           captures no design knowledge
 	- lack of technology experience -- HINDERS -- exacerbates this problem
-	- frequency of change -- HELPS -- code and doc maintained together - but not for 
+	- frequency of change -- HELPS and HINDERS -- code and doc maintained together - but not for 
           large changes
 	- difficult to refactor
 	- have to be clever to get advantage, manually embedding info, traceability and structure
@@ -75,16 +74,16 @@
           it to a computer
 	- go through a few examples - maple, org mode, (lex and yacc), ATLAS
 
-14. Code Gen Treatment and side effects
+14. Code Gen Treatment evaluation
 	{- spend some time on this slide}
 	- lack of time -- HELPS -- saves time by generation
-	- lack of dev exp -- HELPS -- less need to worry about code
+	- lack of dev exp -- HELPS -- less need to worry about code, captures knowledge
 	- lack of technology experience -- HINDERS -- exacerbates this problem
 	- frequency of change -- HELPS -- code is easily updated
 
 15. Holistic Approach
 	- combine lit. programming emphasis on documentation with code gen, but gen all things
-	- codify more knowledge - physics, computing, document, design, %traceab, technology
+	- codify MORE knowledge - physics, computing, document, design, %traceab, technology
 
 16. GlassBR Example
 	- predict risk of breakage of glass pane under load from an explosion (blast)
@@ -162,7 +161,7 @@
 	- lack of time -- HELPS -- saves time by generation
 	- lack of dev exp -- HELPS -- can select des. Dec, if capture des knowledge
 	- lack of technology experience -- HELPS -- can gen technology (CI, Makefile, etc.)
-	- frequency of change -- HELPS -- code and doc are easily updated, in sync
+	- frequency of change -- HELPS -- code and doc are easily updated, in sync, consistent by construction
 	- more automation than LP, but still has benefits of LP through emphasizing docs.
 	- treats pain, no side effects, but expensive
 

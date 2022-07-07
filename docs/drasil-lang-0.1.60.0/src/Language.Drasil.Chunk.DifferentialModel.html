@@ -906,30 +906,38 @@ forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><a href="#local-6989586621679418762"><span class="hs-identifier hs-var">transUnks</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-251"></span><span>
 </span><span id="line-252"></span><span class="hs-comment">{-
-  Form well-formatted ODE equations which the ODE solvers can solve. For example:  
+  Form well-formatted ODE equations which the ODE solvers can solve. For example:
+
+  the original fourth-order ODE: 
+  y'''' + 3y&#8242;&#8242; &#8722; sin(t)y&#8242; + 8y = t2
+
+  can be re-written to
+
   A                 *  X      + B     = X'
 
-  0  1      0   0      x'''     0       equation 1
-  0  0      1   0      x''      0       equation 2
-  0  0      0   1      x'       0       equation 3 
-  -8 sin(t) -3  0      x        t^2     equation 4 
+  0  0      1   0      x&#8324;       0       equation 1
+  0  1      0   0      x&#8323;       0       equation 2
+  1  0      0   0      x&#8322;       0       equation 3 
+  0 -3  sin(t) -8      x&#8321;       t^2     equation 4 
+
+  X = x&#8324;,x&#8323;,x&#8322;,x&#8321; and x&#8321; = y, x&#8322; = y', x&#8323; = y'', x&#8324; = y'''
 
   A: [[Expr]], X: [Unknown], B: [Expr]
   return [equation 1, equation 2, equation 3, equation 4]
 -}</span><span>
-</span><span id="line-264"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-type">formEquations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#Unknown"><span class="hs-identifier hs-type">Unknown</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Constrained.html#ConstrConcept"><span class="hs-identifier hs-type">ConstrConcept</span></a></span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-265"></span><span id="formEquations"><span class="annot"><span class="annottext">formEquations :: [[Expr]] -&gt; [Unknown] -&gt; [Expr] -&gt; ConstrConcept -&gt; [Expr]
+</span><span id="line-272"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-type">formEquations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#Unknown"><span class="hs-identifier hs-type">Unknown</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Constrained.html#ConstrConcept"><span class="hs-identifier hs-type">ConstrConcept</span></a></span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-273"></span><span id="formEquations"><span class="annot"><span class="annottext">formEquations :: [[Expr]] -&gt; [Unknown] -&gt; [Expr] -&gt; ConstrConcept -&gt; [Expr]
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-var hs-var">formEquations</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-266"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-var">formEquations</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-267"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-var">formEquations</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-268"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-var">formEquations</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679418760"><span class="annot"><span class="annottext">ex :: [Expr]
+</span><span id="line-274"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-var">formEquations</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-275"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-var">formEquations</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-276"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#formEquations"><span class="hs-identifier hs-var">formEquations</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679418760"><span class="annot"><span class="annottext">ex :: [Expr]
 </span><a href="#local-6989586621679418760"><span class="hs-identifier hs-var">ex</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679418759"><span class="annot"><span class="annottext">exs :: [[Expr]]
 </span><a href="#local-6989586621679418759"><span class="hs-identifier hs-var">exs</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679418758"><span class="annot"><span class="annottext">unks :: [Unknown]
 </span><a href="#local-6989586621679418758"><span class="hs-identifier hs-var">unks</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679418757"><span class="annot"><span class="annottext">y :: Expr
 </span><a href="#local-6989586621679418757"><span class="hs-identifier hs-var">y</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679418756"><span class="annot"><span class="annottext">ys :: [Expr]
 </span><a href="#local-6989586621679418756"><span class="hs-identifier hs-var">ys</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679418755"><span class="annot"><span class="annottext">depVa :: ConstrConcept
 </span><a href="#local-6989586621679418755"><span class="hs-identifier hs-var">depVa</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-269"></span><span>  </span><span class="hs-special">(</span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><span id="line-277"></span><span>  </span><span class="hs-special">(</span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="#local-6989586621679418757"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Unknown -&gt; Expr
@@ -947,7 +955,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679418758"><span class="hs-identifier hs-var">unks</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679418756"><span class="hs-identifier hs-var">ys</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="#local-6989586621679418755"><span class="hs-identifier hs-var">depVa</span></a></span><span>
-</span><span id="line-270"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679418753"><span class="annot"><span class="annottext">indexUnks :: [Expr]
+</span><span id="line-278"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679418753"><span class="annot"><span class="annottext">indexUnks :: [Expr]
 </span><a href="#local-6989586621679418753"><span class="hs-identifier hs-var hs-var">indexUnks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Unknown -&gt; Expr) -&gt; [Unknown] -&gt; [Expr]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -961,7 +969,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall r. LiteralC r =&gt; Unknown -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#int"><span class="hs-identifier hs-var">int</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Unknown]
 </span><a href="#local-6989586621679418758"><span class="hs-identifier hs-var">unks</span></a></span><span> </span><span class="hs-comment">-- create X</span><span>
-</span><span id="line-271"></span><span>        </span><span id="local-6989586621679418752"><span class="annot"><span class="annottext">filteredExprs :: [(Expr, Expr)]
+</span><span id="line-279"></span><span>        </span><span id="local-6989586621679418752"><span class="annot"><span class="annottext">filteredExprs :: [(Expr, Expr)]
 </span><a href="#local-6989586621679418752"><span class="hs-identifier hs-var hs-var">filteredExprs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Expr, Expr) -&gt; Bool) -&gt; [(Expr, Expr)] -&gt; [(Expr, Expr)]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679418751"><span class="annot"><span class="annottext">x :: (Expr, Expr)
@@ -977,7 +985,7 @@ forall a b. [a] -&gt; [b] -&gt; [(a, b)]
 </span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679418760"><span class="hs-identifier hs-var">ex</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679418753"><span class="hs-identifier hs-var">indexUnks</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- remove zero coefficients</span><span>
-</span><span id="line-272"></span><span>        </span><span id="local-6989586621679418750"><span class="annot"><span class="annottext">termExprs :: [Expr]
+</span><span id="line-280"></span><span>        </span><span id="local-6989586621679418750"><span class="annot"><span class="annottext">termExprs :: [Expr]
 </span><a href="#local-6989586621679418750"><span class="hs-identifier hs-var hs-var">termExprs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Expr, Expr) -&gt; Expr) -&gt; [(Expr, Expr)] -&gt; [Expr]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Expr -&gt; Expr -&gt; Expr) -&gt; (Expr, Expr) -&gt; Expr
@@ -986,17 +994,17 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; (a, b) -&gt; c
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Expr, Expr)]
 </span><a href="#local-6989586621679418752"><span class="hs-identifier hs-var">filteredExprs</span></a></span><span> </span><span class="hs-comment">-- multiple coefficient with depend variables</span><span>
-</span><span id="line-273"></span><span>        </span><span id="local-6989586621679418754"><span class="annot"><span class="annottext">finalExpr :: Expr
+</span><span id="line-281"></span><span>        </span><span id="local-6989586621679418754"><span class="annot"><span class="annottext">finalExpr :: Expr
 </span><a href="#local-6989586621679418754"><span class="hs-identifier hs-var hs-var">finalExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr -&gt; Expr) -&gt; [Expr] -&gt; Expr
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; a -&gt; a) -&gt; t a -&gt; a
 </span><span class="hs-identifier hs-var">foldl1</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679418750"><span class="hs-identifier hs-var">termExprs</span></a></span><span> </span><span class="hs-comment">-- add terms together</span><span>
-</span><span id="line-274"></span><span>
-</span><span id="line-275"></span><span class="hs-comment">-- | Construct an InitialValueProblem.</span><span>
-</span><span id="line-276"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#makeAIVP"><span class="hs-identifier hs-type">makeAIVP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#InitialValueProblem"><span class="hs-identifier hs-type">InitialValueProblem</span></a></span><span>
-</span><span id="line-277"></span><span id="makeAIVP"><span class="annot"><span class="annottext">makeAIVP :: Expr -&gt; Expr -&gt; [Expr] -&gt; InitialValueProblem
+</span><span id="line-282"></span><span>
+</span><span id="line-283"></span><span class="hs-comment">-- | Construct an InitialValueProblem.</span><span>
+</span><span id="line-284"></span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#makeAIVP"><span class="hs-identifier hs-type">makeAIVP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Expr.Lang.html#Expr"><span class="hs-identifier hs-type">Expr</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.DifferentialModel.html#InitialValueProblem"><span class="hs-identifier hs-type">InitialValueProblem</span></a></span><span>
+</span><span id="line-285"></span><span id="makeAIVP"><span class="annot"><span class="annottext">makeAIVP :: Expr -&gt; Expr -&gt; [Expr] -&gt; InitialValueProblem
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#makeAIVP"><span class="hs-identifier hs-var hs-var">makeAIVP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; [Expr] -&gt; InitialValueProblem
 </span><a href="Language.Drasil.Chunk.DifferentialModel.html#IVP"><span class="hs-identifier hs-var">IVP</span></a></span><span>
-</span><span id="line-278"></span></pre></body></html>
+</span><span id="line-286"></span></pre></body></html>

@@ -25,6 +25,10 @@
 
 \numberwithin{equation}{section} % Numbers equations based on their section
 
+\usepackage[newfloat]{minted}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Code}
+
 \usepackage{tcolorbox} % Code section 
 \tcbuselibrary{minted,skins}
 \newtcblisting{haskell1}{

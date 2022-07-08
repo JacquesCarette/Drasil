@@ -19,6 +19,7 @@ This appendix provides detailed explanations of various parts of DifferentialMod
 	\label{tab_demodeltype}
 \end{table}
 
+\begin{listing}
 \begin{haskell1}
 -- $K_d$ is qdDerivGain
 -- $y_t$ is opProcessVariable
@@ -29,3 +30,16 @@ lhs = [exactDbl 1 $* (opProcessVariable $^^ 2)]
 	$+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
 rhs = sy qdSetPointTD `mulRe` sy qdPropGain
 \end{haskell1}
+\captionof{listing}{Source code of input language for the example~\ref{eq_odeexmaple}}
+\label{code_scexinputl}
+\end{listing}
+
+\begin{listing}
+\begin{haskell1}
+coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
+unknowns = [opProcessVariable $^^ 2, opProcessVariable $^^ 1, opProcessVariable $^^ 0]
+constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
+\end{haskell1}
+\captionof{listing}{Source code of directly setting for the example~\ref{eq_odeexmaple}}
+\label{code_scexmatrix}
+\end{listing}

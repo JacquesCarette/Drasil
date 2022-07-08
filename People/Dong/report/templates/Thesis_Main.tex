@@ -27,7 +27,7 @@
 
 \usepackage[newfloat]{minted}
 \newenvironment{code}{\captionsetup{type=listing}}{}
-\SetupFloatingEnvironment{listing}{name=Code}
+\SetupFloatingEnvironment{listing}{name=Code, listname=List of Codes}
 
 \usepackage{tcolorbox} % Code section 
 \tcbuselibrary{minted,skins}
@@ -61,37 +61,38 @@
     \setcounter{figure}{0}
     \setcounter{equation}{0}
     \setcounter{table}{0}
-  
+
   \include{introduction}                  
-        \setcounter{figure}{0}
-        \setcounter{equation}{0}
-        \setcounter{table}{0}
-        
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
+
   \include{chapter1}                  
-       \setcounter{figure}{0}
-       \setcounter{equation}{0}
-       \setcounter{table}{0}
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
 
   \include{sample_chapter}                  
-       \setcounter{figure}{0}
-       \setcounter{equation}{0}
-       \setcounter{table}{0}
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
 
   \include{conclusion}
-        \setcounter{figure}{0}
-        \setcounter{equation}{0}
-        \setcounter{table}{0}
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
 
 \begin{appendix}
     \include{appendixA}
-        \setcounter{figure}{0}
-        \setcounter{equation}{0}
-        \setcounter{table}{0}
+      \setcounter{figure}{0}
+      \setcounter{equation}{0}
+      \setcounter{table}{0}
 
     \include{appendixB}
-        \setcounter{figure}{0}
-        \setcounter{equation}{0}
-        \setcounter{table}{0}
+      \setcounter{figure}{0}
+      \setcounter{equation}{0}
+      \setcounter{table}{0}
+
 \end{appendix}
 
 % The bibliography is set up to allow for multiple bib files

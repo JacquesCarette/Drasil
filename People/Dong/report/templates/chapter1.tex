@@ -82,13 +82,13 @@ For new types, the \verb|LHS|, the short name for the left-hand side, is a list 
 
 \begin{listing}
 \begin{haskell1}
-lhs = [1 $* (y_t $^^ 2)] -- $\label{myline}$
+lhs = [1 $* (y_t $^^ 2)]
 	$+ (1 + K_d) $* (y_t $^^ 1)
 	$+ (20 + K_p) $* (y_t $^^ 0)
 rhs = r_t K_p
 \end{haskell1}
 \captionof{listing}{Input language for the example~\ref{eq_odeexmaple}}
-\label{code:c-code}
+\label{code_exinputl}
 \end{listing}
 
 \section{Two Constructors}
@@ -108,7 +108,7 @@ unknowns   = [2, 1, 0]
 constants  = [r_t K_p]
 \end{haskell1}
 
-The second constructor is called \verb|makeASingleDE|. This constructor uses the input language~\ref{sec_input} to simplify the input of a single ODE. In \verb|makeASingleDE|, we create the coefficient matrix, unknown vector, and constant vector based on restricted inputs. In other words, users can no longer set the data by directly giving values. The \verb|DifferentialModel| will generate all data for the coefficient matrix, unknown vector, and constant vector accordingly. The constructor first creates a descending unknown vector base on the highest number of its derivatives. For example, if the highest order of its derivative on the left-hand side of the equation is 2, we will generate a list that contains 2, 1 and 0. Then, we will create the coefficient matrix by finding its related coefficient based on the descending order of the unknown vector. One advantage of this design decision is that it increases the readability while inputting a single ODE. The second advantage is that the \verb|DifferentialModel| will no longer require users to input the unknown vector in descending order. Any order of the unknown vector will be acceptable because we will generate the data of \verb|DifferentialModel|. The pseudo-code~\ref{code:c-code} shows how to use the input language to set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector.The full detail of how to use the input language set the coefficient matrix, unknown vector, and constant vector for the PDContoller example will show up in the Appendix~\ref{appendix_a}.
+The second constructor is called \verb|makeASingleDE|. This constructor uses the input language~\ref{sec_input} to simplify the input of a single ODE. In \verb|makeASingleDE|, we create the coefficient matrix, unknown vector, and constant vector based on restricted inputs. In other words, users can no longer set the data by directly giving values. The \verb|DifferentialModel| will generate all data for the coefficient matrix, unknown vector, and constant vector accordingly. The constructor first creates a descending unknown vector base on the highest number of its derivatives. For example, if the highest order of its derivative on the left-hand side of the equation is 2, we will generate a list that contains 2, 1 and 0. Then, we will create the coefficient matrix by finding its related coefficient based on the descending order of the unknown vector. One advantage of this design decision is that it increases the readability while inputting a single ODE. The second advantage is that the \verb|DifferentialModel| will no longer require users to input the unknown vector in descending order. Any order of the unknown vector will be acceptable because we will generate the data of \verb|DifferentialModel|. The pseudo-code~\ref{code_exinputl} shows how to use the input language to set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector.The full detail of how to use the input language set the coefficient matrix, unknown vector, and constant vector for the PDContoller example will show up in the Appendix ~\ref{code_scexinputl}.
 
 \section{Display Matrix}
 After a \verb|DifferentialModel| obtains ODE information, we want to display them in the software requirements specification (SRS). Previously, we mentioned the Drasil framework able to generate software artifacts, and SRS is a part of them. This section will discuss two ways to display ODEs in the SRS.

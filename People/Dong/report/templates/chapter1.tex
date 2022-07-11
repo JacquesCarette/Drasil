@@ -78,7 +78,7 @@ type LHS = [Term]
 ($+) xs x  = xs ++ [x]
 \end{haskell1}
 
-For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator connects a dummy dependent variable and the order of its derivative. We call it a dummy dependent variable because it is a placeholder to increase users' readability. The \verb|$*| operator creates a term by combining a coefficient matrix and an unknown variable. Last, the \verb|$+| operator connects all terms. Let's write pseudo code for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PDController example will show up in Appendix ~\ref{appendix_a}.
+For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator connects a dummy dependent variable and the order of its derivative. We call it a dummy dependent variable because it is a placeholder to increase users' readability. The \verb|$*| operator creates a term by combining a coefficient matrix and an unknown variable. Last, the \verb|$+| operator connects all terms. Let's write pseudo code for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PDController example will show up in ~\ref{code_scexinputl}.
 
 \begin{listing}
 \begin{haskell1}

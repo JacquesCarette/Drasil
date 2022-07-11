@@ -1,2 +1,23 @@
 \chapter{External libraries}
-start
+The external library comes from an outside source, and it is not originate from the source project. Thus, we will generate interfaces to interact with selected libraries. Most libraries are language dependent, and the Drasil framework can generate five different languages, includes Python, Java, C++, C\#, and Swift. Among those five languages, four programming languages have ODE libraries to solving ODEs. In Python, Scipy Library is a well-known scientific libraries to solving scientific problems, and it has support to solve ODEs. In Java, there is a library called Apache Commons Maths, and it is a supplementary library to solve mathematical and statistical problems which build-in Java programming language does not available. It has support to solve ODEs as well. There are two less known libraries work as ODE solver in C++ and C\#, and they are ODEINT Library and OSLO Library respectively. However, we did not find a suitable library for Swift. 
+
+All four selected libraries have some commonalities. Firstly, they provide numerical solution for a system of first-order ODEs. Secondly, they has similar interface for solving ODEs numerically. Last, they has options for selecting different algorithms to solve an ODE. Beside commonalities, they has variability as well. Some libraries provide options to output ODE's solution as a function or a generic class that similar to a function. Outside of external libraries, it is could be a challenge to manage different external libraries inside the Drasil framework. In this Chapter, we will first discuss the commonalities and variabilities of four libraries. Next, we will discuss how the Drasil team manage those libraries.
+
+\section{Commonality}
+All four selected libraries have some commonalities. Firstly, they provide numerical solution for a system of first-order ODEs. Secondly, they has similar interface for solving ODEs numerically. Last, they has options for selecting different algorithms to solve an ODE. 
+
+\subsection{Initial Value Problems}
+solve ODEs numerically
+\subsection{Generic Interface}
+base on same interface
+\subsection{Algorithm Options}
+algorithm options
+improvement
+
+\section{Variability: Function vs Points}
+
+
+More options in Scipy Library and OSLO Library
+
+\section{Management Libraries}
+symbolic links

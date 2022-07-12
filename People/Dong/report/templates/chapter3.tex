@@ -4,23 +4,34 @@ The external library comes from an outside source, and it is not originate from 
 All four selected libraries have some commonalities. Firstly, they provide numerical solution for a system of first-order ODEs. Secondly, they has similar interface for solving ODEs numerically. Last, they has options for selecting different algorithms to solve an ODE. Beside commonalities, they has variability as well. Some libraries provide options to output ODE's solution as a function or a generic class that similar to a function. Outside of external libraries, it is could be a challenge to manage different external libraries inside the Drasil framework. In this Chapter, we will first discuss the commonalities and variabilities of four libraries. Next, we will discuss how the Drasil team manage those libraries.
 
 \section{Numerical Solutions}
-In a ODE, the independent variable is usually time. One way to get get a numerical solution is to get the point value in a certain time point. Therefore, we treat the ODE as an initial value problem. For example, we can assume the start time is zero, and the time interval is a fixed time range. At the time zero, the initial value is given by users. In the next time point, previous time plus a fixed time range, libraries will calculate the numerical solution in this time point. At a certain time point, the next time point would excess the total simulation time of this ODE, then the program will stop. To get a numerical solution in a certain time range, we still need to collect the numerical value in each iteration. 
+The backend mechanism of how each library to get a numerical solution is following by the following ideology. In a ODE, the independent variable is usually time. One way to get get a numerical solution is to get the point value in a certain time point. Therefore, we treat the ODE as an initial value problem. For example, we can assume the start time is zero, and the time interval is a fixed time range. At the time zero, the initial value is given by users. In the next time point, previous time plus a fixed time range, libraries will calculate the numerical solution in this time point. At a certain time point, the next time point would excess the total simulation time of this ODE, then the program will stop. To get a numerical solution in a certain time range, we still need to collect the numerical value in each iteration. 
 
-One commonality all four external libraries have is that they provide numerical solutions for a system of first-order ODEs. The following is mathematical expression for a system of first-order ODEs. 
+All four external libraries have is that they provide numerical solutions for a system of first-order ODEs. The following is mathematical expression for a system of first-order ODEs. 
 
 \begin{equation} \label{eq_foode}
     X' = AX + c
 \end{equation}
 
-X is the unknown vector that consist of dependent variables. X' is the vector that consist of first derivative of dependent variables. The A is a coefficient matrix, and c is a constant vector. In each implementation, we can treat the dependent values as a list. The first index of the this array indicates the first dependent variable, and the second index of this array indicates the second dependent variable, and so on. Each dependent variable will have its initial value. For example, if there are two dependent variables, there will be two initial values.
+X is the unknown vector that consist of dependent variables. X' is the vector that consist of first derivative of dependent variables. The A is a coefficient matrix, and c is a constant vector. 
+
+% In each implementation, we can treat the dependent values as a list. The first index of the this array indicates the first dependent variable, and the second index of this array indicates the second dependent variable, and so on. Each dependent variable will have its initial value. For example, if there are two dependent variables, there will be two initial values.
 
 \section{Algorithm Options}
 algorithm options
+
 improvement: provide range other than a fixed point 
 
 \section{Function vs Points}
-What is Variability
-More options in Scipy Library and OSLO Library
+The ODE provide mathematical expression for describing a function over time. The numerical solution can instantiate an ODE, but it only provides a partial solution for the ODE. If we are interested in the continuous change of the function, numerous values points will not help. Instead of providing points, providing a function would be a better choice to represent the ODE.
+
+Not all libraries have options to represent the ODE as a function. Among four libraries, Scipy Library and OSLO Library have similar option to support out put a function.
+
+Scipy
+return a generic interface
+
+OSLO
+return a endless sequence of solution points
+
 
 \section{Management Libraries}
 symbolic links

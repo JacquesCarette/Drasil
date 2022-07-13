@@ -40,15 +40,28 @@
 \newcommand{\closeSyntaxTable}{\end{longtable}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Footnotes that only show "when compiling for printing"
+
+\ifcompilingforprinting
+  \newcommand{\printOnlyFootnote}[1]{\footnote{#1}}
+  \newcommand{\printOnlyFootnoteText}[1]{\footenotetext{#1}}
+  \newcommand{\printOnlyFootnoteMark}{\footnotemark}
+\else
+  \newcommand{\printOnlyFootnote}[1]{}
+  \newcommand{\printOnlyFootnoteText}[1]{}
+  \newcommand{\printOnlyFootnoteMark}{}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Portable HREFs
 
 % Common variant
-\newcommand{\porthref}[2]{\href{#2}{#1}\footnote{\url{#2}}}
+\newcommand{\porthref}[2]{\href{#2}{#1}\printOnlyFootnote{\url{#2}}}
 % Custom URLs
-\newcommand{\porthreft}[3]{\href{#3}{#1}\footnote{\href{#3}{#2}}}
+\newcommand{\porthreft}[3]{\href{#3}{#1}\printOnlyFootnote{\href{#3}{#2}}}
 % Inside of some environments, footnote marks aren't registered properly, so we
 % need to manually write the "text" part
-\newcommand{\porthreftm}[2]{\href{#2}{#1\footnotemark}} 
+\newcommand{\porthreftm}[2]{\href{#2}{#1\printOnlyFootnoteMark}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inlined TODOs
@@ -61,7 +74,7 @@
 \crefname{listing}{source code}{source codes}
 \Crefname{listing}{Source Code}{Source Codes}
 \newenvironment{haskell}[4]
-    {\VerbatimEnvironment\singlespacing\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{\protect\href{#4}{#3}}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt,breaklines]{haskell}}
+    {\VerbatimEnvironment\singlespacing\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#4}}\printOnlyFootnoteText{\protect\href{#4}{#3}}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt,breaklines]{haskell}}
     {\end{minted}\end{code}\doublespacing}
 
 \newcommand{\inlineHs}[1]{\mintinline{haskell}|#1|}

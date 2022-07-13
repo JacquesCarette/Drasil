@@ -2,7 +2,12 @@ cff-version: 1.2.0
 title: "Drasil"
 abstract: "Generate All The Things! Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain."
 type: software
-message: "If you use this software, please cite it using these metadata."
+message: "Please cite this software using the metadata, preferring information from 'preferred-citation' section."
+preferred-citation:
+  authors:
+    - name: "The Drasil Research Team"
+  title: "Drasil"
+  type: software
 contact:
   - family-names: Carette
     given-names: Jacques

@@ -14,5 +14,5 @@ InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step
 V_W = Calculations.func_V_W(V_tank)
 m_W = Calculations.func_m_W(rho_W, V_W)
 tau_W = Calculations.func_tau_W(C_W, h_C, A_C, m_W)
-T_W = Calculations.func_T_W(T_C, t_final, T_init, A_tol, R_tol, t_step, tau_W)
+T_W = Calculations.func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W)
 OutputFormat.write_output(E_W, T_W)

@@ -44,17 +44,18 @@ eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
 
 eBalanceOnWtrRC :: DifferentialModel 
 eBalanceOnWtrRC = 
-  makeLinear
-    time 
+  makeASystemDE
+    time
     tempW
-    [exactDbl 1 $* 1]
-    balWtrExpr
+    coeffs
+    unknowns
+    constants
     "eBalanceOnWtrRC" 
     (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water") 
     (tempW ^. defn)
-
-balWtrExpr :: PExpr
-balWtrExpr = neg (recip_ (sy tauW) `mulRe` (sy tempC $- apply1 tempW time))
+    where coeffs = [[exactDbl 1, recip_ (sy tauW)]]
+          unknowns = [1, 0]
+          constants = [recip_ (sy tauW) `mulRe` sy tempC]
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [

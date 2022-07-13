@@ -39,7 +39,7 @@ int main(int argc, const char *argv[]) {
     double V_W = func_V_W(V_tank);
     double m_W = func_m_W(rho_W, V_W);
     double tau_W = func_tau_W(C_W, h_C, A_C, m_W);
-    vector<double> T_W = func_T_W(T_C, t_final, T_init, A_tol, R_tol, t_step, tau_W);
+    vector<double> T_W = func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W);
     write_output(E_W, T_W);
     
     return 0;

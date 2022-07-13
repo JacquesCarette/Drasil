@@ -209,9 +209,16 @@ isEntryEmpty :: SmallEntry -> Bool
 isEntryEmpty (SE [] [] [] []) = False
 isEntryEmpty _ = True
 
+escapeDotID :: String -> String
+escapeDotID = map go
+  where
+    go :: Char -> Char
+    go '.' = '_'
+    go c = c
+
 -- Helper to convert class instances into graph edges.
 mkPkgEdges :: [ClassInstance] -> [Edges]
-mkPkgEdges cis = concatOver2 $ map (\ClassInstance{dnType=typ, clsInstName=cls} -> (typ, [cls])) cis
+mkPkgEdges cis = concatOver2 $ map (\ClassInstance {dnType = typ, clsInstName = cls} -> (escapeDotID typ, [escapeDotID cls])) cis
 
 -- Helper to concatenate tuples based on the first part of the tuple
 -- (if two elements have the same thing for the first part of the tuple, concatenate the second parts)

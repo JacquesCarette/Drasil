@@ -1,6 +1,6 @@
 \chapter{Drasil}
 
-  **Section Roadmap:
+\ds{**Section Roadmap:
     -- This is where the real meat of Drasil is discussed (implementation details)
     -- Intro to our knowledge-capture mechanisms
       - Chunks/hierarchy
@@ -8,7 +8,12 @@
       - Look for 'interesting' examples (synonyms, acronyms, complexity, etc.)
     -- Intro to the DSL
       - Captured knowledge is useless without the transformations/rendering engine
-      - DSL for each softifact
+      - DSL for each softifact}
+
+In this chapter we will introduce the Drasil framework and some details of its 
+implementation including knowledge-capture mechanisms, the domain specific 
+languages used throughout, and how all of these pieces are brought together in 
+a human-usable way to generate \sfs{}.
       
 \section{What Drasil is and isn't}
   * Basically just restating some things from the intro in more depth
@@ -16,7 +21,58 @@
   - Built around a specific set of assumptions, for a particular class of problems
   - NOT an ontology / ontology builder
 
+Manually writing and maintaining a full range of \sfs{} is
+redundant, tedious, and often \sfs{} fall our of sync with each other. 
+Drasil is a framework built to tackle these problems.
+
+Contrary to documentation generators like Doxygen, Javadoc, and Pandoc
+which take a code-centric view of the problem and rely on manual redundancy -- 
+i.e. natural-language explanations written as specially delimited
+comments which can then be weaved into API documentation alongside code -- 
+Drasil takes a knowledge-centric, redundancy-limiting, fully traceable single 
+source approach to generating all \sfs{}.
+
+However, Drasil is not a panacea for all the woes of software development. Even 
+the seemingly well-defined issues of unnecessary redundancy and manual 
+duplication turn out to be large, many-headed beasts existing across a 
+multitude of software domains; each with their own benefits, drawbacks, and 
+challenges.
+
+To reiterate: Drasil has not been designed as a silver-bullet. It is a 
+specialized tool meant to be used in well-understood domains for software that 
+will undergo frequent maintenance and/or changes. In deciding whether Drasil 
+would be useful for developing software to tackle a given problem, we recommend 
+identifying those projects that are long-lived (10+ years) with \sfs{} 
+relevant to multiple stakeholders. For our purposes, as mentioned earlier, we 
+have focused on SC software that follows the input $\rightarrow$ process 
+$\rightarrow$ output pattern. SC software has the benefit of being relatively 
+slow to change, so models used today may not be updated or invalidated for some 
+time, if ever. Should that happen, the models will likely still be applicable 
+given a set of assumptions or assuming certain margin for error.
+
+With Drasil being built around this specific class of problems, we remain aware 
+that there are likely many in-built assumptions that could affect its 
+applicability to other domains in its current state. Expanding Drasil's reach 
+is an avenue for future work.
+
+The Drasil framework relies on a knowledge-centric approach to software 
+specification and development. We attempt to codify the foundational theory 
+behind the problems we are attempting to solve and operationalize it through 
+the use of generative technologies. By doing so, we can reuse common knowledge 
+across projects and maintain a single source of truth in our knowledge database.
+
+Given how important knowledge is to Drasil, one might think we are building 
+ontologies or ontology generators. This is \emph{not} the case. We are not 
+attempting to create a source for all knowledge and relationships inside a 
+given field. We are merely using the information we have available to build up 
+knowledge as needed to solve a problem. Over time, this may take on the 
+appearance of an ontology, but Drasil does not currently enforce any strict 
+rules on how knowledge should be captured, outside of its type system and some 
+best practice recommendations. We will explore knowledge capture in more depth 
+in Section~\ref{sec:kc}.
+
 \section{Our Ingredients: Organizing and Capturing Knowledge}
+\label{sec:kc}
   - Organization of knowledge implies a need for knowledge-capture mechanisms 
     at different levels (different levels of abstraction / specificity)
   - segues right into chunks/hierarchy

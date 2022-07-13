@@ -42,7 +42,27 @@
   left=1mm,
 } 
 \definecolor{bg}{rgb}{0.99, 0.96, 0.89}
+\newtcblisting{python1}{
+  listing engine=minted,
+  colback=bg,
+  colframe=black!70,
+  listing only,
+  minted style=colorful,
+  minted language=python,
+  minted options={linenos=true,texcl=true, breaklines=true},
+  left=1mm,
+} 
 
+\newtcblisting{csharp1}{
+  listing engine=minted,
+  colback=bg,
+  colframe=black!70,
+  listing only,
+  minted style=colorful,
+  minted language=csharp,
+  minted options={linenos=true,texcl=true, breaklines=true},
+  left=1mm,
+} 
 % ********************************
 \begin{document}
 \include{definitions} % LaTeX variables for preface pages/headers

@@ -1,5 +1,5 @@
 \chapter{External libraries}
-The external library comes from an outside source, and it is not originate from the source project. Thus, we will generate interfaces to interact with selected libraries. Most libraries are language dependent, and the Drasil framework can generate five different languages, includes Python, Java, C++, C\#, and Swift. Among those five languages, four programming languages have ODE libraries to solving ODEs. In Python, Scipy Library~\citep{scipy} is a well-known scientific libraries to solving scientific problems, and it has support to solve ODEs. In Java, there is a library called Apache Commons Maths~\citep{apache}, and it is a supplementary library to solve mathematical and statistical problems which build-in Java programming language does not available. It has support to solve ODEs as well. There are two less known libraries work as ODE solver in C++ and C\#, and they are ODEINT Library~\citep{odeint} and OSLO Library~\citep{oslo} respectively. However, we did not find a suitable library for Swift. 
+The external library comes from an outside source, and it is not originate from the source project. Thus, we will generate interfaces to interact with selected libraries. Most libraries are language dependent, and the Drasil framework can generate five different languages, includes Python, Java, C++, C\#, and Swift. Among those five languages, four programming languages have ODE libraries to solving ODEs. In Python, Scipy Library~\citep{scipy} is a well-known scientific libraries to solving scientific problems, and it has support to solve ODEs. In Java, there is a library called Apache Commons Maths(ACM)~\citep{apache}, and it is a supplementary library to solve mathematical and statistical problems which build-in Java programming language does not available. It has support to solve ODEs as well. There are two less known libraries work as ODE solver in C++ and C\#, and they are ODEINT Library~\citep{odeint} and OSLO Library~\citep{oslo} respectively. However, we did not find a suitable library for Swift. 
 
 All four selected libraries have some commonalities. Firstly, they provide numerical solution for a system of first-order ODEs. Secondly, they has similar interface for solving ODEs numerically. Last, they has options for selecting different algorithms to solve an ODE. Beside commonalities, they has variability as well. Some libraries provide options to output ODE's solution as a function or a generic class that similar to a function. Outside of external libraries, it is could be a challenge to manage different external libraries inside the Drasil framework. In this Chapter, we will first discuss the commonalities and variabilities of four libraries. Next, we will discuss how the Drasil team manage those libraries.
 
@@ -17,8 +17,26 @@ X is the unknown vector that consist of dependent variables. X' is the vector th
 % In each implementation, we can treat the dependent values as a list. The first index of the this array indicates the first dependent variable, and the second index of this array indicates the second dependent variable, and so on. Each dependent variable will have its initial value. For example, if there are two dependent variables, there will be two initial values.
 
 \section{Algorithm Options}
-algorithm options
+In reality, we can solve an ODE in many algorithms, such as Adams method. Those four external libraries also provide many algorithms to solve an ODE, and we classified them into five categories, a family of Adams methods, a family of BDF methods, a family of Runge-Kutta methods, a family of Euler method, and Bulirsch-Stoer method, in the Table~\ref{tab_algoexlib}. Moreover, the detail of available algorithm for each library will show up in appendixA.
 
+\begin{table}
+    \begin{tabular}{|l||*{5}{c|}}\hline
+        \backslashbox{Algorithm}{Library}
+        &\makebox[6em]{Scipy-Python}&\makebox[6em]{ACM-Java}&\makebox[6em]{ODEINT-C++}&\makebox[6em]{OSLO-C\#}\\\hline\hline
+        Family of Adams & \checkmark & \checkmark & \checkmark &\\\hline
+        Family of BDF & \checkmark &&& \checkmark \\\hline
+        Family of Runge-Kutta & \checkmark & \checkmark & \checkmark & \checkmark \\\hline
+        Gragg-Bulirsch-Stoer && \checkmark & \checkmark &\\\hline
+        Family of Euler && \checkmark & \checkmark &\\\hline
+    \end{tabular}
+	\caption{Algorithm supports for external libraries}	
+	\label{tab_algoexlib}
+\end{table}
+
+Among algorithms, we can add many new features to solve ODE different.
+
+step control
+provide range 
 improvement: provide range other than a fixed point 
 
 \section{Function vs Points}

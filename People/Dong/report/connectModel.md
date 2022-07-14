@@ -168,7 +168,7 @@ Once we create`ODESolverFormat`, there are three more data type we need create
 
 5. InitialValueProblem: contain information need to solve IVP. 
   - initTime: initial time
-  - finalTime: final time
+  - finalTime: final time (can be a time interval https://github.com/JacquesCarette/Drasil/issues/2194#issuecomment-1098040003)
   - initValues: initial values for newly created first order equations
 
 ```haskell

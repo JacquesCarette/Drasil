@@ -33,11 +33,7 @@ In reality, we can solve an ODE in many algorithms, such as Adams method. Those 
 	\label{tab_algoexlib}
 \end{table}
 
-Among algorithms, we can add many new features to solve ODE different.
-
-step control
-provide range 
-improvement: provide range other than a fixed point 
+During investigation of algorithms, we found some algorithms use a fixed step size for calculating numerical solution, and others instead of using adaptive size (reference). This discovery can further influence the design choice of solving ODE numerically in the Drasil framework. Currently, Drasil treat all step sizes as a fixed value, and it would be ideal to allow the step size be either fixed or adaptive.
 
 \section{Function vs Points}
 The ODE provide mathematical expression for describing a function over time. The numerical solution can instantiate an ODE, but it only provides a partial solution for the ODE. If we are interested in the continuous change of the function, numerous values points will not help. Instead of providing points, providing a function would be a better choice to represent the ODE. In the Drasil framework, users have an option to generate a runnable program or a library. The runnable program will contain main function, so users can run this artifact in the local machine. If it is a library, other outside program can utilize the generated library. Outputting the ODE as a function inclined equal to generate a library.

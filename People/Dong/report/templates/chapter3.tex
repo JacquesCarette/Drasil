@@ -38,44 +38,7 @@ During investigation of algorithms, we found some algorithms use a fixed step si
 \section{Function vs Points}
 The ODE provide mathematical expression for describing a function over time. The numerical solution can instantiate an ODE, but it only provides a partial solution for the ODE. If we are interested in the continuous change of the function, numerous values points will not help. Instead of providing points, providing a function would be a better choice to represent the ODE. In the Drasil framework, users have an option to generate a runnable program or a library. The runnable program will contain main function, so users can run this artifact in the local machine. If it is a library, other outside program can utilize the generated library. Outputting the ODE as a function inclined equal to generate a library.
 
-Not all libraries have options to represent the ODE as a function. Among four libraries, Scipy Library and OSLO Library have similar option to support out put a function. In Scipy library, we can return a generic interface called \verb|scipy.integrate.ode|~\citep{scipyfun}. It is a generic interface can store information preserve the ODE, and later if we want to solve the ODE, we can add other ODE related configuration information afterward.
-
-\begin{python1}
-def func_y_t(K_d, K_p, r_t, t_sim, t_step):
-    def f(t, y_t):
-        return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
-    r = scipy.integrate.ode(f)
-    r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)
-    r.set_initial_value([0.0, 0.0], 0.0)
-    y_t = [[0.0, 0.0][0]]
-    while r.successful() and r.t < t_sim:
-        r.integrate(r.t + t_step)
-        y_t.append(r.y[0])
-    return y_t
-\end{python1}
-
-In line 1, \verb|func_y_t| is a function output the numerical solution, and it is a list of numbers. In the line 2, the local function \verb|f| contains ODE. The line 3 shows local function return a list. Since we want to solve a system of ODE, the index one is the first ODE in this system, and the index two is the second ODE this system. By calling \verb|scipy.integrate.ode|, we pack ODE information in the generic interface. The line between 5 and 10, are procedure how to set configuration and collecting results. Theoretically, we can just return the \verb|r| in line 4 to present returning a function of ODE.
-
-\begin{csharp1}
-public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
-    List<double> y_t;
-    Func<double, Vector, Vector> f = (t, y_t_vec) => {
-        return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
-    };
-    Options opts = new Options();
-    opts.AbsoluteTolerance = Constants.AbsTol;
-    opts.RelativeTolerance = Constants.RelTol;
-    Vector initv = new Vector(new double[] {0.0, 0.0});
-    IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
-    IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
-    y_t = new List<double> {};
-    foreach (SolPoint sp in points) {
-        y_t.Add(sp.X[0]);
-    }
-    return y_t;
-}
-\end{csharp1}
-The function \verb|Ode.RK547M| return an enumerable sequence of solution points, it is a endless sequence of solution points. Later on, we can call \verb|SolveFromToStep| to return a list of points base on start time, end time, and time interval. What \verb|Ode.RK547M| return can be treat as a function of ODE.
+Not all libraries have options to represent the ODE as a function. Among four libraries, Scipy Library and OSLO Library have similar option to support out put a function. In Scipy library, we can return a generic interface called \verb|scipy.integrate.ode|~\citep{scipyfun}. It is a generic interface can store information preserve the ODE, and later if we want to solve the ODE, we can add other ODE related configuration information afterward. In OSLO library, the function \verb|Ode.RK547M| return an enumerable sequence of solution points, it is a endless sequence of solution points. Later on, we can call \verb|SolveFromToStep| to return a list of points base on start time, end time, and time interval. What \verb|Ode.RK547M| return can be treat as a function of ODE.
 
 \section{Management Libraries}
 Once the Drasil framework generate code, the program relay on external libraries to complete calculating ODEs. In the current setting, the Drasil framework keep copies of external libraries in the repository. It is not practical because the amount of space external libraries occupied. Moreover, external libraries do not share across study cases, and each study case will have its copy of external libraries. This research surfaces the current way handles dependencies in Drasil framework is problematic, and the team would like to find a better way to handle dependency. We use a temporary solution, symbolic links, to share external libraries without duplications. By creating a symbolic link file, external libraries become sharable. The team will conduct further study to tackle this problem.

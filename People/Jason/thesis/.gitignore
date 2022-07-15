@@ -1,4 +1,4 @@
-_minted-thesis/
+build/
 thesis.pdf
 *.tdo
 *.dvi

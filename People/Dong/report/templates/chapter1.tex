@@ -1,5 +1,5 @@
 \chapter{ODE Data Representation}
-In the Drasil framework, there is a single data structure containing all the information for all products, and we call it System Information. The giant System Information collects a multitude of pieces of information; whenever we need it, we extract the information from the System Information. In previous research, we store all ordinary differential equations (ODEs) information in the System Information. However, that information existed in the form of plain text. In other words, we explicitly wrote ODEs in the text without any advanced data structure. Although this method maintains the relationship of ODEs, it restricts any transformation of ODEs. Therefore, the Drasil team decide to create a new data structure to store ODEs information. This chapter will describe how to store an ODE in the Drasil framework. 
+In the Drasil framework, there is a single data structure containing all the information for all products, and we call it System Information. The giant System Information collects a multitude of pieces of information; whenever we need it, we extract the information from the System Information. In previous research, we store all ordinary differential equations (ODEs) information in the System Information. However, that information existed in the form of plain text. In other words, we explicitly wrote ODEs in the text without any advanced data structure. Although this method maintains the relationship of ODEs, it restricts any transformation of ODEs. For example, if the text-based ODE is high-order linear ODE, we can not transform it to its equivalent system of first-order ODE. Therefore, the Drasil team is exploring new approach to store ODEs in a new data structure, and the new structure would allow ODEs be polymorphic. Once we capture ODEs information in this data structure, we can generate its polymorphic forms. Thus, this approach is contrasting to previous method, and would allow users only write ODEs once. This chapter will describe how to store an ODE in the Drasil framework. 
 
 \section{Matrix Form}
 In general, an equation contains a left-hand expression, a right-hand expression, and an equal sign. The left-hand and right-hand expressions connect by an equal sign. A linear ODE also has its left-hand and right-hand sides. Each side has its unique shape. We can write a linear ODE in the shape of
@@ -8,7 +8,7 @@ In general, an equation contains a left-hand expression, a right-hand expression
 	\boldsymbol{Ax} = \boldsymbol{b}
 \end{equation}
 
-On the left-hand side, A is an m * n matrix, and x is an n-vector. On the right-hand side, b is an m-vector. The A is commonly known as the coefficient matrix, b is the constant vector, and x is the unknown vector.
+On the left-hand side, \textbf{A} is an m * n matrix, and x is an n-vector. On the right-hand side, b is an m-vector. The \textbf{A} is commonly known as the coefficient matrix, b is the constant vector, and x is the unknown vector.
 
 Given the ODE example~\ref{eq_odeexmaple} in PDContoller case study,
 \begin{equation} \label{eq_odeexmaple}
@@ -53,7 +53,18 @@ Currently, the \verb|DifferentialModel| only captures the knowledge of ODEs with
 
 \section{Input Language}
 \label{sec_input}
-There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form, so introducing an input language could simplify inputting a single ODE. What will this input language look like? The example~\ref{eq_odeexmaple} represents a linear second-order ODE, and how to represent a linear nth-order ODE? Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of 
+There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form. Here is one example how the internal representation of \verb|DifferentialModel| for example~\ref{eq_odeexmaple}.
+
+\begin{haskell1}
+_indepVar = time
+_depVar = y_t
+_coefficients = [[1, 1 + K_d, 20 + K_p]]
+_unknowns = [2, 1, 0]
+_dmConstants = [r_t K_p]
+_dmconc = ... -- Drasil definition for chuck concept
+\end{haskell1}
+
+We can directly set value to each record in the constructor of \verb|DifferentialModel|. However, it would be not so elegant to set a single ODE in the example, because users have to extracts the coefficient matrix, unknown vector and constant vector from the original equation manually. Once the coefficient matrix, unknown vector and constant vector is ready, we can set value into \verb|_depVar|, \verb|_coefficients|, \verb|_unknowns|, and \verb|_dmConstants| accordingly. This process is ideal when the ODE is a system of ODE, and it would be over-complicated for user to do extraction for a single ODE. Another advantage of having an helper function to input an ODE is that it can reduce human error and make sure the equation is well-formed. Therefore, we designed a helper function to tackle this problem and we call this helper function input language. What will this input language looks like? The input language is inspired by how a linear nth-order ODE look like. Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of 
 \begin{equation} \label{eq_linearDE}
 	a_n(t)y^n(t) + a_{n-1}(t)y^{n-1}(t) + \dots + a_1(t)y'(t) + a_0(t)y(t) = g(t)
 \end{equation}
@@ -78,10 +89,14 @@ type LHS = [Term]
 ($+) xs x  = xs ++ [x]
 \end{haskell1}
 
-For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator connects a dummy dependent variable and the order of its derivative. We call it a dummy dependent variable because it is a placeholder to increase users' readability. The \verb|$*| operator creates a term by combining a coefficient matrix and an unknown variable. Last, the \verb|$+| operator connects all terms. Let's write pseudo code for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PDController example will show up in ~\ref{code_scexinputl}.
+For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator connects a dummy dependent variable and the order of its derivative. We call it a dummy dependent variable because it is a placeholder to increase users' readability. The \verb|$*| operator creates a term by combining a coefficient matrix and an unknown variable. Last, the \verb|$+| operator connects all terms. Let's write pseudo code (Code \ref{code_exinputl}) for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PDController example will show up in ~\ref{code_scexinputl}.
 
 \begin{listing}
 \begin{haskell1}
+-- in example \ref{eq_odeexmaple}: y\_t'' + (1 + K\_d)y\_t' + (20 + K\_p)y\_t = r\_t K\_p
+-- left hand side = y\_t'' + (1 + K\_d)y\_t' + (20 + K\_p)y\_t 
+-- right hand side = r\_t K\_p
+
 lhs = [1 $* (y_t $^^ 2)]
 	$+ (1 + K_d) $* (y_t $^^ 1)
 	$+ (20 + K_p) $* (y_t $^^ 0)
@@ -92,7 +107,9 @@ rhs = r_t K_p
 \end{listing}
 
 \section{Two Constructors}
-There are two constructors to create a \verb|DifferentialModel|, which they use for different design purposes. The first constructor is \verb|makeASystemDE|. A user can set the coefficient matrix, unknown vector, and constant vector by explicitly giving \verb|[[Expr]]|, \verb|[Unknown]|, and \verb|[Expr]|. There will be several guards to check whether inputs are well-formed.
+There are many way to create the a \verb|DifferentialModel|. One most obvious way is to set each record directly by passing values in the constructor and \verb|makeASystemDE| constructor serve as this role. We also designed another constructor, \verb|makeASingleDE|, for users who want to use input language to create a \verb|DifferentialModel|.
+
+For \verb|makeASystemDE| constructor, a user can set the coefficient matrix, unknown vector, and constant vector by explicitly giving \verb|[[Expr]]|, \verb|[Unknown]|, and \verb|[Expr]|. There will be several guards to check whether inputs are well-formed.
 
 1. The coefficient matrix and constant vector dimension need to match. The \verb|_coefficients| is an m * n matrix, and \verb|_dmConstants| is an m vector. This guard makes sure they have the same m dimension. If an error says ``Length of coefficients matrix should equal to the length of the constant vector.'', it means \verb|_coefficients| and \verb|_dmConstants| has different m dimension, violating mathematical rules.
 
@@ -108,15 +125,35 @@ unknowns   = [2, 1, 0]
 constants  = [r_t K_p]
 \end{haskell1}
 
-The second constructor is called \verb|makeASingleDE|. This constructor uses the input language~\ref{sec_input} to simplify the input of a single ODE. In \verb|makeASingleDE|, we create the coefficient matrix, unknown vector, and constant vector based on restricted inputs. In other words, users can no longer set the data by directly giving values. The \verb|DifferentialModel| will generate all data for the coefficient matrix, unknown vector, and constant vector accordingly. The constructor first creates a descending unknown vector base on the highest number of its derivatives. 
-
-To take the code~\ref{code_exinputl} as an example, the highest order of its derivative on the left-hand side of the equation is 2, so we will generate the unknown vector, and it is a list that contains 2, 1 and 0. Then, we will create the coefficient matrix by finding its related coefficient based on the descending order of the unknown vector. The main advantage of this design decision is that the \verb|DifferentialModel| will no longer require users to input the unknown vector in descending order. Any order of the unknown vector will be acceptable because we will generate relative data in \verb|DifferentialModel|. The pseudo-code~\ref{code_exinputl} shows how to use the input language to set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector. The full detail of how to use the input language set the coefficient matrix, unknown vector, and constant vector for the PDContoller example will show up in the Appendix ~\ref{code_scexinputl}.
+The second constructor is called \verb|makeASingleDE|. This constructor uses the input language to simplify the input of a single ODE. In \verb|makeASingleDE|, we create the coefficient matrix, unknown vector, and constant vector based on restricted inputs. In other words, users can no longer set the data by directly giving values. The \verb|DifferentialModel| will generate all data for the coefficient matrix, unknown vector, and constant vector accordingly. The constructor first creates a descending unknown vector base on the highest number of its derivatives. To take the code~\ref{code_exinputl} as an example, the highest order of its derivative on the left-hand side of the equation is 2, so we will generate the unknown vector, and it is a list that contains 2, 1 and 0. Then, we will create the coefficient matrix by finding its related coefficient based on the descending order of the unknown vector. The main advantage of this design decision is that the \verb|DifferentialModel| will no longer require users to input the unknown vector in descending order. Any order of the unknown vector will be acceptable because we will generate relative data in \verb|DifferentialModel|. The pseudo-code~\ref{code_exinputl} shows how to use the input language to set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector. The full detail of how to use the input language set the coefficient matrix, unknown vector, and constant vector for the PDContoller example will show up in the Appendix ~\ref{code_scexinputl}.
 
 \section{Display Matrix}
 After a \verb|DifferentialModel| obtains ODE information, we want to display them in the software requirements specification (SRS). Previously, we mentioned the Drasil framework able to generate software artifacts, and SRS is a part of them. This section will discuss two ways to display ODEs in the SRS.
 
-1. We can display ODEs in a matrix form. The matrix form~\ref{eq_matrixformexmaple} demonstrates how the ODE will appear in a matrix form in the SRS. In the \verb|DifferentialModel|, the coefficient matrix is a list of lists expression, the unknown vector is a list of integers, and the constant vector is a list of expressions. It should be fairly straightforward for the Drasil printer to display them by printing each part sequentially.
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		
+\includegraphics[width=1\textwidth]{figures/ODEInMatrix.png}
+		\caption{Displaying ODE in a matrix form}
+		\label{fig_multienv_odematrix}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+	
+\includegraphics[width=1\textwidth]{figures/ODEInLinearEq.png}
+		\caption{Displaying ODE in a linear equation}
+		\label{fig_multienv_odelinear}
+	\end{subfigure}
+	
+	\caption{Options of Displaying an ODE}
+	\label{fig_multienv}
+\end{figure}
 
-2. We also can display ODEs in a shape of a linear equation. The example~\ref{eq_odeexmaple} demonstrates how the ODE will show up in the shape of a linear equation in the SRS. Displaying a single ODE in a linear equation is a special case. When there is only one single ODE, it would be over complicated to display it in a matrix form. This is the same reason we want to create an input language to manage the input of a single ODE better.
+1. We can display ODEs in a matrix form. The matrix form~\ref{eq_matrixformexmaple} demonstrates how the ODE will appear in a matrix form in the SRS. In the \verb|DifferentialModel|, the coefficient matrix is a list of lists expression, the unknown vector is a list of integers, and the constant vector is a list of expressions. It should be fairly straightforward for the Drasil printer to display them by printing each part sequentially. The example for this option shows in Figure~\ref{fig_multienv_odematrix}. However, we explicitly force the Drasil printer to display a single ODE in shape of a linear equation, because displaying a single ODE in matrix from would be over-complicated. The example is a demo shows the Drasil printer is capable to display an ODE in a matrix form.
+
+2. We also can display ODEs in a shape of a linear equation. The example~\ref{eq_odeexmaple} demonstrates how the ODE will show up in the shape of a linear equation in the SRS. Displaying a single ODE in a linear equation is a special case. When there is only one single ODE, it would be over complicated to display it in a matrix form. This is the same reason we want to create an input language to manage the input of a single ODE better. The example for this option shows in Figure~\ref{fig_multienv_odelinear}.
 
 In the future, the Drasil team wants to explore more variability in displaying ODEs. One topic highlighted in the discussion is showing an ODE in a canonical form. However, many mathematicians have different opinions on a canonical form, and the name of canonical form has been used differently, such as normal form or standard form. More research on this part would help us better understand the knowledge of ODE.

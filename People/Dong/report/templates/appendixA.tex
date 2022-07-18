@@ -25,22 +25,39 @@ This appendix provides detailed explanations of various parts of DifferentialMod
 -- $y_t$ is opProcessVariable
 -- $K_p$ is qdPropGain
 -- $r_t$ is qdSetPointTD
-lhs = [exactDbl 1 $* (opProcessVariable $^^ 2)]
-	$+ (exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1))
+imPDRC :: DifferentialModel
+imPDRC = makeASingleDE
+	time
+	opProcessVariable
+	lhs
+	rhs
+	"imPDRC"
+	(nounPhraseSP "Computation of the Process Variable as a function of time")
+	EmptyS
+	where 
+	lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)]
+	$+ (exactDbl 1 $* (opProcessVariable $^^ 2))
 	$+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
-rhs = sy qdSetPointTD `mulRe` sy qdPropGain
+	rhs = sy qdSetPointTD `mulRe` sy qdPropGain
 \end{haskell1}
-\captionof{listing}{Source code of input language for the example~\ref{eq_odeexmaple}}
+\captionof{listing}{Using input language for the example~\ref{eq_odeexmaple} in DifferentialModel}
 \label{code_scexinputl}
 \end{listing}
 
 \begin{listing}
 \begin{haskell1}
-coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
-unknowns = [opProcessVariable $^^ 2, opProcessVariable $^^ 1, opProcessVariable $^^ 0]
-constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
+imPDRC :: DifferentialModel
+imPDRC = makeASystemDE
+	time
+	opProcessVariable
+	coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
+	unknowns = [2, 1, 0]
+	constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
+	"imPDRC"
+	(nounPhraseSP "Computation of the Process Variable as a function of time")
+	EmptyS
 \end{haskell1}
-\captionof{listing}{Source code of directly setting for the example~\ref{eq_odeexmaple}}
+\captionof{listing}{Explicitly set values for the example~\ref{eq_odeexmaple} in DifferentialModel}
 \label{code_scexmatrix}
 \end{listing}
 

@@ -1,0 +1,19 @@
+introduction paragraph: what you're missing is something stronger on the motivation. You do mention "it restricts any transformation of ODEs", but that's easy to miss.
+
+Can I use polymorphic to describe the ODE? There is the new edit for the motivation.
+
+"_Although writing ODEs in text maintains the relationship of ODEs, it restricts any transformation of ODEs. For example, if the text-based ODE is a high-order linear ODE, we can not transform it into its equivalent system of first-order ODE. Therefore, the Drasil team is exploring a new approach to store ODEs in a new data structure, and the new structure would allow ODEs to be **polymorphic**. Once we capture ODEs information in this data structure, we can generate its equivalent forms._"
+
+#
+
+before you present DifferentialModel, you should do a bit more of an analysis of what is in a "System of Linear ODEs". Basically the reader should not be surprised, after your analysis/explanation regarding any of the fields of that data-structure.
+
+Should I should change the constructor name to SingleLinearODE? All case studies that use this data structure(DifferentialModel) are single ODE. No_PCM has a single first-order ODE, and PD_Controller has a single second-order ODE. Although users can enter a coefficient matrix (m * n) that m is great than 1, but later transformation would assume the coefficient matrix would be 1 * n.
+
+#
+
+there is a gap in between your example in (2.2.1) and the data-structure explanation. I think it would be easier if you show a simpler (concrete) example of low-order, maybe translate that to a 'direct' version of the (internal) Drasil structure to show how UGLY that would be, thus motivating the need for some helpers to make it nicer.
+
+similarly, in 2.3, I would first motivate the reason for the 2 constructors before explaining them
+
+in 2.4, I would show examples.

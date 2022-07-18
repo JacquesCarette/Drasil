@@ -48,7 +48,7 @@ imPDRC
             rhs = sy qdSetPointTD `mulRe` sy qdPropGain
       -- Matrix form: 
       -- coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
-      -- unknowns = [opProcessVariable $^^ 2, opProcessVariable $^^ 1, opProcessVariable $^^ 0]
+      -- unknowns = [2, 1, 0]
       -- constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
 
 imDeriv :: Derivation

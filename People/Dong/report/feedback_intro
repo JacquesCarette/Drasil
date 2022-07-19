@@ -1,47 +1,44 @@
-introduction paragraph: what you're missing is something stronger on the motivation. You do mention "it restricts any transformation of ODEs", but that's easy to miss.
+# introduction paragraph: what you're missing is something stronger on the motivation. You do mention "it restricts any transformation of ODEs", but that's easy to miss.
 
 Can I use polymorphic to describe the ODE? There is the new edit for the motivation.
 
 "_Although writing ODEs in text maintains the relationship of ODEs, it restricts any transformation of ODEs. For example, if the text-based ODE is a high-order linear ODE, we can not transform it into its equivalent system of first-order ODE. Therefore, the Drasil team is exploring a new approach to store ODEs in a new data structure, and the new structure would allow ODEs to be **polymorphic**. Once we capture ODEs information in this data structure, we can generate its equivalent forms._"
 
-#
 
-before you present DifferentialModel, you should do a bit more of an analysis of what is in a "System of Linear ODEs". Basically the reader should not be surprised, after your analysis/explanation regarding any of the fields of that data-structure.
+# before you present DifferentialModel, you should do a bit more of an analysis of what is in a "System of Linear ODEs". Basically the reader should not be surprised, after your analysis/explanation regarding any of the fields of that data-structure.
 
 Should I should change the constructor name to SingleLinearODE? All case studies that use this data structure(DifferentialModel) are single ODE. No_PCM has a single first-order ODE, and PD_Controller has a single second-order ODE. Although users can enter a coefficient matrix (m * n) that m is great than 1, but later transformation would assume the coefficient matrix would be 1 * n.
 
-#
+# there is a gap in between your example in (2.2.1) and the data-structure explanation. I think it would be easier if you show a simpler (concrete) example of low-order, maybe translate that to a 'direct' version of the (internal) Drasil structure to show how UGLY that would be, thus motivating the need for some helpers to make it nicer.
 
-there is a gap in between your example in (2.2.1) and the data-structure explanation. I think it would be easier if you show a simpler (concrete) example of low-order, maybe translate that to a 'direct' version of the (internal) Drasil structure to show how UGLY that would be, thus motivating the need for some helpers to make it nicer.
+# similarly, in 2.3, I would first motivate the reason for the 2 constructors before explaining them
 
-similarly, in 2.3, I would first motivate the reason for the 2 constructors before explaining them
-
-in 2.4, I would show examples.
+# in 2.4, I would show examples.
 
 
 ###
 
-I think you should use your short title as the long title. That is, "SOLVING HIGH-ORDER LINEAR ORDINARY DIFFERENTIAL EQUATIONS FOR SCS IN DRASIL" can be shortened to "SOLVING HIGH-ORDER LINEAR ODES IN DRASIL"
+# I think you should use your short title as the long title. That is, "SOLVING HIGH-ORDER LINEAR ORDINARY DIFFERENTIAL EQUATIONS FOR SCS IN DRASIL" can be shortened to "SOLVING HIGH-ORDER LINEAR ODES IN DRASIL"
 
 If the long title be "SOLVING HIGH-ORDER LINEAR ODES IN DRASIL", will the short title be the same as long title?
 
-Although you are focusing on linear ODEs, you should make it clear when you present the scope (likely in Chapter 1) that Drasil can solve nonlinear ODEs (like the double pendulum nonlinear ode). You can explain in your future work what steps might be taken to support nonlinear ODEs with data structures in Drasil.
+# Although you are focusing on linear ODEs, you should make it clear when you present the scope (likely in Chapter 1) that Drasil can solve nonlinear ODEs (like the double pendulum nonlinear ode). You can explain in your future work what steps might be taken to support nonlinear ODEs with data structures in Drasil.
 
 When it comes to nonlinear ODEs, we didn't use this new data structure at all. For example, we write explicit ODE equation in the double pendulum. What I did is expanding drasil capability to generate right interface when we write explicit equation for high-order ODE. I am not sure whether I should add nonlinear ODE part in this chapter, because the nonlinear ODE doesn't use this data structure.
 
-Is there any constraint enforced that the entries in _coefficients can only be functions of the independent variable (often t)? This is required for linear ODEs. What would happen if the expression in _coefficients depended on _depVar? I think the answer depends on how you eventually link to the external library for solving the ODE. I'm thinking about the double pendulum example. I believe you solve that ODE, even though it is nonlinear. Do you represent it in matrix form? I tried to find your double pendulum example. Where is it?
+# Is there any constraint enforced that the entries in _coefficients can only be functions of the independent variable (often t)? This is required for linear ODEs. What would happen if the expression in _coefficients depended on _depVar? I think the answer depends on how you eventually link to the external library for solving the ODE. I'm thinking about the double pendulum example. I believe you solve that ODE, even though it is nonlinear. Do you represent it in matrix form? I tried to find your double pendulum example. Where is it?
 
-Why is the type of _unknowns an Integer? The unknowns are actually functions that take arguments and generate a real number. Is it the case that you never actually use the type information? Maybe you mean the order of the derivative? That is what the sample code on page 12 suggests.
+# Why is the type of _unknowns an Integer? The unknowns are actually functions that take arguments and generate a real number. Is it the case that you never actually use the type information? Maybe you mean the order of the derivative? That is what the sample code on page 12 suggests.
 
 I think I didn't explain well on what is the _unknowns. The _unknowns is not a [y_t'', y_t', y_t], the _unknowns is order of y_t, so it is ['', ',  ]. I use [2, 1, 0] to represent the order of derivative. The y_t will be store in _depVar, and its order of derivative will be store in _unknowns. Technically, the combination of _depVar and _unknowns is the unknown vector [y_t'', y_t', y_t]. Currently, there is a few constraint to input _coefficients, the dimension of _coefficients (m*n) need to match with _unknowns (n*1). Other than that, there is no other constraints. We will assume user did the job to make the ODE in shape of Ax = b. Anything in A does not depends on x. We also assume the entries can only be functions of the independent variable.
 
 I plan to put double pendulum example on chapter after ODE data representation and External libraries analysis. In the Connecting ODE data represent with external libraries, I want to describe that the high-order linear ODE can be done with current transformation, but other ODE, like non-linear ODE need to use our old technique, manually write the equations twice to get the numerical solution 
 
-You say that unknowns needs to be descending. Would unknowns = [3] be valid? (I don't see why not, I just want to verify.)
+# You say that unknowns needs to be descending. Would unknowns = [3] be valid? (I don't see why not, I just want to verify.)
 
 [3] would be valid, as long as the order is descending. [1, 3] would be invalid, and there is a guard to check it. If someone put [2, 2, 1] in there, it will also complaint, because the vector can be simply to [2, 1] 
 
 
-Are the new data structures used in the current Drasil examples?
+# Are the new data structures used in the current Drasil examples?
 
 PD_Controller and No_PCM currently using the new data structure. The double pendulum doesn't not use the new data structure, we explicits write the ODE twice in the double pendulum

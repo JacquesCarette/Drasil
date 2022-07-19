@@ -8,14 +8,14 @@ In general, an equation contains a left-hand expression, a right-hand expression
 	\boldsymbol{Ax} = \boldsymbol{b}
 \end{equation}
 
-On the left-hand side, \textbf{A} is an m $\times$ n matrix, and \textbf{x} is an n-vector. On the right-hand side, \textbf{b} is an m-vector. The \textbf{A} is commonly known as the coefficient matrix, \textbf{b} is the constant vector, and \textbf{x} is the unknown vector.
+On the left-hand side, \textbf{A} is an m $\times$ n matrix, and \textbf{x} is an n-vector. On the right-hand side, \textbf{b} is an m-vector. The \textbf{A} is commonly known as the coefficient matrix, \textbf{b} is the constant vector, and \textbf{x} is the unknown vector. The equation~\ref{eq_matrixform} can represent not only a single linear ODE, but also represent a linear system of ODE. A linear system of ODE is a finite set of linear differential equations. In this research, we only have case studies for single ODE, and all examples will demonstrate on single ODEs. The new data structure is capable to store information for a system of ODE, but its related functions only support for instances of single ODE.
 
-Given the ODE example~\ref{eq_odeexmaple} in PDContoller case study,
+Given the ODE example~\ref{eq_odeexmaple} in \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller case study},
 \begin{equation} \label{eq_odeexmaple}
 	y_t'' + (1 + K_d)y_t' + (20 + K_p)y_t = r_t K_p
 \end{equation}
 
-$y_t$ is the dependent variable, and $K_d$, $K_p$, and $r_t$ are constant variables. We can write this equation as follows. 
+$y_t$ is the dependent variable and it is Process Variable. $K_d$ , $K_p$, and $r_t$ are constant variables. $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows. 
 
 \begin{equation} \label{eq_matrixformexmaple}
 	\begin{bmatrix}
@@ -33,7 +33,7 @@ $y_t$ is the dependent variable, and $K_d$, $K_p$, and $r_t$ are constant variab
 	\end{bmatrix}
 \end{equation}
 
-The relationship between the matrix form~\ref{eq_matrixform} and the example~\ref{eq_matrixformexmaple} is not hard to find. Firstly, the coefficient matrix A is a 1 $\times$ 3 matrix that consists of $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector is a 3 $\times$ 1 vector with $y_t''$, $y_t'$, and $y_t$. Last, the constant vector is a 1 $\times$ 1 vector with $r_t K_p$. The matrix form~\ref{eq_matrixform} very well captures all the knowledge we need to present an ODE. Therefore, we decided to create a datatype called \verb|DifferentialModel| to preserve ODEs information. The \verb|DifferentialModel| has six records, and here is the representing code for \verb|DifferentialModel|.
+The relationship between the matrix form~\ref{eq_matrixform} and the example~\ref{eq_matrixformexmaple} is not hard to find. Firstly, the coefficient matrix \textbf{A} is a 1 $\times$ 3 matrix that consists of $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector \textbf{x} is a 3 $\times$ 1 vector with $y_t''$, $y_t'$, and $y_t$. Last, the constant vector \textbf{b} is a 1 $\times$ 1 vector with $r_t K_p$. The matrix form~\ref{eq_matrixform} very well captures all the knowledge we need to present an ODE. Therefore, we decided to create a datatype called \verb|DifferentialModel| to preserve ODEs information. The \verb|DifferentialModel| has six records, and here is the representing code for \verb|DifferentialModel|.
 \begin{haskell1}
 data DifferentialModel = SystemOfLinearODEs {
 	_indepVar :: UnitalChunk,
@@ -45,16 +45,26 @@ data DifferentialModel = SystemOfLinearODEs {
 }
 \end{haskell1}
 
-Previous to this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk already existed in Drasil. We created an \verb|Unknown| type for this experiment. Their semantics will show up in Appendix A ~\ref{tab_demodeltype}
+Previous to this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk already existed in Drasil. We created an \verb|Unknown| type for this experiment. Their semantics will show up in table ~\ref{tab_demodeltype}
 
-The \verb|_indepVar| represents the independent variable in an ODE, and it is usually time. The \verb|_depVar| represents the dependent variable in an ODE. The \verb|_coefficients| is a list of lists \verb|Expr|, and it represents the coefficient matrix in an ODE. The \verb|_unknowns| is a list of \verb|Unknown|, and it represents the unknown vector. Each \verb|Unknown| indicates an nth order of derivative of the dependent variable. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_matrixformexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is.
+\begin{table}
+	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+		\textbf{Type} & \textbf{Semantics} \\
+		\toprule
+		\verb|UnitalChunk| & concepts with quantities that must have a unit definition.\\
+		\verb|ConstrConcept| & conceptual symbolic quantities with Constraints and maybe a reasonable value.\\
+		\verb|Expr| & a type encode mathematical expression. \\
+		\verb|ConceptChunk| & a concept that contains an idea, a definition, and an associated domain of knowledge\\
+        \verb|Unknown|& synonym of Integer\\
+		\bottomrule	
+	\end{tabular}	
+	\caption{Type use in DifferentialModel}	
+	\label{tab_demodeltype}
+\end{table}
 
-Currently, the \verb|DifferentialModel| only captures the knowledge of ODEs with one dependent variable, and it is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of all ODEs and eventually lead to solving a system of linear ODE with multiple dependent variables.
+The \verb|_indepVar| represents the independent variable in an ODE, and it is often time. The \verb|_depVar| represents the dependent variable in an ODE. The \verb|_coefficients| is a list of lists \verb|Expr|, and it represents the coefficient matrix \textbf{A} in an ODE. The \verb|_unknowns| is a list of \verb|Unknown|, and \verb|Unknown| is synonym of integers. The \verb|_unknowns| represent a list of order numbers of derivatives. Combining \verb|_depVar| and \verb|_unknowns|, they represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. The code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
 
-\section{Input Language}
-\label{sec_input}
-There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form. Here is one example how the internal representation of \verb|DifferentialModel| for example~\ref{eq_odeexmaple}.
-
+\begin{listing}
 \begin{haskell1}
 _indepVar = time
 _depVar = y_t
@@ -63,8 +73,15 @@ _unknowns = [2, 1, 0]
 _dmConstants = [r_t K_p]
 _dmconc = ... -- Drasil definition for chuck concept
 \end{haskell1}
+\captionof{listing}{Internal Data Representation for the example~\ref{eq_odeexmaple}}
+\label{code_interaldata}
+\end{listing}
 
-We can directly set value to each record in the constructor of \verb|DifferentialModel|. However, it would be not so elegant to set a single ODE in the example, because users have to extracts the coefficient matrix, unknown vector and constant vector from the original equation manually. Once the coefficient matrix, unknown vector and constant vector is ready, we can set value into \verb|_depVar|, \verb|_coefficients|, \verb|_unknowns|, and \verb|_dmConstants| accordingly. This process is ideal when the ODE is a system of ODE, and it would be over-complicated for user to do extraction for a single ODE. Another advantage of having an helper function to input an ODE is that it can reduce human error and make sure the equation is well-formed. Therefore, we designed a helper function to tackle this problem and we call this helper function input language. What will this input language looks like? The input language is inspired by how a linear nth-order ODE look like. Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of 
+Currently, the \verb|DifferentialModel| only captures the knowledge of ODEs with one dependent variable, and it is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of all ODEs and eventually lead to solving a system of linear ODE with multiple dependent variables.
+
+\section{Input Language}
+\label{sec_input}
+There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form. While inputting a single ODE, one obvious way is directly passing value to each record in the constructor of \verb|DifferentialModel|. For example, in the example~\ref{eq_odeexmaple}, we can pass exact values that show in the code~\ref{code_interaldata} via \verb|DifferentialModel| constructors. However, it would be not so elegant to set a single ODE in the example, because users have to extracts the coefficient matrix \textbf{A}, unknown vector \textbf{x} and constant vector \textbf{b} from the original equation manually. Once the coefficient matrix, unknown vector and constant vector is ready, we can set value into \verb|_depVar|, \verb|_coefficients|, \verb|_unknowns|, and \verb|_dmConstants| accordingly. This process is ideal when the ODE is a system of ODE, and it would be over-complicated for user to do extraction for a single ODE. Therefore, we decided create a helper function to ease this issue. Another advantage of having an helper function to input an ODE is that it can reduce human error and make sure the equation is well-formed. We call this helper function input language, and what will this input language looks like? The input language is inspired by how a linear nth-order ODE looks like. Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of 
 \begin{equation} \label{eq_linearDE}
 	a_n(t)y^n(t) + a_{n-1}(t)y^{n-1}(t) + \dots + a_1(t)y'(t) + a_0(t)y(t) = g(t)
 \end{equation}

@@ -35,6 +35,8 @@ Why is the type of _unknowns an Integer? The unknowns are actually functions tha
 
 I think I didn't explain well on what is the _unknowns. The _unknowns is not a [y_t'', y_t', y_t], the _unknowns is order of y_t, so it is ['', ',  ]. I use [2, 1, 0] to represent the order of derivative. The y_t will be store in _depVar, and its order of derivative will be store in _unknowns. Technically, the combination of _depVar and _unknowns is the unknown vector [y_t'', y_t', y_t]. Currently, there is a few constraint to input _coefficients, the dimension of _coefficients (m*n) need to match with _unknowns (n*1). Other than that, there is no other constraints. We will assume user did the job to make the ODE in shape of Ax = b. Anything in A does not depends on x. We also assume the entries can only be functions of the independent variable.
 
+I plan to put double pendulum example on chapter after ODE data representation and External libraries analysis. In the Connecting ODE data represent with external libraries, I want to describe that the high-order linear ODE can be done with current transformation, but other ODE, like non-linear ODE need to use our old technique, manually write the equations twice to get the numerical solution 
+
 You say that unknowns needs to be descending. Would unknowns = [3] be valid? (I don't see why not, I just want to verify.)
 
 [3] would be valid, as long as the order is descending. [1, 3] would be invalid, and there is a guard to check it. If someone put [2, 2, 1] in there, it will also complaint, because the vector can be simply to [2, 1] 

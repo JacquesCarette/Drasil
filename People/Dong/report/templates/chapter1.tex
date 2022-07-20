@@ -12,10 +12,11 @@ On the left-hand side, \textbf{A} is an m $\times$ n matrix, and \textbf{x} is a
 
 Given the ODE example~\ref{eq_odeexmaple} in \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller case study},
 \begin{equation} \label{eq_odeexmaple}
-	y_t'' + (1 + K_d)y_t' + (20 + K_p)y_t = r_t K_p
+	y_t''(t) + (1 + K_d)y_t'(t) + (20 + K_p)y_t(t) = r_t K_p
 \end{equation}
 
-$y_t$ is the dependent variable and it is Process Variable. $K_d$ , $K_p$, and $r_t$ are constant variables. $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows. 
+$y_t$ is the dependent variable and it is Process Variable. $y_t$(t) is a function of independent variable, often time. $y_t'$(t) is the first order derivative of $y_t$(t). 
+$y_t''$(t) is the second order derivative of $y_t$(t). $K_d$ , $K_p$, and $r_t$ are constant variables. $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows. 
 
 \begin{equation} \label{eq_matrixformexmaple}
 	\begin{bmatrix}
@@ -62,7 +63,7 @@ Previous to this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk al
 	\label{tab_demodeltype}
 \end{table}
 
-The \verb|_indepVar| represents the independent variable in an ODE, and it is often time. The \verb|_depVar| represents the dependent variable in an ODE. The \verb|_coefficients| is a list of lists \verb|Expr|, and it represents the coefficient matrix \textbf{A} in an ODE. The \verb|_unknowns| is a list of \verb|Unknown|, and \verb|Unknown| is synonym of integers. The \verb|_unknowns| represent a list of order numbers of derivatives. Combining \verb|_depVar| and \verb|_unknowns|, they represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. The code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
+The \verb|_indepVar| represents the independent variable in an ODE, and it is often time. The \verb|_depVar| represents the dependent variable in an ODE. The \verb|_coefficients| is a list of lists \verb|Expr|, and it represents the coefficient matrix \textbf{A} in an ODE. The \verb|_unknowns| is a list of \verb|Unknown|, and \verb|Unknown| is synonym of integers. The \verb|_unknowns| represent a list of order numbers of derivatives of the function. Combining \verb|_depVar| and \verb|_unknowns|, they represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. The code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
 
 \begin{listing}
 \begin{haskell1}
@@ -86,7 +87,7 @@ There are many reasons why we want to provide an input language for users to inp
 	a_n(t)y^n(t) + a_{n-1}(t)y^{n-1}(t) + \dots + a_1(t)y'(t) + a_0(t)y(t) = g(t)
 \end{equation}
 
-On the left-hand side of the linear equation~\ref{eq_linearDE}, the expression is a collection of terms. Each term consists of a coefficient and a derivative of the dependent variable. With ideas of term, coefficient, and derivative, we create new data types to mimic the mathematical expression of a linear ODE. The following is the detail of the code for new data types and operators.
+On the left-hand side of the linear equation~\ref{eq_linearDE}, the expression is a collection of terms. Each term consists of a coefficient and a derivative of the function y(t). With ideas of term, coefficient, and derivative, we create new data types to mimic the mathematical expression of a linear ODE. The following is the detail of the code for new data types and operators.
 
 \begin{haskell1}
 type Unknown = Integer
@@ -106,7 +107,16 @@ type LHS = [Term]
 ($+) xs x  = xs ++ [x]
 \end{haskell1}
 
-For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator connects a dummy dependent variable and the order of its derivative. We call it a dummy dependent variable because it is a placeholder to increase users' readability. The \verb|$*| operator creates a term by combining a coefficient matrix and an unknown variable. Last, the \verb|$+| operator connects all terms. Let's write pseudo code (Code \ref{code_exinputl}) for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PDController example will show up in ~\ref{code_scexinputl}.
+For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. This corresponds to the left hand side is a collection of terms. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. This corresponds to a term consists of a coefficient and a derivative of the function. Although \verb|_unk| is integers, combining \verb|_unk| and \verb|_depVar| we can get the derivative of the function. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator take a variable and a integer, and it represent the derivative of the function. For example, in example~\ref{eq_odeexmaple}, we can write $y_t(t)$\^{}\^{}2 to represent $y_t(t)''$. Although the function is provide by \verb|_depVar| and the first parameter in \verb|$^^| will be ignored, the dummy variable maintain the whole input structure as close as a linear ODE.
+
+The \verb|$^^| operator take a variable and a integer, and return a integer (Unknown is a synonym of Integer).
+
+connects a variable and the order of its derivative. 
+
+
+We call it a dummy dependent variable because it is a placeholder to increase users' readability. 
+
+The \verb|$*| operator creates a term by combining a coefficient matrix and an unknown variable. Last, the \verb|$+| operator connects all terms. Let's write pseudo code (Code \ref{code_exinputl}) for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PDController example will show up in ~\ref{code_scexinputl}.
 
 \begin{listing}
 \begin{haskell1}

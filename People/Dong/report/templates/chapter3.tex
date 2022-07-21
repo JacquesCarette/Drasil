@@ -48,7 +48,7 @@ In reality, we can solve an ODE in many algorithms, and those four libraries pro
 
 \begin{sidewaystable}
 \begin{adjustbox}{width=\columnwidth,center}
-\begin{tabular}{p{0.18\textwidth} | p{0.20\textwidth} p{0.20\textwidth} p{0.20\textwidth} p{0.20\textwidth}}\hline
+\begin{tabular}{p{0.18\textwidth} | p{0.17\textwidth} p{0.22\textwidth} p{0.29\textwidth} p{0.16\textwidth}}\hline
     \backslashbox{Algorithm}{Library}
     &\textbf{Scipy-Python}&\textbf{ACM-Java}&\textbf{ODEINT-C++}&\textbf{OSLO-C\#}\\
     \toprule
@@ -57,37 +57,62 @@ In reality, we can solve an ODE in many algorithms, and those four libraries pro
         \item Implicit Adams
         \end{itemize} & 
         \begin{itemize}[wide]
-        \item Adams-Bashforth
-        \item Adams-Moulton
-        \end{itemize} & \checkmark &\\\hline
+        \item Adams Bashforth
+        \item Adams Moulton
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Adams Bashforth Moulton
+        \end{itemize} &\\ \hline
     Family of BDF & 
         \begin{itemize}[wide]
         \item BDF
-        \end{itemize} &&& \checkmark \\\hline
+        \end{itemize} &&& 
+        \begin{itemize}[wide]
+        \item Gear’s BDF
+        \end{itemize} \\ \hline
     Family of RK & 
         \begin{itemize}[wide]
-        \item (4)5 Dormand Prince
-        \item 8(5,3) Dormand Prince
+        \item Dormand Prince (4)5 
+        \item Dormand Prince 8(5,3) 
         \end{itemize} & 
         \begin{itemize}[wide]
-        \item Second order
-        \item Fourth order
+        \item 2ed order
+        \item 4th order
         \item Gill fourth order
         \item 3/8 fourth order
         \item Luther sixth order
-        \item 5(4) Higham and Hall
-        \item 5(4) Dormand Prince
-        \item 8(5,3) Dormand Prince
-        \end{itemize} & \checkmark & \checkmark \\\hline
+        \item Higham and Hall 5(4)
+        \item Dormand Prince 5(4) 
+        \item Dormand Prince 8(5,3) 
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item 4th order
+        \item Dormand Prince 5
+        \item Fehlberg 78
+        \item Controlled Error Stepper
+        \item Dense Output Stepper
+        \item Rosenbrock 4
+        \item Symplectic RKN McLachlan 6
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Dormand Prince RK547M
+        \end{itemize} \\ \hline
     Family of Euler && 
         \begin{itemize}[wide]
         \item Euler method
-        \end{itemize} & \checkmark &\\\hline
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Explicit Euler
+        \item Implicit Euler
+        \item Symplectic Euler
+        \end{itemize} &\\ \hline
     Others && 
         \begin{itemize}[wide]
-        \item
-        Gragg Bulirsch Stoer 
-        \end{itemize} & \checkmark &\\
+        \item Gragg Bulirsch Stoer 
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Gragg Bulirsch Stoer 
+        \end{itemize} &\\
     \bottomrule	
 \end{tabular}
 \end{adjustbox}

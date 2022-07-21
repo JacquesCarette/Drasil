@@ -172,5 +172,41 @@ public static List<double> func_y_t(double K_d, double K_p, double r_t, double t
 	\bottomrule	
 \end{tabular}	
 \caption{Algorithm Options in Apache Commons Maths~\citep{apachefun}}	
-\label{tab_algscipy}
+\label{tab_algacm}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{ p{0.4\textwidth} p{0.5\textwidth} }
+	\textbf{Name} & \textbf{Description} \\
+	\toprule
+	\verb|euler| & Explicit Euler: Very simple, only for demonstrating purpose\\ \hline
+	\verb|runge_kutta4| & Runge-Kutta 4: The classical Runge Kutta scheme, good general scheme without error control.\\ \hline
+	\verb|runge_kutta_cash_karp54| & Cash-Karp: Good general scheme with error estimation.\\ \hline
+	\verb|runge_kutta_dopri5| & Dormand-Prince 5: Standard method with error control and dense output.\\ \hline
+	\verb|runge_kutta_fehlberg78| & Fehlberg 78: Good high order method with error estimation.\\ \hline
+
+	\verb|adams_bashforth_moulton| & Adams-Bashforth-Moulton: Multi-step method with high performance.\\ \hline
+	\verb|controlled_runge_kutta| & Controlled Error Stepper: Error control for the Runge-Kutta steppers.\\ \hline
+	\verb|dense_output_runge_kutta| & Dense Output Stepper: Dense output for the Runge-Kutta steppers.\\ \hline
+	\verb|bulirsch_stoer| & Bulirsch-Stoer: Stepper with step size, order control and dense output. Very good if high precision is required..\\ \hline
+	\verb|implicit_euler| & Implicit Euler: Basic implicit routine.\\ \hline
+	\verb|rosenbrock4| & Rosenbrock 4: Solver for stiff systems with error control and dense output.\\ \hline
+	\verb|symplectic_euler| & Symplectic Euler: Basic symplectic solver for separable Hamiltonian system.\\ \hline
+	\verb|symplectic_rkn_sb3a_mclachlan| & Symplectic RKN McLachlan: Symplectic solver for separable Hamiltonian system with order 6.\\
+	\bottomrule	
+\end{tabular}	
+\caption{Algorithm Options in ODEINT~\citep{odeintfun}}	
+\label{tab_algodeint}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+	\textbf{Name} & \textbf{Description} \\
+	\toprule
+	\verb|RK547M| & This method is most appropriate for solving non-stiff ODE systems. It is based on classical Runge-Kutta formulae with modifications for automatic error and step size control.\\ \hline
+	\verb|GearBDF| & It is an implementation of the Gear back differentiation method, a multi-step implicit method for stiff ODE systems solving.\\
+	\bottomrule	
+\end{tabular}	
+\caption{Algorithm Options in OSLO~\citep{oslofun}}	
+\label{tab_algodeint}
 \end{table}

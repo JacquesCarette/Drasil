@@ -4,35 +4,63 @@ The external library comes from an outside source, and it is not originate from 
 In this Chapter, we will discuss some topics related to commonalities and variabilities of four libraries, includes numerical solutions, algorithms options and outputting a function. Last, we will discussed how we handle dependencies.
 
 \section{Numerical Solutions}
-Numerical solutions use algorithms to make approximation for mathematical equations. All numerical solution are approximation, and some numerical solutions utilize better algorithm can produce a better result than others. All selected libraries provides numerical solution for a linear system of first order ODE. We can write a linear system of first order ODE in shape of 
-\begin{equation} \label{eq_foode}
-    \boldsymbol{X}' = \boldsymbol{AX} + \boldsymbol{c}
-\end{equation}
+Numerical solutions use algorithms to make approximation for mathematical equations. All numerical solution are approximation, and some numerical solutions utilize better algorithm can produce a better result than others. All selected libraries provides numerical solution for a linear system of first-order ODE as an initial value problem (IVP). The initial value requires an initial condition which specify the value of the function at the start point, and it is contrasting to boundary value problem (BVP). In this research, we are going to solve each scientific problem as an IVP. Let see how to solve a linear system of first-order ODE with an example. Here is an example of a linear system of first-order ODE.
+\begin{flalign} \label{ex_firstorderode}
+& x_{1}(t)' = x_{2}(t) \\ \nonumber
+& x_{2}(t)' = -(1 + K_{d})x_{2}(t) - (20 + K_{p})x_{1}(t) + r_{t} K_{p} 
+\end{flalign}
 
-The \textbf{A} is a coefficient matrix, and c is a constant vector. The \textbf{X} is the unknown vector contains functions of the independent variable, often time. The \textbf{X}' is a vector that consist of first derivative of functions in \textbf{X}. 
+In example~\ref{ex_firstorderode} , there are two dependent variables $x_1$ and $x_2$. The $x_1(t)$ is the function of the independent variable, time, which produces dependent variables $x_1$ over time. The $x_2(t)$ is also the function of the independent variable, time, which produces dependent variables $x_2$ over time. The $x_1'$(t) is the first-order derivative of $x_1$(t). The $x_2'$(t) is the first-order derivative of $x_2$(t). The $K_d$ , $K_p$, and $r_t$ are constant variables, and they remain the same meaning in the example~\ref{eq_odeexmaple} and the example~\ref{ex_firstorderode}. We can encode the example~\ref{ex_firstorderode} in all four libraries.
 
-The backend mechanism of how each library to get a numerical solution is following by the following ideology. In a ODE, the independent variable is usually time. One way to get get a numerical solution is to get the point value in a certain time point. Therefore, we treat the ODE as an initial value problem. For example, we can assume the start time is zero, and the time interval is a fixed time range. At the time zero, the initial value is given by users. In the next time point, previous time plus a fixed time range, libraries will calculate the numerical solution in this time point. At a certain time point, the next time point would excess the total simulation time of this ODE, then the program will stop. To get a numerical solution in a certain time range, we still need to collect the numerical value in each iteration. 
+In the Python, we can write the example as following code:
+\begin{python1}
+def f(t, y_t):
+    return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
+\end{python1}
 
-% In each implementation, we can treat the dependent values as a list. The first index of the this array indicates the first dependent variable, and the second index of this array indicates the second dependent variable, and so on. Each dependent variable will have its initial value. For example, if there are two dependent variables, there will be two initial values.
+In the Java, we can write the example as following code:
+\begin{java1}
+public void computeDeriv(double t, double[] y_t, double[] dy_t) {
+    dy_t[0] = y_t[1];
+    dy_t[1] = -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p;
+}
+\end{java1}
+
+In the C++, we can write the example as following code:
+\begin{cplusplus1}
+void ODE::operator()(vector<double> y_t, vector<double> &dy_t, double t) {
+    dy_t.at(0) = y_t.at(1);
+    dy_t.at(1) = -(1.0 + K_d) * y_t.at(1) + -(20.0 + K_p) * y_t.at(0) + r_t * K_p;
+}	
+\end{cplusplus1}
+
+In the C\#, we can write the example as following code:
+\begin{csharp1}
+Func<double, Vector, Vector> f = (t, y_t_vec) => {
+    return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
+};
+\end{csharp1}
+
+Once we capture the information of the system of ODE, we have to given initial condition for solving an ODE as an IVP. To solve the example~\ref{ex_firstorderode}, we have to give the initial value for both $x_1$ and $x_2$. Overall, an ODE is a simulation, and it simulates the change of dependent values over time. Before we start the simulation, there are other configurations need to specify, include start time of the simulation, end time of the simulation, time step between each iteration. We can also given values for the absolute tolerance and related tolerance to each libraries. Those two tolerances control the accuracy of the solution. As we mentioned before, all numerical solutions are approximation. High tolerance produce less accurate solutions, and smaller tolerances produce more accurate solutions. Last, we have to collect the numerical value for each iteration. The full detail on how each libraries solve the example~\ref{ex_firstorderode} will show up in Appendix A.
 
 \section{Algorithm Options}
-In reality, we can solve an ODE in many algorithms, such as Adams method. Those four external libraries also provide many algorithms to solve an ODE, and we classified them into five categories, a family of Adams methods, a family of BDF methods, a family of Runge-Kutta methods, a family of Euler method, and Bulirsch-Stoer method, in the Table~\ref{tab_algoexlib}. Moreover, the detail of available algorithm for each library will show up in appendixA.
+In reality, we can solve an ODE in many algorithms, and those four libraries provide many algorithms. We roughly classified available algorithms into four categories base on the type of algorithm they use. They are a family of Adams methods, a family of backward differentiation formula methods, a family of Runge-Kutta methods, and a family of Euler method. The commonality analysis on available algorithms is just an approximation, and it is not completed. To get a completed commonality analysis will require some help from domain experts in ODE area. It will far out of my study, so we only provide a rough classification in this study. Although the commonality is not completed, the team still benefit from the current analysis. Not only a future student can quickly access information of which algorithm is available in relative language, but also it remains us that we can increase the consistency of artifacts by providing one to one mapping for each algorithm in four libraries. For example, if a user explicitly choose a family of Adams methods as the targeted algorithm, all available libraries should use a family of Adams methods to solve the ODE. Unfortunately, not all libraries provide a family of Adams methods. Here in the table~\ref{tab_algoexlib}, it shows the availability of approximation of a family of algorithm in each library. The full detail of available algorithm for each library will show up in appendix A.
 
-\begin{table}
+\begin{table}[ht]
     \begin{tabular}{|l||*{5}{c|}}\hline
         \backslashbox{Algorithm}{Library}
         &\makebox[6em]{Scipy-Python}&\makebox[6em]{ACM-Java}&\makebox[6em]{ODEINT-C++}&\makebox[6em]{OSLO-C\#}\\\hline\hline
         Family of Adams & \checkmark & \checkmark & \checkmark &\\\hline
         Family of BDF & \checkmark &&& \checkmark \\\hline
         Family of Runge-Kutta & \checkmark & \checkmark & \checkmark & \checkmark \\\hline
-        Gragg-Bulirsch-Stoer && \checkmark & \checkmark &\\\hline
         Family of Euler && \checkmark & \checkmark &\\\hline
+        Gragg-Bulirsch-Stoer && \checkmark & \checkmark &\\\hline
     \end{tabular}
-	\caption{Algorithm supports for external libraries}	
+	\caption{Algorithms support in external libraries}	
 	\label{tab_algoexlib}
 \end{table}
 
-During investigation of algorithms, we found some algorithms use a fixed step size for calculating numerical solution, and others instead of using adaptive size (reference). This discovery can further influence the design choice of solving ODE numerically in the Drasil framework. Currently, Drasil treat all step sizes as a fixed value, and it would be ideal to allow the step size be either fixed or adaptive.
+Last, there are some improvements the Drasil team can make the solution of ODE better. For example, we found some algorithms use a fixed step size for calculating numerical solution, and others instead of using adaptive step size. We add the step size with current time value to calculate the next value of dependent variables. A fixed step size mean the step size is the same in each iteration. A adaptive step size means the step size is not always the same, and it could change base on other factors. This discovery can further influence the design choice of solving ODE numerically in the Drasil framework. Currently, Drasil treat all step sizes as a fixed value, and it would be ideal to allow the step size be either fixed or adaptive in future.
 
 \section{Function vs Points}
 The ODE provide mathematical expression for describing a function over time. The numerical solution can instantiate an ODE, but it only provides a partial solution for the ODE. If we are interested in the continuous change of the function, numerous values points will not help. Instead of providing points, providing a function would be a better choice to represent the ODE. In the Drasil framework, users have an option to generate a runnable program or a library. The runnable program will contain main function, so users can run this artifact in the local machine. If it is a library, other outside program can utilize the generated library. Outputting the ODE as a function inclined equal to generate a library.

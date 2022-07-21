@@ -4,8 +4,9 @@
 This appendix provides detailed explanations of various parts of DifferentialModel.
 
 \section{Constructors of DifferentialModel}
+\label{const_de}
 
-\begin{listing}
+% \begin{listing}[ht]
 \begin{haskell1}
 -- $K_d$ is qdDerivGain
 -- $y_t$ is opProcessVariable
@@ -27,10 +28,10 @@ imPDRC = makeASingleDE
 	rhs = sy qdSetPointTD `mulRe` sy qdPropGain
 \end{haskell1}
 \captionof{listing}{Using input language for the example~\ref{eq_odeexmaple} in DifferentialModel}
-\label{code_scexinputl}
-\end{listing}
+% \label{code_scexinputl}
+% \end{listing}
 
-\begin{listing}
+\begin{listing}[ht]
 \begin{haskell1}
 imPDRC :: DifferentialModel
 imPDRC = makeASystemDE
@@ -49,10 +50,21 @@ imPDRC = makeASystemDE
 
 \section{Numerical Solution implementation}
 
-\begin{listing}
+\begin{listing}[ht]
 \begin{python1}
-def f(t, y_t):
-  return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
+def func_y_t(K_d, K_p, r_t, t_sim, t_step):
+    def f(t, y_t):
+        return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
+    
+    r = scipy.integrate.ode(f)
+    r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)
+    r.set_initial_value([0.0, 0.0], 0.0)
+    y_t = [[0.0, 0.0][0]]
+    while r.successful() and r.t < t_sim:
+        r.integrate(r.t + t_step)
+        y_t.append(r.y[0])
+    
+    return y_t
 \end{python1}
 \captionof{listing}{Source code of solving PDController in Scipy}
 \label{code_pythonscipy}
@@ -60,11 +72,20 @@ def f(t, y_t):
 
 In line 1, \verb|func_y_t| is a function output the numerical solution, and it is a list of numbers. In the line 2, the local function \verb|f| contains ODE. The line 3 shows local function return a list. Since we want to solve a system of ODE, the index one is the first ODE in this system, and the index two is the second ODE this system. By calling \verb|scipy.integrate.ode|, we pack ODE information in the generic interface. The line between 5 and 10, are procedure how to set configuration and collecting results. Theoretically, we can just return the \verb|r| in line 4 to present returning a function of ODE.
 
-\begin{listing}
+\begin{listing}[ht]
 \begin{java1}
-public void computeDerivatives(double t, double[] y_t, double[] dy_t) {
-  dy_t[0] = y_t[1];
-  dy_t[1] = -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p;
+public static ArrayList<Double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+	ArrayList<Double> y_t;
+	ODEStepHandler stepHandler = new ODEStepHandler();
+	ODE ode = new ODE(K_p, K_d, r_t);
+	double[] curr_vals = {0.0, 0.0};
+
+	FirstOrderIntegrator it = new DormandPrince54Integrator(t_step, t_step, Constants.AbsTol, Constants.RelTol);
+	it.addStepHandler(stepHandler);
+	it.integrate(ode, 0.0, curr_vals, t_sim, curr_vals);
+	y_t = stepHandler.y_t;
+
+	return y_t;
 }
 \end{java1}
 \captionof{listing}{A linear system of first-order representation in ACM}
@@ -73,21 +94,62 @@ public void computeDerivatives(double t, double[] y_t, double[] dy_t) {
 
 \begin{listing}
 \begin{cplusplus1}
-void ODE::operator()(vector<double> y_t, vector<double> &dy_t, double t) {
-  dy_t.at(0) = y_t.at(1);
-  dy_t.at(1) = -(1.0 + K_d) * y_t.at(1) + -(20.0 + K_p) * y_t.at(0) + r_t * K_p;
+vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+	vector<double> y_t;
+	ODE ode = ODE(K_p, K_d, r_t);
+	vector<double> currVals{0.0, 0.0};
+	Populate pop = Populate(y_t);
+		
+	boost::numeric::odeint::runge_kutta_dopri5<vector<double>> rk = boost::numeric::odeint::runge_kutta_dopri5<vector<double>>();
+	auto stepper = boost::numeric::odeint::make_controlled(Constants::AbsTol, Constants::RelTol, rk);
+	boost::numeric::odeint::integrate_const(stepper, ode, currVals, 0.0, t_sim, t_step, pop);
+	
+	return y_t;
 }	
 \end{cplusplus1}
 \captionof{listing}{A linear system of first-order representation in ODEINT}
 \label{code_cplusplusodeint}
 \end{listing}
 
-\begin{listing}
+\begin{listing}[ht]
 \begin{csharp1}
-Func<double, Vector, Vector> f = (t, y_t_vec) => {
-  return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
-};
+public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+	List<double> y_t;
+	Func<double, Vector, Vector> f = (t, y_t_vec) => {
+		return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
+	};
+	Options opts = new Options();
+	opts.AbsoluteTolerance = Constants.AbsTol;
+	opts.RelativeTolerance = Constants.RelTol;
+	
+	Vector initv = new Vector(new double[] {0.0, 0.0});
+	IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
+	IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
+	y_t = new List<double> {};
+	foreach (SolPoint sp in points) {
+		y_t.Add(sp.X[0]);
+	}
+	
+	return y_t;
+}
 \end{csharp1}
 \captionof{listing}{Source code of solving PDController in OSLO}
 \label{code_csharposlo}
 \end{listing}
+
+
+\section{Algorithm in External Libraries}
+\begin{table}[ht]
+\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+	\textbf{Type} & \textbf{Semantics} \\
+	\toprule
+	\verb|UnitalChunk| & concepts with quantities that must have a unit definition.\\
+	\verb|ConstrConcept| & conceptual symbolic quantities with Constraints and maybe a reasonable value.\\
+	\verb|Expr| & a type encode mathematical expression. \\
+	\verb|ConceptChunk| & a concept that contains an idea, a definition, and an associated domain of knowledge\\
+	\verb|Unknown|& synonym of Integer\\
+	\bottomrule	
+\end{tabular}	
+\caption{Type use in DifferentialModel}	
+\label{tab_demodeltype}
+\end{table}

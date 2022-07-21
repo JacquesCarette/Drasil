@@ -135,7 +135,7 @@ For \verb|makeASystemDE| constructor, a user can set the coefficient matrix, unk
 
 3. The order of the unknown vector needs to be descending due to design decisions. We have no control over what users will give to us, and there are infinite ways to represent a linear equation in the matrix form~\ref{eq_matrixform}. We strictly ask users to input the unknown vector descending, so we can maintain the shape of a normal form of linear ODE~\ref{eq_linearDE}. This design decision will simplify the implementation for solving a linear ODE numerically in Chapter 3. If an error says, ``The order of giving unknowns needs to be descending.'', it means the order of unknown vector is not descending.
 
-The following pseudo-code shows how to directly set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector. The full detail of how to directly set the coefficient matrix, unknown vector, and constant vector for the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller} example will show up in the Appendix~\ref{code_scexmatrix}.
+The following pseudo-code shows how to directly set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector. The full detail of how to directly set the coefficient matrix, unknown vector, and constant vector for the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller} example will show up in the Appendix~\ref{const_de}.
 
 \begin{haskell1}
 coefficent = [[1, 1 + K_d, 20 + K_p]]

@@ -139,17 +139,38 @@ public static List<double> func_y_t(double K_d, double K_p, double r_t, double t
 
 
 \section{Algorithm in External Libraries}
+
 \begin{table}[ht]
 \begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
-	\textbf{Type} & \textbf{Semantics} \\
+	\textbf{Name} & \textbf{Description} \\
 	\toprule
-	\verb|UnitalChunk| & concepts with quantities that must have a unit definition.\\
-	\verb|ConstrConcept| & conceptual symbolic quantities with Constraints and maybe a reasonable value.\\
-	\verb|Expr| & a type encode mathematical expression. \\
-	\verb|ConceptChunk| & a concept that contains an idea, a definition, and an associated domain of knowledge\\
-	\verb|Unknown|& synonym of Integer\\
+	\verb|zvode| & Complex-valued Variable-coefficient Ordinary Differential Equation solver, with fixed-leading-coefficient implementation. It provides implicit Adams method (for non-stiff problems) and a method based on backward differentiation formulas (BDF) (for stiff problems).\\ \hline
+	\verb|lsoda| & Real-valued Variable-coefficient Ordinary Differential Equation solver, with fixed-leading-coefficient implementation. It provides automatic method switching between implicit Adams method (for non-stiff problems) and a method based on backward differentiation formulas (BDF) (for stiff problems).\\ \hline
+	\verb|dopri5| & This is an explicit runge-kutta method of order (4)5 due to Dormand \& Prince (with stepsize control and dense output).\\ \hline
+	\verb|dop853| & This is an explicit runge-kutta method of order 8(5,3) due to Dormand \& Prince (with stepsize control and dense output).\\
 	\bottomrule	
 \end{tabular}	
-\caption{Type use in DifferentialModel}	
-\label{tab_demodeltype}
+\caption{Algorithm Options in Scipy~\citep{scipyfun}}	
+\label{tab_algscipy}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{ p{0.27\textwidth} p{0.7\textwidth} }
+	\textbf{Name} & \textbf{Description} \\
+	\toprule
+	\verb|Euler| & This class implements a simple Euler integrator for Ordinary Differential Equations.\\ \hline
+	\verb|Midpoint| & This class implements a second order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	\verb|Classical RungeKutta| & This class implements the classical fourth order Runge-Kutta integrator for Ordinary Differential Equations (it is the most often used Runge-Kutta method).\\ \hline
+	\verb|Gill| & This class implements the Gill fourth order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	\verb|Luther| & This class implements the Luther sixth order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	\verb|Higham and Hall| & This class implements the 5(4) Higham and Hall integrator for Ordinary Differential Equations.\\ \hline
+	\verb|DormandPrince 5(4)| & This class implements the 5(4) Dormand-Prince integrator for Ordinary Differential Equations.\\ \hline
+	\verb|DormandPrince 8(5,3)| & This class implements the 8(5,3) Dormand-Prince integrator for Ordinary Differential Equations.\\ \hline
+	\verb|Gragg-Bulirsch-Stoer| & This class implements a Gragg-Bulirsch-Stoer integrator for Ordinary Differential Equations.\\ \hline
+	\verb|Adams-Bashforth| & This class implements explicit Adams-Bashforth integrators for Ordinary Differential Equations.\\ \hline
+	\verb|Adams-Moulton| & This class implements implicit Adams-Moulton integrators for Ordinary Differential Equations.\\
+	\bottomrule	
+\end{tabular}	
+\caption{Algorithm Options in Apache Commons Maths~\citep{apachefun}}	
+\label{tab_algscipy}
 \end{table}

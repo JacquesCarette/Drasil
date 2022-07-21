@@ -52,26 +52,24 @@ imPDRC = makeASystemDE
 \label{numsol}
 
 % \begin{listing}[ht]
-\begin{python1}
-def func_y_t(K_d, K_p, r_t, t_sim, t_step):
-    def f(t, y_t):
-        return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
+% \begin{python1}
+% def func_y_t(K_d, K_p, r_t, t_sim, t_step):
+%     def f(t, y_t):
+%         return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
     
-    r = scipy.integrate.ode(f)
-    r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)
-    r.set_initial_value([0.0, 0.0], 0.0)
-    y_t = [[0.0, 0.0][0]]
-    while r.successful() and r.t < t_sim:
-        r.integrate(r.t + t_step)
-        y_t.append(r.y[0])
+%     r = scipy.integrate.ode(f)
+%     r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)
+%     r.set_initial_value([0.0, 0.0], 0.0)
+%     y_t = [[0.0, 0.0][0]]
+%     while r.successful() and r.t < t_sim:
+%         r.integrate(r.t + t_step)
+%         y_t.append(r.y[0])
     
-    return y_t
-\end{python1}
-\captionof{listing}{Source code of solving PDController in Scipy}
+%     return y_t
+% \end{python1}
+% \captionof{listing}{Source code of solving PDController in Scipy}
 % \label{code_pythonscipy}
 % \end{listing}
-
-In line 1, \verb|func_y_t| is a function output the numerical solution, and it is a list of numbers. In the line 2, the local function \verb|f| contains ODE. The line 3 shows local function return a list. Since we want to solve a system of ODE, the index one is the first ODE in this system, and the index two is the second ODE this system. By calling \verb|scipy.integrate.ode|, we pack ODE information in the generic interface. The line between 5 and 10, are procedure how to set configuration and collecting results. Theoretically, we can just return the \verb|r| in line 4 to present returning a function of ODE.
 
 % \begin{listing}[ht]
 \begin{java1}
@@ -113,28 +111,28 @@ vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double
 % \end{listing}
 
 % \begin{listing}[ht]
-\begin{csharp1}
-public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
-	List<double> y_t;
-	Func<double, Vector, Vector> f = (t, y_t_vec) => {
-		return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
-	};
-	Options opts = new Options();
-	opts.AbsoluteTolerance = Constants.AbsTol;
-	opts.RelativeTolerance = Constants.RelTol;
+% \begin{csharp1}
+% public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+% 	List<double> y_t;
+% 	Func<double, Vector, Vector> f = (t, y_t_vec) => {
+% 		return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
+% 	};
+% 	Options opts = new Options();
+% 	opts.AbsoluteTolerance = Constants.AbsTol;
+% 	opts.RelativeTolerance = Constants.RelTol;
 	
-	Vector initv = new Vector(new double[] {0.0, 0.0});
-	IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
-	IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
-	y_t = new List<double> {};
-	foreach (SolPoint sp in points) {
-		y_t.Add(sp.X[0]);
-	}
+% 	Vector initv = new Vector(new double[] {0.0, 0.0});
+% 	IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
+% 	IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
+% 	y_t = new List<double> {};
+% 	foreach (SolPoint sp in points) {
+% 		y_t.Add(sp.X[0]);
+% 	}
 	
-	return y_t;
-}
-\end{csharp1}
-\captionof{listing}{Source code of solving PDController in OSLO}
+% 	return y_t;
+% }
+% \end{csharp1}
+% \captionof{listing}{Source code of solving PDController in OSLO}
 % \label{code_csharposlo}
 % \end{listing}
 

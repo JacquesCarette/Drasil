@@ -44,14 +44,19 @@
 % \compilingforprintingtrue % Enable
 \compilingforprintingfalse % Disable
 
-% QUESTION-DIRECTED WRITING & TO-DOS SWITCH (default = true)
-% If enabled, "writing directive" boxes will be displayed in the PDF
+% - DOUBLE SPACING (default = true)
+\newif\ifdoublespaced
+\doublespacedtrue % Double space
+% \doublespacedfalse % Single space
+
+% - QUESTION-DIRECTED WRITING & TO-DOS SWITCH (default = true)
+%   If enabled, "writing directive" boxes will be displayed in the PDF
 \newif\ifshowwritingdirectives
 \showwritingdirectivestrue % Show questions and to-do notes
 % \showwritingdirectivesfalse % Don't show questions and to-do notes
 
-% Reset footnote numbering for each page (default = false)
-% If enabled, the footnote numbering will reset to 1 on each new page
+% - RESET FOOTNOTE NUMBERING FOR EACH PAGE (default = false)
+%   If enabled, the footnote numbering will reset to 1 on each new page
 \newif\ifresetfootnotecounter
 % \resetfootnotecountertrue % Reset footnote numbering on each page
 \resetfootnotecounterfalse % Don't reset footnote numbering on each page

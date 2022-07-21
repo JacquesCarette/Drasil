@@ -44,21 +44,56 @@ Func<double, Vector, Vector> f = (t, y_t_vec) => {
 Once we capture the information of the system of ODE, we have to given initial condition for solving an ODE as an IVP. To solve the example~\ref{ex_firstorderode}, we have to give the initial value for both $x_1$ and $x_2$. Overall, an ODE is a simulation, and it simulates the change of dependent values over time. Before we start the simulation, there are other configurations need to specify, include start time of the simulation, end time of the simulation, time step between each iteration. We can also given values for the absolute tolerance and related tolerance to each libraries. Those two tolerances control the accuracy of the solution. As we mentioned before, all numerical solutions are approximation. High tolerance produce less accurate solutions, and smaller tolerances produce more accurate solutions. Last, we have to collect the numerical value for each iteration. The full detail on how each libraries solve the example~\ref{ex_firstorderode} will show up in Appendix~\ref{numsol}.
 
 \section{Algorithm Options}
-In reality, we can solve an ODE in many algorithms, and those four libraries provide many algorithms. We roughly classified available algorithms into four categories base on the type of algorithm they use. They are a family of Adams methods, a family of backward differentiation formula methods, a family of Runge-Kutta methods, and a family of Euler method. The commonality analysis on available algorithms is just an approximation, and it is not completed. To get a completed commonality analysis will require some help from domain experts in ODE area. It will far out of my study, so we only provide a rough classification in this study. Although the commonality is not completed, the team still benefit from the current analysis. Not only a future student can quickly access information of which algorithm is available in relative language, but also it remains us that we can increase the consistency of artifacts by providing one to one mapping for each algorithm in four libraries. For example, if a user explicitly choose a family of Adams methods as the targeted algorithm, all available libraries should use a family of Adams methods to solve the ODE. Unfortunately, not all libraries provide a family of Adams methods. Here in the table~\ref{tab_algoexlib}, it shows the availability of approximation of a family of algorithm in each library. The full detail of available algorithm for each library will show up in Appendix~\ref{alg_externallib}.
+In reality, we can solve an ODE in many algorithms, and those four libraries provide many algorithms. We roughly classified available algorithms into four categories base on the type of algorithm they use. They are a family of Adams methods, a family of backward differentiation formula methods (BDF), a family of Runge-Kutta (RK) methods, and a family of Euler method. The commonality analysis on available algorithms is just an approximation, and it is not completed. To get a completed commonality analysis will require some help from domain experts in ODE area. It will far out of my study, so we only provide a rough classification in this study. Although the commonality is not completed, the team still benefit from the current analysis. Not only a future student can quickly access information of which algorithm is available in relative language, but also it remains us that we can increase the consistency of artifacts by providing one to one mapping for each algorithm in four libraries. For example, if a user explicitly choose a family of Adams methods as the targeted algorithm, all available libraries should use a family of Adams methods to solve the ODE. Unfortunately, not all libraries provide a family of Adams methods. Here in the table~\ref{tab_algoexlib}, it shows the availability of approximation of a family of algorithm in each library. The full detail of available algorithm for each library will show up in Appendix~\ref{alg_externallib}.
 
-\begin{table}[ht]
-    \begin{tabular}{|l||*{5}{c|}}\hline
-        \backslashbox{Algorithm}{Library}
-        &\makebox[6em]{Scipy-Python}&\makebox[6em]{ACM-Java}&\makebox[6em]{ODEINT-C++}&\makebox[6em]{OSLO-C\#}\\\hline\hline
-        Family of Adams & \checkmark & \checkmark & \checkmark &\\\hline
-        Family of BDF & \checkmark &&& \checkmark \\\hline
-        Family of Runge-Kutta & \checkmark & \checkmark & \checkmark & \checkmark \\\hline
-        Family of Euler && \checkmark & \checkmark &\\\hline
-        Gragg-Bulirsch-Stoer && \checkmark & \checkmark &\\\hline
-    \end{tabular}
-	\caption{Algorithms support in external libraries}	
-	\label{tab_algoexlib}
-\end{table}
+\begin{sidewaystable}
+\begin{adjustbox}{width=\columnwidth,center}
+\begin{tabular}{p{0.18\textwidth} | p{0.20\textwidth} p{0.20\textwidth} p{0.20\textwidth} p{0.20\textwidth}}\hline
+    \backslashbox{Algorithm}{Library}
+    &\textbf{Scipy-Python}&\textbf{ACM-Java}&\textbf{ODEINT-C++}&\textbf{OSLO-C\#}\\
+    \toprule
+    Family of Adams & 
+        \begin{itemize}[wide]
+        \item Implicit Adams
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Adams-Bashforth
+        \item Adams-Moulton
+        \end{itemize} & \checkmark &\\\hline
+    Family of BDF & 
+        \begin{itemize}[wide]
+        \item BDF
+        \end{itemize} &&& \checkmark \\\hline
+    Family of RK & 
+        \begin{itemize}[wide]
+        \item (4)5 Dormand Prince
+        \item 8(5,3) Dormand Prince
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Second order
+        \item Fourth order
+        \item Gill fourth order
+        \item 3/8 fourth order
+        \item Luther sixth order
+        \item 5(4) Higham and Hall
+        \item 5(4) Dormand Prince
+        \item 8(5,3) Dormand Prince
+        \end{itemize} & \checkmark & \checkmark \\\hline
+    Family of Euler && 
+        \begin{itemize}[wide]
+        \item Euler method
+        \end{itemize} & \checkmark &\\\hline
+    Others && 
+        \begin{itemize}[wide]
+        \item
+        Gragg Bulirsch Stoer 
+        \end{itemize} & \checkmark &\\
+    \bottomrule	
+\end{tabular}
+\end{adjustbox}
+\caption{Algorithms support in external libraries}	
+\label{tab_algoexlib}
+\end{sidewaystable}
 
 Last, there are some improvements the Drasil team can make the solution of ODE better. For example, we found some algorithms use a fixed step size for calculating numerical solution, and others instead of using adaptive step size. We add the step size with current time value to calculate the next value of dependent variables. A fixed step size mean the step size is the same in each iteration. A adaptive step size means the step size is not always the same, and it could change base on other factors. This discovery can further influence the design choice of solving ODE numerically in the Drasil framework. Currently, Drasil treat all step sizes as a fixed value, and it would be ideal to allow the step size be either fixed or adaptive in future.
 
@@ -66,6 +101,54 @@ Last, there are some improvements the Drasil team can make the solution of ODE b
 The ODE provide mathematical expression for describing a function over time. The numerical solution can instantiate an ODE, but it only provides a partial solution for the ODE. If we are interested in the continuous change of the function, numerous values points will not help. Instead of providing points, providing a function would be a better choice to represent the ODE. In the Drasil framework, users have an option to generate a runnable program or a library. The runnable program will contain main function, so users can run this artifact in the local machine. If it is a library, other outside program can utilize the generated library. Outputting the ODE as a function inclined equal to generate a library.
 
 Not all libraries have options to represent the ODE as a function. Among four libraries, Scipy Library and OSLO Library have similar option to support out put a function. In Scipy library, we can return a generic interface called \verb|scipy.integrate.ode|~\citep{scipyfun}. It is a generic interface can store information preserve the ODE, and later if we want to solve the ODE, we can add other ODE related configuration information afterward. In OSLO library, the function \verb|Ode.RK547M| return an enumerable sequence of solution points, it is a endless sequence of solution points. Later on, we can call \verb|SolveFromToStep| to return a list of points base on start time, end time, and time interval. What \verb|Ode.RK547M| return can be treat as a function of ODE.
+
+\begin{listing}[ht]
+\begin{python1}
+def func_y_t(K_d, K_p, r_t, t_sim, t_step):
+    def f(t, y_t):
+        return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
+    
+    r = scipy.integrate.ode(f)
+    r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)
+    r.set_initial_value([0.0, 0.0], 0.0)
+    y_t = [[0.0, 0.0][0]]
+    while r.successful() and r.t < t_sim:
+        r.integrate(r.t + t_step)
+        y_t.append(r.y[0])
+    
+    return y_t
+\end{python1}
+\label{code_pythonscipy}
+\captionof{listing}{Source code of solving PDController in Scipy}
+\end{listing}
+
+In line 1, \verb|func_y_t| is a function output the numerical solution, and it is a list of numbers. In the line 2, the local function \verb|f| contains ODE. The line 3 shows local function return a list. Since we want to solve a system of ODE, the index one is the first ODE in this system, and the index two is the second ODE this system. By calling \verb|scipy.integrate.ode|, we pack ODE information in the generic interface. The line between 5 and 10, are procedure how to set configuration and collecting results. Theoretically, we can just return the \verb|r| in line 4 to present returning a function of ODE.
+
+\begin{listing}[ht]
+\begin{csharp1}
+public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+    List<double> y_t;
+    Func<double, Vector, Vector> f = (t, y_t_vec) => {
+        return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
+    };
+    Options opts = new Options();
+    opts.AbsoluteTolerance = Constants.AbsTol;
+    opts.RelativeTolerance = Constants.RelTol;
+    
+    Vector initv = new Vector(new double[] {0.0, 0.0});
+    IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
+    IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
+    y_t = new List<double> {};
+    foreach (SolPoint sp in points) {
+        y_t.Add(sp.X[0]);
+    }
+    
+    return y_t;
+}
+\end{csharp1}
+\captionof{listing}{Source code of solving PDController in OSLO}
+\label{code_csharposlo}
+\end{listing}
 
 \section{Management Libraries}
 Once the Drasil framework generate code, the program relay on external libraries to complete calculating ODEs. In the current setting, the Drasil framework keep copies of external libraries in the repository. It is not practical because the amount of space external libraries occupied. Moreover, external libraries do not share across study cases, and each study case will have its copy of external libraries. This research surfaces the current way handles dependencies in Drasil framework is problematic, and the team would like to find a better way to handle dependency. We use a temporary solution, symbolic links, to share external libraries without duplications. By creating a symbolic link file, external libraries become sharable. The team will conduct further study to tackle this problem.

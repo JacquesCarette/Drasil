@@ -48,7 +48,7 @@ In reality, we can solve an ODE in many algorithms, and those four libraries pro
 
 \begin{sidewaystable}
 \begin{adjustbox}{width=\columnwidth,center}
-\begin{tabular}{p{0.18\textwidth} | p{0.17\textwidth} p{0.22\textwidth} p{0.29\textwidth} p{0.16\textwidth}}\hline
+\begin{tabular}{p{0.18\textwidth} | p{0.22\textwidth} p{0.22\textwidth} p{0.29\textwidth} p{0.25\textwidth}}\hline
     \backslashbox{Algorithm}{Library}
     &\textbf{Scipy-Python}&\textbf{ACM-Java}&\textbf{ODEINT-C++}&\textbf{OSLO-C\#}\\
     \toprule
@@ -76,6 +76,7 @@ In reality, we can solve an ODE in many algorithms, and those four libraries pro
         \item Dormand Prince 8(5,3) 
         \end{itemize} & 
         \begin{itemize}[wide]
+        \item Explicit Euler
         \item 2ed order
         \item 4th order
         \item Gill fourth order
@@ -86,6 +87,9 @@ In reality, we can solve an ODE in many algorithms, and those four libraries pro
         \item Dormand Prince 8(5,3) 
         \end{itemize} & 
         \begin{itemize}[wide]
+        \item Explicit Euler
+        \item Implicit Euler
+        \item Symplectic Euler
         \item 4th order
         \item Dormand Prince 5
         \item Fehlberg 78
@@ -97,15 +101,6 @@ In reality, we can solve an ODE in many algorithms, and those four libraries pro
         \begin{itemize}[wide]
         \item Dormand Prince RK547M
         \end{itemize} \\ \hline
-    Family of Euler && 
-        \begin{itemize}[wide]
-        \item Euler method
-        \end{itemize} & 
-        \begin{itemize}[wide]
-        \item Explicit Euler
-        \item Implicit Euler
-        \item Symplectic Euler
-        \end{itemize} &\\ \hline
     Others && 
         \begin{itemize}[wide]
         \item Gragg Bulirsch Stoer 

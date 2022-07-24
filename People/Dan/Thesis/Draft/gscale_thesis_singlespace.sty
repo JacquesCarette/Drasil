@@ -42,12 +42,14 @@
 \def\field#1{\gdef\@field{#1}}
 \def\dept#1{\gdef\@dept{#1}}
 \def\degree#1{\gdef\@degree{#1}}
+\def\degreeabbrv#1{\gdef\@degreeabbrv{#1}}
 \def\degreename#1{\gdef\@degreename{#1}}
 \def\halftitle#1{\gdef\@halftitle{#1}}
 \def\prevdegreeone#1{\gdef\@prevdegreeone{#1}}
 \def\prevdegreetwo#1{\gdef\@prevdegreetwo{#1}}
 \def\principaladviser#1{\gdef\@principaladviser{#1}}
-\def\advis@r{Adviser}
+\def\doctype#1{\gdef\@doctype{#1}}
+\def\advis@r{Advisor}
 \def\principaladvisor#1{\gdef\@principaladviser{#1}\gdef\advis@r{Advisor}}
 \def\firstreader#1{\gdef\@firstreader{#1}}
 \def\secondreader#1{\gdef\@secondreader{#1}}
@@ -57,7 +59,7 @@
 \def\@halftitle{\@title}
 \def\@prevdegreeone{B.Sc.}
 \def\@prevdegreetwo{B.Sc.}	
-\def\@degree{Master of Applied Science}
+\def\@degree{\@degree}
 \def\@degreename{\@dept}
 \def\@principaladviser{}\def\@firstreader{}\def\@secondreader{}
 \def\@submitdate{\ifcase\the\month\or
@@ -96,13 +98,13 @@
          \end{center}\vskip.5in
     \vfill
     \begin{center}
-      \sc   a thesis\\
-      submitted to the department of \@dept\\
-        and  the school of graduate studies\\
-        of mcmaster university\\
+      \sc   a \@doctype\\
+      submitted to the \@dept\\
+        and  the School of Graduate Studies\\
+        of McMaster University\\
         in partial fulfilment of the requirements\\
-       for the degree of\\
-        Master of Applied Science
+        for the degree of\\
+        \@degree
     \end{center}
     \vfill
 
@@ -137,8 +139,8 @@ of \@degree.
 
  \def\signaturepage{%
         \noindent
-        Master of Applied Science (\@copyrightyear) \hfill  McMaster University \\
-        (\@dept)                                \hfill  Hamilton, Ontario, Canada
+        \@degree~(\@copyrightyear) \hfill  McMaster University \\
+        (\@dept) \hfill  Hamilton, Ontario, Canada
 
 
         \vspace{1in}
@@ -153,8 +155,8 @@ of \@degree.
 
 
 \def\beforepreface{
-%\doublespacing
-	\hypersetup{pageanchor=false}
+    %\doublespacing
+    \hypersetup{pageanchor=false}
     \pagenumbering{roman}
     \pagestyle{plain}
     \halftitlep
@@ -166,30 +168,6 @@ of \@degree.
 \def\prefacesection#1{
     \chapter*{#1}
     \addcontentsline{toc}{chapter}{#1}}
-
-\def\referencepageswithnotations#1{\newpage
-	%\doublespacing
-	\tableofcontents
-	
-	\iffigurespage
-	{\newpage
-		\addvspace{10pt}
-		\let\saveaddvspace=\addvspace
-		\def\addvspace##1{}
-		\listoffigures
-		\let\addvspace=\saveaddvspace}
-	\fi
-	
-	\iftablespage
-	{\newpage
-		\addvspace{10pt}
-		\let\saveaddvspace=\addvspace
-		\def\addvspace##1{}
-		\listoftables
-		\let\addvspace=\saveaddvspace}
-	\fi
-	\input{#1}
-	\label{NumPrefacePages}}
 
 \def\referencepages{\newpage
 %\doublespacing
@@ -212,18 +190,25 @@ of \@degree.
         \listoftables
         \let\addvspace=\saveaddvspace}
     \fi
-    \label{NumPrefacePages}}
+}
+
+\def\academicstatement#1{
+    \newpage
+    \input{#1}
+    \label{NumPrefacePages}
+}
     
 \def\afterpreface{
-	\hypersetup{pageanchor=true}
-	\newpage    
+    \hypersetup{pageanchor=true}
+    \newpage    
     \pagenumbering{arabic}
     %\doublespacing
     \pagestyle{fancy}
 
-\lhead[{M.A.Sc. Thesis -- \@shortauthor}]   {{M.A.Sc. Thesis -- \@shortauthor}}
-\chead[{}]  {{}} \rhead[{McMaster University -- \@field}]
-{{McMaster University -- \@field}} \lfoot[{}] {{}}
+\lhead[{\@degreeabbrv~\@doctype---\@shortauthor}]   
+{{\@degreeabbrv~\@doctype---\@shortauthor}}
+\chead[{}]  {{}} \rhead[{McMaster University---\@field}]
+{{McMaster University---\@field}} \lfoot[{}] {{}}
 \cfoot[{\thepage}]  {{\thepage}} \rfoot[ {}]{{}} }
 
 % Start with pagestyle{headings} in case front matter isn't processed

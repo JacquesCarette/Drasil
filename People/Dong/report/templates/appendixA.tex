@@ -155,20 +155,32 @@ vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double
 \end{table}
 
 \begin{table}[ht]
-\begin{tabular}{ p{0.27\textwidth} p{0.7\textwidth} }
+\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
 	\textbf{Name} & \textbf{Description} \\
 	\toprule
-	\verb|Euler| & This class implements a simple Euler integrator for Ordinary Differential Equations.\\ \hline
-	\verb|Midpoint| & This class implements a second order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
-	\verb|Classical RungeKutta| & This class implements the classical fourth order Runge-Kutta integrator for Ordinary Differential Equations (it is the most often used Runge-Kutta method).\\ \hline
-	\verb|Gill| & This class implements the Gill fourth order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
-	\verb|Luther| & This class implements the Luther sixth order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
-	\verb|Higham and Hall| & This class implements the 5(4) Higham and Hall integrator for Ordinary Differential Equations.\\ \hline
-	\verb|DormandPrince 5(4)| & This class implements the 5(4) Dormand-Prince integrator for Ordinary Differential Equations.\\ \hline
-	\verb|DormandPrince 8(5,3)| & This class implements the 8(5,3) Dormand-Prince integrator for Ordinary Differential Equations.\\ \hline
-	\verb|Gragg-Bulirsch-Stoer| & This class implements a Gragg-Bulirsch-Stoer integrator for Ordinary Differential Equations.\\ \hline
-	\verb|Adams-Bashforth| & This class implements explicit Adams-Bashforth integrators for Ordinary Differential Equations.\\ \hline
-	\verb|Adams-Moulton| & This class implements implicit Adams-Moulton integrators for Ordinary Differential Equations.\\
+	\verb|RK547M| & This method is most appropriate for solving non-stiff ODE systems. It is based on classical Runge-Kutta formulae with modifications for automatic error and step size control.\\ \hline
+	\verb|GearBDF| & It is an implementation of the Gear back differentiation method, a multi-step implicit method for stiff ODE systems solving.\\
+	\bottomrule	
+\end{tabular}	
+\caption{Algorithm Options in OSLO~\citep{oslofun}}	
+\label{tab_algodeint}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{ p{0.13\textwidth} | p{0.27\textwidth} p{0.57\textwidth} }
+	\textbf{Step Size} & \textbf{Name} & \textbf{Description} \\
+	\toprule
+	Fixed Step & \verb|Euler| & This class implements a simple Euler integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Midpoint| & This class implements a second order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Classical RungeKutta| & This class implements the classical fourth order Runge-Kutta integrator for Ordinary Differential Equations (it is the most often used Runge-Kutta method).\\ \hline
+	& \verb|Gill| & This class implements the Gill fourth order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Luther| & This class implements the Luther sixth order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	Adaptive Stepsize & \verb|Higham and Hall| & This class implements the 5(4) Higham and Hall integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|DormandPrince 5(4)| & This class implements the 5(4) Dormand-Prince integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|DormandPrince 8(5,3)| & This class implements the 8(5,3) Dormand-Prince integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Gragg-Bulirsch-Stoer| & This class implements a Gragg-Bulirsch-Stoer integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Adams-Bashforth| & This class implements explicit Adams-Bashforth integrators for Ordinary Differential Equations.\\ \hline
+	& \verb|Adams-Moulton| & This class implements implicit Adams-Moulton integrators for Ordinary Differential Equations.\\
 	\bottomrule	
 \end{tabular}	
 \caption{Algorithm Options in Apache Commons Maths~\citep{apachefun}}	
@@ -196,17 +208,5 @@ vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double
 	\bottomrule	
 \end{tabular}	
 \caption{Algorithm Options in ODEINT~\citep{odeintfun}}	
-\label{tab_algodeint}
-\end{table}
-
-\begin{table}[ht]
-\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
-	\textbf{Name} & \textbf{Description} \\
-	\toprule
-	\verb|RK547M| & This method is most appropriate for solving non-stiff ODE systems. It is based on classical Runge-Kutta formulae with modifications for automatic error and step size control.\\ \hline
-	\verb|GearBDF| & It is an implementation of the Gear back differentiation method, a multi-step implicit method for stiff ODE systems solving.\\
-	\bottomrule	
-\end{tabular}	
-\caption{Algorithm Options in OSLO~\citep{oslofun}}	
 \label{tab_algodeint}
 \end{table}

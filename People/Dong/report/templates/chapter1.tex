@@ -1,6 +1,8 @@
 \chapter{ODE Data Representation}
 In the Drasil framework, there is a single data structure containing all the information for all products, and we call it System Information. The giant System Information collects a multitude of pieces of information; whenever we need it, we extract the information from the System Information. In previous research, we store all ordinary differential equations (ODEs) information in the System Information. However, that information existed in the form of plain text. In other words, we explicitly wrote ODEs in the text without any advanced data structure. Although this method maintains the relationship of ODEs, it restricts any transformation of ODEs. For example, if the text-based ODE is high-order linear ODE, we can not transform it to its equivalent system of first-order ODE. Therefore, the Drasil team is exploring new approach to store ODEs in a new data structure, and the new structure would allow ODEs be isomorphic, which means we can map the ODE from one form to other forms. Once we capture ODEs information in this data structure, we can generate its equivalent forms. This approach is contrasting to previous method, and it only requires users write ODEs once. This chapter we will introduce where the new data structure comes from, how the new data structure captures ODE information, how to use the new data structure, and how the new data structure interacts with the Drasil printer.
 
+\section{Explicit Equation}
+
 \section{Matrix Form}
 In general, an equation contains a left-hand expression, a right-hand expression, and an equal sign. The left-hand and right-hand expressions connect by an equal sign. A linear ODE also has its left-hand and right-hand sides. Each side has its unique shape. We can write a linear ODE in the shape of
 
@@ -78,7 +80,7 @@ _dmconc = ... -- Drasil definition for chuck concept
 \label{code_interaldata}
 \end{listing}
 
-Currently, the \verb|DifferentialModel| only captures the knowledge of ODEs with one dependent variable, and it is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of all ODEs and eventually lead to solving a system of linear ODE with multiple dependent variables.
+Currently, the \verb|DifferentialModel| only captures the knowledge of ODEs with one dependent variable, and it is a special case of the family of linear ODEs. Studying this special case will help the Drasil team better understand how to capture the knowledge of all ODEs and eventually lead to solving a system of linear ODE with multiple dependent variables. On top of that, there is one assumption. The \verb|_coefficients| can only be functions of independent variable, often time. In other word, the \verb|_coefficients| does not depend on \verb|_depVar|.
 
 \section{Input Language}
 \label{sec_input}

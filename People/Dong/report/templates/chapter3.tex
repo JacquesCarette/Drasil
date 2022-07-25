@@ -4,20 +4,20 @@ The external library comes from an outside source and does not originate from th
 This chapter will discuss topics related to the commonalities and variabilities of four libraries, including numerical solutions, algorithms options and outputting a function. Last, we will discuss how we handle dependencies.
 
 \section{Numerical Solutions}
-Numerical solutions use algorithms to make approximation for mathematical equations. All numerical solution are approximation, and some numerical solutions utilize better algorithm can produce a better result than others. All selected libraries provides numerical solution for a linear system of first-order ODE as an initial value problem (IVP). The initial value requires an initial condition which specify the value of the function at the start point, and it is contrasting to boundary value problem (BVP). In this research, we are going to solve each scientific problem as an IVP. Let see how to solve a linear system of first-order ODE with an example. Here is an example of a linear system of first-order ODE.
+Numerical solutions use algorithms to make approximations for mathematical equations. All numerical solutions are approximations, and some numerical solutions that utilize better algorithms can produce a better result than others. All selected libraries provide numerical solution for a linear system of first-order ODE as an initial value problem (IVP). The initial value requires an initial condition that specifies the function's value at the start point, contrasting with boundary value problem (BVP). In this research, we will solve each scientific problem as an IVP. Let's see how to solve a linear system of first-order ODE with an example. Here is an example of a linear system of first-order ODE.
 \begin{flalign} \label{ex_firstorderode}
 & x_{1}(t)' = x_{2}(t) \\ \nonumber
 & x_{2}(t)' = -(1 + K_{d})x_{2}(t) - (20 + K_{p})x_{1}(t) + r_{t} K_{p} 
 \end{flalign}
 
-In example~\ref{ex_firstorderode} , there are two dependent variables $x_1$ and $x_2$. The $x_1(t)$ is the function of the independent variable, time, which produces dependent variables $x_1$ over time. The $x_2(t)$ is also the function of the independent variable, time, which produces dependent variables $x_2$ over time. The $x_1$ is the process variable, and the $x_2$ is the first derivative with respect to time of the process variable $x_1$. The $x_1'$(t) is the first directive of the function $x_1(t)$, and the $x_2'$(t) is the first derivative of the function $x_2$(t). The $K_d$ , $K_p$, and $r_t$ are constant variables, and they remain the same meaning in the example~\ref{eq_odeexmaple} and the example~\ref{ex_firstorderode}. We can encode the example~\ref{ex_firstorderode} in all four libraries.
+In example~\ref{ex_firstorderode}, there are two dependent variables, $x_1$ and $x_2$. The $x_1(t)$ is the function of the independent variable, time, which produces dependent variables $x_1$ over time. The $x_2(t)$ is the function of the independent variable, time, which produces dependent variables $x_2$ over time. The $x_1$ is the process variable, and the $x_2$ is the first derivative with respect to the time of the process variable $x_1$. The $x_1'$(t) is the first directive of the function $x_1(t)$, and the $x_2'$(t) is the first derivative of the function $x_2$(t). The $K_d$ , $K_p$, and $r_t$ are constant variables, and they remain the same meaning in example~\ref{eq_odeexmaple} and example~\ref{ex_firstorderode}. We can encode the example~\ref{ex_firstorderode} in all four libraries.
 
-In the Python, we can write the example as following code:
+In Python, we can write the example as the following code:
 \begin{python1}
 def f(t, y_t):
     return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
 \end{python1}
-In this example, the y\_t is a list of dependent variable. The index 0 of y\_t is the dependent variable $x_1$, and the index 1 of y\_t is the dependent variable $x_2$. The y\_t[1] represent the first equation $x_{1}(t)' = x_{2}(t)$ in the example~\ref{ex_firstorderode}. The -(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p represents the second equation, $-(1 + K_{d})x_{2}(t) - (20 + K_{p})x_{1}(t) + r_{t} K_{p}$, in the example~\ref{ex_firstorderode}. In the Java, we can write the example as following code:
+In this example, the y\_t is a list of dependent variables. The index 0 of y\_t is the dependent variable $x_1$, and the index 1 of y\_t is the dependent variable $x_2$. The y\_t[1] represent the first equation $x_{1}(t)' = x_{2}(t)$ in the example~\ref{ex_firstorderode}. The -(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p represents the second equation, $x_{2}(t)' = -(1 + K_{d})x_{2}(t) - (20 + K_{p})x_{1}(t) + r_{t} K_{p}$, in the example~\ref{ex_firstorderode}. In Java, we can write the example as the following code:
 \begin{java1}
 public void computeDeriv(double t, double[] y_t, double[] dy_t) {
     dy_t[0] = y_t[1];
@@ -25,7 +25,7 @@ public void computeDeriv(double t, double[] y_t, double[] dy_t) {
 }
 \end{java1}
 
-In the C++, we can write the example as following code:
+In C++, we can write the example as the following code:
 \begin{cplusplus1}
 void ODE::operator()(vector<double> y_t, vector<double> &dy_t, double t) {
     dy_t.at(0) = y_t.at(1);
@@ -33,14 +33,14 @@ void ODE::operator()(vector<double> y_t, vector<double> &dy_t, double t) {
 }	
 \end{cplusplus1}
 
-In the C\#, we can write the example as following code:
+In C\#, we can write the example as the following code:
 \begin{csharp1}
 Func<double, Vector, Vector> f = (t, y_t_vec) => {
     return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
 };
 \end{csharp1}
 
-Once we capture the information of the system of ODE, we have to given initial condition for solving an ODE as an IVP. To solve the example~\ref{ex_firstorderode}, we have to give the initial value for both $x_1$ and $x_2$. Overall, an ODE is a simulation, and it simulates a function of time. Before we start the simulation, there are other configurations need to specify, include start time of the simulation, end time of the simulation, time step between each iteration. We can also given values for the absolute tolerance and relative tolerance to each libraries. Those two tolerances control the accuracy of the solution. As we mentioned before, all numerical solutions are approximation. High tolerance produce less accurate solutions, and smaller tolerances produce more accurate solutions. Last, we have to collect the numerical value for each iteration. The full detail on how each libraries solve the example~\ref{ex_firstorderode} will show up in Appendix~\ref{numsol}.
+Once we capture the information of the system of ODE, we have to give an initial condition for solving an ODE as an IVP. To solve the example~\ref{ex_firstorderode}, we must provide the initial value for both $x_1$ and $x_2$. Overall, an ODE is a simulation, and it simulates a function of time. Before we start the simulation, other configurations need to specify, including the start time, end time of the simulation, time step between each iteration. We can also provide values for each library's absolute and relative tolerance. Those two tolerances control the accuracy of the solution. As we mentioned before, all numerical solutions are approximations. High tolerance produces less accurate solutions, and smaller tolerances produce more accurate solutions. Last, we have to collect the numerical value for each iteration. The full detail on how each library solves the example~\ref{ex_firstorderode} will show up in Appendix~\ref{numsol}.
 
 \section{Algorithm Options}
 In reality, we can solve an ODE in many algorithms, and those four libraries provide many algorithms. We roughly classified available algorithms into four categories base on the type of algorithm they use. They are a family of Adams methods, a family of backward differentiation formula methods (BDF), a family of Runge-Kutta (RK) methods, and other methods. The commonality analysis on available algorithms is just an approximation, and it is not completed. To get a completed commonality analysis will require some help from domain experts in ODE area. It will far out of my study, so we only provide a rough classification in this study. Although the commonality is not completed, the team still benefit from the current analysis. Not only a future student can quickly access information of which algorithm is available in relative language, but also it remains us that we can increase the consistency of artifacts by providing one to one mapping for each algorithm in four libraries. For example, if a user explicitly choose a family of Adams methods as the targeted algorithm, all available libraries should use a family of Adams methods to solve the ODE. Unfortunately, not all libraries provide a family of Adams methods. Here in the table~\ref{tab_algoexlib}, it shows the availability of approximation of a family of algorithm in each library. The full detail of available algorithm for each library will show up in Appendix~\ref{alg_externallib}.

@@ -1,6 +1,13 @@
 \chapter{Connect Model to Libraries}
 External libraries come from an outside source and do not originate from the source project, and many of them can solve scientific problems. If we utilize them in the Drasil framework, those libraries can help to solve many scientific problems. One way to use external libraries is to create proper interfaces connecting the program and external libraries.
 
+- chapter 2 we put ODE in a data structure, and it become isomorphic.
+- chapter 3 we know external libraries can solve a system of first order equations
+- we know a higher-order ODE can be converted to a system of first order ode
+- theoretically, we can covert the higher-order to a system of first order ode, and use the external libraries to solve the system ode.
+
+\section{Higher Order to First Order}
+
 We can write a linear system of first-order ODE in shape of 
 \begin{equation} \label{eq_foode}
     \boldsymbol{X}' = \boldsymbol{AX} + \boldsymbol{c}
@@ -8,6 +15,69 @@ We can write a linear system of first-order ODE in shape of
 
 The \textbf{A} is a coefficient matrix, and c is a constant vector. The \textbf{X} is the unknown vector contains functions of the independent variable, often time. The \textbf{X}' is a vector that consist of first derivative of functions in \textbf{X}.
 
+Most way for solving ODEs are intended for first-order equations, and we can covert most higher-order ODEs to a system of first-order equations \citep{converthigherode}. How to convert a higher-order in shape of \textbf{Ax} = \textbf{b} (~\ref{eq_matrixform}) to a system of first order equations in shape of \textbf{X}' = \textbf{AX} + \textbf{c} (~\ref{eq_foode})?
+
+1. Isolating the hightest derivative
+\begin{equation} \label{eq_isohighode}
+  x^n = f (t, x, x', x'', \dots, x^{n-1})
+\end{equation}
+
+Given a higher-order ODE, we can write it in form of the equation~\ref{eq_isohighode}. We put the highest derivative 
+
+2. Introduce new variables 
+\begin{flalign} 
+  & y_{1} = x \\ \nonumber
+  & y_{2} = x' \\ \nonumber
+  & \dots \\ \nonumber
+  & y_{n} = x^{n-1} 
+\end{flalign}
+
+3. differentiate the new variables
+\begin{flalign} 
+  & y_{1}' = x' = y_{2} \\ \nonumber
+  & y_{2}' = x'' = y_{3} \\ \nonumber
+  & \dots \\ \nonumber
+  & y_{n}' = x_{n} = f (t, y_{1}, y_{2}, \dots, y_{n})
+\end{flalign}
+
+4. rewrite the linear function 
+the $f (t, y_{1}, y_{2}, \dots, y_{n})$ is a linear function, we can rewrite is as (wiki)
+\begin{equation}
+h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
+\end{equation}
+
+5. summary them in a matrix form \textbf{X}' = \textbf{AX} + \textbf{c}
+\begin{equation}
+	\begin{bmatrix}
+		y_{1}' \\
+        y_{2}' \\
+        \dots  \\
+        y_{n}'
+	\end{bmatrix}
+    = 
+    \begin{bmatrix}
+		0, & 1, & 0, & \dots, & 0 \\
+        0, & 0, & 1, & \dots, & 0 \\
+        \dots \\
+        g_{1}(t), & g_{2}(t), & g_{3}(t), & \dots, & g_{n}(t)
+	\end{bmatrix}
+    \cdot
+    \begin{bmatrix}
+		y_{1} \\
+        y_{2} \\
+        \dots  \\
+        y_{n}
+	\end{bmatrix}
+    = 
+    \begin{bmatrix}
+		0 \\
+        0 \\
+        \dots  \\
+        h(t)
+	\end{bmatrix}
+\end{equation}
+
 \section{Connect DifferentialModel to Libraries}
 
 \section{Connect Explicit Equations to Libraries}
+double pendulum example

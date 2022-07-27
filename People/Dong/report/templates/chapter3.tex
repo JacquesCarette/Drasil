@@ -7,7 +7,7 @@ This chapter will discuss topics related to the commonalities and variabilities 
 We use algorithms to make approximations for mathematical equations and create numerical solutions. All numerical solutions are approximations, and some numerical solutions that utilize better algorithms can produce a better result than others. All selected libraries provide numerical solutions for a system of first-order ODE as an initial value problem (IVP). The IVP requires an initial condition that specifies the function's value at the start point, contrasting with boundary value problem (BVP). In this research, we will solve each scientific problem as an IVP. Let's see how to solve a system of first-order ODE with an example. Here is an example of a system of first-order ODE.
 \begin{flalign} \label{ex_firstorderode}
 & x_{1}(t)' = x_{2}(t) \\ \nonumber
-& x_{2}(t)' = -(1 + K_{d})x_{2}(t) - (20 + K_{p})x_{1}(t) + r_{t} K_{p} 
+& x_{2}(t)' = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p} 
 \end{flalign}
 
 In example~\ref{ex_firstorderode}, there are two dependent variables, $x_1$ and $x_2$. The $x_1(t)$ is the function of the independent variable, often time, which produces dependent variables $x_1$ over time. The $x_2(t)$ is the function of the independent variable, often time, which produces dependent variables $x_2$ over time. The $x_1$ is the process variable, and the $x_2$ is the first derivative with respect to the time of the process variable $x_1$. The $x_1'$(t) is the first directive of the function $x_1(t)$, and the $x_2'$(t) is the first derivative of the function $x_2$(t). The $K_d$ , $K_p$, and $r_t$ are constant variables, and they remain the same meaning in example~\ref{eq_odeexmaple} and example~\ref{ex_firstorderode}. We can encode the example~\ref{ex_firstorderode} in all four libraries.
@@ -17,7 +17,7 @@ In Python, we can write the example as the following code:
 def f(t, y_t):
     return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
 \end{python1}
-In this example, the y\_t is a list of dependent variables. The index 0 of y\_t is the dependent variable $x_1$, and the index 1 of y\_t is the dependent variable $x_2$. The y\_t[1] represent the first equation $x_{1}(t)' = x_{2}(t)$ in the example~\ref{ex_firstorderode}. The -(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p represents the second equation, $x_{2}(t)' = -(1 + K_{d})x_{2}(t) - (20 + K_{p})x_{1}(t) + r_{t} K_{p}$, in the example~\ref{ex_firstorderode}. In Java, we can write the example as the following code:
+In this example, the y\_t is a list of dependent variables. The index 0 of y\_t is the dependent variable $x_1$, and the index 1 of y\_t is the dependent variable $x_2$. The y\_t[1] represent the first equation $x_{1}(t)' = x_{2}(t)$ in the example~\ref{ex_firstorderode}. The -(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p represents the second equation, $x_{2}(t)' = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p}$, in the example~\ref{ex_firstorderode}. In Java, we can write the example as the following code:
 \begin{java1}
 public void computeDeriv(double t, double[] y_t, double[] dy_t) {
     dy_t[0] = y_t[1];

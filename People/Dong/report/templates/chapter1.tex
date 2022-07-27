@@ -17,7 +17,7 @@ Given the ODE example~\ref{eq_odeexmaple} in \href{https://jacquescarette.github
 	y_t''(t) + (1 + K_d) \cdot y_t'(t) + (20 + K_p) \cdot y_t(t) = r_t \cdot K_p
 \end{equation}
 
-The $y_t$ is the dependent variable and it is Process Variable. The $y_t$(t) is a function of independent variable, often time. Depend on what time it is, the function $y_t$(t) will produce different values of $y_t$ at different time. The $y_t'$(t) is the first order derivative of $y_t$(t). The $y_t''$(t) is the second order derivative of $y_t$(t). The $K_d$ , $K_p$, and $r_t$ are constant variables. The $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows. 
+The $y_t$ is the dependent variable and it is Process Variable. The $y_t$(t) is a function of independent variable, often time. Depend on what time it is, the function $y_t$(t) will produce different values of $y_t$ at different time. The $y_t'$(t) is the first derivative of $y_t$(t). The $y_t''$(t) is the second derivative of $y_t$(t). The $K_d$ , $K_p$, and $r_t$ are constant variables. The $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows. 
 
 \begin{equation} \label{eq_matrixformexmaple}
 	\begin{bmatrix}
@@ -65,7 +65,7 @@ Previous to this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk al
 \end{table}
 
 The \verb|_indepVar| represents the independent variable, and it is often time. The \verb|_depVar| represents the dependent variable. Combing \verb|_depVar| and \verb|_indepVar|, it represents a function produce dependent variables over time. The \verb|_coefficients| is a list of lists \verb|Expr|, and it represents the coefficient matrix \textbf{A}. The \verb|_unknowns| is a list of \verb|Unknown|, and \verb|Unknown| is synonym of integers.
-The \verb|_unknowns| represent a list of order numbers of derivatives of the function. Combining \verb|_depVar|, \verb|_indepVar| and \verb|_unknowns|, they can represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. The code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
+The \verb|_unknowns| represent a list of numbers of derivatives of the function. Combining \verb|_depVar|, \verb|_indepVar| and \verb|_unknowns|, they can represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. The code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
 
 \begin{listing}[ht]
 \begin{haskell1}

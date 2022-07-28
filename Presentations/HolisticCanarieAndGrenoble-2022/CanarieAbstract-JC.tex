@@ -1,0 +1,29 @@
+Developing sustainable research software is painful.  Pain points include:
+not enough time for documentation and testing; insufficient experience
+with development or technology; frequent changes.  One treatment is
+literate programming: developers write programs with human understandability as
+the first goal. For example Org-mode with Babel allows mixing code
+(in multiple languages), documentation, test results, and output.
+Co-locating code, documentation, and tests helps developers keep them in sync.
+The consequences of changes become easier to see.
+
+Another pain treatment is code generation, i.e., programs that
+write code.  For example, Matlab and Maple have code
+generation facilities. There are also tools suites like Spiral for digital
+signal processing, and FEniCS (Finite Element and Computational Software).
+A generator better embodies complex theory, allowing programs to be
+written more rapidly, and regenerated quickly when changes occur.
+
+In our holistic approach to pain management, we combine literate programming and
+code generation via a pervasively generative approach.  It is about way more
+than code: we also generate documentation, test scripts, test results, build
+files, reports, and other resources. We build a knowledge base of models for
+physics, computing, mathematics, and documentation, and then write "recipes"
+that weave together this knowledge to generate the desired artifacts.
+
+The holistic approach addresses multiple pain points.  Our knowledge-first
+approach lets scientists focus on science rather than software. Our
+infrastructure captures common practise about software development and
+technology idiosyncrasies, alleviating that pain point as well.  As the recipes
+are high-level programs that embody meaningful choices, they are relatively
+easy to change.

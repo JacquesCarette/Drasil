@@ -21,7 +21,7 @@ In Python, we can write the example as the following code:
 def f(t, y_t):
     return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
 \end{python1}
-In this example, the y\_t is a list of dependent variables. The index 0 of y\_t is the dependent variable $x_1$, and the index 1 of y\_t is the dependent variable $x_2$. The y\_t[1] represent the first equation $x_{1}(t)' = x_{2}(t)$ in Example~\ref{ex_firstorderode}. The -(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p represents the second equation, $x_{2}(t)' = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p}$, in Example~\ref{ex_firstorderode}. In Java, we can write the example as the following code:
+In this example, the y\_t is a list of dependent variables. The index 0 of y\_t is the dependent variable $x_1$, and the index 1 of y\_t is the dependent variable $x_2$. The y\_t[1] represent the first equation $x_{1}'(t) = x_{2}(t)$ in Example~\ref{ex_firstorderode}. The -(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p represents the second equation, $x_{2}'(t) = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p}$, in Example~\ref{ex_firstorderode}. In Java, we can write the example as the following code:
 \begin{java1}
 public void computeDeriv(double t, double[] y_t, double[] dy_t) {
     dy_t[0] = y_t[1];

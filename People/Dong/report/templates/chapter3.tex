@@ -1,7 +1,10 @@
 \chapter{External libraries}
 External libraries are from an outside source; they do not originate from the source project. Our current interest is for libraries that are used to support solving scientific problems. Most external libraries are language-dependent, and the Drasil framework can generate five different languages: Python, Java, C\texttt{++}, C\#, and Swift. Among those five languages, four programming languages have ODE libraries for solving ODEs and we did not find a suitable library for Swift. In Python, the Scipy library~\citep{scipy} is a well-known scientific library for solving scientific problems, including support for solving ODEs. In Java, a library called Apache Commons Maths (ACM)~\citep{apache} provides a supplementary library for solving mathematical and statistical problems not available in the Java programming language. ACM includes support to solve ODEs. Two less known libraries to solve ODEs are ODEINT Library~\citep{odeint} in C\texttt{++} and the OSLO Library~\citep{oslo} in C\#.
 
-The four selected libraries have some commonalities and variabilities. Firstly, they all have the commonality of providing a numerical solution for a system of first-order ODEs. Each library can output a value of the dependent variable at a specific time, and we can collect those values in a time range. Secondly, they all provide different algorithms for solving ODEs numerically, and we will conduct a rough commonality analysis of available algorithms. A completed commonality analysis would be too time-consuming and out of the scope of our study. Lastly, Scipy and OSLO libraries have the potential to output an ODE as a function. This discovery will provide options for the Drasil framework to solve an ODE by generating a library rather than a standalone executable program. Besides commonalities and variabilities, the Drasil team has to learn how to manage external libraries in the Drasil framework.
+The four selected libraries have some commonalities and variabilities. Firstly, they all have the commonality of providing a numerical solution for a system of first-order ODEs. Each library can output a value of the dependent variable at a specific time, and we can collect those values in a time range. Secondly, they all provide different algorithms for solving ODEs numerically, and we will conduct a rough commonality analysis of available algorithms. A completed commonality analysis would be too time-consuming and out of the scope of our study. Lastly, Scipy and OSLO libraries have the potential to output an ODE as a function. This discovery will provide options for the Drasil framework to solve an ODE by generating a library rather than a standalone executable program. 
+
+Besides commonalities and variabilities, the Drasil team has to learn how to manage external libraries in the Drasil framework. 
+Fix-me explain motivation and goal to manage external libraries in general.
 
 This chapter will discuss topics related to the commonalities and variabilities of four libraries, including numerical solutions, algorithms options and outputting an ODE as a function. Last, we will discuss how we handle dependencies in the framework.
 
@@ -16,12 +19,12 @@ In this research, we will solve each scientific problem as an IVP. Let's see how
 
 In Example~\ref{ex_firstorderode}, there are two dependent variables: $x_1$ and $x_2$. Both $x_1(t)$ and $x_2(t)$ are functions of the independent variable, in this case time. The $x_1$ is the process variable, and the $x_2$ is the rate of change of $x_1$. The $x_1'$(t) is the first directive of the function $x_1(t)$ respect time, and the $x_2'$(t) is the first derivative of the function $x_2$(t) respect time. The $K_d$ , $K_p$, and $r_t$ are constant variables, and they remain the same meaning in Example~\ref{eq_odeexmaple} and example~\ref{ex_firstorderode}. We can encode the Example~\ref{ex_firstorderode} in all four libraries.
 
-In Python, we can write the example as the following code:
+In Python Scipy library, we can write the example as the following code:
 \begin{python1}
 def f(t, y_t):
     return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
 \end{python1}
-In this example, the y\_t is a list of dependent variables. The index 0 of y\_t is the dependent variable $x_1$, and the index 1 of y\_t is the dependent variable $x_2$. The y\_t[1] represent the first equation $x_{1}'(t) = x_{2}(t)$ in Example~\ref{ex_firstorderode}. The -(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p represents the second equation, $x_{2}'(t) = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p}$, in Example~\ref{ex_firstorderode}. In Java, we can write the example as the following code:
+In this example, the y\_t is a list of dependent variables. The index 0 of y\_t is the dependent variable $x_1$, and the index 1 of y\_t is the dependent variable $x_2$. The y\_t[1] represent the first equation $x_{1}'(t) = x_{2}(t)$ in Example~\ref{ex_firstorderode}. The -(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p represents the second equation, $x_{2}'(t) = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p}$, in Example~\ref{ex_firstorderode}. In Java ACM library, we can write the example as the following code:
 \begin{java1}
 public void computeDeriv(double t, double[] y_t, double[] dy_t) {
     dy_t[0] = y_t[1];
@@ -29,7 +32,7 @@ public void computeDeriv(double t, double[] y_t, double[] dy_t) {
 }
 \end{java1}
 
-In C\texttt{++}, we can write the example as the following code:
+In C\texttt{++} ODEINT library, we can write the example as the following code:
 \begin{cplusplus1}
 void ODE::operator()(vector<double> y_t, vector<double> &dy_t, double t) {
     dy_t.at(0) = y_t.at(1);
@@ -37,7 +40,7 @@ void ODE::operator()(vector<double> y_t, vector<double> &dy_t, double t) {
 }	
 \end{cplusplus1}
 
-In C\#, we can write the example as the following code:
+In C\# OSLO library, we can write the example as the following code:
 \begin{csharp1}
 Func<double, Vector, Vector> f = (t, y_t_vec) => {
     return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);

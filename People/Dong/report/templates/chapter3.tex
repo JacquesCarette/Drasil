@@ -10,11 +10,11 @@ We use algorithms to make approximations for mathematical equations and create n
 Fix-me: say how a BVP is different
 In this research, we will solve each scientific problem as an IVP. Let's see how to solve a system of first-order ODE with an example. Here is an example of a system of first-order ODE.
 \begin{flalign} \label{ex_firstorderode}
-& x_{1}(t)' = x_{2}(t) \\ \nonumber
-& x_{2}(t)' = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p} 
+& x_{1}'(t) = x_{2}(t) \\ \nonumber
+& x_{2}'(t) = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p} 
 \end{flalign}
 
-In Example~\ref{ex_firstorderode}, there are two dependent variables: $x_1$ and $x_2$. The $x_1(t)$ is the function of the independent variable, in this case time, which produces dependent variables $x_1$ over time. The $x_2(t)$ is the function of the independent variable time which produces dependent variables $x_2$ over time. The $x_1$ is the process variable, and the $x_2$ is the first derivative with respect to the time of the process variable $x_1$. The $x_1'$(t) is the first directive of the function $x_1(t)$, and the $x_2'$(t) is the first derivative of the function $x_2$(t). The $K_d$ , $K_p$, and $r_t$ are constant variables, and they remain the same meaning in Example~\ref{eq_odeexmaple} and example~\ref{ex_firstorderode}. We can encode the Example~\ref{ex_firstorderode} in all four libraries.
+In Example~\ref{ex_firstorderode}, there are two dependent variables: $x_1$ and $x_2$. Both $x_1(t)$ and $x_2(t)$ are functions of the independent variable, in this case time. The $x_1$ is the process variable, and the $x_2$ is the rate of change of $x_1$. The $x_1'$(t) is the first directive of the function $x_1(t)$ respect time, and the $x_2'$(t) is the first derivative of the function $x_2$(t) respect time. The $K_d$ , $K_p$, and $r_t$ are constant variables, and they remain the same meaning in Example~\ref{eq_odeexmaple} and example~\ref{ex_firstorderode}. We can encode the Example~\ref{ex_firstorderode} in all four libraries.
 
 In Python, we can write the example as the following code:
 \begin{python1}

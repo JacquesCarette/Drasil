@@ -1,15 +1,88 @@
 \chapter{Background}
 \section{Software Artifacts}
+\label{sec:sfs}
  -  (Reference a lot of Parnas)
 \section{Software Reuse and Software Families}
   - Bring up GNU/Linux and different distros as examples of software families
     - (Raspbian v Raspbian lite) = Debian--, etc.
+  - Touch on reuse areas like reproducible research - Gentleman and Lang 2012
 \section{Literate Programming}
-  - Knuth - lots of Knuth
-  - Gentleman and Lang 2012
-  - Johnson and Johnson 1997 - Literate programming using noweb
-  - VNODE-LP
-  - Physically Based Rendering ...
+
+Literate Programming (LP) is a method for writing software introduced by Knuth 
+that focuses on explaining to a human what we want a computer to do rather than 
+simply writing a set of instructions for the computer on how to perform the 
+task~\cite{Knuth1984}.
+
+Developing literate programs involves breaking algorithms down into
+\emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}
+which are small and easily understandable. The chunks are ordered to follow a 
+``psychological order''~\cite{PieterseKourieAndBoake2004} if
+you will, that promotes understanding. They do not have to be written in the 
+same order that a computer would read them. It should also be noted that in a 
+literate program, the code and documentation are kept together in one source. 
+To extract runnable code, a process known as \emph{tangle} must be performed on 
+the source. A similar process known as \emph{weave} is used to extract and 
+typeset the documentation.
+
+
+There are many advantages to LP beyond understandability. As a program is
+developed and updated, the documentation surrounding the source code is more 
+likely to be updated simultaneously. It has been experimentally found that 
+using LP ends up with more consistent documentation and 
+code~\cite{ShumAndCook1993}. There are many downsides to having inconsistent 
+documentation while developing or maintaining 
+code~\cite{Kotula2000,Thimbleby1986}, while the benefits of consistent 
+documentation are numerous~\cite{Hyman1990, Kotula2000}. Keeping the advantages 
+and disadvantages of good documentation in mind we can see that more effective, 
+maintainable code can be produced if properly using 
+LP~\cite{PieterseKourieAndBoake2004}.
+
+Regardless of the benefits of LP, it has not been very popular with 
+developers~\cite{ShumAndCook1993}. However, there are
+several successful examples of LP's use in SC. Two such literate programs that 
+come to mind are VNODE-LP~\cite{Nedialkov2006} and ``Physically Based 
+Rendering: From Theory to Implementation''~\cite{PharrAndHumphreys2004} a 
+literate program and textbook on the subject matter. Shum and 
+Cook~\cite{ShumAndCook1993} discuss the main issues behind LP's lack of 
+popularity which can be summed up as dependency on a 
+particular output language or text processor, and the lack of flexibility on 
+what should be presented or suppressed in the output.
+
+There are several other factors which contribute to LP's lack of popularity and 
+slow adoption thus far. While LP allows a developer to write their code and its 
+documentation simultaneously, that documentation is comprised of a single 
+artifact which may not cover the same material as standard artifacts software 
+engineers expect (see Section~\ref{sec:sfs} for more details). LP also does not 
+simplify the development process: documentation and code are written as usual, 
+and there is the additional effort of re-ordering the chunks. The LP 
+development process has some benefits such as allowing developers to follow a 
+more natural flow in development by writing chunks in whichever order they 
+wish, keep the documentation and code updated simultaneously (in theory) 
+because of their co-location, and automatically incorporate code chunks into 
+the documentation to reduce some information duplication.
+
+There have been many attempts to increase LP's popularity by focusing on 
+changing the output language or removing the text processor dependency. Several
+new tools such as CWeb (for the C language), DOC++ (for C++), noweb 
+(programming language independent), and others were developed. Other tools such 
+as javadoc (for Java) and Doxygen (for multiple languages) were also influenced 
+by LP, but differ in that they are merely document extraction tools. They do 
+not contain the chunking features which allow for re-ordering algorithms.
+
+With new tools came new features including, but not limited to, phantom
+abstracting~\cite{ShumAndCook1993}, a ``What You See Is What You Get'' (WYSIWYG)
+editor~\cite{FritzsonGunnarssonAndJirstrand2002}, and even movement away from 
+the ``one source'' idea~\cite{Simonis2003}.
+
+While LP is still not mainstream~\cite{Ramsey1994}, these more robust 
+tools helped drive the understanding behind what exactly LP tools must 
+do. In certain domains LP is becoming more standardized, for 
+example: Agda, Haskell, and R support LP to some extent, even though it is not 
+yet common practice. R has good tool support, with the most popular being
+Sweave~\cite{Leisch2002}, however it is designed to dynamically create
+up-to-date reports or manuals by running embedded code as opposed to being used
+as part of the software development process. 
+
   - Al-Maati and Boujarwah 2002
 \section{Generative Programming}
  - ?

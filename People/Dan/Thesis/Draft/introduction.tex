@@ -30,7 +30,7 @@ common issues faced during development and you have a perfect storm for
 inter-artifact syncronization issues.
 
 How can we avoid having our artifacts fall out of sync with each other?
-Some would argue "just write code!" And that is exactly what a number of other
+Some would argue ``just write code!" And that is exactly what a number of other
 approaches have tried. Documentation generators like Doxygen, Javadoc, Pandoc,
 and more take a code-centric view of the problem. Typically, they work by having
 natural-language descriptions and/or explanations written as specially delimited
@@ -66,7 +66,8 @@ undergoes frequent change (maintenance). Good candidates for development using
 Drasil are long-lived (10+ years) software projects with artifacts of interest
 to multiple stakeholders. With that in mind, we have decided to focus on
 scientific computing (SC) software. Specifically, we are looking at software 
-that follows the pattern 'input -> process -> output'.
+that follows the pattern \emph{input $\rightarrow$ process $\rightarrow$ 
+output}.
 
 SC software has a strong fundamental underpinning of well-understood concepts.
 It also has the benefit of seldomly changing, and when it does, existing models
@@ -75,6 +76,14 @@ well-understood and the underlying modeling equations are unlikely to change.
 However, should they change, the current models will likely remain as good
 approximations under a specific set of assumptions. For instance, who hasn't
 heard 'assume each body is a sphere' during a physics lecture?
+
+SC software could also benefit from buy-in to good software development 
+practices as many SC software developers put the emphasis on science and not 
+development~\citep{Kelly2007}. Rather than following rigid, process-heavy 
+approaches deemed unfavourable~\citep{CarverEtAl2007}, developers of SC 
+software choose to use knowledge acquisition driven~\citep{Kelly2015}, 
+agile~\citep{Segal2005, CarverEtAl2007, AckroydEtAl2008, 
+EasterbrookAndJohns2009}, or amethododical~\citep{Kelly2013} processes instead.
 
 \section{Roadmap}
 

@@ -2,6 +2,36 @@
 In the Drasil framework, there is a single data structure containing all the information for all products, and we call it System Information. The giant System Information collects a multitude of pieces of information; whenever we need it, we extract the information from the System Information. In previous research, we store all ordinary differential equations (ODEs) information in the System Information. However, that information existed in the form of plain text. In other words, we explicitly wrote ODEs in the text without any advanced data structure. Although this method maintains the relationship of ODEs, it restricts any transformation of ODEs. For example, if the text-based ODE is higher-order linear ODE, we can not transform it to its equivalent system of first-order ODE. Therefore, the Drasil team is exploring new approach to store ODEs in a new data structure, and the new structure would allow ODEs be isomorphic, which means we can map the ODE from one form to other forms. Once we capture ODEs information in this data structure, we can generate its equivalent forms. This approach is contrasting to previous method, and it only requires users write ODEs once. This chapter we will introduce where the new data structure comes from, how the new data structure captures ODE information, how to use the new data structure, and how the new data structure interacts with the Drasil printer.
 
 \section{Explicit Equation}
+Before we conducting this research, the Drasil framework can generate software that provide numerical solutions for a first-order ODE by explicitly writing the equation. We re-write the ODE equation in a text based form, and pass it to the Drasil code generator. 
+
+1. show the \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NOPCM equation}, 
+
+\begin{equation} \label{eq_nopcmorginal}
+	T_{w}'(t) +  \frac {T_{w}(t)}{\tau_{w}} = \frac{T_{c}}{\tau_{w}}
+\end{equation}
+
+2. derive it to 
+\begin{equation} \label{eq_nopcmderive}
+	T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
+\end{equation}
+
+3. write it in explicit form
+Code~\ref{code_expliciteq} shows the how to encode the Example~\ref{ex_firstorderode} by writing the explicit equation.
+\begin{listing}[ht]
+\begin{haskell1}
+-- Pesodu Code
+reciprocal tau_w * (T_c - T_w[0])
+\end{haskell1}
+\captionof{listing}{Explicit for the Example~\ref{ex_firstorderode}}
+\label{code_expliciteq}
+\end{listing}
+
+4. ducplication problem
+
+\begin{haskell1}
+T_w'(t) = reciprocal tau_w * (T_c - T_w(t))
+\end{haskell1}
+completely text-base and not transformable, write the equation twice. Tell reader we will explain why the transformation is needed.
 
 \section{Matrix Form}
 In general, an equation contains a left-hand expression, a right-hand expression, and an equal sign. The left-hand and right-hand expressions connect by an equal sign. A linear ODE also has its left-hand and right-hand sides. Each side has its unique shape. We can write a linear ODE in the shape of
@@ -12,7 +42,7 @@ In general, an equation contains a left-hand expression, a right-hand expression
 
 On the left-hand side, \textbf{A} is an m $\times$ n matrix, and \textbf{x} is an n-vector. On the right-hand side, \textbf{b} is an m-vector. The \textbf{A} is commonly known as the coefficient matrix, \textbf{b} is the constant vector, and \textbf{x} is the unknown vector. The equation~\ref{eq_matrixform} can represent not only a single linear ODE, but also represent a linear system of ODE. A linear system of ODE is a finite set of linear differential equations. In this research, we only have case studies for single ODE, and all examples will demonstrate on single ODEs. The new data structure is capable to store information for a system of ODE, but its related functions only support for instances of single ODE.
 
-Given the ODE example~\ref{eq_odeexmaple} in \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller case study},
+Given the ODE example~\ref{eq_odeexmaple} in \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study},
 \begin{equation} \label{eq_odeexmaple}
 	y_t''(t) + (1 + K_d) \cdot y_t'(t) + (20 + K_p) \cdot y_t(t) = r_t \cdot K_p
 \end{equation}
@@ -65,7 +95,7 @@ Previous to this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk al
 \end{table}
 
 The \verb|_indepVar| represents the independent variable, and it is often time. The \verb|_depVar| represents the dependent variable. Combing \verb|_depVar| and \verb|_indepVar|, it represents a function produce dependent variables over time. The \verb|_coefficients| is a list of lists \verb|Expr|, and it represents the coefficient matrix \textbf{A}. The \verb|_unknowns| is a list of \verb|Unknown|, and \verb|Unknown| is synonym of integers.
-The \verb|_unknowns| represent a list of numbers of derivatives of the function. Combining \verb|_depVar|, \verb|_indepVar| and \verb|_unknowns|, they can represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. The code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
+The \verb|_unknowns| represent a list of numbers of derivatives of the function. Combining \verb|_depVar|, \verb|_indepVar| and \verb|_unknowns|, they can represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. Code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
 
 \begin{listing}[ht]
 \begin{haskell1}

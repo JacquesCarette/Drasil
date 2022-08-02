@@ -2,36 +2,36 @@
 In the Drasil framework, there is a single data structure containing all the information for all products, and we call it System Information. The giant System Information collects a multitude of pieces of information; whenever we need it, we extract the information from the System Information. In previous research, we store all ordinary differential equations (ODEs) information in the System Information. However, that information existed in the form of plain text. In other words, we explicitly wrote ODEs in the text without any advanced data structure. Although this method maintains the relationship of ODEs, it restricts any transformation of ODEs. For example, if the text-based ODE is higher-order linear ODE, we can not transform it to its equivalent system of first-order ODE. Therefore, the Drasil team is exploring new approach to store ODEs in a new data structure, and the new structure would allow ODEs be isomorphic, which means we can map the ODE from one form to other forms. Once we capture ODEs information in this data structure, we can generate its equivalent forms. This approach is contrasting to previous method, and it only requires users write ODEs once. This chapter we will introduce where the new data structure comes from, how the new data structure captures ODE information, how to use the new data structure, and how the new data structure interacts with the Drasil printer.
 
 \section{Explicit Equation}
-Before we conducting this research, the Drasil framework can generate software that provide numerical solutions for a first-order ODE by explicitly writing the equation. We re-write the ODE equation in a text based form, and pass it to the Drasil code generator. 
-
-1. show the \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NOPCM equation}, 
+Before we conducting this research, the Drasil framework can generate software that provide numerical solutions for a first-order ODE by explicitly writing the equation. We re-write the ODE equation in a text based form, and pass it to the Drasil code generator. In Equation~\ref{eq_nopcmorginal}, it is the model describes the energy balance on water in \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NOPCM case study}, and we can find the temperature of the water base on it.
 
 \begin{equation} \label{eq_nopcmorginal}
 	T_{w}'(t) +  \frac {T_{w}(t)}{\tau_{w}} = \frac{T_{c}}{\tau_{w}}
 \end{equation}
 
-2. derive it to 
+The $T_w(t)$ is a function of the independent variable, in this case time. The $T_w$ is the temperature of water ($ ^\circ C $). The $T_w'(t)$ is the first directive of the function $T_w(t)$ respect time. The $T_c$ is the temperature of the heating coil (°C), and the $\tau_w$ is the ODE parameter for water related to decay time (s). We can later isolated the $T_w'(t)$ to the left hand side, and move rest terms to right hand side of the equation. Then, we can get Equation~\ref{eq_nopcmderive}.
 \begin{equation} \label{eq_nopcmderive}
 	T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
 \end{equation}
 
-3. write it in explicit form
-Code~\ref{code_expliciteq} shows the how to encode the Example~\ref{ex_firstorderode} by writing the explicit equation.
+Base on Equation~\ref{eq_nopcmderive}, we can write it into a pure text-based form, and pass it to the Drasil code generator. Code~\ref{code_expliciteq} shows the how to encode the Example~\ref{ex_firstorderode} by writing the explicit equation. The details on how to use explicit equations to get numerical solutions for ODEs will be discussed on section~\ref{se_connecteetolib}.
 \begin{listing}[ht]
 \begin{haskell1}
 -- Pesodu Code
 reciprocal tau_w * (T_c - T_w[0])
 \end{haskell1}
-\captionof{listing}{Explicit for the Example~\ref{ex_firstorderode}}
+\captionof{listing}{NOPCM equation for the Drasil Code Generator}
 \label{code_expliciteq}
 \end{listing}
 
-4. ducplication problem
-
+\begin{listing}[ht]
 \begin{haskell1}
 T_w'(t) = reciprocal tau_w * (T_c - T_w(t))
 \end{haskell1}
-completely text-base and not transformable, write the equation twice. Tell reader we will explain why the transformation is needed.
+\captionof{listing}{NOPCM equation for SRS}
+\label{code_expliciteqsrs}
+\end{listing}
+
+In Code~\ref{code_expliciteq}, we encode Equation~\ref{eq_nopcmderive}, and pass it to code generator. The information is necessary for a ODE libraries to solve the ODE numerically. In Code~\ref{code_expliciteqsrs}, we also encode Equation~\ref{eq_nopcmderive}, and pass it to the Drasil printer. The information is necessary for printing ODEs in SRS. They both describe the same ODE, but we write it twice in the Drasil framework. Therefore, there is a information duplication. We can transform from Code~\ref{code_expliciteq} to Code~\ref{code_expliciteqsrs} with human interfere. However, without human interfere, we can not transfer the between two expressions because they are all in a text-based form. In order to reduce the information duplication, the Drasil team decide to make an advanced data structure to hold the ODE information.
 
 \section{Matrix Form}
 In general, an equation contains a left-hand expression, a right-hand expression, and an equal sign. The left-hand and right-hand expressions connect by an equal sign. A linear ODE also has its left-hand and right-hand sides. Each side has its unique shape. We can write a linear ODE in the shape of
@@ -47,7 +47,7 @@ Given the ODE example~\ref{eq_odeexmaple} in \href{https://jacquescarette.github
 	y_t''(t) + (1 + K_d) \cdot y_t'(t) + (20 + K_p) \cdot y_t(t) = r_t \cdot K_p
 \end{equation}
 
-The $y_t$ is the dependent variable and it is Process Variable. The $y_t$(t) is a function of independent variable, often time. Depend on what time it is, the function $y_t$(t) will produce different values of $y_t$ at different time. The $y_t'$(t) is the first derivative of $y_t$(t). The $y_t''$(t) is the second derivative of $y_t$(t). The $K_d$ , $K_p$, and $r_t$ are constant variables. The $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows. 
+In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y_t$. The $y_t$(t) is a function of independent variable, in this case time. The $y_t'$(t) is the first derivative of $y_t$(t) respect time. The $y_t''$(t) is the second derivative of $y_t$(t) respect time. The $y_t$ is the process variable, and the $y_t'$ is the rate of change of $y_t$. The $y_t''$ is the rate of change of the rate of change of $y_t$. The $K_d$ , $K_p$, and $r_t$ are constant variables. The $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows.
 
 \begin{equation} \label{eq_matrixformexmaple}
 	\begin{bmatrix}

@@ -123,8 +123,41 @@ We can solve an ODE with many algorithms. The four selected libraries each provi
 
 There are some improvements that the Drasil team can do to make the ODE solution better. For example, we found some algorithms use a fixed step size for calculating numerical solutions, and others use an adaptive step size. We add the step size with the current time value to calculate the next value of dependent variables. A fixed step size means the step size is the same in each iteration. An adaptive step size means the step size is not always the same and could change based on other factors. In Table~\ref{tab_algacm}, the ACM library divides algorithms into one group that uses a fixed step and others that uses an adaptive step. This discovery can further influence the design choice of solving ODE numerically in the Drasil framework. Currently, Drasil treats all step sizes as a fixed value, and it would be ideal to allow the step size to be either fixed or adaptive in future.
 
-\section{ODE as a Function}
-The ODE provides a mathematical expression for describing a function of time. The numerical solution can instantiate an ODE, but it only provides a partial solution. If we are interested in the continuous change of the function, the numerical solution will not help. Instead of providing points, providing a function of time would be a better choice to represent the solution as an ODE. In the Drasil framework, users have the option to generate a runnable program or a library. The runnable program will contain the main function so users can run generated code directly. If the generated code is a library, other programs can utilize the generated library by calling it via its interfaces. Thus, by outputting the ODE as a function, other outside program can solve an ODE by calling the generated ODE library. Not all libraries have options to represent the ODE as a function. Among the four selected libraries, Scipy Library and OSLO Library have a similar option to support outputting a function. In the Scipy library, we can return a generic interface called \verb|scipy.integrate.ode|~\citep{scipyfun} which is a generic interface that can store ODE's information. Later if we want to solve the ODE, we can add other ODE-related configuration information. The code~\ref{code_pythonscipy} shows the full details of how to solve the Example~\ref{ex_firstorderode} in the Scipy library.
+\section{ODE as a Sequence of Functions}
+While the ODE provides a mathematical expression for describing a function of time, the numerical solution can instantiate the ODE solution. In the Module Interface Specification (MIS), we can output the numerical solution as $\mathbb{R}^n$, a infinite sequence of $\mathbb{R}$. However, the reality is an infinite sequence is not always available in the four selected libraries. Most of them provide numerical solutions in form of a finite sequence of $\mathbb{R}$, $\mathbb{R}^k$. It provides a partial solution and describes the numerical solution in a time range with a certain time step. Another way to provide numerical solution for the ODE is to output the solution as a sequence of function $(? \rightarrow \mathbb{R})^n$. The question mark (?) represents an unknown object. In side of the sequence of function $(?\rightarrow \mathbb{R})^n$, in each function $? \rightarrow \mathbb{R}$, given a satisfied unknown object, the function will output a $\mathbb{R}$. Table~\ref{tab_outputtype} shows the availability of output type for solving an ODE numerically in the four selected libraries.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{0.2\textwidth} | p{0.4\textwidth} } \hline
+    \textbf{Library}&\textbf{Available Output Type}\\
+    \toprule
+    Scipy-Python & 
+    \begin{itemize}[wide]
+    \item $\mathbb{R}^k$
+    \item $(? \rightarrow \mathbb{R})^n$
+    \end{itemize}  \\ \hline
+    ACM-Java &     
+    \begin{itemize}[wide]
+    \item $\mathbb{R}^k$
+    \end{itemize}  \\ \hline
+    ODEINT-C\texttt{++} & 
+    \begin{itemize}[wide]
+    \item $\mathbb{R}^k$
+    \end{itemize}\\ \hline
+    OSLO-C\# & 
+    \begin{itemize}[wide]
+    \item $\mathbb{R}^k$
+    \item $\mathbb{R}^n$
+    \end{itemize} \\
+    \bottomrule	
+\end{tabular}	
+\caption{Available output type in external libraries}	
+\label{tab_outputtype}
+\end{table}
+
+% If we are interested in the continuous change of the function, the numerical solution will not help. Instead of providing points, providing a function of time would be a better choice to represent the solution as an ODE, and the type of the output can be a sequence of functions, $(\mathbb{R}^k \rightarrow \mathbb{R})^n$. The n is a infinite integer, and the k is a finite integer. It means the $(\mathbb{R}^k \rightarrow \mathbb{R})^n$ contains a infinite function in a sequence, and each function takes k $\mathbb{R}$ to get one $\mathbb{R}$.
+
+In the Drasil framework, users have the option to generate a runnable program or a library. The runnable program will contain the main function so users can run generated code directly. If the generated code is a library, other programs can utilize the generated library by calling it via its interfaces. Thus, by outputting the ODE as a function, other outside program can solve an ODE by calling the generated ODE library. Not all libraries have options to represent the ODE as a function. Among the four selected libraries, Scipy Library and OSLO Library have a similar option to support outputting a function. In the Scipy library, we can return a generic interface called \verb|scipy.integrate.ode|~\citep{scipyfun} which is a generic interface that can store ODE's information. Later if we want to solve the ODE, we can add other ODE-related configuration information. The code~\ref{code_pythonscipy} shows the full details of how to solve the Example~\ref{ex_firstorderode} in the Scipy library.
 
 \begin{listing}[ht]
 \begin{python1}

@@ -30,6 +30,7 @@ Now, we can start differentiate $y_{1}$, $y_{2}$, $\dots$, and $y_{n}$ in equati
   & y_{1}' = x' = y_{2} \\ \nonumber
   & y_{2}' = x'' = y_{3} \\ \nonumber
   & \dots \\ \nonumber
+  & y_{n-1}' = x^{n-1} = y^{n}\\ \nonumber
   & y_{n}' = x^{n} = f (t, y_{1}, y_{2}, \dots, y_{n})
 \end{flalign}
 
@@ -43,6 +44,7 @@ Based on the equation~\ref{eq_diffvervars}, we can simplify equations by removin
     & y_{1}' = y_{2} \\ \nonumber
     & y_{2}' = y_{3} \\ \nonumber
     & \dots \\ \nonumber
+    & y_{n-1}' = y^{n}\\ \nonumber
     & y_{n}'= h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
 \end{flalign}
 
@@ -50,30 +52,34 @@ Last, we can rewrite the equation~\ref{eq_diffvervarslinear} in form of \textbf{
 \begin{equation}
 	\begin{bmatrix}
 		y_{1}' \\
-        y_{2}' \\
-        \dots  \\
-        y_{n}'
+    y_{2}' \\
+    \dots  \\
+    y_{n-1}' \\
+    y_{n}'
 	\end{bmatrix}
     = 
-    \begin{bmatrix}
+  \begin{bmatrix}
 		0, & 1, & 0, & \dots, & 0 \\
-        0, & 0, & 1, & \dots, & 0 \\
-        \dots \\
-        g_{1}(t), & g_{2}(t), & g_{3}(t), & \dots, & g_{n}(t)
+    0, & 0, & 1, & \dots, & 0 \\
+    \dots \\
+    0, & 0, & 0, & \dots, & 1 \\
+    g_{1}(t), & g_{2}(t), & g_{3}(t), & \dots, & g_{n}(t)
 	\end{bmatrix}
     \cdot
-    \begin{bmatrix}
+  \begin{bmatrix}
 		y_{1} \\
-        y_{2} \\
-        \dots  \\
-        y_{n}
+    y_{2} \\
+    \dots  \\
+    y_{n-1} \\
+    y_{n}
 	\end{bmatrix}
     + 
-    \begin{bmatrix}
-		0 \\
-        0 \\
-        \dots  \\
-        h(t)
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    \dots  \\
+    0 \\
+    h(t)
 	\end{bmatrix}
 \end{equation}
 

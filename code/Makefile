@@ -233,7 +233,7 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
 # Generate graph of package dependencies
-packagedeps: 
+packagedeps: graphmod check_dot
 	@mkdir -p $(GRAPH_FOLDER)
 	@echo ----------------------------
 	@echo Generating package dependency graph

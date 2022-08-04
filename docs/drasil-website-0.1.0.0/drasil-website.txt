@@ -100,6 +100,7 @@ packDepGraphTitle :: Sentence
 
 -- | Introduces the package dependency graphs.
 graphSecIntro :: String
+graphSecBwPkgs :: String
 
 -- | Function to create displayable versions of the graphs.
 dependencyGraphs :: FilePath -> String -> Contents

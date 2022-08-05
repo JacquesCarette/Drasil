@@ -2,7 +2,7 @@
 In the Drasil framework, there is a single data structure containing all the information for all products, and we call it System Information. The giant System Information collects a multitude of pieces of information; whenever we need it, we extract the information from the System Information. In previous research, we store all ordinary differential equations (ODEs) information in the System Information. However, that information existed in the form of plain text. In other words, we explicitly wrote ODEs in the text without any advanced data structure. Although this method maintains the relationship of ODEs, it restricts any transformation of ODEs. For example, if the text-based ODE is higher-order linear ODE, we can not transform it to its equivalent system of first-order ODE. Therefore, the Drasil team is exploring new approach to store ODEs in a new data structure, and the new structure would allow ODEs be isomorphic, which means we can map the ODE from one form to other forms. Once we capture ODEs information in this data structure, we can generate its equivalent forms. This approach is contrasting to previous method, and it only requires users write ODEs once. This chapter we will introduce where the new data structure comes from, how the new data structure captures ODE information, how to use the new data structure, and how the new data structure interacts with the Drasil printer.
 
 \section{Explicit Equation}
-Before we conduct this research, the Drasil framework can generate software that provides numerical solutions for a first-order ODE by explicitly writing the equation. We re-write the ODE equation in a text-based form and pass it to the Drasil code generator. In Equation~\ref{eq_nopcmorginal}, the model describes the energy balance of water. In \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NOPCM case study}, we can find the temperature of the water base on it.
+Before we conduct this research, the Drasil framework can generate software that provides numerical solutions for a first-order ODE by explicitly writing the equation. We re-write the ODE equation in a text-based form and pass it to the Drasil code generator. In Equation~\ref{eq_nopcmorginal}, the model describes the energy balance of water. In \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NoPCM case study}, we can find the temperature of the water base on it.
 
 \begin{equation} \label{eq_nopcmorginal}
 	T_{w}'(t) +  \frac {T_{w}(t)}{\tau_{w}} = \frac{T_{c}}{\tau_{w}}
@@ -13,26 +13,27 @@ The $T_w(t)$ is a function of the independent variable, in this case time. The $
 	T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
 \end{equation}
 
-Based on Equation~\ref{eq_nopcmderive}, we can write it into a pure text-based form and pass it to the Drasil code generator. Code~\ref{code_expliciteq} shows how to encode Example~\ref{ex_firstorderode} by writing the explicit equation. We will discuss how to use explicit equations to get numerical solutions for ODEs in section~\ref{se_connecteetolib}.
-\begin{listing}[ht]
-\begin{haskell1}
--- Pesodu Code
-reciprocal tau_w * (T_c - T_w[0])
-\end{haskell1}
-\captionof{listing}{NOPCM equation for the Drasil Code Generator}
-\label{code_expliciteq}
-\end{listing}
+Based on Equation~\ref{eq_nopcmderive}, we can write it into a pure text-based form and pass it to the Drasil code generator. Code~\ref{code_expliciteq} shows how to encode Example~\ref{ex_firstorderode} by writing the explicit equation. Brooks's thesis~\citep{brooks} (section Example ODE Library Encodings pages 91-103) documented how the Drasil framework solves Equation~\ref{eq_nopcmderive} with manually created \verb|ODEInfo|. The user will first encode the ODE equation in the general data pool. Whenever we need it, we retrieve the ODE equation from it. However, there is a gap between the original equation and external libraries (Chapter~\ref{cha_extlib}). The external libraries can not understand the original ODE equation from the general data pool. Therefore, the Drasil team manually transforms the original ODE equation into another form (in \verb|ODEInfo|), which external libraries can use to produce a numerical solution.
+
+Here is an example of how we manually close the gap between the text-based ODE and external libraries. In Code~\ref{code_expliciteqsrs}, we encode Equation~\ref{eq_nopcmderive} and put it into the general data pool. During printing the SRS, we retrieve the text-based ODE and print it. The Drasil printer is capable of displaying encoded ODE in text. However, external libraries require a specific format for the ODE and not utilize the original ODE. Therefore, we manually create Code \ref{code_expliciteq} so external libraries can solve the ODE. They both describe the same ODE, but we write it twice in the Drasil framework. Therefore, there is an information duplication. We can transform from Code~\ref{code_expliciteqsrs} to Code~\ref{code_expliciteq} with human interference. However, without human interference, we can not complete the transformation because Code~\ref{code_expliciteqsrs} lack the necessary structure. To reduce the information duplication, the Drasil team decided to make an advanced data structure to hold the ODE information.
 
 \begin{listing}[ht]
 \begin{haskell1}
 -- Pesodu Code
 T_w'(t) = reciprocal tau_w * (T_c - T_w(t))
 \end{haskell1}
-\captionof{listing}{NOPCM equation for SRS}
+\captionof{listing}{NoPCM equation for SRS}
 \label{code_expliciteqsrs}
 \end{listing}
 
-In Code~\ref{code_expliciteq}, we encode Equation~\ref{eq_nopcmderive} in Drasil. Later, we will pass it to the Code Generator. The information is necessary for ODE libraries to solve the ODE numerically. In Code~\ref{code_expliciteqsrs}, we also encode Equation~\ref{eq_nopcmderive} and pass it to the Drasil printer. The information is necessary for printing ODEs in SRS. They both describe the same ODE, but we write it twice in the Drasil framework. Therefore, there is an information duplication. We can transform from Code~\ref{code_expliciteq} to Code~\ref{code_expliciteqsrs} with human interference. However, without human interference, we can not transfer between two expressions because they are all in a text-based form. To reduce the information duplication, the Drasil team decided to make an advanced data structure to hold the ODE information.
+\begin{listing}[ht]
+\begin{haskell1}
+-- Pesodu Code
+reciprocal tau_w * (T_c - T_w[0])
+\end{haskell1}
+\captionof{listing}{NoPCM equation for the Drasil Code Generator}
+\label{code_expliciteq}
+\end{listing}
 
 \section{Matrix Form}
 In general, an equation contains a left-hand expression, a right-hand expression, and an equal sign. The left-hand and right-hand expressions connect by an equal sign. A linear ODE also has its left-hand and right-hand sides. Each side has its unique shape. We can write a linear ODE in the shape of

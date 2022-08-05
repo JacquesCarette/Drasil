@@ -108,7 +108,7 @@ _unknowns = [2, 1, 0]
 _dmConstants = [r_t K_p]
 _dmconc = ... -- Drasil definition for chuck concept
 \end{haskell1}
-\captionof{listing}{Internal Data Representation for the example~\ref{eq_odeexmaple}}
+\captionof{listing}{Internal Data Representation for Example~\ref{eq_odeexmaple}}
 \label{code_interaldata}
 \end{listing}
 
@@ -116,12 +116,12 @@ Currently, the \verb|DifferentialModel| only captures the knowledge of ODEs with
 
 \section{Input Language}
 \label{sec_input}
-There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form. While inputting a single ODE, one obvious way is directly passing value to each record via constructors of \verb|DifferentialModel|. However, it would be not so elegant to set a single ODE in the example, because users have to extracts the coefficient matrix \textbf{A}, unknown vector \textbf{x} and constant vector \textbf{b} from the original equation manually. Once the coefficient matrix, unknown vector and constant vector is ready, we can set value into \verb|_depVar|, \verb|_coefficients|, \verb|_unknowns|, and \verb|_dmConstants| accordingly. This process is ideal when the ODE is a system of ODE, and it would be over-complicated for user to do extraction for a single ODE. Therefore, we decided create a helper function to ease this issue. Another advantage of having an helper function to input an ODE is that it can reduce human error and make sure the equation is well-formed. We call this helper function input language, and what will this input language looks like? The input language is inspired by how a linear nth-order ODE looks like. Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of 
+There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form. While inputting a single ODE, one obvious way is directly passing value to each record via constructors of \verb|DifferentialModel|. The Code~\ref{code_interaldata} shows how to encode Example~\ref{eq_odeexmaple} in the \verb|DifferentialModel|. However, it would be not so elegant to set a single ODE in the example, because users have to extracts the coefficient matrix \textbf{A}, unknown vector \textbf{x} and constant vector \textbf{b} from the original equation manually. Once the coefficient matrix, unknown vector and constant vector is ready, we can set value into \verb|_depVar|, \verb|_coefficients|, \verb|_unknowns|, and \verb|_dmConstants| accordingly. This process is ideal when the ODE is a system of ODE, and it would be over-complicated for user to do extraction for a single ODE. Therefore, we decided create a helper function to ease this issue. On top of that, the Drasil printer will print a single ODE in SRS with a more familiar ``one line equation'' form. Another advantage of having an helper function to input an ODE is that it can reduce human error and make sure the equation is well-formed. We call this helper function input language, and what will this input language looks like? The input language is inspired by how a linear nth-order ODE looks like. Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of 
 \begin{equation} \label{eq_linearDE}
 	a_n(t) \cdot y^n(t) + a_{n-1}(t) \cdot y^{n-1}(t) + \dots + a_1(t) \cdot y'(t) + a_0(t) \cdot y(t) = g(t)
 \end{equation}
 
-On the left-hand side of the linear equation~\ref{eq_linearDE}, the expression is a collection of terms. Each term consists of a coefficient and a derivative of the function y(t). With ideas of term, coefficient, and derivative, we create new data types to mimic the mathematical expression of a linear ODE. The following is the detail of the code for new data types and operators.
+On the left-hand side of the linear equation~\ref{eq_linearDE}, the expression is a collection of terms. Each term consists of a coefficient function and a derivative of the function y(t). The coefficient $a_0(t), \dots, a_n(t)$ and $g(t)$ can be constant or non-constant functions, in our case they are constant functions. With ideas of term, coefficient, and derivative, we create new data types to mimic the mathematical expression of a linear ODE. The following is the detail of the code for new data types and operators.
 
 \begin{haskell1}
 type Unknown = Integer
@@ -145,7 +145,7 @@ For new types, the \verb|LHS|, the short name for the left-hand side, is a list 
 
 \begin{listing}[ht]
 \begin{haskell1}
--- in example \ref{eq_odeexmaple}: y\_t'' + (1 + K\_d)y\_t' + (20 + K\_p)y\_t = r\_t K\_p
+-- in Example \ref{eq_odeexmaple}: y\_t'' + (1 + K\_d)y\_t' + (20 + K\_p)y\_t = r\_t K\_p
 -- left hand side = y\_t'' + (1 + K\_d)y\_t' + (20 + K\_p)y\_t 
 -- right hand side = r\_t K\_p
 

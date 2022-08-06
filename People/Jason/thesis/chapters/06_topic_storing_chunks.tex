@@ -1,6 +1,102 @@
 \chapter{``Store All The Things''}
 \label{chap:storingChunks}
 
+\begin{writingdirectives}
+
+      \item \textit{Problem}: Drasil can have any number of \textit{types} (of
+            chunks) involved in any particular generation. While the types are
+            useful in many regards, the types encumber us when we try to
+            reference a specific chunk (by its \UID{}) without surrounding type
+            information, which may not be important.
+
+      \item Drasils \ChunkDB{} (\refOriginalChunkDBHaskell) collects chunks
+            using a series of maps, one for each chunk type.
+
+      \item \textit{Practical Problems}:
+            \begin{itemize}
+
+                  \item Does not allow us to ignore type information when its
+                        not really needed. i.e., in areas where we use bounded
+                        polymorphism.
+                  
+                        \intodo{Explain when it's not really needed (i.e.,
+                        functions that just take any chunk that satisfy a
+                        constraint and use them in some area, or just grabbing
+                        the UID or the references of the chunk.)}
+
+                  \item Scaling against new types of chunks.
+                  
+                  \item Scaling against type parameters.
+                  
+                  \item Data consistency.
+                  
+                  \item Can't properly answer ``what chunk does X UID refer
+                        to?'' No definitive answer to examining a specific chunk
+                        by its \UID{}.
+
+            \end{itemize}
+
+      \item \textit{Solution}: Without discard, mask the type information,
+            ignoring differences in the chunks other than that which is
+            minimally required of them, and unmask it as needed.
+
+      \item \textit{Practical Solution}: We can use \ExistentialQuantification{}
+            with new data type that can carry anything that provides a minimum
+            needed functionality (i.e., providing \UID{}s for their own data,
+            and for references). In doing this, we effectively ``drop the type
+            information'' when it's placed into the chunk database. However, we
+            allow for that chunk to be unpacked (with type information retained)
+            later through using Haskell's \inlineHs{Data.Typeable} (part of
+            \inlineHs{base} package). As such, we can merge the series of maps
+            into a single map that collects all chunks.
+
+\end{writingdirectives}
+
+In Drasil vernacular, as discussed in \Cref{chap:drasil}, we call encoded
+fragments of knowledge ``chunks.'' In practice, users encode chunks using
+Haskells basic \inlineHs{data} types (example later), tagging it with a
+\ACF{uid}, typically contained within the record. \acsp{uid} are represented by
+the \UID{} data type\todo{ref Original UID Haskell}. For example, \todo{ref
+example chunk definition below} the below example chunk definition represents a
+commonly used packet of data associated with names.
+
+\intodo{Example of a basic chunk definition.}
+
+In the above example, the chunk is of a specific \textit{type}. Drasil leverages
+Haskells type system to create a system of reasoning about chunks. As such, when
+we create instances of chunks, they are ``typed'' with a single fully
+monomorphic type signature. When chunks connect and intertwine other chunks,
+instead of storing whole instances of those constituent chunks, we store \UID{}
+references to those constituent chunks. In doing this, we ensure that all
+references to that chunk refer to the same piece of immutable data. 
+
+\intodo{Discuss classy lenses built.}
+
+Searching for chunks by their \UID{}s requires us to have somewhere to search
+from. Drasil requires developers to collect all of their relevant chunks inside
+of an encompassing ``chunk database.'' The ``chunk database'' (\ChunkDB{}) is
+built (as seen in \refOriginalChunkDBHaskell{}) using a series of maps
+(\refOriginalChunkDBTypeMapsHaskell) that map \UID{} keys to chunk data. Each
+map is a map from a \UID{} to a specific data monomorphic data type. As such, in
+order to access a chunk by its \UID{}, the associated type of the chunk must be
+known, even if operations we intended to use on the grabbed chunk are generic,
+applicable to any similar category of chunks, or all chunks. Additionally, since
+there is one map per monomorphic type, it means that all chunk types must be
+known and coded in the \ChunkDB{} beforehand. Of course, this means that set of
+types that Drasil can work with is fixed, and, that if we have \(N\) types (with
+no type parameters), then there must be \(N\) maps in the \ChunkDB{} data type.
+However, for each chunk type with type parameters, each argument combination
+would need to also be registered. Together, this leads to an ever-growing series
+of maps. Additionally, since we have a collection of maps, ... regarding UID
+collision detection.
+
+\intodo{What's the problem with this method of storing chunks?}
+
+\intodo{How can we resolve it?}
+
+\intodo{How can we mask the types and unmask them later?}
+
+
 \intodo{Rewrite the point form notes in Storing Chunks chapter.}
 
 \begin{itemize}

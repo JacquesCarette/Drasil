@@ -20,7 +20,7 @@ Here is an example of how we manually close the gap between the text-based ODE a
 \begin{listing}[ht]
 \begin{haskell1}
 -- Pesodu Code
-T_w'(t) = reciprocal tau_w * (T_c - T_w(t))
+T_w'(t) = reciprocal τ_w * (T_c - T_w(t))
 \end{haskell1}
 \captionof{listing}{NoPCM equation for SRS}
 \label{code_expliciteqsrs}
@@ -29,7 +29,7 @@ T_w'(t) = reciprocal tau_w * (T_c - T_w(t))
 \begin{listing}[ht]
 \begin{haskell1}
 -- Pesodu Code
-reciprocal tau_w * (T_c - T_w[0])
+reciprocal τ_w * (T_c - T_w[0])
 \end{haskell1}
 \captionof{listing}{NoPCM equation for the Drasil Code Generator}
 \label{code_expliciteq}
@@ -105,7 +105,7 @@ _indepVar = time
 _depVar = y_t
 _coefficients = [[1, 1 + K_d, 20 + K_p]]
 _unknowns = [2, 1, 0]
-_dmConstants = [r_t K_p]
+_dmConstants = [r_t * K_p]
 _dmconc = ... -- Drasil definition for chuck concept
 \end{haskell1}
 \captionof{listing}{Internal Data Representation for Example~\ref{eq_odeexmaple}}
@@ -152,7 +152,7 @@ For new types, the \verb|LHS|, the short name for the left-hand side, is a list 
 lhs = [1 $* (y_t $^^ 2)]
 	$+ (1 + K_d) $* (y_t $^^ 1)
 	$+ (20 + K_p) $* (y_t $^^ 0)
-rhs = r_t K_p
+rhs = r_t * K_p
 \end{haskell1}
 \captionof{listing}{Input language for the example~\ref{eq_odeexmaple}}
 \label{code_exinputl}
@@ -174,7 +174,7 @@ The following pseudo-code shows how to directly set the example~\ref{eq_odeexmap
 \begin{haskell1}
 coefficent = [[1, 1 + K_d, 20 + K_p]]
 unknowns   = [2, 1, 0]
-constants  = [r_t K_p]
+constants  = [r_t * K_p]
 \end{haskell1}
 
 The second constructor is called \verb|makeASingleDE|. This constructor uses the input language to simplify the input of a single ODE. In \verb|makeASingleDE|, we create the coefficient matrix, unknown vector, and constant vector based on restricted inputs. In other words, users can no longer set the data by directly giving values. The \verb|DifferentialModel| will generate all data for the coefficient matrix, unknown vector, and constant vector accordingly. The constructor first creates a descending unknown vector base on the highest number of its derivatives. To take the code~\ref{code_exinputl} as an example, the highest order of its derivative on the left-hand side of the equation is 2, so we will generate the unknown vector, and it is a list that contains 2, 1 and 0. Then, we will create the coefficient matrix by finding its related coefficient based on the descending order of the unknown vector. The main advantage of this design decision is that the \verb|DifferentialModel| will no longer require users to input the unknown vector in descending order. Any order of the unknown vector will be acceptable because we will generate relative data in \verb|DifferentialModel|. The pseudo-code~\ref{code_exinputl} shows how to use the input language to set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector. The full detail of how to use the input language set the coefficient matrix, unknown vector, and constant vector for the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller} example will show up in the Appendix ~\ref{const_de}.

@@ -117,7 +117,97 @@ unmasked for retrieval and normal usage.
 The question: how can we achieve this?
 
 To collapse the series of maps into a single one, we need to have a common data
-type for the maps ``value'' type. 
+type for the maps ``value'' type. So, we create one:
+
+\begin{pseudohaskell}{Basic Chunk Box}{basicChunkBox}
+data Chunk = Chunk a
+\end{pseudohaskell}
+
+Great! Now we can create a single map for our chunk collection.
+
+\begin{pseudohaskell}{New Chunk Database Map}{newChunkDatabaseMap}
+type ChunkDB = Map UID Chunk
+\end{pseudohaskell}
+
+Ok, now we've created a mechanism to collapse all of our chunk maps into one,
+but, we've encountered an issue: we've neglected retrieval functionality. Let's
+see:
+
+\begin{pseudohaskell}{Broken QuantityDict Chunk Retriever}{brokenChunkRetriever}
+retrieveQD :: UID -> ChunkDB -> Maybe QuantityDict
+retrieveQD u cdb = do
+    (Chunk expectedQd) <- lookup u cdb
+    pure expectedQd
+\end{pseudohaskell}
+
+\Chunk{}s are currently an informational void. So, this results in a type
+error\todo{Show the type error here.}. Haskell is unable to create the infinite
+type coercion from \inlineHs{expectedQd}'s unknown type to a \QuantityDict{}.
+
+So, how can we try to fix this? \inlineHs{Data.Typeable} to the rescue!
+\inlineHs{Data.Typeable} allows us to create constrained types with extra
+functionality for casting (amongst other common reflection operations). First,
+we need to alter our \Chunk{} data type to make the contained data satisfy the
+\Typeable{} constraint that the \Typeable{} module needs for most of its
+functionality. As of \acs{ghc} 7.10 (for which our targeted version of 8+ is
+newer than), \acs{ghc} automatically instantiates the \Typeable{} typeclass for
+all types.
+
+\begin{pseudohaskell}{Examinable Chunk Box}{examinableChunkBox}
+{-# LANGUAGE ExistentialQuantification #-}
+...
+data Chunk = forall a. Typeable a => Chunk a
+\end{pseudohaskell}
+
+Ok, now we should be able to retrieve chunks, and cast the chunk value types as
+needed.
+
+\begin{pseudohaskell}{Working QuantityDict Chunk Retriever}{workingChunkRetriever}
+retrieveQD :: UID -> ChunkDB -> Maybe QuantityDict
+retrieveQD u cdb = do
+    (Chunk expectedQd) <- lookup u cdb
+    cast expectedQd
+\end{pseudohaskell}
+
+To sum up, at this point:
+
+\begin{itemize}
+
+      \item We were able to mask individual chunk types by hiding them in
+            \Chunk{} boxes, allowing us to avoid discussing specific chunk types
+            when forming our \ChunkDB{}.
+
+      \item \ChunkDB{} is now merely a single map that allows us to easily
+            ensure that there are no \UID{} collisions.
+
+      \item \ChunkDB{} scales against new chunk type creation because it
+            discusses no specific types as it only discusses types through
+            constraints. Through this, it scales against the creation of type
+            parameters for Haskell-level types.
+
+\end{itemize}
+
+\intodo{Discuss adding a few more constraints to the Chunk-allowable types. They
+      should satisfy HasUID, HasReferences, and Dumpable.}
+
+One notable and commonly used feature of the previous generation of the
+\ChunkDB{} was that it allowed the user to grab \textit{all} chunks of a
+particular type. We can re-create this for this new \ChunkDB{} as well by using
+\inlineHs{Data.Typeable}s \TypeRep{} signature representation of Haskell types:
+
+\begin{pseudohaskell}{Grabbing All Chunks from the New ChunkDB}{grabAllChunksFromNewChunkDB}
+todo :: _
+\end{pseudohaskell}
+
+\intodo{I just need an example above, its kind of boring to write though. It
+      would need to show a function that grabs chunks by a specific TypeRep and
+      an example of how to use it.}
+
+However, this is something of an expensive and commonly performed task, so it's
+inefficient. So, in order to make the \ChunkDB{} more ``industrial-strength,''
+we can add an extra mechanism for caching in various ways to trade a bit of
+memory for a frequent and expensive search operation.
+
 \intodo{Continue here!}
 
 \intodo{How can we mask the types and unmask them later?}
@@ -199,6 +289,8 @@ type for the maps ``value'' type.
             information? \textit{Rigid designators}.
 
 \end{itemize}
+
+\intodo{Move nearly everything below to the Future Work chapter.}
 
 \section{Future Work}
 

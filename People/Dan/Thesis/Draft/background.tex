@@ -2,11 +2,53 @@
 \section{Software Artifacts}
 \label{sec:sfs}
  -  (Reference a lot of Parnas)
+ - Rational designs (how/why to fake)
 \section{Software Reuse and Software Families}
+\subsection{Software/Program Families}
   - Bring up GNU/Linux and different distros as examples of software families
     - (Raspbian v Raspbian lite) = Debian--, etc.
+\subsection{Reuse and Reproducible Research}
   - Touch on reuse areas like reproducible research - Gentleman and Lang 2012
-\section{Literate Programming}
+
+Being able to reproduce results, is fundamental to the idea of good science.
+When it comes to software projects, there are often many undocumented
+assumptions or modifications (including hacks) involved in the finished product.
+This can make replication impossible without the help of the original author,
+and in some cases reveal errors in the original author's
+work~\cite{IonescuAndJansson2013}.
+
+Reproducible research has been used to mean embedding executable code in
+research papers to allow readers to reproduce the results
+described~\cite{SchulteEtAl2012}.
+
+Combining research reports with relevant code, data, etc.\ is not necessarily
+easy, especially when dealing with the publication versions of an author's work.
+As such, the idea of \emph{compendia} were
+introduced~\cite{GentlemanAndLang2012} to provide a means of encapsulating the
+full scope of the work. Compendia allow readers to see computational details, as
+well as re-run computations performed by the author. Gentleman and Lang proposed
+that compendia should be used for peer review and distribution of scientific
+work~\cite{GentlemanAndLang2012}.
+
+Currently, several tools have been developed for reproducible research
+including, but not limited to, Sweave~\cite{Leisch2002},
+SASweave~\cite{LenthEtAl2007}, Statweave~\cite{Lenth2009},
+Scribble~\cite{FlattEtAl2009}, and Org-mode~\cite{SchulteEtAl2012}. The most
+popular of those being Sweave~\cite{SchulteEtAl2012}. The aforementioned tools
+maintain a focus on code and certain computational details. Sweave,
+specifically, allows for embedding code into a document which is run as the
+document is being typeset so that up to date results are always included.
+However, Sweave (along with many other tools), still maintains a focus on
+producing a single, linear document. It is my hope that Drasil will outperform
+these existing tools due to its flexibility and its ability to create multiple
+artifacts from a knowledge base.
+
+\section{Literate Approaches to Software Development}
+
+There have been several approaches attempting to combine development of program 
+code with documentation.\ds{Something something...}
+
+\subsection{Literate Programming}
 
 Literate Programming (LP) is a method for writing software introduced by Knuth 
 that focuses on explaining to a human what we want a computer to do rather than 
@@ -23,7 +65,6 @@ literate program, the code and documentation are kept together in one source.
 To extract runnable code, a process known as \emph{tangle} must be performed on 
 the source. A similar process known as \emph{weave} is used to extract and 
 typeset the documentation.
-
 
 There are many advantages to LP beyond understandability. As a program is
 developed and updated, the documentation surrounding the source code is more 
@@ -83,6 +124,33 @@ Sweave~\cite{Leisch2002}, however it is designed to dynamically create
 up-to-date reports or manuals by running embedded code as opposed to being used
 as part of the software development process. 
 
-  - Al-Maati and Boujarwah 2002
+\subsection{Literate Software}
+
+A combination of LP and Box Structure~\cite{Mills1986} was proposed as a new
+method called ``Literate Software Development''
+(LSD)~\cite{AlMatiiAndBoujarwah2002}. Box structure can be summarized as the
+idea of different views which are abstractions that communicate the same
+information in different levels of detail, for different purposes. Box
+structures consist of black box, state machine, and clear box structures. The
+black box gives an external (user) view of the system and consists of stimuli
+and responses; the state machine makes the state data of the system visible (it
+defines the data stored between stimuli); and the clear box gives an internal
+(designer's) view describing how data are processed, typically referring to
+smaller black boxes~\cite{Mills1986}. These three structures can be nested as
+many times as necessary to describe a system.
+
+LSD was developed with the intent to overcome the disadvantages of both LP and
+box structure. It was intended to overcome LP's inability to specify interfaces
+between modules, the inability to decompose boxes and implement the design
+created by box structures, as well as the lack of tools to support box
+structure~\cite{Deck1996}.
+
+The framework developed for LSD, ``WebBox'', expanded LP and box structures in a
+variety of ways. It included new chunk types, the ability to refine chunks, the
+ability to specify interfaces and communication between boxes, and the ability
+to decompose boxes at any level. However, literate software (and LSD) remains
+primarily code-focused with very little support for creating other software
+artifacts, in much the same way as LP.
+
 \section{Generative Programming}
  - ?

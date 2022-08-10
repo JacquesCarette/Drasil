@@ -1,17 +1,9 @@
 \chapter{Connect Model to Libraries}
-In chapter 2, we stored the information of a higher-order linear ODE in the \verb|DifferentialModel|. This record preserve the relationship of the ODE, and we can transform the ODE to other forms. In chapter 3, we discuss how to solve a system of first-order ODEs numerically in four different external libraries. What we have not discussed is that how to how to close the gap between the \verb|DifferentialModel| and external libraries. All external libraries do not understands what is a \verb|DifferentialModel|, so this is the problem we want to solve in this chapter. What we know is that most way for solving ODEs are intended for first-order ODEs, and we can covert most higher-order ODEs to a system of first-order ODEs~\citep{converthigherode}. 
-Theoretically, we can transform a higher-order linear ODE to a system of first-order ODEs. Then, giving the equivalent system of first-order ODEs to external libraries, we can get the numerical solution for the higher-order linear ODE.
+In chapter 2, we stored the information of a higher-order linear ODE in the \verb|DifferentialModel|. This data type preserve the relationship of the ODE, and we can transform the ODE to other forms. In chapter 3, we discuss how to solve a system of first-order ODEs numerically in four selected external libraries. What we have not discussed is that how to close the gap between the \verb|DifferentialModel| and external libraries so the Drasil framework can generate a program to solve a high-order ODE numerically. All external libraries do not understands what is a \verb|DifferentialModel|, so this is the problem we are going to solve in this chapter. What we know is that most way for solving ODEs are intended for first-order ODEs, and we can covert most higher-order ODEs to a system of first-order ODEs~\citep{converthigherode}. Therefore, the methodology we use in this chapter is first transform a higher-order linear ODE to a system of first-order ODEs. Then, using the external libraries to solve the system of first-order ODEs. The original higher-order linear ODE is equivalent to the system of first-order ODEs. Thus, by transitivity, the numerical solution for the system of first-order ODEs is also the numerical solution of the higher-order ODE.
 
 In this chapter, we will first discuss how to convert a higher-order linear ODE to a system of first order equations in theory. Then, we will talk about how to connect explicit equation with external libraries. Last, we will discuss how to generate explicit equation base on \verb|DifferentialModel|.
 
 \section{Higher Order to First Order}
-We can write a linear system of first-order ODE in shape of the equation~\ref{eq_foode}. The \textbf{A} is a coefficient matrix, and c is a constant vector. The \textbf{X} is the unknown vector contains functions of the independent variable, often time. The \textbf{X}' is a vector that consist of first derivative of functions in \textbf{X}.
-\begin{equation} \label{eq_foode}
-    \boldsymbol{X}' = \boldsymbol{AX} + \boldsymbol{c}
-\end{equation}
-
-% Most way for solving ODEs are intended for first-order ODEs, and we can covert most higher-order ODEs to a system of first-order ODEs~\citep{converthigherode}. If we have a higher-order linear ODE, we can covert it to a system of first order ODE. So, how to convert a higher-order ODE in shape of \textbf{Ax} = \textbf{b} (~\ref{eq_matrixform}) to a system of first order equations in shape of \textbf{X}' = \textbf{AX} + \textbf{c} (~\ref{eq_foode})?
-
 Given a higher-order ODE, we can write it in form of the equation~\ref{eq_isohighode}. We put the highest derivative $x^n$ on the left hand side, and the rest of terms on right hand side. On the right hand side, $f (t, x, x', x'', \dots, x^{n-1})$ means a function depends on variables t, x, x', \dots, and $x^{n-1}$. The t is independent variable and it is time. The x, x', \dots, and $x^{n-1}$ means the dependent variable x, first derivative of x, and until n-1 derivative.
 \begin{equation} \label{eq_isohighode}
   x^n = f (t, x, x', x'', \dots, x^{n-1})
@@ -48,8 +40,8 @@ Based on the equation~\ref{eq_diffvervars}, we can simplify equations by removin
     & y_{n}'= h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
 \end{flalign}
 
-Last, we can rewrite the equation~\ref{eq_diffvervarslinear} in form of \textbf{X}' = \textbf{AX} + \textbf{c}
-\begin{equation}
+Last, we can rewrite Equation~\ref{eq_diffvervarslinear} in a matrix form.
+\begin{equation} \label{eq_foodeexample}
 	\begin{bmatrix}
 		y_{1}' \\
     y_{2}' \\
@@ -83,13 +75,101 @@ Last, we can rewrite the equation~\ref{eq_diffvervarslinear} in form of \textbf{
 	\end{bmatrix}
 \end{equation}
 
+Lastly, we abstract Equation~\ref{eq_foodeexample} into a general form, Equation~\ref{eq_foode}. The \textbf{A} is a coefficient matrix, and \textbf{c} is a constant vector. The \textbf{X} is the unknown vector contains functions of the independent variable, often time. The \textbf{X}' is a vector that consist of first derivative of functions in \textbf{X}.
+\begin{equation} \label{eq_foode}
+    \boldsymbol{X}' = \boldsymbol{AX} + \boldsymbol{c}
+\end{equation}
+
+In the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study}, we convert Example~\ref{eq_odeexmaple} to Example~\ref{ex_firstorderode}. Then, we generate a program to solve Example~\ref{ex_firstorderode} numerically. By transitivity, the numerical solution is valid for Example~\ref{eq_odeexmaple} as well.
+
 \section{Connect Explicit Equations to Libraries}
 \label{se_connecteetolib}
-reference to Brooks thesis
+
+In previous research, conducted by Brooks, we write the ODEs in a text-based form and store it in a general data pool. Although, the Drasil printer is capable to print ODEs in a SRS, the Drasil Code Generator unable to understand the ODEs in a text-based form. To make study case work, we manually recreate an object (\verb|ODEInfo|) based on the original ODE. Then, the Drasil Code Generator take the new object and generate a solution program. The detail on 
+how to generate external libraries in code can be found on Brooks's thesis~\citep{brooks}. However, the previous research only complete generating external libraries for a first-order ODE. For a higher-order ODE, even we convert it to a system of first-order ODE in \verb|ODEInfo|, the Code Generator still unable to generate proper software. The Code Generator unable to retrieve proper initial values when there are more than one initial value. Therefore, we change the type of the initial value to a new type which can hold for multiple values. 
+
+
+\begin{listing}[ht]
+\begin{haskell1}
+-- Old 
+data ODEInfo = ODEInfo {
+  ...
+  initVal :: CodeExpr
+  ...
+}
+
+-- New 
+data ODEInfo = ODEInfo {
+  ...
+  initVal :: [CodeExpr],
+  ...
+}
+\end{haskell1}
+\end{listing}
+
+The \verb|ODEInfo| is a datatype store the initial value, we can change the type to be a list. This will enable to store multiple initial values in this data type. Then, we have to make sure the Code Generator know how to handle the type of initial values. 
+
+\begin{listing}[ht]
+\begin{haskell1}
+-- Old 
+initVal info
+
+-- New 
+matrix[initVal info]  
+\end{haskell1}
+\end{listing}
+
+In Drasil Code Generator, we use matrix to represent a list. A list is a special case of matrix which dimension is 1. The info is a data type \verb|ODEInfo|, the code \verb|initVal info| retrieve the initVal from \verb|ODEInfo|. In the new code, the type of initVal is no longer \verb|CodeExpr| but a list of \verb|CodeExpr|. Therefore we change wrap \verb|initVal| in a \verb|matrix|.
+
+\begin{listing}[ht]
+\begin{haskell1}
+-- Old 
+def func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W):
+  ...
+  r.set_initial_value(T_init, 0.0)
+  T_W = [T_init]
+  ...
+
+-- New 
+def func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W):
+  ...
+  r.set_initial_value([T_init], 0.0)
+  T_W = [[T_init][0]]
+  ...
+\end{haskell1}
+\end{listing}
+
+the \verb|set_initial_value| will take a list of initial values instead of just one. \verb|T_W| is collection of the numerical solution. Initial values also is a part of numerical solution, so we have to add the proper initial value to the list.
+
+The implementation unlocks the potential for Drasil to solve any higher-order ODE with its equivalent first-order ODE. This include a higher-order non-linear ODE. Despite the \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html#Sec:IMs}{Double Pendulum case study} contains a higher-order non-linear ODE, the Drasil framework now can generate a program to solve it numerically.
+
+1. explain conversion
+
+\begin{flalign} \label{eq_dblpenhigh}
+& \theta_{1}'' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\theta_{2}'}^2L_{2}+{\theta_{1}'}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
+& \theta_{2}'' = \frac{2\sin (\theta_{1}-\theta_{2})({\theta_{1}'}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\theta_{2}'}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
+\end{flalign}
+
+\begin{flalign} \label{eq_dblpenfirst}
+  & \theta_{1}' = \omega_{1} \\ \nonumber
+  & \theta_{2}' = \omega_{2} \\ \nonumber
+  & \omega_{1}' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\omega{2}}^2L_{2}+{\omega{1}}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
+  & \omega_{2}' = \frac{2\sin (\theta_{1}-\theta_{2})({\omega_{1}}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\omega_{2}}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
+\end{flalign}
+
+2. show ODE Info code
+
+2. show generated code
+
+However, the Double Pendulum case study unable to utilize any function in \verb|DifferentialModel| because it was designed for a linear ODE. Further research is required.
+
+
+% reference to Brooks thesis
 double pendulum example
-limitation: duplication
+% limitation: duplication
 
 \section{Generate Explicit Equations}
+This process is not ideal because propagates duplicate information. We want to design the Drasil framework to be as fully automatic as possible, so we want to remove human interference.
+
 generate equations
 reduce duplication
-

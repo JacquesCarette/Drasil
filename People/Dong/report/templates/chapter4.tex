@@ -159,6 +159,25 @@ The implementation unlocks the potential for Drasil to solve any higher-order OD
 
 2. show ODE Info code
 
+\begin{listing}[ht]
+\begin{haskell1}
+dblPenODEInfo :: ODEInfo
+dblPenODEInfo = odeInfo
+  ...
+  [3*π/7, 0, 3*π/4, 0]
+  [ ω₁,
+  -g(2m₁ + m₂)sin θ₁ - m₂gsin (θ₁ - 2θ₂) - 2sin (θ₁ - θ₂)m₂(ω₂²L₂ + ω₁²L₁cos (θ₁ - θ₂))
+    /
+    L₁(2m₁ + m₂ -m₂cos (2θ₁ - 2θ₂)),
+  ω₂,
+  2sin (θ₁ - θ₂)(ω₁²L₁(m₁ + m₂ ) + g(m₁ + m₂ )cos θ₁ + ω₂²L₂m₂cos (θ₁ - θ₂ ))
+    /
+    L₂(2m₁ + m₂ -m₂cos (2θ₁ - 2θ₂))
+  ]
+  ...
+\end{haskell1}
+\end{listing}
+θ
 2. show generated code
 
 However, the Double Pendulum case study unable to utilize any function in \verb|DifferentialModel| because it was designed for a linear ODE. Further research is required.

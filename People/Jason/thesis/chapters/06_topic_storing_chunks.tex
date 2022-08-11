@@ -117,10 +117,18 @@ unmasked for retrieval and normal usage.
 The question: how can we achieve this?
 
 To collapse the series of maps into a single one, we need to have a common data
-type for the maps ``value'' type. So, we create one:
+type for the maps ``value'' type. 
+
+\intodo{Attempt to create a ``Chunk t'' type, but then note that a type needs to
+      have a type parameters, but that we can ignore them through
+      ExistentialQuantification.}
+
+So, we create one:
 
 \begin{pseudohaskell}{Basic Chunk Box}{basicChunkBox}
-data Chunk = Chunk a
+{-# LANGUAGE ExistentialQuantification #-}
+...
+data Chunk = forall a. Chunk a
 \end{pseudohaskell}
 
 Great! Now we can create a single map for our chunk collection.

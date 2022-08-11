@@ -4,6 +4,7 @@ In chapter 2, we stored the information of a higher-order linear ODE in the \ver
 In this chapter, we will first discuss how to convert a higher-order linear ODE to a system of first order equations in theory. Then, we will talk about how to connect explicit equation with external libraries. Last, we will discuss how to generate explicit equation base on \verb|DifferentialModel|.
 
 \section{Higher Order to First Order}
+\label{se_hightofirst}
 Given a higher-order ODE, we can write it in form of the equation~\ref{eq_isohighode}. We put the highest derivative $x^n$ on the left hand side, and the rest of terms on right hand side. On the right hand side, $f (t, x, x', x'', \dots, x^{n-1})$ means a function depends on variables t, x, x', \dots, and $x^{n-1}$. The t is independent variable and it is time. The x, x', \dots, and $x^{n-1}$ means the dependent variable x, first derivative of x, and until n-1 derivative.
 \begin{equation} \label{eq_isohighode}
   x^n = f (t, x, x', x'', \dots, x^{n-1})
@@ -80,7 +81,7 @@ Lastly, we abstract Equation~\ref{eq_foodeexample} into a general form, Equation
     \boldsymbol{X}' = \boldsymbol{AX} + \boldsymbol{c}
 \end{equation}
 
-In the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study}, we convert Example~\ref{eq_odeexmaple} to Example~\ref{ex_firstorderode}. Then, we generate a program to solve Example~\ref{ex_firstorderode} numerically. By transitivity, the numerical solution is valid for Example~\ref{eq_odeexmaple} as well.
+Once we completed the transformation and get a system of first-order ODE in shape of Equation~\ref{eq_foode}. We encode it in Drasil and pass it to Drasil Code Generator. In the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study}, we convert Example~\ref{eq_odeexmaple} to Example~\ref{ex_firstorderode}. Then, we generate a program to solve Example~\ref{ex_firstorderode} numerically. By transitivity, the numerical solution is valid for Example~\ref{eq_odeexmaple} as well.
 
 \section{Connect Explicit Equations to Libraries}
 \label{se_connecteetolib}
@@ -122,28 +123,32 @@ matrix[initVal info]
 In Drasil Code Generator, we use matrix to represent a list. A list is a special case of matrix which dimension is 1. The info is a data type \verb|ODEInfo|, the code \verb|initVal info| retrieve the initVal from \verb|ODEInfo|. In the new code, the type of initVal is no longer \verb|CodeExpr| but a list of \verb|CodeExpr|. Therefore we change wrap \verb|initVal| in a \verb|matrix|.
 
 \begin{listing}[ht]
-\begin{haskell1}
--- Old 
-def func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W):
-  ...
+\begin{python1}
+# Old 
   r.set_initial_value(T_init, 0.0)
   T_W = [T_init]
-  ...
 
--- New 
-def func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W):
-  ...
+# New 
   r.set_initial_value([T_init], 0.0)
   T_W = [[T_init][0]]
-  ...
-\end{haskell1}
+\end{python1}
 \end{listing}
 
 the \verb|set_initial_value| will take a list of initial values instead of just one. \verb|T_W| is collection of the numerical solution. Initial values also is a part of numerical solution, so we have to add the proper initial value to the list.
 
-The implementation unlocks the potential for Drasil to solve any higher-order ODE with its equivalent first-order ODE. This include a higher-order non-linear ODE. Despite the \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html#Sec:IMs}{Double Pendulum case study} contains a higher-order non-linear ODE, the Drasil framework now can generate a program to solve it numerically.
+\begin{listing}[ht]
+\begin{csharp1}
+// Old 
+Vector initv = new Vector(T_init);
 
-1. explain conversion
+// New 
+Vector initv = new Vector(new double[] {T_init});
+\end{csharp1}
+\end{listing}
+
+In Java and C\texttt{++}, the backend code already handle the initial value as a list, so there is no change in artifact for those two languages. 
+
+The implementation unlocks the potential for Drasil to solve any higher-order ODE with its equivalent first-order ODE. This include a higher-order non-linear ODE. Despite the \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html#Sec:IMs}{Double Pendulum case study} contains a higher-order non-linear ODE, the Drasil framework now can generate a program to solve it numerically. In the double pendulum case study, we eventually want to solve Equation~\ref{eq_dblpenhigh}. There are two second-order ODEs in one system. To solve this system of ODE, we can convert them into a system of first-order ODE. The transformation follow the methodology we discussed in Section~\ref{se_hightofirst}. We can covert Equation~\ref{eq_dblpenhigh} into Equation~\ref{eq_dblpenfirst}. However, we cannot show Equation~\ref{eq_dblpenfirst} in shape of Equation~\ref{eq_foode} because the ODE is not a linear ODE. Once the transformation complete, we can encode Equation~\ref{eq_dblpenfirst}, and ready pass it to the Drasil Code Generator.
 
 \begin{flalign} \label{eq_dblpenhigh}
 & \theta_{1}'' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\theta_{2}'}^2L_{2}+{\theta_{1}'}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
@@ -157,38 +162,66 @@ The implementation unlocks the potential for Drasil to solve any higher-order OD
   & \omega_{2}' = \frac{2\sin (\theta_{1}-\theta_{2})({\omega_{1}}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\omega_{2}}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
 \end{flalign}
 
-2. show ODE Info code
-
+The following is an example how we encode Equation~\ref{eq_dblpenfirst} in the Drasil. 
 \begin{listing}[ht]
 \begin{haskell1}
 dblPenODEInfo :: ODEInfo
 dblPenODEInfo = odeInfo
-  ...
-  [3*π/7, 0, 3*π/4, 0]
-  [ ω₁,
-  -g(2m₁ + m₂)sin θ₁ - m₂gsin (θ₁ - 2θ₂) - 2sin (θ₁ - θ₂)m₂(ω₂²L₂ + ω₁²L₁cos (θ₁ - θ₂))
-    /
-    L₁(2m₁ + m₂ -m₂cos (2θ₁ - 2θ₂)),
+...
+[3*π/7, 0, 3*π/4, 0]
+[ ω₁,
+  -g(2m₁ + m₂)sin θ₁ - m₂gsin (θ₁ - 2θ₂) - 2sin (θ₁ - θ₂)m₂(ω₂²L₂ + ω₁²L₁cos (θ₁ - θ₂)) / L₁(2m₁ + m₂ -m₂cos (2θ₁ - 2θ₂)),
   ω₂,
-  2sin (θ₁ - θ₂)(ω₁²L₁(m₁ + m₂ ) + g(m₁ + m₂ )cos θ₁ + ω₂²L₂m₂cos (θ₁ - θ₂ ))
-    /
-    L₂(2m₁ + m₂ -m₂cos (2θ₁ - 2θ₂))
-  ]
-  ...
+  2sin (θ₁ - θ₂)(ω₁²L₁(m₁ + m₂ ) + g(m₁ + m₂ )cos θ₁ + ω₂²L₂m₂cos (θ₁ - θ₂ )) / L₂(2m₁ + m₂ -m₂cos (2θ₁ - 2θ₂))
+]
+...
 \end{haskell1}
 \end{listing}
-θ
-2. show generated code
 
-However, the Double Pendulum case study unable to utilize any function in \verb|DifferentialModel| because it was designed for a linear ODE. Further research is required.
+Once the \verb|dblPenODEInfo| is ready, we will pass it to the Drasil Code generator. We generate the program solve double pendulum in four languages. The detail of each artifacts captured ODE information will show in Appendix A (link)
 
-
-% reference to Brooks thesis
-double pendulum example
-% limitation: duplication
+The limitation with manually created \verb|ODEInfo| is that there we will write the ODE twice. In this case, we encode both Equation~\ref{eq_dblpenhigh} and Equation~\ref{eq_dblpenfirst} in Drasil. They both demonstrate the phenomena of double pendulum, and exist in an isomorphic ODE type. In the next section, we would like to discuss how to automate the transformation from a higher-order ODE to a system of first-order ODE.
 
 \section{Generate Explicit Equations}
 This process is not ideal because propagates duplicate information. We want to design the Drasil framework to be as fully automatic as possible, so we want to remove human interference.
 
+talk the scope, only for a single high-order ODE, not for a system of high-order ODE
+
 generate equations
 reduce duplication
+
+However, the Double Pendulum case study unable to utilize any function in \verb|DifferentialModel| because it was designed for a linear ODE. Further research is required.
+
+\begin{equation} \label{eq_foodeexample}
+	\begin{bmatrix}
+		\mathcolorbox{red}{y_{1}'} \\
+    y_{2}' \\
+    \dots  \\
+    y_{n-1}' \\
+    y_{n}'
+	\end{bmatrix}
+    = 
+  \begin{bmatrix}
+		0, & 1, & 0, & \dots, & 0 \\
+    0, & 0, & 1, & \dots, & 0 \\
+    \dots \\
+    0, & 0, & 0, & \dots, & 1 \\
+    g_{1}(t), & g_{2}(t), & g_{3}(t), & \dots, & g_{n}(t)
+	\end{bmatrix}
+    \cdot
+  \begin{bmatrix}
+		y_{1} \\
+    y_{2} \\
+    \dots  \\
+    y_{n-1} \\
+    y_{n}
+	\end{bmatrix}
+    + 
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    \dots  \\
+    0 \\
+    h(t)
+	\end{bmatrix}
+\end{equation}

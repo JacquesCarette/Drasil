@@ -27,7 +27,7 @@ Now, we can start differentiate $y_{1}$, $y_{2}$, $\dots$, and $y_{n}$ in equati
   & y_{n}' = x^{n} = f (t, y_{1}, y_{2}, \dots, y_{n})
 \end{flalign}
 
-The $f (t, y_{1}, y_{2}, \dots, y_{n})$ is a linear function, and we can rewrite them as the following
+We assume $f (t, y_{1}, y_{2}, \dots, y_{n})$ is a linear function. Then, we can rewrite them as the following
 \begin{equation}\label{eq_linear}
 h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + \dots + g_{n}(t) \cdot y_{n}
 \end{equation}
@@ -187,12 +187,14 @@ This process is not ideal because propagates duplicate information. We want to d
 
 talk the scope, only for a single high-order ODE, not for a system of high-order ODE
 
+All necessary information contains in \verb|DifferentialModel|
+
 generate equations
 reduce duplication
 
 However, the Double Pendulum case study unable to utilize any function in \verb|DifferentialModel| because it was designed for a linear ODE. Further research is required.
 
-\begin{equation} \label{eq_foodeexample}
+\begin{equation} \label{eq_foodeexamplecolor}
 	\begin{bmatrix}
 		\highlight{yellow}{y_{1}'} \\
     \highlight{yellow}{y_{2}'} \\
@@ -226,18 +228,78 @@ However, the Double Pendulum case study unable to utilize any function in \verb|
 	\end{bmatrix}
 \end{equation}
 
-generate yellow X' and X
-In the yellow highlight part, They highlighted the X' and X in Equation~\ref{eq_foode}. X' and X are fairly predictable. The length of X' and X depend on how many new dependent variables introduces. If the higher-order ODE is second-order, there will be two new dependent variables be introduced and the length of X' and X will be 2. If the higher-order ODE is nth-order, there will be n new dependent variables be introduced and the length of X' and X will be n. For X', known it is n-th order ODE, we parameterize $y'$ from 1 to n. For X, known it is n-th order ODE, we parameterize $y$ from 1 to n.
+We can abstract Equation~\ref{eq_foodeexamplecolor} to Equation~\ref{eq_foode}. We highlighted X' and X in yellow color in Equation~\ref{eq_foodeexamplecolor}. The number of elements in \textbf{X'} and \textbf{X} depend on how many new dependent variables introduces. If the higher-order ODE is second-order, there will be two new dependent variables be introduced and the length of \textbf{X'} and \textbf{X} will be 2. If the higher-order ODE is nth-order, there will be n new dependent variables be introduced and the length of \textbf{X'} and \textbf{X} will be n. For \textbf{X'}, known it is n-th order ODE, we parameterize $y'$ from 1 to n. For \textbf{X}, known it is n-th order ODE, we parameterize $y$ from 1 to n.
 
-generate orange identity matrix 
-The A contain highlighted in orange and blue. The orange highlighted the identity matrix. The identity matrix has its pattern. The first row contains minimum 0, 1, and (n-2)th 0 append to [0, 1]. If there is a second identity row, it contain 0, 0 ,1 and append (n-3)th 0 to [0, 0 ,1]. The identity matrix has n-1 rows with n length.
+code
 
-generate gray identity in c
-the minimum [0, h(t)], and (n-2) add before [0, h(t)]
+We highlighted the n$\times$n coefficient matrix \textbf{A} in orange and blue color in Equation~\ref{eq_foodeexamplecolor}. The orange part is the identity matrix. Since the lowest higher-order ODE is a second-order, so the smallest identity matrix is [0, 1]. Equation~\ref{eq_foodeexamplecolortwo} shows a completed transformation for a second-order ODE.
+\begin{equation} \label{eq_foodeexamplecolortwo}
+	\begin{bmatrix}
+		{y_{1}'} \\
+    {y_{2}'} 
+	\end{bmatrix}
+    = 
+  \begin{bmatrix}
+		{0}, & {1} \\
+    {g_{1}(t)}, & {g_{2}(t)}
+	\end{bmatrix}
+    \cdot
+  \begin{bmatrix}
+		{y_{1}} \\
+    {y_{2}} 
+	\end{bmatrix}
+    + 
+  \begin{bmatrix}
+    {0} \\
+    {h(t)}
+	\end{bmatrix}
+\end{equation}
 
-generate cyan and red
-blue and red can be determine by known relation with 
+If it is a fourth-order ODE, the \textbf{A} will be a n$\times$n matrix, and the dimension of the identity matrix will be n-1$\times$n. Equation~\ref{eq_foodeexamplecolorfour} shows a completed transformation for a fourth-order ODE.
+\begin{equation} \label{eq_foodeexamplecolorfour}
+	\begin{bmatrix}
+		{y_{1}'} \\
+    {y_{2}'} \\
+    {y_{3}'} \\
+    {y_{4}'}
+	\end{bmatrix}
+    = 
+  \begin{bmatrix}
+		{0}, & {1}, & {0}, & {0} \\
+    {0}, & {0}, & {1}, & {0} \\
+    {0}, & {0}, & {0}, & {1} \\
+    {g_{1}(t)}, & {g_{2}(t)}, & {g_{3}(t)}, & {g_{4}(t)}
+	\end{bmatrix}
+    \cdot
+  \begin{bmatrix}
+		{y_{1}} \\
+    {y_{2}} \\
+    {y_{3}} \\
+    {y_{4}}
+	\end{bmatrix}
+    + 
+  \begin{bmatrix}
+    {0} \\
+    {0} \\
+    {0} \\
+    {h(t)}
+	\end{bmatrix}
+\end{equation}
+
+The identity matrix starts with [0, 1], and append (n-2)th 0 to it. If there is a second identity row, the second row contains [0, 0 ,1] and append (n-3)th 0 to it. We observe there is an pattern for the identity matrix, so we can generate it.
+
+code
+
+We highlighted the constant vector \textbf{c} in gray and red color in Equation~\ref{eq_foodeexamplecolor}.The vector \textbf{c} has the length of n. The last element of the constant vector \textbf{c} will be h(t), and anything before h(t) will be zeros.
+
+code
+
+For the rest parts blue and red in Equation~\ref{eq_foodeexamplecolor}, they can be determine by the last equation in Equation~\ref{eq_diffvervarslinear}.
 
 \begin{equation}
-  y_{n}' = x^{n} = f (t, y_{1}, y_{2}, \dots, y_{n}) = h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
+  y_{n}' = h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
 \end{equation}
+
+code
+
+We generate the \verb|ODEInfo| based on \verb|DifferentialModel|.

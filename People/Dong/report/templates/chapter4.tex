@@ -10,7 +10,7 @@ Given a higher-order ODE, we can write it in form of the equation~\ref{eq_isohig
   x^n = f (t, x, x', x'', \dots, x^{n-1})
 \end{equation}
 
-Later, we introduce new variables, $y_{1}$, $y_{2}$, $\dots$, and $y_{n}$, and the new relationship show at below.
+Later, we introduce new variables, $y_{1}$, $y_{2}$, $\dots$, and $y_{n}$. The number of newly introduced dependent variable is equal to the highest order of the ODE. The new relationship show at below.
 \begin{flalign} \label{eq_newvars}
   & y_{1} = x \\ \nonumber
   & y_{2} = x' \\ \nonumber
@@ -29,7 +29,7 @@ Now, we can start differentiate $y_{1}$, $y_{2}$, $\dots$, and $y_{n}$ in equati
 
 The $f (t, y_{1}, y_{2}, \dots, y_{n})$ is a linear function, and we can rewrite them as the following
 \begin{equation}\label{eq_linear}
-h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
+h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + \dots + g_{n}(t) \cdot y_{n}
 \end{equation}
 
 Based on the equation~\ref{eq_diffvervars}, we can simplify equations by removing derivatives of x and replace $f (t, y_{1}, y_{2}, \dots, y_{n})$ with equation~\ref{eq_linear}. Then, we can get:
@@ -194,34 +194,50 @@ However, the Double Pendulum case study unable to utilize any function in \verb|
 
 \begin{equation} \label{eq_foodeexample}
 	\begin{bmatrix}
-		\mathcolorbox{red}{y_{1}'} \\
-    y_{2}' \\
-    \dots  \\
-    y_{n-1}' \\
-    y_{n}'
+		\highlight{yellow}{y_{1}'} \\
+    \highlight{yellow}{y_{2}'} \\
+    \highlight{yellow}{\dots} \\
+    \highlight{yellow}{y_{n-1}'} \\
+    \highlight{yellow}{y_{n}'}
 	\end{bmatrix}
     = 
   \begin{bmatrix}
-		0, & 1, & 0, & \dots, & 0 \\
-    0, & 0, & 1, & \dots, & 0 \\
-    \dots \\
-    0, & 0, & 0, & \dots, & 1 \\
-    g_{1}(t), & g_{2}(t), & g_{3}(t), & \dots, & g_{n}(t)
+		\highlight{orange}{0}, & \highlight{orange}{1}, & \highlight{orange}{0}, & \highlight{orange}{\dots}, & \highlight{orange}{0} \\
+    \highlight{orange}{0}, & \highlight{orange}{0}, & \highlight{orange}{1}, & \highlight{orange}{\dots}, & \highlight{orange}{0} \\
+    \highlight{orange}{\dots} \\
+    \highlight{orange}{0}, & \highlight{orange}{0}, & \highlight{orange}{0}, & \highlight{orange}{\dots}, & \highlight{orange}{1} \\
+    \highlight{cyan}{g_{1}(t)}, & \highlight{cyan}{g_{2}(t)}, & \highlight{cyan}{g_{3}(t)}, & \highlight{cyan}{\dots}, & \highlight{cyan}{g_{n}(t)}
 	\end{bmatrix}
     \cdot
   \begin{bmatrix}
-		y_{1} \\
-    y_{2} \\
-    \dots  \\
-    y_{n-1} \\
-    y_{n}
+		\highlight{yellow}{y_{1}} \\
+    \highlight{yellow}{y_{2}} \\
+    \highlight{yellow}{\dots} \\
+    \highlight{yellow}{y_{n-1}} \\
+    \highlight{yellow}{y_{n}}
 	\end{bmatrix}
     + 
   \begin{bmatrix}
-    0 \\
-    0 \\
-    \dots  \\
-    0 \\
-    h(t)
+    \highlight{lightgray}{0} \\
+    \highlight{lightgray}{0} \\
+    \highlight{lightgray}{\dots} \\
+    \highlight{lightgray}{0} \\
+    \highlight{red}{h(t)}
 	\end{bmatrix}
+\end{equation}
+
+generate yellow X' and X
+In the yellow highlight part, They highlighted the X' and X in Equation~\ref{eq_foode}. X' and X are fairly predictable. The length of X' and X depend on how many new dependent variables introduces. If the higher-order ODE is second-order, there will be two new dependent variables be introduced and the length of X' and X will be 2. If the higher-order ODE is nth-order, there will be n new dependent variables be introduced and the length of X' and X will be n. For X', known it is n-th order ODE, we parameterize $y'$ from 1 to n. For X, known it is n-th order ODE, we parameterize $y$ from 1 to n.
+
+generate orange identity matrix 
+The A contain highlighted in orange and blue. The orange highlighted the identity matrix. The identity matrix has its pattern. The first row contains minimum 0, 1, and (n-2)th 0 append to [0, 1]. If there is a second identity row, it contain 0, 0 ,1 and append (n-3)th 0 to [0, 0 ,1]. The identity matrix has n-1 rows with n length.
+
+generate gray identity in c
+the minimum [0, h(t)], and (n-2) add before [0, h(t)]
+
+generate cyan and red
+blue and red can be determine by known relation with 
+
+\begin{equation}
+  y_{n}' = x^{n} = f (t, y_{1}, y_{2}, \dots, y_{n}) = h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
 \end{equation}

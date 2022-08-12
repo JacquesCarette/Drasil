@@ -101,10 +101,9 @@ never occur becomes tedious.
 
 \section{Scaling Against New Types}
 
-\intodo{How can we resolve it?}
-
 Fundamentally, the issue with the \ChunkDB{} is that it caters to each
-individual type by creating a map for each type, leading to tedious busy work.
+individual type by creating a map for each type, leading to tedious busy work in
+upkeep of an ever-growing list of map.
 
 In order to scale against new types, we need to make the database maps
 type-agnostic, merging them all together. It should contain no hard-coded
@@ -119,11 +118,39 @@ The question: how can we achieve this?
 To collapse the series of maps into a single one, we need to have a common data
 type for the maps ``value'' type. 
 
-\intodo{Attempt to create a ``Chunk t'' type, but then note that a type needs to
-      have a type parameters, but that we can ignore them through
-      ExistentialQuantification.}
+\begin{pseudohaskell}{First Attempt at a Universal Chunk Carriage}{firstUniversalChunkCarriage}
+data Chunk t = Chunk t
+\end{pseudohaskell}
 
-So, we create one:
+Now, we have a common data type to wrap our data in: \Chunk{}. Since the type
+parameters expose the type of the internal data, we will be able to unpack the
+Chunk box into the internal data as well. However, this type parameter is also
+an issue for storage, we run into the same issue of needing to create a series
+of maps, one for each type:
+
+\begin{pseudohaskell}{}{showingFirstChunkWouldFailChunkDB}
+-- | Our chunk databases. Should contain all the maps we will need.
+data ChunkDB = CDB { a   :: Map UID (Chunk A)
+                   , b   :: Map UID (Chunk B)
+                   , c   :: Map UID (Chunk C)
+                   , ... :: Map UID (Chunk ...)
+                   }
+\end{pseudohaskell}
+
+We need to be able to ignore the type parameter entirely without losing the
+ability to unpack the data as needed. The nice thing about this ``as needed''
+clause is that we will have an explicit expectation of what the type
+\textit{should} be. In other words, it is sufficient that we can \textit{safely
+attempt} to unpack data and cast it to a specific data.
+
+Thankfully, \acs{ghc} provides us with the ``Existential Quantification''
+language feature\todo{Cite something about the ExistentialQuantification
+language feature} that we can enable\todo{Create a tiny code snippet in the
+appendix that just shows how to enable a language feature at the top of a
+Haskell source code file.}.
+
+So, now we can re-create \Chunk{} using \ExistentialQuantification{} to hide the
+type parameter:
 
 \begin{pseudohaskell}{Basic Chunk Box}{basicChunkBox}
 {-# LANGUAGE ExistentialQuantification #-}
@@ -195,8 +222,58 @@ To sum up, at this point:
 
 \end{itemize}
 
-\intodo{Discuss adding a few more constraints to the Chunk-allowable types. They
-      should satisfy HasUID, HasReferences, and Dumpable.}
+Now, let's impose restrictions on the admissible chunks, to ensure that they are
+indeed ``admissible,'' namely:
+
+\begin{enumerate}
+      
+      \item They should contain \UID{}s.
+      
+      \item They should know what chunks they directly depend on.
+
+\end{enumerate}
+
+One implicit contract we had with the chunks in the past, was that they were all
+expected to have \UID{}s. Now, we can try to make this contract more explicit
+through imposing typeclass constraints, as below:
+
+\begin{pseudohaskell}{UID Ownership Contract}{uidOwnershipContract}
+class HasUID t where:
+      uid :: t -> UID
+\end{pseudohaskell}
+
+And then we would alter our \Chunk{} definition:
+
+\begin{pseudohaskell}{Chunks with UID Constraint}{chunksWithUidConstraint}
+data Chunk = forall a. (Typeable a, HasUID a) => Chunk a
+\end{pseudohaskell}
+
+Great! Now all chunks must ``have a \acs{uid},'' but we don't have a guarantee
+that they are unique and owned solely by a single instance of any chunk. This is
+fine for now\todo{Add to future work.}.
+
+For the last restriction we want to impose, we want to ensure that chunks are
+always ``understandable'' in a sense that all chunks they depend on have already
+been entered in the chunk database as well. In other words, all information they
+depend on should have already been entered before they are entered.
+
+\begin{pseudohaskell}{Chunk Dependencies Contract}{chunkDependenciesContract}
+class HasReferences t where:
+      refs :: t -> [UID]
+\end{pseudohaskell}
+
+And then we would alter our \Chunk{} definition:
+
+\begin{pseudohaskell}{Chunks with UID and Reference List Constraints}{chunksWithUidAndRefListConstraint}
+data Chunk = forall a. (Typeable a, HasUID a, HasReferences a) => Chunk a
+\end{pseudohaskell}
+
+As you can see, adding restrictions on all chunks is now also considerably
+simpler. If we're interested, we can add a ``dump to X'' mechanism, where $X$ is
+any encoding of our choice (such as \acs{json}), similarly. This is omitted for
+brevity, but we chose to add this.
+
+\intodo{Connect these ideas here better.}
 
 One notable and commonly used feature of the previous generation of the
 \ChunkDB{} was that it allowed the user to grab \textit{all} chunks of a
@@ -218,45 +295,16 @@ memory for a frequent and expensive search operation.
 
 \intodo{Continue here!}
 
-\intodo{How can we mask the types and unmask them later?}
-
-\intodo{What is common to all chunks? What do they all need to satisfy?}
+\ChunkDB{} is now a usable core across Drasil-like projects (ones thriving on
+the same ``knowledge-based programming'' ideology).
 
 \intodo{Discuss current setup of chunks being built as nesting dolls.}
+
+\intodo{Discuss where it's currently built and why it's not in Drasil really.}
 
 \intodo{Rewrite the point form notes in Storing Chunks chapter.}
 
 \begin{itemize}
-
-      \item Problems occur:
-            \begin{itemize}
-
-                  \item \UID{} collisions
-
-                  \item Difficult to ascertain what a specific chunk type is
-                        from a \UID{}
-
-                  \item ``ChunkDB'' is not a stable core across Drasil-like
-                        projects (ones that thrive on the same ``knowledge-based
-                        programming'' ideology). \ChunkDB{}s are essentially the
-                        ``scope'' of a system.
-
-            \end{itemize}
-
-      \item Solution:
-            \begin{itemize}
-
-                  \item Merge the maps!
-
-                  \item The key would be the same; a \UID{}.
-
-                  \item The value type?
-
-                  \item An existentially quantified \inlineHs{Data.Typeable.Typeable}!
-
-                  \item e.g., \inlineHs{data Chunk = forall a. Typeable => Chunk a}.
-
-            \end{itemize}
 
       \item But wait! We're missing a few things from chunks:
             \begin{itemize}
@@ -276,6 +324,7 @@ memory for a frequent and expensive search operation.
       \item Ok, much better now.
 
       \item Or is it? Still many problems!
+            \intodo{Move nearly everything below to the Future Work chapter.}
             \begin{itemize}
 
                   \item How do we explain ``Data.Typeable''?
@@ -297,8 +346,6 @@ memory for a frequent and expensive search operation.
             information? \textit{Rigid designators}.
 
 \end{itemize}
-
-\intodo{Move nearly everything below to the Future Work chapter.}
 
 \section{Future Work}
 
@@ -331,19 +378,26 @@ memory for a frequent and expensive search operation.
 
       \item What is a ``chunk''?
             \begin{itemize}
+
                   \item A ``chunk instance'' is a single \textit{term} of a
                         language.
+                        
                   \item A ``chunk type'' is a language itself.
+                  
             \end{itemize}
 
       \item What is a ``transformer''?
             \begin{itemize}
+
                   \item A ``transformer'' is a conversion of a term written in a
-                        language into another term, potentially in another language.
+                        language into another term, potentially in another
+                        language.
+                        
                   \item Transformers rely on a well-understood dissection of
                         knowledge (contained in a chunk type/language) in order
                         transform it (potentially with other terms/information
                         as well) into another term.
+                        
             \end{itemize}
 
 \end{enumerate}

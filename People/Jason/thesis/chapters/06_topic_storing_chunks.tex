@@ -101,10 +101,9 @@ never occur becomes tedious.
 
 \section{Scaling Against New Types}
 
-\intodo{How can we resolve it?}
-
 Fundamentally, the issue with the \ChunkDB{} is that it caters to each
-individual type by creating a map for each type, leading to tedious busy work.
+individual type by creating a map for each type, leading to tedious busy work to
+make up for inflexibility.
 
 In order to scale against new types, we need to make the database maps
 type-agnostic, merging them all together. It should contain no hard-coded

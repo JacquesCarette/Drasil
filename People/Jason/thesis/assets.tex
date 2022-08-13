@@ -9,6 +9,7 @@
 \newcommand{\codeAssets}{\assets/code}
 \newcommand{\currentCode}{\codeAssets/current}
 \newcommand{\originalCode}{\codeAssets/original}
+\newcommand{\pseudoCode}{\codeAssets/pseudo}
 
 %------------------------------------------------------------------------------
 % Code
@@ -113,6 +114,17 @@
 % reltoqd
 \newcommand{\originalRelToQDHaskell}{\input{\originalCode/reltoqd}}
 \newcommand{\refOriginalRelToQDHaskell}{\Cref{lst:origRelToQD}}
+
+% Pseudocode
+%--------------------------------------
+
+% bad universal chunk carriage
+\newcommand{\badUniversalChunkCarriage}{\input{\pseudoCode/badUniversalChunkCarriage}}
+\newcommand{\refBadUniversalChunkCarriage}{\Cref{lst:badUniversalChunkCarriage}}
+
+% showing bad chunk carriage would fail chunkdb
+\newcommand{\showingBadChunkWouldFailChunkDB}{\input{\pseudoCode/showingBadChunkWouldFailChunkDB}}
+\newcommand{\refShowingBadChunkWouldFailChunkDB}{\Cref{lst:showingBadChunkWouldFailChunkDB}}
 
 %------------------------------------------------------------------------------
 % Figures

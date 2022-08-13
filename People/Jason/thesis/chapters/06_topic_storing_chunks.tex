@@ -1,6 +1,8 @@
 \chapter{``Store All The Things''}
 \label{chap:storingChunks}
 
+\intodo{Move all code snippets in ``Store All The Things'' to their own files.}
+
 \begin{writingdirectives}
 
       \item \textit{Problem}: Drasil can have any number of \textit{types} of
@@ -18,7 +20,7 @@
                   \item Does not allow us to ignore type information when its
                         not really needed. i.e., in areas where we use bounded
                         polymorphism.
-                  
+
                         \intodo{Explain when it's not really needed (i.e.,
                         functions that just take any chunk that satisfy a
                         constraint and use them in some area, or just grabbing
@@ -118,9 +120,7 @@ The question: how can we achieve this?
 To collapse the series of maps into a single one, we need to have a common data
 type for the maps ``value'' type. 
 
-\begin{pseudohaskell}{First Attempt at a Universal Chunk Carriage}{firstUniversalChunkCarriage}
-data Chunk t = Chunk t
-\end{pseudohaskell}
+\badUniversalChunkCarriage{}
 
 Now, we have a common data type to wrap our data in: \Chunk{}. Since the type
 parameters expose the type of the internal data, we will be able to unpack the
@@ -128,14 +128,7 @@ Chunk box into the internal data as well. However, this type parameter is also
 an issue for storage, we run into the same issue of needing to create a series
 of maps, one for each type:
 
-\begin{pseudohaskell}{}{showingFirstChunkWouldFailChunkDB}
--- | Our chunk databases. Should contain all the maps we will need.
-data ChunkDB = CDB { a   :: Map UID (Chunk A)
-                   , b   :: Map UID (Chunk B)
-                   , c   :: Map UID (Chunk C)
-                   , ... :: Map UID (Chunk ...)
-                   }
-\end{pseudohaskell}
+\showingBadChunkWouldFailChunkDB{}
 
 We need to be able to ignore the type parameter entirely without losing the
 ability to unpack the data as needed. The nice thing about this ``as needed''
@@ -293,6 +286,14 @@ inefficient. So, in order to make the \ChunkDB{} more ``industrial-strength,''
 we can add an extra mechanism for caching in various ways to trade a bit of
 memory for a frequent and expensive search operation.
 
+\intodo{Haskell code: new chunk database structure.}
+
+Now, we have extra functionality for caching by \TypeRep{}s without needing to
+calculate it every time we need it. Since it's frequently used in Drasils case
+studies and artifact generation, this will save \acs{cpu} time. Additionally, we
+added a traceability matrix to easily find which chunks depend on which (direct
+ones only, indirect ones can be calculated later if needed).
+
 \intodo{Continue here!}
 
 \ChunkDB{} is now a usable core across Drasil-like projects (ones thriving on
@@ -302,28 +303,9 @@ the same ``knowledge-based programming'' ideology).
 
 \intodo{Discuss where it's currently built and why it's not in Drasil really.}
 
-\intodo{Rewrite the point form notes in Storing Chunks chapter.}
-
 \begin{itemize}
 
-      \item But wait! We're missing a few things from chunks:
-            \begin{itemize}
-
-                  \item What knowledge does the chunk rely on already having
-                        been ``registered'' in the database and ready?
-
-                  \item They should have \UID{}s; where's our guarantee?
-
-                  \item Debugging will be difficult; need an interface to dump
-                        all information of a chunk quickly.
-
-            \end{itemize}
-
-      \item Ok, revise: \inlineHs{data Chunk = forall a. (Typeable a, HasUID a, HasChunkRefs a, Dumpable a) => Chunk a}
-
-      \item Ok, much better now.
-
-      \item Or is it? Still many problems!
+      \item Still many problems!
             \intodo{Move nearly everything below to the Future Work chapter.}
             \begin{itemize}
 

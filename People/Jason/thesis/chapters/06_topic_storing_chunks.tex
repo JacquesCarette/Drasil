@@ -1,8 +1,6 @@
 \chapter{``Store All The Things''}
 \label{chap:storingChunks}
 
-\intodo{Move all code snippets in ``Store All The Things'' to their own files.}
-
 \begin{writingdirectives}
 
       \item \textit{Problem}: Drasil can have any number of \textit{types} of
@@ -145,28 +143,26 @@ Haskell source code file.}.
 So, now we can re-create \Chunk{} using \ExistentialQuantification{} to hide the
 type parameter:
 
-\begin{pseudohaskell}{Basic Chunk Box}{basicChunkBox}
-{-# LANGUAGE ExistentialQuantification #-}
-...
-data Chunk = forall a. Chunk a
-\end{pseudohaskell}
+\intodo{So, this ExistentialQuantification is a bit more important, and I should
+      explain a bit more about why it's helpful in this particular case. It's
+      useful because it allows me to ignore the type while retaining information
+      about basic common functionality to \textit{all} of them by saying that
+      they \textit{all} must satisfy a specific set of constraints. So, this is
+      to say that the ExistentialQuantification is a bit more helpful than I
+      make it sound. It lets me basically create a heterogeneous list with
+      subtyped elements in Haskell.}
+
+\voidDataChunks{}
 
 Great! Now we can create a single map for our chunk collection.
 
-\begin{pseudohaskell}{New Chunk Database Map}{newChunkDatabaseMap}
-type ChunkDB = Map UID Chunk
-\end{pseudohaskell}
+\voidDataChunkDB{}
 
 Ok, now we've created a mechanism to collapse all of our chunk maps into one,
 but, we've encountered an issue: we've neglected retrieval functionality. Let's
 see:
 
-\begin{pseudohaskell}{Broken QuantityDict Chunk Retriever}{brokenChunkRetriever}
-retrieveQD :: UID -> ChunkDB -> Maybe QuantityDict
-retrieveQD u cdb = do
-    (Chunk expectedQd) <- lookup u cdb
-    pure expectedQd
-\end{pseudohaskell}
+\brokenChunkRetriever{}
 
 \Chunk{}s are currently an informational void. So, this results in a type
 error\todo{Show the type error here.}. Haskell is unable to create the infinite
@@ -181,21 +177,12 @@ functionality. As of \acs{ghc} 7.10 (for which our targeted version of 8+ is
 newer than), \acs{ghc} automatically instantiates the \Typeable{} typeclass for
 all types.
 
-\begin{pseudohaskell}{Examinable Chunk Box}{examinableChunkBox}
-{-# LANGUAGE ExistentialQuantification #-}
-...
-data Chunk = forall a. Typeable a => Chunk a
-\end{pseudohaskell}
+\examinableChunkBox{}
 
 Ok, now we should be able to retrieve chunks, and cast the chunk value types as
 needed.
 
-\begin{pseudohaskell}{Working QuantityDict Chunk Retriever}{workingChunkRetriever}
-retrieveQD :: UID -> ChunkDB -> Maybe QuantityDict
-retrieveQD u cdb = do
-    (Chunk expectedQd) <- lookup u cdb
-    cast expectedQd
-\end{pseudohaskell}
+\workingChunkRetriever{}
 
 To sum up, at this point:
 
@@ -230,16 +217,11 @@ One implicit contract we had with the chunks in the past, was that they were all
 expected to have \UID{}s. Now, we can try to make this contract more explicit
 through imposing typeclass constraints, as below:
 
-\begin{pseudohaskell}{UID Ownership Contract}{uidOwnershipContract}
-class HasUID t where:
-      uid :: t -> UID
-\end{pseudohaskell}
+\uidOwnershipContract{}
 
 And then we would alter our \Chunk{} definition:
 
-\begin{pseudohaskell}{Chunks with UID Constraint}{chunksWithUidConstraint}
-data Chunk = forall a. (Typeable a, HasUID a) => Chunk a
-\end{pseudohaskell}
+\chunksWithUidConstraint{}
 
 Great! Now all chunks must ``have a \acs{uid},'' but we don't have a guarantee
 that they are unique and owned solely by a single instance of any chunk. This is
@@ -250,16 +232,11 @@ always ``understandable'' in a sense that all chunks they depend on have already
 been entered in the chunk database as well. In other words, all information they
 depend on should have already been entered before they are entered.
 
-\begin{pseudohaskell}{Chunk Dependencies Contract}{chunkDependenciesContract}
-class HasReferences t where:
-      refs :: t -> [UID]
-\end{pseudohaskell}
+\chunkDependenciesContract{}
 
 And then we would alter our \Chunk{} definition:
 
-\begin{pseudohaskell}{Chunks with UID and Reference List Constraints}{chunksWithUidAndRefListConstraint}
-data Chunk = forall a. (Typeable a, HasUID a, HasReferences a) => Chunk a
-\end{pseudohaskell}
+\chunksWithUidAndRefListConstraint{}
 
 As you can see, adding restrictions on all chunks is now also considerably
 simpler. If we're interested, we can add a ``dump to X'' mechanism, where $X$ is

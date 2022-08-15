@@ -13,7 +13,9 @@ The $T_w(t)$ is a function of the independent variable, in this case time. The $
 	T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
 \end{equation}
 
-Based on Equation~\ref{eq_nopcmderive}, we can write it into a text-based form and pass it to the Drasil code generator. Code~\ref{code_expliciteq} shows how to encode Example~\ref{ex_firstorderode} by writing the explicit equation. Brooks's thesis~\citep{brooks} documented how the Drasil framework solves Equation~\ref{eq_nopcmderive} with manually created \verb|ODEInfo|. The user will first encode the ODE equation in the general data pool. Whenever we need it, we retrieve the ODE equation from it. However, there is a gap between the original equation and external libraries (Chapter~\ref{cha_extlib}). The external libraries can not understand the original ODE equation from the general data pool. Therefore, the Drasil team manually transforms the original ODE equation into another form (in \verb|ODEInfo|), which external libraries can use to produce a numerical solution.
+Based on Equation~\ref{eq_nopcmderive}, we can write it into a text-based form and pass it to the Drasil code generator. Code~\ref{code_expliciteq} shows how to encode Example~\ref{ex_firstorderode} by writing the explicit equation. Brooks's thesis~\citep{brooks} documented how the Drasil framework solves Equation~\ref{eq_nopcmderive} with manually created \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-0.1.9.0/Language-Drasil-Code.html#t:ODEInfo}{ODEInfo}. The \verb|ODEInfo| is a data type holds ODE information. 
+
+The user will first encode the ODE equation in the general data pool. Whenever we need it, we retrieve the ODE equation from it. However, there is a gap between the original equation and external libraries (Chapter~\ref{cha_extlib}). The external libraries can not understand the original ODE equation from the general data pool. Therefore, the Drasil team manually transforms the original ODE equation into another form (\verb|ODEInfo|), which external libraries can use to produce a numerical solution.
 
 Here is an example of how we manually close the gap between the text-based ODE and external libraries. In Code~\ref{code_expliciteqsrs}, we encode Equation~\ref{eq_nopcmderive} and put it into the general data pool. During printing the SRS, we retrieve the text-based ODE and print it. The Drasil printer is capable of displaying encoded ODE in text. However, external libraries require a specific format for the ODE and can not utilize the original ODE. Therefore, we manually create Code \ref{code_expliciteq} so external libraries can solve the ODE. They both describe the same ODE, but we write it twice in the Drasil framework. Therefore, there is an information duplication. We can transform from Code~\ref{code_expliciteqsrs} to Code~\ref{code_expliciteq} with human interference. However, without human interference, we can not complete the transformation because Code~\ref{code_expliciteqsrs} lacks the necessary structure. To reduce the information duplication, the Drasil team decided to make an advanced data structure to hold the ODE information.
 
@@ -67,7 +69,32 @@ In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y_t$. The 
 	\end{bmatrix}
 \end{equation}
 
-The relationship between the matrix form~\ref{eq_matrixform} and the example~\ref{eq_matrixformexmaple} is not hard to find. Firstly, the coefficient matrix \textbf{A} is a 1 $\times$ 3 matrix that consists of $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector \textbf{x} is a 3 $\times$ 1 vector with $y_t''$, $y_t'$, and $y_t$. Last, the constant vector \textbf{b} is a 1 $\times$ 1 vector with $r_t \cdot K_p$. The matrix form~\ref{eq_matrixform} very well captures all the knowledge we need to present an ODE. Therefore, we decided to create a datatype called \verb|DifferentialModel| to preserve ODEs information. The \verb|DifferentialModel| has six records, and here is the representing code for \verb|DifferentialModel|.
+The relationship between the matrix form~\ref{eq_matrixform} and the example~\ref{eq_matrixformexmaple} is not hard to find. Firstly, the coefficient matrix \textbf{A} is a 1 $\times$ 3 matrix that consists of $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector \textbf{x} is a 3 $\times$ 1 vector with $y_t''$, $y_t'$, and $y_t$. Last, the constant vector \textbf{b} is a 1 $\times$ 1 vector with $r_t \cdot K_p$. The matrix form~\ref{eq_matrixform} very well captures all the knowledge we need to present an ODE. But, how a matrix form looks like in a nth-order linear ODE? Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of
+
+\begin{equation} \label{eq_linearDE}
+	a_n(t) \cdot y^n(t) + a_{n-1}(t) \cdot y^{n-1}(t) + \dots + a_1(t) \cdot y'(t) + a_0(t) \cdot y(t) = h(t)
+\end{equation}
+
+The coefficient $a_0(t), \dots, a_n(t)$ and $g(t)$ can be constant or non-constant functions, in our case they are constant functions. We also can write Equation~\ref{eq_linearDE} in a matrix form.
+
+\begin{equation} \label{eq_matrixnthorder}
+	\begin{bmatrix}
+		a_n(t), & a_{n-1}, \dots, & a_0(t)
+	\end{bmatrix}
+	\cdot
+	\begin{bmatrix}
+		y_{t}^{n}(t) \\
+		y_{t}^{n-1}(t) \\
+		\dots \\
+		y_{t}(t)  
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		h(t)
+	\end{bmatrix}
+\end{equation}
+
+Therefore, we decided to create a datatype called \verb|DifferentialModel| to preserve ODEs information. The \verb|DifferentialModel| has six records, and here is the representing code for \verb|DifferentialModel|.
 \begin{haskell1}
 data DifferentialModel = SystemOfLinearODEs {
 	_indepVar :: UnitalChunk,
@@ -116,12 +143,9 @@ Currently, the \verb|DifferentialModel| only captures the knowledge of ODEs with
 
 \section{Input Language}
 \label{sec_input}
-There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form. While inputting a single ODE, one obvious way is directly passing value to each record via constructors of \verb|DifferentialModel|. The Code~\ref{code_interaldata} shows how to encode Example~\ref{eq_odeexmaple} in the \verb|DifferentialModel|. However, it would be not so elegant to set a single ODE in the example, because users have to extracts the coefficient matrix \textbf{A}, unknown vector \textbf{x} and constant vector \textbf{b} from the original equation manually. Once the coefficient matrix, unknown vector and constant vector is ready, we can set value into \verb|_depVar|, \verb|_coefficients|, \verb|_unknowns|, and \verb|_dmConstants| accordingly. This process is ideal when the ODE is a system of ODE, and it would be over-complicated for user to do extraction for a single ODE. Therefore, we decided create a helper function to ease this issue. On top of that, the Drasil printer will print a single ODE in SRS with a more familiar ``one line equation'' form. Another advantage of having an helper function to input an ODE is that it can reduce human error and make sure the equation is well-formed. We call this helper function input language, and what will this input language looks like? The input language is inspired by how a linear nth-order ODE looks like. Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of 
-\begin{equation} \label{eq_linearDE}
-	a_n(t) \cdot y^n(t) + a_{n-1}(t) \cdot y^{n-1}(t) + \dots + a_1(t) \cdot y'(t) + a_0(t) \cdot y(t) = g(t)
-\end{equation}
+There are many reasons why we want to provide an input language for users to input ODE equations. One major reason is that it could be over complicated for users to input a single ODE in a matrix form. While inputting a single ODE, one obvious way is directly passing value to each record via constructors of \verb|DifferentialModel|. The Code~\ref{code_interaldata} shows how to encode Example~\ref{eq_odeexmaple} in the \verb|DifferentialModel|. However, it would be not so elegant to set a single ODE in the example, because users have to extracts the coefficient matrix \textbf{A}, unknown vector \textbf{x} and constant vector \textbf{b} from the original equation manually. Once the coefficient matrix, unknown vector and constant vector is ready, we can set value into \verb|_depVar|, \verb|_coefficients|, \verb|_unknowns|, and \verb|_dmConstants| accordingly. This process is ideal when the ODE is a system of ODE, and it would be over-complicated for user to do extraction for a single ODE. Therefore, we decided create a helper function to ease this issue. On top of that, the Drasil printer will print a single ODE in SRS with a more familiar ``one line equation'' form. Another advantage of having an helper function to input an ODE is that it can reduce human error and make sure the equation is well-formed. We call this helper function input language, and what will this input language looks like? 
 
-On the left-hand side of the linear equation~\ref{eq_linearDE}, the expression is a collection of terms. Each term consists of a coefficient function and a derivative of the function y(t). The coefficient $a_0(t), \dots, a_n(t)$ and $g(t)$ can be constant or non-constant functions, in our case they are constant functions. With ideas of term, coefficient, and derivative, we create new data types to mimic the mathematical expression of a linear ODE. The following is the detail of the code for new data types and operators.
+The input language is inspired by how a linear nth-order ODE looks like. Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of Equation~\ref{eq_linearDE}. On the left-hand side of Equation~\ref{eq_linearDE}, the expression is a collection of terms. Each term consists of a coefficient function and a derivative of the function y(t). With ideas of term, coefficient, and derivative, we create new data types to mimic the mathematical expression of a linear ODE. The following is the detail of the code for new data types and operators.
 
 \begin{haskell1}
 type Unknown = Integer
@@ -172,12 +196,53 @@ For \verb|makeASystemDE| constructor, a user can set the coefficient matrix, unk
 The following pseudo-code shows how to directly set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector. The full detail of how to directly set the coefficient matrix, unknown vector, and constant vector for the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller} example will show up in the Appendix~\ref{const_de}.
 
 \begin{haskell1}
-coefficent = [[1, 1 + K_d, 20 + K_p]]
+coefficient = [[1, 1 + K_d, 20 + K_p]]
 unknowns   = [2, 1, 0]
 constants  = [r_t * K_p]
 \end{haskell1}
 
 The second constructor is called \verb|makeASingleDE|. This constructor uses the input language to simplify the input of a single ODE. In \verb|makeASingleDE|, we create the coefficient matrix, unknown vector, and constant vector based on restricted inputs. In other words, users can no longer set the data by directly giving values. The \verb|DifferentialModel| will generate all data for the coefficient matrix, unknown vector, and constant vector accordingly. The constructor first creates a descending unknown vector base on the highest number of its derivatives. To take the code~\ref{code_exinputl} as an example, the highest order of its derivative on the left-hand side of the equation is 2, so we will generate the unknown vector, and it is a list that contains 2, 1 and 0. Then, we will create the coefficient matrix by finding its related coefficient based on the descending order of the unknown vector. The main advantage of this design decision is that the \verb|DifferentialModel| will no longer require users to input the unknown vector in descending order. Any order of the unknown vector will be acceptable because we will generate relative data in \verb|DifferentialModel|. The pseudo-code~\ref{code_exinputl} shows how to use the input language to set the example~\ref{eq_odeexmaple}'s coefficient matrix, unknown vector, and constant vector. The full detail of how to use the input language set the coefficient matrix, unknown vector, and constant vector for the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller} example will show up in the Appendix ~\ref{const_de}.
+
+We know Unknown a synonym of Integer. In Code~\ref{code_emulateunk}, it generate \verb|[Unknown]| for unknowns in \verb|DifferentialModel|. We search through the \verb|LHS| to get the largest \verb|Unknown|. Then, we create a list of Unknown from the largest \verb|Unknown| to 0.
+\begin{listing}[ht]
+\begin{haskell1}
+-- | Find the highest order in left hand side
+findHighestOrder :: LHS -> Term
+findHighestOrder = foldr1 (\x y -> if x ^. unk >= y ^. unk then x else y)
+
+-- | Create all possible unknowns based on the highest order.
+-- | The order of the result list is from the highest degree to zero degree.
+createAllUnknowns :: Unknown -> ConstrConcept -> [Unknown]
+createAllUnknowns highestUnk depv
+  | highestUnk  == 0  = [highestUnk]
+  | otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depv
+\end{haskell1}
+\captionof{listing}{Emulate Unknown}
+\label{code_emulateunk}
+\end{listing}
+
+In Code~\ref{code_createcoe}, it generates \verb|[Expr]| for coefficient in \verb|DifferentialModel|. We have a \verb|LHS| and a \verb|[Unknown]|. We construct the coefficients matrix by searching each \verb|Unknown| in \verb|LHS|. Once we find the matched \verb|Unknown|, we collect its related coefficient. If we did not find the matched \verb|Unknown|, we assume there is no related \verb|Term| exist, so we put a 0 as the coefficient.
+\begin{listing}[ht]
+\begin{haskell1}
+-- | Create Coefficients base on all possible unknowns
+-- | The order of the result list is from the highest degree to zero degree.
+createCoefficients :: LHS -> [Unknown] -> [Expr]
+createCoefficients [] _ = error "Left hand side is an empty list"
+createCoefficients _ [] = []
+createCoefficients lhs (x:xs) = genCoefficient (findCoefficient x lhs) : createCoefficients lhs xs
+
+-- | Get the coefficient, if it is Nothing, return zero
+genCoefficient :: Maybe Term -> Expr
+genCoefficient Nothing = exactDbl 0
+genCoefficient (Just x) = x ^. coeff
+
+-- | Find the term that match with the unknown
+findCoefficient :: Unknown -> LHS -> Maybe Term
+findCoefficient u = find(\x -> x ^. unk == u)
+\end{haskell1}
+\captionof{listing}{Create a coefficient matrix}
+\label{code_createcoe}
+\end{listing}
 
 \section{Display Matrix}
 After a \verb|DifferentialModel| obtains ODE information, we want to display them in the software requirements specification (SRS). Previously, we mentioned the Drasil framework able to generate software artifacts, and SRS is a part of them. This section will discuss two ways to display ODEs in the SRS.

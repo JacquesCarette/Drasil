@@ -183,40 +183,36 @@ Once the \verb|dblPenODEInfo| is ready, we will pass it to the Drasil Code gener
 The limitation with manually created \verb|ODEInfo| is that there we will write the ODE twice. In this case, we encode both Equation~\ref{eq_dblpenhigh} and Equation~\ref{eq_dblpenfirst} in Drasil. They both demonstrate the phenomena of double pendulum, and exist in an isomorphic ODE type. In the next section, we would like to discuss how to automate the transformation from a higher-order ODE to a system of first-order ODE.
 
 \section{Generate Explicit Equations}
-This process is not ideal because propagates duplicate information. We want to design the Drasil framework to be as fully automatic as possible, so we want to remove human interference.
+Manually creating explicit equations is not ideal because propagates duplicate information. We want to design the Drasil framework to be as fully automatic as possible, so we want to remove human interference. Therefore, an ideal solution is to encode the ODE in a data structure. Then, we extract information from this structure and generate a form which selected external libraries can utilize. Creating the \verb|DifferentialModel| data structure satisfy the need of this idea. We can restructure an ODE base on the information from \verb|DifferentialModel|. The scope of this research only cover generating explicit explicit for a single higher-order ODE. In the future, we are looking for generating explicit equations for a system of higher-order ODE.
 
-talk the scope, only for a single high-order ODE, not for a system of high-order ODE
+Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its equivalent system of first-order ODE in shape of Equation~\ref{eq_foode}. For the convenience of implementation, we shuffle the data around in Equation~\ref{eq_foodeexample}. We reversed the order of \textbf{X}, and it start with $y_{n}$ and end with $y_{1}$. The coefficient matrix \textbf{A} has change as well, but \textbf{X'} and \textbf{c} remain unchanged.
 
-All necessary information contains in \verb|DifferentialModel|
 
-generate equations
-reduce duplication
-
-However, the Double Pendulum case study unable to utilize any function in \verb|DifferentialModel| because it was designed for a linear ODE. Further research is required.
+% However, the Double Pendulum case study unable to utilize any function in \verb|DifferentialModel| because it was designed for a linear ODE. Further research is required.
 
 \begin{equation} \label{eq_foodeexamplecolor}
 	\begin{bmatrix}
 		\highlight{yellow}{y_{1}'} \\
-    \highlight{yellow}{y_{2}'} \\
     \highlight{yellow}{\dots} \\
+    \highlight{yellow}{y_{n-2}'} \\
     \highlight{yellow}{y_{n-1}'} \\
     \highlight{yellow}{y_{n}'}
 	\end{bmatrix}
     = 
   \begin{bmatrix}
-		\highlight{orange}{0}, & \highlight{orange}{1}, & \highlight{orange}{0}, & \highlight{orange}{\dots}, & \highlight{orange}{0} \\
-    \highlight{orange}{0}, & \highlight{orange}{0}, & \highlight{orange}{1}, & \highlight{orange}{\dots}, & \highlight{orange}{0} \\
+		\highlight{orange}{0}, & \highlight{orange}{0}, & \highlight{orange}{\dots}, & \highlight{orange}{1}, & \highlight{orange}{0} \\
     \highlight{orange}{\dots} \\
-    \highlight{orange}{0}, & \highlight{orange}{0}, & \highlight{orange}{0}, & \highlight{orange}{\dots}, & \highlight{orange}{1} \\
-    \highlight{cyan}{g_{1}(t)}, & \highlight{cyan}{g_{2}(t)}, & \highlight{cyan}{g_{3}(t)}, & \highlight{cyan}{\dots}, & \highlight{cyan}{g_{n}(t)}
+    \highlight{orange}{0}, & \highlight{orange}{1}, & \highlight{orange}{\dots}, & \highlight{orange}{0}, & \highlight{orange}{0} \\
+    \highlight{orange}{1}, & \highlight{orange}{0}, & \highlight{orange}{\dots}, & \highlight{orange}{0}, & \highlight{orange}{0} \\
+    \highlight{cyan}{g_{n}(t)}, & \highlight{cyan}{g_{n-1}(t)}, & \highlight{cyan}{\dots}, & \highlight{cyan}{g_{2}(t)}, & \highlight{cyan}{g_{1}(t)}
 	\end{bmatrix}
     \cdot
   \begin{bmatrix}
-		\highlight{yellow}{y_{1}} \\
-    \highlight{yellow}{y_{2}} \\
+    \highlight{yellow}{y_{n}} \\
     \highlight{yellow}{\dots} \\
-    \highlight{yellow}{y_{n-1}} \\
-    \highlight{yellow}{y_{n}}
+    \highlight{yellow}{y_{3}} \\
+		\highlight{yellow}{y_{2}} \\
+    \highlight{yellow}{y_{1}}
 	\end{bmatrix}
     + 
   \begin{bmatrix}
@@ -228,9 +224,26 @@ However, the Double Pendulum case study unable to utilize any function in \verb|
 	\end{bmatrix}
 \end{equation}
 
-We can abstract Equation~\ref{eq_foodeexamplecolor} to Equation~\ref{eq_foode}. We highlighted X' and X in yellow color in Equation~\ref{eq_foodeexamplecolor}. The number of elements in \textbf{X'} and \textbf{X} depend on how many new dependent variables introduces. If the higher-order ODE is second-order, there will be two new dependent variables be introduced and the length of \textbf{X'} and \textbf{X} will be 2. If the higher-order ODE is nth-order, there will be n new dependent variables be introduced and the length of \textbf{X'} and \textbf{X} will be n. For \textbf{X'}, known it is n-th order ODE, we parameterize $y'$ from 1 to n. For \textbf{X}, known it is n-th order ODE, we parameterize $y$ from 1 to n.
+Since the Equation~\ref{eq_foodeexamplecolor} is an expansion of Equation~\ref{eq_foode}, we will use symbols in both equations to explain how to generate Equation~\ref{eq_foodeexamplecolor}. We highlighted \textbf{X'} and \textbf{X} in yellow color in Equation~\ref{eq_foodeexamplecolor}. The number of elements in \textbf{X'} and \textbf{X} depend on how many new dependent variables introduces. If the higher-order ODE is second-order, there will be two new dependent variables be introduced and the length of \textbf{X'} and \textbf{X} will be 2. If the higher-order ODE is nth-order, there will be n new dependent variables be introduced and the length of \textbf{X'} and \textbf{X} will be n. For \textbf{X'}, known it is n-th order ODE, we parameterize $y'$ from n to 1. For \textbf{X}, known it is n-th order ODE, we parameterize $y$ from 1 to n.
 
-code
+% \begin{listing}[ht]
+% \begin{haskell1}
+% -- | Find the highest order in left hand side
+% findHighestOrder :: LHS -> Term
+% findHighestOrder = foldr1 (\x y -> if x ^. unk >= y ^. unk then x else y)
+
+% -- | Create all possible unknowns based on the highest order.
+% -- | The order of the result list is from the highest degree to zero degree.
+% createAllUnknowns :: Unknown -> ConstrConcept -> [Unknown]
+% createAllUnknowns highestUnk depv
+%   | highestUnk  == 0  = [highestUnk]
+%   | otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depv
+% \end{haskell1}
+% \end{listing}
+
+Fix-me DE model need to remove the highest order. Once we isolation the highest order on the left side, there will be no highest order in right side
+Fix-me Code implementation has highest order on the top, data will shuffle around and looks different than report
+
 
 We highlighted the n$\times$n coefficient matrix \textbf{A} in orange and blue color in Equation~\ref{eq_foodeexamplecolor}. The orange part is the identity matrix. Since the lowest higher-order ODE is a second-order, so the smallest identity matrix is [0, 1]. Equation~\ref{eq_foodeexamplecolortwo} shows a completed transformation for a second-order ODE.
 \begin{equation} \label{eq_foodeexamplecolortwo}
@@ -297,7 +310,7 @@ code
 For the rest parts blue and red in Equation~\ref{eq_foodeexamplecolor}, they can be determine by the last equation in Equation~\ref{eq_diffvervarslinear}.
 
 \begin{equation}
-  y_{n}' = h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
+  y_{n}' = x_{n}'= h(t) + g_{1}(t) \cdot y_{1} + g_{2}(t) \cdot y_{2} + ... + g_{n}(t) \cdot y_{n}
 \end{equation}
 
 code

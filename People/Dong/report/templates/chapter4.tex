@@ -447,6 +447,22 @@ divideCosntants a b
 
 \begin{listing}[ht]
 \begin{haskell1}
+-- Acceptable format for ODE solvers
+-- X' = AX + B
+-- A  is coefficient matrix with identity matrix
+-- X  is unknown column vector after reduce the highest order
+-- B  is constant column vector with identity matrix
+-- X' is a column vector of first-order unknowns
+data ODESolverFormat = X'{
+  coeffVects :: [[Expr]],
+  unknownVect :: [Integer],
+  constantVect :: [Expr]
+}
+\end{haskell1}
+\end{listing}
+
+\begin{listing}[ht]
+\begin{haskell1}
 -- | Construct an ODESolverFormat for solving the ODE.
 makeAODESolverFormat :: DifferentialModel -> ODESolverFormat
 makeAODESolverFormat dm = X' transEs transUnks transConsts
@@ -471,21 +487,7 @@ data InitialValueProblem = IVP{
 \end{haskell1}
 \end{listing}
 
-\begin{listing}[ht]
-\begin{haskell1}
--- Acceptable format for ODE solvers
--- X' = AX + B
--- A  is coefficient matrix with identity matrix
--- X  is unknown column vector after reduce the highest order
--- B  is constant column vector with identity matrix
--- X' is a column vector of first-order unknowns
-data ODESolverFormat = X'{
-  coeffVects :: [[Expr]],
-  unknownVect :: [Integer],
-  constantVect :: [Expr]
-}
-\end{haskell1}
-\end{listing}
+
 
 \begin{listing}[ht]
 \begin{haskell1}
@@ -499,15 +501,15 @@ odeInfo' ovs opt dm ivp = ODEInfo
   (map expr $ initValues ivp)
   (createFinalExpr dm)
   opt
-
-createFinalExpr :: DifferentialModel -> [CodeExpr]
-createFinalExpr dm = map expr $ formEquations (coeffVects ode) (unknownVect ode) (constantVect ode) (_depVar dm)
-  where ode = makeAODESolverFormat dm
 \end{haskell1}
 \end{listing}
 
 \begin{listing}[ht]
 \begin{haskell1}
+createFinalExpr :: DifferentialModel -> [CodeExpr]
+createFinalExpr dm = map expr $ formEquations (coeffVects ode) (unknownVect ode) (constantVect ode) (_depVar dm)
+  where ode = makeAODESolverFormat dm
+
 formEquations :: [[Expr]] -> [Unknown] -> [Expr] -> ConstrConcept-> [Expr]
 formEquations [] _ _ _ = []
 formEquations _ [] _ _ = []

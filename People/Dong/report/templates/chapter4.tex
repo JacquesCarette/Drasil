@@ -381,7 +381,7 @@ Base on $x_{n}'$ = $y_{n}$ and relationship in Equation~\ref{eq_newvars}, we can
   \nonumber
 \end{equation}
 Replacing variables in Equation~\ref{eq_foodeexamplecolor}, we can get a new matrix.
-\begin{equation}
+\begin{equation}\label{eq_foodeexampledetail}
 	\begin{bmatrix}
 		\highlight{yellow}{x_{1}'} \\
     \highlight{yellow}{\dots} \\
@@ -415,6 +415,7 @@ Replacing variables in Equation~\ref{eq_foodeexamplecolor}, we can get a new mat
 	\end{bmatrix}
 \end{equation}
 
+Here is the implementation for creating Equation~\ref{eq_foodeexampledetail} in Drasil. In Code~\ref{code_isohighode}, we remove the highest order, because we want to isolate the highest order to the left hand side.
 \begin{listing}[ht]
 \begin{haskell1}
 -- | Delete the highest order
@@ -425,6 +426,7 @@ transUnknowns = tail
 \label{code_isohighode}
 \end{listing}
 
+In Code~\ref{code_cancelcoe}, the \verb|transCoefficients| cancel out the coefficient, $a_n(t)$, in blue highlighted. The \verb|divideCosntants| cancel out the coefficient in red highlighted.
 \begin{listing}[ht]
 \begin{haskell1}
 -- | Cancel the leading coefficient of the highest order in the coefficient matrix
@@ -445,24 +447,21 @@ divideCosntants a b
 \label{code_cancelcoe}
 \end{listing}
 
+In Code~\ref{code_odesolverformat}, the \verb|ODESolverFormat| contians information of the system of first-order ODE. The \verb|makeAODESolverFormat| is the smart constructor to create an \verb|ODESolverFormat| by giving a \verb|DifferentialModel|.
 \begin{listing}[ht]
 \begin{haskell1}
 -- Acceptable format for ODE solvers
--- X' = AX + B
--- A  is coefficient matrix with identity matrix
--- X  is unknown column vector after reduce the highest order
--- B  is constant column vector with identity matrix
+-- X' = AX + c
+-- coeffVects is A - coefficient matrix with identity matrix
+-- unknownVect is X - unknown column vector after reduce the highest order
+-- constantVect is c - constant column vector with identity matrix, 
 -- X' is a column vector of first-order unknowns
 data ODESolverFormat = X'{
   coeffVects :: [[Expr]],
   unknownVect :: [Integer],
   constantVect :: [Expr]
 }
-\end{haskell1}
-\end{listing}
 
-\begin{listing}[ht]
-\begin{haskell1}
 -- | Construct an ODESolverFormat for solving the ODE.
 makeAODESolverFormat :: DifferentialModel -> ODESolverFormat
 makeAODESolverFormat dm = X' transEs transUnks transConsts
@@ -471,24 +470,24 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
         transConsts = addIdentityConsts [head (dm ^. dmConstants) `divideCosntants` head (head (dm ^. coefficients))] (length transUnks)
 \end{haskell1}
 \captionof{listing}{Source code for generating Equation~\ref{eq_foode}, \textbf{X'} = \textbf{AX} + \textbf{c}}
-\label{code_cancelcoe}
+\label{code_odesolverformat}
 \end{listing}
 
-We generate the \verb|ODEInfo| based on \verb|DifferentialModel|.
-
+In Chapter 3, we mentioned we will solve the ODE as an IVP. In Code~\ref{code_ivpinfo}, we create \verb|InitialValueProblem| to stroe IVP related information.
 \begin{listing}[ht]
 \begin{haskell1}
 -- Information for solving an initial value problem
 data InitialValueProblem = IVP{
-  initTime :: Expr,
-  finalTime :: Expr,
-  initValues :: [Expr]
+  initTime :: Expr, -- inital time
+  finalTime :: Expr, -- end time
+  initValues :: [Expr] -- intial values
 }
 \end{haskell1}
+\captionof{listing}{Source code for IVP infomation}
+\label{code_ivpinfo}
 \end{listing}
 
-
-
+Lastly, in Code~\ref{code_generateodeinfo}, we create a new smart construct to automatically genrate \verb|ODEInfo| by taking \verb|DifferentialModel| from the genreal data pool.
 \begin{listing}[ht]
 \begin{haskell1}
 odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
@@ -501,11 +500,7 @@ odeInfo' ovs opt dm ivp = ODEInfo
   (map expr $ initValues ivp)
   (createFinalExpr dm)
   opt
-\end{haskell1}
-\end{listing}
 
-\begin{listing}[ht]
-\begin{haskell1}
 createFinalExpr :: DifferentialModel -> [CodeExpr]
 createFinalExpr dm = map expr $ formEquations (coeffVects ode) (unknownVect ode) (constantVect ode) (_depVar dm)
   where ode = makeAODESolverFormat dm
@@ -521,4 +516,6 @@ formEquations (ex:exs) unks (y:ys) depVa =
         termExprs = map (uncurry mulRe) filteredExprs -- multiple coefficient with depend variables
         finalExpr = foldl1 addRe termExprs -- add terms together
 \end{haskell1}
+\captionof{listing}{Source code for generating ODEInfo}
+\label{code_generateodeinfo}
 \end{listing}

@@ -22,6 +22,13 @@
 \usepackage{amsmath} % Non-standard math symbols
 \usepackage{amsfonts} % Extended fonts for mathematics
 \usepackage[hidelinks]{hyperref} % Linking to LaTeX labels and external URLs
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  filecolor=blue,      
+  urlcolor=blue,
+  citecolor=blue,
+}
 \usepackage{slashbox}
 \usepackage{tikz}
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
@@ -90,8 +97,7 @@
 \usepackage{adjustbox}
 \usepackage[mathletters]{ucs}
 \usepackage[utf8x]{inputenc}
-% \usepackage{xcolor}
-% \usepackage{soul}
+
 \newcommand{\highlight}[2]{\colorbox{#1}{$\displaystyle #2$}}
 
 % ********************************

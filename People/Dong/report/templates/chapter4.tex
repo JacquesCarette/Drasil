@@ -167,7 +167,35 @@ Despite the \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/S
   & \omega_{1}' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\omega{2}}^2L_{2}+{\omega{1}}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
   & \omega_{2}' = \frac{2\sin (\theta_{1}-\theta_{2})({\omega_{1}}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\omega_{2}}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
 \end{flalign}
-In Code~\ref{code_encodedblpend}, it shows the example of how we encode Equation~\ref{eq_dblpenfirst} in the Drasil. 
+
+Figure~\ref{fig_dblpen} demonstrates how a double pendulum example in a lab environment. The full details of the double pendulum's SRS in \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html}{Drasil website}. Table~\ref{tab_dblpendes} lists the all variable means in the example.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/DblPendulum.png}
+  \caption{Double Pendulum Demonstration}
+  \label{fig_dblpen}
+\end{figure}
+
+\begin{table}[ht]
+	\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+		\textbf{Name} & \textbf{Description} \\
+		\toprule
+		\verb|m₁| & The mass of the first object\\
+    \verb|m₂| & The mass of the second object\\
+		\verb|L₁| & The length of the first rod\\
+		\verb|L₂| & The length of the second rod\\
+		\verb|g| & gravity\\
+		\verb|θ₁| & The angle of the first rod\\
+		\verb|θ₂| & The angle of the second rod\\
+		\verb|ω₁| & The angular velocity of the first object\\
+		\verb|ω₂| & The angular velocity of the second object\\
+		\bottomrule	
+	\end{tabular}	
+	\caption{Variables in Double Pendulum Example}	
+	\label{tab_dblpendes}
+\end{table}
+
+Now we have Equation~\ref{eq_dblpenfirst}, we can encode it in the Drasil. In Code~\ref{code_encodedblpend}, it shows the example of how we encode Equation~\ref{eq_dblpenfirst} in the Drasil. 
 \begin{listing}[ht]
 \begin{haskell1}
 dblPenODEInfo :: ODEInfo
@@ -185,17 +213,14 @@ dblPenODEInfo = odeInfo
 \label{code_encodedblpend}
 \end{listing}
 
-Once the \verb|dblPenODEInfo| is ready, we will pass it to the Drasil Code generator. We generate the program solve double pendulum in four languages. The details of generated code for double pendulum will show in Appendix A (link)
+Once the \verb|dblPenODEInfo| is ready, we will pass it to the Drasil Code generator. It will generate programs solve Double Pendulum in four languages. The details of generated code for double pendulum will show in Appendix A ("Should I list all generated code in Appendix, it looks ugly"). However, the Double Pendulum case study unable to utilize any function introduced in the next section because it was designed for a linear ODE.
 
 The limitation of manually creating \verb|ODEInfo| is that we will write the ODE twice. In this case, we encode both Equation~\ref{eq_dblpenhigh} and Equation~\ref{eq_dblpenfirst} in Drasil. They both demonstrate the phenomena of double pendulum, and exist in an isomorphic ODE type. In the next section, we would like to discuss how to automate the transformation from a higher-order ODE to a system of first-order ODE.
 
 \section{Generate Explicit Equations}
 Manually creating explicit equations is not ideal because it requires human interference and propagates duplicate information. We want to design the Drasil framework as fully automatically as possible, so we want to remove human interference. Therefore, an ideal solution is to encode the ODE in a flexible data structure. Then, we extract information from this structure and generate a form of ODE which selected external libraries can utilize. Creating the \verb|DifferentialModel| data structure satisfies the need of this idea. We can restructure an ODE base on the information from \verb|DifferentialModel|. This research's scope only covers generating explicit equations for a single higher-order ODE. In the future, we are looking to generate explicit equations for a system of higher-order ODE.
 
-Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its equivalent system of first-order ODE in the shape of Equation~\ref{eq_foode}. For the convenience of implementation, we shuffle the data around in Equation~\ref{eq_foodeexample}. We reversed the order of \textbf{X} to $x_{n}$, $\dots$, $x_{1}$. 
-The coefficient matrix \textbf{A} also changed, but \textbf{X'} and \textbf{c} remain unchanged.
-
-% However, the Double Pendulum case study unable to utilize any function in \verb|DifferentialModel| because it was designed for a linear ODE. Further research is required.
+Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its equivalent system of first-order ODE in the shape of Equation~\ref{eq_foode}. For the convenience of implementation, we shuffle the data around in Equation~\ref{eq_foodeexample}. We reversed the order of \textbf{X} to $x_{n}$, $\dots$, $x_{1}$. The coefficient matrix \textbf{A} also changed, but \textbf{X'} and \textbf{c} remain unchanged.
 
 \begin{equation} \label{eq_foodeexamplecolor}
 	\begin{bmatrix}

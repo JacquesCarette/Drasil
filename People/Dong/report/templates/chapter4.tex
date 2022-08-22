@@ -168,7 +168,7 @@ Despite the \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/S
   & \omega_{2}' = \frac{2\sin (\theta_{1}-\theta_{2})({\omega_{1}}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\omega_{2}}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
 \end{flalign}
 
-Figure~\ref{fig_dblpen} demonstrates how a double pendulum example in a lab environment. The full details of the double pendulum's SRS in \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html}{Drasil website}. Table~\ref{tab_dblpendes} lists the all variable means in the example.
+Figure~\ref{fig_dblpen} demonstrates how a Double Pendulum example works in a lab environment. The full details of the Double Pendulum's SRS locates in \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html}{Drasil website}. Table~\ref{tab_dblpendes} lists all variables in Double Pendulum example.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.6\textwidth]{figures/DblPendulum.png}
@@ -184,7 +184,7 @@ Figure~\ref{fig_dblpen} demonstrates how a double pendulum example in a lab envi
     \verb|m₂| & The mass of the second object\\
 		\verb|L₁| & The length of the first rod\\
 		\verb|L₂| & The length of the second rod\\
-		\verb|g| & gravity\\
+		\verb|g| & Gravitational acceleration\\
 		\verb|θ₁| & The angle of the first rod\\
 		\verb|θ₂| & The angle of the second rod\\
 		\verb|ω₁| & The angular velocity of the first object\\
@@ -506,14 +506,14 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
 \label{code_odesolverformat}
 \end{listing}
 
-In Chapter 3, we mentioned we would solve the ODE as an IVP. In Code~\ref{code_ivpinfo}, we create \verb|InitialValueProblem| to store IVP-related information, includes intial time, final time and intival values.
+In Chapter 3, we mentioned we would solve the ODE as an IVP. In Code~\ref{code_ivpinfo}, we create \verb|InitialValueProblem| to store IVP-related information, includes initial time, final time and initial values.
 \begin{listing}[ht]
 \begin{haskell1}
 -- Information for solving an initial value problem
 data InitialValueProblem = IVP{
   initTime :: Expr, -- inital time
   finalTime :: Expr, -- end time
-  initValues :: [Expr] -- intial values
+  initValues :: [Expr] -- initial values
 }
 \end{haskell1}
 \captionof{listing}{Source code for IVP infomation}

@@ -212,7 +212,7 @@ dblPenODEInfo = odeInfo
 \label{code_encodedblpend}
 \end{listing}
 
-Once the \verb|dblPenODEInfo| is ready, we will pass it to the Drasil Code generator. It will generate programs solve Double Pendulum in four languages. The details of generated code for double pendulum will show in Appendix A ("Should I list all generated code in Appendix, it looks ugly"). However, the Double Pendulum case study unable to utilize any function introduced in the next section because they were designed for a linear ODE.
+Once the \verb|dblPenODEInfo| is ready, we will pass it to the Drasil Code generator. It will generate programs solve Double Pendulum in four languages. The details of generated code for double pendulum will show in Appendix~\ref{gencodedbl}. However, the Double Pendulum case study unable to utilize any function introduced in the next section because they were designed for a linear ODE.
 
 The limitation of manually creating \verb|ODEInfo| is that we will write the ODE twice. In this case, we encode both Equation~\ref{eq_dblpenhigh} and Equation~\ref{eq_dblpenfirst} in Drasil. They both demonstrate the phenomena of double pendulum, and exist in an isomorphic ODE type. In the next section, we will discuss how to automate the transformation from a higher-order linear ODE to a system of first-order ODE.
 

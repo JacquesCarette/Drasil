@@ -15,7 +15,7 @@
       \item \textit{Practical Problems}:
             \begin{itemize}
 
-                  \item Does not allow us to ignore type information when its
+                  \item Does not allow us to ignore type information when it's
                         not really needed. i.e., in areas where we use bounded
                         polymorphism.
 
@@ -302,88 +302,18 @@ currently built in such a way that relies on assuming that certain chunk types
 exist and are related to other chunk types that share a \UID{} with them. In
 other words, a ``whole chunk'' is the union of the chunks with the same \UID{}
 spread across the other chunk maps. There are many ways that this can be
-resolved, all depending on the needs of ``chunk building.''
+resolved, all depending on the needs of ``chunk building.'' For example, there
+are at least three (3) possible resolutions: 
+\begin{inparaenum}[(i)]
+      
+      \item forcibly/naively changing the \UID{}s, 
 
-\intodo{3 resolutions: changing UIDs, collapsing, collapsing and restructuring
-      language used to form chunks.}
+      \item forcibly/naively collapsing the chunk structure, and 
+      
+      \item restructuring the chunk structure against the chunks, possibly
+            learning how to re-create the easy chunk building style through
+            other features.
 
-\begin{itemize}
-
-      \item Still many problems!
-            \intodo{Move nearly everything below to the Future Work chapter.}
-            \begin{itemize}
-
-                  \item How do we explain ``Data.Typeable''?
-
-                  \item And ``HasUID''?
-
-                  \item And ``HasChunkRefs''?
-
-                  \item And ``Dumpable''?
-
-            \end{itemize}
-
-      \item Well, at the very least, now we're able to merge the ``chunk'' maps
-            and fix many of the pre-existing problems (we're almost there!).
-            However, now we're relying too much on Haskell. How do we explain
-            those parts?
-
-      \item Also, what are \UID{}s really? Do their information carry any real
-            information? \textit{Rigid designators}.
-
-\end{itemize}
-
-\section{Future Work}
-
-\subsection{Encodings}
-
-\begin{itemize}
-
-      \item With the above new definition of ``chunks'', they still remain a
-            very vague idea, and still \textit{deeply embedded} (a place to
-            recognize an encoding might be appropriate!) in Haskell.
-
-      \item What are the kinds of chunks that can exist? What can be in a chunk,
-            and what are we missing from the existing list of chunks?
-
-      \item The problem with that is that we lose a lot of information by
-            writing Haskell, and leaving the knowledge in the form of Haskell.
-
-      \item We need to de-embed all chunks so that we can obtain a tangible
-            understanding of them.
-
-      \item Through de-embedding the chunks, we will also be forced to de-embed
-            everything with it. This is including the ways in which we transform
-            and generate ``new''-ish knowledge (not necessarily new types/kinds
-            of knowledge, but new instances of types).
-
-\end{itemize}
-
-
-\begin{enumerate}
-
-      \item What is a ``chunk''?
-            \begin{itemize}
-
-                  \item A ``chunk instance'' is a single \textit{term} of a
-                        language.
-                        
-                  \item A ``chunk type'' is a language itself.
-                  
-            \end{itemize}
-
-      \item What is a ``transformer''?
-            \begin{itemize}
-
-                  \item A ``transformer'' is a conversion of a term written in a
-                        language into another term, potentially in another
-                        language.
-                        
-                  \item Transformers rely on a well-understood dissection of
-                        knowledge (contained in a chunk type/language) in order
-                        transform it (potentially with other terms/information
-                        as well) into another term.
-                        
-            \end{itemize}
-
-\end{enumerate}
+\end{inparaenum}
+However, a solution has not yet been decided. For this issue is largely out of
+scope at the moment, and requires considerable work. 

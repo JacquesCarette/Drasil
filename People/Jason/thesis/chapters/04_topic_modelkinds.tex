@@ -538,10 +538,10 @@ While the information is now encoded, it is not without its own issues:
 \begin{enumerate}
 
 	\item As \ModelKinds{} is written using a GADT, it is difficult to extend
-	      its functionality (the ``expression problem''\todo{Cite the original
-		      expression problem paper.}). A work in progress re-design of
+	      its functionality (the ``expression problem''
+	      \cite{Wadler1999ExpressionProblem}). A work in progress re-design of
 	      \ModelKinds{}, relying on \acs{ghc}s \ConstraintKinds{}
-	      \cite{ConstraintKindsGHC2020} language extension, uses Haskell-level
+	      \cite{GHC2020ConstraintKinds} language extension, uses Haskell-level
 	      typeclasses to describe what a model satisfying the needs of being a
 	      ``model kind'' must provide in order to be treated as a ``model
 	      kind''. These typeclass instances may be thought of as proofs that

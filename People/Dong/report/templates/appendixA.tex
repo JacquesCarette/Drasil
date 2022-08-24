@@ -199,7 +199,6 @@ vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double
 	\verb|runge_kutta_cash_karp54| & Cash-Karp: Good general scheme with error estimation.\\ \hline
 	\verb|runge_kutta_dopri5| & Dormand-Prince 5: Standard method with error control and dense output.\\ \hline
 	\verb|runge_kutta_fehlberg78| & Fehlberg 78: Good high order method with error estimation.\\ \hline
-
 	\verb|adams_bashforth_moulton| & Adams-Bashforth-Moulton: Multi-step method with high performance.\\ \hline
 	\verb|controlled_runge_kutta| & Controlled Error Stepper: Error control for the Runge-Kutta steppers.\\ \hline
 	\verb|dense_output_runge_kutta| & Dense Output Stepper: Dense output for the Runge-Kutta steppers.\\ \hline
@@ -219,43 +218,77 @@ vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double
 \section{Generated code for Double Pendulum}
 \label{gencodedbl}
  
+We altered the source code to make it more readable. In Code~\ref{code_pythondbl} and Code~\ref{code_csharpdbl}, line 2-12 are in one line. In Code~\ref{code_javadbl} and Code~\ref{code_cppdbl}, line 4-5 are in one line. Line 9-10 are in one line.
 \begin{listing}[ht]
 \begin{python1}
 def f(t, theta):
-	return [theta[1], (-9.8 * (2.0 * m_1 + m_2) * math.sin(theta[0]) - m_2 * 9.8 * math.sin(theta[0] - 2.0 * theta[2]) - 2.0 * math.sin(theta[0] - theta[2]) * m_2 * (theta[3] ** 2.0 * L_2 + theta[1] ** 2.0 * L_1 * math.cos(theta[0] - theta[2]))) / (L_1 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2]))), theta[3], 2.0 * math.sin(theta[0] - theta[2]) * (theta[1] ** 2.0 * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * math.cos(theta[0]) + theta[3] ** 2.0 * L_2 * m_2 * math.cos(theta[0] - theta[2])) / (L_2 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2])))]
+	return [
+		theta[1],
+
+		(-9.8 * (2.0 * m_1 + m_2) * math.sin(theta[0]) - m_2 * 9.8 * math.sin(theta[0] - 2.0 * theta[2]) - 2.0 * math.sin(theta[0] - theta[2]) * m_2 * (theta[3] ** 2.0 * L_2 + theta[1] ** 2.0 * L_1 * math.cos(theta[0] - theta[2]))) 
+			/ (L_1 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2]))), 
+		
+		theta[3], 
+		
+		2.0 * math.sin(theta[0] - theta[2]) * (theta[1] ** 2.0 * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * math.cos(theta[0]) + theta[3] ** 2.0 * L_2 * m_2 * math.cos(theta[0] - theta[2])) 
+			/ (L_2 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2])))
+		]
 \end{python1}
 \captionof{listing}{Generate Python code for Double Pendulum}
+\label{code_pythondbl}
 \end{listing} 
 
 \begin{listing}[ht]
 \begin{java1}
 public void computeDeriv(double t, double[] theta, double[] dtheta) {
 	dtheta[0] = theta[1];
-	dtheta[1] = (-9.8 * (2.0 * m_1 + m_2) * Math.sin(theta[0]) - m_2 * 9.8 * Math.sin(theta[0] - 2.0 * theta[2]) - 2.0 * Math.sin(theta[0] - theta[2]) * m_2 * (Math.pow(theta[3], 2.0) * L_2 + Math.pow(theta[1], 2.0) * L_1 * Math.cos(theta[0] - theta[2]))) / (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
+
+	dtheta[1] = (-9.8 * (2.0 * m_1 + m_2) * Math.sin(theta[0]) - m_2 * 9.8 * Math.sin(theta[0] - 2.0 * theta[2]) - 2.0 * Math.sin(theta[0] - theta[2]) * m_2 * (Math.pow(theta[3], 2.0) * L_2 + Math.pow(theta[1], 2.0) * L_1 * Math.cos(theta[0] - theta[2]))) 
+		/ (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
+	
 	dtheta[2] = theta[3];
-	dtheta[3] = 2.0 * Math.sin(theta[0] - theta[2]) * (Math.pow(theta[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.cos(theta[0]) + Math.pow(theta[3], 2.0) * L_2 * m_2 * Math.cos(theta[0] - theta[2])) / (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
+
+	dtheta[3] = 2.0 * Math.sin(theta[0] - theta[2]) * (Math.pow(theta[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.cos(theta[0]) + Math.pow(theta[3], 2.0) * L_2 * m_2 * Math.cos(theta[0] - theta[2])) 
+		/ (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
 }
 \end{java1}
 \captionof{listing}{Generate Java code for Double Pendulum}
+\label{code_javadbl}
 \end{listing}
 
 \begin{listing}[ht]
 \begin{cplusplus1}
 void ODE::operator()(vector<double> theta, vector<double> &dtheta, double t) {
 	dtheta.at(0) = theta.at(1);
-	dtheta.at(1) = (-9.8 * (2.0 * m_1 + m_2) * sin(theta.at(0)) - m_2 * 9.8 * sin(theta.at(0) - 2.0 * theta.at(2)) - 2.0 * sin(theta.at(0) - theta.at(2)) * m_2 * (pow(theta.at(3), 2.0) * L_2 + pow(theta.at(1), 2.0) * L_1 * cos(theta.at(0) - theta.at(2)))) / (L_1 * (2.0 * m_1 + m_2 - m_2 * cos(2.0 * theta.at(0) - 2.0 * theta.at(2))));
+
+	dtheta.at(1) = (-9.8 * (2.0 * m_1 + m_2) * sin(theta.at(0)) - m_2 * 9.8 * sin(theta.at(0) - 2.0 * theta.at(2)) - 2.0 * sin(theta.at(0) - theta.at(2)) * m_2 * (pow(theta.at(3), 2.0) * L_2 + pow(theta.at(1), 2.0) * L_1 * cos(theta.at(0) - theta.at(2)))) 
+		/ (L_1 * (2.0 * m_1 + m_2 - m_2 * cos(2.0 * theta.at(0) - 2.0 * theta.at(2))));
+	
 	dtheta.at(2) = theta.at(3);
-	dtheta.at(3) = 2.0 * sin(theta.at(0) - theta.at(2)) * (pow(theta.at(1), 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * cos(theta.at(0)) + pow(theta.at(3), 2.0) * L_2 * m_2 * cos(theta.at(0) - theta.at(2))) / (L_2 * (2.0 * m_1 + m_2 - m_2 * cos(2.0 * theta.at(0) - 2.0 * theta.at(2))));
+
+	dtheta.at(3) = 2.0 * sin(theta.at(0) - theta.at(2)) * (pow(theta.at(1), 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * cos(theta.at(0)) + pow(theta.at(3), 2.0) * L_2 * m_2 * cos(theta.at(0) - theta.at(2))) 
+		/ (L_2 * (2.0 * m_1 + m_2 - m_2 * cos(2.0 * theta.at(0) - 2.0 * theta.at(2))));
 }
 \end{cplusplus1}
 \captionof{listing}{Generate C\texttt{++} code for Double Pendulum}
+\label{code_cppdbl}
 \end{listing} 
 
 \begin{listing}[ht]
 \begin{csharp1}
 Func<double, Vector, Vector> f = (t, theta_vec) => {
-	return new Vector(theta_vec[1], (-9.8 * (2.0 * m_1 + m_2) * Math.Sin(theta_vec[0]) - m_2 * 9.8 * Math.Sin(theta_vec[0] - 2.0 * theta_vec[2]) - 2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * m_2 * (Math.Pow(theta_vec[3], 2.0) * L_2 + Math.Pow(theta_vec[1], 2.0) * L_1 * Math.Cos(theta_vec[0] - theta_vec[2]))) / (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))), theta_vec[3], 2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * (Math.Pow(theta_vec[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.Cos(theta_vec[0]) + Math.Pow(theta_vec[3], 2.0) * L_2 * m_2 * Math.Cos(theta_vec[0] - theta_vec[2])) / (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))));
+	return new Vector(
+		theta_vec[1], 
+
+		(-9.8 * (2.0 * m_1 + m_2) * Math.Sin(theta_vec[0]) - m_2 * 9.8 * Math.Sin(theta_vec[0] - 2.0 * theta_vec[2]) - 2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * m_2 * (Math.Pow(theta_vec[3], 2.0) * L_2 + Math.Pow(theta_vec[1], 2.0) * L_1 * Math.Cos(theta_vec[0] - theta_vec[2]))) 
+			/ (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))), 
+		
+		theta_vec[3], 
+
+		2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * (Math.Pow(theta_vec[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.Cos(theta_vec[0]) + Math.Pow(theta_vec[3], 2.0) * L_2 * m_2 * Math.Cos(theta_vec[0] - theta_vec[2])) 
+			/ (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))));
 };
 \end{csharp1}
 \captionof{listing}{Generate C\# code for Double Pendulum}
+\label{code_csharpdbl}
 \end{listing} 

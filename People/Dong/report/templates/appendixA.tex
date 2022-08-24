@@ -1,7 +1,7 @@
 \chapter{My Appendix}
 \label{appendix_a}
 
-This appendix lists tables and Code to further explain some parts in this report.
+This appendix lists tables and code to further explain some parts in this report.
 
 \section{Constructors of DifferentialModel}
 \label{const_de}
@@ -239,6 +239,25 @@ def f(t, theta):
 \end{listing} 
 
 \begin{listing}[ht]
+\begin{csharp1}
+Func<double, Vector, Vector> f = (t, theta_vec) => {
+	return new Vector(
+		theta_vec[1], 
+
+		(-9.8 * (2.0 * m_1 + m_2) * Math.Sin(theta_vec[0]) - m_2 * 9.8 * Math.Sin(theta_vec[0] - 2.0 * theta_vec[2]) - 2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * m_2 * (Math.Pow(theta_vec[3], 2.0) * L_2 + Math.Pow(theta_vec[1], 2.0) * L_1 * Math.Cos(theta_vec[0] - theta_vec[2]))) 
+			/ (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))), 
+		
+		theta_vec[3], 
+
+		2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * (Math.Pow(theta_vec[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.Cos(theta_vec[0]) + Math.Pow(theta_vec[3], 2.0) * L_2 * m_2 * Math.Cos(theta_vec[0] - theta_vec[2])) 
+			/ (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))));
+};
+\end{csharp1}
+\captionof{listing}{Generate C\# code for Double Pendulum}
+\label{code_csharpdbl}
+\end{listing} 
+
+\begin{listing}[ht]
 \begin{java1}
 public void computeDeriv(double t, double[] theta, double[] dtheta) {
 	dtheta[0] = theta[1];
@@ -272,23 +291,4 @@ void ODE::operator()(vector<double> theta, vector<double> &dtheta, double t) {
 \end{cplusplus1}
 \captionof{listing}{Generate C\texttt{++} code for Double Pendulum}
 \label{code_cppdbl}
-\end{listing} 
-
-\begin{listing}[ht]
-\begin{csharp1}
-Func<double, Vector, Vector> f = (t, theta_vec) => {
-	return new Vector(
-		theta_vec[1], 
-
-		(-9.8 * (2.0 * m_1 + m_2) * Math.Sin(theta_vec[0]) - m_2 * 9.8 * Math.Sin(theta_vec[0] - 2.0 * theta_vec[2]) - 2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * m_2 * (Math.Pow(theta_vec[3], 2.0) * L_2 + Math.Pow(theta_vec[1], 2.0) * L_1 * Math.Cos(theta_vec[0] - theta_vec[2]))) 
-			/ (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))), 
-		
-		theta_vec[3], 
-
-		2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * (Math.Pow(theta_vec[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.Cos(theta_vec[0]) + Math.Pow(theta_vec[3], 2.0) * L_2 * m_2 * Math.Cos(theta_vec[0] - theta_vec[2])) 
-			/ (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))));
-};
-\end{csharp1}
-\captionof{listing}{Generate C\# code for Double Pendulum}
-\label{code_csharpdbl}
 \end{listing} 

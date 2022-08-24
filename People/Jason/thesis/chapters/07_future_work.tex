@@ -6,33 +6,30 @@
 While this work does contribute to the Drasil research project and the ideology
 underpinning it, there are still many questions and concerns left unanswered.
 
-\begin{itemize}
+\section{Chunks}
 
-      \item Addressing Chapter 6\ldots{}
+While \Cref{chap:storingChunks} answers questions regarding \textit{storing}
+more kinds of chunks and has created a basic set of constraints that all chunks
+must satisfy (\HasUID{} and \HasChunkRefs{}), we've embedded their solutions in
+Haskell code rather than Drasil itself. In order for solutions to be included
+``in Drasil itself,'' we need to encode it such that Drasil allows users to
+interact with them, dynamically, without Template Haskell \todo{Cite something
+about TemplateHaskell} or other things ``deep'' in Haskell. Similarly, we have
+mysterious \Typeable{} usage left unknown, which should eventually be replaced
+with something well-understood to us. In the future, we hope to improve chunk
+building fundamentally, perhaps by using a \acs{dsl} instead of leaning on
+built-in Haskell functionality. This would allow us to better analyze Drasil and
+its projects.
 
-      \item Still many problems!
-            \intodo{Move nearly everything below to the Future Work chapter.}
-            \begin{itemize}
+Furthermore, while we've added requirements that \acsp{uid} be unique, we
+haven't discussed how \UID{}s should be built (automatic or manual, and how?),
+nor ensured that \UID{} references ultimately link to the chunks they were
+intended to link to. We desire for them to fully be \textit{rigid designators}
+\todo{Cite something about rigid designators.}. Perhaps these questions will
+naturally resolve themselves when we try to switch to using a Drasil \acs{dsl}
+to build chunks.
 
-                  \item How do we explain ``Data.Typeable''?
-
-                  \item And ``HasUID''?
-
-                  \item And ``HasChunkRefs''?
-
-                  \item And ``Dumpable''?
-
-            \end{itemize}
-
-      \item Well, at the very least, now we're able to merge the ``chunk'' maps
-            and fix many of the pre-existing problems (we're almost there!).
-            However, now we're relying too much on Haskell. How do we explain
-            those parts?
-
-      \item Also, what are \UID{}s really? Do their information carry any real
-            information? \textit{Rigid designators}.
-
-\end{itemize}
+\intodo{Continue here!}
 
 \section{Encodings}
 

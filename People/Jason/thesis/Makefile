@@ -2,7 +2,8 @@
 
 help:
 	@echo "Build:"
-	@echo "  - build: Build a fresh copy of the thesis in the build/ folder, soft linked to local 'thesis.pdf'."
+	@echo "  - build: Build a fresh copy of the thesis in the build/ folder."
+	@echo "  - debug: Same as 'build', but pauses build on errors for easier debugging."
 	@echo "  - clean: Clean working TeX build artifacts."
 	@echo ""
 	@echo "Supplementary Information:"
@@ -22,6 +23,9 @@ getting_started:
 
 build: # '-output-directory=build' is a special name and is referenced from '\usepackage{minted}'region in 'thesis.tex'
 	latexmk -output-directory=build -pdf -interaction=nonstopmode thesis.tex --shell-escape
+
+debug:
+	latexmk -output-directory=build -pdf thesis.tex --shell-escape
 
 clean:
 	rm -rf build/

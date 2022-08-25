@@ -32,19 +32,19 @@ imPDRC = makeASingleDE
 % \end{listing}
 
 % \begin{listing}[ht]
-\begin{haskell1}
-imPDRC :: DifferentialModel
-imPDRC = makeASystemDE
-	time
-	opProcessVariable
-	coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
-	unknowns = [2, 1, 0]
-	constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
-	"imPDRC"
-	(nounPhraseSP "Computation of the Process Variable as a function of time")
-	EmptyS
-\end{haskell1}
-\captionof{listing}{Explicitly set values for the example~\ref{eq_odeexmaple} in DifferentialModel}
+% \begin{haskell1}
+% imPDRC :: DifferentialModel
+% imPDRC = makeASystemDE
+% 	time
+% 	opProcessVariable
+% 	coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
+% 	unknowns = [2, 1, 0]
+% 	constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
+% 	"imPDRC"
+% 	(nounPhraseSP "Computation of the Process Variable as a function of time")
+% 	EmptyS
+% \end{haskell1}
+% \captionof{listing}{Explicitly set values for the example~\ref{eq_odeexmaple} in DifferentialModel}
 % \label{code_scexmatrix}
 % \end{listing}
 

@@ -95,10 +95,24 @@ in Section~\ref{sec:kc}.
   -  Implicit parameters vs explicit: Ex. an SRS will always be rendered based on the recipe, but its output will either be LaTeX or HTML based on an explicit choice. Implicit params fed to gen table of symbols/A\&A / ToU.
 
 
-\section{Reimplementing the case studies in Drasil}
-\ds{TODO: move this / rearrange it into a "Iteration and refinement" section that doesn't discuss the
- specific results with the case studies.}
+\section{Iteration and refinement}
+\ds{TODO: Figure out what belongs here and what belongs in results}
+
   - Practical approach to iron out kinks / find holes in Drasil
-  - Find places to improve upon the existing case studies - ‘update as you go’ mindset
+
+  - Find places to improve upon the existing case studies - ‘update as you go’ 
+  mindset
+
   - Observe the amount of effort required to correct errors - show examples
+
   - Most of the code we’ll show off should be in here.
+
+  - Tau example (see issue 348) and its implications - symbols and definitions 
+  didn't match. -> implicit 1m depth into the page (means we may need to change 
+  the equations). Resistive and mobilizing shear switched throughout the 
+  original docs -- impossible with Drasil.
+
+  - \ds{This next one might belong in future work} Implicit assumptions -> 
+  Issue 91. We take for granted things are "physical 
+  materials", but this is an assumption that could be codified and made 
+  explicit to the system (which would allow us some more flexibility).

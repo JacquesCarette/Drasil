@@ -29,74 +29,18 @@ intended to link to. We desire for them to fully be \textit{rigid designators}
 naturally resolve themselves when we try to switch to using a Drasil \acs{dsl}
 to build chunks.
 
-\intodo{Continue here!}
+As described in \Cref{chap:storingChunks}, once we resolve the issue regarding
+\UID{} collisions, we should be able to register more of our currently underused
+chunks in our new \ChunkDB{}s. In doing this, we will be able to perform a wider
+range of analysis on our necessary ``knowledge'' (chunks). For example, we
+should be able to better understand how much mental effort is needed to produce
+software artifacts.
 
-\section{Encodings}
+\subsection{Math-specific Instances}
 
-\begin{itemize}
-
-      \item With the above new definition of ``chunks'', they still remain a
-            very vague idea, and still \textit{deeply embedded} (a place to
-            recognize an encoding might be appropriate!) in Haskell.
-
-      \item What are the kinds of chunks that can exist? What can be in a chunk,
-            and what are we missing from the existing list of chunks?
-
-      \item The problem with that is that we lose a lot of information by
-            writing Haskell, and leaving the knowledge in the form of Haskell.
-
-      \item We need to de-embed all chunks so that we can obtain a tangible
-            understanding of them.
-
-      \item Through de-embedding the chunks, we will also be forced to de-embed
-            everything with it. This is including the ways in which we transform
-            and generate ``new''-ish knowledge (not necessarily new types/kinds
-            of knowledge, but new instances of types).
-
-\end{itemize}
-
-\section{Chunks}
-
-\begin{enumerate}
-
-      \item What is a ``chunk''?
-            \begin{itemize}
-
-                  \item A ``chunk instance'' is a single \textit{term} of a
-                        language.
-                        
-                  \item A ``chunk type'' is a language itself.
-                  
-            \end{itemize}
-
-      \item What is a ``transformer''?
-            \begin{itemize}
-
-                  \item A ``transformer'' is a conversion of a term written in a
-                        language into another term, potentially in another
-                        language.
-                        
-                  \item Transformers rely on a well-understood dissection of
-                        knowledge (contained in a chunk type/language) in order
-                        transform it (potentially with other terms/information
-                        as well) into another term.
-                        
-            \end{itemize}
-
-\end{enumerate}
-
-
-\begin{itemize}
-
-      \item This document will contain knowledge regarding the Expression language
-            that is shown in Haskell code, but not quite in our encodings. To
-            further improve Drasil, one of the next ``obvious'' steps is to
-            transcribe the knowledge involved with writing any language down as
-            well. An excruciating amount of knowledge is everywhere.
-
-      \item The unit and dimension related to numbers is another project on its
-            own. It will need to be added to calculate the units of operations and
-            ensure that representations are appropriate for their (precision vs
-            accuracy as Dr. Smith mentioned).
-
-\end{itemize}
+In \Cref{chap:modelkinds,chap:typedExpr}, we discussed how we can improve the
+reliability of mathematical language usage in Drasil in different facets. One
+notable facet in practice is the unit and dimension of numbers. We hope that we
+may, in the future, create a strong and reliable system for units and dimensions
+for Drasil, allowing users to discuss precision and accuracy of the generated
+\acs{scs} solver artifacts.

@@ -1,47 +1,51 @@
 \chapter{ODE Data Representation}
-In the Drasil framework, there is a single data structure containing all the information for all products, and we call it \verb|System Information|. The giant \verb|System Information| collects a multitude of pieces of information; whenever we need it, we extract the information from the \verb|System Information|. A ODE could existed in various forms and some forms was designed for specific purposes. For example, we can transform a higher-order ODE to its equivalent system of first-order ODE. Then, we can solve the system of ODE numerically. In previous research, We stored the ODE information in a data structure that cannot be re-used for other purposes. We have to re-write the ODE in a specific form to satisfy a new goal each time. It starts propagate duplication and we easily lose traceability. Therefore, the Drasil team is exploring new way to store ODEs in a new data structure, and the new structure would allow ODEs be isomorphic, which means we can map one ODE form to others. 
+In the Drasil framework, there is a single data structure containing all the information for all products, and we call it \verb|System Information|. The giant \verb|System Information| collects a multitude of pieces of information; whenever we need it, we extract the information from the \verb|System Information|. We store the ODE information in \verb|System Information|. 
 
-By capturing the essential information of ODEs, we cah flexibly transform it in others forms that might similarly appear. On one hand, the transformation might result in losing information. For example, we can display ODE in a textual form in SRS. Once we completed transformation for displaying purpose, the textual form ODE has less information than the original ODE. On the other hand, we made transformation for a specific purpose, such as generating ODE in code. Furthermore, capturing ODEs information in a flexible data structure only requires Drasil users write ODEs once.
+A ODE could existed in various forms and some forms was designed for specific purposes. For example, we can transform a higher-order ODE to its equivalent system of first-order ODE. Then, we can solve the system of ODE numerically. In previous research, We stored the ODE information in a data structure that cannot be re-used for other purposes. We have to re-write the ODE in a specific form to satisfy a new goal each time. It starts propagate duplication and we easily lose traceability. Therefore, the Drasil team is exploring new way to store ODEs in a new data structure, and the new structure would allow ODEs be isomorphic, which means we can map one ODE form to others. 
+
+By capturing the essential information of ODEs, we can flexibly transform it in others forms that might similarly appear. On one hand, the transformation might result in losing information. For example, we can display ODE in a textual form in SRS (software requirements specification). Once we completed transformation for displaying purpose, the textual form ODE has less information than the original ODE. On the other hand, we made transformation for a specific purpose, such as generating ODE in code. Furthermore, capturing ODEs information in a flexible data structure only requires Drasil users write ODEs once.
 
 In this chapter, we will first introduce how we re-write ODE for a different purpose. Then, we will introduce a new data structure for storing ODE information. We will talk about details on how the new data structure captures ODE information, how to use the new data structure, and how the new data structure interacts with Drasil Printer.
 
 \section{Explicit Equation}
-Before we conduct this research, the Drasil framework can generate software that provides numerical solutions for a first-order ODE by explicitly writing the equation. We re-write the ODE equation and pass it to the Drasil code generator. In Equation~\ref{eq_nopcmorginal}, the model describes the energy balance of water. In \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NoPCM case study}, we can find the temperature of the water base on it.
+Before we conduct this research, the Drasil framework can generate software that provides numerical solutions for a first-order ODE by explicitly rewriting the ODE equation. We re-write the original ODE in a form which the Drasil Code Generator can utilize. The Drasil Code Generator retrieve ODE information from the new ODE equation, and generate a program that can produce numerical solutions. Here is the example how we solve the \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NoPCM case study}. The Equation~\ref{eq_nopcmorginal} was defined in \verb|Instance Model|. The model describes the energy balance of water, and we can find the temperature of the water base on it.
 
 \begin{equation} \label{eq_nopcmorginal}
 	T_{w}'(t) +  \frac {T_{w}(t)}{\tau_{w}} = \frac{T_{c}}{\tau_{w}}
 \end{equation}
 
-The $T_w(t)$ is a function of the independent variable, in this case time. The $T_w$ is the temperature of water ($ ^\circ C $). The $T_w'(t)$ is the first directive of the function $T_w(t)$ respect time. The $T_c$ is the temperature of the heating coil (°C), and the $\tau_w$ is the ODE parameter for water related to decay time (s). We can later isolate the $T_w'(t)$ to the left-hand side and move the rest terms to the right-hand side. Then, we can get Equation~\ref{eq_nopcmderive}.
+The $T_w(t)$ is a function of the independent variable, in this case time. The $T_w$ is the temperature of water ($ ^\circ C $). The $T_w'(t)$ is the first directive of the function $T_w(t)$ respect time. The $T_c$ is the temperature of the heating coil (°C), and the $\tau_w$ is the ODE parameter for water related to decay time (s). Isolating for $T_w'(t)$, we obtain the following Equation~\ref{eq_nopcmderive}.
 \begin{equation} \label{eq_nopcmderive}
 	T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
 \end{equation}
 
-Based on Equation~\ref{eq_nopcmderive}, we can write it into a text-based form and pass it to the Drasil code generator. Code~\ref{code_expliciteq} shows how to encode Example~\ref{ex_firstorderode} by writing the explicit equation. Brooks's thesis~\citep{brooks} documented how the Drasil framework solves Equation~\ref{eq_nopcmderive} with manually created \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-0.1.9.0/Language-Drasil-Code.html#t:ODEInfo}{ODEInfo}. The \verb|ODEInfo| is a data type holds ODE information. 
-
-The user will first encode the ODE equation in the general data pool. Whenever we need it, we retrieve the ODE equation from it. However, there is a gap between the original equation and external libraries (Chapter~\ref{cha_extlib}). The external libraries can not understand the original ODE equation from the general data pool. Therefore, the Drasil team manually transforms the original ODE equation into another form (\verb|ODEInfo|), which external libraries can use to produce a numerical solution.
-
-Here is an example of how we manually close the gap between the text-based ODE and external libraries. In Code~\ref{code_expliciteqsrs}, we encode Equation~\ref{eq_nopcmderive} and put it into the general data pool. During printing the SRS, we retrieve the text-based ODE and print it. The Drasil printer is capable of displaying encoded ODE in text. However, external libraries require a specific format for the ODE and can not utilize the original ODE. Therefore, we manually create Code \ref{code_expliciteq} so external libraries can solve the ODE. They both describe the same ODE, but we write it twice in the Drasil framework. Therefore, there is an information duplication. We can transform from Code~\ref{code_expliciteqsrs} to Code~\ref{code_expliciteq} with human interference. However, without human interference, we can not complete the transformation because Code~\ref{code_expliciteqsrs} lacks the necessary structure. To reduce the information duplication, the Drasil team decided to make an advanced data structure to hold the ODE information.
-
 \begin{listing}[ht]
 \begin{haskell1}
--- Pesodu Code
+-- Pseudocode
 T_w'(t) = reciprocal τ_w * (T_c - T_w(t))
 \end{haskell1}
 \captionof{listing}{NoPCM equation for SRS}
 \label{code_expliciteqsrs}
 \end{listing}
 
+Based on Equation~\ref{eq_nopcmderive}, we can write it into a text-based form. A form that text be literarily written down. It does not contain rich data. Code~\ref{code_expliciteqsrs} shows how to textually encode Equation~\ref{eq_nopcmderive} in Drasil. We can use the information of Code~\ref{code_expliciteqsrs} for displaying purpose, such as displaying ODE equation in SRS, because we wrote them down literarily. However, we cannot reuse it for other purpose such as creating a program which solve the ODE numerically. Therefore, we re-write the Code~\ref{code_expliciteqsrs} to other form for solving purpose. Brooks's thesis~\citep{brooks} documented how the Drasil framework solves Equation~\ref{eq_nopcmderive} with manually created \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-0.1.9.0/Language-Drasil-Code.html#t:ODEInfo}{ODEInfo}. The \verb|ODEInfo| is a \verb|data type| that extract useful information from the original ODE (Equation~\ref{eq_nopcmderive}). Drasil Code Generator can utilize \verb|ODEInfo| to generate a program that solve the original ODE numerically. 
 \begin{listing}[ht]
 \begin{haskell1}
--- Pesodu Code
+-- Pseudocode
 reciprocal τ_w * (T_c - T_w[0])
 \end{haskell1}
 \captionof{listing}{NoPCM equation for the Drasil Code Generator}
 \label{code_expliciteq}
 \end{listing}
+Code~\ref{code_expliciteq} shows how to rewriting the original ODE for solving purpose. We can not directly transform Code~\ref{code_expliciteqsrs} to Code~\ref{code_expliciteq}, there is a gap between two ODE expressions.
 
-\section{Matrix Form}
+Despite the gap between Code~\ref{code_expliciteqsrs} and Code~\ref{code_expliciteq}, we can manually close it by re-writing the ODE. Rewriting the ODE in other form produce duplication because both Code~\ref{code_expliciteqsrs} and Code~\ref{code_expliciteq} describe the same ODE. The Code~\ref{code_expliciteqsrs} lacks the necessary structure to allow transformation. Therefore, the Drasil team decided to make an new data structure to store the ODE information, so the ODE information can be reused for different purposes.
+
+% The user will first encode the ODE equation in the general data pool. Whenever we need it, we retrieve the ODE equation from it. However, there is a gap between the original equation and external libraries (Chapter~\ref{cha_extlib}). The external libraries can not understand the original ODE equation from the general data pool. Therefore, the Drasil team manually transforms the original ODE equation into another form (\verb|ODEInfo|), which external libraries can use to produce a numerical solution.
+
+% Here is an example of how we manually close the gap between the text-based ODE and external libraries. In Code~\ref{code_expliciteqsrs}, we encode Equation~\ref{eq_nopcmderive} and put it into the general data pool. During printing the SRS, we retrieve the text-based ODE and print it. The Drasil printer is capable of displaying encoded ODE in text. However, external libraries require a specific format for the ODE and can not utilize the original ODE. Therefore, we manually create Code \ref{code_expliciteq} so external libraries can solve the ODE. They both describe the same ODE, but we write it twice in the Drasil framework. Therefore, there is an information duplication. We can transform from Code~\ref{code_expliciteqsrs} to Code~\ref{code_expliciteq} with human interference. However, without human interference, we can not complete the transformation because Code~\ref{code_expliciteqsrs} lacks the necessary structure. To reduce the information duplication, 
+
+\section{Matrix Form Structure}
 In general, an equation contains a left-hand expression, a right-hand expression, and an equal sign. The left-hand and right-hand expressions connect by an equal sign. A linear ODE also has its left-hand and right-hand sides. Each side has its unique shape. We can write a linear ODE in the shape of
 
 \begin{equation} \label{eq_matrixform}
@@ -52,10 +56,10 @@ On the left-hand side, \textbf{A} is an m $\times$ n matrix, and \textbf{x} is a
 
 Given the ODE example~\ref{eq_odeexmaple} in \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study},
 \begin{equation} \label{eq_odeexmaple}
-	y_t''(t) + (1 + K_d) \cdot y_t'(t) + (20 + K_p) \cdot y_t(t) = r_t \cdot K_p
+	y''(t) + (1 + K_d) \cdot y'(t) + (20 + K_p) \cdot y(t) = r_t \cdot K_p
 \end{equation}
 
-In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y_t$. The $y_t$(t) is a function of independent variable, in this case time. The $y_t'$(t) is the first derivative of $y_t$(t) respect time. The $y_t''$(t) is the second derivative of $y_t$(t) respect time. The $y_t$ is the process variable, and the $y_t'$ is the rate of change of $y_t$. The $y_t''$ is the rate of change of the rate of change of $y_t$. The $K_d$ , $K_p$, and $r_t$ are constant variables. The $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows.
+In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y$. The $y$(t) is a function of independent variable, in this case time. The $y'$(t) is the first derivative of $y$(t) respect time. The $y''$(t) is the second derivative of $y$(t) respect time. The $y$ is the process variable, and the $y'$ is the rate of change of $y$. The $y''$ is the rate of change of the rate of change of $y$. The $K_d$ , $K_p$, and $r_t$ are constant variables. The $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation as follows.
 
 \begin{equation} \label{eq_matrixformexmaple}
 	\begin{bmatrix}
@@ -63,9 +67,9 @@ In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y_t$. The 
 	\end{bmatrix}
 	\cdot
 	\begin{bmatrix}
-		y_{t}''(t)  \\
-		y_{t}'(t)   \\
-		y_{t}(t)  
+		y''(t)  \\
+		y'(t)   \\
+		y(t)  
 	\end{bmatrix}
 	=
 	\begin{bmatrix}
@@ -73,7 +77,7 @@ In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y_t$. The 
 	\end{bmatrix}
 \end{equation}
 
-The relationship between the matrix form~\ref{eq_matrixform} and the example~\ref{eq_matrixformexmaple} is not hard to find. Firstly, the coefficient matrix \textbf{A} is a 1 $\times$ 3 matrix that consists of $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector \textbf{x} is a 3 $\times$ 1 vector with $y_t''$, $y_t'$, and $y_t$. Last, the constant vector \textbf{b} is a 1 $\times$ 1 vector with $r_t \cdot K_p$. The matrix form~\ref{eq_matrixform} very well captures all the knowledge we need to present an ODE. But, how a matrix form looks like in a nth-order linear ODE? Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of
+The relationship between the matrix form~\ref{eq_matrixform} and the example~\ref{eq_matrixformexmaple} is not hard to find. Firstly, the coefficient matrix \textbf{A} is a 1 $\times$ 3 matrix that consists of $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector \textbf{x} is a 3 $\times$ 1 vector with $y''$, $y'$, and $y$. Last, the constant vector \textbf{b} is a 1 $\times$ 1 vector with $r_t \cdot K_p$. The matrix form~\ref{eq_matrixform} very well captures all the knowledge we need to present an ODE. But, how a matrix form looks like in a nth-order linear ODE? Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of
 
 \begin{equation} \label{eq_linearDE}
 	a_n(t) \cdot y^n(t) + a_{n-1}(t) \cdot y^{n-1}(t) + \dots + a_1(t) \cdot y'(t) + a_0(t) \cdot y(t) = h(t)
@@ -128,12 +132,12 @@ Previous to this research, UnitalChunk, ConstrConcept, Expr, and ConceptChunk al
 \end{table}
 
 The \verb|_indepVar| represents the independent variable, and it is often time. The \verb|_depVar| represents the dependent variable. Combing \verb|_depVar| and \verb|_indepVar|, it represents a function produce dependent variables over time. The \verb|_coefficients| is a list of lists \verb|Expr|, and it represents the coefficient matrix \textbf{A}. The \verb|_unknowns| is a list of \verb|Unknown|, and \verb|Unknown| is synonym of integers.
-The \verb|_unknowns| represent a list of numbers of derivatives of the function. Combining \verb|_depVar|, \verb|_indepVar| and \verb|_unknowns|, they can represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y_t$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. Code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
+The \verb|_unknowns| represent a list of numbers of derivatives of the function. Combining \verb|_depVar|, \verb|_indepVar| and \verb|_unknowns|, they can represent the unknown vector \textbf{x}. The \verb|_dmConstants| is a list of \verb|Expr|, and it represents the constant vector \textbf{b}. Last, the \verb|_dmconc| contains metadata of this model. To represent example~\ref{eq_odeexmaple} in \verb|DifferentialModel|, \verb|_indepVar| is time, \verb|_depVar| is $y$, \verb|_coefficients| is the 1 $\times$ 3 matrix, \verb|_unknowns| is the 3 $\times$ 1 vector, \verb|_dmConstants| is the 1 $\times$ 1 vector, and \verb|_dmconc| is \verb|ConceptChunk| that describes what this model is. Code~\ref{code_interaldata} shows the internal data representation of the example~\ref{eq_odeexmaple} in \verb|DifferentialModel|.
 
 \begin{listing}[ht]
 \begin{haskell1}
 _indepVar = time
-_depVar = y_t
+_depVar = y
 _coefficients = [[1, 1 + K_d, 20 + K_p]]
 _unknowns = [2, 1, 0]
 _dmConstants = [r_t * K_p]
@@ -169,7 +173,7 @@ type LHS = [Term]
 ($+) xs x  = xs ++ [x]
 \end{haskell1}
 
-For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. This corresponds to the left hand side is a collection of terms. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. This corresponds to a term consists of a coefficient and a derivative of the function. Although \verb|_unk| is an integer, combining \verb|_unk|, \verb|_depVar| and \verb|_indepVar| we can get the derivative of the function. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator take a variable and a integer, and it represents the derivative of the function. For instance, in example~\ref{eq_odeexmaple}, we can write $y_t(t)$\^{}\^{}2 to represent $y_t''(t)$. One thing we want to notice here is that we store $y_t(t)$ in \verb|_depVar| and \verb|_indepVar|. The operator \verb|$^^| will ignore the first parameter, and store the second parameter in \verb|_unknowns|. The reason to positioning a dummy variable before \verb|$^^| is becasue this will maintain the whole input structure as close as a linear ODE. The \verb|$*| operator creates a term by combining a coefficient matrix and a derivative function. For instance, in example~\ref{eq_odeexmaple}, we can write $(1 + K_d) \$* (y_t$ \$\^{}\^{}1) to represent $(1 + K_d) \cdot y_t'(t)$. Last, the \verb|$+| operator will append all terms into a list. Let's write pseudo code (Code \ref{code_exinputl}) for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PDController example will show up in ~\ref{const_de}.
+For new types, the \verb|LHS|, the short name for the left-hand side, is a list of \verb|Term|. This corresponds to the left hand side is a collection of terms. Each \verb|Term| has an \verb|Expr| and \verb|Unknown|. This corresponds to a term consists of a coefficient and a derivative of the function. Although \verb|_unk| is an integer, combining \verb|_unk|, \verb|_depVar| and \verb|_indepVar| we can get the derivative of the function. For new operators, they are inspired by the linear equation~\ref{eq_linearDE}. The \verb|$^^| operator take a variable and a integer, and it represents the derivative of the function. For instance, in example~\ref{eq_odeexmaple}, we can write $y(t)$\^{}\^{}2 to represent $y''(t)$. One thing we want to notice here is that we store $y(t)$ in \verb|_depVar| and \verb|_indepVar|. The operator \verb|$^^| will ignore the first parameter, and store the second parameter in \verb|_unknowns|. The reason to positioning a dummy variable before \verb|$^^| is becasue this will maintain the whole input structure as close as a linear ODE. The \verb|$*| operator creates a term by combining a coefficient matrix and a derivative function. For instance, in example~\ref{eq_odeexmaple}, we can write $(1 + K_d) \$* (y$ \$\^{}\^{}1) to represent $(1 + K_d) \cdot y'(t)$. Last, the \verb|$+| operator will append all terms into a list. Let's write pseudo code (Code \ref{code_exinputl}) for the example matrix form~\ref{eq_odeexmaple} in the newly introduced input language. The full detail of the input language for the PDController example will show up in ~\ref{const_de}.
 
 \begin{listing}[ht]
 \begin{haskell1}
@@ -177,9 +181,9 @@ For new types, the \verb|LHS|, the short name for the left-hand side, is a list 
 -- left hand side = y\_t'' + (1 + K\_d)y\_t' + (20 + K\_p)y\_t 
 -- right hand side = r\_t K\_p
 
-lhs = [1 $* (y_t $^^ 2)]
-	$+ (1 + K_d) $* (y_t $^^ 1)
-	$+ (20 + K_p) $* (y_t $^^ 0)
+lhs = [1 $* (y $^^ 2)]
+	$+ (1 + K_d) $* (y $^^ 1)
+	$+ (20 + K_p) $* (y $^^ 0)
 rhs = r_t * K_p
 \end{haskell1}
 \captionof{listing}{Input language for the example~\ref{eq_odeexmaple}}
@@ -249,7 +253,7 @@ findCoefficient u = find(\x -> x ^. unk == u)
 \end{listing}
 
 \section{Display Matrix}
-After a \verb|DifferentialModel| obtains ODE information, we want to display them in the software requirements specification (SRS). Previously, we mentioned the Drasil framework able to generate software artifacts, and SRS is a part of them. This section will discuss two ways to display ODEs in the SRS.
+After a \verb|DifferentialModel| obtains ODE information, we want to display them in SRS. Previously, we mentioned the Drasil framework able to generate software artifacts, and SRS is a part of them. This section will discuss two ways to display ODEs in the SRS.
 
 \begin{figure}[ht]
 	\centering

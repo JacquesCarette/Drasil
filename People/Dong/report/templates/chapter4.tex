@@ -1,16 +1,18 @@
 \chapter{Connect Model to Libraries}
-In Chapter 2, we stored the information of a higher-order linear ODE in the \verb|DifferentialModel|. This \verb|data type| preserves the relationship of the ODE, and we can transform the ODE into other forms. In Chapter 3, we discuss how to solve a system of first-order ODE numerically in four selected external libraries. However, there is a gap between the \verb|DifferentialModel| and external libraries. Four selected libraries cannot solve the higher-order ODE directly, but they can solve its equivalent system of first-order ODE. We know that most ways of solving ODEs are intended for first-order ODE, so we want to convert the higher-order ODE to a system of first-order ODE~\citep{converthigherode}. Firstly, we transform a higher-order linear ODE into a system of first-order ODE. Then, generating a program that contains proper interfaces for utilizing four selected external libraries. This program solves the system of first-order ODE numerically by producing a list of values of dependent variables based on time. The original higher-order linear ODE is equivalent to the system of first-order ODE we solved. Thus, by transitivity, the numerical solution for the system of first-order ODE is also the numerical solution of the higher-order ODE.
+In Chapter 2 we store the information of a higher-order linear ODE in the \verb|DifferentialModel|. This \verb|data type| captures the relationship of the ODE, so that we can transform the ODE into other forms. In Chapter 3 we discuss how to solve a system of first-order ODEs numerically in four selected external libraries. However, there is a gap between the \verb|DifferentialModel| and external libraries. The selected libraries cannot solve the higher-order ODE directly, but they can solve its equivalent system of first-order equations. We know that most ways of solving ODEs are intended for systems of first-order ODEs, so we want to convert the higher-order ODE to a system of first-order ODEs~\citep{converthigherode}. Firstly, we transform a higher-order ODE into a system of first-order ODEs. Then, generating a program that contains proper interfaces for utilizing four selected external libraries. This program solves the system of first-order ODEs numerically by producing a list of values of dependent variables based on time. The original higher-order ODE is equivalent to the system of first-order ODEs we solve. Thus, by transitivity, the numerical solution for the system of first-order ODEs is also the numerical solution of the higher-order ODE.
 
-In this chapter, we will first discuss how to convert any higher-order linear ODE to a system of first-order ODE in theory. Then, we will discuss about how to enable Drasil Code Generator to generate a program that produce numerical solution for a system of first-order ODE. Lastly, we will discuss about how to automate the generating process.
+In this research, my work is primary focus on enabling the Drasil Code Generator to generate code for solving higher order ODE and automatically extracting useful information from \verb|DifferentialModel| for the Drasil Code Generator. In addition, we create a new case study, Double Pendulum, which has a system of non-linear ODEs. With the new implementations, we able to generate code which can solve Double Pendulum numerically. In this chapter, we will first discuss how to convert any higher-order linear ODE to a system of first-order ODEs in theory. Then, we will discuss how to enable the Drasil Code Generator to generate code that produces a numerical solution for a system of first-order ODEs. Lastly, we will discuss about how to automate the generation process.
 
 \section{Higher Order to First Order}
 \label{se_hightofirst}
-Given a higher-order linear ODE, we can write it as Equation~\ref{eq_isohighode}. We isolate the highest derivative $y^n$ on the left-hand side and the rest of terms on the right- hand side. On the right hand side, $f (t, y, y', y'', \dots, y^{n-1})$ means a function depends on variables t, y, y', \dots, and $y^{n-1}$. The t is the independent variable, and it is often time. The y, y', \dots, and $y^{n-1}$ means the dependent variable y, the first derivative of y, and until the (n-1)th derivative.
+Any higher-order linear ODE can be written in the following form:
 \begin{equation} \label{eq_isohighode}
   y^n = f (t, y, y', y'', \dots, y^{n-1})
 \end{equation}
 
-Then, we start to introducing new variables, $x_{1}$, $x_{2}$, $\dots$, and $x_{n}$. The number of the newly introduced dependent variable is equal to the highest order of the ODE. The new relationship is shown below.
+We isolate the highest derivative $y^n$ on the left-hand side and the rest of terms on the right-hand side. On the right hand side, $f (t, y, y', y'', \dots, y^{n-1})$ means a function depends on variables $t$, $y$, $y'$, $\dots$, and $y^{n-1}$. The $t$ is the independent variable, and it is often time. The $y$, $y'$, $\dots$, and $y^{n-1}$ represent the dependent variable $y$, the first derivative of $y$, $\dots$, up to $(n-1)^\text{th}$ derivative.
+
+For the next step, we introduce the following new variables: $x_{1}$, $x_{2}$, $\dots$, $x_{n}$. The number of the newly introduced dependent variable is equal to the highest order of the ODE, $n$. The new relationship is shown below.
 \begin{flalign} \label{eq_newvars}
   & x_{1} = y \\ \nonumber
   & x_{2} = y' \\ \nonumber
@@ -18,7 +20,7 @@ Then, we start to introducing new variables, $x_{1}$, $x_{2}$, $\dots$, and $x_{
   & x_{n} = y^{n-1} 
 \end{flalign}
 
-After that, we start to differentiating $x_{1}$, $x_{2}$, $\dots$, and $x_{n}$ in Equation~\ref{eq_newvars}. This step helps us to get new relationships between each variable.
+Next, we differentiate $x_{1}$, $x_{2}$, $\dots$, $x_{n}$ in Equation~\ref{eq_newvars} to establish the following relationships between the variables:
 \begin{flalign} \label{eq_diffvervars}
   & x_{1}' = y' = x_{2} \\ \nonumber
   & x_{2}' = y'' = x_{3} \\ \nonumber
@@ -27,22 +29,22 @@ After that, we start to differentiating $x_{1}$, $x_{2}$, $\dots$, and $x_{n}$ i
   & x_{n}' = y^{n} = f (t, x_{1}, x_{2}, \dots, x_{n})
 \end{flalign}
 
-Since the higher-order ODE is linear ODE, $f (t, x_{1}, x_{2}, \dots, x_{n})$ is a linear function. We can rewrite $f (t, x_{1}, x_{2}, \dots, x_{n})$ as the following
+Since the higher-order ODE is a linear ODE, $f (t, x_{1}, x_{2}, \dots, x_{n})$ is a linear function; therefore, we can rewrite $f (t, x_{1}, x_{2}, \dots, x_{n})$ as
 \begin{equation}\label{eq_linear}
 b_{0}(t) \cdot x_{1} + b_{1}(t) \cdot x_{2} + \dots + b_{n-1}(t) \cdot x_{n} + h(t)
 \end{equation}
-$b_{0}(t)$, $\dots$, $b_{n-1}(t)$ and $h(t)$ are constant functions.
+where $b_{0}(t)$, $\dots$, $b_{n-1}(t)$ and $h(t)$ are constant functions or non-constant functions.
 
-Based on Equation~\ref{eq_diffvervars} and Equation~\ref{eq_linear}, we can we can get:
+Based on Equation~\ref{eq_diffvervars} and Equation~\ref{eq_linear}, we obtain:
 \begin{flalign} \label{eq_diffvervarslinear}
     & x_{1}' = x_{2} \\ \nonumber
     & x_{2}' = x_{3} \\ \nonumber
     & \dots \\ \nonumber
-    & x_{n-1}' = x^{n}\\ \nonumber
+    & x_{n-1}' = x_{n}\\ \nonumber
     & x_{n}'= b_{0}(t) \cdot x_{1} + b_{1}(t) \cdot x_{2} + ... + b_{n-1}(t) \cdot x_{n} + h(t)
 \end{flalign}
 
-Then, we can rewrite Equation~\ref{eq_diffvervarslinear} in a matrix form.
+We can rewrite Equation~\ref{eq_diffvervarslinear} in matrix form:
 \begin{equation} \label{eq_foodeexample}
 	\begin{bmatrix}
 		x_{1}' \\
@@ -77,20 +79,25 @@ Then, we can rewrite Equation~\ref{eq_diffvervarslinear} in a matrix form.
 	\end{bmatrix}
 \end{equation}
 
-Lastly, we abstract Equation~\ref{eq_foodeexample} into a general form, Equation~\ref{eq_foode}. 
+Lastly, we abstract Equation~\ref{eq_foodeexample} into a general form: 
 \begin{equation} \label{eq_foode}
-    \boldsymbol{X}' = \boldsymbol{AX} + \boldsymbol{c}
+    \boldsymbol{x}' = \boldsymbol{Ax} + \boldsymbol{c}
 \end{equation}
-The \textbf{A} is a coefficient matrix, and \textbf{c} is a constant vector. The \textbf{X} is the unknown vector that contains functions of the independent variable, often time. The \textbf{X}' is a vector that consists of first derivatives of functions of \textbf{X}.
+The \textbf{A} is a coefficient matrix, and \textbf{c} is a constant vector. The \textbf{x} is the unknown vector that contains functions of the independent variable, often time. The \textbf{x}' is a vector that consists of first derivatives of functions of \textbf{x}.
 
-% Once we complete the transformation, we get a system of first-order ODE in the shape of Equation~\ref{eq_foode}. We encode it in Drasil and pass it to Drasil Code Generator. In the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study}, we convert Example~\ref{eq_odeexmaple} to Example~\ref{ex_firstorderode}. Then, we generate a program to solve Example~\ref{ex_firstorderode} numerically. By transitivity, the numerical solution is valid for Example~\ref{eq_odeexmaple} as well.
+% Once we complete the transformation, we get a system of first-order ODEs in the shape of Equation~\ref{eq_foode}. We encode it in Drasil and pass it to Drasil Code Generator. In the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study}, we convert Example~\ref{eq_odeexmaple} to Example~\ref{ex_firstorderode}. Then, we generate a program to solve Example~\ref{ex_firstorderode} numerically. By transitivity, the numerical solution is valid for Example~\ref{eq_odeexmaple} as well.
 
-\section{Connect Explicit Equations to Libraries}
+\section{Connect Drasil with External Libraries}
 \label{se_connecteetolib}
 
-In previous research conducted by Brooks, we wrote the ODE in a text-based form and stored them in a general data pool. Although, the Drasil printer can print a text-based ODE in the SRS, the Drasil Code Generator cannot utilize the text-based ODE. Therefore, we manually create a \verb|data type|, called \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-0.1.9.0/Language-Drasil-Code.html#t:ODEInfo}{ODEInfo}, to make study cases work. We extract useful information from the original ODE and construct \verb|ODEInfo| for Dasil Code Generator. The Drasil Code Generator utilized \verb|ODEInfo| to generate a program which produce a numerical solution. We can find details on how to generate a program which solve a first-order ODE numerically in Brooks's thesis~\citep{brooks}. However, the previous research only completed generating a program for a first-order ODE. Before the change, \verb|ODEInfo| only has options to provide one initial value. For a higher-order ODE, the current setting of \verb|ODEInfo| does not hold all information we need to solve a ODE. Therefore, to enable Drasil Code Generator generating problem for higher-order ODE, the \verb|ODEInfo| need to store multiple initial values. For example, we can convert a fourth-order ODE into a system of first-order ODE. To solve the system ODE as an IVP, we need four initial values. Thus, the Drasil Code Generator must adapt to handle multiple initial values.
+In previous research, Drasil developers wrote the ODE in \href{https://jacquescarette.github.io/Drasil/docs/full/drasil-lang-0.1.60.0/Language-Drasil-Chunk-Relation.html#t:RelationConcept}{RelationConcept} \verb|data type| which has a field called, \verb|_rel|. The \verb|_rel| is \href{https://jacquescarette.github.io/Drasil/docs/full/drasil-lang-0.1.60.0/Language-Drasil-ModelExpr-Lang.html#t:ModelExpr}{ModelExpr} type and can be used for representing mathematical expressions. We can write mathematical expression such as the right hand side equal to the left hand side in \verb|ModelExpr|. The drawback is we can not extract useful information from \verb|RelationConcept| to allow the Drasil Code Generator to utilize those information. The Drasil printer can print a \verb|RelationConcept| in the SRS, but the Drasil Code Generator cannot utilize the \verb|RelationConcept|. Therefore, in the previous approach the user has to repeat information through a manually created \verb|data type|, called \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-0.1.9.0/Language-Drasil-Code.html#t:ODEInfo}{ODEInfo}, to generate code. In our improved approach, we expanded the Drasil Code Generator's capability to generate code for solving a higher-order ODE. Also, we create a new case study, Double Pendulum, which has a system of high-order non-linear ODE.
 
-In Code~\ref{code_odeinfointial}, we change the \verb|data type| of \verb|initVal| from a \verb|| to a list of \verb|CodeExpr|. This change allows Drasil users store multiple initial values in a list.
+\subsection{Enable Drasil for Solving Higher-Order ODEs}
+The Drasil Code Generator utilized \verb|ODEInfo| to generate code which produce a numerical solution. We can find details on how to generate code which solve a first-order ODE numerically in Brooks's thesis (91-103)~\citep{brooks}. His work could generate code for a first-order ODE, but not a higher-order ODE. The \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html}{PDContoller} was created by a McMaster student, Naveen. It generates code for solving a second order linear ODE numerically in Python only. The new approach will enable to generate code for solving any higher-order linear ODE in Python, Java, C\texttt{++} and C\#.
+
+Before our changes, \verb|ODEInfo| only has an option to provide one initial value. For a higher-order ODE, the current setting of \verb|ODEInfo| does not hold all information we need. Therefore, to enable the Drasil Code Generator to work for higher-order ODE, \verb|ODEInfo| needs to store multiple initial values. For example, when we can convert a fourth-order ODE as an IVP into first-order ODEs, we need four initial values. Thus, the Drasil Code Generator must adapt to handle multiple initial values.
+
+In Code~\ref{code_odeinfointial} we change the \verb|data type| of \verb|initVal| from a \verb|CodeExpr| to a list of \verb|CodeExpr|. This change allows Drasil users to store multiple initial values in a list.
 \begin{listing}[ht]
 \begin{haskell1}
 -- Old 
@@ -111,19 +118,41 @@ data ODEInfo = ODEInfo {
 \label{code_odeinfointial}
 \end{listing}
 
+We also have to that the ensure Drasil Code Generator can utilize the new \verb|data type| \verb|[CodeExpr]|. Previously, Drasil Code Generator only handling the \verb|initVal| as \verb|CodeExpr|. Now the \verb|initVal| becomes \verb|[CodeExpr]|. In the Drasil framework, we handle a list of \verb|data type| by \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-base-0.1.9.0/Language-Drasil-CodeExpr.html#v:matrix}{matrix}. In Code~\ref{code_odeinfointialcodegen}, the \verb|matrix| can wrap a \verb|[CodeExpr]| into a \verb|CodeExpr| and the code \verb|initVal info| retrieves the \verb|initVal| from an \verb|ODEInfo| data type. There are multiple functions we need to make sure the Drasil Code Generator adapt a list of values. 
+
+The first function is \verb|initSolListWithValFill|(97)~\citep{brooks}. Since the type of \verb|initVal| has been changed to a list of \verb|CodeExpr|, we need to use \verb|matrix| to warp \verb|[initVal info]| as a \verb|CodeExpr|. The \verb|initSolListWithValFill| only used for generating interface in the Scipy Library.
 \begin{listing}[ht]
 \begin{haskell1}
 -- Old 
-initVal info
+initSolListWithValFill (depVar info) (initVal info)
 
 -- New 
-matrix[initVal info]  
+initSolListWithValFill (depVar info) (matrix[initVal info]) 
 \end{haskell1}
-\captionof{listing}{Source code for initial values in Code Generator}
-\label{code_odeinfointialcodegen}
 \end{listing}
 
-We also have to ensure Drasil Code Generator can utilize the new \verb|data type| \verb|[CodeExpr]|. Previously, Drasil Code Generator only handling the \verb|initVal| as \verb|CodeExpr|. Now the \verb|initVal| becomes \verb|[CodeExpr]|. In the Drasil framework, we handling a list of \verb|data type| by \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-base-0.1.9.0/Language-Drasil-CodeExpr.html#v:matrix}{matrix}. In Code~\ref{code_odeinfointialcodegen}, the \verb|matrix| can wrap a \verb|[CodeExpr]| into a \verb|CodeExpr| and the code \verb|initVal info| retrieves the \verb|initVal| from an \verb|ODEInfo| data type. This change effects generated code. For Python Scipy library, in Code~\ref{code_pythonintial}, line 6 initialize the initial value with a list rather than one entity. The same thing happens in C\# OSLO. In Code~\ref{code_csharpintial}, line 5 initializes a list rather than one object. In Java and C\texttt{++}, the backend code already handles the initial value as a list, so there is no change for artifact in those two languages. 
+The second function is \verb|basicArgFill|(96,98)~\citep{brooks}. The \verb|basicArgFill| has been used for filling values for variables and it takes a \verb|CodeExpr|. We can use \verb|matrix| to warp \verb|[initVal info]| as a \verb|CodeExpr|.
+
+\begin{listing}[ht]
+\begin{haskell1}
+basicArgFill :: CodeExpr -> ArgumentFill
+basicArgFill = BasicF
+\end{haskell1}
+\end{listing}
+
+\begin{listing}[ht]
+\begin{haskell1}
+-- Old 1
+basicArgFill[initVal info] -- page 96
+
+-- Old 2
+basicArgFill [matrix[[initVal info]] -- page 98
+
+-- New 
+basicArgFill matrix [initVal info]
+\end{haskell1}
+\end{listing}
+The change of \verb|basicArgFill| effects for generating interface in Python Scipy library and C\# OSLO library. For Python Scipy library, in Code~\ref{code_pythonintial}, line 6 initialize the initial value with a list rather than one entity.
 
 \begin{listing}[ht]
 \begin{python1}
@@ -138,7 +167,7 @@ We also have to ensure Drasil Code Generator can utilize the new \verb|data type
 \captionof{listing}{Source code for initial values in Python}
 \label{code_pythonintial}
 \end{listing}
-
+The same thing happens in C\# OSLO. In Code~\ref{code_csharpintial}, line 5 initializes a list rather than one object.  
 \begin{listing}[ht]
 \begin{csharp1}
 // Old 
@@ -151,22 +180,54 @@ Vector initv = new Vector(new double[] {T_init});
 \label{code_csharpintial}
 \end{listing}
 
-Allowing multiple initial values unlocks the potential for Drasil to generate a program that produce numerical solution for a system of first-order ODE. Every higher-order linear ODE has its equivalent system of first-order ODE, and the solution for the system of first-order ODE is also the solution for the higher-order ODE. The same thing happens on non-linear higher-order ODE. If we could transform a higher-order non-linear ODE to a system of first-order ODE, we can solve it through four selected external libraries. 
+Lastly, we have to create two additional functions based on function \verb|fixedReturn|(100)~\citep{brooks} and fixedStatementFill(89)~\citep{brooks}. The \verb|fixedReturn| indicate a step that returns a fixed value. The \verb|fixedStatementFill| will fill in values for the \verb|fixedReturn|. In previous research, we always fill in integer 1 for the Java ACM library because we only solved a first-order ODE. However, it requires to return $n$, the order number of the ODE. Therefore, newly created function \verb|fixedReturn'| and \verb|fixedStatementFill'| return the right $n$ based on the order of the ODE.
 
-Despite \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html#Sec:IMs}{Double Pendulum case study} containing a higher-order non-linear ODE, the Drasil framework can generate a program to solve it numerically. In the double pendulum case study, we eventually want to solve Equation~\ref{eq_dblpenhigh}. There are two second-order ODEs in one system. To solve this system of ODE, we convert them into a system of first-order ODE. The transformation follows the methodology we discussed in Section~\ref{se_hightofirst}. We transform Equation~\ref{eq_dblpenhigh} into Equation~\ref{eq_dblpenfirst}. Once the transformation is complete, we can encode Equation~\ref{eq_dblpenfirst} and pass it to Drasil Code Generator. However, we cannot show Equation~\ref{eq_dblpenfirst} in the shape of Equation~\ref{eq_foode} (\textbf{X'} = \textbf{AX} + \textbf{c}) because the ODE is not a linear ODE.
+\begin{listing}[ht]
+\begin{haskell1}
+-- Old 
+fixedReturn :: CodeExpr -> Step
+fixedReturn = lockedStatement . FRet
 
-\begin{flalign} \label{eq_dblpenhigh}
-& \theta_{1}'' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\theta_{2}'}^2L_{2}+{\theta_{1}'}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
-& \theta_{2}'' = \frac{2\sin (\theta_{1}-\theta_{2})({\theta_{1}'}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\theta_{2}'}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
-\end{flalign}
+fixedStatementFill :: StepFill
+fixedStatementFill = StatementF [] []
 
-\begin{flalign} \label{eq_dblpenfirst}
-  & \theta_{1}' = \omega_{1} \\ \nonumber
-  & \theta_{2}' = \omega_{2} \\ \nonumber
-  & \omega_{1}' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\omega{2}}^2L_{2}+{\omega{1}}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
-  & \omega_{2}' = \frac{2\sin (\theta_{1}-\theta_{2})({\omega_{1}}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\omega_{2}}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
-\end{flalign}
+-- New added 
+fixedReturn' = statementStep (\cdchs [e] -> case (cdchs, e) of
+  ([], _) -> FRet e
+  (_,_) -> error "Fill for fixedReturn' should provide no CodeChunk")
 
+fixedStatementFill' :: CodeExpr -> StepFill
+fixedStatementFill' a = StatementF [] [a]
+\end{haskell1}
+\end{listing}
+The function of \verb|fixedReturn'| and \verb|fixedStatementFill'| effects for generating interface in Java ACM library. In Code~\ref{code_javadimen}, in line 8, the $n$ will depends on the value we pass in \verb|fixedStatementFill'|.
+\begin{listing}
+\begin{java1}
+// Old 
+public class ODE implements FirstOrderDifferentialEquations {
+  ...
+  public int getDimension() {
+    return 1;
+  }
+}
+// New 
+public class ODE implements FirstOrderDifferentialEquations {
+  ...
+  public int getDimension() {
+    return n; // n will depends on fixedStatementFill' \$ int \$ toInteger \$ length \$ initVal info
+  }
+}
+\end{java1}
+\captionof{listing}{Source code for return dimension in Java}
+\label{code_javadimen}
+\end{listing}
+
+In C\texttt{++} the backend code already handles the initial value as a list, so there is no change for artifact in C\texttt{++}.
+
+Allowing multiple initial values unlocks the potential for Drasil to generate code that produce numerical solution for a system of first-order ODEs. Every higher-order linear ODE has its equivalent system of first-order ODE, and the solution for the system of first-order ODEs is also the solution for the higher-order ODE. The same thing happens on non-linear higher-order ODE. If we could transform a higher-order non-linear ODE to a system of first-order ODEs, we can solve it via the four selected external libraries. 
+
+\subsection{Double Pendulum}
+\label{se_dblpen}
 Figure~\ref{fig_dblpen} demonstrates how a Double Pendulum example works in a lab environment. The full details of the Double Pendulum's SRS locates in \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html}{Drasil website}. Table~\ref{tab_dblpendes} lists all variables in Double Pendulum example.
 \begin{figure}[ht]
   \centering
@@ -194,6 +255,21 @@ Figure~\ref{fig_dblpen} demonstrates how a Double Pendulum example works in a la
 	\label{tab_dblpendes}
 \end{table}
 
+Our found to this point has been on linear ODEs. However, despite the \href{https://jacquescarette.github.io/Drasil/examples/dblpendulum/SRS/srs/DblPendulum_SRS.html#Sec:IMs}{Double Pendulum case study} containing a non-linear ODE, the Drasil framework can still generate code to solve it numerically. In the double pendulum case study, we want to solve the following equation:
+
+\begin{flalign} \label{eq_dblpenhigh}
+  & \theta_{1}'' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\theta_{2}'}^2L_{2}+{\theta_{1}'}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
+  & \theta_{2}'' = \frac{2\sin (\theta_{1}-\theta_{2})({\theta_{1}'}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\theta_{2}'}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
+\end{flalign}
+There are two second-order ODEs in one system. To solve this system of ODEs, we convert them into a system of first-order ODEs. The transformation follows the methodology we discussed in Section~\ref{se_hightofirst}. We transform Equation~\ref{eq_dblpenhigh} into Equation~\ref{eq_dblpenfirst}. Once the transformation is complete, we can encode Equation~\ref{eq_dblpenfirst} and pass it to the Drasil Code Generator. However, we cannot show Equation~\ref{eq_dblpenfirst} in the shape of Equation~\ref{eq_foode} (\textbf{x'} = \textbf{Ax} + \textbf{c}) because the ODE is not a linear ODE.
+
+\begin{flalign} \label{eq_dblpenfirst}
+  & \theta_{1}' = \omega_{1} \\ \nonumber
+  & \theta_{2}' = \omega_{2} \\ \nonumber
+  & \omega_{1}' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\omega{2}}^2L_{2}+{\omega{1}}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
+  & \omega_{2}' = \frac{2\sin (\theta_{1}-\theta_{2})({\omega_{1}}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\omega_{2}}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
+\end{flalign}
+
 Now we have Equation~\ref{eq_dblpenfirst}, we can encode it in the Drasil. In Code~\ref{code_encodedblpend}, it shows the example of how we encode Equation~\ref{eq_dblpenfirst} in the Drasil. 
 \begin{listing}[ht]
 \begin{haskell1}
@@ -212,14 +288,14 @@ dblPenODEInfo = odeInfo
 \label{code_encodedblpend}
 \end{listing}
 
-Once the \verb|dblPenODEInfo| is ready, we will pass it to the Drasil Code generator. It will generate programs solve Double Pendulum in four languages. The details of generated code for double pendulum will show in Appendix~\ref{gencodedbl}. However, the Double Pendulum case study unable to utilize any function introduced in the next section because they were designed for a linear ODE.
+Once the \verb|dblPenODEInfo| is ready, we will pass it to the Drasil Code generator. It will generate code solve Double Pendulum in four languages. The details of the generated code for double pendulum are in Appendix~\ref{gencodedbl}. However, the Double Pendulum case study is unable to utilize any function introduced in the next section because they were designed for a linear ODE.
 
-The limitation of manually creating \verb|ODEInfo| is that we will write the ODE twice. In this case, we encode both Equation~\ref{eq_dblpenhigh} and Equation~\ref{eq_dblpenfirst} in Drasil. They both demonstrate the phenomena of double pendulum, and exist in an isomorphic ODE type. In the next section, we will discuss how to automate the transformation from a higher-order linear ODE to a system of first-order ODE.
+The limitation of manually creating \verb|ODEInfo| is that we will write the ODE twice. In this case, we encode both Equation~\ref{eq_dblpenhigh} and Equation~\ref{eq_dblpenfirst} in Drasil. They both demonstrate the phenomena of double pendulum, and exist in an isomorphic ODE type. In the next section, we will discuss how to automate the transformation from a higher-order linear ODE to a system of first-order ODEs.
 
-\section{Generate Explicit Equations}
-Manually creating explicit equations is not ideal because it requires human interference and propagates duplicate information. We want to design the Drasil framework as fully automatically as possible, so we want to remove human interference. Therefore, an ideal solution is to encode the ODE in a flexible data structure. Then, we extract information from this structure and generate a form of ODE which selected external libraries can utilize. Creating the \verb|DifferentialModel| data structure satisfies the need of this idea. We can restructure an ODE base on the information from \verb|DifferentialModel|. This research's scope only covers generating explicit equations for a single higher-order ODE. In the future, we are looking to generate explicit equations for a system of higher-order ODE.
+\section{Generate ODEInfo Automatically}
+Manually creating explicit equations is not ideal because it requires human interference and propagates duplicate information. We want to design the Drasil framework to be as fully automatic as possible. Therefore, an ideal solution is to encode the ODE in a flexible data structure. Then, we can extract information from this structure and generate a form of the ODE that selected external libraries can utilize. Creating the \verb|DifferentialModel| data structure satisfies the need of this idea. We can restructure an ODE based on the information from \verb|DifferentialModel|. This research's scope only covers generating explicit equations for a single higher-order ODE. In the future, we are looking to generate explicit equations for a system of higher-order ODEs.
 
-Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its equivalent system of first-order ODE in the shape of Equation~\ref{eq_foode}. For the convenience of implementation, we shuffle the data around in Equation~\ref{eq_foodeexample}. We reversed the order of \textbf{X} to $x_{n}$, $\dots$, $x_{1}$. The coefficient matrix \textbf{A} also changed, but \textbf{X'} and \textbf{c} remain unchanged.
+Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its equivalent system of first-order ODE in the shape of Equation~\ref{eq_foode}. For the convenience of implementation, we shuffle the data around in Equation~\ref{eq_foodeexample}. We reverse the order of \textbf{x} to $x_{n}$, $\dots$, $x_{1}$. The coefficient matrix \textbf{A} is also changed, but \textbf{x'} and \textbf{c} remain unchanged.
 
 \begin{equation} \label{eq_foodeexamplecolor}
 	\begin{bmatrix}
@@ -255,9 +331,9 @@ Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its e
 	\end{bmatrix}
 \end{equation}
 
-Since Equation~\ref{eq_foodeexamplecolor} is an expansion of Equation~\ref{eq_foode}, we will use symbols in both equations to explain how to generate Equation~\ref{eq_foodeexamplecolor}. We highlighted \textbf{X'} and \textbf{X} in yellow colour in Equation~\ref{eq_foodeexamplecolor}. The number of elements in \textbf{X'} and \textbf{X} depends on how many new dependent variables introduces. If the higher-order ODE is second-order, we will introduce two new dependent variables. If the higher-order ODE is nth-order, we will introduce n new dependent variables. For \textbf{X'}, knowing it is n-th order ODE, we parameterize $x'$ from 1 to n. For \textbf{X}, knowing it is n-th order ODE, we parameterize $x$ from n to 1.
+Since Equation~\ref{eq_foodeexamplecolor} is an expansion of Equation~\ref{eq_foode}, we will use symbols in both equations to explain how to generate Equation~\ref{eq_foodeexamplecolor}. We highlighted \textbf{x'} and \textbf{x} in yellow in Equation~\ref{eq_foodeexamplecolor}. The number of elements in \textbf{x'} and \textbf{x} depends on how many new dependent variables are introduced. If the higher-order ODE is second-order, we will introduce two new dependent variables. If the higher-order ODE is $n^{th}$-order, we will introduce n new dependent variables. For \textbf{x'}, knowing it is $n^{th}$-order ODE, we parameterize $x'_{1}, \dots, x'_{n}$. For \textbf{x}, knowing it is $n^{th}$-order ODE, we parameterize $x_{n}, \dots, x_{1}$.
 
-We highlighted the n$\times$n coefficient matrix \textbf{A} in orange and blue colour in Equation~\ref{eq_foodeexamplecolor}. The orange part is an matrix looks like an identity matrix. For the lowest higher-order ODE second-order, the orange part is [1, 0]. Equation~\ref{eq_foodeexamplecolortwo} shows a completed transformation for a second-order ODE.
+We highlighted the $n \times n$ coefficient matrix \textbf{A} in orange and blue in Equation~\ref{eq_foodeexamplecolor}. The orange part is a matrix that looks like the identity matrix, only rotated, and and with an extra column of 0s. For the lowest higher-order ODE, a second-order ODE, the orange part is $[1, 0]$. Equation~\ref{eq_foodeexamplecolortwo} shows a completed transformation for a second-order ODE.
 \begin{equation} \label{eq_foodeexamplecolortwo}
 	\begin{bmatrix}
 		{x_{1}'} \\
@@ -280,7 +356,7 @@ We highlighted the n$\times$n coefficient matrix \textbf{A} in orange and blue c
 	\end{bmatrix}
 \end{equation}
 
-If it is a fourth-order ODE, the \textbf{A} will be an 4$\times$4 matrix. Equation~\ref{eq_foodeexamplecolorfour} shows a completed transformation for a fourth-order ODE.
+For a fourth-order ODE, the \textbf{A} will be a $4 \times 4$ matrix. Equation~\ref{eq_foodeexamplecolorfour} shows a completed transformation for a fourth-order ODE.
 \begin{equation} \label{eq_foodeexamplecolorfour}
 	\begin{bmatrix}
 		{x_{1}'} \\
@@ -311,7 +387,7 @@ If it is a fourth-order ODE, the \textbf{A} will be an 4$\times$4 matrix. Equati
 	\end{bmatrix}
 \end{equation}
 
-The orange part starts at (n-1)th row with $[1, 0, \dots]$. If there is a second row, we add $[0, 1, \dots]$ above the start row and so on. We observe there is a pattern for the orange part, so that we can generate it. In Code~\ref{code_createidentity}, \verb|constIdentityRowVect| and \verb|addIdentityValue| are responsible for generating each row in the orange part. We first create a row containing a list of 0. Then, we replace one of 0s to 1. The \verb|addIdentityCoeffs| run through a recursion to add all rows in orange part together.
+The orange part starts at the ${n-1}^{th}$ row with $[1, 0, \dots]$. If there is a second row, we add $[0, 1, \dots]$ above the start row and so on. We observe there is a pattern for the orange part, so that we can generate it. In Code~\ref{code_createidentity}, \verb|constIdentityRowVect| and \verb|addIdentityValue| are responsible for generating each row in the orange part. We first create a row containing a list of 0. Then, we replace one of 0s to 1. The \verb|addIdentityCoeffs| run through a recursion to add all rows in the orange part together.
 
 \begin{listing}[ht]
 \begin{haskell1}
@@ -357,11 +433,11 @@ Firstly, we move every term from left to right, except the highest order term.
 \begin{equation}
 	a_n(t) \cdot y^n(t)  = -a_{n-1}(t) \cdot y^{n-1}(t) + \dots + -a_1(t) \cdot y'(t) + -a_0(t) \cdot y(t) + h(t) \nonumber
 \end{equation}
-Secondly, we cancel out the coefficient, $a_n(t)$.
+Secondly, we divide both side of the equation by the coefficient $a_n(t)$.
 \begin{equation}
 	y^n(t)  = \frac{-a_{n-1}(t) \cdot y^{n-1}(t) + \dots + -a_1(t) \cdot y'(t) + -a_0(t) \cdot y(t) + h(t)}{a_n(t)} \nonumber
 \end{equation}
-Then, this can be written in a matrix form
+Then, this can be written in matrix form as:
 \begin{equation} 
   \begin{bmatrix}
 		y^n(t)
@@ -383,7 +459,7 @@ Then, this can be written in a matrix form
 	\end{bmatrix}
   \nonumber
 \end{equation}
-Since $x_{n}'$ = $y_{n}$ (Equation~\ref{eq_diffvervars}), we can replace $y_{n}$ with $x_{n}'$. Based on Equation~\ref{eq_newvars}, we replace all derivatives of y(t) with $x_{n}$, \dots, $x_{1}$.
+Since $x_{n}'$ = $y_{n}$ (Equation~\ref{eq_diffvervars}), we can replace $y_{n}$ with $x_{n}'$. Based on Equation~\ref{eq_newvars}, we replace all derivatives of $y(t)$ with $x_{n}, \dots, x_{1}$.
 
 \begin{equation}
   \begin{bmatrix}
@@ -406,7 +482,7 @@ Since $x_{n}'$ = $y_{n}$ (Equation~\ref{eq_diffvervars}), we can replace $y_{n}$
 	\end{bmatrix}
   \nonumber
 \end{equation}
-Lastly, we replacing new variables in Equation~\ref{eq_foodeexamplecolor}, we can get a new matrix.
+Lastly, we replace new variables in Equation~\ref{eq_foodeexamplecolor} to get a new matrix.
 \begin{equation}\label{eq_foodeexampledetail}
 	\begin{bmatrix}
 		\highlight{yellow}{x_{1}'} \\
@@ -452,7 +528,7 @@ transUnknowns = tail
 \label{code_isohighode}
 \end{listing}
 
-In Code~\ref{code_cancelcoe}, the \verb|transCoefficients| cancel out the coefficient, $a_n(t)$, in blue highlighted. The \verb|divideCosntants| cancels out the coefficient in red highlighted.
+In Code~\ref{code_cancelcoe} the \verb|transCoefficients| divide the coefficient $a_n(t)$ in blue highlighted. The \verb|divideConstants| divide the coefficient in the red highlights.
 \begin{listing}[ht]
 \begin{haskell1}
 -- | Cancel the leading coefficient of the highest order in the coefficient matrix
@@ -463,8 +539,8 @@ transCoefficients es
     where mapNeg = map (\x -> if x == exactDbl 0 then exactDbl 0 else neg x)
 
 -- | divide the leading coefficient of the highest order in constant
-divideCosntants :: Expr -> Expr -> Expr
-divideCosntants a b
+divideConstants :: Expr -> Expr -> Expr
+divideConstants a b
   | b == exactDbl 0 = error "Divisor can't be zero"
   | b == exactDbl 1 = a
   | otherwise       = a $/ b
@@ -473,7 +549,7 @@ divideCosntants a b
 \label{code_cancelcoe}
 \end{listing}
 
-In Code~\ref{code_odesolverformat}, we create a new \verb|data type| called \verb|ODESolverFormat|. The \verb|ODESolverFormat| contains information for the system of first-order ODE. The \verb|coeffVects|, \verb|unknownVect|, and \verb|constantVect| are responsible for \textbf{A}, \textbf{X}, and \textbf{c} in Equation~\ref{eq_foode} (\textbf{X'} = \textbf{AX} + \textbf{c}). The \verb|makeAODESolverFormat| is a smart constructor to create an \verb|ODESolverFormat| by giving a \verb|DifferentialModel|.
+In Code~\ref{code_odesolverformat}, we create a new \verb|data type| called \verb|ODESolverFormat|. The \verb|ODESolverFormat| contains information for the system of first-order ODEs. The \verb|coeffVects|, \verb|unknownVect|, and \verb|constantVect| are responsible for \textbf{A}, \textbf{x}, and \textbf{c} in Equation~\ref{eq_foode} (\textbf{x'} = \textbf{Ax} + \textbf{c}). The \verb|makeAODESolverFormat| is a smart constructor to create an \verb|ODESolverFormat| by providing a \verb|DifferentialModel|.
 
 \begin{listing}[ht]
 \begin{haskell1}
@@ -496,7 +572,7 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
         transEs = addIdentityCoeffs [transCoefficients $ head (dm ^. coefficients)] (length transUnks) 0
         transConsts = addIdentityConsts [head (dm ^. dmConstants) `divideCosntants` head (head (dm ^. coefficients))] (length transUnks)
 \end{haskell1}
-\captionof{listing}{Source code for generating Equation~\ref{eq_foode}, \textbf{X'} = \textbf{AX} + \textbf{c}}
+\captionof{listing}{Source code for generating Equation~\ref{eq_foode}, \textbf{x'} = \textbf{Ax} + \textbf{c}}
 \label{code_odesolverformat}
 \end{listing}
 
@@ -514,7 +590,7 @@ data InitialValueProblem = IVP{
 \label{code_ivpinfo}
 \end{listing}
 
-Lastly, in Code~\ref{code_generateodeinfo}, we create a new smart construct to generate the \verb|ODEInfo| automatically. In \verb|odeInfo'|, the first parameter is \verb|[CodeVarChunk]|. There will likely be other variables in the ODE. The \verb|[CodeVarChunk]| contains variables other than the dependent and independent variables. The \href{https://jacquescarette.github.io/Drasil/docs/full/drasil-code-0.1.9.0/Language-Drasil-Data-ODEInfo.html#t:ODEOptions}{ODEOptions} is instructing external libraries on how to solve the ODE. The \verb|DifferentialModel| contains core information for the higher-order ODE. Last, \verb|InitialValueProblem| contains information for solving the ODE numerically. The \verb|createFinalExpr| creates multiple expressions in a list. Those expressions were created based on information on the system of first-order ODE. The \verb|formEquations| take parameters the coefficient matrix \textbf{A} (\verb|[[Expr]]|), the unknown vector \textbf{X} (\verb|[Unknown]|), and the constant vector \textbf{c} (\verb|[Expr]|). Then, we form responsible expressions. The first row of \textbf{A} cross product the \textbf{X}, then we add all terms together with a responsible constant term. In the follwoing row of \textbf{A}, we do the same thing. The \verb|formEquations| will output a list of expressions equivalent to Equation~\ref{eq_diffvervarslinear}. Once the explicit equation for the higher-order ODE is created, we can pass it to Drasil Code Generator.
+Lastly, in Code~\ref{code_generateodeinfo}, we create a new smart construct to generate the \verb|ODEInfo| automatically. In \verb|odeInfo'|, the first parameter is \verb|[CodeVarChunk]|. There will likely be other variables in the ODE. The \verb|[CodeVarChunk]| contains variables other than the dependent and independent variables. The \href{https://jacquescarette.github.io/Drasil/docs/full/drasil-code-0.1.9.0/Language-Drasil-Data-ODEInfo.html#t:ODEOptions}{ODEOptions} is instructing external libraries on how to solve the ODE. The \verb|DifferentialModel| contains core information for the higher-order ODE. Last, \verb|InitialValueProblem| contains information for solving the ODE numerically. The \verb|createFinalExpr| creates multiple expressions in a list. Those expressions were created based on information on the system of first-order ODEs. The \verb|formEquations| take parameters the coefficient matrix \textbf{A} (\verb|[[Expr]]|), the unknown vector \textbf{x} (combing \verb|[Unknown]| and \verb|ConstrConcept|), and the constant vector \textbf{c} (\verb|[Expr]|). Those parameters contains enough information to create explicit equations for the Drasil Code Generator. We can create explicit equations by each row of \textbf{A} dot product the \textbf{x} with an added responsible constant term. The \verb|formEquations| will output a list of expressions equivalent to Equation~\ref{eq_diffvervarslinear}. Once the explicit equation for the higher-order ODE is created, we can pass it to the Drasil Code Generator.
 
 \begin{listing}[ht]
 \begin{haskell1}

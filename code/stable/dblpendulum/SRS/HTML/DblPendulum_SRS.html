@@ -414,44 +414,44 @@
         <p class="paragraph">
           The following section provides an overview of the Software Requirements Specification (SRS) for Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
-      </div>
-    </div>
-    <div id="Sec:DocPurpose">
-      <div class="subsection">
-        <h2>Purpose of Document</h2>
-        <p class="paragraph">
-          The primary purpose of this document is to record the requirements of the Pendulum. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of DblPendulum. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
-        </p>
-        <p class="paragraph">
-          This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
-        </p>
-      </div>
-    </div>
-    <div id="Sec:ReqsScope">
-      <div class="subsection">
-        <h2>Scope of Requirements</h2>
-        <p class="paragraph">
-          The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions.
-        </p>
-      </div>
-    </div>
-    <div id="Sec:ReaderChars">
-      <div class="subsection">
-        <h2>Characteristics of Intended Reader</h2>
-        <p class="paragraph">
-          Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of DblPendulum can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
-        </p>
-      </div>
-    </div>
-    <div id="Sec:DocOrg">
-      <div class="subsection">
-        <h2>Organization of Document</h2>
-        <p class="paragraph">
-          The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
-        </p>
-        <p class="paragraph">
-          The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
-        </p>
+        <div id="Sec:DocPurpose">
+          <div class="subsection">
+            <h2>Purpose of Document</h2>
+            <p class="paragraph">
+              The primary purpose of this document is to record the requirements of the Pendulum. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of DblPendulum. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+            </p>
+            <p class="paragraph">
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:ReqsScope">
+          <div class="subsection">
+            <h2>Scope of Requirements</h2>
+            <p class="paragraph">
+              The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:ReaderChars">
+          <div class="subsection">
+            <h2>Characteristics of Intended Reader</h2>
+            <p class="paragraph">
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of DblPendulum can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:DocOrg">
+          <div class="subsection">
+            <h2>Organization of Document</h2>
+            <p class="paragraph">
+              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+            </p>
+            <p class="paragraph">
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
     <div id="Sec:GenSysDesc">
@@ -460,64 +460,64 @@
         <p class="paragraph">
           This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
         </p>
-      </div>
-    </div>
-    <div id="Sec:SysContext">
-      <div class="subsection">
-        <h2>System Context</h2>
-        <p class="paragraph">
-          <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (DblPendulum). Arrows are used to show the data flow between the system and its environment.
-        </p>
-        <div id="Figure:sysCtxDiag">
-          <figure>
-            <img src="../../../../datafiles/dblpendulum/SystemContextFigure.png" alt="System Context" >
-            <figcaption>System Context</figcaption>
-          </figure>
+        <div id="Sec:SysContext">
+          <div class="subsection">
+            <h2>System Context</h2>
+            <p class="paragraph">
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (DblPendulum). Arrows are used to show the data flow between the system and its environment.
+            </p>
+            <div id="Figure:sysCtxDiag">
+              <figure>
+                <img src="../../../../datafiles/dblpendulum/SystemContextFigure.png" alt="System Context" >
+                <figcaption>System Context</figcaption>
+              </figure>
+            </div>
+            <p class="paragraph">
+              The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
+            </p>
+            <ul class="list">
+              <li>
+                User Responsibilities
+                <ul class="list">
+                  <li>
+                    Provide initial conditions of the physical state of the motion and the input data related to the Pendulum, ensuring no errors in the data entry.
+                  </li>
+                  <li>Ensure that consistent units are used for input variables.</li>
+                  <li>
+                    Ensure required <a href=#Sec:Assumps>software assumptions</a> are appropriate for any particular problem input to the software.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                DblPendulum Responsibilities
+                <ul class="list">
+                  <li>
+                    Detect data type mismatch, such as a string of characters input instead of a floating point number.
+                  </li>
+                  <li>
+                    Determine if the inputs satisfy the required physical and software constraints.
+                  </li>
+                  <li>Calculate the required outputs.</li>
+                  <li>Generate the required graphs.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-        <p class="paragraph">
-          The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
-        </p>
-        <ul class="list">
-          <li>
-            User Responsibilities
-            <ul class="list">
-              <li>
-                Provide initial conditions of the physical state of the motion and the input data related to the Pendulum, ensuring no errors in the data entry.
-              </li>
-              <li>Ensure that consistent units are used for input variables.</li>
-              <li>
-                Ensure required <a href=#Sec:Assumps>software assumptions</a> are appropriate for any particular problem input to the software.
-              </li>
-            </ul>
-          </li>
-          <li>
-            DblPendulum Responsibilities
-            <ul class="list">
-              <li>
-                Detect data type mismatch, such as a string of characters input instead of a floating point number.
-              </li>
-              <li>
-                Determine if the inputs satisfy the required physical and software constraints.
-              </li>
-              <li>Calculate the required outputs.</li>
-              <li>Generate the required graphs.</li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div id="Sec:UserChars">
-      <div class="subsection">
-        <h2>User Characteristics</h2>
-        <p class="paragraph">
-          The end user of DblPendulum should have an understanding of high school physics, high school calculus and ordinary differential equations.
-        </p>
-      </div>
-    </div>
-    <div id="Sec:SysConstraints">
-      <div class="subsection">
-        <h2>System Constraints</h2>
-        <p class="paragraph">There are no system constraints.</p>
+        <div id="Sec:UserChars">
+          <div class="subsection">
+            <h2>User Characteristics</h2>
+            <p class="paragraph">
+              The end user of DblPendulum should have an understanding of high school physics, high school calculus and ordinary differential equations.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:SysConstraints">
+          <div class="subsection">
+            <h2>System Constraints</h2>
+            <p class="paragraph">There are no system constraints.</p>
+          </div>
+        </div>
       </div>
     </div>
     <div id="Sec:SpecSystDesc">

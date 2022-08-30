@@ -44,8 +44,6 @@ The unit system used throughout is SI (Système International d'Unités). In add
 \\
 \midrule
 \endhead
-${{}^{\circ}}$ & angle & degree
-\\
 ${\text{kg}}$ & mass & kilogram
 \\
 ${\text{m}}$ & length & metre
@@ -114,6 +112,8 @@ ${\symbf{T}_{2}}$ & The tension of the second object & ${\text{N}}$
 \\
 $t$ & Time & ${\text{s}}$
 \\
+$\text{theta}$ & Dependent variables & ${\text{rad}}$
+\\
 ${v_{\text{x}1}}$ & The horizontal velocity of the first object & $\frac{\text{m}}{\text{s}}$
 \\
 ${v_{\text{x}2}}$ & The horizontal velocity of the second object & $\frac{\text{m}}{\text{s}}$
@@ -132,9 +132,9 @@ ${α_{1}}$ & The angular acceleration of the first object & $\frac{\text{rad}}{\
 \\
 ${α_{2}}$ & The angular acceleration of the second object & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
-${θ_{1}}$ & The angle of the first rod & ${{}^{\circ}}$
+${θ_{1}}$ & The angle of the first rod & ${\text{rad}}$
 \\
-${θ_{2}}$ & The angle of the second rod & ${{}^{\circ}}$
+${θ_{2}}$ & The angle of the second rod & ${\text{rad}}$
 \\
 $π$ & Ratio of circumference to diameter for any circle & --
 \\
@@ -416,7 +416,7 @@ Description & \begin{symbDescription}
               \item{${v_{\text{x}1}}$ is the the horizontal velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
               \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -475,7 +475,7 @@ Description & \begin{symbDescription}
               \item{${v_{\text{y}1}}$ is the the vertical velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
               \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -535,7 +535,7 @@ Description & \begin{symbDescription}
               \item{${v_{\text{x}1}}$ is the the horizontal velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
               \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -590,7 +590,7 @@ Description & \begin{symbDescription}
               \item{${v_{\text{y}1}}$ is the the vertical velocity of the first object ($\frac{\text{m}}{\text{s}}$)}
               \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -644,7 +644,7 @@ Description & \begin{symbDescription}
               \item{${a_{\text{x}1}}$ is the the horizontal acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \item{${α_{1}}$ is the the angular acceleration of the first object ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -705,7 +705,7 @@ Description & \begin{symbDescription}
               \item{${a_{\text{y}1}}$ is the the vertical acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \item{${α_{1}}$ is the the angular acceleration of the first object ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -767,7 +767,7 @@ Description & \begin{symbDescription}
               \item{${a_{\text{x}1}}$ is the the horizontal acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${α_{2}}$ is the the angular acceleration of the second object ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -824,7 +824,7 @@ Description & \begin{symbDescription}
               \item{${a_{\text{y}1}}$ is the the vertical acceleration of the first object ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${α_{2}}$ is the the angular acceleration of the second object ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -881,9 +881,9 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{1}}$ is the the tension of the first object (${\text{N}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -922,9 +922,9 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{1}}$ is the the tension of the first object (${\text{N}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${m_{1}}$ is the the mass of the first object (${\text{kg}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -965,7 +965,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -1004,7 +1004,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${m_{2}}$ is the the mass of the second object (${\text{kg}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -1086,7 +1086,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{${p_{\text{x}1}}$ is the the horizontal position of the first object (${\text{m}}$)}
               \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${p_{\text{x}1}}$ is the horizontal position
@@ -1127,7 +1127,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{${p_{\text{y}1}}$ is the the vertical position of the first object (${\text{m}}$)}
               \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${p_{\text{y}1}}$ is the vertical position
@@ -1169,7 +1169,7 @@ Description & \begin{symbDescription}
               \item{${p_{\text{x}2}}$ is the the horizontal position of the second object (${\text{m}}$)}
               \item{${p_{\text{x}1}}$ is the the horizontal position of the first object (${\text{m}}$)}
               \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${p_{\text{x}2}}$ is the horizontal position
@@ -1211,7 +1211,7 @@ Description & \begin{symbDescription}
               \item{${p_{\text{y}2}}$ is the the vertical position of the second object (${\text{m}}$)}
               \item{${p_{\text{y}1}}$ is the the vertical position of the first object (${\text{m}}$)}
               \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${p_{\text{y}2}}$ is the vertical position
@@ -1342,8 +1342,8 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${α_{1}}$ is the the angular acceleration of the first object ($\frac{\text{rad}}{\text{s}^{2}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
@@ -1402,8 +1402,8 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${α_{2}}$ is the the angular acceleration of the second object ($\frac{\text{rad}}{\text{s}^{2}}$)}
-              \item{${θ_{1}}$ is the the angle of the first rod (${{}^{\circ}}$)}
-              \item{${θ_{2}}$ is the the angle of the second rod (${{}^{\circ}}$)}
+              \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
+              \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
@@ -1480,10 +1480,6 @@ ${m_{1}}$ & ${m_{1}}\gt{}0$ & $0.5$ ${\text{kg}}$ & 10$\%$
 \\
 ${m_{2}}$ & ${m_{2}}\gt{}0$ & $0.5$ ${\text{kg}}$ & 10$\%$
 \\
-${θ_{1}}$ & ${θ_{1}}\gt{}0$ & $30.0$ ${{}^{\circ}}$ & 10$\%$
-\\
-${θ_{2}}$ & ${θ_{2}}\gt{}0$ & $30.0$ ${{}^{\circ}}$ & 10$\%$
-\\
 \bottomrule
 \caption{Input Data Constraints}
 \label{Table:InDataConstraints}
@@ -1498,9 +1494,9 @@ The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data c
 \\
 \midrule
 \endhead
-${α_{1}}$ & ${α_{1}}\gt{}0$
+${θ_{1}}$ & ${θ_{1}}\gt{}0$
 \\
-${α_{2}}$ & ${α_{2}}\gt{}0$
+${θ_{2}}$ & ${θ_{2}}\gt{}0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -1533,10 +1529,6 @@ ${L_{2}}$ & The length of the second rod & ${\text{m}}$
 ${m_{1}}$ & The mass of the first object & ${\text{kg}}$
 \\
 ${m_{2}}$ & The mass of the second object & ${\text{kg}}$
-\\
-${θ_{1}}$ & The angle of the first rod & ${{}^{\circ}}$
-\\
-${θ_{2}}$ & The angle of the second rod & ${{}^{\circ}}$
 \\
 \bottomrule
 \caption{Required Inputs following \hyperref[inputValues]{FR:Input-Values}}

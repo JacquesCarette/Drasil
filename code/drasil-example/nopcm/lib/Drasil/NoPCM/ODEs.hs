@@ -11,9 +11,16 @@ import Drasil.SWHS.Unitals (tauW, tempC, tempInit, tempW, timeFinal, timeStep,
 
 
 noPCMODEOpts :: ODEOptions
-noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep) (exactDbl 0)
+noPCMODEOpts = odeOptions 
+  RK45 (sy absTol) (sy relTol) (sy timeStep)
 
 noPCMODEInfo :: ODEInfo
-noPCMODEInfo = odeInfo (quantvar time) (quantvar tempW)
-  [quantvar tauW, quantvar tempC] (exactDbl 0) (sy timeFinal) (sy tempInit)
-  [recip_ (sy tauW) `mulRe` (sy tempC $- idx (sy tempW) (int 0))] noPCMODEOpts
+noPCMODEInfo = odeInfo
+  (quantvar time)
+  (quantvar tempW)
+  [quantvar tauW, quantvar tempC] 
+  (exactDbl 0) 
+  (sy timeFinal) 
+  [sy tempInit]
+  [recip_ (sy tauW) `mulRe` (sy tempC $- idx (sy tempW) (int 0))] 
+  noPCMODEOpts

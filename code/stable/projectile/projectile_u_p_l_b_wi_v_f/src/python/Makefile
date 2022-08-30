@@ -1,7 +1,7 @@
 build:
 
 run: build
-	python Projectile.py $(RUNARGS)
+	python3 Projectile.py $(RUNARGS)
 
 doc: doxConfig Projectile.py
 	doxygen doxConfig

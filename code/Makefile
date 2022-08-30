@@ -27,8 +27,8 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #--------------------------------------------#
 
 # Current list of examples
-SRC_EXAMPLES = glassbr nopcm projectile pdcontroller
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum sglpendulum 
+SRC_EXAMPLES = glassbr nopcm projectile pdcontroller dblpendulum
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpendulum 
 GOOLTEST = codegenTest
 
 # where they live
@@ -232,6 +232,14 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 # then make pdfs from the generated TeX files.
 tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
+# Generate graph of package dependencies
+packagedeps: graphmod check_dot
+	@mkdir -p $(GRAPH_FOLDER)
+	@echo ----------------------------
+	@echo Generating package dependency graph
+	@echo ----------------------------
+	@stack dot --prune dblpendulum,gamephysics,glassbr,hghc,nopcm,pdcontroller,projectile,sglpendulum,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
+
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
@@ -317,8 +325,8 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | tee >(dot -Tpdf -o "$(GRAPH_FOLDER)drasil-$*.pdf") >(dot -Tsvg -o "$(GRAPH_FOLDER)drasil-$*.svg") | dot -Tpng -o "$(GRAPH_FOLDER)drasil-$*.png"
 
 # Dot graphs are currently generated for datatypes and class instance structures.
-# They are made using the default dot algorithm and the circo algorithm for options
-# and viewability. We also add example to these variables so that we can still
+# They are made using the default dot graph algorithm and viewability. 
+# We also add example to these variables so that we can still
 # make the graphs for that folder (although it's technically not a package itself).
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
 	- rm -rf "$(ANALYSIS_FOLDER)"
@@ -327,17 +335,15 @@ analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasi
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
 	@echo "Analysis complete. Please see '$(ANALYSIS_FOLDER)' folder."
 
-convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs.
-	@echo "Building dependency graphs in Dot and Circo formats. This may take a few minutes."
+convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.
+	@echo "Building dependency graphs. This may take a few minutes."
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
-		echo "Converting type dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
+		echo "Converting type dot graph for '$$pack' into an svg" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
-		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
 	@cd $(CLASSINST_GRAPH_FOLDER) && for pack in $(PACKAGES_E); do \
-		echo "Converting classInst dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
+		echo "Converting classInst dot graph for '$$pack' into an svg" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
-		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
 	@echo "Dependency graphs built, check your '$(TYPEGRAPH_FOLDER)' and '$(CLASSINST_GRAPH_FOLDER)' folders."
 
@@ -427,7 +433,7 @@ deploy_lite: ##@Deploy Deploy the Drasil website without regenerating artifacts.
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: analysis graphs docs tex doxygen website ##@Deploy Generates all artifacts and the Drasil website locally.
+deploy: analysis graphs packagedeps docs tex doxygen website ##@Deploy Generates all artifacts and the Drasil website locally.
 	"$(MAKE)" deploy_lite
 
 #-----------------------#

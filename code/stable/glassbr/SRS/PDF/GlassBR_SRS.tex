@@ -351,7 +351,7 @@ This section simplifies the original problem and helps in developing the theoret
 \begin{itemize}
 \item[glassType:\phantomsection\label{assumpGT}]{The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.}
 \item[glassCondition:\phantomsection\label{assumpGC}]{Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC:Accommodate-Altered-Glass}.)}
-\item[explainScenario:\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blask-Risk}.)}
+\item[explainScenario:\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blast-Risk}.)}
 \item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD:sdfTol}, \hyperref[DD:nFL]{DD:nFL}, \hyperref[DD:loadDurFactor]{DD:loadDurFactor}, \hyperref[DD:dimlessLoad]{DD:dimlessLoad}, and \hyperref[assumpLDFC]{A:ldfConstant}.)}
 \item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[accMoreThanSingleLite]{LC:Accomodate-More-than-Single-Lite}.)}
 \item[boundaryConditions:\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC:Accomodate-More-Boundary-Conditions}.)}
@@ -1376,7 +1376,7 @@ This section provides the non-functional requirements, the qualities that the so
 This section lists the likely changes to be made to the software.
 
 \begin{itemize}
-\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]{\hyperref[assumpES]{A:explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.}
+\item[Calculate-Internal-Blast-Risk:\phantomsection\label{calcInternalBlastRisk}]{\hyperref[assumpES]{A:explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.}
 \item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]{\hyperref[assumpSV]{A:standardValues}, \hyperref[assumpLDFC]{A:ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.}
 \item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]{\hyperref[assumpGL]{A:glassLite} - The software may be changed to accommodate more than a single lite.}
 \item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]{\hyperref[assumpBC]{A:boundaryConditions} - The software may be changed to accommodate more boundary conditions than 4-sided support.}
@@ -1488,7 +1488,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blask-Risk} &  &  & X &  &  &  &  & 
+\hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blast-Risk} &  &  & X &  &  &  &  & 
 \\
 \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E} &  &  &  & X &  &  &  & X
 \\

@@ -471,845 +471,845 @@
         <p class="paragraph">
           This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
         </p>
-      </div>
-    </div>
-    <div id="Sec:ProbDesc">
-      <div class="subsection">
-        <h2>Problem Description</h2>
-        <p class="paragraph">
-          A system is needed to provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
-        </p>
-      </div>
-    </div>
-    <div id="Sec:TermDefs">
-      <div class="subsubsection">
-        <h3>Terminology and Definitions</h3>
-        <p class="paragraph">
-          This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
-        </p>
-        <ul class="list">
-          <li>
-            PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.
-          </li>
-          <li>PD Controller: Proportional-Derivative Controller.</li>
-          <li>
-            Summing Point: Control block where the difference between the Set-Point and the Process Variable is computed.
-          </li>
-          <li>Power Plant: A second order system to be controlled.</li>
-          <li>
-            Second Order System: A system whose input-output relationship is denoted by a second-order differential equation.
-          </li>
-          <li>
-            Process Error: Input to the PID controller. Process Error is the difference between the Set-Point and the Process Variable.
-          </li>
-          <li>
-            Simulation Time: Total execution time of the PD simulation.
-          </li>
-          <li>Process Variable: The output value from the power plant.</li>
-          <li>
-            Set-Point: The desired value that the control system must reach. This also knows as the reference variable.
-          </li>
-          <li>
-            Proportional Gain: Gain constant of the proportional controller.
-          </li>
-          <li>
-            Derivative Gain: Gain constant of the derivative controller.
-          </li>
-          <li>
-            Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.
-          </li>
-          <li>
-            Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).
-          </li>
-          <li>
-            Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.
-          </li>
-          <li>
-            Time domain: The analysis of mathematical functions in terms of time.
-          </li>
-          <li>
-            Laplace transform: An integral transform that converts a function of a real variable t (often time) to a function of a complex variable s (complex frequency).
-          </li>
-          <li>
-            Control Variable: The Control Variable is the output of the PD controller.
-          </li>
-          <li>Step Time: Simulation step time.</li>
-          <li>Absolute Tolerance: Absolute tolerance for the integrator.</li>
-          <li>Relative Tolerance: Relative tolerance for the integrator.</li>
-          <li>
-            Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
-          </li>
-          <li>
-            Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
-          </li>
-          <li>
-            Stiffness Coefficient: Quantity that characterizes a spring's stiffness.
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div id="Sec:PhysSyst">
-      <div class="subsubsection">
-        <h3>Physical System Description</h3>
-        <p class="paragraph">
-          The physical system of PD Controller, as shown in <a href=#Figure:pidSysDiagram>Fig:pidSysDiagram</a>, includes the following elements:
-        </p>
-        <div class="list">
-          <p>PS1: The Summing Point.</p>
-          <p>PS2: The PD Controller.</p>
-          <p>PS3: The Power Plant.</p>
-        </div>
-        <div id="Figure:pidSysDiagram">
-          <figure>
-            <img src="../../../../datafiles/pdcontroller/Fig_PDController.png" alt="The physical system" width="70.0%" >
-            <figcaption>The physical system</figcaption>
-          </figure>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:GoalStmt">
-      <div class="subsubsection">
-        <h3>Goal Statements</h3>
-        <p class="paragraph">
-          Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step Time, the goal statements are:
-        </p>
-        <div class="list">
-          <p>
-            <div id="processVariable">
-              Process-Variable: Calculate the output of the Power Plant (Process Variable) over time.
-            </div>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:SolCharSpec">
-      <div class="subsection">
-        <h2>Solution Characteristics Specification</h2>
-        <p class="paragraph">
-          The instance models that govern PD Controller are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
-        </p>
-      </div>
-    </div>
-    <div id="Sec:Assumps">
-      <div class="subsubsection">
-        <h3>Assumptions</h3>
-        <p class="paragraph">
-          This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
-        </p>
-        <div class="list">
-          <p>
-            <div id="pwrPlant">
-              Power plant: The Power Plant and the Sensor are coupled as a single unit. (RefBy: <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>, <a href=#pwrPlantTxFnx>A:Transfer Function</a>, <a href=#massSpring>A:Spring Mass</a>, and <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="decoupled">
-              Decoupled equation: The decoupled form of the PD Controller equation used in this simulation. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="setPoint">
-              Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a> and <a href=#IM:pdEquationIM>IM:pdEquationIM</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="externalDisturb">
-              External disturbance: There are no external disturbances to the Power Plant during the simulation. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="initialValue">
-              Initial Value: The initial value of the Process Variable is assumed to be zero. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="parallelEq">
-              Parallel Equation: The Parallel form of the equation is used for the PD Controller. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="unfilteredDerivative">
-              Unfiltered Derivative: A pure derivative function is used for this simulation; there are no filters applied. (RefBy: <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="pwrPlantTxFnx">
-              Transfer Function: The combined Power Plant and Sensor (<a href=#pwrPlant>A:Power plant</a>) are characterized by a Second Order mass-spring-damper System. (RefBy: <a href=#TM:tmSOSystem>TM:tmSOSystem</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="massSpring">
-              Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="dampingCoeffSpring">
-              Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="stiffnessCoeffSpring">
-              Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
-            </div>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:TMs">
-      <div class="subsubsection">
-        <h3>Theoretical Models</h3>
-        <p class="paragraph">
-          This section focuses on the general equations and laws that PD Controller is based on.
-        </p>
-        <div id="TM:laplaceTransform">
-          <table class="tdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>TM:laplaceTransform</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td><p class="paragraph">Laplace Transform</p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>F<sub>s</sub></em> is the Laplace Transform of a function (Unitless)
-                  </li>
-                  <li>
-                    <em>f<sub>t</sub></em> is the Function in the time domain (Unitless)
-                  </li>
-                  <li>
-                    <em>s</em> is the Complex frequency-domain parameter (Unitless)
-                  </li>
-                  <li><em>t</em> is the time (<em>s</em>)</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  Bilateral Laplace Transform. The Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (<a href=#laplaceWiki>laplaceWiki</a>).
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#laplaceWiki>laplaceWiki</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddProcessError>DD:ddProcessError</a>, <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>, and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div id="TM:invLaplaceTransform">
-          <table class="tdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>TM:invLaplaceTransform</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td><p class="paragraph">Inverse Laplace Transform</p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[{f_{\text{t}}}=\mathit{L⁻¹[F(s)]}\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>f<sub>t</sub></em> is the Function in the time domain (Unitless)
-                  </li>
-                  <li>
-                    <em>L⁻¹[F(s)]</em> is the Inverse Laplace Transform of a function (Unitless)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  Inverse Laplace Transform of F(S). The Inverse Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (<a href=#laplaceWiki>laplaceWiki</a>).
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#laplaceWiki>laplaceWiki</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div id="TM:tmSOSystem">
-          <table class="tdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>TM:tmSOSystem</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">Second Order Mass-Spring-Damper System</p>
-              </td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[\frac{1}{m s^{2}+c s+k}\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li><em>m</em> is the mass (<em>kg</em>)</li>
-                  <li>
-                    <em>s</em> is the Complex frequency-domain parameter (Unitless)
-                  </li>
-                  <li>
-                    <em>c</em> is the Damping coefficient of the spring (Unitless)
-                  </li>
-                  <li>
-                    <em>k</em> is the Stiffness coefficient of the spring (<em>s</em>)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The Transfer Function (from <a href=#pwrPlantTxFnx>A:Transfer Function</a>) of a Second Order System (mass-spring-damper) is characterized by this equation.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#abbasi2015>abbasi2015</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:GDs">
-      <div class="subsubsection">
-        <h3>General Definitions</h3>
-        <p class="paragraph">
-          This section collects the laws and equations that will be used to build the instance models.
-        </p>
-        <div id="GD:gdPowerPlant">
-          <table class="gdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>GD:gdPowerPlant</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">The Transfer Function of the Power Plant</p>
-              </td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[\frac{1}{s^{2}+s+20}\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>s</em> is the Complex frequency-domain parameter (Unitless)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness Coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#pidWiki>pidWiki</a> and <a href=#abbasi2015>abbasi2015</a>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:DDs">
-      <div class="subsubsection">
-        <h3>Data Definitions</h3>
-        <p class="paragraph">
-          This section collects and defines all the data needed to build the instance models.
-        </p>
-        <div id="DD:ddProcessError">
-          <table class="ddefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>DD:ddProcessError</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">Process Error in the frequency domain</p>
-              </td>
-            </tr>
-            <tr>
-              <th>Symbol</th>
-              <td><p class="paragraph"><em>E<sub>s</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td><p class="paragraph">Unitless</p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[{E_{\text{s}}}={R_{\text{s}}}-{Y_{\text{s}}}\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
-                  </li>
-                  <li>
-                    <em>R<sub>s</sub></em> is the Set-Point in the frequency domain (Unitless)
-                  </li>
-                  <li>
-                    <em>Y<sub>s</sub></em> is the Process Variable in the frequency domain (Unitless)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPoint>A:Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A:Initial Value</a>).
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>, and <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-        <div id="DD:ddPropCtrl">
-          <table class="ddefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>DD:ddPropCtrl</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Proportional control in the frequency domain
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Symbol</th>
-              <td><p class="paragraph"><em>P<sub>s</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td><p class="paragraph">Unitless</p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[{P_{\text{s}}}={K_{\text{p}}} {E_{\text{s}}}\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>P<sub>s</sub></em> is the Proportional control in the frequency domain (Unitless)
-                  </li>
-                  <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
-                  <li>
-                    <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The Proportional Controller is the product of the Proportional Gain and the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>).
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph"><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-        <div id="DD:ddDerivCtrl">
-          <table class="ddefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>DD:ddDerivCtrl</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">Derivative control in the frequency domain</p>
-              </td>
-            </tr>
-            <tr>
-              <th>Symbol</th>
-              <td><p class="paragraph"><em>D<sub>s</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td><p class="paragraph">Unitless</p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[{D_{\text{s}}}={K_{\text{d}}} {E_{\text{s}}} s\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>D<sub>s</sub></em> is the Derivative control in the frequency domain (Unitless)
-                  </li>
-                  <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
-                  <li>
-                    <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
-                  </li>
-                  <li>
-                    <em>s</em> is the Complex frequency-domain parameter (Unitless)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The Derivative Controller is the product of the Derivative Gain and the differential of the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). A pure form of the Derivative controller is used in this application (from <a href=#unfilteredDerivative>A:Unfiltered Derivative</a>).
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph"><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-        <div id="DD:ddCtrlVar">
-          <table class="ddefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>DD:ddCtrlVar</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">Control Variable in the frequency domain</p>
-              </td>
-            </tr>
-            <tr>
-              <th>Symbol</th>
-              <td><p class="paragraph"><em>C<sub>s</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td><p class="paragraph">Unitless</p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[{C_{\text{s}}}={E_{\text{s}}} \left({K_{\text{p}}}+{K_{\text{d}}} s\right)\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>C<sub>s</sub></em> is the Control Variable in the frequency domain (Unitless)
-                  </li>
-                  <li>
-                    <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
-                  </li>
-                  <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
-                  <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
-                  <li>
-                    <em>s</em> is the Complex frequency-domain parameter (Unitless)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The Control Variable is the output of the controller. In this case, it is the sum of the Proportional (from <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>) and Derivative (from <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>) controllers. The parallel (from <a href=#parallelEq>A:Parallel Equation</a>) and de-coupled (from <a href=#decoupled>A:Decoupled equation</a>) form of the PD equation is used in this document.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-      </div>
-    </div>
-    <div id="Sec:IMs">
-      <div class="subsubsection">
-        <h3>Instance Models</h3>
-        <p class="paragraph">
-          This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
-        </p>
-        <div id="IM:pdEquationIM">
-          <table class="idefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>IM:pdEquationIM</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Computation of the Process Variable as a function of time
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>r<sub>t</sub></em>, <em>K<sub>p</sub></em>, <em>K<sub>d</sub></em>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Output</th>
-              <td><p class="paragraph"><em>y<sub>t</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Input Constraints</th>
-              <td>
-                \[{r_{\text{t}}}\gt{}0\]
-                \[{K_{\text{p}}}\gt{}0\]
-                \[{K_{\text{d}}}\gt{}0\]
-              </td>
-            </tr>
-            <tr>
-              <th>Output Constraints</th>
-              <td>\[{y_{\text{t}}}\gt{}0\]</td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {{y_{\text{t}}}}+-{r_{\text{t}}} {K_{\text{p}}}=0\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li><em>t</em> is the time (<em>s</em>)</li>
-                  <li><em>y<sub>t</sub></em> is the Process Variable (Unitless)</li>
-                  <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
-                  <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
-                  <li><em>r<sub>t</sub></em> is the Set-Point (Unitless)</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#abbasi2015>abbasi2015</a> and <a href=#johnson2008>johnson2008</a>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#outputValues>FR:Output-Values</a> and <a href=#calculateValues>FR:Calculate-Values</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div id="IM:pdEquationIMDeriv">
-          <div class="subsubsubsection">
-            <h4>Detailed derivation of Process Variable:</h4>
+        <div id="Sec:ProbDesc">
+          <div class="subsection">
+            <h2>Problem Description</h2>
             <p class="paragraph">
-              The Process Variable <em>Y<sub>s</sub></em> in a PD Control Loop is the product of the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>), Control Variable (from <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>), and the Power Plant (from <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>).
+              A system is needed to provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
             </p>
-            \[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}\]
-            <p class="paragraph">
-              Substituting the values and rearranging the equation.
-            </p>
-            \[s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0\]
-            <p class="paragraph">
-              Computing the Inverse Laplace Transform of a function (from <a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a>) of the equation.
-            </p>
-            \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0\]
-            <p class="paragraph">
-              The Set-Point <em>r<sub>t</sub></em> is a step function and a constant (from <a href=#setPoint>A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to
-            </p>
-            \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+            <div id="Sec:TermDefs">
+              <div class="subsubsection">
+                <h3>Terminology and Definitions</h3>
+                <p class="paragraph">
+                  This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+                </p>
+                <ul class="list">
+                  <li>
+                    PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.
+                  </li>
+                  <li>PD Controller: Proportional-Derivative Controller.</li>
+                  <li>
+                    Summing Point: Control block where the difference between the Set-Point and the Process Variable is computed.
+                  </li>
+                  <li>Power Plant: A second order system to be controlled.</li>
+                  <li>
+                    Second Order System: A system whose input-output relationship is denoted by a second-order differential equation.
+                  </li>
+                  <li>
+                    Process Error: Input to the PID controller. Process Error is the difference between the Set-Point and the Process Variable.
+                  </li>
+                  <li>
+                    Simulation Time: Total execution time of the PD simulation.
+                  </li>
+                  <li>Process Variable: The output value from the power plant.</li>
+                  <li>
+                    Set-Point: The desired value that the control system must reach. This also knows as the reference variable.
+                  </li>
+                  <li>
+                    Proportional Gain: Gain constant of the proportional controller.
+                  </li>
+                  <li>
+                    Derivative Gain: Gain constant of the derivative controller.
+                  </li>
+                  <li>
+                    Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.
+                  </li>
+                  <li>
+                    Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).
+                  </li>
+                  <li>
+                    Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.
+                  </li>
+                  <li>
+                    Time domain: The analysis of mathematical functions in terms of time.
+                  </li>
+                  <li>
+                    Laplace transform: An integral transform that converts a function of a real variable t (often time) to a function of a complex variable s (complex frequency).
+                  </li>
+                  <li>
+                    Control Variable: The Control Variable is the output of the PD controller.
+                  </li>
+                  <li>Step Time: Simulation step time.</li>
+                  <li>Absolute Tolerance: Absolute tolerance for the integrator.</li>
+                  <li>Relative Tolerance: Relative tolerance for the integrator.</li>
+                  <li>
+                    Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
+                  </li>
+                  <li>
+                    Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
+                  </li>
+                  <li>
+                    Stiffness Coefficient: Quantity that characterizes a spring's stiffness.
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div id="Sec:PhysSyst">
+              <div class="subsubsection">
+                <h3>Physical System Description</h3>
+                <p class="paragraph">
+                  The physical system of PD Controller, as shown in <a href=#Figure:pidSysDiagram>Fig:pidSysDiagram</a>, includes the following elements:
+                </p>
+                <div class="list">
+                  <p>PS1: The Summing Point.</p>
+                  <p>PS2: The PD Controller.</p>
+                  <p>PS3: The Power Plant.</p>
+                </div>
+                <div id="Figure:pidSysDiagram">
+                  <figure>
+                    <img src="../../../../datafiles/pdcontroller/Fig_PDController.png" alt="The physical system" width="70.0%" >
+                    <figcaption>The physical system</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:GoalStmt">
+              <div class="subsubsection">
+                <h3>Goal Statements</h3>
+                <p class="paragraph">
+                  Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step Time, the goal statements are:
+                </p>
+                <div class="list">
+                  <p>
+                    <div id="processVariable">
+                      Process-Variable: Calculate the output of the Power Plant (Process Variable) over time.
+                    </div>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div id="Sec:DataConstraints">
-      <div class="subsubsection">
-        <h3>Data Constraints</h3>
-        <p class="paragraph">
-          The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
-        </p>
-        <div id="Table:InDataConstraints">
-          <table class="table">
-            <tr>
-              <th>Var</th>
-              <th>Physical Constraints</th>
-              <th>Typical Value</th>
-              <th>Uncert.</th>
-            </tr>
-            <tr>
-              <td><em>K<sub>d</sub></em></td>
-              <td><em>K<sub>d</sub>&thinsp;&ge;&thinsp;0</em></td>
-              <td><em>1</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>K<sub>p</sub></em></td>
-              <td><em>K<sub>p</sub>&thinsp;&gt;&thinsp;0</em></td>
-              <td><em>20</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>r<sub>t</sub></em></td>
-              <td><em>r<sub>t</sub>&thinsp;&gt;&thinsp;0</em></td>
-              <td><em>1</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>t<sub>sim</sub></em></td>
-              <td>
-                <em>1&thinsp;&le;&thinsp;t<sub>sim</sub>&thinsp;&le;&thinsp;60</em>
-              </td>
-              <td><em>10</em> <em>s</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>t<sub>step</sub></em></td>
-              <td>
-                <em>\(\frac{1}{100}\)&thinsp;&le;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>sim</sub></em>
-              </td>
-              <td><em>0.01</em> <em>s</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-          </table>
-          <p class="caption">Input Data Constraints</p>
+        <div id="Sec:SolCharSpec">
+          <div class="subsection">
+            <h2>Solution Characteristics Specification</h2>
+            <p class="paragraph">
+              The instance models that govern PD Controller are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+            </p>
+            <div id="Sec:Assumps">
+              <div class="subsubsection">
+                <h3>Assumptions</h3>
+                <p class="paragraph">
+                  This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
+                </p>
+                <div class="list">
+                  <p>
+                    <div id="pwrPlant">
+                      Power plant: The Power Plant and the Sensor are coupled as a single unit. (RefBy: <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>, <a href=#pwrPlantTxFnx>A:Transfer Function</a>, <a href=#massSpring>A:Spring Mass</a>, and <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="decoupled">
+                      Decoupled equation: The decoupled form of the PD Controller equation used in this simulation. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="setPoint">
+                      Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a> and <a href=#IM:pdEquationIM>IM:pdEquationIM</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="externalDisturb">
+                      External disturbance: There are no external disturbances to the Power Plant during the simulation. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="initialValue">
+                      Initial Value: The initial value of the Process Variable is assumed to be zero. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="parallelEq">
+                      Parallel Equation: The Parallel form of the equation is used for the PD Controller. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="unfilteredDerivative">
+                      Unfiltered Derivative: A pure derivative function is used for this simulation; there are no filters applied. (RefBy: <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="pwrPlantTxFnx">
+                      Transfer Function: The combined Power Plant and Sensor (<a href=#pwrPlant>A:Power plant</a>) are characterized by a Second Order mass-spring-damper System. (RefBy: <a href=#TM:tmSOSystem>TM:tmSOSystem</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="massSpring">
+                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="dampingCoeffSpring">
+                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="stiffnessCoeffSpring">
+                      Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                    </div>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:TMs">
+              <div class="subsubsection">
+                <h3>Theoretical Models</h3>
+                <p class="paragraph">
+                  This section focuses on the general equations and laws that PD Controller is based on.
+                </p>
+                <div id="TM:laplaceTransform">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:laplaceTransform</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Laplace Transform</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>F<sub>s</sub></em> is the Laplace Transform of a function (Unitless)
+                          </li>
+                          <li>
+                            <em>f<sub>t</sub></em> is the Function in the time domain (Unitless)
+                          </li>
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          Bilateral Laplace Transform. The Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (<a href=#laplaceWiki>laplaceWiki</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#laplaceWiki>laplaceWiki</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddProcessError>DD:ddProcessError</a>, <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>, and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="TM:invLaplaceTransform">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:invLaplaceTransform</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Inverse Laplace Transform</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{f_{\text{t}}}=\mathit{L⁻¹[F(s)]}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>f<sub>t</sub></em> is the Function in the time domain (Unitless)
+                          </li>
+                          <li>
+                            <em>L⁻¹[F(s)]</em> is the Inverse Laplace Transform of a function (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          Inverse Laplace Transform of F(S). The Inverse Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (<a href=#laplaceWiki>laplaceWiki</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#laplaceWiki>laplaceWiki</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="TM:tmSOSystem">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:tmSOSystem</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Second Order Mass-Spring-Damper System</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\frac{1}{m s^{2}+c s+k}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>m</em> is the mass (<em>kg</em>)</li>
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                          <li>
+                            <em>c</em> is the Damping coefficient of the spring (Unitless)
+                          </li>
+                          <li>
+                            <em>k</em> is the Stiffness coefficient of the spring (<em>s</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Transfer Function (from <a href=#pwrPlantTxFnx>A:Transfer Function</a>) of a Second Order System (mass-spring-damper) is characterized by this equation.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#abbasi2015>abbasi2015</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:GDs">
+              <div class="subsubsection">
+                <h3>General Definitions</h3>
+                <p class="paragraph">
+                  This section collects the laws and equations that will be used to build the instance models.
+                </p>
+                <div id="GD:gdPowerPlant">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:gdPowerPlant</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">The Transfer Function of the Power Plant</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\frac{1}{s^{2}+s+20}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness Coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#pidWiki>pidWiki</a> and <a href=#abbasi2015>abbasi2015</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:DDs">
+              <div class="subsubsection">
+                <h3>Data Definitions</h3>
+                <p class="paragraph">
+                  This section collects and defines all the data needed to build the instance models.
+                </p>
+                <div id="DD:ddProcessError">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:ddProcessError</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Process Error in the frequency domain</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>E<sub>s</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{E_{\text{s}}}={R_{\text{s}}}-{Y_{\text{s}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
+                          </li>
+                          <li>
+                            <em>R<sub>s</sub></em> is the Set-Point in the frequency domain (Unitless)
+                          </li>
+                          <li>
+                            <em>Y<sub>s</sub></em> is the Process Variable in the frequency domain (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPoint>A:Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A:Initial Value</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>, and <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:ddPropCtrl">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:ddPropCtrl</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Proportional control in the frequency domain
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>P<sub>s</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{P_{\text{s}}}={K_{\text{p}}} {E_{\text{s}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>P<sub>s</sub></em> is the Proportional control in the frequency domain (Unitless)
+                          </li>
+                          <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
+                          <li>
+                            <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Proportional Controller is the product of the Proportional Gain and the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:ddDerivCtrl">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:ddDerivCtrl</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Derivative control in the frequency domain</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>D<sub>s</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{D_{\text{s}}}={K_{\text{d}}} {E_{\text{s}}} s\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>D<sub>s</sub></em> is the Derivative control in the frequency domain (Unitless)
+                          </li>
+                          <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
+                          <li>
+                            <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
+                          </li>
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Derivative Controller is the product of the Derivative Gain and the differential of the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). A pure form of the Derivative controller is used in this application (from <a href=#unfilteredDerivative>A:Unfiltered Derivative</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#DD:ddCtrlVar>DD:ddCtrlVar</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:ddCtrlVar">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:ddCtrlVar</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Control Variable in the frequency domain</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>C<sub>s</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{C_{\text{s}}}={E_{\text{s}}} \left({K_{\text{p}}}+{K_{\text{d}}} s\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>C<sub>s</sub></em> is the Control Variable in the frequency domain (Unitless)
+                          </li>
+                          <li>
+                            <em>E<sub>s</sub></em> is the Process Error in the frequency domain (Unitless)
+                          </li>
+                          <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
+                          <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
+                          <li>
+                            <em>s</em> is the Complex frequency-domain parameter (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The Control Variable is the output of the controller. In this case, it is the sum of the Proportional (from <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>) and Derivative (from <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>) controllers. The parallel (from <a href=#parallelEq>A:Parallel Equation</a>) and de-coupled (from <a href=#decoupled>A:Decoupled equation</a>) form of the PD equation is used in this document.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#johnson2008>johnson2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:IMs">
+              <div class="subsubsection">
+                <h3>Instance Models</h3>
+                <p class="paragraph">
+                  This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
+                </p>
+                <div id="IM:pdEquationIM">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:pdEquationIM</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Computation of the Process Variable as a function of time
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>r<sub>t</sub></em>, <em>K<sub>p</sub></em>, <em>K<sub>d</sub></em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>y<sub>t</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[{r_{\text{t}}}\gt{}0\]
+                        \[{K_{\text{p}}}\gt{}0\]
+                        \[{K_{\text{d}}}\gt{}0\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td>\[{y_{\text{t}}}\gt{}0\]</td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {{y_{\text{t}}}}={r_{\text{t}}} {K_{\text{p}}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em>y<sub>t</sub></em> is the Process Variable (Unitless)</li>
+                          <li><em>K<sub>d</sub></em> is the Derivative Gain (Unitless)</li>
+                          <li><em>K<sub>p</sub></em> is the Proportional Gain (Unitless)</li>
+                          <li><em>r<sub>t</sub></em> is the Set-Point (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#abbasi2015>abbasi2015</a> and <a href=#johnson2008>johnson2008</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calculateValues>FR:Calculate-Values</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:pdEquationIMDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of Process Variable:</h4>
+                    <p class="paragraph">
+                      The Process Variable <em>Y<sub>s</sub></em> in a PD Control Loop is the product of the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>), Control Variable (from <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>), and the Power Plant (from <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>).
+                    </p>
+                    \[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}\]
+                    <p class="paragraph">
+                      Substituting the values and rearranging the equation.
+                    </p>
+                    \[s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0\]
+                    <p class="paragraph">
+                      Computing the Inverse Laplace Transform of a function (from <a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a>) of the equation.
+                    </p>
+                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                    <p class="paragraph">
+                      The Set-Point <em>r<sub>t</sub></em> is a step function and a constant (from <a href=#setPoint>A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to
+                    </p>
+                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:DataConstraints">
+              <div class="subsubsection">
+                <h3>Data Constraints</h3>
+                <p class="paragraph">
+                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                </p>
+                <div id="Table:InDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                      <th>Typical Value</th>
+                      <th>Uncert.</th>
+                    </tr>
+                    <tr>
+                      <td><em>K<sub>d</sub></em></td>
+                      <td><em>K<sub>d</sub>&thinsp;&ge;&thinsp;0</em></td>
+                      <td><em>1</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>K<sub>p</sub></em></td>
+                      <td><em>K<sub>p</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>20</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>r<sub>t</sub></em></td>
+                      <td><em>r<sub>t</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>1</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>sim</sub></em></td>
+                      <td>
+                        <em>1&thinsp;&le;&thinsp;t<sub>sim</sub>&thinsp;&le;&thinsp;60</em>
+                      </td>
+                      <td><em>10</em> <em>s</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>step</sub></em></td>
+                      <td>
+                        <em>\(\frac{1}{1000}\)&thinsp;&le;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>sim</sub></em>
+                      </td>
+                      <td><em>0.001</em> <em>s</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Input Data Constraints</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

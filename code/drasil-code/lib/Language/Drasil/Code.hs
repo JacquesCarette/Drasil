@@ -10,7 +10,7 @@ module Language.Drasil.Code (
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, 
   AuxFile(..), getSampleData, Visibility(..), defaultChoices, 
-  CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec,
+  CodeSpec(..), funcUID, asVC, codeSpec,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -23,7 +23,7 @@ module Language.Drasil.Code (
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn, initSolWithVal,
+  returnExprList, fixedReturn, fixedReturn', initSolWithVal,
   ExternalLibraryCall, StepGroupFill(..), StepFill(..), FunctionIntFill(..), 
   ArgumentFill(..), ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..),
   externalLibCall, choiceStepsFill, choiceStepFill, mandatoryStepFill, 
@@ -33,14 +33,14 @@ module Language.Drasil.Code (
   implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
   populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
-  returnExprListFill, fixedStatementFill, initSolWithValFill,
+  returnExprListFill, fixedStatementFill, fixedStatementFill', initSolWithValFill,
   Lang(..),
   PackageSym(..), AuxiliarySym(..),
   AuxData(..), PackData(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar, 
   listToArray,
   field,
-  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), 
+  ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
   unPP, unJP, unCSP, unCPPP, unSP
   -- Language.Drasil.Chunk.NamedArgument
@@ -69,7 +69,7 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn, initSolWithVal)
+  returnExprList, fixedReturn, fixedReturn', initSolWithVal)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..), externalLibCall, 
@@ -80,7 +80,7 @@ import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
   initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
-  fixedStatementFill, initSolWithValFill)
+  fixedStatementFill, fixedStatementFill', initSolWithValFill)
 
 import Language.Drasil.Code.Lang (Lang(..))
 
@@ -92,8 +92,9 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints,
   makeODE, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
   makeOptFeats, ExtLib(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, funcUID', asVC, asVC', 
-  codeSpec)
+  
+import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, asVC, codeSpec)
+
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
 
@@ -109,7 +110,7 @@ import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 
 import Language.Drasil.CodeExpr (field)
 
-import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, ODEOptions(..), 
+import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, 
   mkODELibNoPath)

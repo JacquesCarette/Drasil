@@ -36,9 +36,12 @@ import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms)
+  inConstraints, outConstraints, acronyms, pendDisAngle, constants)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPendulum.References (citations, koothoor2013, smithLai2005)
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
+import Language.Drasil.Code (listToArray, quantvar)
+import Drasil.DblPendulum.ODEs (dblPenODEInfo)
 
 
 srs :: Document
@@ -172,7 +175,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [dong],
   _purpose     = purpDoc progName Verbose,
-  _quants      = symbols,
+  _quants      = symbolsAll,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
   _datadefs    = dataDefs,
@@ -181,14 +184,18 @@ si = SI {
   _outputs     = outputs,
   _defSequence = [] :: [Block SimpleQDef],
   _constraints = inConstraints,
-  _constants   = [] :: [ConstQDef],
+  _constants   = constants,
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
 
+symbolsAll :: [QuantityDict]
+symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
+  ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
+
 symbMap :: ChunkDB
-symbMap = cdb (map qw iMods ++ map qw symbols)
+symbMap = cdb (map qw iMods ++ map qw symbolsAll)
   (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++

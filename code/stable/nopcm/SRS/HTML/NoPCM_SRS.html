@@ -653,1095 +653,1095 @@
         <p class="paragraph">
           This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
         </p>
-      </div>
-    </div>
-    <div id="Sec:ProbDesc">
-      <div class="subsection">
-        <h2>Problem Description</h2>
-        <p class="paragraph">
-          A system is needed to investigate the heating of water in a solar water heating tank.
-        </p>
-      </div>
-    </div>
-    <div id="Sec:TermDefs">
-      <div class="subsubsection">
-        <h3>Terminology and Definitions</h3>
-        <p class="paragraph">
-          This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
-        </p>
-        <ul class="list">
-          <li>
-            Heat flux: The rate of thermal energy transfer through a given surface per unit time.
-          </li>
-          <li>
-            Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.
-          </li>
-          <li>
-            Thermal conduction: The transfer of heat energy through a substance.
-          </li>
-          <li>Transient: Changing with time.</li>
-        </ul>
-      </div>
-    </div>
-    <div id="Sec:PhysSyst">
-      <div class="subsubsection">
-        <h3>Physical System Description</h3>
-        <p class="paragraph">
-          The physical system of SWHS, as shown in <a href=#Figure:Tank>Fig:Tank</a>, includes the following elements:
-        </p>
-        <div class="list">
-          <p>PS1: Tank containing water.</p>
-          <p>
-            PS2: Heating coil at bottom of tank. (<em>q<sub>C</sub></em> represents the heat flux into the water from the coil.)
-          </p>
-        </div>
-        <div id="Figure:Tank">
-          <figure>
-            <img src="../../../../datafiles/nopcm/TankWaterOnly.png" alt="Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>" >
-            <figcaption>
-              Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:GoalStmt">
-      <div class="subsubsection">
-        <h3>Goal Statements</h3>
-        <p class="paragraph">
-          Given the temperature of the heating coil, the initial temperature of the water, and the material properties, the goal statements are:
-        </p>
-        <div class="list">
-          <p>
-            <div id="waterTempGS">
-              Predict-Water-Temperature: Predict the temperature of the water over time.
-            </div>
-          </p>
-          <p>
-            <div id="waterEnergyGS">
-              Predict-Water-Energy: Predict the change in heat energy in the water over time.
-            </div>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:SolCharSpec">
-      <div class="subsection">
-        <h2>Solution Characteristics Specification</h2>
-        <p class="paragraph">
-          The instance models that govern NoPCM are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
-        </p>
-      </div>
-    </div>
-    <div id="Sec:Assumps">
-      <div class="subsubsection">
-        <h3>Assumptions</h3>
-        <p class="paragraph">
-          This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
-        </p>
-        <div class="list">
-          <p>
-            <div id="assumpTEO">
-              Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: <a href=#TM:consThermE>TM:consThermE</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpHTCC">
-              Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time. (RefBy: <a href=#TM:nwtnCooling>TM:nwtnCooling</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpCWTAT">
-              Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpDWCoW">
-              Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpSHECoW">
-              Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpLCCCW">
-              Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpTHCCoT">
-              Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (RefBy: <a href=#likeChgTCVOD>LC:Temperature-Coil-Variable-Over-Day</a> and <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpTHCCoL">
-              Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. (RefBy: <a href=#likeChgTCVOL>LC:Temperature-Coil-Variable-Over-Length</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpCTNTD">
-              Charging-Tank-No-Temp-Discharge: The model only accounts for charging the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. (RefBy: <a href=#likeChgDT>LC:Discharging-Tank</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpWAL">
-              Water-Always-Liquid: The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href=#unlikeChgWFS>UC:Water-Fixed-States</a>, <a href=#TM:sensHtE>TM:sensHtE</a>, <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpPIT">
-              Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: <a href=#likeChgTLH>LC:Tank-Lose-Heat</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpNIHGBW">
-              No-Internal-Heat-Generation-By-Water: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero. (RefBy: <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpAPT">
-              Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0<em>&deg;C</em> and 100<em>&deg;C</em>, respectively. (RefBy: <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.)
-            </div>
-          </p>
-          <p>
-            <div id="assumpVCN">
-              Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a>.)
-            </div>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:TMs">
-      <div class="subsubsection">
-        <h3>Theoretical Models</h3>
-        <p class="paragraph">
-          This section focuses on the general equations and laws that NoPCM is based on.
-        </p>
-        <div id="TM:consThermE">
-          <table class="tdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>TM:consThermE</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td><p class="paragraph">Conservation of thermal energy</p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[-∇\cdot{}\symbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li><em>∇</em> is the gradient (Unitless)</li>
+        <div id="Sec:ProbDesc">
+          <div class="subsection">
+            <h2>Problem Description</h2>
+            <p class="paragraph">
+              A system is needed to investigate the heating of water in a solar water heating tank.
+            </p>
+            <div id="Sec:TermDefs">
+              <div class="subsubsection">
+                <h3>Terminology and Definitions</h3>
+                <p class="paragraph">
+                  This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+                </p>
+                <ul class="list">
                   <li>
-                    <em><b>q</b></em> is the thermal flux vector (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
+                    Heat flux: The rate of thermal energy transfer through a given surface per unit time.
                   </li>
                   <li>
-                    <em>g</em> is the volumetric heat generation per unit volume (<em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>)
+                    Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.
                   </li>
                   <li>
-                    <em>ρ</em> is the density (<em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>)
+                    Thermal conduction: The transfer of heat energy through a substance.
                   </li>
-                  <li>
-                    <em>C</em> is the specific heat capacity (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li><em>t</em> is the time (<em>s</em>)</li>
-                  <li><em>T</em> is the temperature (<em>&deg;C</em>)</li>
+                  <li>Transient: Changing with time.</li>
                 </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
+              </div>
+            </div>
+            <div id="Sec:PhysSyst">
+              <div class="subsubsection">
+                <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The above equation gives the law of conservation of energy for transient heat transfer in a given material.
+                  The physical system of SWHS, as shown in <a href=#Figure:Tank>Fig:Tank</a>, includes the following elements:
                 </p>
+                <div class="list">
+                  <p>PS1: Tank containing water.</p>
+                  <p>
+                    PS2: Heating coil at bottom of tank. (<em>q<sub>C</sub></em> represents the heat flux into the water from the coil.)
+                  </p>
+                </div>
+                <div id="Figure:Tank">
+                  <figure>
+                    <img src="../../../../datafiles/nopcm/TankWaterOnly.png" alt="Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>" >
+                    <figcaption>
+                      Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>
+                    </figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:GoalStmt">
+              <div class="subsubsection">
+                <h3>Goal Statements</h3>
                 <p class="paragraph">
-                  For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#assumpTEO>A:Thermal-Energy-Only</a>).
+                  Given the temperature of the heating coil, the initial temperature of the water, and the material properties, the goal statements are:
                 </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph"><a href=#GD:rocTempSimp>GD:rocTempSimp</a></p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div id="TM:sensHtE">
-          <table class="tdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>TM:sensHtE</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">Sensible heat energy (no state change)</p>
-              </td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[E={C^{\text{L}}} m ΔT\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li><em>E</em> is the sensible heat (<em>J</em>)</li>
-                  <li>
-                    <em>C<sup>L</sup></em> is the specific heat capacity of a liquid (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li><em>m</em> is the mass (<em>kg</em>)</li>
-                  <li><em>ΔT</em> is the change in temperature (<em>&deg;C</em>)</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>E</em> occurs as long as the material does not reach a temperature where a phase change occurs, as assumed in <a href=#assumpWAL>A:Water-Always-Liquid</a>.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph"><a href=#IM:heatEInWtr>IM:heatEInWtr</a></p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div id="TM:nwtnCooling">
-          <table class="tdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>TM:nwtnCooling</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td><p class="paragraph">Newton's law of cooling</p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[q\left(t\right)=h ΔT\left(t\right)\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>q</em> is the heat flux (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li><em>t</em> is the time (<em>s</em>)</li>
-                  <li>
-                    <em>h</em> is the convective heat transfer coefficient (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li><em>ΔT</em> is the change in temperature (<em>&deg;C</em>)</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
-                </p>
-                <p class="paragraph">
-                  <em>h</em> is assumed to be independent of <em>T</em> (from <a href=#assumpHTCC>A:Heat-Transfer-Coeffs-Constant</a>).
-                </p>
-                <p class="paragraph">
-                  <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#incroperaEtAl2007>incroperaEtAl2007</a> (pg. 8)
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:GDs">
-      <div class="subsubsection">
-        <h3>General Definitions</h3>
-        <p class="paragraph">
-          This section collects the laws and equations that will be used to build the instance models.
-        </p>
-        <div id="GD:rocTempSimp">
-          <table class="gdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>GD:rocTempSimp</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">Simplified rate of change of temperature</p>
-              </td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li><em>m</em> is the mass (<em>kg</em>)</li>
-                  <li>
-                    <em>C</em> is the specific heat capacity (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li><em>t</em> is the time (<em>s</em>)</li>
-                  <li><em>T</em> is the temperature (<em>&deg;C</em>)</li>
-                  <li>
-                    <em>q<sub>in</sub></em> is the heat flux input (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>A<sub>in</sub></em> is the surface area over which heat is transferred in (<em>m<sup>2</sup></em>)
-                  </li>
-                  <li>
-                    <em>q<sub>out</sub></em> is the heat flux output (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>A<sub>out</sub></em> is the surface area over which heat is transferred out (<em>m<sup>2</sup></em>)
-                  </li>
-                  <li>
-                    <em>g</em> is the volumetric heat generation per unit volume (<em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>)
-                  </li>
-                  <li><em>V</em> is the volume (<em>m<sup>3</sup></em>)</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td><p class="paragraph">--</p></td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#GD:rocTempSimp>GD:rocTempSimp</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div id="GD:rocTempSimpDeriv">
-          <div class="subsubsubsection">
-            <h4>
-              Detailed derivation of simplified rate of change of temperature:
-            </h4>
-            <p class="paragraph">
-              Integrating <a href=#TM:consThermE>TM:consThermE</a> over a volume (<em>V</em>), we have:
-            </p>
-            \[-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
-            <p class="paragraph">
-              Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
-            </p>
-            \[-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
-            <p class="paragraph">
-              We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
-            </p>
-            \[{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
-            <p class="paragraph">
-              Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD:rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A:Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A:Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:
-            </p>
-            \[ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
-            <p class="paragraph">
-              Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
-            </p>
-            \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                <div class="list">
+                  <p>
+                    <div id="waterTempGS">
+                      Predict-Water-Temperature: Predict the temperature of the water over time.
+                    </div>
+                  </p>
+                  <p>
+                    <div id="waterEnergyGS">
+                      Predict-Water-Energy: Predict the change in heat energy in the water over time.
+                    </div>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div id="GD:htFluxWaterFromCoil">
-          <table class="gdefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>GD:htFluxWaterFromCoil</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">Heat flux into the water from the coil</p>
-              </td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td>
-                <p class="paragraph"><em>\(\frac{\text{W}}{\text{m}^{2}}\)</em></p>
-              </td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[{q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>q<sub>C</sub></em> is the heat flux into the water from the coil (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>C</sub></em> is the temperature of the heating coil (<em>&deg;C</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>W</sub></em> is the temperature of the water (<em>&deg;C</em>)
-                  </li>
-                  <li><em>t</em> is the time (<em>s</em>)</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>q<sub>C</sub></em> is found by assuming that Newton's law of cooling applies (<a href=#assumpLCCCW>A:Newton-Law-Convective-Cooling-Coil-Water</a>). This law (defined in <a href=#TM:nwtnCooling>TM:nwtnCooling</a>) is used on the surface of the heating coil.
-                </p>
-                <p class="paragraph">
-                  <a href=#assumpTHCCoT>A:Temp-Heating-Coil-Constant-over-Time</a>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-      </div>
-    </div>
-    <div id="Sec:DDs">
-      <div class="subsubsection">
-        <h3>Data Definitions</h3>
-        <p class="paragraph">
-          This section collects and defines all the data needed to build the instance models.
-        </p>
-        <div id="DD:waterMass">
-          <table class="ddefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>DD:waterMass</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td><p class="paragraph">Mass of water</p></td>
-            </tr>
-            <tr>
-              <th>Symbol</th>
-              <td><p class="paragraph"><em>m<sub>W</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td><p class="paragraph"><em>kg</em></p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[{m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
-                  <li>
-                    <em>V<sub>W</sub></em> is the volume of water (<em>m<sup>3</sup></em>)
-                  </li>
-                  <li>
-                    <em>ρ<sub>W</sub></em> is the density of water (<em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td><p class="paragraph">--</p></td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph"><a href=#findMass>FR:Find-Mass</a></p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-        <div id="DD:waterVolume.nopcm">
-          <table class="ddefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>DD:waterVolume.nopcm</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td><p class="paragraph">Volume of water</p></td>
-            </tr>
-            <tr>
-              <th>Symbol</th>
-              <td><p class="paragraph"><em>V<sub>W</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td><p class="paragraph"><em>m<sup>3</sup></em></p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[{V_{\text{W}}}={V_{\text{tank}}}\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>V<sub>W</sub></em> is the volume of water (<em>m<sup>3</sup></em>)
-                  </li>
-                  <li>
-                    <em>V<sub>tank</sub></em> is the volume of the cylindrical tank (<em>m<sup>3</sup></em>)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  Based on <a href=#assumpVCN>A:Volume-Coil-Negligible</a>. <em>V<sub>tank</sub></em> is defined in <a href=#DD:tankVolume>DD:tankVolume</a>.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td><p class="paragraph">--</p></td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph"><a href=#findMass>FR:Find-Mass</a></p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-        <div id="DD:tankVolume">
-          <table class="ddefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>DD:tankVolume</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td><p class="paragraph">Volume of the cylindrical tank</p></td>
-            </tr>
-            <tr>
-              <th>Symbol</th>
-              <td><p class="paragraph"><em>V<sub>tank</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td><p class="paragraph"><em>m<sup>3</sup></em></p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>V<sub>tank</sub></em> is the volume of the cylindrical tank (<em>m<sup>3</sup></em>)
-                  </li>
-                  <li>
-                    <em>π</em> is the ratio of circumference to diameter for any circle (Unitless)
-                  </li>
-                  <li><em>D</em> is the diameter of tank (<em>m</em>)</li>
-                  <li><em>L</em> is the length of tank (<em>m</em>)</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td><p class="paragraph">--</p></td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a> and <a href=#findMass>FR:Find-Mass</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-        <div id="DD:balanceDecayRate">
-          <table class="ddefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>DD:balanceDecayRate</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  ODE parameter for water related to decay time
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Symbol</th>
-              <td><p class="paragraph"><em>τ<sub>W</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Units</th>
-              <td><p class="paragraph"><em>s</em></p></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[{τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (<em>s</em>)
-                  </li>
-                  <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
-                  <li>
-                    <em>C<sub>W</sub></em> is the specific heat capacity of water (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>A<sub>C</sub></em> is the heating coil surface area (<em>m<sup>2</sup></em>)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#outputInputDerivVals>FR:Output-Input-Derived-Values</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-      </div>
-    </div>
-    <div id="Sec:IMs">
-      <div class="subsubsection">
-        <h3>Instance Models</h3>
-        <p class="paragraph">
-          This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
-        </p>
-        <p class="paragraph">
-          The goal <a href=#waterTempGS>GS:Predict-Water-Temperature</a> is met by <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and the goal <a href=#waterEnergyGS>GS:Predict-Water-Energy</a> is met by <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.
-        </p>
-        <div id="IM:eBalanceOnWtr">
-          <table class="idefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>IM:eBalanceOnWtr</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Energy balance on water to find the temperature of the water
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>T<sub>C</sub></em>, <em>T<sub>init</sub></em>, <em>t<sub>final</sub></em>, <em>A<sub>C</sub></em>, <em>h<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Output</th>
-              <td><p class="paragraph"><em>T<sub>W</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Input Constraints</th>
-              <td>\[{T_{\text{C}}}\geq{}{T_{\text{init}}}\]</td>
-            </tr>
-            <tr>
-              <th>Output Constraints</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[\frac{\,d{T_{\text{W}}}}{\,dt}-\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)=0\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li><em>t</em> is the time (<em>s</em>)</li>
-                  <li>
-                    <em>T<sub>W</sub></em> is the temperature of the water (<em>&deg;C</em>)
-                  </li>
-                  <li>
-                    <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>C</sub></em> is the temperature of the heating coil (<em>&deg;C</em>)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>τ<sub>W</sub></em> is calculated from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>.
-                </p>
-                <p class="paragraph">
-                  The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (<em>&deg;C</em>) where <em>0</em> (<em>&deg;C</em>) and <em>100</em> (<em>&deg;C</em>) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A:Water-Always-Liquid</a>).
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#koothoor2013>koothoor2013</a> (with PCM removed)
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div id="IM:eBalanceOnWtrDeriv">
-          <div class="subsubsubsection">
-            <h4>Detailed derivation of the energy balance on water:</h4>
+        <div id="Sec:SolCharSpec">
+          <div class="subsection">
+            <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A:Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A:No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD:rocTempSimp</a> can be written as:
+              The instance models that govern NoPCM are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
-            \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}\]
-            <p class="paragraph">
-              Using <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em>, this can be written as:
-            </p>
-            \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
-            <p class="paragraph">
-              Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
-            </p>
-            \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
-            <p class="paragraph">
-              By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>), this can be written as:
-            </p>
-            \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+            <div id="Sec:Assumps">
+              <div class="subsubsection">
+                <h3>Assumptions</h3>
+                <p class="paragraph">
+                  This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
+                </p>
+                <div class="list">
+                  <p>
+                    <div id="assumpTEO">
+                      Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: <a href=#TM:consThermE>TM:consThermE</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpHTCC">
+                      Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time. (RefBy: <a href=#TM:nwtnCooling>TM:nwtnCooling</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpCWTAT">
+                      Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpDWCoW">
+                      Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpSHECoW">
+                      Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpLCCCW">
+                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpTHCCoT">
+                      Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (RefBy: <a href=#likeChgTCVOD>LC:Temperature-Coil-Variable-Over-Day</a> and <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpTHCCoL">
+                      Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. (RefBy: <a href=#likeChgTCVOL>LC:Temperature-Coil-Variable-Over-Length</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpCTNTD">
+                      Charging-Tank-No-Temp-Discharge: The model only accounts for charging the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. (RefBy: <a href=#likeChgDT>LC:Discharging-Tank</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpWAL">
+                      Water-Always-Liquid: The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href=#unlikeChgWFS>UC:Water-Fixed-States</a>, <a href=#TM:sensHtE>TM:sensHtE</a>, <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpPIT">
+                      Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: <a href=#likeChgTLH>LC:Tank-Lose-Heat</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpNIHGBW">
+                      No-Internal-Heat-Generation-By-Water: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero. (RefBy: <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpAPT">
+                      Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0<em>&deg;C</em> and 100<em>&deg;C</em>, respectively. (RefBy: <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="assumpVCN">
+                      Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a>.)
+                    </div>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:TMs">
+              <div class="subsubsection">
+                <h3>Theoretical Models</h3>
+                <p class="paragraph">
+                  This section focuses on the general equations and laws that NoPCM is based on.
+                </p>
+                <div id="TM:consThermE">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:consThermE</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Conservation of thermal energy</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[-∇\cdot{}\symbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>∇</em> is the gradient (Unitless)</li>
+                          <li>
+                            <em><b>q</b></em> is the thermal flux vector (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em>g</em> is the volumetric heat generation per unit volume (<em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>)
+                          </li>
+                          <li>
+                            <em>ρ</em> is the density (<em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>)
+                          </li>
+                          <li>
+                            <em>C</em> is the specific heat capacity (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em>T</em> is the temperature (<em>&deg;C</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The above equation gives the law of conservation of energy for transient heat transfer in a given material.
+                        </p>
+                        <p class="paragraph">
+                          For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#assumpTEO>A:Thermal-Energy-Only</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#GD:rocTempSimp>GD:rocTempSimp</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="TM:sensHtE">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:sensHtE</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Sensible heat energy (no state change)</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[E={C^{\text{L}}} m ΔT\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>E</em> is the sensible heat (<em>J</em>)</li>
+                          <li>
+                            <em>C<sup>L</sup></em> is the specific heat capacity of a liquid (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
+                          </li>
+                          <li><em>m</em> is the mass (<em>kg</em>)</li>
+                          <li><em>ΔT</em> is the change in temperature (<em>&deg;C</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>E</em> occurs as long as the material does not reach a temperature where a phase change occurs, as assumed in <a href=#assumpWAL>A:Water-Always-Liquid</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:heatEInWtr>IM:heatEInWtr</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="TM:nwtnCooling">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:nwtnCooling</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Newton's law of cooling</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[q\left(t\right)=h ΔT\left(t\right)\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>q</em> is the heat flux (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em>h</em> is the convective heat transfer coefficient (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
+                          </li>
+                          <li><em>ΔT</em> is the change in temperature (<em>&deg;C</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is assumed to be independent of <em>T</em> (from <a href=#assumpHTCC>A:Heat-Transfer-Coeffs-Constant</a>).
+                        </p>
+                        <p class="paragraph">
+                          <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#incroperaEtAl2007>incroperaEtAl2007</a> (pg. 8)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:GDs">
+              <div class="subsubsection">
+                <h3>General Definitions</h3>
+                <p class="paragraph">
+                  This section collects the laws and equations that will be used to build the instance models.
+                </p>
+                <div id="GD:rocTempSimp">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:rocTempSimp</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Simplified rate of change of temperature</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>m</em> is the mass (<em>kg</em>)</li>
+                          <li>
+                            <em>C</em> is the specific heat capacity (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li><em>T</em> is the temperature (<em>&deg;C</em>)</li>
+                          <li>
+                            <em>q<sub>in</sub></em> is the heat flux input (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em>A<sub>in</sub></em> is the surface area over which heat is transferred in (<em>m<sup>2</sup></em>)
+                          </li>
+                          <li>
+                            <em>q<sub>out</sub></em> is the heat flux output (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em>A<sub>out</sub></em> is the surface area over which heat is transferred out (<em>m<sup>2</sup></em>)
+                          </li>
+                          <li>
+                            <em>g</em> is the volumetric heat generation per unit volume (<em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>)
+                          </li>
+                          <li><em>V</em> is the volume (<em>m<sup>3</sup></em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:rocTempSimp>GD:rocTempSimp</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="GD:rocTempSimpDeriv">
+                  <div class="subsubsubsection">
+                    <h4>
+                      Detailed derivation of simplified rate of change of temperature:
+                    </h4>
+                    <p class="paragraph">
+                      Integrating <a href=#TM:consThermE>TM:consThermE</a> over a volume (<em>V</em>), we have:
+                    </p>
+                    \[-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    <p class="paragraph">
+                      Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
+                    </p>
+                    \[-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    <p class="paragraph">
+                      We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
+                    </p>
+                    \[{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    <p class="paragraph">
+                      Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD:rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A:Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A:Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:
+                    </p>
+                    \[ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                    <p class="paragraph">
+                      Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
+                    </p>
+                    \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                  </div>
+                </div>
+                <div id="GD:htFluxWaterFromCoil">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:htFluxWaterFromCoil</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Heat flux into the water from the coil</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td>
+                        <p class="paragraph"><em>\(\frac{\text{W}}{\text{m}^{2}}\)</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>q<sub>C</sub></em> is the heat flux into the water from the coil (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
+                          </li>
+                          <li>
+                            <em>T<sub>C</sub></em> is the temperature of the heating coil (<em>&deg;C</em>)
+                          </li>
+                          <li>
+                            <em>T<sub>W</sub></em> is the temperature of the water (<em>&deg;C</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>q<sub>C</sub></em> is found by assuming that Newton's law of cooling applies (<a href=#assumpLCCCW>A:Newton-Law-Convective-Cooling-Coil-Water</a>). This law (defined in <a href=#TM:nwtnCooling>TM:nwtnCooling</a>) is used on the surface of the heating coil.
+                        </p>
+                        <p class="paragraph">
+                          <a href=#assumpTHCCoT>A:Temp-Heating-Coil-Constant-over-Time</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:DDs">
+              <div class="subsubsection">
+                <h3>Data Definitions</h3>
+                <p class="paragraph">
+                  This section collects and defines all the data needed to build the instance models.
+                </p>
+                <div id="DD:waterMass">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:waterMass</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Mass of water</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>m<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>kg</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
+                          <li>
+                            <em>V<sub>W</sub></em> is the volume of water (<em>m<sup>3</sup></em>)
+                          </li>
+                          <li>
+                            <em>ρ<sub>W</sub></em> is the density of water (<em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#findMass>FR:Find-Mass</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:waterVolume.nopcm">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:waterVolume.nopcm</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Volume of water</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>V<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>m<sup>3</sup></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{V_{\text{W}}}={V_{\text{tank}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>V<sub>W</sub></em> is the volume of water (<em>m<sup>3</sup></em>)
+                          </li>
+                          <li>
+                            <em>V<sub>tank</sub></em> is the volume of the cylindrical tank (<em>m<sup>3</sup></em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          Based on <a href=#assumpVCN>A:Volume-Coil-Negligible</a>. <em>V<sub>tank</sub></em> is defined in <a href=#DD:tankVolume>DD:tankVolume</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#findMass>FR:Find-Mass</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:tankVolume">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:tankVolume</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Volume of the cylindrical tank</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>V<sub>tank</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>m<sup>3</sup></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>V<sub>tank</sub></em> is the volume of the cylindrical tank (<em>m<sup>3</sup></em>)
+                          </li>
+                          <li>
+                            <em>π</em> is the ratio of circumference to diameter for any circle (Unitless)
+                          </li>
+                          <li><em>D</em> is the diameter of tank (<em>m</em>)</li>
+                          <li><em>L</em> is the length of tank (<em>m</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a> and <a href=#findMass>FR:Find-Mass</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:balanceDecayRate">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:balanceDecayRate</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          ODE parameter for water related to decay time
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>τ<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>s</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (<em>s</em>)
+                          </li>
+                          <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
+                          <li>
+                            <em>C<sub>W</sub></em> is the specific heat capacity of water (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
+                          </li>
+                          <li>
+                            <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
+                          </li>
+                          <li>
+                            <em>A<sub>C</sub></em> is the heating coil surface area (<em>m<sup>2</sup></em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputInputDerivVals>FR:Output-Input-Derived-Values</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:IMs">
+              <div class="subsubsection">
+                <h3>Instance Models</h3>
+                <p class="paragraph">
+                  This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
+                </p>
+                <p class="paragraph">
+                  The goal <a href=#waterTempGS>GS:Predict-Water-Temperature</a> is met by <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and the goal <a href=#waterEnergyGS>GS:Predict-Water-Energy</a> is met by <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.
+                </p>
+                <div id="IM:eBalanceOnWtr">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:eBalanceOnWtr</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Energy balance on water to find the temperature of the water
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>T<sub>C</sub></em>, <em>T<sub>init</sub></em>, <em>t<sub>final</sub></em>, <em>A<sub>C</sub></em>, <em>h<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>T<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>\[{T_{\text{C}}}\geq{}{T_{\text{init}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}} {{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}} {T_{\text{C}}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em>T<sub>W</sub></em> is the temperature of the water (<em>&deg;C</em>)
+                          </li>
+                          <li>
+                            <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (<em>s</em>)
+                          </li>
+                          <li>
+                            <em>T<sub>C</sub></em> is the temperature of the heating coil (<em>&deg;C</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>τ<sub>W</sub></em> is calculated from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>.
+                        </p>
+                        <p class="paragraph">
+                          The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (<em>&deg;C</em>) where <em>0</em> (<em>&deg;C</em>) and <em>100</em> (<em>&deg;C</em>) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A:Water-Always-Liquid</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#koothoor2013>koothoor2013</a> (with PCM removed)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:eBalanceOnWtrDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of the energy balance on water:</h4>
+                    <p class="paragraph">
+                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A:Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A:No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD:rocTempSimp</a> can be written as:
+                    </p>
+                    \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}\]
+                    <p class="paragraph">
+                      Using <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em>, this can be written as:
+                    </p>
+                    \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    <p class="paragraph">
+                      Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
+                    </p>
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    <p class="paragraph">
+                      By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>), this can be written as:
+                    </p>
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                  </div>
+                </div>
+                <div id="IM:heatEInWtr">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:heatEInWtr</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Heat energy in the water</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>T<sub>init</sub></em>, <em>m<sub>W</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>E<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>E<sub>W</sub></em> is the change in heat energy in the water (<em>J</em>)
+                          </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
+                          <li>
+                            <em>C<sub>W</sub></em> is the specific heat capacity of water (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
+                          </li>
+                          <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
+                          <li>
+                            <em>T<sub>W</sub></em> is the temperature of the water (<em>&deg;C</em>)
+                          </li>
+                          <li>
+                            <em>T<sub>init</sub></em> is the initial temperature (<em>&deg;C</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The above equation is derived using <a href=#TM:sensHtE>TM:sensHtE</a>.
+                        </p>
+                        <p class="paragraph">
+                          The change in temperature is the difference between the temperature at time <em>t</em> (<em>s</em>), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (<em>&deg;C</em>).
+                        </p>
+                        <p class="paragraph">
+                          This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em><em>&deg;C</em> (<a href=#assumpWAL>A:Water-Always-Liquid</a>, <a href=#assumpAPT>A:Atmospheric-Pressure-Tank</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:DataConstraints">
+              <div class="subsubsection">
+                <h3>Data Constraints</h3>
+                <p class="paragraph">
+                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
+                </p>
+                <div id="Table:InDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                      <th>Software Constraints</th>
+                      <th>Typical Value</th>
+                      <th>Uncert.</th>
+                    </tr>
+                    <tr>
+                      <td><em>A<sub>C</sub></em></td>
+                      <td><em>A<sub>C</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>A<sub>C</sub>&thinsp;&le;&thinsp;A<sub>C</sub><sup>max</sup></em>
+                      </td>
+                      <td><em>0.12</em> <em>m<sup>2</sup></em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>C<sub>W</sub></em></td>
+                      <td><em>C<sub>W</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>C<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;C<sub>W</sub>&thinsp;&lt;&thinsp;C<sub>W</sub><sup>max</sup></em>
+                      </td>
+                      <td>
+                        <em>4186</em> <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
+                      </td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>D</em></td>
+                      <td><em>D&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>AR<sub>min</sub>&thinsp;&le;&thinsp;D&thinsp;&le;&thinsp;AR<sub>max</sub></em>
+                      </td>
+                      <td><em>0.412</em> <em>m</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>h<sub>C</sub></em></td>
+                      <td><em>h<sub>C</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>h<sub>C</sub><sup>min</sup>&thinsp;&le;&thinsp;h<sub>C</sub>&thinsp;&le;&thinsp;h<sub>C</sub><sup>max</sup></em>
+                      </td>
+                      <td>
+                        <em>1000</em> <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
+                      </td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>L</em></td>
+                      <td><em>L&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>L<sub>min</sub>&thinsp;&le;&thinsp;L&thinsp;&le;&thinsp;L<sub>max</sub></em>
+                      </td>
+                      <td><em>1.5</em> <em>m</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>T<sub>C</sub></em></td>
+                      <td>
+                        <em>0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100</em>
+                      </td>
+                      <td>--</td>
+                      <td><em>50</em> <em>&deg;C</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>T<sub>init</sub></em></td>
+                      <td>
+                        <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;100</em>
+                      </td>
+                      <td>--</td>
+                      <td><em>40</em> <em>&deg;C</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>final</sub></em></td>
+                      <td><em>t<sub>final</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
+                      </td>
+                      <td><em>50000</em> <em>s</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>step</sub></em></td>
+                      <td>
+                        <em>0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                      </td>
+                      <td>--</td>
+                      <td><em>0.01</em> <em>s</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>ρ<sub>W</sub></em></td>
+                      <td><em>ρ<sub>W</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
+                      </td>
+                      <td><em>1000</em> <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Input Data Constraints</p>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:CorSolProps">
+              <div class="subsubsection">
+                <h3>Properties of a Correct Solution</h3>
+                <p class="paragraph">
+                  The <a href=#Table:OutDataConstraints>Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                </p>
+                <div id="Table:OutDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                    </tr>
+                    <tr>
+                      <td><em>T<sub>W</sub></em></td>
+                      <td>
+                        <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>W</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><em>E<sub>W</sub></em></td>
+                      <td><em>E<sub>W</sub>&thinsp;&ge;&thinsp;0</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Output Data Constraints</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div id="IM:heatEInWtr">
-          <table class="idefn">
-            <tr>
-              <th>Refname</th>
-              <td><b>IM:heatEInWtr</b></td>
-            </tr>
-            <tr>
-              <th>Label</th>
-              <td><p class="paragraph">Heat energy in the water</p></td>
-            </tr>
-            <tr>
-              <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>T<sub>init</sub></em>, <em>m<sub>W</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Output</th>
-              <td><p class="paragraph"><em>E<sub>W</sub></em></p></td>
-            </tr>
-            <tr>
-              <th>Input Constraints</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>Output Constraints</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>Equation</th>
-              <td>
-                \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
-              </td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>E<sub>W</sub></em> is the change in heat energy in the water (<em>J</em>)
-                  </li>
-                  <li><em>t</em> is the time (<em>s</em>)</li>
-                  <li>
-                    <em>C<sub>W</sub></em> is the specific heat capacity of water (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
-                  <li>
-                    <em>T<sub>W</sub></em> is the temperature of the water (<em>&deg;C</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>init</sub></em> is the initial temperature (<em>&deg;C</em>)
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The above equation is derived using <a href=#TM:sensHtE>TM:sensHtE</a>.
-                </p>
-                <p class="paragraph">
-                  The change in temperature is the difference between the temperature at time <em>t</em> (<em>s</em>), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (<em>&deg;C</em>).
-                </p>
-                <p class="paragraph">
-                  This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em><em>&deg;C</em> (<a href=#assumpWAL>A:Water-Always-Liquid</a>, <a href=#assumpAPT>A:Atmospheric-Pressure-Tank</a>).
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <th>Source</th>
-              <td>
-                <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
-              </td>
-            </tr>
-            <tr>
-              <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <p class="paragraph"></p>
-      </div>
-    </div>
-    <div id="Sec:DataConstraints">
-      <div class="subsubsection">
-        <h3>Data Constraints</h3>
-        <p class="paragraph">
-          The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
-        </p>
-        <div id="Table:InDataConstraints">
-          <table class="table">
-            <tr>
-              <th>Var</th>
-              <th>Physical Constraints</th>
-              <th>Software Constraints</th>
-              <th>Typical Value</th>
-              <th>Uncert.</th>
-            </tr>
-            <tr>
-              <td><em>A<sub>C</sub></em></td>
-              <td><em>A<sub>C</sub>&thinsp;&gt;&thinsp;0</em></td>
-              <td>
-                <em>A<sub>C</sub>&thinsp;&le;&thinsp;A<sub>C</sub><sup>max</sup></em>
-              </td>
-              <td><em>0.12</em> <em>m<sup>2</sup></em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>C<sub>W</sub></em></td>
-              <td><em>C<sub>W</sub>&thinsp;&gt;&thinsp;0</em></td>
-              <td>
-                <em>C<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;C<sub>W</sub>&thinsp;&lt;&thinsp;C<sub>W</sub><sup>max</sup></em>
-              </td>
-              <td>
-                <em>4186</em> <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-              </td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>D</em></td>
-              <td><em>D&thinsp;&gt;&thinsp;0</em></td>
-              <td>
-                <em>AR<sub>min</sub>&thinsp;&le;&thinsp;D&thinsp;&le;&thinsp;AR<sub>max</sub></em>
-              </td>
-              <td><em>0.412</em> <em>m</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>h<sub>C</sub></em></td>
-              <td><em>h<sub>C</sub>&thinsp;&gt;&thinsp;0</em></td>
-              <td>
-                <em>h<sub>C</sub><sup>min</sup>&thinsp;&le;&thinsp;h<sub>C</sub>&thinsp;&le;&thinsp;h<sub>C</sub><sup>max</sup></em>
-              </td>
-              <td>
-                <em>1000</em> <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-              </td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>L</em></td>
-              <td><em>L&thinsp;&gt;&thinsp;0</em></td>
-              <td>
-                <em>L<sub>min</sub>&thinsp;&le;&thinsp;L&thinsp;&le;&thinsp;L<sub>max</sub></em>
-              </td>
-              <td><em>1.5</em> <em>m</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>T<sub>C</sub></em></td>
-              <td>
-                <em>0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100</em>
-              </td>
-              <td>--</td>
-              <td><em>50</em> <em>&deg;C</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>T<sub>init</sub></em></td>
-              <td>
-                <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;100</em>
-              </td>
-              <td>--</td>
-              <td><em>40</em> <em>&deg;C</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>t<sub>final</sub></em></td>
-              <td><em>t<sub>final</sub>&thinsp;&gt;&thinsp;0</em></td>
-              <td>
-                <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
-              </td>
-              <td><em>50000</em> <em>s</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>t<sub>step</sub></em></td>
-              <td>
-                <em>0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-              </td>
-              <td>--</td>
-              <td><em>0.01</em> <em>s</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-            <tr>
-              <td><em>ρ<sub>W</sub></em></td>
-              <td><em>ρ<sub>W</sub>&thinsp;&gt;&thinsp;0</em></td>
-              <td>
-                <em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
-              </td>
-              <td><em>1000</em> <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
-              <td>10<em>%</em></td>
-            </tr>
-          </table>
-          <p class="caption">Input Data Constraints</p>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:CorSolProps">
-      <div class="subsubsection">
-        <h3>Properties of a Correct Solution</h3>
-        <p class="paragraph">
-          The <a href=#Table:OutDataConstraints>Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
-        </p>
-        <div id="Table:OutDataConstraints">
-          <table class="table">
-            <tr>
-              <th>Var</th>
-              <th>Physical Constraints</th>
-            </tr>
-            <tr>
-              <td><em>T<sub>W</sub></em></td>
-              <td>
-                <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>W</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
-              </td>
-            </tr>
-            <tr>
-              <td><em>E<sub>W</sub></em></td>
-              <td><em>E<sub>W</sub>&thinsp;&ge;&thinsp;0</em></td>
-            </tr>
-          </table>
-          <p class="caption">Output Data Constraints</p>
         </div>
       </div>
     </div>

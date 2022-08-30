@@ -129,7 +129,7 @@ formStdODE d
         unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
         constantVec = [express (columnVec (d ^. dmConstants))]
 
--- | Set the single ODE to a flat equation form, rhs = lhs 
+-- | Set the single ODE to a flat equation form, lhs = rhs
 formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
 formASingleODE coeffs unks consts = equiv (lhs : rhs)
   where lhs = foldl1 addRe (map (\x-> express (fst x) `mulRe` snd x) $ filterZeroCoeff coeffs unks)

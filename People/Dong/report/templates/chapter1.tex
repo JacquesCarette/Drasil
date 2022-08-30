@@ -13,13 +13,12 @@ Before we conduct this research, the Drasil framework can generate software that
 \begin{equation} \label{eq_nopcmorginal}
 	T_{w}'(t) +  \frac {T_{w}(t)}{\tau_{w}} = \frac{T_{c}}{\tau_{w}}
 \end{equation}
-\myequations{NoPCM Equation 1}
+\myequations{NoPCM Equation}
 
 The $T_w(t)$ is a function of the independent variable, in this case time. The $T_w$ is the temperature of water ($ ^\circ C $). The $T_w'(t)$ is the first directive of the function $T_w(t)$ respect time. The $T_c$ is the temperature of the heating coil (°C), and the $\tau_w$ is the ODE parameter for water related to decay time (s). Isolating for $T_w'(t)$, we obtain the following Equation~\ref{eq_nopcmderive}.
 \begin{equation} \label{eq_nopcmderive}
 	T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
 \end{equation}
-\myequations{NoPCM Equation 2}
 
 \begin{listing}[ht]
 \begin{haskell1}
@@ -52,7 +51,7 @@ In general, an equation contains a left-hand expression, a right-hand expression
 \begin{equation} \label{eq_matrixform}
 	\boldsymbol{Ax} = \boldsymbol{b}
 \end{equation}
-\myequations{Matrix Form Equation}
+\myequations{Matrix Form}
 
 On the left-hand side, \textbf{A} is an m $\times$ n matrix, and \textbf{x} is an n-vector. On the right-hand side, \textbf{b} is an m-vector. The \textbf{A} is commonly known as the coefficient matrix, \textbf{x} is the unknown vector, and \textbf{b} is the constant vector. The equation~\ref{eq_matrixform} can represent not only a single linear ODE, but also represent a linear system of ODE. A linear system of ODE is a finite set of linear differential equations. In this research, we only have case studies for single ODEs, and all examples will demonstrate on single ODEs. The new data structure we proposed is capable to store information for a system of ODE, but its related functions only support for case studies that has single ODEs. Here is an ODE example from \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study}.
 \begin{equation} \label{eq_odeexmaple}

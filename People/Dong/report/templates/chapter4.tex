@@ -83,6 +83,7 @@ Lastly, we abstract Equation~\ref{eq_foodeexample} into a general form:
 \begin{equation} \label{eq_foode}
     \boldsymbol{x}' = \boldsymbol{Ax} + \boldsymbol{c}
 \end{equation}
+\myequations{System of First-Order ODE in Matrix Form}
 The \textbf{A} is a coefficient matrix, and \textbf{c} is a constant vector. The \textbf{x} is the unknown vector that contains functions of the independent variable, often time. The \textbf{x}' is a vector that consists of first derivatives of functions of \textbf{x}.
 
 % Once we complete the transformation, we get a system of first-order ODEs in the shape of Equation~\ref{eq_foode}. We encode it in Drasil and pass it to Drasil Code Generator. In the \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study}, we convert Example~\ref{eq_odeexmaple} to Example~\ref{ex_firstorderode}. Then, we generate a program to solve Example~\ref{ex_firstorderode} numerically. By transitivity, the numerical solution is valid for Example~\ref{eq_odeexmaple} as well.
@@ -288,6 +289,7 @@ Our found to this point has been on linear ODEs. However, despite the \href{http
   & \theta_{1}'' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\theta_{2}'}^2L_{2}+{\theta_{1}'}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
   & \theta_{2}'' = \frac{2\sin (\theta_{1}-\theta_{2})({\theta_{1}'}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\theta_{2}'}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
 \end{flalign}
+\myequations{Double Pendulum Equation}
 There are two second-order ODEs in one system. To solve this system of ODEs, we convert them into a system of first-order ODEs. The transformation follows the methodology we discussed in Section~\ref{se_hightofirst}. We transform Equation~\ref{eq_dblpenhigh} into Equation~\ref{eq_dblpenfirst}. Once the transformation is complete, we can encode Equation~\ref{eq_dblpenfirst} and pass it to the Drasil Code Generator. However, we cannot show Equation~\ref{eq_dblpenfirst} in the shape of Equation~\ref{eq_foode} (\textbf{x'} = \textbf{Ax} + \textbf{c}) because the ODE is not a linear ODE.
 
 \begin{flalign} \label{eq_dblpenfirst}
@@ -296,6 +298,7 @@ There are two second-order ODEs in one system. To solve this system of ODEs, we 
   & \omega_{1}' = \frac{-g(2m_{1}+m_{2})\sin \theta_{1}-m_{2}g\sin (\theta_{1}-2\theta_{2})-2\sin (\theta_{1}-\theta_{2})m_{2}({\omega{2}}^2L_{2}+{\omega{1}}^2L_{1}\cos (\theta_{1}-\theta_{2}))}{L_{1}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))} \\ \nonumber
   & \omega_{2}' = \frac{2\sin (\theta_{1}-\theta_{2})({\omega_{1}}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\omega_{2}}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
 \end{flalign}
+\myequations{Double Pendulum Equation in a System of First-Order ODE}
 
 Now we have Equation~\ref{eq_dblpenfirst}, we can encode it in the Drasil. In Code~\ref{code_encodedblpend}, it shows the example of how we encode Equation~\ref{eq_dblpenfirst} in the Drasil. We replace Drasil language with mathematical symbols to increase the readability of the code.
 \begin{listing}[ht]
@@ -543,6 +546,7 @@ Lastly, we replace new variables in Equation~\ref{eq_foodeexamplecolor} to get a
     \highlight{red}{\frac{h(t)}{a_n(t)}}
 	\end{bmatrix}
 \end{equation}
+\myequations{Expansion of System of First-Order ODE in Matrix Form}
 
 Here is the implementation for creating Equation~\ref{eq_foodeexampledetail} in Drasil. In Code~\ref{code_isohighode}, we remove the highest order because we want to isolate the highest order to the left-hand side.
 \begin{listing}[ht]

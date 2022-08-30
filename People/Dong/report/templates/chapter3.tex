@@ -21,6 +21,7 @@ The following example is derived from the Example~\ref{eq_odeexmaple}. We transf
 & x_{1}'(t) = x_{2}(t) \\ \nonumber
 & x_{2}'(t) = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p} 
 \end{flalign}
+\myequations{System of First-Order ODE for PDContoller}
 
 In Example~\ref{ex_firstorderode}, there are two dependent variables: $x_1$ and $x_2$. Both $x_1(t)$ and $x_2(t)$ are functions of the independent variable, in this case time. The $x_1$ is the process variable, and the $x_2$ is the rate of change of $x_1$. The $x_1'$(t) is the first directive of the function $x_1(t)$ respect time, and the $x_2'$(t) is the first derivative of the function $x_2$(t) respect time. The $K_d$ , $K_p$, and $r_t$ are constant variables, and they remain the same meaning in Example~\ref{eq_odeexmaple} and example~\ref{ex_firstorderode}. We can encode the Example~\ref{ex_firstorderode} in all four libraries.
 

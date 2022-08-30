@@ -67,3 +67,6 @@ code/Website
 *.pygtex
 *.pygstyle
 *.listing
+*.lol
+*.equ
+*.code

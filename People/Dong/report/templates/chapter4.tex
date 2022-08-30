@@ -118,7 +118,7 @@ data ODEInfo = ODEInfo {
 \label{code_odeinfointial}
 \end{listing}
 
-We also have to that the ensure Drasil Code Generator can utilize the new \verb|data type| \verb|[CodeExpr]|. Previously, Drasil Code Generator only handling the \verb|initVal| as \verb|CodeExpr|. Now the \verb|initVal| becomes \verb|[CodeExpr]|. In the Drasil framework, we handle a list of \verb|data type| by \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-base-0.1.9.0/Language-Drasil-CodeExpr.html#v:matrix}{matrix}. In Code~\ref{code_odeinfointialcodegen}, the \verb|matrix| can wrap a \verb|[CodeExpr]| into a \verb|CodeExpr| and the code \verb|initVal info| retrieves the \verb|initVal| from an \verb|ODEInfo| data type. There are multiple functions we need to make sure the Drasil Code Generator adapt a list of values. 
+We also have to that the ensure Drasil Code Generator can utilize the new \verb|data type| \verb|[CodeExpr]|. Previously, Drasil Code Generator only handling the \verb|initVal| as \verb|CodeExpr|. Now the \verb|initVal| becomes \verb|[CodeExpr]|. In the Drasil framework, we handle a list of \verb|data type| by \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-base-0.1.9.0/Language-Drasil-CodeExpr.html#v:matrix}{matrix}. The \verb|matrix| can wrap a \verb|[CodeExpr]| into a \verb|CodeExpr| and the code \verb|initVal info| retrieves the \verb|initVal| from an \verb|ODEInfo| \verb|data type|. There are multiple functions we need to make sure the Drasil Code Generator adapt a list of values. 
 
 The first function is \verb|initSolListWithValFill|(97)~\citep{brooks}. Since the type of \verb|initVal| has been changed to a list of \verb|CodeExpr|, we need to use \verb|matrix| to warp \verb|[initVal info]| as a \verb|CodeExpr|. The \verb|initSolListWithValFill| only used for generating interface in the Scipy Library.
 \begin{listing}[ht]
@@ -154,7 +154,7 @@ basicArgFill matrix [initVal info]
 \end{listing}
 The change of \verb|basicArgFill| effects for generating interface in Python Scipy library and C\# OSLO library. For Python Scipy library, in Code~\ref{code_pythonintial}, line 6 initialize the initial value with a list rather than one entity.
 
-\begin{listing}[ht]
+\begin{listing}
 \begin{python1}
 # Old 
   r.set_initial_value(T_init, 0.0)
@@ -180,9 +180,32 @@ Vector initv = new Vector(new double[] {T_init});
 \label{code_csharpintial}
 \end{listing}
 
-Lastly, we have to create two additional functions based on function \verb|fixedReturn|(100)~\citep{brooks} and fixedStatementFill(89)~\citep{brooks}. The \verb|fixedReturn| indicate a step that returns a fixed value. The \verb|fixedStatementFill| will fill in values for the \verb|fixedReturn|. In previous research, we always fill in integer 1 for the Java ACM library because we only solved a first-order ODE. However, it requires to return $n$, the order number of the ODE. Therefore, newly created function \verb|fixedReturn'| and \verb|fixedStatementFill'| return the right $n$ based on the order of the ODE.
+In the Java ACM library, we use \verb|FirstOrderDifferentialEquations| interface to solve a system of first-order ODEs. In this interface, it has a method called \verb|getDimension()|. In the previous implementation, the \verb|getDimension()| will always return 1 because we only solve a first order ODE. It been hard-coded in the Drasil Code Generator. While we want to solve a $n^{th}$-order ODE, the \verb|getDimension()| need to return $n$.
 
-\begin{listing}[ht]
+\begin{listing}
+\begin{java1}
+// Old 
+public class ODE implements FirstOrderDifferentialEquations {
+  ...
+  public int getDimension() {
+    return 1;
+  }
+}
+// New 
+public class ODE implements FirstOrderDifferentialEquations {
+  ...
+  public int getDimension() {
+    return n; // n is an integer that users can explicitly define
+  }
+}
+\end{java1}
+\captionof{listing}{Source code for return dimension in Java}
+\label{code_javadimen}
+\end{listing}
+
+In order to allow \verb|getDimension()| return an integer other than 1, we have to add two additional method based on function \verb|fixedReturn|(100)~\citep{brooks} and fixedStatementFill(89)~\citep{brooks} in the Drasil Code Generator. The \verb|fixedReturn| indicate a step that returns a fixed value, such as \verb|fixedReturn (int 1)|. We create similar methods \verb|fixedReturn'| and \verb|fixedStatementFill'|. In Code~\ref{code_fixedreturn} the \verb|fixedReturn'| will indicate a step that returns a fixed value, but the \verb|fixedStatementFill'| will fill in the fixed value base on the order of the ODE. The function of \verb|fixedReturn'| and \verb|fixedStatementFill'| effects for generating interface in Java ACM library. In Code~\ref{code_javadimen}, in line 12, the $n$ will depends on the value we pass in \verb|fixedStatementFill'|.
+
+\begin{listing}
 \begin{haskell1}
 -- Old 
 fixedReturn :: CodeExpr -> Step
@@ -199,30 +222,34 @@ fixedReturn' = statementStep (\cdchs [e] -> case (cdchs, e) of
 fixedStatementFill' :: CodeExpr -> StepFill
 fixedStatementFill' a = StatementF [] [a]
 \end{haskell1}
-\end{listing}
-The function of \verb|fixedReturn'| and \verb|fixedStatementFill'| effects for generating interface in Java ACM library. In Code~\ref{code_javadimen}, in line 8, the $n$ will depends on the value we pass in \verb|fixedStatementFill'|.
-\begin{listing}
-\begin{java1}
-// Old 
-public class ODE implements FirstOrderDifferentialEquations {
-  ...
-  public int getDimension() {
-    return 1;
-  }
-}
-// New 
-public class ODE implements FirstOrderDifferentialEquations {
-  ...
-  public int getDimension() {
-    return n; // n will depends on fixedStatementFill' \$ int \$ toInteger \$ length \$ initVal info
-  }
-}
-\end{java1}
-\captionof{listing}{Source code for return dimension in Java}
-\label{code_javadimen}
+\captionof{listing}{Source code for returning a fixed value}
+\label{code_fixedreturn}
 \end{listing}
 
 In C\texttt{++} the backend code already handles the initial value as a list, so there is no change for artifact in C\texttt{++}.
+
+Lastly, we have to redefine \verb|CodeDefinition| for \verb|ODEInfo|(118)~\citep{brooks}. The \verb|ODEInfo|'s \verb|CodeDefinition| used in the Drasil Generator to map variables between \verb|ODEInfo| and generated code. In Code~\ref{code_odeinfocodedef} we used \verb|matrix| to wrap \verb|[initVal info]| as a \verb|CodeExpr|.
+
+\begin{listing}
+\begin{haskell1}
+-- Old 
+odeDef :: ODEInfo -> CodeDefinition
+odeDef info = CD 
+  ...
+  (map ($ info) [tInit, tFinal, initVal, absTol . odeOpts, 
+  relTol . odeOpts, stepSize . odeOpts]) 
+  ODE
+
+-- New 
+odeDef :: ODEInfo -> CodeDefinition
+odeDef info = CD 
+  ...
+  (matrix [initVal info]: map ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
+  ODE
+\end{haskell1}
+\captionof{listing}{Source code for ODEInfo CodeDefinition}
+\label{code_odeinfocodedef}
+\end{listing}
 
 Allowing multiple initial values unlocks the potential for Drasil to generate code that produce numerical solution for a system of first-order ODEs. Every higher-order linear ODE has its equivalent system of first-order ODE, and the solution for the system of first-order ODEs is also the solution for the higher-order ODE. The same thing happens on non-linear higher-order ODE. If we could transform a higher-order non-linear ODE to a system of first-order ODEs, we can solve it via the four selected external libraries. 
 

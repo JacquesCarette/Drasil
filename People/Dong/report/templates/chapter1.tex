@@ -13,11 +13,13 @@ Before we conduct this research, the Drasil framework can generate software that
 \begin{equation} \label{eq_nopcmorginal}
 	T_{w}'(t) +  \frac {T_{w}(t)}{\tau_{w}} = \frac{T_{c}}{\tau_{w}}
 \end{equation}
+\myequations{NoPCM Equation 1}
 
 The $T_w(t)$ is a function of the independent variable, in this case time. The $T_w$ is the temperature of water ($ ^\circ C $). The $T_w'(t)$ is the first directive of the function $T_w(t)$ respect time. The $T_c$ is the temperature of the heating coil (°C), and the $\tau_w$ is the ODE parameter for water related to decay time (s). Isolating for $T_w'(t)$, we obtain the following Equation~\ref{eq_nopcmderive}.
 \begin{equation} \label{eq_nopcmderive}
 	T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
 \end{equation}
+\myequations{NoPCM Equation 2}
 
 \begin{listing}[ht]
 \begin{haskell1}
@@ -50,10 +52,14 @@ In general, an equation contains a left-hand expression, a right-hand expression
 \begin{equation} \label{eq_matrixform}
 	\boldsymbol{Ax} = \boldsymbol{b}
 \end{equation}
+\myequations{Matrix Form Equation}
+
 On the left-hand side, \textbf{A} is an m $\times$ n matrix, and \textbf{x} is an n-vector. On the right-hand side, \textbf{b} is an m-vector. The \textbf{A} is commonly known as the coefficient matrix, \textbf{x} is the unknown vector, and \textbf{b} is the constant vector. The equation~\ref{eq_matrixform} can represent not only a single linear ODE, but also represent a linear system of ODE. A linear system of ODE is a finite set of linear differential equations. In this research, we only have case studies for single ODEs, and all examples will demonstrate on single ODEs. The new data structure we proposed is capable to store information for a system of ODE, but its related functions only support for case studies that has single ODEs. Here is an ODE example from \href{https://jacquescarette.github.io/Drasil/examples/pdcontroller/SRS/srs/PDController_SRS.html#Sec:IMs}{PDContoller case study}.
 \begin{equation} \label{eq_odeexmaple}
 	y''(t) + (1 + K_d) \cdot y'(t) + (20 + K_p) \cdot y(t) = r_t \cdot K_p
 \end{equation}
+\myequations{PDContoller Equation}
+
 In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y$. The dependent variable $y$ is depend on independent variable t, in this case time. We use $y$(t) to represent a function of time. The $y'$(t) is the first derivative of $y$(t). The $y''$(t) is the second derivative of $y$(t). The $y$ is the process variable, and the $y'(t)$ is the rate of change of $y(t)$. The $y''(t)$ is the rate of change of the rate of change of $y(t)$. The $K_d$ , $K_p$, and $r_t$ are constant variables. The $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation in a matrix form as follows.
 
 \begin{equation} \label{eq_matrixformexmaple}
@@ -71,12 +77,14 @@ In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y$. The de
 		r_{t} \cdot K_{p} 
 	\end{bmatrix}
 \end{equation}
+\myequations{PDContoller Equation in Matrix Form}
 
 The relationship between the matrix form~\ref{eq_matrixform} and the example~\ref{eq_matrixformexmaple} is not hard to find. Firstly, the coefficient matrix \textbf{A} is a 1 $\times$ 3 matrix that consists of $1$, $1 + K_d$, ane $20 + K_p$. Secondly, the unknown vector \textbf{x} is a 3 $\times$ 1 vector with $y''$, $y'$, and $y$. Last, the constant vector \textbf{b} is a 1 $\times$ 1 vector with $r_t \cdot K_p$. The matrix form~\ref{eq_matrixform} very well captures all the knowledge we need to present an ODE. But, how a matrix form looks like in a nth-order linear ODE? Based on Paul's Online Notes~\citep{paullinearode}, we can write all linear ODEs in the shape of
 
 \begin{equation} \label{eq_linearDE}
 	a_n(t) \cdot y^n(t) + a_{n-1}(t) \cdot y^{n-1}(t) + \dots + a_1(t) \cdot y'(t) + a_0(t) \cdot y(t) = h(t)
 \end{equation}
+\myequations{Linear Higher-Order ODE}
 
 The coefficient $a_0(t), \dots, a_n(t)$ and $g(t)$ can be constant or non-constant functions, in our case they are constant functions. We also can write Equation~\ref{eq_linearDE} in a matrix form. 
 \begin{equation} \label{eq_matrixnthorder}
@@ -95,6 +103,8 @@ The coefficient $a_0(t), \dots, a_n(t)$ and $g(t)$ can be constant or non-consta
 		h(t)
 	\end{bmatrix}
 \end{equation}
+\myequations{Linear Higher-Order ODE in Matrix Form}
+
 This is the methodology used for linear ODEs, and it contains all necessary information for understanding the linear ODE. Therefore, we create a data structure which contain the matrix information of the ODE. It is an advanced structural ODE information \verb|data type|, called \verb|DifferentialModel| to capture knowledge of linear ODEs.
 
 The \verb|DifferentialModel| is the type, it takes one value. The \verb|SystemOfLinearODEs| is a value with a record that is used to describe a structural content of system of linear ODEs with six necessary fields. Here is the representing code for \verb|DifferentialModel|.

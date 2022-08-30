@@ -297,13 +297,13 @@ There are two second-order ODEs in one system. To solve this system of ODEs, we 
   & \omega_{2}' = \frac{2\sin (\theta_{1}-\theta_{2})({\omega_{1}}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\omega_{2}}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
 \end{flalign}
 
-Now we have Equation~\ref{eq_dblpenfirst}, we can encode it in the Drasil. In Code~\ref{code_encodedblpend}, it shows the example of how we encode Equation~\ref{eq_dblpenfirst} in the Drasil. 
+Now we have Equation~\ref{eq_dblpenfirst}, we can encode it in the Drasil. In Code~\ref{code_encodedblpend}, it shows the example of how we encode Equation~\ref{eq_dblpenfirst} in the Drasil. We replace Drasil language with mathematical symbols to increase the readability of the code.
 \begin{listing}[ht]
 \begin{haskell1}
 dblPenODEInfo :: ODEInfo
 dblPenODEInfo = odeInfo
 ...
-[3*π/7, 0, 3*π/4, 0]
+[3*π/7, 0, 3*π/4, 0] -- initial values
 [ ω₁,
   -g(2m₁ + m₂)sin θ₁ - m₂gsin (θ₁ - 2θ₂) - 2sin (θ₁ - θ₂)m₂(ω₂²L₂ + ω₁²L₁cos (θ₁ - θ₂)) / L₁(2m₁ + m₂ -m₂cos (2θ₁ - 2θ₂)),
   ω₂,
@@ -311,7 +311,7 @@ dblPenODEInfo = odeInfo
 ]
 ...
 \end{haskell1}
-\captionof{listing}{Source code for encoding double pendulum}
+\captionof{listing}{Pseudocode for encoding double pendulum}
 \label{code_encodedblpend}
 \end{listing}
 

@@ -251,8 +251,8 @@ addIdentityConsts :: [Expr] -> Int -> [Expr]
 addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr
 
 -- | divide the leading coefficient of the highest order in constant
-divideCosntants :: Expr -> Expr -> Expr
-divideCosntants a b
+divideConstant :: Expr -> Expr -> Expr
+divideConstant a b
   | b == exactDbl 0 = error "Divisor can't be zero"
   | b == exactDbl 1 = a
   | otherwise       = a $/ b
@@ -262,7 +262,7 @@ makeAODESolverFormat :: DifferentialModel -> ODESolverFormat
 makeAODESolverFormat dm = X' transEs transUnks transConsts
   where transUnks = transUnknowns $ dm ^. unknowns
         transEs = addIdentityCoeffs [transCoefficients $ head (dm ^. coefficients)] (length transUnks) 0
-        transConsts = addIdentityConsts [head (dm ^. dmConstants) `divideCosntants` head (head (dm ^. coefficients))] (length transUnks)
+        transConsts = addIdentityConsts [head (dm ^. dmConstants) `divideConstant` head (head (dm ^. coefficients))] (length transUnks)
 
 {-
   Form well-formatted ODE equations which the ODE solvers can solve. For example:

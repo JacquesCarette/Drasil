@@ -131,15 +131,26 @@ We can solve an ODE with many algorithms. The four selected libraries each provi
 % There are some improvements that the Drasil team can do to make the ODE solution better. For example, we found some algorithms use a fixed step size for calculating numerical solutions, and others use an adaptive step size. We add the step size with the current time value to calculate the next value of dependent variables. A fixed step size means the step size is the same in each iteration. An adaptive step size means the step size is not always the same and could change based on other factors. In Table~\ref{tab_algacm}, the ACM library divides algorithms into one group that uses a fixed step and others that uses an adaptive step. This discovery can further influence the design choice of solving ODE numerically in the Drasil framework. Currently, Drasil treats all step sizes as a fixed value, and it would be ideal to allow the step size to be either fixed or adaptive in future.
 
 \section{Output an ODE}
-In the Drasil framework, we can generate modularized software. A modularized software will contain a controller module, an input module, a calculation module, and an output module. The controller module contains the main function, the start of the software. The input module handles all input parameters and constraints. We manually create a txt file that contains all input information. The input module will read this file and covert the information to its environment. The calculation module contains all the logic for solving the scientific problem. For example, in higher-order linear ODE, the calculation module contains all functions of calculating the numerical solution. Lastly, the output module will output the solution. In all ODE case studies, we will write the output of the calculation module as a string in a txt file. 
+In the Drasil framework, we can generate modularized software. A modularized software will contain a controller module, an input module, a calculation module, and an output module. The controller module contains the main function, the start of the software. The input module handles all input parameters and constraints. We manually create a txt file that contains all input information. The input module will read this file and covert the information to its environment. The calculation module contains all the logic for solving the scientific problem. For example, in Double Pendulum, the calculation module contains all functions of calculating the numerical solution. Lastly, the output module will output the solution. In all ODE case studies, the output module will write the return of the calculation module as a string in a txt file. 
 
-With each module interacting with others, we would like to study the output of the calculation module in ODE case studies. Currently, the calculation module will output a finite sequence of real numbers, $\mathbb{R}^k$. The $k$ is a natural number which depends on the start time, end time, and time step. A finite sequence of real numbers only captures a partial solution, and we ideally want to capture a complete solution. Therefore, we would like to explore options external libraries provide to output a different type for the calculation module. Most selected external libraries only provide numerical solutions in the form of a finite sequence of real numbers, $\mathbb{R}^k$. The C\# OSLO library not only supports outputting a finite sequence of real numbers but also an infinite sequence of real numbers. In C\# OSLO library, we can get an infinite numerical solution that contains all possible values of the dependent variable over time. The function \verb|Ode.RK547M| returns an enumerable sequence of solution points. If we are interested in a partial solution, we can filter it with parameters such as start time, end time, and time interval.
+With each module interacting with others, we would like to study the output of the calculation module in ODE case studies. Currently, the calculation module will output a finite sequence of real numbers, $\mathbb{R}^i$. The $i$ is a natural number which depends on the start time, end time, and time step. A finite sequence of real numbers only captures a partial solution, and we ideally want to capture a complete solution. Therefore, we would like to explore options to output a different type for the calculation module. 
 
-% The reality is outputting an infinite sequence is not always available in the four selected libraries. 
+We have the following specification for the calculation module:
 
-% The return of \verb|Ode.RK547M| is equivalent to an infinite sequence of real numbers, $\mathbb{R}^n$. The return of \verb|sol.SolveFromToStep| is equivalent to a finite sequence of real numbers, $\mathbb{R}^k$. 
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
+    \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
+    \toprule
+    Calculations & $\mathbb{R}^n$ & $\mathbb{R}^i$ \\
+    \bottomrule	
+\end{tabular}	
+\caption{Specification for Calculations Module Return a Finite Sequence}	
+\label{tab_srsforcal}
+\end{table}
+The $n$ is length of the sequence. The $\mathbb{R}^n$ is input values for calculating the ODE. In our study case, after running the generated program, it will create a file which contain the numerical solution of the ODE from the start time to end time. The numerical solution be written as a stream of real number in a txt file.
 
-Code~\ref{code_csharposlo} shows the full details of how to solve Example~\ref{ex_firstorderode} in the OSLO library.
+Most selected external libraries only provide numerical solutions in the form of a finite sequence of real numbers, $\mathbb{R}^i$. The C\# OSLO library not only supports outputting a finite sequence of real numbers but also an infinite sequence of real numbers. In C\# OSLO library, we can get an infinite numerical solution that contains all possible values of the dependent variable over time ($\mathbb{R}^j$). The $j$ is the length of the sequence, and it is a natural number. The function \verb|Ode.RK547M| returns an endless enumerable sequence of solution points. If we are interested in a partial solution ($\mathbb{R}^i$), we can filter it with parameters such as start time, end time, and time interval. Code~\ref{code_csharposlo} shows the full details of how to solve Example~\ref{ex_firstorderode} in the OSLO library.
 \begin{listing}[ht]
 \begin{csharp1}
 public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
@@ -165,64 +176,94 @@ public static List<double> func_y_t(double K_d, double K_p, double r_t, double t
 \captionof{listing}{Source code of solving PDController in OSLO}
 \label{code_csharposlo}
 \end{listing}
-In Code~\ref{code_csharposlo}, between line 3 and line 4, we encode the ODE of the Example~\ref{ex_firstorderode} in a \verb|Vector|. Between line 7 and line 8, we set the absolute and relative tolerance in the \verb|Options| class. In line 10, we initialize initial values. Next, in line 11, we use \verb|Ode.RK547M| to get an endless sequence of real numbers, $\mathbb{R}^n$. The $n$ is a natural number. In line 12, we use \verb|SolveFromToStep| to get a partial solution ($\mathbb{R}^k$) base on the start time, the final time, and the time step. Last, between line 13 and line 15, we run a loop to collect the process variable $x_1$. With the workflow we described above, the \verb|Ode.RK547M(0.0, initv, f, opts)| return an object has richer data, because {}$\mathbb{R}^k \subset \mathbb{R}^n$.
 
-Another output of the calculation module for solving the ODE is to output the solution as a function $\mathbb{R} \rightarrow \mathbb{R}^i$. The i is the number of equations in the ODE. The input is the independent variable, often time, and the output is a sequence of real numbers. In Example~\ref{ex_firstorderode}, the function type will be $\mathbb{R} \rightarrow \mathbb{R}^2$. The idea of outputting an ODE as a function can be useful when the Drasil framework generates a library. Users have the option to generate a runnable program or a standalone library. 
-
-On the one hand, the runnable program contains the main function so users can run generated software directly. On the other hand, the library contains all functions to solve the ODE so that outside software can utilize the generated library via its interfaces. The generated library can provide support for calculating the numerical solution of the ODE, and we find Python Scipy library supports outputting ODE as a function.
-
-In the Python Scipy library, we can return a generic interface called \verb|scipy.integrate.ode|~\citep{scipyfun}, which is a generic interface that can store ODE's information. It contains the relationship between the dependent variable, the independent variables, and other variables. Given an independent variable time, the \verb|scipy.integrate.ode| can calculate dependent variables. If we are interested in a partial numerical solution, we can add other ODE-related information, such as the start time, the end time, and the time step. Code~\ref{code_pythonscipy} shows the full details of how to solve Example~\ref{ex_firstorderode} in the Scipy library.
-
-\begin{listing}[ht]
-\begin{python1}
-def func_y_t(K_d, K_p, r_t, t_sim, t_step):
-    def f(t, y_t):
-        return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
-    
-    r = scipy.integrate.ode(f)
-    r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)
-    r.set_initial_value([0.0, 0.0], 0.0)
-    y_t = [[0.0, 0.0][0]]
-    while r.successful() and r.t < t_sim:
-        r.integrate(r.t + t_step)
-        y_t.append(r.y[0])
-    
-    return y_t
-\end{python1}
-\captionof{listing}{Source code of solving PDController in Scipy}
-\label{code_pythonscipy}
-\end{listing}
-In Code~\ref{code_pythonscipy}, between line 2 and line 3, we encode the ODE equation of Example~\ref{ex_firstorderode} in a list. In line 5, we call \verb|scipy.integrate.ode| to packing ODE information in the generic interface ($\mathbb{R} \rightarrow \mathbb{R}^i$). In line 6, we set the configuration for algorithm choices and how much absolute and relative tolerance are. In line 7, we set initial values and the start time. In line 8, we initialize the result collection. We specify which initial value we want to put in the result collection. In line 9, the while loop represents the whole iteration to calculate the ODE.  Line 10 adds the time step in each iteration. In this example, we are only interested in collecting the process variable $x_1$, so we only collect the process variable in line 11. Last, we return the collection of results in line 13. With the workflow described above, the generic interface \verb|scipy.integrate.ode(f)| captures the information of the ODE, and it represents the ODE as a function.
-
-Table~\ref{tab_outputtype} summarizes the availability of the calculation module's output type for solving an ODE numerically in the four selected libraries.
+In Code~\ref{code_csharposlo}, between line 3 and line 4, we encode the ODE of the Example~\ref{ex_firstorderode} in a \verb|Vector|. Between line 7 and line 8, we set the absolute and relative tolerance in the \verb|Options| class. In line 10, we initialize initial values. Next, in line 11, we use \verb|Ode.RK547M| to get an endless sequence of real numbers, $\mathbb{R}^j$. In line 12, we use \verb|SolveFromToStep| to get a partial solution ($\mathbb{R}^i$) base on the start time, the final time, and the time step. Last, between line 13 and line 15, we run a loop to collect the process variable $x_1$. With the workflow we described above, the \verb|Ode.RK547M(0.0, initv, f, opts)| return an object has richer data, because {}$\mathbb{R}^i \subset \mathbb{R}^j$. Instead of returning $\mathbb{R}^i$, we can opt in returning the $\mathbb{R}^j$. Here is the new specification.
 \begin{table}[ht]
 \centering
-\begin{tabular}{p{0.2\textwidth} | p{0.6\textwidth} } \hline
-    \textbf{Library}&\textbf{Available Output Type}\\
+\begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
+    \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
     \toprule
-    Scipy-Python & 
-    \begin{itemize}[wide]
-    \item $\mathbb{R}^k$ (k is a finite integer)
-    \item $\mathbb{R} \rightarrow \mathbb{R}^i$ (i is the number of equations in the ODE)
-    \end{itemize}  \\ \hline
-    ACM-Java &     
-    \begin{itemize}[wide]
-    \item $\mathbb{R}^k$
-    \end{itemize}  \\ \hline
-    ODEINT-C\texttt{++} & 
-    \begin{itemize}[wide]
-    \item $\mathbb{R}^k$
-    \end{itemize}\\ \hline
-    OSLO-C\# & 
-    \begin{itemize}[wide]
-    \item $\mathbb{R}^k$
-    \item $\mathbb{R}^n$ (n is an infinite integer)
-    \end{itemize} \\
+    Calculations & $\mathbb{R}^n$ & $\mathbb{R}^j$ \\
     \bottomrule	
 \end{tabular}	
-\caption{Available output type in external libraries}	
-\label{tab_outputtype}
+\caption{Specification for Calculations Module Return an Infinite Sequence}	
+\label{tab_srsforcal}
 \end{table}
+The implementation of this specification is not completed, but it provides analysis on what options the C\# OSLO library provides.
+
+Ideally the ODE is a function which mean giving an independent variable it will output dependent variables. Here is the purposed specification:
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
+    \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
+    \toprule
+    Calculations & & $\mathbb{R} \rightarrow \mathbb{R}^k$ \\
+    \bottomrule	
+\end{tabular}	
+\caption{Specification for Calculations Return a Funtion}	
+\label{tab_srsforcal}
+\end{table}
+
+For $\mathbb{R} \rightarrow \mathbb{R}^k$, the $\mathbb{R}$ is the independent variable. The $\mathbb{R}^k$ is a sequence of dependent variables. For a fourth-order ODE, the $\mathbb{R}^k$ would be $\mathbb{R}^4$. Since Drasil Framework can generate a library, the idea of outputting an ODE as a function can be useful. A program can hook up the interface of the generated library, and the library will provide support for calculating the numerical solution of the ODE. The implementation of this specification is not completed, but it gives future students inspirations on how to generate a library to solve the ODE.
+
+% Another ideal output of the calculation module can be $\mathbb{R} \rightarrow \mathbb{R}^k$. 
+
+% Another output of the calculation module for solving the ODE is to output the solution as a function $\mathbb{R} \rightarrow \mathbb{R}^i$. The i is the number of equations in the ODE. The input is the independent variable, often time, and the output is a sequence of real numbers. In Example~\ref{ex_firstorderode}, the function type will be $\mathbb{R} \rightarrow \mathbb{R}^2$. The idea of outputting an ODE as a function can be useful when the Drasil framework generates a library. Users have the option to generate a runnable program or a standalone library. 
+
+% On the one hand, the runnable program contains the main function so users can run generated software directly. On the other hand, the library contains all functions to solve the ODE so that outside software can utilize the generated library via its interfaces. The generated library can provide support for calculating the numerical solution of the ODE, and we find Python Scipy library supports outputting ODE as a function.
+
+% In the Python Scipy library, we can return a generic interface called \verb|scipy.integrate.ode|~\citep{scipyfun}, which is a generic interface that can store ODE's information. It contains the relationship between the dependent variable, the independent variables, and other variables. Given an independent variable time, the \verb|scipy.integrate.ode| can calculate dependent variables. If we are interested in a partial numerical solution, we can add other ODE-related information, such as the start time, the end time, and the time step. Code~\ref{code_pythonscipy} shows the full details of how to solve Example~\ref{ex_firstorderode} in the Scipy library.
+
+% \begin{listing}[ht]
+% \begin{python1}
+% def func_y_t(K_d, K_p, r_t, t_sim, t_step):
+%     def f(t, y_t):
+%         return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
+    
+%     r = scipy.integrate.ode(f)
+%     r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)
+%     r.set_initial_value([0.0, 0.0], 0.0)
+%     y_t = [[0.0, 0.0][0]]
+%     while r.successful() and r.t < t_sim:
+%         r.integrate(r.t + t_step)
+%         y_t.append(r.y[0])
+    
+%     return y_t
+% \end{python1}
+% \captionof{listing}{Source code of solving PDController in Scipy}
+% \label{code_pythonscipy}
+% \end{listing}
+% In Code~\ref{code_pythonscipy}, between line 2 and line 3, we encode the ODE equation of Example~\ref{ex_firstorderode} in a list. In line 5, we call \verb|scipy.integrate.ode| to packing ODE information in the generic interface ($\mathbb{R} \rightarrow \mathbb{R}^i$). In line 6, we set the configuration for algorithm choices and how much absolute and relative tolerance are. In line 7, we set initial values and the start time. In line 8, we initialize the result collection. We specify which initial value we want to put in the result collection. In line 9, the while loop represents the whole iteration to calculate the ODE.  Line 10 adds the time step in each iteration. In this example, we are only interested in collecting the process variable $x_1$, so we only collect the process variable in line 11. Last, we return the collection of results in line 13. With the workflow described above, the generic interface \verb|scipy.integrate.ode(f)| captures the information of the ODE, and it represents the ODE as a function.
+
+% Table~\ref{tab_outputtype} summarizes the availability of the calculation module's output type for solving an ODE numerically in the four selected libraries.
+% \begin{table}[ht]
+% \centering
+% \begin{tabular}{p{0.2\textwidth} | p{0.6\textwidth} } \hline
+%     \textbf{Library}&\textbf{Available Output Type}\\
+%     \toprule
+%     Scipy-Python & 
+%     \begin{itemize}[wide]
+%     \item $\mathbb{R}^k$ (k is a finite integer)
+%     \item $\mathbb{R} \rightarrow \mathbb{R}^i$ (i is the number of equations in the ODE)
+%     \end{itemize}  \\ \hline
+%     ACM-Java &     
+%     \begin{itemize}[wide]
+%     \item $\mathbb{R}^k$
+%     \end{itemize}  \\ \hline
+%     ODEINT-C\texttt{++} & 
+%     \begin{itemize}[wide]
+%     \item $\mathbb{R}^k$
+%     \end{itemize}\\ \hline
+%     OSLO-C\# & 
+%     \begin{itemize}[wide]
+%     \item $\mathbb{R}^k$
+%     \item $\mathbb{R}^n$ (n is an infinite integer)
+%     \end{itemize} \\
+%     \bottomrule	
+% \end{tabular}	
+% \caption{Available output type in external libraries}	
+% \label{tab_outputtype}
+% \end{table}
 
 % \section{Management Libraries}
 % Once the Drasil framework generates code, the generated code relies on external libraries to calculate an ODE. In the current setting, the Drasil framework keeps copies of external libraries in the repository. In the long run this is not practical because of the amount of space external libraries occupy. Moreover, external libraries are not currently shared across case studies, and each case study will have its own copy of external libraries. The current research has uncovered that the current way of handling dependencies in the Drasil framework is problematic. In the future, the team would like to find a better way to handle dependencies. We used a temporary solution, symbolic links, to share external libraries without duplications. By creating a symbolic link file, external libraries become sharable. In the future, the team will conduct further studies to tackle this problem.

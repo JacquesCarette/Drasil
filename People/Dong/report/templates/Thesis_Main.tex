@@ -100,8 +100,19 @@
 
 \newcommand{\highlight}[2]{\colorbox{#1}{$\displaystyle #2$}}
 
+\usepackage{listings}
+\usepackage{tocloft}
+
 % ********************************
 \begin{document}
+\renewcommand\lstlistlistingname{List of Code}
+
+\newcommand{\listequationsname}{List of Equations}
+\newlistof{myequations}{equ}{\listequationsname}
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+\setlength{\cftmyequationsnumwidth}{2.5em}
+
 \include{definitions} % LaTeX variables for preface pages/headers
     
 \beforepreface % Half title page, title page, declaration page   
@@ -109,7 +120,15 @@
   \include{abstr} % Abstract
   \include{dedic} % Dedication
   \include{acknowledgements} % Acknowledgements
-  \referencepages % Table of Contents, List of Figures, List of Tables
+  \tableofcontents
+  \listoffigures
+  \pagebreak
+  \listoftables
+  \pagebreak
+  \lstlistoflistings
+  \pagebreak
+  \listofmyequations
+  % \referencepages % Table of Contents, List of Figures, List of Tables
   \include{notation}
   \academicstatement{academicachievementdeclaration}
 \afterpreface

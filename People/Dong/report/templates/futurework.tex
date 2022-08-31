@@ -7,14 +7,14 @@ Chapter 4 discusses how to automate generating process for a single higher-order
 Drasil has options for generating a runnable program or standalone libraries. However, all ODE-related case studies generate a runnable program. Chapter 3 analyzed each selected external library. For example, the Python Scipy library has an option to return a generic interface class which stores all necessary ODE information. C\# OSLO has an option for returning endless points. Those points are close to a mathematical definition of a spline. Those two options provided by external libraries can be used for generating libraries. Eventually, other outside programs can utilize Drasil generated ODE solvers.
 
 \section{Display ODEs in Various Forms}
-In Figure~\ref{fig_multienv} we displayed the ODE in two different forms. In future, we want to display ODE in other forms. For example, in mathematical expression, sometimes we move all the terms to the left-hand side and leave the right-hand side to 0.
+In Figure~\ref{fig_multienv}, we displayed the ODE in two different forms. In future, we want to display ODE in other forms. For example, in mathematical expression, sometimes we move all the terms to the left-hand side and leave the right-hand side to 0.
 \begin{figure}[ht]
 \centering	
 \includegraphics[width=1\textwidth]{figures/ODEVariousForm.png}
 \caption{Options of Displaying an ODE}
 \label{fig_odevariousform}
 \end{figure}
-This is just one example the variability of displaying ODEs. More research still needed to allow Drasil displays ODEs in various forms.
+This is just one example of the variability of displaying ODEs. More research still needed to allow Drasil displays ODEs in various forms.
 
 \section{Allow Adaptive Steps}
 While we were solving the ODE as an IVP numerically, we set the step size to fixed step size. In reality, the step size can be adaptive rather than fixed. We found some algorithms use a fixed step size for calculating numerical solutions, and others use an adaptive step size. We add the step size with the current time value to calculate the next value of dependent variables. A fixed step size means the step size is the same in each iteration. An adaptive step size means the step size is not always the same and could change based on other factors. In Table~\ref{tab_algacm}, the ACM library divides algorithms into one group that uses a fixed step and others that uses an adaptive step. This discovery can further influence the design choice of solving ODE numerically in the Drasil framework. Currently, Drasil treats all step sizes as a fixed value, and it would be ideal to allow the step size to be either fixed or adaptive in future.

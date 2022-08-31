@@ -134,9 +134,7 @@ We can solve an ODE with many algorithms. The four selected libraries each provi
 \section{Output an ODE}
 In the Drasil framework, we can generate modularized software. This modularized software will contain a controller module, an input module, a calculation module, and an output module. The controller module contains the main function, the start of the software. The input module handles all input parameters and constraints. We manually create a txt file that contains all input information. The input module will read this file and convert the information to its environment. The calculation module contains all the logic for solving the scientific problem. For example, in Double Pendulum, the calculation module contains all functions of calculating the numerical solution. Lastly, the output module will output the solution. In all ODE case studies, the output module will write the return of the calculation module as a string in a txt file. 
 
-With each module interacting with others, we would like to study the output of the calculation module in ODE case studies. Currently, the calculation module will output a finite sequence of real numbers, $\mathbb{R}^i$. The $i$ is a natural number which depends on the start time, end time, and time step. A finite sequence of real numbers only captures a partial solution, and we ideally want to capture a complete solution. Therefore, we would like to explore options to output a different type for the calculation module. 
-
-We have the following specification for the calculation module:
+With each module interacting with others, we would like to study the output of the calculation module in ODE case studies. Currently, the calculation module will output a finite sequence of real numbers, $\mathbb{R}^i$. The $i$ is a natural number which depends on the start time, end time, and time step. We have the following specification for the calculation module:
 
 \begin{table}[ht]
 \centering
@@ -149,9 +147,9 @@ We have the following specification for the calculation module:
 \caption{Specification for Calculations Module Return a Finite Sequence}	
 \label{tab_srsforcal}
 \end{table}
-The $n$ is the length of the sequence. The $\mathbb{R}^n$ represents input values for calculating the ODE. In our study case, after running the generated program, it will create a file containing the numerical solution of the ODE from the start time to the end time. The numerical solution is written as a stream of real numbers in a txt file.
+The $n$ is the length of the sequence. The $\mathbb{R}^n$ represents input values for calculating the ODE. In our study case, after running the generated program, it will create a file containing the numerical solution of the ODE from the start time to the end time. The numerical solution is written as a stream of real numbers in a txt file. A finite sequence of real numbers only captures a partial solution, and we ideally want to capture a complete solution. Therefore, we would like to explore options to output a different type for the calculation module.
 
-Most selected external libraries only provide numerical solutions in the form of a finite sequence of real numbers, $\mathbb{R}^i$. The C\# OSLO library not only supports outputting a finite sequence of real numbers but also an infinite sequence of real numbers. In C\# OSLO library, we can get an infinite numerical solution that contains all possible values of the dependent variable over time ($\mathbb{R}^j$). The $j$ is the length of the sequence, and it is a natural number. The function \verb|Ode.RK547M| returns an endless enumerable sequence of solution points. If we are interested in a partial solution ($\mathbb{R}^i$), we can filter it with parameters such as start time, end time, and time interval. Code~\ref{code_csharposlo} shows the full details of how to solve Example~\ref{ex_firstorderode} in the OSLO library.
+Most selected external libraries only provide numerical solutions in the form of a finite sequence of real numbers, $\mathbb{R}^i$. The C\# OSLO library not only supports outputting a finite sequence of real numbers but also an infinite sequence of real numbers. In C\# OSLO library, we can get an infinite numerical solution that contains all possible values of the dependent variable over time ($\mathbb{R}^j$). The $j$ is the length of the sequence, and it is a natural number. The function \verb|Ode.RK547M| returns an endless enumerable sequence of solution points. If we are interested in a partial solution ($\mathbb{R}^i$), we can filter it with parameters such as start time, end time, and time step. Code~\ref{code_csharposlo} shows the full details of how to solve Example~\ref{ex_firstorderode} in the OSLO library.
 \begin{listing}[ht]
 \begin{csharp1}
 public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
@@ -192,7 +190,7 @@ In Code~\ref{code_csharposlo}, between line 3 and line 4, we encode the ODE of E
 \end{table}
 The implementation of this specification is not complete, but we provide an analysis of what options the C\# OSLO library offers.
 
-Ideally, the ODE is a function that means giving an independent variable will output dependent variables. Here is the purposed specification:
+Ideally, the ODE is a function that means giving an independent variable will output dependent variables. Here is another purposed specification:
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
@@ -205,7 +203,7 @@ Ideally, the ODE is a function that means giving an independent variable will ou
 \label{tab_srsforcal}
 \end{table}
 
-For $\mathbb{R} \rightarrow \mathbb{R}^k$, the $\mathbb{R}$ is the independent variable. The $\mathbb{R}^k$ is a sequence of dependent variables. For a fourth-order ODE, the $\mathbb{R}^k$ would be $\mathbb{R}^4$. Since Drasil Framework can generate a library, the idea of outputting an ODE as a function can be useful. A program can hook up the interface of the generated library, and the library will provide support for calculating the numerical solution of the ODE. The implementation of this specification is not complete, but it gives future students some inspiration on how to generate a library to solve the ODE.
+For $\mathbb{R} \rightarrow \mathbb{R}^k$, the $\mathbb{R}$ is the independent variable. The $\mathbb{R}^k$ is a sequence of dependent variables. For a fourth-order ODE, the $\mathbb{R}^k$ would be $\mathbb{R}^4$. Since Drasil Framework can generate a library, the idea of outputting an ODE as a function can be useful. A program can hook up the interface of the generated library, and the library will provide support for calculating the numerical solution of the ODE. The implementation of this specification is not complete, but it gives future students some inspiration on how to generate a library to solve the ODE in Drasil.
 
 % Another ideal output of the calculation module can be $\mathbb{R} \rightarrow \mathbb{R}^k$. 
 

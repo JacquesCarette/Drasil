@@ -119,40 +119,51 @@ data ODEInfo = ODEInfo {
 \label{code_odeinfointial}
 \end{listing}
 
-We also have to ensure that Drasil Code Generator can utilize the new \verb|data type| \verb|[CodeExpr]|. Previously, Drasil Code Generator only handled the \verb|initVal| as \verb|CodeExpr|. Now the \verb|initVal| becomes \verb|[CodeExpr]|. In the Drasil framework, we handle a list of \verb|data type| by \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-base-0.1.9.0/Language-Drasil-CodeExpr.html#v:matrix}{matrix}. The \verb|matrix| can wrap a \verb|[CodeExpr]| into a \verb|CodeExpr|, and the code \verb|initVal info| retrieves the \verb|initVal| from an \verb|ODEInfo| \verb|data type|. We need to change multiple functions to ensure the Drasil Code Generator adapts a list of values. 
-
-The first function is \verb|initSolListWithValFill|(97)~\citep{brooks}. Since we change the type of \verb|initVal| to a list of \verb|CodeExpr|, we need to use \verb|matrix| to warp \verb|[initVal info]| as a \verb|CodeExpr|. We use \verb|initSolListWithValFill| for generating interfaces in the Scipy Library.
-\begin{listing}[ht]
-\begin{haskell1}
--- Old 
-initSolListWithValFill (depVar info) (initVal info)
-
--- New 
-initSolListWithValFill (depVar info) (matrix[initVal info]) 
-\end{haskell1}
-\end{listing}
-
-The second function is \verb|basicArgFill|(96,98)~\citep{brooks}, which takes a CodeExpr. We use \verb|basicArgFill| for filling values for variables and \verb|matrix| to warp \verb|[initVal info]| as a \verb|CodeExpr|.
+We also have to ensure that Drasil Code Generator can utilize the new \verb|data type| \verb|[CodeExpr]|. Previously, Drasil Code Generator only handled the \verb|initVal| as \verb|CodeExpr|. Now the \verb|initVal| becomes \verb|[CodeExpr]|. In the Drasil framework, we handle a list of \verb|data type| by \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-base-0.1.9.0/Language-Drasil-CodeExpr.html#v:matrix}{matrix}, and the code \verb|initVal info| retrieves the \verb|initVal| from an \verb|ODEInfo| \verb|data type|. The \verb|matrix| can wrap a \verb|[CodeExpr]| into a \verb|CodeExpr|. 
 
 \begin{listing}[ht]
 \begin{haskell1}
-basicArgFill :: CodeExpr -> ArgumentFill
-basicArgFill = BasicF
+matrix[initVal info]
 \end{haskell1}
 \end{listing}
 
-\begin{listing}[ht]
-\begin{haskell1}
--- Old 1
-basicArgFill[initVal info] -- page 96
+In \verb|initSolListWithValFill|, \verb|basicArgFill|, and \verb|CodeDefinition| for \verb|ODEInfo|, we have to ensure we wrap the \verb|initVal|.
+% We need to change multiple functions to ensure the Drasil Code Generator adapts a list of values. 
 
--- Old 2
-basicArgFill [matrix[[initVal info]] -- page 98
+% We need to change \verb|initSolListWithValFill|(97)~\citep{brooks}, \verb|basicArgFill|(96,98)~\citep{brooks}
 
--- New 
-basicArgFill matrix [initVal info]
-\end{haskell1}
-\end{listing}
+% The first function is \verb|initSolListWithValFill|(97)~\citep{brooks}. Since we change the type of \verb|initVal| to a list of \verb|CodeExpr|, we need to use \verb|matrix| to warp \verb|[initVal info]| as a \verb|CodeExpr|. We use \verb|initSolListWithValFill| for generating interfaces in the Scipy Library.
+% \begin{listing}[ht]
+% \begin{haskell1}
+% -- Old 
+% initSolListWithValFill (depVar info) (initVal info)
+
+% -- New 
+% initSolListWithValFill (depVar info) (matrix[initVal info]) 
+% \end{haskell1}
+% \end{listing}
+
+% The second function is \verb|basicArgFill|(96,98)~\citep{brooks}, which takes a CodeExpr. We use \verb|basicArgFill| for filling values for variables and \verb|matrix| to warp \verb|[initVal info]| as a \verb|CodeExpr|.
+
+% \begin{listing}[ht]
+% \begin{haskell1}
+% basicArgFill :: CodeExpr -> ArgumentFill
+% basicArgFill = BasicF
+% \end{haskell1}
+% \end{listing}
+
+% \begin{listing}[ht]
+% \begin{haskell1}
+% -- Old 1
+% basicArgFill[initVal info] -- page 96
+
+% -- Old 2
+% basicArgFill [matrix[[initVal info]] -- page 98
+
+% -- New 
+% basicArgFill matrix [initVal info]
+% \end{haskell1}
+% \end{listing}
 The change of \verb|basicArgFill| impacts generated interface in the Python Scipy library and C\# OSLO library. For the Python Scipy library, in Code~\ref{code_pythonintial}, line 6 set the initial value as a list of \verb|T_init|.
 
 \begin{listing}
@@ -204,7 +215,7 @@ public class ODE implements FirstOrderDifferentialEquations {
 \label{code_javadimen}
 \end{listing}
 
-In order to allow \verb|getDimension()| return an integer other than 1, we have to add two additional method based on function \verb|fixedReturn|(100)~\citep{brooks} and fixedStatementFill(89)~\citep{brooks} in the Drasil Code Generator. The \verb|fixedReturn| indicates a step that returns a fixed value, such as \verb|fixedReturn (int 1)|. We create similar methods \verb|fixedReturn'| and \verb|fixedStatementFill'|. In Code~\ref{code_fixedreturn}, the \verb|fixedReturn'| will indicate a step that returns a fixed value, but the \verb|fixedStatementFill'| will fill in the fixed value base on the order of the ODE. The function of \verb|fixedReturn'| and \verb|fixedStatementFill'| effects for generating interface in Java ACM library. In Code~\ref{code_javadimen}, line 12, the $n$ will depend on the value we pass in \verb|fixedStatementFill'|.
+To allow \verb|getDimension()| return an integer other than 1, we have to add two additional method based on function \verb|fixedReturn|(100)~\citep{brooks} and fixedStatementFill(89)~\citep{brooks} in the Drasil Code Generator. The \verb|fixedReturn| indicates a step that returns a fixed value, such as \verb|fixedReturn (int 1)|. We create similar methods \verb|fixedReturn'| and \verb|fixedStatementFill'|. In Code~\ref{code_fixedreturn}, the \verb|fixedReturn'| will indicate a step that returns a fixed value, but the \verb|fixedStatementFill'| will fill in the fixed value base on the order of the ODE. Now, in Code~\ref{code_javadimen}, line 12, the $n$ will depend on the value we pass in \verb|fixedStatementFill'|.
 
 \begin{listing}
 \begin{haskell1}
@@ -229,28 +240,28 @@ fixedStatementFill' a = StatementF [] [a]
 
 In C\texttt{++}, the backend code already handles the initial value as a list, so there are no changes for artifacts in C\texttt{++}.
 
-Lastly, we have to redefine \verb|CodeDefinition| for \verb|ODEInfo|(118)~\citep{brooks}. We use \verb|CodeDefinition| in the Drasil Generator to map variables between \verb|ODEInfo| and generated code. In Code~\ref{code_odeinfocodedef}, we used \verb|matrix| to wrap \verb|[initVal info]| as a \verb|CodeExpr|.
+% Lastly, we have to redefine \verb|CodeDefinition| for \verb|ODEInfo|(118)~\citep{brooks}. We use \verb|CodeDefinition| in the Drasil Generator to map variables between \verb|ODEInfo| and generated code. In Code~\ref{code_odeinfocodedef}, we used \verb|matrix| to wrap \verb|[initVal info]| as a \verb|CodeExpr|.
 
-\begin{listing}
-\begin{haskell1}
--- Old 
-odeDef :: ODEInfo -> CodeDefinition
-odeDef info = CD 
-  ...
-  (map ($ info) [tInit, tFinal, initVal, absTol . odeOpts, 
-  relTol . odeOpts, stepSize . odeOpts]) 
-  ODE
+% \begin{listing}
+% \begin{haskell1}
+% -- Old 
+% odeDef :: ODEInfo -> CodeDefinition
+% odeDef info = CD 
+%   ...
+%   (map ($ info) [tInit, tFinal, initVal, absTol . odeOpts, 
+%   relTol . odeOpts, stepSize . odeOpts]) 
+%   ODE
 
--- New 
-odeDef :: ODEInfo -> CodeDefinition
-odeDef info = CD 
-  ...
-  (matrix [initVal info]: map ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
-  ODE
-\end{haskell1}
-\captionof{listing}{Source code for ODEInfo CodeDefinition}
-\label{code_odeinfocodedef}
-\end{listing}
+% -- New 
+% odeDef :: ODEInfo -> CodeDefinition
+% odeDef info = CD 
+%   ...
+%   (matrix [initVal info]: map ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
+%   ODE
+% \end{haskell1}
+% \captionof{listing}{Source code for ODEInfo CodeDefinition}
+% \label{code_odeinfocodedef}
+% \end{listing}
 
 Allowing multiple initial values unlocks the potential for Drasil to generate code that produces the numerical solution for a system of first-order ODEs. Every higher-order linear ODE has its equivalent system of first-order ODE, and the solution for the system of first-order ODEs is also the solution for the higher-order ODE. The same thing happens on non-linear higher-order ODE. If we can transform a higher-order non-linear ODE into a system of first-order ODEs, we can solve it via the four selected external libraries. 
 

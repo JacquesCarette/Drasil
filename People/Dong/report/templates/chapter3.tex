@@ -132,24 +132,24 @@ We can solve an ODE with many algorithms. The four selected libraries each provi
 % There are some improvements that the Drasil team can do to make the ODE solution better. For example, we found some algorithms use a fixed step size for calculating numerical solutions, and others use an adaptive step size. We add the step size with the current time value to calculate the next value of dependent variables. A fixed step size means the step size is the same in each iteration. An adaptive step size means the step size is not always the same and could change based on other factors. In Table~\ref{tab_algacm}, the ACM library divides algorithms into one group that uses a fixed step and others that uses an adaptive step. This discovery can further influence the design choice of solving ODE numerically in the Drasil framework. Currently, Drasil treats all step sizes as a fixed value, and it would be ideal to allow the step size to be either fixed or adaptive in future.
 
 \section{Output an ODE}
-In the Drasil framework, we can generate modularized software. This modularized software will contain a controller module, an input module, a calculation module, and an output module. The controller module contains the main function, the start of the software. The input module handles all input parameters and constraints. We manually create a txt file that contains all input information. The input module will read this file and convert the information to its environment. The calculation module contains all the logic for solving the scientific problem. For example, in Double Pendulum, the calculation module contains all functions of calculating the numerical solution. Lastly, the output module will output the solution. In all ODE case studies, the output module will write the return of the calculation module as a string in a txt file. 
+In the Drasil framework, we can generate modularized software. This modularized software will contain a controller module, an input module, a calculation module, and an output module. The controller module contains the main function that starts the software. The input module handles all input parameters and constraints. We manually create a text file that contains all input information. The input module will read this file and convert the information to its environment. The calculation module contains all the logic for solving the scientific problem. For example, in Double Pendulum, the calculation module contains all functions for calculating the numerical solution. Lastly, the output module will output the solution. In all ODE case studies, the output module will write the return of the calculation module as a string in a text file. 
 
-With each module interacting with others, we would like to study the output of the calculation module in ODE case studies. Currently, the calculation module will output a finite sequence of real numbers, $\mathbb{R}^i$. The $i$ is a natural number which depends on the start time, end time, and time step. We have the following specification for the calculation module:
+With each module interacting with others, we would like to study the output of the calculation module in the ODE case studies. Currently, the calculation module will output a finite sequence of real numbers, $\mathbb{R}^m$. The $m$ is a natural number which depends on the start time, end time, and time step. We have the following specification for the calculation module:
 
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
     \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
     \toprule
-    Calculations & $\mathbb{R}^n$ & $\mathbb{R}^i$ \\
+    Calculations & $\mathbb{R}^n$ & $\mathbb{R}^m$ \\
     \bottomrule	
 \end{tabular}	
-\caption{Specification for Calculations Module Return a Finite Sequence}	
+\caption{Specification for Calculations Module Returns a Finite Sequence}	
 \label{tab_srsforcal}
 \end{table}
-The $n$ is the length of the sequence. The $\mathbb{R}^n$ represents input values for calculating the ODE. In our study case, after running the generated program, it will create a file containing the numerical solution of the ODE from the start time to the end time. The numerical solution is written as a stream of real numbers in a txt file. A finite sequence of real numbers only captures a partial solution, and we ideally want to capture a complete solution. Therefore, we would like to explore options to output a different type for the calculation module.
+The superscript $n$ is the length of the sequence. The $\mathbb{R}^n$ represents input values for calculating the ODE. In our study case, after running the generated program, it will create a file containing the numerical solution of the ODE from the start time to the end time. The numerical solution is written as a stream of real numbers in a text file. A finite sequence of real numbers only captures a partial solution, and we ideally want to capture a complete solution. Therefore, we would like to explore options to output a different type for the calculation module.
 
-Most selected external libraries only provide numerical solutions in the form of a finite sequence of real numbers, $\mathbb{R}^i$. The C\# OSLO library not only supports outputting a finite sequence of real numbers but also an infinite sequence of real numbers. In C\# OSLO library, we can get an infinite numerical solution that contains all possible values of the dependent variable over time ($\mathbb{R}^j$). The $j$ is the length of the sequence, and it is a natural number. The function \verb|Ode.RK547M| returns an endless enumerable sequence of solution points. If we are interested in a partial solution ($\mathbb{R}^i$), we can filter it with parameters such as start time, end time, and time step. Code~\ref{code_csharposlo} shows the full details of how to solve Example~\ref{ex_firstorderode} in the OSLO library.
+Most selected external libraries only provide numerical solutions in the form of a finite sequence of real numbers, $\mathbb{R}^m$. The C\# OSLO library not only supports outputting a finite sequence of real numbers but also an infinite sequence of real numbers. In C\# OSLO library, we can get an infinite numerical solution that contains all possible values of the dependent variable over time ($\mathbb{R}^{\infty}$). The $\infty$ is the length of the sequence, and it is a natural number. The function \verb|Ode.RK547M| returns an endless enumerable sequence of solution points. If we are interested in a partial solution ($\mathbb{R}^m$), we can filter it with parameters such as start time, end time, and time step. Code~\ref{code_csharposlo} shows the full details of how to solve Example~\ref{ex_firstorderode} in the OSLO library.
 \begin{listing}[ht]
 \begin{csharp1}
 public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
@@ -176,13 +176,13 @@ public static List<double> func_y_t(double K_d, double K_p, double r_t, double t
 \label{code_csharposlo}
 \end{listing}
 
-In Code~\ref{code_csharposlo}, between line 3 and line 4, we encode the ODE of Example~\ref{ex_firstorderode} in a \verb|Vector|. Between line 7 and line 8, we set the absolute and relative tolerance in the \verb|Options| class. In line 10, we initialize initial values. Next, in line 11, we use \verb|Ode.RK547M| to get an endless sequence of real numbers, $\mathbb{R}^j$. In line 12, we use \verb|SolveFromToStep| to get a partial solution ($\mathbb{R}^i$) based on the start time, the final time, and the time step. Last, between line 13 and line 15, we run a loop to collect the process variable $x_1$. With the workflow we described above, the \verb|Ode.RK547M(0.0, initv, f, opts)| returns an object with richer data because {}$\mathbb{R}^i \subset \mathbb{R}^j$. Instead of returning $\mathbb{R}^i$, we can have an option to return the $\mathbb{R}^j$. Here is the new specification.
+In Code~\ref{code_csharposlo}, between line 3 and line 4, we encode the ODE of Example~\ref{ex_firstorderode} in a \verb|Vector|. Between line 7 and line 8, we set the absolute and relative tolerance in the \verb|Options| class. In line 10, we initialize initial values. Next, in line 11, we use \verb|Ode.RK547M| to get an endless sequence of real numbers, $\mathbb{R}^{\infty}$. In line 12, we use \verb|SolveFromToStep| to get a partial solution ($\mathbb{R}^m$) based on the start time, the final time, and the time step. Last, between line 13 and line 15, we run a loop to collect the process variable $x_1$. With the workflow we described above, the \verb|Ode.RK547M(0.0, initv, f, opts)| returns an object with richer data because {}$\mathbb{R}^m \subset \mathbb{R}^{\infty}$. Instead of returning $\mathbb{R}^m$, we can have an option to return the $\mathbb{R}^{\infty}$. Here is the new specification.
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
     \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
     \toprule
-    Calculations & $\mathbb{R}^n$ & $\mathbb{R}^j$ \\
+    Calculations & $\mathbb{R}^n$ & $\mathbb{R}^{\infty}$ \\
     \bottomrule	
 \end{tabular}	
 \caption{Specification for Calculations Module Return an Infinite Sequence}	
@@ -196,7 +196,7 @@ Ideally, the ODE is a function that means giving an independent variable will ou
 \begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
     \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
     \toprule
-    Calculations & & $\mathbb{R} \rightarrow \mathbb{R}^k$ \\
+    Calculations & $\mathbb{R}^n$ & $\mathbb{R} \rightarrow \mathbb{R}^k$ \\
     \bottomrule	
 \end{tabular}	
 \caption{Specification for Calculations Return a Funtion}	
@@ -207,7 +207,7 @@ For $\mathbb{R} \rightarrow \mathbb{R}^k$, the $\mathbb{R}$ is the independent v
 
 % Another ideal output of the calculation module can be $\mathbb{R} \rightarrow \mathbb{R}^k$. 
 
-% Another output of the calculation module for solving the ODE is to output the solution as a function $\mathbb{R} \rightarrow \mathbb{R}^i$. The i is the number of equations in the ODE. The input is the independent variable, often time, and the output is a sequence of real numbers. In Example~\ref{ex_firstorderode}, the function type will be $\mathbb{R} \rightarrow \mathbb{R}^2$. The idea of outputting an ODE as a function can be useful when the Drasil framework generates a library. Users have the option to generate a runnable program or a standalone library. 
+% Another output of the calculation module for solving the ODE is to output the solution as a function $\mathbb{R} \rightarrow \mathbb{R}^m$. The i is the number of equations in the ODE. The input is the independent variable, often time, and the output is a sequence of real numbers. In Example~\ref{ex_firstorderode}, the function type will be $\mathbb{R} \rightarrow \mathbb{R}^2$. The idea of outputting an ODE as a function can be useful when the Drasil framework generates a library. Users have the option to generate a runnable program or a standalone library. 
 
 % On the one hand, the runnable program contains the main function so users can run generated software directly. On the other hand, the library contains all functions to solve the ODE so that outside software can utilize the generated library via its interfaces. The generated library can provide support for calculating the numerical solution of the ODE, and we find Python Scipy library supports outputting ODE as a function.
 
@@ -232,7 +232,7 @@ For $\mathbb{R} \rightarrow \mathbb{R}^k$, the $\mathbb{R}$ is the independent v
 % \captionof{listing}{Source code of solving PDController in Scipy}
 % \label{code_pythonscipy}
 % \end{listing}
-% In Code~\ref{code_pythonscipy}, between line 2 and line 3, we encode the ODE equation of Example~\ref{ex_firstorderode} in a list. In line 5, we call \verb|scipy.integrate.ode| to packing ODE information in the generic interface ($\mathbb{R} \rightarrow \mathbb{R}^i$). In line 6, we set the configuration for algorithm choices and how much absolute and relative tolerance are. In line 7, we set initial values and the start time. In line 8, we initialize the result collection. We specify which initial value we want to put in the result collection. In line 9, the while loop represents the whole iteration to calculate the ODE.  Line 10 adds the time step in each iteration. In this example, we are only interested in collecting the process variable $x_1$, so we only collect the process variable in line 11. Last, we return the collection of results in line 13. With the workflow described above, the generic interface \verb|scipy.integrate.ode(f)| captures the information of the ODE, and it represents the ODE as a function.
+% In Code~\ref{code_pythonscipy}, between line 2 and line 3, we encode the ODE equation of Example~\ref{ex_firstorderode} in a list. In line 5, we call \verb|scipy.integrate.ode| to packing ODE information in the generic interface ($\mathbb{R} \rightarrow \mathbb{R}^m$). In line 6, we set the configuration for algorithm choices and how much absolute and relative tolerance are. In line 7, we set initial values and the start time. In line 8, we initialize the result collection. We specify which initial value we want to put in the result collection. In line 9, the while loop represents the whole iteration to calculate the ODE.  Line 10 adds the time step in each iteration. In this example, we are only interested in collecting the process variable $x_1$, so we only collect the process variable in line 11. Last, we return the collection of results in line 13. With the workflow described above, the generic interface \verb|scipy.integrate.ode(f)| captures the information of the ODE, and it represents the ODE as a function.
 
 % Table~\ref{tab_outputtype} summarizes the availability of the calculation module's output type for solving an ODE numerically in the four selected libraries.
 % \begin{table}[ht]
@@ -243,7 +243,7 @@ For $\mathbb{R} \rightarrow \mathbb{R}^k$, the $\mathbb{R}$ is the independent v
 %     Scipy-Python & 
 %     \begin{itemize}[wide]
 %     \item $\mathbb{R}^k$ (k is a finite integer)
-%     \item $\mathbb{R} \rightarrow \mathbb{R}^i$ (i is the number of equations in the ODE)
+%     \item $\mathbb{R} \rightarrow \mathbb{R}^m$ (i is the number of equations in the ODE)
 %     \end{itemize}  \\ \hline
 %     ACM-Java &     
 %     \begin{itemize}[wide]

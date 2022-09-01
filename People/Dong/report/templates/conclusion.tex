@@ -1,3 +1,26 @@
 \chapter{Conclusion}
+An ODE is a type, and it exists in many forms. Previously to this research, there was no flexible and reusable structure for capturing ODE information. The Drasil teams have to manually extract useful information from the original ODE to instruct the Drasil Code Generator to generate code. This approach propagates duplicated information and loses traceability. The newly created structure, DifferentialModel, stores ODE information based on the conventional matrix concept. It provides the flexibility to transform an ODE from one form to another mathematically equivalent form.
 
-Every thesis also needs a concluding chapter
+Along with \verb|DifferentialModel|, four selected external libraries are responsible for producing the numerical solution for a system of first-order ODEs. Drasil users can get a numerical solution by specifying a provided algorithm. Although the Calculations module outputs a finite stream of real numbers, $\mathbb{R}^m$, there are other options. The C\# OSLO provides an option to output an infinite stream of real numbers, $\mathbb{R}^{\infty}$. Also, outputting the ODE as a function that can return the value of the dependent variable for any value of the independent variable could help generate libraries in Drasil.
+
+To allow the Drasil framework to generate code for solving higher-order ODEs, we first modify the Drasil Code Generator to enable solving any higher-order ODEs with manually written equations via external libraries. The Double Pendulum case study demonstrates the Drasil Framework can generate code that solves a system of higher-order non-linear ODEs. Then, we narrow down the scope and generate all useful information that the Drasil Code Generator needed from \verb|DifferentialModel| for solving a single higher-order linear ODE.
+
+This research accomplishes two main goals. The first one is removing the duplicated information caused by the implementation of solving ODEs. The second one is expanding the Drasil capability to solve higher-order ODEs.
+
+% With flexible structure store ODE information, it is possible to automatically transform ODE from one form to another. Solving the equivalent ODE in external libraries provide the solution for the original ODE. 
+
+% no flexible and reusable structure for capturing ODE information
+
+% manually created entity repeat information and lose traceability
+
+% \verb|DifferentialModel| store ODE information
+
+% external libraries solve a system of first-order ODEs
+
+% variabilities of external libraries, languages dependent, algorithm options
+
+% output ODE solver on demand
+
+% enable solve any higer-order ODEs
+
+% extract information from \verb|DifferentialModel| to get the equivalent the first-order ODEs in ODE solver format, get numerical solution

@@ -110,37 +110,6 @@ frequently pulled from in building \acs{scs}, typing mathematical expressions,
 restricting mathematical expression usage to appropriate contexts, and scaling
 Drasils knowledge database.
 
-\intodo{\textit{From Dr. Carette}: The usual means of building software involves
-      multiple artifacts (such as specifications and code) that contain
-      duplicate information that is also supposed to be linked
-      (\textit{traceability}). Drasil aims to use a generative approach to
-      de-duplicate this information and make traceability more immediate. Drasil
-      currently uses a stable scientific knowledge-base to generate families of
-      \ACF{scs} conforming to a \ACF{srs}\cite{SmithAndLai2005}.}
-
-\iffalse
-      % Potential replacement for the above paragraph
-      The usual means of building software involves multiple artifacts (such as
-      specifications and code) that contain duplicate information that is
-      supposed to be linked (\textit{traceability}). Drasil aims to capture the
-      information and knowledge necessary to create these artifacts, and
-      re-generate the artifacts, making traceability more immediate.
-
-      % A less-specific introduction
-      A common thread of knowledge links together all software artifacts.
-      Software developers pull on this thread to produce software artifacts, but
-      the thread is lost on the authors, isn't effectively shared, and artifacts
-      quickly becomes out of date as more is understood or requirements changed.
-      Typically, this knowledge is duplicated across many artifacts (such as
-      specifications and code). Through codifying domain knowledge,
-      Drasil\cite{Drasil2021} aims to use a generative approach to
-      \textit{de-duplicate} this information, and generate software artifacts
-      that are \textit{traceable}, \textit{reusable}, \textit{maintainable}, and
-      \textit{consistent}, against a stable body of knowledge. Drasil currently
-      focuses on \ACF{scs} conforming to a specific \ACF{srs}
-      template\cite{SmithAndLai2005}.
-\fi
-
 \section{Background}
 \label{sec:intro:background}
 
@@ -196,22 +165,6 @@ knowledge for reliable \acs{scs} artifact generation (and more).
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
-
-\iffalse
-      Drasil has de-duplicated knowledge across \acs{scs} artifacts relevant to
-      specifications and code. Through codifying knowledge and creating coherent
-      ``stories'', Drasil is able to generate a wide variety of software
-      artifacts (e.g., \acs{oo} programs via \acs{gool} with guided usage via
-      Makefiles, and requirements specifications [HTML and TeX]). This codified
-      knowledge was de-duplicated from an originating set of artifacts via
-      bottom-up gathering, however, we should be able to use the same knowledge
-      to generate more artifacts in different languages, flavours, and with more
-      options. However, each desired artifact language has its own way of
-      encoding information (such as mathematical expressions). This leaves us
-      needing to teach Drasil more about the targeted languages (and, at times,
-      about the existing codified knowledge) in order to reliably generate
-      usable artifacts.
-\fi
 
 Domain-specific abstractions are what enable domain-specific
 \textit{interpretation and transformation} (e.g., optimization, analysis, error
@@ -304,12 +257,13 @@ of its typed nature.
 In listed code snippets, I will refer to at least two major points of time in
 relation to Drasils development (time measured by their git blob hash):
 ``current''\footnote{Blob hash: dc3674274edb00b1ae0d63e04ba03729e1dbc6f9} and
-``original''\footnote{Blob hash: 9c26b43d3e30c3f618e534a3f176a5152729af74}. The
-``original'' code refers to a code snippet as it was written before I was
-onboarded to Drasil. The ``current'' code includes my work, at least, but might
-also include the work of others who were also contributing to the project while
-I was actively contributing. The work of others might include, but not limited
-to, code formatting, code commenting, and extensions.
+``original''\footnote{Blob hash: 9c26b43d3e30c3f618e534a3f176a5152729af74}
+\todo{Switch these blob hashes to blob tags.}. The ``original'' code refers to a
+code snippet as it was written before I was onboarded to Drasil. The ``current''
+code includes my work, at least, but might also include the work of others who
+were also contributing to the project while I was actively contributing. The
+work of others might include, but not limited to, code formatting, code
+commenting, and extensions.
 
 Drasil has existed since 2014, and has already seen success in its case studies,
 which are used to guide the development of Drasil. Drasils focus on \acs{scs}

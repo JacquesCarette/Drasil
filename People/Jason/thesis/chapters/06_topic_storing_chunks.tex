@@ -169,7 +169,9 @@ see:
 error\todo{Show the type error here.}. Haskell is unable to create the infinite
 type coercion from \inlineHs{expectedQd}'s unknown type to a \QuantityDict{}.
 
-So, how can we try to fix this? \inlineHs{Data.Typeable} to the rescue!
+So, how can we try to fix this? \inlineHs{Data.Typeable} to the rescue! With
+\inlineHs{Data.Typeable}, we're able to work with any piece of data given to us
+without being provided any information about the data directly.
 \inlineHs{Data.Typeable} allows us to create constrained types with extra
 functionality for casting (amongst other common reflection operations). First,
 we need to alter our \Chunk{} data type to make the contained data satisfy the

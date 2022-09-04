@@ -15,7 +15,7 @@ was that of so called \emph{pervasive bugs}. While we usually consider bugs to
 be something we wish to avoid at all costs, this is a case where the 
 pervasiveness of bugs themselves is beneficial. Since we are generating 
 \emph{all} our \sfs{} from a single source, a bug in that source will 
-result in a bug occurring through \emph{every single softifact}. The major 
+result in a bug occurring through \emph{every single \sf{}}. The major 
 consequence is that the bug now has increased visibility, so is more likely to 
 be discovered.
 
@@ -54,6 +54,13 @@ should be updated. As such, pervasive bugs give us peace of mind that our
 	Show off major errors/oversights
 	Original \sfs{} LoC vs number of Drasil LoC to reimplement (and compare the 
 	output of Drasil - multiple languages, etc.)
+	\ds{Kolmogorov complexity?}
+
+- One major thing to point out here: The most common issues we ran into while 
+attempting to generate our versions of the case study \sfs{} was that of 
+implicit knowledge that was typically assumed to be ``understood" in the 
+context of the domain (i.e. domain experts have tacit knowledge and there are 
+many undocumented assumptions).
 
 \section{Design for change}
 	\ds{GlassBR /1000 example}
@@ -69,6 +76,17 @@ development and the reimplementation of our case studies. One salient example
 was in the GlassBR case study.
 
 \ds{Fill in the example details here}
+
+\section {Mundane Value}
+\ds{Title should change since some of these may not be so "mundane", but I want 
+to cover a few very specific results and they don't warrant their own sections}.
+
+- Consistency by construction
+
+- No undefined symbols - use Tau example?
+
+- ``Free" sections - Ref mats can all be generated from "system information" 
+with little effort, unlike manual creation.
 	
 \section{Usability}
 One of Drasil's biggest issues is that of usability. Unless one reads the source

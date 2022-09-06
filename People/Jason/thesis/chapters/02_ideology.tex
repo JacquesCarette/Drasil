@@ -15,7 +15,9 @@ to, generating representational software artifacts and snippets). Briefly, the
 essential idea underpinning this work is: build a specification of your
 \textit{things} (artifacts and theoretical models), build your interpreters, and
 run your interpreter against an instance of the specifications. By switching out
-the interpreter, we reap the benefit of \textit{reusability of knowledge}.
+the interpreter, we reap the benefit of \textit{reusability of knowledge} by
+formalizing development processes as a push-out (or interpretation) of
+\textit{knowledge}.
 
 \section{On Developing Software}
 \label{sec:idlgy:on_developing_software}
@@ -145,16 +147,25 @@ each knowledge/product owner (e.g., actual property ``\textit{owner}'',
 developers, managers, designers, etc.) work on strictly the components that are
 related to them, and nothing else. At the ``bottom'', the final end-user is
 tasked merely with providing feedback that can improve the quality of the
-artifact(s), and are the ones that have an issue that can be resolved with some
-sort of artifact (here, assumed somehow software related). At the ``top'',
-product owners will designate a basic set of requirements of the artifact using
-a coherent \textit{formal language}. Product designers/orchestrators will take
-the requirements and designate a/communicate it into a coherent \textit{story}
-for how the requirements may be translated into a final product. The
-\textit{story} will be built on the well-understood knowledge of various domains
-encoded by experts of those domains. The product designer is tasked primarily
-with translation, while the domain developers and product owners are tasked with
-encoding knowledge and instances of knowledge, respectively.
+artifact(s). They are the ones that have an issue that can be resolved with some
+sort of software artifact. At the ``top'', product owners will designate a basic
+set of requirements of the artifact using a coherent \textit{formal language}.
+Product designers/orchestrators will take the requirements and designate
+a/communicate it into a coherent \textit{story} for how the requirements may be
+translated into a final product. The \textit{story} will be built on the
+well-understood knowledge of various domains encoded by experts of those
+domains. The product designer is tasked primarily with translation, while the
+domain developers and product owners are tasked with encoding knowledge and
+instances of knowledge, respectively.
+
+Through product owners describing their requirements coherently (e.g., via some
+formal language), completely non-technical product owners may, and will, still
+be key figures in the production of the product.
+
+As the stress load/burden becomes shared under this paradigm, the sum of the
+parts should be less than the whole. In other words, the cumulative stress of
+associated with creating the whole is greater than the approximate sum of each
+individual's stress associated with focusing on their respective domain.
 
 Following this ideology, there will be at least 3 key types of roles associated
 with developing artifacts: the \textbf{knowledge encoder}, the \textbf{knowledge
@@ -288,17 +299,10 @@ they are encoding in a software product, then it should be normal to expect
 logical issues and an ``imperfect'' program. Taking cognitive stress into
 consideration, there should be considerably less as knowledge only need be
 transcribed once, and re-used infinitely. Through mechanization, cognitive
-stress of re-writing knowledge is alleviated afterwards for all proceeding
-instances. A formalized-knowledge-first approach to software development should
-highlight areas of issue (poor understanding), never produce bugs, and create
-software with the same quality as the encoded knowledge.
-
-\intodo{The ideology also relates to the question of ``which programming
-    language do I pick for my project?''. This is a moot question under this
-    ideology. There is no one (1) single language that we even use to describe
-    everything, so how can we possibly write all kinds of software for all kinds
-    of knowledge? In a sense, the ideology ``leans into it'' by saying you
-    shouldn't be limited to choosing just one (1).}
+stress of re-writing knowledge is alleviated for all proceeding instances. A
+formalized-knowledge-first approach to software development should highlight
+areas of issue (poor understanding), never produce bugs, and create software
+with the same quality as the encoded knowledge.
 
 \intodo{The ideology demands that we unify modern domain knowledge. Almost
     naturally, we obtain mechanization as a side effect. In other words, it
@@ -310,20 +314,3 @@ software with the same quality as the encoded knowledge.
     ideology is, exactly, ``unify all your knowledge.'' Everything gained by
     unifying our knowledge is a natural side effect, which we happen to care
     about.}
-
-\intodo{Through describing their requirements coherently (e.g., some language),
-    completely non-technical product owners may, and will, still be key figures
-    in the production of the product.}
-
-\intodo{For good artifacts to be produced, the task of each product owner in
-    creating coherent stories is critical, or else their biases will show up in
-    the artifacts.}
-
-\intodo{As the stress load/burden becomes shared under this paradigm, the sum of
-    the parts should be less than the whole. In other words, the cumulative
-    stress of associated with creating the whole is greater than the approximate
-    sum of each individual's stress associated with focusing on their respective
-    domain.}
-
-\intodo{Succinctly, the ideology is ``software as a natural push-out of our
-    knowledge.''}

@@ -591,7 +591,7 @@ divideConstants a b
 
 In Code~\ref{code_odesolverformat}, we create a new \verb|data type| called \verb|ODESolverFormat|. The \verb|ODESolverFormat| contains information for the system of first-order ODEs. The \verb|coeffVects|, \verb|unknownVect|, and \verb|constantVect| are responsible for \textbf{A}, \textbf{x}, and \textbf{c} in Equation~\ref{eq_foode} (\textbf{x'} = \textbf{Ax} + \textbf{c}). The \verb|makeAODESolverFormat| is a smart constructor to create an \verb|ODESolverFormat| by providing a \verb|DifferentialModel|.
 
-\begin{listing}[ht]
+\begin{listing}
 \begin{haskell1}
 -- Acceptable format for ODE solvers
 -- X' = AX + c
@@ -617,7 +617,7 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
 \end{listing}
 
 In Chapter 3, we mentioned we would solve the ODE as an IVP. In Code~\ref{code_ivpinfo}, we create \verb|InitialValueProblem| to store IVP-related information, including initial time, the final time and initial values.
-\begin{listing}[ht]
+\begin{listing}
 \begin{haskell1}
 -- Information for solving an initial value problem
 data InitialValueProblem = IVP{

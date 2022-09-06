@@ -22,10 +22,10 @@ getting_started:
 	@echo "4. Add references to 'references.bib'."
 
 build: # '-output-directory=build' is a special name and is referenced from '\usepackage{minted}'region in 'thesis.tex'
-	latexmk -output-directory=build -pdf -interaction=nonstopmode thesis.tex --shell-escape
+	latexmk -output-directory=build -pdflatex=lualatex -pdf -interaction=nonstopmode thesis.tex --shell-escape
 
 debug:
-	latexmk -output-directory=build -pdf thesis.tex --shell-escape
+	latexmk -output-directory=build -pdflatex=lualatex -pdf thesis.tex --shell-escape
 
 clean:
 	rm -rf build/

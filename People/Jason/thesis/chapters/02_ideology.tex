@@ -81,16 +81,22 @@ of \textit{other various things} from empty, or minimal seedling pools.
 
 Applying this idea to the world of software, where we can create and model
 \textit{things} (henceforth referred to as ``knowledge''), we can take pools of
-knowledge and generate other pools of knowledge (including whole software
-artifacts). \todo{Discuss triform theories} With a weak breadth and low depth of
-captured knowledge, the originating pool of knowledge may approximately appear
-as a description of the software artifacts generated. However, with a strong
-breadth and high depth of captured knowledge, the original pool of knowledge may
-appear far removed from the software artifacts generated (it may contain little
-to no discussion of the desired software artifacts at all, or a precise
-description). In this case, the stress of software development is alleviated
-entirely, and a ``perfect'' software artifact (or series of ``perfect'' software
-artifacts) is (are) constructed.
+``knowledge'' and generate other pools of ``knowledge'' (including whole
+software artifacts). By ``knowledge'' or ``encodings,'' we mean \textit{triform
+theories}, a coupled ``\begin{inparaenum}[(1)]
+    \item axiomatic description,
+    \item a computational description, and 
+    \item an English description of a concept'' \cite{well-understood}.
+\end{inparaenum}
+With a weak breadth and low depth of captured
+knowledge, the originating pool of knowledge may approximately appear as a
+description of the software artifacts generated. However, with a strong breadth
+and high depth of captured knowledge, the original pool of knowledge may appear
+far removed from the software artifacts generated (it may contain little to no
+discussion of the desired software artifacts at all, or a precise description).
+In this case, the stress of software development is alleviated entirely, and a
+``perfect'' software artifact (or series of ``perfect'' software artifacts) is
+(are) constructed.
 
 \section{The Goal}
 \label{sec:idlgy:the_goal}
@@ -219,8 +225,8 @@ encodings should create a stringent, explicit set of rules for which all
 the need to create that particular knowledge/data type. As such, optimally, a
 domain expert would write their knowledge encodings and renderers in a general
 purpose programming language with a sound type system (e.g., Haskell
-\cite{Haskell2010}, Agda \cite{Norell2007}, etc.) \textemdash{} preferring ones with a type
-system based on formal type theories for their feature richness.
+\cite{Haskell2010}, Agda \cite{Norell2007}, etc.) \textemdash{} preferring ones
+with a type system based on formal type theories for their feature richness.
 
 \section{Feasibility}
 \label{sec:idlgy:feasibility}
@@ -259,16 +265,8 @@ discussion forums, and more. In these technologies, knowledge depth typically
 remains ``shallow'', but through increasing breadth of knowledge, increasingly
 interesting websites may be created. The mechanized generation-related
 components of the ideology is also fairly shallow in this area, but, still,
-highly feasible.
-
-\intodo{Realistically, almost any area of generation can be a
-    ``low-depth''/breadth area too}
-
-\intodo{Add to high knowledge density examples:
-    \url{https://en.wikipedia.org/wiki/Algebraic_modeling_language}}
-
-\intodo{Add to high knowledge density examples:
-    \url{https://github.com/McMasterU/HashedExpression}}
+highly feasible. In some sense, almost any individual instance of ``generation''
+is an area of low depth and breadth as well.
 
 In areas of high knowledge density, as long as developers have infinite patience
 and can invest infinite time into transcribing knowledge and information into
@@ -302,13 +300,9 @@ formalized-knowledge-first approach to software development should highlight
 areas of issue (poor understanding), never produce bugs, and create software
 with the same quality as the encoded knowledge.
 
-\intodo{The ideology demands that we unify modern domain knowledge. Almost
-    naturally, we obtain mechanization as a side effect. In other words, it
-    demands that we connect all of our compilers into one single coherent
-    mega-compiler system.}
-
-\intodo{One of the large issues with modern software development is a disconnect
-    in knowledge, which is why this paradigm is the natural answer. The
-    ideology is, exactly, ``unify all your knowledge.'' Everything gained by
-    unifying our knowledge is a natural side effect, which we happen to care
-    about.}
+Concretely, this ideology demands that we systematically build programs by
+describing them as a push-out of a unified knowledge-base of specifications. In
+doing this, ``knowledge'' becomes directly reusable, codified (and easily
+transferrable), traceable in the artifacts, and allowed to be put to better use.
+Finally, ``quality'' of the generate-able software products then becomes a clear
+reflection of the ``quality'' of the codified knowledge.

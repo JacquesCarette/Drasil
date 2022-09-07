@@ -85,8 +85,8 @@
 \SetupFloatingEnvironment{listing}{name=Source Code, listname=List of Source Codes}
 \crefname{listing}{source code}{source codes}
 \Crefname{listing}{Source Code}{Source Codes}
-\newenvironment{haskell}[4]
-    {\VerbatimEnvironment\thesisForceSingleSpacing{}\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#4}}\printOnlyFootnoteText{\protect\href{#4}{#3}}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt,breaklines]{haskell}}
+\newenvironment{haskell}[3]
+    {\VerbatimEnvironment\thesisForceSingleSpacing{}\begin{code}\captionof{listing}[#1]{\protect\porthreftm{#1}{#3}}\printOnlyFootnoteText{\protect\url{#3}}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt,breaklines]{haskell}}
     {\end{minted}\end{code}\thesisSpacing{}}
   
 \newenvironment{pseudohaskell}[2]
@@ -94,8 +94,6 @@
   {\end{minted}\end{code}\thesisSpacing{}}
 
 \newcommand{\inlineHs}[1]{\mintinline{haskell}|#1|}
-
-% TODO: Look into 'xurl' instead of the above hacky solution: <https://tex.stackexchange.com/questions/54946/how-to-break-a-long-url>
 
 % Haskell env original caption style: {\VerbatimEnvironment\begin{code}\caption[#1]{\protect\porthreftm{#1}{#4}}\footnotetext{#3}\label{lst:#2}\begin{minted}[frame=lines,framerule=2pt]{haskell}}
 

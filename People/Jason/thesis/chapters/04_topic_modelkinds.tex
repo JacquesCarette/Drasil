@@ -283,7 +283,7 @@ fact, that one would (and should) question its accuracy. A hypothetical type
 signature, \inlineHs{RelationConcept -> Code}, is quite far fetched. Not all
 expressions that can possibly be contained in a \RelationConcept{} are usable in
 code\footnote{When we discuss ``code'' generation, we target generating usable
-software, but we currently primarily target general-purpose \acs{oo} programs.}
+	software, but we currently primarily target general-purpose \acs{oo} programs.}
 generation.
 
 \section{Language Division}
@@ -434,7 +434,7 @@ instanced, so that portion of the rule is not enforced\todo{Future Work: make
 Theories that define expressions that constrain models in some way are defined
 using \EquationalConstraints{}, which use \ConstraintSet{}s under the hood
 (\refCurrentConstraintSetHaskell{})\todo{Describe what a ConstraintSet actually
-is.}. At the moment, these are not used in code generation, and are pending
+	is.}. At the moment, these are not used in code generation, and are pending
 design for usage in code generation as the translation from them into software
 is unclear and may be interpreted differently by readers. This model can, and
 should, eventually also be usable in code generation once there is interest in
@@ -531,6 +531,11 @@ originating term from an instance of the new contextual information. In other
 words, there should be a generic method to reproduce the original information
 from the new information \textemdash{} this is finding areas where we can add to the
 generation possibilities of Drasil.
+
+\intodo{ModelKinds already has some success, shown in Dongs work, where he added
+	a lot more code generation capabilities through ModelKinds. We can now also
+	create an updated copy of the "Table 3.3: Drasil Case Studies Artifacts
+	Generated".}
 
 \section{Residual Issues}
 

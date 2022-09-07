@@ -109,3 +109,4 @@ modelkinds
 Vasa
 Matryoshka
 transpiling
+pseudohaskell

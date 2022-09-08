@@ -134,7 +134,7 @@ and computer science and programming languages. For example, \todo{An
 
 \intodo{Transcription of the above expression.}
 
-This transcription relies on smart constructors, such as \todo{Ref\. a new
+This transcription relies on smart constructors, such as \todo{Reference a new
 	appendix entry for new smart constructors.}. The smart constructors used are
 all specialized to \Expr{} and perform simplifications along the way (such
 as folding \(1 \cdot x\) into \(x\)).
@@ -142,14 +142,14 @@ as folding \(1 \cdot x\) into \(x\)).
 \section{A Universal Theory Description Language}
 
 As Drasils theories rely heavily on \Relation{}s (and \RelationConcept{}s)
-(\todo{Ref\. the definitions of DDs, IMs, GDs, and TMs}), we may observe that
-the theories are an accurate reflection of writing out mathematics involved as
-one might write them down on paper: exactly as they please. In modelling any
+(\todo{Reference the definitions of DDs, IMs, GDs, and TMs}), we may observe
+that the theories are an accurate reflection of writing out mathematics involved
+as one might write them down on paper: exactly as they please. In modelling any
 problem, one will, of course, model the work of their pencil and paper. This is
 exactly what occurs here. Theories here are shallow representations of
 knowledge, that mimic your pencil and papers work to a clueless reader.
 
-\section{Usage: Converting to Software and Specifications}
+\section{Theories to Specifications and Software}
 
 Drasil relies on converting the various kinds of theories described in the
 \acs{srs} template \cite{SmithAndLai2005}, essentially encoded in Drasil as
@@ -239,15 +239,19 @@ in \RelationConcept{}s. Namely,
 		            constraints at the very least should be immediately usable
 		            in creating assertions in the generated code.
 
-		      \item The conversion relied on the \relToQD{} hack.\todo{Add code
-			            snippet of original relToQD and discuss how it wasn't a
-			            sustainable solution for the long-term. relToQD was
-			            exactly the implicit knowledge I mentioned, it assumes,
-			            without statically checking consistency, that the
-			            Relations/Exprs provided as input for code generation
-			            were all of the form: \(y = f(\ldots{})\). See
-			            \url{https://github.com/JacquesCarette/Drasil/issues/628}
-			            for more information about state of relToQD w.r.t. RCs.}
+		      \item The conversion relied on the \relToQD{} hack.
+			  
+			 		 \intodo{Add code snippet of original relToQD and discuss
+			            	how it wasn't a sustainable solution for the
+			            	long-term. relToQD was exactly the implicit
+			            	knowledge I mentioned, it assumes, without
+			            	statically checking consistency, that the
+			            	Relations/Exprs provided as input for code
+			            	generation were all of the form: \(y =
+			            	f(\ldots{})\). See
+			            	\url{https://github.com/JacquesCarette/Drasil/issues/628}
+			            	for more information about state of relToQD w.r.t.
+			            	RCs.}
 
 		      \item The above is what leads to the brittle untotal conversion of
 		            theories to code.
@@ -374,7 +378,7 @@ handle more \textit{kinds} of theories without needing to create complex
 traversal and analysis algorithms to recognize when certain kinds of theories
 were transcribed in the expressions.
 
-\section{``Classify All The Theories''}
+\section{\textquotedblleft{}Classify All The Theories\textquotedblright{}}
 
 Issues occurring due to weak knowledge capture may be resolved through strong
 knowledge capture. Beginning with the existing case studies of Drasil, we will
@@ -413,16 +417,14 @@ it to be understood as ``x is defined by y'' but displayed differently. Here,
 \(=\) is overloaded as ``definition'', instead of what \(=\) was defined as in
 \Expr{}, as an ``equality'' operator. To resolve this overloading and weak
 knowledge capture of definitions, we create \EquationalModel{}s: theories that
-contain information about definitions of symbols, built using a
-\QDefinition{} (\refCurrentQDefinitionHaskell{}). If an \EquationalModel{}
-deals with theoretical symbols and is defined using either a \ModelExpr{} or an
-\Expr{}, it may be used in Theory Models and General Definitions. If an
-\EquationalModel{} is defined using an \Expr{} and deals with only the
-non-abstract\todo{Is there a name for this?} symbols, then the
-\EquationalModel{} is usable for code generation. At the moment, there is no
-information attached to symbols yet regarding whether they are abstract or
-instanced, so that portion of the rule is not enforced\todo{Future Work: make
-	typed distinction between abstract and instanced symbols}.
+contain information about definitions of symbols, built using a \QDefinition{}
+(\refCurrentQDefinitionHaskell{}). If an \EquationalModel{} deals with
+theoretical symbols and is defined using either a \ModelExpr{} or an \Expr{}, it
+may be used in Theory Models and General Definitions. If an \EquationalModel{}
+is defined using an \Expr{} and deals with only the concrete (non-abstract)
+symbols, then the \EquationalModel{} is usable for code generation. At the
+moment, there is no information attached to symbols yet regarding whether they
+are abstract or instanced, so that portion of the rule is not enforced.
 
 \intodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and
 	the generated code.}

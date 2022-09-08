@@ -40,4 +40,11 @@ reliability of mathematical language usage in Drasil in different facets. One
 notable facet in practice is the unit and dimension of numbers. We hope that we
 may, in the future, create a strong and reliable system for units and dimensions
 for Drasil, allowing users to discuss precision and accuracy of the generated
-\acs{scs} solver artifacts.
+\acs{scs} solver artifacts. Furthermore, in \Cref{chap:typedExpr}, we neglected
+to ensure that symbols referenced, by the expression languages, are all
+appropriate for the use-cases. For example, the \Expr{} should language should
+only allow for reference of concrete and usable symbols, while \ModelExpr{}
+should only allow for referencing of symbols of abstract symbols. Similarly,
+\CodeExpr{} should only allow referencing of symbols that belong to ``code''
+rather than to the mathematical models (for this, a switch from a
+\QuantityDict{} is needed as well).

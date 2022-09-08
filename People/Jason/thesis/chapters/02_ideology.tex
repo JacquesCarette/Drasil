@@ -116,7 +116,7 @@ exactly what they wanted. Unfortunately, it is difficult to have computers
 systematically understand and act on natural language as well as us humans can.
 However, specific subsets of natural language may be usable.
 
-\section{Reconciliation \textemdash{} ``Generate Everything''}
+\section{Reconciliation \textemdash{} \textquotedblleft{}Generate Everything\textquotedblright{}}
 \label{sec:idlgy:generate_everything}
 
 While it is difficult to have a computer act on a huge set of natural language,
@@ -188,6 +188,23 @@ and globally standardized as possible. As discussed in
 will focus on writing a series of highly specific \aclp{dsl}, where the
 languages may be restricted to as specific as one term or a handful.
 
+As a domain expert transcribing knowledge encodings of some well-understood
+domain, one will largely be discussing the ways in which pieces of knowledge are
+\textit{constructed} and \textit{relate to each other}. In order for this
+abstract knowledge encodings to be \textit{usable} in some way, it is vital to
+have ``names'' (\textit{types}) for the knowledge encodings. In working to
+capture the working knowledge of a domain, it's of utmost importance to ensure
+that all ``instances'' of your ``names'' (types) are \textit{always} usable in
+some meaningful way and that the knowledge is exposed in a usable way (e.g.,
+sufficiently through some sort of \acs{api}). In other words, all knowledge
+encodings should create a stringent, explicit set of rules for which all
+``instances'' should conform to, and, arguably, also creates a justification for
+the need to create that particular knowledge/data type. As such, optimally, a
+domain expert would write their knowledge encodings and renderers in a general
+purpose programming language with a sound type system (e.g., Haskell
+\cite{Haskell2010}, Agda \cite{Norell2007}, etc.) \textemdash{} preferring ones
+with a type system based on formal type theories for their feature richness.
+
 \subsection{Knowledge / Domain User \& Orchestrator}
 
 The knowledge user/orchestrator should at least be familiar with a particular
@@ -209,24 +226,6 @@ strict adherence to the knowledge captured at \textit{every step of the way}. As
 such, one should confidently expect the final software artifacts to be
 completely devoid of unexpected things (including errors, unconformities to
 specifications, etc.).
-
-\intodo{Figure out where this below paragraph should belong}
-As a domain expert transcribing knowledge encodings of some well-understood
-domain, one will largely be discussing the ways in which pieces of knowledge are
-\textit{constructed} and \textit{relate to each other}. In order for this
-abstract knowledge encodings to be \textit{usable} in some way, it is vital to
-have ``names'' (\textit{types}) for the knowledge encodings. In working to
-capture the working knowledge of a domain, it's of utmost importance to ensure
-that all ``instances'' of your ``names'' (types) are \textit{always} usable in
-some meaningful way and that the knowledge is exposed in a usable way (e.g.,
-sufficiently through some sort of \acs{api}). In other words, all knowledge
-encodings should create a stringent, explicit set of rules for which all
-``instances'' should conform to, and, arguably, also creates a justification for
-the need to create that particular knowledge/data type. As such, optimally, a
-domain expert would write their knowledge encodings and renderers in a general
-purpose programming language with a sound type system (e.g., Haskell
-\cite{Haskell2010}, Agda \cite{Norell2007}, etc.) \textemdash{} preferring ones
-with a type system based on formal type theories for their feature richness.
 
 \section{Feasibility}
 \label{sec:idlgy:feasibility}

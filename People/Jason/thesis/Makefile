@@ -1,4 +1,4 @@
-.PHONY: help system_requirements getting_started build clean
+.PHONY: help system_requirements getting_started build debug clean
 
 help:
 	@echo "Build:"

@@ -38,3 +38,9 @@ Overview of Generative Software Development - Krzysztof Czarnecki
 - Lots of discussion on DSLs and existing generative tech
 - MDD primer - "aims at capturing every important aspect of a software system 
   through appropriate models"
+- MDA -> Devs express applications independent of specific implementation platforms
+  - Seems to be one level above code (doesn't target other softifacts)
+  - Models are expressed using UML and framework uses Object Management Group standards 
+  - MDA efforts focused on achieving platform independence where GSD addresses 
+    both technical and application-domain variability
+- Contains a useful figure (9) that shows MDA as a subset of GSD.

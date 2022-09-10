@@ -1,6 +1,75 @@
 \chapter{Typing the Expression Language}
 \label{chap:typedExpr}
 
+Mathematical expressions are one of the most prominent components of any
+abstracted concept from scientific software artifacts. With a pencil and paper,
+our mistakes might go unnoticed, because they are never ``hard'' validated by
+any machine, but ``soft'' validated by us and other readers. In other words,
+there is no clear \textit{validity assertion} when we traditionally write
+expressions on paper. While \Cref{chap:modelkinds} focused on understanding how
+mathematical expressions could be dissected and transformed into ``code,'' it
+neglected to discuss which expressions it could even begin to dissect and
+transform \textemdash{} that is to say, which expressions are ``valid?'' The
+objective of this chapter is to create a system of type rules, and enforce
+well-formedness/typedness\footnote{Please note that I will be using
+      ``well-formed'' and ``well-typed'' interchangeably.} through them, for Drasils
+mathematical expression languages.
+
+\intodo{Continue writing here!}
+
+\begin{enumerate}
+
+      \item Ok, so we have these expression languages. They're great!
+
+      \item However, they admit invalid expressions.
+
+      \item Invalid expressions are bad because:
+
+            \begin{enumerate}
+
+                  \item they can't be properly dissected, for us to learn from
+                        them.
+
+                  \item they will cause problems later, in the artifacts we
+                        generate.
+
+                  \item they make no real discernible ``sense.'' They might make
+                        sense to anyone in particular, but, broadly, they will
+                        be gibberish, because they do not obey a globally agreed
+                        upon rule set.
+
+                  \item at the moment, to ensure that our generated artifacts
+                        are directly usable in compilation and usage, we need to
+                        manually ensure that they ``type-check.'' However,
+                        Drasil has no clear understanding of what ``type-check''
+                        means! For a few expressions, this manual methodology
+                        might be ``okay,'' but it surely does not scale well
+                        when add expression generation, nor human error through
+                        scale in expression creation/usage.
+
+            \end{enumerate}
+
+      \item Ok, so what information are we missing? What do we need to ``teach''
+            Drasil about in order for us to ensure that all of our expressions
+            are well-formed (whatever that might mean)?
+
+            \begin{enumerate}
+                  
+                  \item First, we need to discuss: what does ``well-formedness''
+                        mean? 
+
+                  \item What are ``typing rules?'', and how can we create a set
+                        of typing rules?
+
+                  \item What are our needed typing judgments?
+
+            \end{enumerate}
+
+      \item Now that we know what is needed of the expression language, how do
+            we want to implement it in Drasil?
+
+\end{enumerate}
+
 \section{Background: Problem}
 
 \begin{itemize}

@@ -110,3 +110,4 @@ Vasa
 Matryoshka
 transpiling
 pseudohaskell
+typedness

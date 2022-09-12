@@ -114,7 +114,7 @@ data ODEInfo = ODEInfo {
   ...
 }
 \end{haskell1}
-\captionof{listing}{Source code for initial values}
+\captionof{listing}{Source Code for Initial Values in Drasil}
 \label{code_odeinfointial}
 \end{listing}
 Code~\ref{code_odeinfointial} changes the \verb|data type| of \verb|initVal| from a \verb|CodeExpr| to a list of \verb|CodeExpr|. Users can only set one initial value in the old way, but now they can set a list of multiple initial values. This change allows Drasil users to store multiple initial values in a list. We also have to ensure that Drasil Code Generator can utilize the new \verb|data type| \verb|[CodeExpr]|. Previously, Drasil Code Generator only handled the \verb|initVal| as \verb|CodeExpr|. Now the \verb|initVal| becomes \verb|[CodeExpr]|. In the Drasil framework, we handle a list of \verb|data type| by \href{https://jacquescarette.github.io/Drasil/docs/drasil-code-base-0.1.9.0/Language-Drasil-CodeExpr.html#v:matrix}{matrix}, and the code \verb|initVal info| retrieves the \verb|initVal| from an \verb|ODEInfo| \verb|data type|. The \verb|matrix| can wrap a \verb|[CodeExpr]| into a \verb|CodeExpr|. 
@@ -174,7 +174,7 @@ The change of \verb|basicArgFill| impacts generated code in the Python Scipy lib
   r.set_initial_value([T_init], 0.0)
   T_W = [[T_init][0]] # Initial values are also a part of the numerical solution, so we have to add the proper initial value to the list.
 \end{python1}
-\captionof{listing}{Source code for initial values in Python}
+\captionof{listing}{Source Code for Initial Values in Python}
 \label{code_pythonintial}
 \end{listing}
 The same thing happens in C\# OSLO. In Code~\ref{code_csharpintial}, line 5 initializes a list \verb|T_init|, and we later use it as the initial values.  
@@ -186,7 +186,7 @@ Vector initv = new Vector(T_init);
 // New 
 Vector initv = new Vector(new double[] {T_init});
 \end{csharp1}
-\captionof{listing}{Source code for initial values in C\#}
+\captionof{listing}{Source Code for Initial Values in C\#}
 \label{code_csharpintial}
 \end{listing}
 
@@ -209,7 +209,7 @@ public class ODE implements FirstOrderDifferentialEquations {
   }
 }
 \end{java1}
-\captionof{listing}{Source code for return dimension in Java}
+\captionof{listing}{Source Code for Returning Dimension in Java}
 \label{code_javadimen}
 \end{listing}
 
@@ -232,7 +232,7 @@ fixedReturn' = statementStep (\cdchs [e] -> case (cdchs, e) of
 fixedStatementFill' :: CodeExpr -> StepFill
 fixedStatementFill' a = StatementF [] [a]
 \end{haskell1}
-\captionof{listing}{Source code for returning a fixed value}
+\captionof{listing}{Source Code for Returning a Fixed Value}
 \label{code_fixedreturn}
 \end{listing}
 
@@ -257,7 +257,7 @@ In C\texttt{++}, the backend code already handles the initial value as a list, s
 %   (matrix [initVal info]: map ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
 %   ODE
 % \end{haskell1}
-% \captionof{listing}{Source code for ODEInfo CodeDefinition}
+% \captionof{listing}{Source Code for ODEInfo CodeDefinition}
 % \label{code_odeinfocodedef}
 % \end{listing}
 
@@ -323,7 +323,7 @@ dblPenODEInfo = odeInfo
 ]
 ...
 \end{haskell1}
-\captionof{listing}{Pseudocode for encoding Double Pendulum's Equation}
+\captionof{listing}{Pseudocode for Encoding Double Pendulum's Equation}
 \label{code_encodedblpend}
 \end{listing}
 
@@ -447,7 +447,7 @@ addIdentityValue :: Int -> [Expr] -> [Expr]
 addIdentityValue n es = fst splits ++ [exactDbl 1] ++ tail (snd splits)
   where splits = splitAt n es
 \end{haskell1}
-\captionof{listing}{Source code for creating identity matrix(highlighted in orange)}
+\captionof{listing}{Source Code for Creating Identity Matrix (Highlighted in Orange)}
 \label{code_createidentity}
 \end{listing}
 
@@ -460,7 +460,7 @@ We highlighted the constant vector \textbf{c} in gray and red colour in Equation
 addIdentityConsts :: [Expr] -> Int -> [Expr]
 addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr
 \end{haskell1}
-\captionof{listing}{Source code for creating constant matrix \textbf{c}}
+\captionof{listing}{Source Code for Creating Constant Matrix}
 \label{code_createconstant}
 \end{listing}
 
@@ -564,7 +564,7 @@ Here is the implementation for creating Equation~\ref{eq_foodeexampledetail} in 
 transUnknowns :: [Unknown] -> [Unknown]
 transUnknowns = tail
 \end{haskell1}
-\captionof{listing}{Source code for isolating the highest order}
+\captionof{listing}{Source Code for Isolating the Highest Order}
 \label{code_isohighode}
 \end{listing}
 
@@ -585,7 +585,7 @@ divideConstants a b
   | b == exactDbl 1 = a
   | otherwise       = a $/ b
 \end{haskell1}
-\captionof{listing}{Source code for canceling the coefficient from the highest order}
+\captionof{listing}{Source Code for Canceling the Coefficient from the Highest Order}
 \label{code_cancelcoe}
 \end{listing}
 
@@ -612,7 +612,7 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
         transEs = addIdentityCoeffs [transCoefficients $ head (dm ^. coefficients)] (length transUnks) 0
         transConsts = addIdentityConsts [head (dm ^. dmConstants) `divideCosntants` head (head (dm ^. coefficients))] (length transUnks)
 \end{haskell1}
-\captionof{listing}{Source code for generating Equation~\ref{eq_foode}, \textbf{x'} = \textbf{Ax} + \textbf{c}}
+\captionof{listing}{Source Code for Generating Equation~\ref{eq_foode}}
 \label{code_odesolverformat}
 \end{listing}
 
@@ -626,7 +626,7 @@ data InitialValueProblem = IVP{
   initValues :: [Expr] -- initial values
 }
 \end{haskell1}
-\captionof{listing}{Source code for IVP infomation}
+\captionof{listing}{Source Code for IVP Infomation}
 \label{code_ivpinfo}
 \end{listing}
 
@@ -660,6 +660,6 @@ formEquations (ex:exs) unks (y:ys) depVa =
         termExprs = map (uncurry mulRe) filteredExprs -- multiple coefficient with depend variables
         finalExpr = foldl1 addRe termExprs -- add terms together
 \end{haskell1}
-\captionof{listing}{Source code for generating ODEInfo}
+\captionof{listing}{Source Code for Generating ODEInfo}
 \label{code_generateodeinfo}
 \end{listing}

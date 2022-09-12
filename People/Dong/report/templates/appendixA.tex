@@ -27,7 +27,7 @@ imPDRC = makeASingleDE
 	$+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
 	rhs = sy qdSetPointTD `mulRe` sy qdPropGain
 \end{haskell1}
-\captionof{listing}{Using input language for the example~\ref{eq_odeexmaple} in DifferentialModel}
+\captionof{listing}{Using Input Language for the Example~\ref{eq_odeexmaple} in DifferentialModel}
 % \label{code_scexinputl}
 % \end{listing}
 
@@ -69,7 +69,7 @@ def func_y_t(K_d, K_p, r_t, t_sim, t_step):
     
     return y_t
 \end{python1}
-\captionof{listing}{Source code of solving PDController in Scipy}
+\captionof{listing}{Source Code of Solving PDController in Scipy}
 % \label{code_pythonscipy}
 % \end{listing}
 
@@ -89,7 +89,7 @@ public static ArrayList<Double> func_y_t(double K_d, double K_p, double r_t, dou
 	return y_t;
 }
 \end{java1}
-\captionof{listing}{A linear system of first-order representation in ACM}
+\captionof{listing}{A Linear System of First-order Representation in ACM}
 % \label{code_javaacm}
 % \end{listing}
 
@@ -108,7 +108,7 @@ vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double
 	return y_t;
 }	
 \end{cplusplus1}
-\captionof{listing}{A linear system of first-order representation in ODEINT}
+\captionof{listing}{A Linear System of First-order Representation in ODEINT}
 % \label{code_cplusplusodeint}
 % \end{listing}
 
@@ -234,7 +234,7 @@ def f(t, theta):
 			/ (L_2 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2])))
 		]
 \end{python1}
-\captionof{listing}{Generate Python code for Double Pendulum}
+\captionof{listing}{Generate Python Code for Double Pendulum}
 \label{code_pythondbl}
 \end{listing} 
 
@@ -253,7 +253,7 @@ Func<double, Vector, Vector> f = (t, theta_vec) => {
 			/ (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))));
 };
 \end{csharp1}
-\captionof{listing}{Generate C\# code for Double Pendulum}
+\captionof{listing}{Generate C\# Code for Double Pendulum}
 \label{code_csharpdbl}
 \end{listing} 
 
@@ -271,7 +271,7 @@ public void computeDeriv(double t, double[] theta, double[] dtheta) {
 		/ (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
 }
 \end{java1}
-\captionof{listing}{Generate Java code for Double Pendulum}
+\captionof{listing}{Generate Java Code for Double Pendulum}
 \label{code_javadbl}
 \end{listing}
 
@@ -289,6 +289,6 @@ void ODE::operator()(vector<double> theta, vector<double> &dtheta, double t) {
 		/ (L_2 * (2.0 * m_1 + m_2 - m_2 * cos(2.0 * theta.at(0) - 2.0 * theta.at(2))));
 }
 \end{cplusplus1}
-\captionof{listing}{Generate C\texttt{++} code for Double Pendulum}
+\captionof{listing}{Generate C\texttt{++} Code for Double Pendulum}
 \label{code_cppdbl}
 \end{listing} 

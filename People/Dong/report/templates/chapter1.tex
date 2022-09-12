@@ -25,7 +25,7 @@ The $T_w(t)$ is a function of the independent variable, in this case time. The $
 -- Pseudocode
 T_w'(t) = reciprocal τ_w * (T_c - T_w(t))
 \end{haskell1}
-\captionof{listing}{NoPCM equation for SRS}
+\captionof{listing}{NoPCM Equation for SRS}
 \label{code_expliciteqsrs}
 \end{listing}
 
@@ -35,7 +35,7 @@ Based on Equation~\ref{eq_nopcmderive}, we can write it into a text-based form. 
 -- Pseudocode
 reciprocal τ_w * (T_c - T_w[0])
 \end{haskell1}
-\captionof{listing}{NoPCM equation for the Drasil Code Generator}
+\captionof{listing}{NoPCM Equation for the Drasil Code Generator}
 \label{code_expliciteq}
 \end{listing}
 Code~\ref{code_expliciteq} shows how to rewriting the original ODE for solving purpose. We can not directly transform Code~\ref{code_expliciteqsrs} to Code~\ref{code_expliciteq}, there is a gap between two ODE expressions.
@@ -189,7 +189,7 @@ lhs = [1 $* (y $^^ 2)]
 	$+ (20 + K_p) $* (y $^^ 0)
 rhs = r_t * K_p
 \end{haskell1}
-\captionof{listing}{Input language for the example~\ref{eq_odeexmaple}}
+\captionof{listing}{Input Language for the Example~\ref{eq_odeexmaple}}
 \label{code_exinputl}
 \end{listing}
 
@@ -219,7 +219,7 @@ imPDRC = makeASystemDE
 	(nounPhraseSP "Computation of the Process Variable as a function of time")
 	EmptyS
 \end{haskell1}
-\captionof{listing}{Explicitly set values for the example~\ref{eq_odeexmaple} in DifferentialModel}
+\captionof{listing}{Explicitly Set Values for the Example~\ref{eq_odeexmaple} in DifferentialModel}
 \label{code_scexmatrix}
 \end{listing}
 
@@ -264,7 +264,7 @@ genCoefficient (Just x) = x ^. coeff
 findCoefficient :: Unknown -> LHS -> Maybe Term
 findCoefficient u = find(\x -> x ^. unk == u)
 \end{haskell1}
-\captionof{listing}{Create a coefficient matrix}
+\captionof{listing}{Create a Coefficient Matrix}
 \label{code_createcoe}
 \end{listing}
 

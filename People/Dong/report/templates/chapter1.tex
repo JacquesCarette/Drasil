@@ -8,7 +8,14 @@ By capturing the essential information of ODEs, we can flexibly transform it in 
 In this chapter, we will first introduce how we can rewrite ODE for a different purpose. Then, we will introduce a new data structure for storing ODE information. We will talk about details on how the new data structure captures ODE information, how to use the new data structure, and how the new data structure interacts with the Drasil Printer.
 
 \section{Explicit Equation}
-Before we conduct this research, the Drasil framework can generate software that provides numerical solutions for a first-order ODE by explicitly rewriting the ODE equation. We re-write the original ODE in a form which the Drasil Code Generator can utilize. The Drasil Code Generator retrieve ODE information from the new ODE equation, and generate a program that can produce numerical solutions. Here is the example how we solve the \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NoPCM case study}. The Equation~\ref{eq_nopcmorginal} was defined in \verb|Instance Model|. The model describes the energy balance of water, and we can find the temperature of the water base on it.
+Before we conducted this project, the Drasil framework can generate software that provides numerical solutions for a first-order ODE by explicitly rewriting the ODE equation. We will rewrite the original ODE in a form which the Drasil Code Generator can utilize. The Drasil Code Generator retrieves ODE information from the new ODE equation, and generate a program that can produce numerical solutions. We will illustrate our steps with the \href{https://jacquescarette.github.io/Drasil/examples/nopcm/SRS/srs/NoPCM_SRS.html#Sec:IMs}{NoPCM case study}. Figure~\ref{fig_nopcm} shows how a NoPCM example works in a lab environment.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{figures/NoPCM.png}
+\caption{NoPCM Demonstration}
+\label{fig_nopcm}
+\end{figure}
+The square represent a water tank, and it has a heating coil at bottom of the tank. $qc$ represents the heat flux into the water from the coil. The goal is to estimate the temperature of the water over time. We can describe this natural phenomena in a second-order ODE, Equation~\ref{eq_nopcmorginal}.
 
 \begin{equation} \label{eq_nopcmorginal}
 	T_{w}'(t) +  \frac {T_{w}(t)}{\tau_{w}} = \frac{T_{c}}{\tau_{w}}

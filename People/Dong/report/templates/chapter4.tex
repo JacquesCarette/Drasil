@@ -49,7 +49,7 @@ We can rewrite Equation~\ref{eq_diffvervarslinear} in a general form:
   \boldsymbol{x}' = \boldsymbol{Ax} + \boldsymbol{c}
 \end{equation}
 \myequations{System of First-Order ODEs in a General Form}
-The \textbf{A} is a coefficient matrix, and \textbf{c} is a constant vector. The \textbf{x} is the unknown vector that contains functions of the independent variable, often time. The \textbf{x}' is a vector that consists of the first derivatives of functions of \textbf{x}. The following is the long matrix form:
+The $\boldsymbol{A}$ is a coefficient matrix, and $\boldsymbol{c}$ is a constant vector. The $\boldsymbol{x}$ is the unknown vector that contains functions of the independent variable, often time. The $\boldsymbol{x'}$ is a vector that consists of the first derivatives of functions of $\boldsymbol{x}$. The following is the long matrix form:
 \begin{equation} \label{eq_foodeexample}
 	\begin{bmatrix}
 		x_{1}' \\
@@ -299,7 +299,7 @@ Our found to this point have been primarily focusing on solving linear ODEs. How
   & \theta_{2}'' = \frac{2\sin (\theta_{1}-\theta_{2})({\theta_{1}'}^2L_{1}(m_{1}+m_{2})+g(m_{1}+m_{2})\cos \theta_{1} + {\theta_{2}'}^2L_{2}m_{2}\cos (\theta_{1}-\theta_{2}))}{L_{2}(2m_{1}+m_{2}-m_{2}\cos (2\theta_{1}-2\theta_{2}))}
 \end{flalign}
 \myequations{Double Pendulum Equation}
-There are two second-order ODEs in one system. To solve this system of ODEs, we convert them into a system of first-order ODEs. The transformation follows the methodology we discussed in Section~\ref{se_hightofirst}. We transform Equation~\ref{eq_dblpenhigh} into Equation~\ref{eq_dblpenfirst}. Once the transformation is complete, we can encode Equation~\ref{eq_dblpenfirst} and pass it to the Drasil Code Generator. However, we cannot show Equation~\ref{eq_dblpenfirst} in the shape of Equation~\ref{eq_foode} (\textbf{x'} = \textbf{Ax} + \textbf{c}) because the ODE is not a linear ODE.
+There are two second-order ODEs in one system. To solve this system of ODEs, we convert them into a system of first-order ODEs. The transformation follows the methodology we discussed in Section~\ref{se_hightofirst}. We transform Equation~\ref{eq_dblpenhigh} into Equation~\ref{eq_dblpenfirst}. Once the transformation is complete, we can encode Equation~\ref{eq_dblpenfirst} and pass it to the Drasil Code Generator. However, we cannot show Equation~\ref{eq_dblpenfirst} in the shape of Equation~\ref{eq_foode} because the ODE is not a linear ODE.
 
 \begin{flalign} \label{eq_dblpenfirst}
   & \theta_{1}' = \omega_{1} \\ \nonumber
@@ -334,7 +334,7 @@ The limitation of manually creating \verb|ODEInfo| is that we will write the ODE
 \section{Generate ODEInfo Automatically}
 Manually creating explicit equations is not ideal because it requires human interference and propagates duplicate information. We want to design the Drasil framework to be as fully automatic as possible. Therefore, an ideal solution is to encode the ODE in a flexible data structure. Then, we can extract information from this structure and generate a form of the ODE that selected external libraries can utilize. Creating the \verb|DifferentialModel| data structure satisfies the need of this idea. We can restructure an ODE based on the information from \verb|DifferentialModel|. This research's scope only covers generating explicit equations for a single higher-order ODE. In the future, we want to generate explicit equations for a system of higher-order ODEs.
 
-Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its equivalent system of first-order ODEs in the shape of Equation~\ref{eq_foode}. For the convenience of implementation, we shuffle the data around in Equation~\ref{eq_foodeexample}. We reverse the order of \textbf{x} to $x_{n}$, $\dots$, $x_{1}$. The coefficient matrix \textbf{A} also changes, but \textbf{x'} and \textbf{c} remain unchanged.
+Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its equivalent system of first-order ODEs in the shape of Equation~\ref{eq_foode}. For the convenience of implementation, we shuffle the data around in Equation~\ref{eq_foodeexample}. We reverse the order of $\boldsymbol{x}$ to $x_{n}$, $\dots$, $x_{1}$. The coefficient matrix $\boldsymbol{A}$ also changes, but $\boldsymbol{x'}$ and $\boldsymbol{c}$ remain unchanged.
 
 \begin{equation} \label{eq_foodeexamplecolor}
 	\begin{bmatrix}
@@ -370,9 +370,9 @@ Once we encode the ODE in \verb|DifferentialModel|, we want to restructure its e
 	\end{bmatrix}
 \end{equation}
 
-Since Equation~\ref{eq_foodeexamplecolor} is an expansion of Equation~\ref{eq_foode}, we will use symbols in both equations to explain how to generate Equation~\ref{eq_foodeexamplecolor}. We highlighted \textbf{x'} and \textbf{x} in yellow in Equation~\ref{eq_foodeexamplecolor}. The number of elements in \textbf{x'} and \textbf{x} depends on how many new dependent variables are introduced. If the higher-order ODE is second-order, we will introduce two new dependent variables. If the higher-order ODE is $n^{th}$-order, we will introduce n new dependent variables. For \textbf{x'}, knowing it is $n^{th}$-order ODE, we parameterize $x'_{1}, \dots, x'_{n}$. For \textbf{x}, knowing it is $n^{th}$-order ODE, we parameterize $x_{n}, \dots, x_{1}$.
+Since Equation~\ref{eq_foodeexamplecolor} is an expansion of Equation~\ref{eq_foode}, we will use symbols in both equations to explain how to generate Equation~\ref{eq_foodeexamplecolor}. We highlighted $\boldsymbol{x'}$ and $\boldsymbol{x}$ in yellow in Equation~\ref{eq_foodeexamplecolor}. The number of elements in $\boldsymbol{x'}$ and $\boldsymbol{x}$ depends on how many new dependent variables are introduced. If the higher-order ODE is second-order, we will introduce two new dependent variables. If the higher-order ODE is $n^{th}$-order, we will introduce n new dependent variables. For $\boldsymbol{x'}$, knowing it is $n^{th}$-order ODE, we parameterize $x'_{1}, \dots, x'_{n}$. For $\boldsymbol{x}$, knowing it is $n^{th}$-order ODE, we parameterize $x_{n}, \dots, x_{1}$.
 
-We highlighted the $n \times n$ coefficient matrix \textbf{A} in orange and blue in Equation~\ref{eq_foodeexamplecolor}. The orange part is a matrix that looks like the identity matrix, only rotated and with an extra column of 0s. For the lowest higher-order ODE, a second-order ODE, the orange part is $[1, 0]$. Equation~\ref{eq_foodeexamplecolortwo} shows a completed transformation for a second-order ODE.
+We highlighted the $n \times n$ coefficient matrix $\boldsymbol{A}$ in orange and blue in Equation~\ref{eq_foodeexamplecolor}. The orange part is a matrix that looks like the identity matrix, only rotated and with an extra column of 0s. For the lowest higher-order ODE, a second-order ODE, the orange part is $[1, 0]$. Equation~\ref{eq_foodeexamplecolortwo} shows a completed transformation for a second-order ODE.
 \begin{equation} \label{eq_foodeexamplecolortwo}
 	\begin{bmatrix}
 		{x_{1}'} \\
@@ -395,7 +395,7 @@ We highlighted the $n \times n$ coefficient matrix \textbf{A} in orange and blue
 	\end{bmatrix}
 \end{equation}
 
-The \textbf{A} will be a $4 \times 4$ matrix for a fourth-order ODE. Equation~\ref{eq_foodeexamplecolorfour} shows a completed transformation for a fourth-order ODE.
+The $\boldsymbol{A}$ will be a $4 \times 4$ matrix for a fourth-order ODE. Equation~\ref{eq_foodeexamplecolorfour} shows a completed transformation for a fourth-order ODE.
 \begin{equation} \label{eq_foodeexamplecolorfour}
 	\begin{bmatrix}
 		{x_{1}'} \\
@@ -451,7 +451,7 @@ addIdentityValue n es = fst splits ++ [exactDbl 1] ++ tail (snd splits)
 \label{code_createidentity}
 \end{listing}
 
-We highlighted the constant vector \textbf{c} in gray and red colour in Equation~\ref{eq_foodeexamplecolor}. The vector \textbf{c} has the length of n. The last element of the constant vector \textbf{c} will be h(t), and anything above h(t) will be 0s. In Code~\ref{code_createconstant}, in \verb|addIdentityConsts|, given the expression of h(t) and the order number of the ODE, we add $(n-1)$ 0s above the h(t). 
+We highlighted the constant vector $\boldsymbol{c}$ in gray and red colour in Equation~\ref{eq_foodeexamplecolor}. The vector $\boldsymbol{c}$ has the length of n. The last element of the constant vector $\boldsymbol{c}$ will be h(t), and anything above h(t) will be 0s. In Code~\ref{code_createconstant}, in \verb|addIdentityConsts|, given the expression of h(t) and the order number of the ODE, we add $(n-1)$ 0s above the h(t). 
 
 \begin{listing}
 \begin{haskell1}
@@ -589,7 +589,7 @@ divideConstants a b
 \label{code_cancelcoe}
 \end{listing}
 
-In Code~\ref{code_odesolverformat}, we create a new \verb|data type| called \verb|ODESolverFormat|. The \verb|ODESolverFormat| contains information for the system of first-order ODEs. The \verb|coeffVects|, \verb|unknownVect|, and \verb|constantVect| are responsible for \textbf{A}, \textbf{x}, and \textbf{c} in Equation~\ref{eq_foode} (\textbf{x'} = \textbf{Ax} + \textbf{c}). The \verb|makeAODESolverFormat| is a smart constructor to create an \verb|ODESolverFormat| by providing a \verb|DifferentialModel|.
+In Code~\ref{code_odesolverformat}, we create a new \verb|data type| called \verb|ODESolverFormat|. The \verb|ODESolverFormat| contains information for the system of first-order ODEs. The \verb|coeffVects|, \verb|unknownVect|, and \verb|constantVect| are responsible for $\boldsymbol{A}$, $\boldsymbol{x}$, and $\boldsymbol{c}$ in Equation~\ref{eq_foode}. The \verb|makeAODESolverFormat| is a smart constructor to create an \verb|ODESolverFormat| by providing a \verb|DifferentialModel|.
 
 \begin{listing}
 \begin{haskell1}
@@ -630,7 +630,7 @@ data InitialValueProblem = IVP{
 \label{code_ivpinfo}
 \end{listing}
 
-Lastly, in Code~\ref{code_generateodeinfo}, we create a new smart constructor to generate the \verb|ODEInfo| automatically. In \verb|odeInfo'|, the first parameter is \verb|[CodeVarChunk]|. There will likely be other variables in the ODE. The \verb|[CodeVarChunk]| contains variables other than the dependent and independent variables. The \href{https://jacquescarette.github.io/Drasil/docs/full/drasil-code-0.1.9.0/Language-Drasil-Data-ODEInfo.html#t:ODEOptions}{ODEOptions} instructs the Drasil Code Generator on how external libraries solve the ODE. The \verb|DifferentialModel| contains core information for the higher-order ODE. Lastly, the \verb|InitialValueProblem| contains information for solving the ODE numerically. The \verb|createFinalExpr| creates multiple expressions in a list. Those expressions were created based on information on the system of first-order ODEs. The \verb|formEquations| take parameters the coefficient matrix \textbf{A} (\verb|[[Expr]]|), the unknown vector \textbf{x} (combining \verb|[Unknown]| and \verb|ConstrConcept|), and the constant vector \textbf{c} (\verb|[Expr]|). Those parameters contain enough information to create explicit equations for the Drasil Code Generator. We can create explicit equations by taking the dot product of \textbf{A} and \textbf{x}, and then adding the constant term. The \verb|formEquations| will output a list of expressions equivalent to Equation~\ref{eq_diffvervarslinear}. Once explicit equations for the higher-order ODE were created, we can pass it to the Drasil Code Generator.
+Lastly, in Code~\ref{code_generateodeinfo}, we create a new smart constructor to generate the \verb|ODEInfo| automatically. In \verb|odeInfo'|, the first parameter is \verb|[CodeVarChunk]|. There will likely be other variables in the ODE. The \verb|[CodeVarChunk]| contains variables other than the dependent and independent variables. The \href{https://jacquescarette.github.io/Drasil/docs/full/drasil-code-0.1.9.0/Language-Drasil-Data-ODEInfo.html#t:ODEOptions}{ODEOptions} instructs the Drasil Code Generator on how external libraries solve the ODE. The \verb|DifferentialModel| contains core information for the higher-order ODE. Lastly, the \verb|InitialValueProblem| contains information for solving the ODE numerically. The \verb|createFinalExpr| creates multiple expressions in a list. Those expressions were created based on information on the system of first-order ODEs. The \verb|formEquations| take parameters the coefficient matrix $\boldsymbol{A}$ (\verb|[[Expr]]|), the unknown vector $\boldsymbol{x}$ (combining \verb|[Unknown]| and \verb|ConstrConcept|), and the constant vector $\boldsymbol{c}$ (\verb|[Expr]|). Those parameters contain enough information to create explicit equations for the Drasil Code Generator. We can create explicit equations by taking the dot product of $\boldsymbol{A}$ and $\boldsymbol{x}$, and then adding the constant term. The \verb|formEquations| will output a list of expressions equivalent to Equation~\ref{eq_diffvervarslinear}. Once explicit equations for the higher-order ODE were created, we can pass it to the Drasil Code Generator.
 
 \begin{listing}[ht]
 \begin{haskell1}

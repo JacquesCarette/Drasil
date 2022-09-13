@@ -15,7 +15,67 @@ well-formedness/typedness\footnote{Please note that I will be using
       ``well-formed'' and ``well-typed'' interchangeably.} through them, for Drasils
 mathematical expression languages.
 
+\section{Recap of Drasils Math-related Expression Languages}
+
+To recap, at this point, we have three (3) relevant and used ``mathematical
+expression'' languages.
+
+\subsection{One for \textquotedblleft{}Simple\textquotedblright{} Mathematics}
+
+\Expr{} is a mathematical expression languages whose vocabulary is intended to
+always have a definite value. In other words, with little to no extra work on
+your end, you should be able to directly input these expressions in your
+standard calculator (perhaps with a bit of work to handle vectors, functions,
+etc.) to evaluate them.
+
+\subsection{One For \textquotedblleft{}Code\textquotedblright{}}
+
+\CodeExpr{} is a heavily mathematics-focused expression language with a few
+extra features over \Expr{} for \acs{gool}/``code.'' The vocabulary should be
+nearly directly usable in \acs{gool} for outputting to general-purpose
+object-oriented programming languages. \CodeExpr{} is a superset of \Expr{}:
+
+\[\Expr{} \subseteq{} \CodeExpr{}\]
+
+\subsection{And One For General Mathematics}
+
+\ModelExpr{} is the classical mathematics we know and love. It contains nearly
+everything we know (up to what we've encoded thus far) and is intended to be a
+descriptive language, with no particular restrictions on its terms (other than
+that they should at least be describable on pencil and paper too). \ModelExpr{}
+is also a superset of \Expr{}:
+
+\[\Expr{} \subseteq{} \ModelExpr{}\]
+
+However, \ModelExpr{}s terms are unlikely to appear in \CodeExpr{} due to their
+indescribable nature in computable \acs{oo} ``code.''
+
+As of right now, these languages have proven themselves to be effective
+encodings, weakly proven through Drasils case studies being able to produce
+working software artifacts. However, they are not without issue. Notably, at the
+moment, Drasil does not have any readily-available type information about their
+constructions. This lack of type information hampers the ``reliability'' aspect
+of the code generator because the generator is unable to restrict its output
+artifacts to those which are directly usable. In order for the generated
+artifacts to be directly usable, they must be \textit{type safe} programs. In
+other words, we need to make sure that the interpreters and compilers used on
+the generated artifacts never get confused/stuck on the generated expressions.
+To obtain this, we must add type information, and use it.
+
+\section{Type Safety}
+
 \intodo{Continue writing here!}
+
+\intodo{Discuss what ``type safety'' is. Discuss: types, judgments, typing
+      rules, well-typedness, preservation, and progress.}
+
+\intodo{Discuss how we can add type information to Drasils expression languages,
+      and the pros/cons of the solutions. For example, should type enforcement
+      done at the construction-level or post-facto processed?}
+
+\intodo{Discuss the properties of a good solution.}
+
+\intodo{Discuss our proposed and performed solution.}
 
 \begin{enumerate}
 
@@ -54,9 +114,9 @@ mathematical expression languages.
             are well-formed (whatever that might mean)?
 
             \begin{enumerate}
-                  
+
                   \item First, we need to discuss: what does ``well-formedness''
-                        mean? 
+                        mean?
 
                   \item What are ``typing rules?'', and how can we create a set
                         of typing rules?

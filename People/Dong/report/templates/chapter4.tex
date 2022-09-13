@@ -10,7 +10,7 @@ Any higher-order linear ODE can be written in the following form:
   y^n = f (t, y, y', y'', \dots, y^{\textit{(n-1)}})
 \end{equation}
 
-We isolate the highest derivative $y^n$ on the left-hand side and move the rest of the terms on the right-hand side. On the right-hand side, $f (t, y, y', y'', \dots, y^{\textit{(n-1)}})$ means a function depends on variables $t$, $y$, $y'$, $\dots$, and $y^{\textit{(n-1)}}$. The $t$ is the independent variable, and it is often time. The $y$, $y'$, $\dots$, and $y^{\textit{(n-1)}}$ represent the dependent variable $y$, the first derivative of $y$, $\dots$, up to $(n-1)^\text{th}$ derivative.
+We isolate the highest derivative $y^n$ on the left-hand side and move the rest of the terms on the right-hand side. On the right-hand side, $f (t, y, y', y'', \dots, y^{\textit{(n-1)}})$ means a function depends on variables $t$, $y$, $y'$, $\dots$, and $y^{\textit{(n-1)}}$. $t$ is the independent variable, and it is often time. $y$, $y'$, $\dots$, and $y^{\textit{(n-1)}}$ represent the dependent variable $y$, the first derivative of $y$, $\dots$, up to $(n-1)^\text{th}$ derivative.
 
 For the next step, we introduce the following new variables: $x_{1}$, $x_{2}$, $\dots$, $x_{n}$. The number of newly introduced dependent variables equals the order of the ODE, $n$. The new relationship is shown below:
 \begin{flalign} \label{eq_newvars}
@@ -213,7 +213,7 @@ public class ODE implements FirstOrderDifferentialEquations {
 \label{code_javadimen}
 \end{listing}
 
-To allow \verb|getDimension()| return an integer that based on the order of the ODE, we have to add two additional method based on function \verb|fixedReturn|(100)~\citep{brooks} and fixedStatementFill(89)~\citep{brooks} in the Drasil Code Generator. The \verb|fixedReturn| indicates a step that returns a fixed value, such as \verb|fixedReturn (int 1)|. We create similar methods \verb|fixedReturn'| and \verb|fixedStatementFill'|. In Code~\ref{code_fixedreturn}, the \verb|fixedReturn'| will indicate a step that returns a fixed value, but the \verb|fixedStatementFill'| will fill in the fixed value base on the order of the ODE. Now, in Code~\ref{code_javadimen}, line 12, the $n$ will depend on the value we pass in \verb|fixedStatementFill'|.
+To allow \verb|getDimension()| return an integer that based on the order of the ODE, we have to add two additional method based on function \verb|fixedReturn|(100)~\citep{brooks} and fixedStatementFill(89)~\citep{brooks} in the Drasil Code Generator. The \verb|fixedReturn| indicates a step that returns a fixed value, such as \verb|fixedReturn (int 1)|. We create similar methods \verb|fixedReturn'| and \verb|fixedStatementFill'|. In Code~\ref{code_fixedreturn}, the \verb|fixedReturn'| will indicate a step that returns a fixed value, but the \verb|fixedStatementFill'| will fill in the fixed value base on the order of the ODE. Now, in Code~\ref{code_javadimen}, line 12, $n$ will depends on the value we pass in \verb|fixedStatementFill'|.
 
 \begin{listing}
 \begin{haskell1}

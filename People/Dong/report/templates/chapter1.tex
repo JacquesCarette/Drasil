@@ -22,9 +22,10 @@ The square represents a water tank, and it has a heating coil at the bottom of t
 \end{equation}
 \myequations{NoPCM Equation}
 
-The $T_w(t)$ is a function of the independent variable, in this case time. The $T_w$ is the temperature of water ($ ^\circ C $). The $T_w'(t)$ is the first directive of the function $T_w(t)$ respect time. The $T_c$ is the temperature of the heating coil (°C), and the $\tau_w$ is the ODE parameter for water related to decay time (s). Isolating for $T_w'(t)$, we obtain the following Equation~\ref{eq_nopcmderive}.
+$T_w(t)$ is a function of the independent variable, in this case time (t). $T_w$ is the temperature of water ($ ^\circ C $). $T_w'(t)$ is the first derivative of the function $T_w(t)$ with respect to time. $T_c$ is the temperature of the heating coil (°C), and $\tau_w$ is the ODE parameter for water related to decay time (s). Isolating for $T_w'(t)$, we obtain the following equation:
 \begin{equation} \label{eq_nopcmderive}
-	T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
+	% T_{w}'(t) = \frac{T_{c} - T_{w}(t)}{\tau_{w}}
+	T_{w}'(t) = \frac{1}{\tau_{w}} (T_{c} - T_{w}(t))
 \end{equation}
 
 \begin{listing}[ht]
@@ -66,7 +67,7 @@ On the left-hand side, \textbf{A} is an m $\times$ n matrix, and \textbf{x} is a
 \end{equation}
 \myequations{PDContoller Equation}
 
-In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y$. The dependent variable $y$ is depend on independent variable t, in this case time. We use $y$(t) to represent a function of time. The $y'$(t) is the first derivative of $y$(t). The $y''$(t) is the second derivative of $y$(t). The $y$ is the process variable, and the $y'(t)$ is the rate of change of $y(t)$. The $y''(t)$ is the rate of change of the rate of change of $y(t)$. The $K_d$ , $K_p$, and $r_t$ are constant variables. The $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation in a matrix form as follows.
+In Example~\ref{eq_odeexmaple}, there is only one dependent variable $y$. The dependent variable $y$ is depend on independent variable t, in this case time. We use $y$(t) to represent a function of time. $y'$(t) is the first derivative of $y$(t). $y''$(t) is the second derivative of $y$(t). $y$ is the process variable, and $y'(t)$ is the rate of change of $y(t)$. $y''(t)$ is the rate of change of the rate of change of $y(t)$. $K_d$ , $K_p$, and $r_t$ are constant variables. $K_d$ is Derivative Gain, $K_p$ is Proportional Gain, and $r_t$ is Set-Point. We can write this equation in a matrix form as follows.
 
 \begin{equation} \label{eq_matrixformexmaple}
 	\begin{bmatrix}

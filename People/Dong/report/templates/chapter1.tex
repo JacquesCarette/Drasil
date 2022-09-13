@@ -46,7 +46,7 @@ reciprocal τ_w * (T_c - T_w[0])
 \captionof{listing}{NoPCM Equation for the Drasil Code Generator}
 \label{code_expliciteq}
 \end{listing}
-Code~\ref{code_expliciteq} shows how to rewriting the original ODE for the purpose of solving it. We can not directly transform Code~\ref{code_expliciteqsrs} to Code~\ref{code_expliciteq}; there is a gap between two ODE expressions. $T\_w(t)$ is just a variable, but $T\_w[0]$ means the index of $0$ in $T\_w$. This assumes $T\_w$ is a list.
+Code~\ref{code_expliciteq} shows how to rewriting the original ODE for the purpose of solving it. We cannot directly transform Code~\ref{code_expliciteqsrs} to Code~\ref{code_expliciteq}; there is a gap between two ODE expressions. $T\_w(t)$ is just a variable, but $T\_w[0]$ means the index of $0$ in $T\_w$. This assumes $T\_w$ is a list.
 
 Despite the gap between Code~\ref{code_expliciteqsrs} and Code~\ref{code_expliciteq}, we can manually close it by re-writing the ODE. Rewriting the ODE in another form produces duplication because both Code~\ref{code_expliciteqsrs} and Code~\ref{code_expliciteq} describe the same ODE. The Code~\ref{code_expliciteqsrs} lacks the necessary structure to allow transformation. Therefore, we propose a new data structure to store the ODE information.
 

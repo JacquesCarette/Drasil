@@ -85,10 +85,17 @@ of \textit{inference rules} makes up the type rules of a system. Here,
 
 \subsection{A Simple Language}
 
-For example, if we had a small ``simple'' language, \textbf{L}, that contains
+For example, if we had a small ``simple'' language, \(\bb{L}\), that contains
 terms for integer and boolean values, and addition, ``less than'' comparison,
-conjunction, and if-then-else (ternary operators), we might write out the typing
-rules as follows:
+conjunction, and if-then-else (ternary operators), we might write the syntax as
+follows:
+
+\intodo{Syntax of \(\bb{L}\).}
+
+\intodo{Showcase of how lack of typing allows for invalid expressions.}
+
+If we choose to add typing rules to restrict the syntax to only ``valid''
+expression, we might write write them as follows:
 
 \begin{equation}
       \left.
@@ -156,6 +163,12 @@ rules as follows:
       \text{if-then-else (ternary ``if'')}
       \label{eq:exTR:ifThenElse}
 \end{equation}
+
+So as long as we follow these typing rules while we build our expressions, when
+we try to evaluate any of these expressions, we should not arrive at invalid
+expressions where evaluation cannot be completed.
+
+\intodo{However, this is done by hand... shall we automate it? :)}
 
 \intodo{Continue writing here!}
 

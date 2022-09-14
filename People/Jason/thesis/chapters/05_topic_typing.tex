@@ -87,15 +87,94 @@ of \textit{inference rules} makes up the type rules of a system. Here,
 
 For example, if we had a small ``simple'' language, \(\bb{L}\), that contains
 terms for integer and boolean values, and addition, ``less than'' comparison,
-conjunction, and if-then-else (ternary operators), we might write the syntax as
-follows:
+conjunction, and if-then-else (ternary operators), we might write the syntax
+inductively, as follows:
 
-\intodo{Syntax of \(\bb{L}\).}
+\begin{longtable}{ r c c l}
+      \(\bb{L}(l)\) & ::=       & \(n\)                                                        & Integers (where \(n\) is any integer) \\
+                    & \(\vert\) & \texttt{true}                                                & True                                  \\
+                    & \(\vert\) & \texttt{false}                                               & False                                 \\
+                    & \(\vert\) & \(l_1\ \texttt{+}\ l_2\)                                     & Addition                              \\
+                    & \(\vert\) & \(l_1\ \texttt{<}\ l_2\)                                     & ``Less than'' comparison              \\
+                    & \(\vert\) & \(l_1\ \texttt{\land}\ l_2\)                                 & Conjunction                           \\
+                    & \(\vert\) & \(\texttt{if}\ l_1\ \texttt{then}\ l_2\ \texttt{else}\ l_3\) & if-then-else (ternary ``if'')         \\
+\end{longtable}
 
-\intodo{Showcase of how lack of typing allows for invalid expressions.}
+Great! Now, we can form expressions, such as:
 
-If we choose to add typing rules to restrict the syntax to only ``valid''
-expression, we might write write them as follows:
+\begin{equation}
+      10
+      \label{ex:sl:s:good1}
+\end{equation}
+
+\begin{equation}
+      23 + (400\ \texttt{+}\ 4000)
+      \label{ex:sl:s:good2}
+\end{equation}
+
+\begin{equation}
+      \texttt{if}\ \texttt{true}\ \texttt{then}\ 95\ \texttt{else}\ 96
+      \label{ex:sl:s:good3}
+\end{equation}
+
+\begin{equation}
+      42\ \texttt{+}\ \texttt{false}
+      \label{ex:sl:s:bad1}
+\end{equation}
+
+\begin{equation}
+      22 + \texttt{if}\ (40\ \texttt{+}\ 400)\ <\ 96\ \texttt{then}\ \texttt{false}\ \texttt{else}\ 96\ \texttt{+}\ 400
+      \label{ex:sl:s:bad2}
+\end{equation}
+
+\begin{equation}
+      \texttt{if}\ 0\ \texttt{then}\ 1\ \texttt{else}\ \texttt{true}
+      \label{ex:sl:s:bad3}
+\end{equation}
+
+% Forcibly rename the "equation" environment tags to "expression" for the sake
+% of the below discussion.
+\Crefname{equation}{Expression}{Expressions}
+
+Now, let's evaluate these expressions.
+\Cref{ex:sl:s:good1,ex:sl:s:good2,ex:sl:s:good3} can be calculated with a
+conventional understanding of the operations, respectively, as \(10\), \(4423\),
+and \(95\). However, \Cref{ex:sl:s:bad1,ex:sl:s:bad2,ex:sl:s:bad3} are
+worrisome. Regarding, \Cref{ex:sl:s:bad1}, we just don't have any conventional
+sense of addition on integers with booleans, so evaluation is unclear.
+Continuing, to calculate the outermost addition expression of
+\Cref{ex:sl:s:bad2}, we must first calculate the if-then-else condition would
+evaluate to \texttt{true}, so we can short-circuit to the left expression
+(\texttt{false}), but now we have no conventional sense of addition on integers
+with booleans. So, we have an undefined expression, similar to
+\Cref{ex:sl:s:bad1}. Finally, unless we were familiar with C-like languages, we
+might not want to think of \(0\) as being equivalent to \texttt{false}, so we
+immediately find issue in the condition of \Cref{ex:sl:s:bad3}. However,
+ignoring the issue with the condition value, we might also find issue, similar
+to \Cref{ex:sl:s:bad2}, with how different \textit{kinds} of values in the
+branch operands.
+
+\Crefname{equation}{Equation}{Equations}
+
+Other than modifying the syntax into a convoluted mess to avoid issues like
+these (which won't be easy, and might not be possible), we look to \textit{type
+systems} to rescue the \(\bb{L}\). The key is in understanding that there are
+different ``kinds'' (\textit{types}) of values (\textit{terms}). Then, we can
+either filter out the invalid expressions. First, we must analyze and capture
+our universe of types, \(\tau\):
+
+\begin{longtable}{ r c c l}
+      \(\tau\) & ::=       & \(\bb{B}\) & Booleans \\
+               & \(\vert\) & \(\bb{Z}\) & Integers
+\end{longtable}
+
+Note that we are restricting the numeric-related operations to strictly
+integers. The restriction is only there for simplification. \(\tau\) is an
+enumeration of all permissible \textit{types} of \textit{terms} we can have in
+\(\bb{L}\).
+
+Next, we need to add the typing rules to restrict our syntax to only those
+valid. We will do so using inference judgments, as follows:
 
 \begin{equation}
       \left.
@@ -127,7 +206,7 @@ expression, we might write write them as follows:
 \begin{equation}
       \left.
       \infer{(a\ \texttt{+}\ b) : \bb{Z}}
-            {a : \bb{Z}  &  b : \bb{Z}}
+      {a : \bb{Z}  &  b : \bb{Z}}
       \right.
       \qquad
       \text{Addition}
@@ -137,7 +216,7 @@ expression, we might write write them as follows:
 \begin{equation}
       \left.
       \infer{(a\ \texttt{<}\ b) : \bb{B}}
-            {a : \bb{Z}  &  b : \bb{Z}}
+      {a : \bb{Z}  &  b : \bb{Z}}
       \right.
       \qquad
       \text{``Less than'' comparison}
@@ -147,7 +226,7 @@ expression, we might write write them as follows:
 \begin{equation}
       \left.
       \infer{(a\ \texttt{\wedge}\ b) : \bb{B}}
-            {a : \bb{B}  &  b : \bb{B}}
+      {a : \bb{B}  &  b : \bb{B}}
       \right.
       \qquad
       \text{Conjunction}
@@ -157,7 +236,7 @@ expression, we might write write them as follows:
 \begin{equation}
       \left.
       \infer{(\texttt{if}\ b\ \texttt{then}\ x\ \texttt{else}\ y) : \tau}
-            {b : \bb{B}  &  x : \tau  &  y : \tau}
+      {b : \bb{B}  &  x : \tau  &  y : \tau}
       \right.
       \qquad
       \text{if-then-else (ternary ``if'')}

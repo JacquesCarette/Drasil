@@ -34,8 +34,7 @@ etc.) to evaluate them.
 extra features over \Expr{} for \acs{gool}/``code.'' The vocabulary should be
 nearly directly usable in \acs{gool} for outputting to general-purpose
 object-oriented programming languages. \CodeExpr{} is a superset of \Expr{}:
-
-\[\Expr{} \subseteq{} \CodeExpr{}\]
+\(\Expr{} \subseteq{} \CodeExpr{}\).
 
 \subsection{And One For General Mathematics}
 
@@ -43,9 +42,7 @@ object-oriented programming languages. \CodeExpr{} is a superset of \Expr{}:
 everything we know (up to what we've encoded thus far) and is intended to be a
 descriptive language, with no particular restrictions on its terms (other than
 that they should at least be describable on pencil and paper too). \ModelExpr{}
-is also a superset of \Expr{}:
-
-\[\Expr{} \subseteq{} \ModelExpr{}\]
+is also a superset of \Expr{}: \(\Expr{} \subseteq{} \ModelExpr{}\).
 
 However, \ModelExpr{}s terms are unlikely to appear in \CodeExpr{} due to their
 indescribable nature in computable \acs{oo} ``code.''
@@ -57,17 +54,110 @@ moment, Drasil does not have any readily-available type information about their
 constructions. This lack of type information hampers the ``reliability'' aspect
 of the code generator because the generator is unable to restrict its output
 artifacts to those which are directly usable. In order for the generated
-artifacts to be directly usable, they must be \textit{type safe} programs. In
-other words, we need to make sure that the interpreters and compilers used on
-the generated artifacts never get confused/stuck on the generated expressions.
-To obtain this, we must add type information, and use it.
+artifacts to be directly usable, they must be \textit{well-typed} programs. In
+other words, we need to make sure that the generated expressions and programs
+conform to the \textit{type rules} of the respective interpreters and/or
+compilers.
 
 \section{Type Safety}
 
-\intodo{Continue writing here!}
+Before compilation/execution, programming language compilers and interpreters
+check input programs against a logical \textit{type system} to ensure that the
+steps never perform invalid instructions, where program evaluation may become
+impossible\footnote{Some instructions/operations may be ``nonsense!''}. For
+example, to avoid nonsensical instructions, such as \(1 + \texttt{true}\), where
+parameter \textit{type} mismatches occur. In this example, a computer (like us)
+have no reasonable way to understand how to add \(1\) and the truth value
+\texttt{true}. Type systems provide \textit{types} (such as
+\(\mathbb{Z}\)/\texttt{integer} and \(\mathbb{B}\)/\texttt{boolean}) that are
+assigned to each \textit{term} (such as \(1\), \(+\), and \texttt{true}), and a
+set of \textit{typing rules} to restrict how terms interact and form. Types are
+information about the structure of terms. \textit{Types} are typically
+meta-level information. Terms are the value/``primitive'' data of a programming
+language, such as numerics, functions/methods, operators, and modules. A series
+of \textit{inference rules} makes up the type rules of a system. Here,
+\textit{type safety} is approximately an assurance of \textit{preservation} and
+\textit{progress} formed through the typing rules \cite{Harper2016}.
 
-\intodo{Discuss what ``type safety'' is. Discuss: types, judgments, typing
-      rules, well-typedness, preservation, and progress.}
+\intodo{Discuss ``preservation'' and ``progress,'' and how, together, they make
+      up ``safety'' as discussed in \cite{Harper2016}. Also discuss what it
+      means for things to be well-typed.}
+
+\subsection{A Simple Language}
+
+For example, if we had a small ``simple'' language, \textbf{L}, that contains
+terms for integer and boolean values, and addition, ``less than'' comparison,
+conjunction, and if-then-else (ternary operators), we might write out the typing
+rules as follows:
+
+\begin{equation}
+      \left.
+      \infer{n : \bb{Z}}{}
+      \right.
+      \qquad
+      \text{(where \(n\) is any integer.)}
+      \label{eq:exTR:int}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{\texttt{true} : \bb{B}}{}
+      \right.
+      \qquad
+      \text{True}
+      \label{eq:exTR:true}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{\texttt{false} : \bb{B}}{}
+      \right.
+      \qquad
+      \text{False}
+      \label{eq:exTR:false}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{+}\ b) : \bb{Z}}
+            {a : \bb{Z}  &  b : \bb{Z}}
+      \right.
+      \qquad
+      \text{Addition}
+      \label{eq:exTR:addition}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{<}\ b) : \bb{B}}
+            {a : \bb{Z}  &  b : \bb{Z}}
+      \right.
+      \qquad
+      \text{``Less than'' comparison}
+      \label{eq:exTR:lessThan}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{\wedge}\ b) : \bb{B}}
+            {a : \bb{B}  &  b : \bb{B}}
+      \right.
+      \qquad
+      \text{Conjunction}
+      \label{eq:exTR:conjunction}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(\texttt{if}\ b\ \texttt{then}\ x\ \texttt{else}\ y) : \tau}
+            {b : \bb{B}  &  x : \tau  &  y : \tau}
+      \right.
+      \qquad
+      \text{if-then-else (ternary ``if'')}
+      \label{eq:exTR:ifThenElse}
+\end{equation}
+
+\intodo{Continue writing here!}
 
 \intodo{Discuss how we can add type information to Drasils expression languages,
       and the pros/cons of the solutions. For example, should type enforcement

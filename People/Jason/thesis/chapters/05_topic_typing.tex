@@ -87,8 +87,10 @@ of \textit{inference rules} makes up the type rules of a system. Here,
 
 For example, if we had a small ``simple'' language, \(\bb{L}\), that contains
 terms for integer and boolean values, and addition, ``less than'' comparison,
-conjunction, and if-then-else (ternary operators), we might write the syntax
-inductively, as follows:
+conjunction, and if-then-else (ternary operators)\footnote{Assume the
+      definitions of the functions be total and understood/used under the conventional
+      sense that mathematicians so often do.}, we might write the syntax inductively,
+as follows:
 
 \begin{longtable}{ r c c l}
       \(\bb{L}(l)\) & ::=       & \(n\)                                                        & Integers (where \(n\) is any integer) \\
@@ -158,7 +160,7 @@ branch operands.
 
 Other than modifying the syntax into a convoluted mess to avoid issues like
 these (which won't be easy, and might not be possible), we look to \textit{type
-systems} to rescue the \(\bb{L}\). The key is in understanding that there are
+      systems} to rescue the \(\bb{L}\). The key is in understanding that there are
 different ``kinds'' (\textit{types}) of values (\textit{terms}). Then, we can
 either filter out the invalid expressions. First, we must analyze and capture
 our universe of types, \(\tau\):
@@ -169,12 +171,13 @@ our universe of types, \(\tau\):
 \end{longtable}
 
 Note that we are restricting the numeric-related operations to strictly
-integers. The restriction is only there for simplification. \(\tau\) is an
-enumeration of all permissible \textit{types} of \textit{terms} we can have in
-\(\bb{L}\).
+integers. The restriction is only there for simplification of numerics. \(\tau\)
+is an enumeration of all permissible \textit{types} of \textit{terms} we can
+have in \(\bb{L}\).
 
-Next, we need to add the typing rules to restrict our syntax to only those
-valid. We will do so using inference judgments, as follows:
+Next, we need to add the typing rules. They will restrict our syntax to only
+those constructions which are semantically valid. We will do so using inference
+judgments, as follows:
 
 \begin{equation}
       \left.
@@ -247,22 +250,46 @@ So as long as we follow these typing rules while we build our expressions, when
 we try to evaluate any of these expressions, we should not arrive at invalid
 expressions where evaluation cannot be completed.
 
-\intodo{However, this is done by hand... shall we automate it? :)}
+Notably, on paper and pencil, or common typesetting, there is nothing tangibly
+stopping us from continuing to write invalid expressions. However, with
+computerized languages, we're able to tangibly (as far as ``tangible'' goes with
+computers) stop users from writing invalid expressions. This is a huge gain over
+conventional pencil and paper, because we're able to type check statements with
+far less time and effort than if we were to do it manually.
+
+\subsection{Back to Our Expression Languages}
+
+Similar to the untyped \(\bb{L}\), in Drasil, our expression languages (\Expr{},
+\CodeExpr{}, and \ModelExpr{}) are \textit{untyped}\footnote{i.e., they don't
+      have type information, and are not type checked.}. We currently need to manually
+ensure that our generated artifacts \textit{type check}. If we only had a few
+expressions, then it would not be much of an issue to manually type check them.
+However, with scale, it becomes problematic. In particular, just throwing
+``generation'' into the mix makes it an area of concern, because there is no
+assurance of type safety. In this chapter, we aim to bring type information to
+the expression languages, and see how we can improve type safety and expression
+usage.
+
+\subsection{Decomposing the Expression Languages}
 
 \intodo{Continue writing here!}
 
-\intodo{Discuss how we can add type information to Drasils expression languages,
-      and the pros/cons of the solutions. For example, should type enforcement
-      done at the construction-level or post-facto processed?}
-
-\intodo{Discuss the properties of a good solution.}
+\intodo{Draw out the syntax diagram of each language, but start with Expr and
+      discuss how CodeExpr and ModelExpr are extensions of Expr.}
 
 \intodo{Re-write the typing rules without the Haskell code references (keep it
       mathematical/theoretical).}
 
-\intodo{Re-write the typing rules with the Haskell code style.}
+\intodo{Discuss how and where we can add type information to Drasils expression
+      languages, and the pros/cons of the solutions. For example, should type
+      enforcement done at the construction-level or post-facto processed?}
 
-\intodo{Discuss our proposed and performed solution.}
+In Haskell, there are at least two ways that we can perform these type rules: at
+creation, and after creation. If we choose to restrict at the construction, we
+have a stronger sense of type safety for any and all expressions, unlike with
+post-creation manual checking of expressions, where you can't necessarily share
+proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
+      perhaps in Agda!}.
 
 \begin{enumerate}
 

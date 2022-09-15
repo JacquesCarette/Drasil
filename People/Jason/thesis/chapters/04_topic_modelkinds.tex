@@ -534,44 +534,12 @@ words, there should be a generic method to reproduce the original information
 from the new information \textemdash{} this is finding areas where we can add to the
 generation possibilities of Drasil.
 
+While we've gained information about the reason what the expressions described,
+the expression language, as a whole, allows for poorly typed expressions to be
+formed. We lack enforcement regarding the validity of \Expr{} as
+``expressions''.
+
 \intodo{ModelKinds already has some success, shown in Dongs work, where he added
 	a lot more code generation capabilities through ModelKinds. We can now also
-	create an updated copy of the "Table 3.3: Drasil Case Studies Artifacts
-	Generated".}
-
-\section{Residual Issues}
-
-While the information is now encoded, it is not without its own issues:
-
-\begin{enumerate}
-
-	\item As \ModelKinds{} is written using a GADT, it is difficult to extend
-	      its functionality (the ``expression problem''
-	      \cite{Wadler1999ExpressionProblem}). A work in progress re-design of
-	      \ModelKinds{}, relying on \acs{ghc}s \ConstraintKinds{}
-	      \cite{GHC2020ConstraintKinds} language extension, uses Haskell-level
-	      typeclasses to describe what a model satisfying the needs of being a
-	      ``model kind'' must provide in order to be treated as a ``model
-	      kind''. These typeclass instances may be thought of as proofs that
-	      satisfy the requirements.
-
-	\item The type parameter in \ModelKinds{} is peculiar. It is used to
-	      indicate usability of a certain model in code generation through
-	      either having an \Expr{} or a \ModelExpr{}. A \inlineHs{ModelKind
-		      Expr} indicates that a model is usable in code generation, while a
-	      \inlineHs{ModelKind ModelExpr} indicates that the model is not to be
-	      used in code generation.
-
-	\item While we've gained information about the reason what the expressions
-	      described, the expression language, as a whole, allows for poorly
-	      typed expressions to be formed. We lack enforcement regarding the
-	      validity of \Expr{} as ``expressions''.
-
-\end{enumerate}
-
-However, these first two (2) issues are relatively unimportant for now. (1) has
-a proof of concept solution (as discussed above), and (2) is a matter of the
-Haskell implementation we choose. (3) is the next area of focus in regard to
-expressions.
-
-\intodo{Note the ``residual issues'' in the ``Future Work'' chapter.}
+	create an updated copy of the ``Table 3.3: Drasil Case Studies Artifacts
+	Generated.''}

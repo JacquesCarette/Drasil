@@ -4,6 +4,43 @@
 While this work does contribute to the Drasil research project and the ideology
 underpinning it, there are still many questions and concerns left unanswered.
 
+\section{Theories}
+
+While \Cref{chap:modelkinds} improves upon the mathematical expression-directed
+method of encoding ``theory knowledge,'' it is not without it's own issues.
+Namely, the current implementation has two focal problems that we hope to
+resolve in the future: extensibility, and the questionable type parameter
+belonging to \ModelKind{} (\refCurrentModelKindsHaskell{}).
+
+As \ModelKinds{} is written using a GADT, it is difficult to extend its
+functionality (similar to the ``expression problem''
+\cite{Wadler1999ExpressionProblem}). A work in progress re-design of
+\ModelKinds{} \cite{DrasilIssue2853AlternativeModelKinds}, relying on \acs{ghc}s
+\ConstraintKinds{} \cite{GHC2020ConstraintKinds} language extension, uses
+Haskell-level typeclasses to describe what a model satisfying the needs of being
+a ``model kind'' must provide in order to be treated as a ``model kind''. These
+typeclass instances may be thought of as proofs that satisfy the requirements.
+The primary benefit to adding extensibility to theory kinds is exactly that we
+become able to add any kind of \textit{previously unknown to Drasil} theorem
+without needing to touch too much other code. It also allows us to restrict
+\textit{kinds} of theories to particular areas better.
+
+Continuing, the type parameter in \ModelKinds{} is peculiar. It is used to
+indicate usability of a certain model in code generation through either having
+an \Expr{} or a \ModelExpr{}. A \inlineHs{ModelKind Expr} indicates that a model
+is usable in code generation, while a \inlineHs{ModelKind ModelExpr} indicates
+that the model is not to be used in code generation.
+
+However, these two (2) issues are relatively unimportant for now. The issue of
+extensibility has a proof of concept solution (as discussed above) already
+constructed, and the issue of the type parameter is resolvable as a side effect.
+
+Less operationally important, there is current discussion of renaming
+\ModelKinds{} to \TheoryKinds{} \cite{DrasilIssue2599RenamingModels}, as
+``model'' is a heavily overloaded term, and ``theory'' is a guaranteed
+discussion of abstraction, unlike ``model,'' which is typically instantiated to
+some ``theory.''
+
 \section{Chunks}
 
 While \Cref{chap:storingChunks} answers questions regarding \textit{storing}

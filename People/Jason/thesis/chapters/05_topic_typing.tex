@@ -291,11 +291,11 @@ non-recursive sum type, where each possible value is a different kind of
       certain operations or kinds of values necessarily.}. The syntax is as follows:
 
 \begin{longtable}{ r c c l}
-      \(\mathit{Literal}(l)\) & ::=       & \(n\)     & Integers (where \(n \in \bb{Z}\))                \\
-                              & \(\vert\) & \(s\)     & Strings (where \(s\) is any string of text)      \\
-                              & \(\vert\) & \(r\)     & Real numbers (where \(r \in \bb{R}\)             \\
-                              & \(\vert\) & \(r_w\)   & Whole-numbered reals (where \(r_w \in \bb{R}\))  \\
-                              & \(\vert\) & \(n / d\) & Fractions/percentages (where \(n,d \in \bb{Z}\)) \\
+      \(\mathit{Literal}(l)\) & ::=       & \(n\)              & Integers (where \(n \in \bb{Z}\))                \\
+                              & \(\vert\) & \(s\)              & Strings (where \(s\) is any string of text)      \\
+                              & \(\vert\) & \(r\)              & Real numbers (where \(r \in \bb{R}\)             \\
+                              & \(\vert\) & \(r_w\)            & Whole-numbered reals (where \(r_w \in \bb{R}\))  \\
+                              & \(\vert\) & \(n \texttt{/} d\) & Fractions/percentages (where \(n,d \in \bb{Z}\)) \\
 \end{longtable}
 
 The types are as follows:
@@ -308,9 +308,56 @@ The types are as follows:
             all possible strings of text.}
 \end{longtable}
 
-Thankfully, the typing rules are fairly straight forward:
+Creating the typing rules is a fairly straightforward process:
 
-\intodo{Typing rules for \Literal{}.}
+\begin{equation}
+      \left.
+      \infer{n : \bb{Z}}{}
+      \right.
+      \qquad
+      \text{(where \(n \in \bb{Z}\))}
+      \label{tr:lit:int}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{n : \bb{S}}{}
+      \right.
+      \qquad
+      \text{(where \(s\) is any string of text.)}
+      \label{tr:lit:string}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{r : \bb{R}}{}
+      \right.
+      \qquad
+      \text{(where \(r \in \bb{R}\).)}
+      \label{tr:lit:real}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{r_w : \bb{R}}{}
+      \right.
+      \qquad
+      \text{(where \(r \in \bb{R}\).)}
+      \label{tr:lit:wholeReal}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{n \texttt{/} d : \bb{R}}{}
+      \right.
+      \qquad
+      \text{(where \(n, d \in \bb{Z}\).)}
+      \label{tr:lit:fraction}
+\end{equation}
+
+Note that the ``Whole-numbered Reals'' and ``Reals'' may have overlap. The
+difference is merely the information difference. This is something that can be
+altered later, if desired.
 
 \imptodo{Continue writing here!}
 

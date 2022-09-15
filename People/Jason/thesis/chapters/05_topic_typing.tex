@@ -83,6 +83,16 @@ of \textit{inference rules} makes up the type rules of a system. Here,
       up ``safety'' as discussed in \cite{Harper2016}. Also discuss what it
       means for things to be well-typed.}
 
+\intodo{Invalid expressions are also ``bad'' because they make handling of
+      expressions more cumbersome, we can't guarantee analysis makes sense. They
+      break ``preservation'' and ``progress'' in the generated artifacts, they
+      make no real discernible ``sense.'' They might make sense to anyone in
+      particular, but, broadly, they will be gibberish, because they do not obey
+      a globally agreed upon rule set. To avoid issues with ``preservation'' and
+      ``progress,'' we manually ensure that generated artifacts by writing the
+      source input in precise ways that we only happen to be generating the
+      working artifacts. However, this does not scale well.}
+
 \subsection{A Simple Language}
 
 For example, if we had a small ``simple'' language, \(\bb{L}\), that contains
@@ -257,7 +267,7 @@ computers) stop users from writing invalid expressions. This is a huge gain over
 conventional pencil and paper, because we're able to type check statements with
 far less time and effort than if we were to do it manually.
 
-\subsection{Back to Our Expression Languages}
+\section{Back to Our Expression Languages}
 
 Similar to the untyped \(\bb{L}\), in Drasil, our expression languages (\Expr{},
 \CodeExpr{}, and \ModelExpr{}) are \textit{untyped}\footnote{i.e., they don't
@@ -271,6 +281,9 @@ the expression languages, and see how we can improve type safety and expression
 usage.
 
 \subsection{Decomposing the Expression Languages}
+
+Before we begin to discuss the syntax, we should discuss the intended semantics
+and the common denominator language: \Literal{}.
 
 \intodo{Continue writing here!}
 
@@ -291,84 +304,7 @@ post-creation manual checking of expressions, where you can't necessarily share
 proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
       perhaps in Agda!}.
 
-\begin{enumerate}
-
-      \item Ok, so we have these expression languages. They're great!
-
-      \item However, they admit invalid expressions.
-
-      \item Invalid expressions are bad because:
-
-            \begin{enumerate}
-
-                  \item they can't be properly dissected, for us to learn from
-                        them.
-
-                  \item they will cause problems later, in the artifacts we
-                        generate.
-
-                  \item they make no real discernible ``sense.'' They might make
-                        sense to anyone in particular, but, broadly, they will
-                        be gibberish, because they do not obey a globally agreed
-                        upon rule set.
-
-                  \item at the moment, to ensure that our generated artifacts
-                        are directly usable in compilation and usage, we need to
-                        manually ensure that they ``type-check.'' However,
-                        Drasil has no clear understanding of what ``type-check''
-                        means! For a few expressions, this manual methodology
-                        might be ``okay,'' but it surely does not scale well
-                        when add expression generation, nor human error through
-                        scale in expression creation/usage.
-
-            \end{enumerate}
-
-      \item Ok, so what information are we missing? What do we need to ``teach''
-            Drasil about in order for us to ensure that all of our expressions
-            are well-formed (whatever that might mean)?
-
-            \begin{enumerate}
-
-                  \item First, we need to discuss: what does ``well-formedness''
-                        mean?
-
-                  \item What are ``typing rules?'', and how can we create a set
-                        of typing rules?
-
-                  \item What are our needed typing judgments?
-
-            \end{enumerate}
-
-      \item Now that we know what is needed of the expression language, how do
-            we want to implement it in Drasil?
-
-\end{enumerate}
-
-\section{Background: Problem}
-
 \begin{itemize}
-
-      \item Writing invalid expressions is possible.
-            \begin{itemize}
-
-                  \item On paper, writing invalid expressions is as easy as
-                        making a typo, but complete gibberish can also be
-                        written. We rely on manually checking expressions to
-                        ensure that they are ``correct''. As the number of
-                        expressions grows, the cost of manually checking grows
-                        rapidly, and changes result in costly setbacks. Imagine
-                        systems with 10, 100, and 1000+ expressions, the cost
-                        grows rapidly.
-
-                  \item With computers, we can systematically check the validity
-                        of expressions by imposing various kinds of
-                        restrictions.
-
-            \end{itemize}
-
-      \item Mentally tracking expression creations to ensure they follow the
-            implicit rules of the expression language is too difficult, and
-            leads to mental strain.
 
       \item Compiling to ``lower languages'' requires special type checking
             before compiling to them. For example, the Swift code generator has
@@ -435,11 +371,3 @@ proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
 \subsubsection{Expr}
 
 \input{chapters/typing/rules/expr}
-
-\subsubsection{ModelExpr}
-
-\input{chapters/typing/rules/modelexpr}
-
-\subsubsection{CodeExpr}
-
-\input{chapters/typing/rules/codeexpr}

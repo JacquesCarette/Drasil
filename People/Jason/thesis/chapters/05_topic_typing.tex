@@ -176,8 +176,8 @@ either filter out the invalid expressions. First, we must analyze and capture
 our universe of types, \(\tau\):
 
 \begin{longtable}{ r c c l}
-      \(\tau\) & ::=       & \(\bb{B}\) & Booleans \\
-               & \(\vert\) & \(\bb{Z}\) & Integers
+      \(\Tau(\tau)\) & ::=       & \(\bb{B}\) & Booleans \\
+                     & \(\vert\) & \(\bb{Z}\) & Integers
 \end{longtable}
 
 Note that we are restricting the numeric-related operations to strictly
@@ -282,10 +282,37 @@ usage.
 
 \subsection{Decomposing the Expression Languages}
 
-Before we begin to discuss the syntax, we should discuss the intended semantics
-and the common denominator language: \Literal{}.
+Before we begin to decompose the expression languages into their semantics,
+syntax, and typing rules, we will start off with a common denominator language
+to all the three (3): \Literal{}. The \Literal{} language is a simple
+non-recursive sum type, where each possible value is a different kind of
+``literal'' value\footnote{Note that this work is basing it's understanding on
+      the existing syntax and usage, and does not intend to argue the existence of
+      certain operations or kinds of values necessarily.}. The syntax is as follows:
 
-\intodo{Continue writing here!}
+\begin{longtable}{ r c c l}
+      \(\textit{Literal}(l)\) & ::=       & \(n\)     & Integers (where \(n \in \bb{Z}\))                \\
+                              & \(\vert\) & \(s\)     & Strings (where \(s\) is any string of text)      \\
+                              & \(\vert\) & \(r\)     & Real numbers (where \(r \in \bb{R}\)             \\
+                              & \(\vert\) & \(wr\)    & Whole-numbered reals (where \(wr \in \bb{R}\))   \\
+                              & \(\vert\) & \(n / d\) & Fractions/percentages (where \(n,d \in \bb{Z}\)) \\
+\end{longtable}
+
+The types are as follows:
+
+\begin{longtable}{ r c c l}
+      \(\Tau_{\textit{Literal}}(\tau)\) & ::=       & \(\bb{R}\) & Reals    \\
+                                        & \(\vert\) & \(\bb{Z}\) & Integers \\
+                                        & \(\vert\) & \(\bb{S}\) & Strings
+      \footnote{For sake of brevity, we will think of \(\bb{S}\) as the type of
+            all possible strings of text.}
+\end{longtable}
+
+Thankfully, the typing rules are fairly straight forward:
+
+\intodo{Typing rules for \Literal{}.}
+
+\imptodo{Continue writing here!}
 
 \intodo{Draw out the syntax diagram of each language, but start with Expr and
       discuss how CodeExpr and ModelExpr are extensions of Expr.}

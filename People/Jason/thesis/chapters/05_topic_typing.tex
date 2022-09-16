@@ -342,13 +342,13 @@ Creating the typing rules is a fairly straightforward process:
       \infer{r_w : \bb{R}}{}
       \right.
       \qquad
-      \text{(where \(r \in \bb{R}\).)}
+      \text{(where \(r_w \in \bb{R} \land \lfloor{} r_w \rfloor{} = r_w\).)}
       \label{tr:lit:wholeReal}
 \end{equation}
 
 \begin{equation}
       \left.
-      \infer{n \texttt{/} d : \bb{R}}{}
+      \infer{(n\ \texttt{/}\ d) : \bb{R}}{}
       \right.
       \qquad
       \text{(where \(n, d \in \bb{Z}\).)}

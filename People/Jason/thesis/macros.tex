@@ -75,9 +75,25 @@
 \newcommand{\porthreftm}[2]{\href{#2}{#1\printOnlyFootnoteMark}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODOs
+
 % Inlined TODOs
 \newcommand{\intodo}[1]{\todo[inline]{#1}}
-\newcommand{\imptodo}[1]{\todo[inline,backgroundcolor=orange]{#1}}
+
+% "Important" TODOs
+\newcommand{\imptodo}[1]{\todo[inline,backgroundcolor=Red]{#1}}
+
+% "Easy" TODOs
+\newcommand{\easytodo}[1]{\todo[inline,backgroundcolor=SeaGreen]{#1}}
+\newcommand{\eztodo}[1]{\easytodo{#1}}
+
+% "Tedious" TODOs
+\newcommand{\tedioustodo}[1]{\todo[backgroundcolor=PineGreen]{#1}}
+
+% "Question" TODO Notes
+\newcommand{\questiontodo}[1]{\todo[backgroundcolor=Lavender]{#1}}
+\newcommand{\qtodo}[1]{\questiontodo{#1}}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Haskell snippet

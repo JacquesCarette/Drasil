@@ -111,3 +111,8 @@ Matryoshka
 transpiling
 pseudohaskell
 typedness
+QuantityDicts
+gool
+oo
+uid
+glassbr

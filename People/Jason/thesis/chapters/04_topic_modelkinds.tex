@@ -158,134 +158,108 @@ Drasil relies on converting the various kinds of theories described in the
 \intodo{Example of an IMs conversion into Java code.}
 
 Unfortunately, issues occur when attempting to convert the knowledge contained
-in \RelationConcept{}s. Namely,
+in \RelationConcept{}s. Namely, we have two (2) main issues with it: the
+transformation is not \textit{total} (and we don't have structural information
+about when it is defined versus when it's not), and transformation requires
+complex analysis of expressions (as such, we're currently limited to relying on
+implicit information).
 
-\intodo{I should probably rewrite the below point form notes as paragraphs as
-	well, even though I originally intended to have it as a numbered list.}
+\subsection{It's Not Total}
+
+As the \acs{srs} is purely for \textit{display}, any \Expr{} expression can be
+converted to something for display. However, the transformation of
+\(\RelationConcept{} \rightarrow \acs{gool}\) (in particular, the \(\Expr{}
+\rightarrow \acs{gool}\) component) is not \textit{total} (i.e., not all
+possible expressions of the \Expr{} language can be converted into a
+representational \acs{gool} expression), and we have no information about
+\textit{when} they do. As \acs{gool} is \Expr{}s primary ``code'' target,
+through which we compile to other \acs{oo} languages, we're only able to
+directly translate terms from \Expr{} into \acs{gool} that have definite values.
+The terms in \Expr{} that require extra information before they can be converted
+into code also cannot be directly converted, they need to be refined first. At
+times, this refinement information is also a conscious choice that the developer
+should be making instead of having a choice imposed on them by the code
+generator.
+
+\subsection{It's Inflexible}
+
+\intodo{This subsection is still very awkward, I need to re-write it.}
+
+Assume we have a theory that describes the equation of a line. There are many
+ways we can describe the equation: polynomial (\(a \cdot{} x + b \cdot{} y + c =
+0\)), slope-intercept form (\(y = m \cdot{} x + b\)), point-slope form (\(y_1 -
+y_2 = m(x_1 - x_2)\)), and so on. Although we fundamentally understand the
+equation of a line, even we might find difficulty in recognizing the equation of
+a line from any provided equation. However, when calculating our dependent
+variable, we'll always need to end with a specific form: \(y = \ldots{}\).
+Similarly, when calculating this in ``code,'' we'll need this form. However, if
+we struggle to even recognize the form, we will similarly find difficulty in
+converting it to the specifically required form. Thus, it requires complex
+analysis of the expressions to even create such a \(\Expr{} \rightarrow
+\acs{gool}\) mapping. \RelationConcept{} exhibits the same issues as our
+hypothetical example \textemdash{} it requires brittle, complex analysis.
+
+More generally, it is very easy to write ``difficult/impossible to interpret''
+expressions. For example, it is possible to create expressions for which aren't
+directly calculable (i.e., things that require an extra paper and pencil/mental
+mathematics before performing), either without extra surrounding information or
+simply impossible.
+
+When writing with pencil and paper, we usually write with extra context
+(generally more information that needs to be read to fully understand some
+expression), assuming the reader understands that context. We might also infer
+information about the model. Unfortunately, mechanizing inference, without any
+sort of context or other knowledge, is difficult, artificial learning is a whole
+field of study of its own, and we're not interested in it here! We must reverse
+the relationship of the inference by having knowledge container expose
+everything on its own.
+
+An \Expr{} alone is a weak conveyor of the inner knowledge of theories, similar
+to normal ``pencil and paper'' mathematical expressions, without extra
+information, the expression alone may be ineffectual or nearly unusable in code
+generation.
+
+In general, it is important that each knowledge encoding in Drasil exposes as
+much information as reasonably possible (and useful). We want to expose the
+``specifications'' of each piece of knowledge that we are encoding so that
+transformers and generators may appropriately make use of contained knowledge.
+
+Previous to this work, Drasil was limited to using theories encoded with a
+precise form, \(x = f(a, b, c, \ldots{})\), in code generation. Any other forms
+of theories were unusable. This was known as the ``\relToQD{} hack.''
 
 \originalRelToQDHaskell{}
 
-\begin{enumerate}
+\refOriginalRelToQDHaskell{} was a temporary solution to this symptom of
+insufficient knowledge capture. \relToQD{} relied on implicit (and unguaranteed)
+requirements of inputs. It had no static checks for consistency that an input
+``theory'' was indeed usable in code generation.
 
-	\item The transformation of \(\RelationConcept{} \rightarrow \acs{gool}\) is
-	      not \textit{total} (i.e., not all terms of the \Expr{} language can be
-	      mapped into a representational \acs{gool} term).
+For the \acsp{ode} that Drasil captured, it required manual intervention at the
+time of code generation, with manually written packet of information about how
+the \acs{ode} could be translated.
 
-	      \begin{itemize}
-
-		      \item Not all terms of the \Expr{} language have a definite value.
-
-		      \item Some terms in \Expr{} require extra information before they
-		            can be converted into code. At times, this information is a
-		            conscious choice that the developer should be making instead
-		            of imposed on them.
-
-	      \end{itemize}
-
-	\item It is very easy to write ``difficult/impossible to interpret''
-	      expressions. For example, it is possible to create expressions for
-	      which aren't directly calculable (i.e., things that require an extra
-	      paper and pencil/mental mathematics before performing), either without
-	      extra surrounding information or simply impossible.
-
-	      \begin{itemize}
-
-		      \item When writing with pencil and paper, we usually write with
-		            extra context (generally more information that needs to be
-		            read to fully understand some expression), assuming the
-		            reader understands that context. We might also infer
-		            information about the model. Unfortunately, mechanizing
-		            inference, without any sort of context or other knowledge,
-		            is difficult, artificial learning is a whole field of study
-		            of its own, and we're not interested in it here! As such, we
-		            reverse the relationship of the inference by having
-		            knowledge container expose everything on its own. We
-		            additionally expect knowledge as a requisite to working with
-		            the model.
-
-		      \item Transformation requires a comprehensive understanding of the
-		            inputs to outputs translation, but much of the input
-		            knowledge requires complex analysis that would only appear
-		            in the transformer, discarding its usability elsewhere \textemdash{}
-		            information loss.
-
-		      \item An \Expr{} alone is a weak conveyor of the inner knowledge
-		            of theories, similar to normal pencil-and-paper mathematical
-		            expressions, without extra information, the expression alone
-		            may be ineffectual or nearly unusable in code generation.
-
-		      \item It is important that each knowledge encoding in Drasil
-		            exposes as much information as reasonably possible (and
-		            useful). We want to expose the ``specifications'' of each
-		            piece of knowledge that we are encoding so that transformers
-		            and generators may appropriately make use of contained
-		            knowledge.
-
-	      \end{itemize}
-
-	\item Drasil is limited to using theories with expressions written in a very
-	      precise form: \(x = f(a, b, c, \ldots{})\) \todo{Discuss
-		      \QDefinition{}s.}
-
-	      \begin{itemize}
-
-		      \item The \(=\) sign is being overloaded here to mean definition,
-		            when it is supposed to mean equality. While \(y = x\) might
-		            conventionally be seen as ``y is equal to x'', we might
-		            want, in our model, for it to be understood as ``x is
-		            defined by y'' but displayed differently.
-
-		      \item Any other form of theories are unusable. Equational
-		            constraints at the very least should be immediately usable
-		            in creating assertions in the generated code.
-
-		      \item The conversion relied on the \relToQD{} hack.
-			  
-			 		 \intodo{Add code snippet of original relToQD and discuss
-			            	how it wasn't a sustainable solution for the
-			            	long-term. relToQD was exactly the implicit
-			            	knowledge I mentioned, it assumes, without
-			            	statically checking consistency, that the
-			            	Relations/Exprs provided as input for code
-			            	generation were all of the form: \(y =
-			            	f(\ldots{})\). See
-			            	\url{https://github.com/JacquesCarette/Drasil/issues/628}
-			            	for more information about state of relToQD w.r.t.
-			            	RCs.}
-
-		      \item The above is what leads to the brittle untotal conversion of
-		            theories to code.
-
-	      \end{itemize}
-
-	\item Existing transformation of \RelationConcept{}s into \acs{gool} relies
-	      on unstable transformation caused by need to write in a precise
-	      digestible form, with no static checks done at compile-time.
-	      \intodo{Mention ODE -> code generation.}
-
-\end{enumerate}
-
-Therefore, mathematical knowledge flow is unstable in Drasil, as shown in
-\refTheoriesWithoutModelKinds{}. The focal issue with the existing way theories
-are encoded is that the \textit{theories (\RelationConcept{}s) do not contain
-	the meaningful usable mathematical knowledge at all}. The mathematical knowledge
-is implicitly held within the Haskell-based functions\todo{I need to phrase this
-	better, but, the Haskell calculation functionality should be used as
-	infrequently as possible.}. In order to proceed, this mathematical knowledge
-must be reconciled and merged with the \RelationConcept{}s in some capacity.
+Together, because of the both issues, mathematical knowledge flow is unstable in
+Drasil, as shown in \refTheoriesWithoutModelKinds{}. The focal issue with the
+existing way theories are encoded is that the \textit{theories
+(\RelationConcept{}s) do not contain the structural information we need}. The
+mathematical knowledge is implicitly held within the Haskell-based functions. In
+order to proceed, this mathematical knowledge must be reconciled and merged with
+the \RelationConcept{}s in some capacity.
 
 \theoriesWithoutModelKinds{}
 
 \section{Reconciling Mathematical Knowledge}
 
-Fundamentally, the issue lies in that the information exposed for Drasil to make
-use of is too ``shallow''. The raw expressions are great for viewing and
-human-guided inference by experts, but not an inexperienced person, or for a
-computer to systematically use to generate things. At the moment, the available
-tools' type signatures would appear as something too amazing, so much so in
-fact, that one would (and should) question its accuracy. A hypothetical type
-signature, \inlineHs{RelationConcept -> Code}, is quite far fetched. Not all
-expressions that can possibly be contained in a \RelationConcept{} are usable in
+Fundamentally, the issues arise because the information is too ``shallow'' for
+Drasil to adequately make use of them \textemdash{} it can't infer from
+expressions. The raw expressions are great for viewing and human-guided
+inference by experts, but not an inexperienced person, or for a computer to
+systematically use to generate things. At the moment, the available tools' type
+signatures would appear as something too amazing, so much so in fact, that one
+would (and should) question its accuracy. A hypothetical type signature,
+\inlineHs{RelationConcept -> Code}, is quite far fetched. Not all expressions
+that can possibly be contained in a \RelationConcept{} are usable in
 code\footnote{When we discuss ``code'' generation, we target generating usable
 	software, but we currently primarily target general-purpose \acs{oo} programs.}
 generation.

@@ -27,38 +27,38 @@ import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
 import Data.List (find)
 
--- Unknown is nth degree of derivative of its dependent variable 
+-- | Unknown is nth order of the dependent variable 
 type Unknown = Integer
 
--- Term is the relation of a coefficient and an unknown
+-- | Term consist of a coefficient and an unknown (order)
 data Term = T{
   _coeff :: Expr,
   _unk :: Unknown
 }
 makeLenses ''Term
 
--- LHS is a collection of Terms
+-- | LHS is a collection of Terms
 type LHS = [Term]
 
+-- | Operation connect the dependent variable and the order
 {-
-  Input Language represent a derivative of a dependent variable
-  e.g. depVar $^^ d, 
-  depVar is the dependent variable, d is the dth derivative
+  e.g. depVar $^^ d
+  note: depVar is a dummy variable. It keeps the shape of the syntax.
 -}
 ($^^) :: ConstrConcept -> Integer -> Unknown
 ($^^) _ unk' = unk'
 
+-- | Operation represent multiple
 {-
-  Input Language represent Term which a coefficient multiple an unknown
   e.g. exactDbl 1 $* (opProcessVariable $^^ 2), 
   exactDbl 1 is the the coefficient, 
-  (opProcessVariable $^^ 2) is the 2rd derivative of opProcessVariable
+  (opProcessVariable $^^ 2) is the 2rd order of opProcessVariable
 -}
 ($*) :: Expr -> Unknown -> Term
 ($*) = T
 
+-- | Operation represent plus (collection Terms)
 {-
-  Input Language represent a collection of Terms
   e.g. [exactDbl 1 $* (opProcessVariable $^^ 2)]
        $+ (exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1))
   [exactDbl 1 $* (opProcessVariable $^^ 2)] is a collection with a single Term, 
@@ -67,40 +67,44 @@ type LHS = [Term]
 ($+) :: [Term] -> Term -> LHS
 ($+) xs x  = xs ++ [x]
 
+-- | Describe the structural content of a system of linear ODEs with six necessary fields
 data DifferentialModel = SystemOfLinearODEs {
-  -- independent variable, usually time
+  -- independent variable, often time
   _indepVar :: UnitalChunk,
-  -- Dependent variable, it is a vector
+  -- dependent variable
   _depVar :: ConstrConcept,
   -- coefficients matrix
   _coefficients :: [[Expr]],
-  -- Unknowns column vector
+  -- unknowns column vector (orders)
   _unknowns :: [Unknown],
-  -- Constant Column vector 
+  -- constant column vector 
   _dmConstants :: [Expr],
+  -- meta data
   _dmconc :: ConceptChunk
 }
 makeLenses ''DifferentialModel
 
-
--- Information for solving an initial value problem
+-- | Information for solving an initial value problem
 data InitialValueProblem = IVP{
+  -- initial time
   initTime :: Expr,
+  -- end time
   finalTime :: Expr,
+  -- initial values
   initValues :: [Expr]
 }
 
+-- | Acceptable format for ODE solvers
 {-
-  Acceptable format for ODE solvers
-  X' = AX + B
-  A  is coefficient matrix with identity matrix
-  X  is unknown column vector after reduce the highest order
-  B  is constant column vector with identity matrix
+  represent the structure of X' = AX + B
   X' is a column vector of first-order unknowns
 -}
 data ODESolverFormat = X'{
+  -- A is coefficient matrix with identity matrix
   coeffVects :: [[Expr]],
+  -- combing with the dependent variable. it represents X, unknown column vector after reduce the highest order.
   unknownVect :: [Integer],
+  -- B is constant column vector with identity matrix
   constantVect :: [Expr]
 }
 
@@ -129,27 +133,26 @@ formStdODE d
         unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
         constantVec = [express (columnVec (d ^. dmConstants))]
 
--- | Set the single ODE to a flat equation form, lhs = rhs
+-- | Set the single ODE to a flat equation form, "left hand side" = "right hand side"
 formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
 formASingleODE coeffs unks consts = equiv (lhs : rhs)
   where lhs = foldl1 addRe (map (\x-> express (fst x) `mulRe` snd x) $ filterZeroCoeff coeffs unks)
         rhs = map express consts
 
--- | Remove zero coefficients for display purpose
+-- | Remove zero coefficients for the displaying purpose
 filterZeroCoeff :: [Expr] -> [ModelExpr] -> [(Expr, ModelExpr)]
 filterZeroCoeff es mes = filter (\x -> fst x /= exactDbl 0) $ zip es mes
 
--- | Form a n-vector of derivatives dependent variables
+-- | Form all derivatives for the displaying purpose
 formAllUnknown :: [Unknown] -> ConstrConcept -> UnitalChunk -> [ModelExpr]
 formAllUnknown unks dep ind = map (\x -> formAUnknown x dep ind) unks
 
--- | Form a derivative of a dependent variable
+-- | Form a derivative for the displaying purpose
 formAUnknown :: Unknown -> ConstrConcept-> UnitalChunk -> ModelExpr
 formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (qw dep))
 
+-- |   Create a 'DifferentialModel' by giving a independent variable, a dependent variable a canonical matrix form, and conceptChuck.
 {-
-  Create a 'DifferentialModel' by giving a independent variable, a dependent variable 
-  a canonical matrix form, and conceptChuck.
   canonical matrix form: Ax = b
     A is a known m*n matrix that contains coefficients, 
     x is an n-vector that contain derivatives of dependent variables
@@ -167,7 +170,7 @@ makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
   error "The order of giving unknowns need to be descending"
  | otherwise = SystemOfLinearODEs indepVar' depVar' coeffs unks const'(dccWDS id' term' defn')
 
--- | Create a single ODE with its left hand side and right hand side
+-- | Create a 'DifferentialModel' by the input language
 makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
 makeASingleDE indepVar'' depVar'' lhs const'' id'' term'' defn''
  | length coeffs /= length [const''] =
@@ -184,25 +187,24 @@ isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
 isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
 isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)) True coeffs
 
--- | Function to check whether the of giving unknown is descending
+-- | Function to check whether the of giving the unknown vector is descending
 isUnknownDescending :: [Unknown] -> Bool
 isUnknownDescending [] = True
 isUnknownDescending [_] = True
 isUnknownDescending (x:y:xs) = x > y && isUnknownDescending xs
 
--- | Find the highest order in left hand side
+-- | Find the order in left hand side
 findHighestOrder :: LHS -> Term
 findHighestOrder = foldr1 (\x y -> if x ^. unk >= y ^. unk then x else y)
 
 -- | Create all possible unknowns based on the highest order.
--- | The order of the result list is from the highest degree to zero degree.
+-- The order of the result list is from the order to zero.
 createAllUnknowns :: Unknown -> ConstrConcept -> [Unknown]
 createAllUnknowns highestUnk depv
   | highestUnk  == 0  = [highestUnk]
   | otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depv
 
 -- | Create Coefficients base on all possible unknowns
--- | The order of the result list is from the highest degree to zero degree.
 createCoefficients :: LHS -> [Unknown] -> [Expr]
 createCoefficients [] _ = error "Left hand side is an empty list"
 createCoefficients _ [] = []
@@ -213,24 +215,24 @@ genCoefficient :: Maybe Term -> Expr
 genCoefficient Nothing = exactDbl 0
 genCoefficient (Just x) = x ^. coeff
 
--- | Find the term that match with the unknown
+-- | Find the term that match with the unknown (order)
 findCoefficient :: Unknown -> LHS -> Maybe Term
 findCoefficient u = find(\x -> x ^. unk == u)
 
--- | Delete the highest order
+-- | Reduce the order
 transUnknowns :: [Unknown] -> [Unknown]
 transUnknowns = tail
 
--- | Reduce the target coefficient to one, delete it, apply negative
+-- | Reduce the target term, move the target to the left hand side and the rest of term to the right hand side. Then, reduce its coefficient-- 
 transCoefficients :: [Expr] -> [Expr]
 transCoefficients es
   | head es == exactDbl 1 = mapNeg $ tail es
   | otherwise = mapNeg $ tail $ map ($/ head es) es
     where mapNeg = map (\x -> if x == exactDbl 0 then exactDbl 0 else neg x)
 
--- | Add Identity Matrix to Coefficients
--- | len is the length of the identity row,
--- | index is the location of identity value (start with 0)
+-- | Add the "Identity Matrix" to Coefficients
+-- len is the length of the identity row,
+-- index is the location of identity value (start with 0)
 addIdentityCoeffs :: [[Expr]] -> Int -> Int -> [[Expr]]
 addIdentityCoeffs es len index
   | len == index + 1 = es
@@ -245,12 +247,12 @@ addIdentityValue :: Int -> [Expr] -> [Expr]
 addIdentityValue n es = fst splits ++ [exactDbl 1] ++ tail (snd splits)
   where splits = splitAt n es
 
--- | Add Identity Matrix to Constants
--- | len is the size of new constant vector
+-- | Add zeroes to Constants
+-- len is the size of new constant vector
 addIdentityConsts :: [Expr] -> Int -> [Expr]
 addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr
 
--- | divide the leading coefficient of the highest order in constant
+-- | divide the leading coefficient in the constant term
 divideConstant :: Expr -> Expr -> Expr
 divideConstant a b
   | b == exactDbl 0 = error "Divisor can't be zero"
@@ -264,9 +266,9 @@ makeAODESolverFormat dm = X' transEs transUnks transConsts
         transEs = addIdentityCoeffs [transCoefficients $ head (dm ^. coefficients)] (length transUnks) 0
         transConsts = addIdentityConsts [head (dm ^. dmConstants) `divideConstant` head (head (dm ^. coefficients))] (length transUnks)
 
+-- | Form well-formatted ODE equations which the ODE solvers can solve.
 {-
-  Form well-formatted ODE equations which the ODE solvers can solve. For example:
-
+  For example:
   the original fourth-order ODE: 
   y'''' + 3y′′ − sin(t)y′ + 8y = t2
 
@@ -295,8 +297,8 @@ formEquations (ex:exs) unks (y:ys) depVa =
         termExprs = map (uncurry mulRe) filteredExprs -- multiple coefficient with depend variables
         finalExpr = foldl1 addRe termExprs -- add terms together
 
+-- Construct an InitialValueProblem.
 {-
-  Construct an InitialValueProblem.
   the first Expr: start time
   the second Expr: final time
   [Expr] : initial values

@@ -36,10 +36,8 @@ odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
   [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 odeInfo = ODEInfo
 
-{-
-  Create ODEInfo with 
-  Other variables, ODEOptions, DifferentialModel, and InitialValueProblem
--}
+
+-- | Create ODEInfo with Other variables, ODEOptions, DifferentialModel, and InitialValueProblem
 odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
 odeInfo' ovs opt dm ivp = ODEInfo 
   (quantvar $ _indepVar dm) 
@@ -51,6 +49,7 @@ odeInfo' ovs opt dm ivp = ODEInfo
   (createFinalExpr dm)
   opt
 
+-- | Other parameters for solving the ODE numerically
 data ODEOptions = ODEOpts {
   -- | Solution method.
   solveMethod :: ODEMethod,

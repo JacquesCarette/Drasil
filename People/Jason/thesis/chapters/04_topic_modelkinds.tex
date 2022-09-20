@@ -34,9 +34,6 @@ generate a series of representational software programs. Thankfully, Smith and
 Lai \cite{SmithAndLai2005} break down theories relevant to \acs{scs} into at
 least four (4) kinds for their \acs{srs} template:
 
-\intodo{Insider knowledge: the 3 ``models'' are actively being re-thought, and
-	\textit{are} being renamed to just ``theories''.}
-
 \begin{enumerate}
 
 	\item \textbf{Theory Models}: A ``theory presentation'' \todo{Cite ``Theory
@@ -63,7 +60,7 @@ least four (4) kinds for their \acs{srs} template:
 
 \end{enumerate}
 
-\intodo{Example of a theory/instance model here.}
+\eztodo{Example of a theory/instance model here.}
 
 The Instance Models and Data Definitions are to be directly used in the solving
 algorithm for the whole system, while the General Definitions and Theory Models
@@ -110,7 +107,7 @@ fundamentally, just an instance of a universal mathematical language which
 conveys their information, but given a type synonym to indicate that the
 instance should be a mathematical relation.
 
-\intodo{Theory Models as well rely on this same mathematical language used in
+\eztodo{Theory Models as well rely on this same mathematical language used in
 	\RelationConcept{}s to describe their own theories as well. The encoding is
 	slightly better as it exposes more of the expressions, but, still, the
 	expressions are left problematic.}
@@ -120,19 +117,18 @@ instance should be a mathematical relation.
 
 \originalExprHaskell
 
-\Expr{} (defined above, in \refOriginalExprHaskell{} with an \acs{adt}\todo{I
-	should probably discuss the ADT portion a bit more.}) represents the
-hypothetical mathematical language used to discuss the mathematics relevant
-to common \acs{scs}, specifically, at least to under/graduate-level physics
-problems. The language contains the commonly found operations in a
-well-understood physics textbook (here, with a focus on graduate-level
-scientific problems). The mathematical language is universal, covering a
-wide range of knowledge, including facilities for creating commonly used
-primitive data types, operations, and functions  in mathematics, physics,
+\Expr{} (defined above, in \refOriginalExprHaskell{} with an \ACF{adt})
+represents the hypothetical mathematical language used to discuss the
+mathematics relevant to common \acs{scs}, specifically, at least to
+under/graduate-level physics problems. The language contains the commonly found
+operations in a well-understood physics textbook (here, with a focus on
+graduate-level scientific problems). The mathematical language is universal,
+covering a wide range of knowledge, including facilities for creating commonly
+used primitive data types, operations, and functions  in mathematics, physics,
 and computer science and programming languages. For example, \todo{An
-	expression.} is transcribed in Drasil as follows:
+expression.} is transcribed in Drasil as follows:
 
-\intodo{Transcription of the above expression.}
+\eztodo{Transcription of the above expression.}
 
 This transcription relies on smart constructors, such as \todo{Reference a new
 	appendix entry for new smart constructors.}. The smart constructors used are
@@ -155,7 +151,7 @@ Drasil relies on converting the various kinds of theories described in the
 \acs{srs} template \cite{SmithAndLai2005}, essentially encoded in Drasil as
 \RelationConcept{}s, into representational code.
 
-\intodo{Example of an IMs conversion into Java code.}
+\tedioustodo{Example of an IMs conversion into Java code.}
 
 Unfortunately, issues occur when attempting to convert the knowledge contained
 in \RelationConcept{}s. Namely, we have two (2) main issues with it: the
@@ -183,7 +179,7 @@ generator.
 
 \subsection{It Requires Complex Analysis}
 
-\intodo{This subsection is still very awkward, I need to re-write it.}
+\imptodo{This subsection is still very awkward, I need to re-write it.}
 
 Assume we have a theory that describes the equation of a line. There are many
 ways we can describe the equation: polynomial (\(a \cdot{} x + b \cdot{} y + c =
@@ -291,14 +287,14 @@ language division and type information.
 
 \languageDivision{}
 
-\intodo{Re: TTF: What Haskell/GHC language extensions did we need to use?}
+\eztodo{Re: TTF: What Haskell/GHC language extensions did we need to use?}
 
 \Expr{} has its indefinite values split off into \ModelExpr{}
 (\refCurrentModelExprHaskell{})\todo{List notable terms moved, Deriv, Continuous
 	vs Discrete ranges, Space, etc}, a deeply embedded universal mathematical
 language. As we desire for it to be equally usable as \Expr{}, it is,
 essentially, the original \Expr{} without the language terms related to
-``code''\todo{i.e., \ldots{}}. In order to alleviate the stress involved with
+``code.'' In order to alleviate the stress involved with
 writing out the same expression in two (2) different languages, we use a
 \ACF{ttf} encoding of the two (2) languages (\refCurrentExprTTFHaskell{} and
 \refCurrentModelExprTTFHaskell{}). The \acs{ttf} encoding allows us to
@@ -372,9 +368,9 @@ to determine whether the model is ``fully refined''/``grounded'' or not, and,
 hence, usable in code generation. \refCurrentModelKindsHaskell{} displays the
 creation of \ModelKind{} and \ModelKinds{}. Please note that this aggregation is
 based purely on the existing model examples in the existing Drasil case studies,
-and the existing models are \textit{incomplete} in the larger scope.
+and the existing models are incomplete in the larger scope.
 
-\intodo{What must each kind of model provide for them to be candidates for a
+\eztodo{What must each kind of model provide for them to be candidates for a
 	ModelKind type? One: they must be able to re-create the original Expr they
 	had been encoded as, in the new ModelExpr language, via their ``Express''
 	instance.}
@@ -400,7 +396,7 @@ symbols, then the \EquationalModel{} is usable for code generation. At the
 moment, there is no information attached to symbols yet regarding whether they
 are abstract or instanced, so that portion of the rule is not enforced.
 
-\intodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and
+\eztodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and
 	the generated code.}
 
 \subsection{Constraints}
@@ -416,7 +412,7 @@ is unclear and may be interpreted differently by readers. This model can, and
 should, eventually also be usable in code generation once there is interest in
 creating runtime assertions of symbols.
 
-\intodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
+\eztodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
 	the SRS.}
 
 \subsection{Definition Realms}
@@ -435,7 +431,7 @@ along the way to create Instance Models. An \EquationalRealm{} is based on a
 \QDefinition{}s through choosing definitions (encoded as \DefiningExpr{}s,
 \refCurrentDefiningExprHaskell{}), through refinements, from the \MultiDefn{}s.
 
-\intodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
+\eztodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
 
 \subsection{Differential Equations}
 
@@ -493,10 +489,10 @@ classifying theories and relevant information. Notably, from the new encodings
 of the theories, we are still able to recreate the original \Expr{}s (or, now
 \ModelExpr{}s) that once represented them.
 
-\intodo{Side-by-side figure comparison of \refTheoriesWithModelKinds{} and
+\tedioustodo{Side-by-side figure comparison of \refTheoriesWithModelKinds{} and
 	\refTheoriesWithoutModelKinds{}}
 
-\intodo{What do we learn from doing this conversion, about the greater part
+\eztodo{What do we learn from doing this conversion, about the greater part
 	about encoding knowledge? \ldots{}}
 
 From this, we obtain a new general rule for future knowledge
@@ -513,7 +509,7 @@ the expression language, as a whole, allows for poorly typed expressions to be
 formed. We lack enforcement regarding the validity of \Expr{} as
 ``expressions''.
 
-\intodo{ModelKinds already has some success, shown in Dongs work, where he added
+\eztodo{ModelKinds already has some success, shown in Dongs work, where he added
 	a lot more code generation capabilities through ModelKinds. We can now also
 	create an updated copy of the ``Table 3.3: Drasil Case Studies Artifacts
 	Generated.''}

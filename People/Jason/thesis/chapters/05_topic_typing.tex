@@ -79,11 +79,11 @@ of \textit{inference rules} makes up the type rules of a system. Here,
 \textit{type safety} is approximately an assurance of \textit{preservation} and
 \textit{progress} formed through the typing rules \cite{Harper2016}.
 
-\intodo{Discuss ``preservation'' and ``progress,'' and how, together, they make
+\eztodo{Discuss ``preservation'' and ``progress,'' and how, together, they make
       up ``safety'' as discussed in \cite{Harper2016}. Also discuss what it
       means for things to be well-typed.}
 
-\intodo{Invalid expressions are also ``bad'' because they make handling of
+\eztodo{Invalid expressions are also ``bad'' because they make handling of
       expressions more cumbersome, we can't guarantee analysis makes sense. They
       break ``preservation'' and ``progress'' in the generated artifacts, they
       make no real discernible ``sense.'' They might make sense to anyone in
@@ -361,15 +361,16 @@ altered later, if desired.
 
 \imptodo{Continue writing here!}
 
-\intodo{Draw out the syntax diagram of each language, but start with Expr and
-      discuss how CodeExpr and ModelExpr are extensions of Expr.}
+\tedioustodo{Draw out the syntax diagram of each language, but start with Expr
+      and discuss how CodeExpr and ModelExpr are extensions of Expr.}
 
-\intodo{Re-write the typing rules without the Haskell code references (keep it
-      mathematical/theoretical).}
+\tedioustodo{Re-write the typing rules without the Haskell code references (keep
+      it mathematical/theoretical).}
 
-\intodo{Discuss how and where we can add type information to Drasils expression
-      languages, and the pros/cons of the solutions. For example, should type
-      enforcement done at the construction-level or post-facto processed?}
+\tedioustodo{Discuss how and where we can add type information to Drasils
+      expression languages, and the pros/cons of the solutions. For example,
+      should type enforcement done at the construction-level or post-facto
+      processed?}
 
 In Haskell, there are at least two ways that we can perform these type rules: at
 creation, and after creation. If we choose to restrict at the construction, we
@@ -377,6 +378,9 @@ have a stronger sense of type safety for any and all expressions, unlike with
 post-creation manual checking of expressions, where you can't necessarily share
 proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
       perhaps in Agda!}.
+
+\imptodo{Either preserve some stuff from the below content of this chapter, or
+      delete it all.}
 
 \begin{itemize}
 

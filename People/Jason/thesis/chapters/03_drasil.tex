@@ -111,12 +111,15 @@ produced artifacts. Naturally, Drasil is limited to software-based side effects,
 but focused on producing \textit{files} on a computer.
 
 The case studies are focused on constructing scientific software that follow a
-precise \acs{srs} \cite{SmithAndLai2005}\intodo{Discuss Dr. Smiths template a bit
-      more, I need to explain the sections quickly, give an example, and explain that
-      it dissects SCS into well-understood components, which should provide sufficient
-      information for a developer to build a representational software}. Therefore,
-all artifacts are produced with the goal of providing a user with a (i)
-\acl{srs}, and (ii) a usable software that adheres to the \acl{srs}.
+precise \acs{srs} \cite{SmithAndLai2005}. Therefore, all artifacts are produced
+with the goal of providing a user with a (i) \acl{srs}, and (ii) a usable
+software that adheres to the \acl{srs}.
+
+\eztodo{Discuss Dr. Smiths template a bit more, I need to explain the sections
+      quickly, give an example, and explain that it dissects SCS into
+      well-understood components, which should provide sufficient information
+      for a developer to build a representational software. Perhaps I can
+      include a sample schematic?}
 
 The encodings of the desired artifact files are next most important. For
 example, an \acs{srs} artifact is typically a file that an end-user will be
@@ -165,11 +168,6 @@ relies on developing a stable framework for collecting a collection of
 down knowledge into small units of knowledge, the end-result development cycle
 should appear similar to using a projectional editor with appropriate \acs{ide}
 tooling.
-
-\intodo{Add an example of an SRS document, and explain how there is sufficient
-      information in it such that we can use it to generate representational
-      software that solves the relevant problems, with little or no manual/extra
-      information (excluding design choices of the desired software artifacts).}
 
 \drasilLogoImg{}
 
@@ -274,7 +272,7 @@ capable of generating representational software. \acs{nopcm} is usable in all
 languages supported by \acs{gool} except for Swift due to the lack of a
 Drasil-supported \acs{ode} solving library for the Swift \acs{gool} renderer.
 \acs{pdcontroller} was built outside of the normal means of Drasils case studies
-development, being built by a student\todo{Cite Naveens PR.} at McMaster
+development, being built by a student\eztodo{Cite Naveens PR.} at McMaster
 University for a class taken. Code generation for \acs{pdcontroller} is not
 impossible, it just requires more investigation for the needs of the case study.
 However, both the issues related to \acs{nopcm} and \acs{pdcontroller} are
@@ -285,15 +283,14 @@ document, applying transformations until a sufficient knowledge-base can be
 formed such that a residual \acs{oo} program can be generated via \acs{gool}.
 The \acs{srs} document (and relevant encodings of the knowledge in the \acs{srs}
 documents) outlines the input and output variables of a \acs{scs}. The Data
-Definitions\todo{Link to an example in the Appendix?}, Instance Models\todo{Link
-      to an example in the Appendix?}, and symbols are all used to form a
-``calculation path'' that relates the inputs to the outputs of the desired
-software artifact. If such calculation path cannot be found, then no program
-will be generated, and an error will be displayed to the user at Drasils runtime
-(e.g., it is not checked at Drasil compile-time). Each executable software
-artifact produced is coupled with a means (currently, a generated Makefile) to
-run and, where required, build the software artifact. Additionally, for
-supported languages, Doxygen \cite{Doxygen} configurations may be built.
+Definitions, Instance Models, and symbols are all used to form a ``calculation
+path'' that relates the inputs to the outputs of the desired software artifact.
+If such calculation path cannot be found, then no program will be generated, and
+an error will be displayed to the user at Drasils runtime (e.g., it is not
+checked at Drasil compile-time). Each executable software artifact produced is
+coupled with a means (currently, a generated Makefile) to run and, where
+required, build the software artifact. Additionally, for supported languages,
+Doxygen \cite{Doxygen} configurations may be built.
 
 The remaining case studies that do not generate code are still left. Issues
 related to their encodings of mathematical knowledge plague their usability in

@@ -91,7 +91,8 @@
 \newcommand{\tedioustodo}[1]{\todo[backgroundcolor=PineGreen]{#1}}
 
 % "Question" TODO Notes
-\newcommand{\questiontodo}[1]{\todo[backgroundcolor=Lavender]{#1}}
+\newcounter{todonoteQuestionsCtr}
+\newcommand{\questiontodo}[1]{\stepcounter{todonoteQuestionsCtr}\todo[backgroundcolor=Lavender]{\textbf{Q \#\thetodonoteQuestionsCtr{}}: #1}}
 \newcommand{\qtodo}[1]{\questiontodo{#1}}
 
 

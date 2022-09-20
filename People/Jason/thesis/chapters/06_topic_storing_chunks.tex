@@ -19,11 +19,6 @@
                         not really needed. i.e., in areas where we use bounded
                         polymorphism.
 
-                        \intodo{Explain when it's not really needed (i.e.,
-                        functions that just take any chunk that satisfy a
-                        constraint and use them in some area, or just grabbing
-                        the UID or the references of the chunk.)}
-
                   \item Scaling against new types of chunks.
                   
                   \item Scaling against type parameters.
@@ -60,9 +55,9 @@ the \UID{} data type\todo{ref Original UID Haskell}. For example, \todo{ref
 example chunk definition below} the below example chunk definition represents a
 commonly used packet of data associated with names.
 
-\intodo{Example of an uncomplicated chunks definition.}
+\tedioustodo{Example of an uncomplicated chunk definition.}
 
-\intodo{Discuss what parts are necessary for a chunk to be considered ``valid.''
+\eztodo{Discuss what parts are necessary for a chunk to be considered ``valid.''
       i.e., a UID, a list of references to referred chunks, and a type.}
 
 In the above example, the chunk belongs to a specific \textit{type}
@@ -77,7 +72,7 @@ references to that chunk refer to the same piece of immutable data\todo{Is
 memory usage a real issue with this? I also imagine this allows post-facto chunk
 creation too.}.
 
-\intodo{Discuss classy lenses built.}
+\tedioustodo{Discuss classy lenses built.}
 
 Searching for chunks by their \UID{}s requires us to have somewhere to search
 from. Drasil requires developers to collect all of their relevant chunks inside
@@ -144,7 +139,7 @@ quantification'' language feature is.}
 So, now we can re-create \Chunk{} using \ExistentialQuantification{} to hide the
 type parameter:
 
-\intodo{So, this ExistentialQuantification is a bit more important, and I should
+\eztodo{So, this ExistentialQuantification is a bit more important, and I should
       explain a bit more about why it's helpful in this particular case. It's
       useful because it allows me to ignore the type while retaining information
       about basic common functionality to \textit{all} of them by saying that
@@ -248,7 +243,7 @@ simpler. If we're interested, we can add a ``dump to X'' mechanism, where $X$ is
 any encoding of our choice (such as \acs{json}), similarly. This is omitted for
 brevity, but we chose to add this.
 
-\intodo{Connect these ideas here better.}
+\tedioustodo{Connect these ideas here better.}
 
 One notable and commonly used feature of the previous generation of the
 \ChunkDB{} was that it allowed the user to grab \textit{all} chunks of a
@@ -259,7 +254,7 @@ particular type. We can re-create this for this new \ChunkDB{} as well by using
 todo :: _
 \end{pseudohaskell}
 
-\intodo{I just need an example above, its kind of boring to write though. It
+\eztodo{I just need an example above, its kind of boring to write though. It
       would need to show a function that grabs chunks by a specific TypeRep and
       an example of how to use it.}
 
@@ -268,7 +263,7 @@ inefficient. So, in order to make the \ChunkDB{} more ``industrial-strength,''
 we can add an extra mechanism for caching in various ways to trade a bit of
 memory for a frequent and expensive search operation.
 
-\intodo{Haskell code: new chunk database structure.}
+\eztodo{Haskell code: new chunk database structure.}
 
 Now, we have extra functionality for caching by \TypeRep{}s without needing to
 calculate it every time we need it. Since it's frequently used in Drasils case
@@ -289,11 +284,11 @@ The \acs{uid} conflicts occur because of how they were structured. The chunks
 follow a ``gradual building'' pattern, similar to Matryoshka nesting
 dolls (\refMatryoshkaDollsImg{}).
 
-\intodo{Example chunk definition.}
+\eztodo{Example chunk definition.}
 
-\intodo{Example chunk definition.}
+\eztodo{Example chunk definition.}
 
-\intodo{Example common chunk definition.}
+\eztodo{Example common chunk definition.}
 
 In these above examples\footnote{The examples do not exist in Drasil, but they
 represent how chunks are ``gradually built.''}, chunks rely on a common data

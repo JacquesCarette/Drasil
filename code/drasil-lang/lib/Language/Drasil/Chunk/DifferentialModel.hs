@@ -32,7 +32,9 @@ type Unknown = Integer
 
 -- | Term consist of a coefficient and an unknown (order)
 data Term = T{
+  -- | the coefficient
   _coeff :: Expr,
+  -- | the order
   _unk :: Unknown
 }
 makeLenses ''Term
@@ -69,42 +71,39 @@ type LHS = [Term]
 
 -- | Describe the structural content of a system of linear ODEs with six necessary fields
 data DifferentialModel = SystemOfLinearODEs {
-  -- independent variable, often time
+  -- | independent variable, often time
   _indepVar :: UnitalChunk,
-  -- dependent variable
+  -- | dependent variable
   _depVar :: ConstrConcept,
-  -- coefficients matrix
+  -- | coefficients matrix
   _coefficients :: [[Expr]],
-  -- unknowns column vector (orders)
+  -- | unknowns column vector (orders)
   _unknowns :: [Unknown],
-  -- constant column vector 
+  -- | constant column vector 
   _dmConstants :: [Expr],
-  -- meta data
+  -- | meta data
   _dmconc :: ConceptChunk
 }
 makeLenses ''DifferentialModel
 
 -- | Information for solving an initial value problem
 data InitialValueProblem = IVP{
-  -- initial time
+  -- | initial time
   initTime :: Expr,
-  -- end time
+  -- | end time
   finalTime :: Expr,
-  -- initial values
+  -- | initial values
   initValues :: [Expr]
 }
 
--- | Acceptable format for ODE solvers
-{-
-  represent the structure of X' = AX + B
-  X' is a column vector of first-order unknowns
--}
+-- | Acceptable format for ODE solvers, represent the structure of X' = AX + B
+-- X' is a column vector of first-order unknowns
 data ODESolverFormat = X'{
-  -- A is coefficient matrix with identity matrix
+  -- | represent A, the coefficient matrix with identity matrix
   coeffVects :: [[Expr]],
-  -- combing with the dependent variable. it represents X, unknown column vector after reduce the highest order.
+  -- | combing with the dependent variable. it represents X, the unknown column vector after reduce the highest order.
   unknownVect :: [Integer],
-  -- B is constant column vector with identity matrix
+  -- | represent B, the constant column vector with identity matrix
   constantVect :: [Expr]
 }
 

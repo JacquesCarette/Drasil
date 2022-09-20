@@ -86,6 +86,27 @@ should only allow for referencing of symbols of abstract symbols. Similarly,
 rather than to the mathematical models (for this, a switch from a
 \QuantityDict{} is needed as well).
 
-\easytodo{ChunkDB arithmetic \textemdash{} now we have the full power of
-    database knowledge and operations that we can apply to our code. Filling up
-    our ChunkDB in a less-manual method too.}
+\subsection{Database}
+
+Once the \ChunkDB{} prototype finds its way into Drasil, we may focus on the
+ways we can manipulate them. For example, if we consider them sets we should
+consider implementing ``union'' and ``intersection'' operations to assist in
+importing and analyzing bodies of chunks. Additionally, if we consider them
+``tables'' (as in common relational databases), we might benefit from ``inner''
+and ``outer'' joins, or even using a \acs{sql} server as a backend to inputting
+(or handling) chunks. Using an \acs{sql} server may prove beneficial as there
+are already many \acs{gui} frontends for inputting \acs{rdbms} data.
+Furthermore, with the new database structure, ``tree shaking'' should be a
+fairly simple operation, reduced to searching for chunks that are unreachable
+from the universe of references of an input set of chunks. For example, for the
+\textit{SmithEtAl} template, we may consider tree shaking against the directly
+captured instances of inputs and outputs to remove any unnecessary assumptions,
+theories, symbols, etc.
+
+Finally, one pain-point in the case studies is inputting the transcribed chunks
+into the chunk database. At the moment, it requires manually inputting the data
+into lists, and then using the lists to form the \ChunkDB{}\todo{Ref. chunk db
+manual input code snippet}. We could attempt to automatically register the
+chunks in the database, either by analyzing Haskell (meta-linguistic), or
+de-embedding the chunks from our Haskell code and registering on parsing them
+\todo{Cite Dr Carettes comment about this}. 

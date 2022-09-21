@@ -294,7 +294,10 @@ non-recursive sum type, where each possible value is a different kind of
       \(\mathit{Literal}(l)\) & ::=       & \(n\)              & Integers (where \(n \in \bb{Z}\))                \\
                               & \(\vert\) & \(s\)              & Strings (where \(s\) is any string of text)      \\
                               & \(\vert\) & \(r\)              & Real numbers (where \(r \in \bb{R}\)             \\
-                              & \(\vert\) & \(r_w\)            & Whole-numbered reals (where \(r_w \in \bb{R}\))  \\
+                              & \(\vert\) & \(r_w\)            & Whole-numbered
+      reals (where \(r_w \in \bb{R} \land r_w \in \bb{Z}\)\
+      \footnote{Intentionally redundant to indicate that \(r_w\) is a real
+      number, but it should also be ``whole,'' and, as such, an integer.})                                        \\
                               & \(\vert\) & \(n \texttt{/} d\) & Fractions/percentages (where \(n,d \in \bb{Z}\)) \\
 \end{longtable}
 

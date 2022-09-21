@@ -426,12 +426,12 @@ creating runtime assertions of symbols.
 
 The Theory Models and General Definition Models are unrefined, and may contain
 multiple ways for a particular theoretical symbol to be defined. This is
-captured in Drasil by \EquationalRealm{}s: modelled after realms\todo{Cite
-	realms? If so, from Dr. Carette and Yasmines paper?}. This model kind is
-intended specifically for retaining information about conscious choices made
-along the way to create Instance Models. An \EquationalRealm{} is based on a
-\MultiDefn{} (\refCurrentMultiDefnHaskell{}), and is intended for forming
-\QDefinition{}s through choosing definitions (encoded as \DefiningExpr{}s,
+captured in Drasil by \EquationalRealm{}s: modelled after realms\qtodo{Cite Dr.
+Carette and Yasmines paper?}. This model kind is intended specifically for
+retaining information about conscious choices made along the way to create
+Instance Models. An \EquationalRealm{} is based on a \MultiDefn{}
+(\refCurrentMultiDefnHaskell{}), and is intended for forming \QDefinition{}s
+through choosing definitions (encoded as \DefiningExpr{}s,
 \refCurrentDefiningExprHaskell{}), through refinements, from the \MultiDefn{}s.
 
 \eztodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
@@ -444,10 +444,10 @@ differential equation models are converted into one of the other \ModelKinds{}.
 For related solving of differential equations, \DEModel{} implicitly relies on a
 developer writing a related \ODEInfo{}\todo{ref Current ODEInfo} packet which
 the code generator can use to solve the system. Actively being reconstructed in
-Drasil\todo{Cite Dongs work.}, \NewDEModel{} is the replacement for \DEModel{},
-aiming to expose more information about well-understood differential equations
-and related areas. \NewDEModel{} will eventually be renamed to \DEModel{} once
-all existing \DEModel{} models have been upgraded.
+Drasil\qtodo{How do I cite Dongs work?}, \NewDEModel{} is the replacement for
+\DEModel{}, aiming to expose more information about well-understood differential
+equations and related areas. \NewDEModel{} will eventually be renamed to
+\DEModel{} once all existing \DEModel{} models have been upgraded.
 
 \intodo{Example of a DEModel/NewDEModel and a RelationConcept in Haskell code,
 	the SRS, and the related ODEInfo and code.}

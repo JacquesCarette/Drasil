@@ -36,18 +36,19 @@ least four (4) kinds for their \acs{srs} template:
 
 \begin{enumerate}
 
-	\item \textbf{Theory Models}: A ``theory presentation'' \todo{Cite ``Theory
-		      Presentations.''}: an abstract theory, highly general and
-	      unspecific, with room for refinement. Typically, these are names
-	      coupled with information contained as axioms and data that make up
-	      a coherent story, but that are too vague to be immediately usable
-	      by the developers other than for refining into Instance Models.
+	\item \textbf{Theory Models}: A ``theory presentation'' \qtodo{How should I
+		      cite ``Theory Presentations?''}: an abstract theory, highly
+	      general and unspecific, with room for refinement. Typically, these
+	      are names coupled with information contained as axioms and data
+	      that make up a coherent story, but that are too vague to be
+	      immediately usable by the developers other than for refining into
+	      Instance Models.
 
-	\item \textbf{General Definitions}: A partially refined\todo{Discuss what
-		      refinement means here.} theory, typically bearing a stronger relation
-	      to the context of the \acs{srs} than the Theory Models. However,
-	      still, these are generally theoretical and abstract, much like Theory
-	      Models.
+	\item \textbf{General Definitions}: A partially refined\footnote{Similar to
+	      a theory model, but made less abstract in some way.} theory,
+	      typically bearing a stronger relation to the context of the \acs{srs}
+	      than the Theory Models. However, still, these are generally
+	      theoretical and abstract, much like Theory Models.
 
 	\item \textbf{Instance Models}: A fully refined theory, derived from the
 	      Theory Models and General Definitions, and directly usable by
@@ -126,7 +127,7 @@ graduate-level scientific problems). The mathematical language is universal,
 covering a wide range of knowledge, including facilities for creating commonly
 used primitive data types, operations, and functions  in mathematics, physics,
 and computer science and programming languages. For example, \todo{An
-expression.} is transcribed in Drasil as follows:
+	expression.} is transcribed in Drasil as follows:
 
 \eztodo{Transcription of the above expression.}
 
@@ -238,7 +239,7 @@ the \acs{ode} could be translated.
 Together, because of the both issues, mathematical knowledge flow is unstable in
 Drasil, as shown in \refTheoriesWithoutModelKinds{}. The focal issue with the
 existing way theories are encoded is that the \textit{theories
-(\RelationConcept{}s) do not contain the structural information we need}. The
+	(\RelationConcept{}s) do not contain the structural information we need}. The
 mathematical knowledge is implicitly held within the Haskell-based functions. In
 order to proceed, this mathematical knowledge must be reconciled and merged with
 the \RelationConcept{}s in some capacity.

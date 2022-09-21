@@ -198,7 +198,8 @@ where the knowledge is collected, placed, and grown (generated).
 The transformers take in some knowledge, optional \textit{refinement}
 information, and convert it into some other knowledge fragment. As expected,
 these transformations are ``against the grain'' of the ``bottom-up'' information
-gathering\todo{Provide a text-based example.}. Areas of precise and highly
+gathering\footnote{In a sense that we obtain the transformer of the ``input'' by
+abstracting from instances of the ``output.''}. Areas of precise and highly
 specific fragments of knowledge have their key components used in generating
 something in another language (this typically involves some sort of information
 loss/strip in order to restrict the knowledge for a specific purpose). The
@@ -207,12 +208,12 @@ miniature, ``bite-sized'', transformations, we are able to create large and
 highly complex (but well-thought-out and understood).
 
 The largest, most prominent transformer used in Drasil is that of the
-\textit{SmithEtAl} knowledge transformer\todo{I'm naming this, which I really
-      shouldn't be doing, but I need a name to refer to the SRS+Code generator we have
-      at the moment.}. It is currently represented using the entry point to Haskell
-programs, the \inlineHs{main :: IO ()} function is representative of the
-transformation capabilities of our understanding of our case studies into
-sufficient \acs{srs} documents, and ready-to-use software.
+\textit{SmithEtAl} knowledge transformer\qtodo{I'm naming this, which I really
+      shouldn't be doing, but I need a name for the SRS+Code generator.}. It
+is currently represented using the entry point to Haskell programs, the
+\inlineHs{main :: IO ()} function is representative of the transformation
+capabilities of our understanding of our case studies into sufficient \acs{srs}
+documents, and ready-to-use software.
 
 \currentGlassBRMainFHaskell{}
 
@@ -247,9 +248,6 @@ and that, together, they are able to produce a meta-level holistic single theory
 that connects a list of inputs to a list of outputs of a desired calculation.
 The calculations should also be reasonably convertible in some programming
 language if we decide to use the calculations for code generation as well.
-
-\intodo{Coloured diagram showing flow of information and how general information
-      flow works.}
 
 \caseStudiesCodeTable{}
 

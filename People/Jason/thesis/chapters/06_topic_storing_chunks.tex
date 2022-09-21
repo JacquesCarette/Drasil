@@ -223,9 +223,8 @@ And then we would alter our \Chunk{} definition:
 
 Great! Now all chunks must ``have a \acs{uid}'' (exposed via their \HasUID{}
 instances), but we don't have a guarantee that they are unique and owned solely
-by a single instance of any chunk. This is fine for now, but it will be
-inevitably be handled when we need the assurance\todo{Add this note to future
-work.}.
+by a single instance of any chunk. This is fine for now, and is left for future
+work as part of future work (\Cref{chap:futureWork:sec:chunks}).
 
 For the last restriction we want to impose, we want to ensure that chunks are
 always ``understandable'' in a sense that all chunks they depend on have already

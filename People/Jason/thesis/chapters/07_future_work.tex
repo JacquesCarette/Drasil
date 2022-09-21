@@ -5,6 +5,7 @@ While this work does contribute to the Drasil research project and the ideology
 underpinning it, there are still many questions and concerns left unanswered.
 
 \section{Theories}
+\label{chap:futureWork:sec:theories}
 
 While \Cref{chap:modelkinds} improves upon the mathematical expression-directed
 method of encoding ``theory knowledge,'' it is not without it's own issues.
@@ -42,6 +43,7 @@ discussion of abstraction, unlike ``model,'' which is typically instantiated to
 some ``theory.''
 
 \section{Chunks}
+\label{chap:futureWork:sec:chunks}
 
 While \Cref{chap:storingChunks} answers questions regarding \textit{storing}
 more kinds of chunks and has created a basic set of constraints that all chunks
@@ -58,8 +60,8 @@ better analyze Drasil and its projects.
 
 Furthermore, while we've added requirements that \acsp{uid} be unique, we
 haven't discussed how \UID{}s should be built (automatic or manual, and how?),
-nor ensured that \UID{} references ultimately link to the chunks they were
-intended to link to. We desire for them to fully be \textit{rigid designators}
+nor ensured that \UID{} uniquely refer to the chunks they were intended to link
+to. We desire for them to fully be \textit{rigid designators}
 \cite{Kripke1972NandN}. Perhaps these questions will naturally resolve
 themselves when we try to switch to using a Drasil \acs{dsl} to build chunks.
 
@@ -71,6 +73,7 @@ should be able to better understand how much mental effort is needed to produce
 software artifacts.
 
 \subsection{Math-specific Instances}
+\label{chap:futureWork:sec:chunks:sub:mathSpecific}
 
 In \Cref{chap:modelkinds,chap:typedExpr}, we discussed how we can improve the
 reliability of mathematical language usage in Drasil in different facets. One
@@ -87,6 +90,7 @@ rather than to the mathematical models (for this, a switch from a
 \QuantityDict{} is needed as well).
 
 \subsection{Database}
+\label{chap:futureWork:sec:chunks:sub:database}
 
 Once the \ChunkDB{} prototype finds its way into Drasil, we may focus on the
 ways we can manipulate them. For example, if we consider them sets we should

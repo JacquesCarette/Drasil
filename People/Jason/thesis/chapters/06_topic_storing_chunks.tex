@@ -133,11 +133,7 @@ Thankfully, \acs{ghc} provides us with the ``Existential Quantification''
 language feature \cite{GHC2020ExistentialQuantification} that we can enable by
 placing a small compiler option at the top of our Haskell files (e.g.,
 \mintinline{haskell}{{-# LANGUAGE ExistentialQuantification #-}}), or, in our
-\texttt{package.yaml} files. \todo{Quickly explain what the ``existential
-quantification'' language feature is.}
-
-So, now we can re-create \Chunk{} using \ExistentialQuantification{} to hide the
-type parameter:
+\texttt{package.yaml} files.
 
 \eztodo{So, this ExistentialQuantification is a bit more important, and I should
       explain a bit more about why it's helpful in this particular case. It's
@@ -147,6 +143,9 @@ type parameter:
       to say that the ExistentialQuantification is a bit more helpful than I
       make it sound. It lets me basically create a heterogeneous list with
       subtyped elements in Haskell.}
+
+So, now we can re-create \Chunk{} using \ExistentialQuantification{} to hide the
+type parameter:
 
 \voidDataChunks{}
 

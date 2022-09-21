@@ -74,9 +74,11 @@ fields in order to generate representational software for the \acs{srs}. The
 focus of the scientific requirements documents are to transcribe the relevant
 knowledge of a \acs{scs} system for end-user developers to satisfy when
 developing \acs{scs}, and as developed by a domain/scientific expert. For
-example, the \porthref{\acs{glassbr} \acs{srs}}{https://jacquescarette.github.io/Drasil/examples/glassbr/SRS/srs/GlassBR_SRS.html} is used to fully explain \todo{something}
-such that a software developer can construct a program based on it. Of course,
-if the \acs{srs} document is to be truly sufficient for a software developer to
+example, the \porthref{\acs{glassbr}
+\acs{srs}}{https://jacquescarette.github.io/Drasil/examples/glassbr/SRS/srs/GlassBR_SRS.html}
+is used to explain a scientific experiment, where a blast stresses glasses, such
+that a software developer can construct a program based on it. Of course, if the
+\acs{srs} document is to be truly sufficient for a software developer to
 unambiguously create a representational software artifact, then the software
 developer (who potentially knows nothing about the domain discussed in the
 \acs{srs} document) will need to be able to credibly transcribe everything into
@@ -126,15 +128,15 @@ operations in a well-understood physics textbook (here, with a focus on
 graduate-level scientific problems). The mathematical language is universal,
 covering a wide range of knowledge, including facilities for creating commonly
 used primitive data types, operations, and functions  in mathematics, physics,
-and computer science and programming languages. For example, \todo{An
-	expression.} is transcribed in Drasil as follows:
+and computer science and programming languages. For example, one might
+transcribe \(3 e^{x + 2} = y\) in Drasil as:
 
-\eztodo{Transcription of the above expression.}
+\eztodo{Pseudocode transcription of the above expression.}
 
-This transcription relies on smart constructors, such as \todo{Reference a new
-	appendix entry for new smart constructors.}. The smart constructors used are
-all specialized to \Expr{} and perform simplifications along the way (such
-as folding \(1 \cdot x\) into \(x\)).
+This transcription relies on smart constructors, such as those in
+\refOriginalFewExprSmartConstructorsHaskell{}. The smart constructors used are
+all specialized to \Expr{} and perform simplifications along the way (such as
+folding \(1 \cdot x\) into \(x\)).
 
 \section{A Universal Theory Description Language}
 

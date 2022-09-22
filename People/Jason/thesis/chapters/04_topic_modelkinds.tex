@@ -364,14 +364,16 @@ the new theory knowledge containers to be able to fully re-create the original
 shallow/raw \Expr{}s as a property of the new theory encodings. The once
 meta-level knowledge of the theories, lost in the Haskell implementation,
 becomes exposed and understood to Drasil. Ultimately, this is done through
-replacing \RelationConcept{} usage with \ModelKind{}, an aggregation of existing
-Drasil-related knowledge of mathematical theories. \ModelKind{} is defined using
-a \acs{gadt}, with one (1) type parameter. The type parameter is currently used
-to determine whether the model is ``fully refined''/``grounded'' or not, and,
-hence, usable in code generation. \refCurrentModelKindsHaskell{} displays the
-creation of \ModelKind{} and \ModelKinds{}. Please note that this aggregation is
-based purely on the existing model examples in the existing Drasil case studies,
-and the existing models are incomplete in the larger scope.
+replacing \RelationConcept{} usage with \ModelKind{}\footnote{\ModelKind{} is
+built upon Dr. Jacques Carettes prototype of an earlier version of
+\ModelKinds{}}, an aggregation of existing Drasil-related knowledge of
+mathematical theories. \ModelKind{} is defined using a \acs{gadt}, with one (1)
+type parameter. The type parameter is currently used to determine whether the
+model is ``fully refined''/``grounded'' or not, and, hence, usable in code
+generation. \refCurrentModelKindsHaskell{} displays the creation of \ModelKind{}
+and \ModelKinds{}. Please note that this aggregation is based purely on the
+existing model examples in the existing Drasil case studies, and the existing
+models are incomplete in the larger scope.
 
 \eztodo{What must each kind of model provide for them to be candidates for a
 	ModelKind type? One: they must be able to re-create the original Expr they

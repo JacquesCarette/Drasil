@@ -28,11 +28,11 @@ In Drasil, both of these languages are of great importance. The mathematical
 field of knowledge is directly used in at least two domains currently captured:
 the scientific theories, and \acs{gool} \cite{Carette2019}. Meanwhile, the
 programming language theory (artifacts) is only directly used in \acs{gool}, and
-its various renderers. The SmithEtAl \acs{srs} \cite{SmithAndLai2005} template
-generator uses knowledge transcribed as scientific requirements to automatically
-generate a series of representational software programs. Thankfully, Smith and
-Lai \cite{SmithAndLai2005} break down theories relevant to \acs{scs} into at
-least four (4) kinds for their \acs{srs} template:
+its various renderers. The Smith et al. \acs{srs} \cite{SmithAndLai2005}
+template generator uses knowledge transcribed as scientific requirements to
+automatically generate a series of representational software programs.
+Thankfully, Smith and Lai \cite{SmithAndLai2005} break down theories relevant to
+\acs{scs} into at least four (4) kinds for their \acs{srs} template:
 
 \begin{enumerate}
 
@@ -68,11 +68,11 @@ algorithm for the whole system, while the General Definitions and Theory Models
 provide justification for the existence of the Instance Models, and the Data
 Definitions are provided and relatively unimportant/uncritical to the system.
 
-Since the SmithEtAl generator focuses itself on knowledge captured in the form
-of the \acs{srs} template, Drasil requires a comprehensive understanding of both
-fields in order to generate representational software for the \acs{srs}. The
-focus of the scientific requirements documents are to transcribe the relevant
-knowledge of a \acs{scs} system for end-user developers to satisfy when
+Since the Smith et al. generator focuses itself on knowledge captured in the
+form of the \acs{srs} template, Drasil requires a comprehensive understanding of
+both fields in order to generate representational software for the \acs{srs}.
+The focus of the scientific requirements documents are to transcribe the
+relevant knowledge of a \acs{scs} system for end-user developers to satisfy when
 developing \acs{scs}, and as developed by a domain/scientific expert. For
 example, the \porthref{\acs{glassbr}
 \acs{srs}}{https://jacquescarette.github.io/Drasil/examples/glassbr/SRS/srs/GlassBR_SRS.html}
@@ -268,20 +268,19 @@ generation.
 \acs{gool} currently bears the burden of creating a family of software artifacts
 through describing a single \acs{gool} program. As we are specifically
 interested in generating families of \acs{scs} through strong knowledge capture,
-this work partially bears the burden of testing to ensure that the conversion of
-the knowledge contained in the SmithEtAl template \cite{SmithAndLai2005} is
-stable and reliable. At the moment, it is possible to describe mathematical
-expressions that are completely unusable in \acs{gool} because \acsp{gool}
-primary targets are languages that rely on expressions with, at least, definite
-values. Of course, \Expr{} already contains terms that are without definite
-values. For example, \Expr{} (\refOriginalExprHaskell{}) discusses derivations,
-integrations, spaces as primitive/literal values (largely symbolic, and
-unavailable in \acs{oo} languages), definition statements, equivalence\todo{I
-	guess it's less-so about definite value, moreso about lack of representation in
-	\acs{oo} languages.}, and infinite series. Realistically, this information
-already \textit{exists} in Drasil, but it is not strongly enforced at Drasils
-Haskell-level compile-time. In other words, the information is not
-\textit{exposed} to Haskells type system, but to Drasils runtime.
+this work partially bears the burden ensuring that the conversion of the
+knowledge contained in the Smith et al. \acs{srs} template
+\cite{SmithAndLai2005} to software is possible. At the moment, it is possible to
+describe mathematical expressions that are completely unusable in \acs{gool}
+because \acsp{gool} primary targets are languages that rely on expressions with,
+at least, definite values. Of course, \Expr{} already contains terms that are
+without definite values. For example, \Expr{} (\refOriginalExprHaskell{})
+discusses derivations, integrations, spaces as primitive/literal values (largely
+symbolic, and unavailable in \acs{oo} languages), definition statements, and
+infinite series. Realistically, this information already \textit{exists} in
+Drasil, but it is not strongly enforced at Drasils Haskell-level compile-time.
+In other words, the information is not \textit{exposed} to Haskells type system,
+but to Drasils runtime.
 
 In order to ensure that developers can only write ``usable'' grounded theories
 (``InstanceModels'') for the code generator to use, we have chosen to expose

@@ -207,13 +207,11 @@ produced fragments are directed by the developer. By composing a series of
 miniature, ``bite-sized'', transformations, we are able to create large and
 highly complex (but well-thought-out and understood).
 
-The largest, most prominent transformer used in Drasil is that of the
-\textit{SmithEtAl} knowledge transformer\qtodo{I'm naming this, which I really
-      shouldn't be doing, but I need a name for the SRS+Code generator.}. It
-is currently represented using the entry point to Haskell programs, the
-\inlineHs{main :: IO ()} function is representative of the transformation
-capabilities of our understanding of our case studies into sufficient \acs{srs}
-documents, and ready-to-use software.
+The largest, most prominent transformer used in Drasil is that of the Smith et
+al. \acs{srs} knowledge transformer. It is currently represented using the entry
+point to Haskell programs, the \inlineHs{main :: IO ()} function is
+representative of the transformation capabilities of our understanding of our
+case studies into sufficient \acs{srs} documents, and ready-to-use software.
 
 \currentGlassBRMainFHaskell{}
 
@@ -233,12 +231,13 @@ external resource.
 The \acs{srs} and software artifacts are optional features. They are also not
 always guaranteed to function merely because they were executed. It is up to the
 knowledge transcribers to ensure that the body of knowledge recorded is
-logically consistent and well-understood to Drasil. In particular, the SmithEtAl
-transformer requires that the recorded \textit{theories}/models are consistent,
-and that, together, they are able to produce a meta-level holistic single theory
-that connects a list of inputs to a list of outputs of a desired calculation.
-The calculations should also be reasonably convertible in some programming
-language if we decide to use the calculations for code generation as well.
+logically consistent and well-understood to Drasil. In particular, the Smith et
+al. transformer requires that the transcribed theories are consistent. A key
+point of ``consistency'' here is that they collectively produce a meta-level
+holistic single theory that creates a calculation scheme for a list of inputs to
+a list of outputs. The calculations should also be reasonably convertible in
+some programming language if we decide to use the calculations for code
+generation as well.
 
 \caseStudiesCodeTable{}
 

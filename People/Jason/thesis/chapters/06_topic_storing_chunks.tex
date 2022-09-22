@@ -133,19 +133,15 @@ Thankfully, \acs{ghc} provides us with the ``Existential Quantification''
 language feature \cite{GHC2020ExistentialQuantification} that we can enable by
 placing a small compiler option at the top of our Haskell files (e.g.,
 \mintinline{haskell}{{-# LANGUAGE ExistentialQuantification #-}}), or, in our
-\texttt{package.yaml} files.
-
-\eztodo{So, this ExistentialQuantification is a bit more important, and I should
-      explain a bit more about why it's helpful in this particular case. It's
-      useful because it allows me to ignore the type while retaining information
-      about basic common functionality to \textit{all} of them by saying that
-      they \textit{all} must satisfy a specific set of constraints. So, this is
-      to say that the ExistentialQuantification is a bit more helpful than I
-      make it sound. It lets me basically create a heterogeneous list with
-      subtyped elements in Haskell.}
-
-So, now we can re-create \Chunk{} using \ExistentialQuantification{} to hide the
-type parameter:
+\texttt{package.yaml} files. The ``Existential Quantification'' feature allows
+us to qualify over variable types. In  particular, this is useful for
+heterogeneous lists with elements, sub-typed against a set of constraints, in
+Haskell (which isn't normally encouraged, nor directly possible). In other
+words, it is useful because it allows us to ignore the type while retaining the
+value and a common basic functionality to all sub-typed elements through
+accessing the structural information through a set of constraints. With this, we
+can re-create \Chunk{} using \ExistentialQuantification{} to hide the type
+parameter:
 
 \voidDataChunks{}
 

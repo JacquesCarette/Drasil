@@ -140,13 +140,19 @@ folding \(1 \cdot x\) into \(x\)).
 
 \section{A Universal Theory Description Language}
 
-As Drasils theories rely heavily on \Relation{}s (and \RelationConcept{}s)
-(\todo{Reference the definitions of DDs, IMs, GDs, and TMs}), we may observe
-that the theories are an accurate reflection of writing out mathematics involved
-as one might write them down on paper: exactly as they please. In modelling any
-problem, one will, of course, model the work of their pencil and paper. This is
-exactly what occurs here. Theories here are shallow representations of
-knowledge, that mimic your pencil and papers work to a clueless reader.
+The \acs{srs} document organizes theoretical information of different kinds in
+various ways: instance models (\InstanceModel{}), general definitions
+(\GenDefn{}), and theoretical models (\TheoryModel{}). However, each way relies
+on flat \Relation{}s, either directly or through \RelationConcept{}s. The
+theories are ``shallow'', or ``flat,'' representations of the theoretical
+information because they do not directly provide information about the structure
+of the information they carry. When transmitting information on pencil and paper
+to your colleagues, this is fine, because they will likely read extra contextual
+information from it, and know how to use it accordingly. However, our machines
+aren't able to infer as well as we're able to. Our machines are clueless to the
+contextual information about the theories because we have provided no means of
+discussion to them. In other words, Drasil does not yet understand the language
+of the associated context. This work aims to fix this issue.
 
 \section{Theories to Specifications and Software}
 

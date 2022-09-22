@@ -451,10 +451,12 @@ differential equation models are converted into one of the other \ModelKinds{}.
 For related solving of differential equations, \DEModel{} implicitly relies on a
 developer writing a related \ODEInfo{}\todo{ref Current ODEInfo} packet which
 the code generator can use to solve the system. Actively being reconstructed in
-Drasil\qtodo{How do I cite Dongs work?}, \NewDEModel{} is the replacement for
-\DEModel{}, aiming to expose more information about well-understood differential
-equations and related areas. \NewDEModel{} will eventually be renamed to
-\DEModel{} once all existing \DEModel{} models have been upgraded.
+Drasil \cite{Chen2022MEng} \footnote{Shortly after I implemented \ModelKind{},
+Dong continued working on exploring \DEModel{}s and created \NewDEModel{} as a
+result.}, \NewDEModel{} is the replacement for \DEModel{}, aiming to expose more
+information about well-understood differential equations and related areas.
+\NewDEModel{} will eventually be renamed to \DEModel{} once all existing
+\DEModel{} models have been upgraded.
 
 \intodo{Example of a DEModel/NewDEModel and a RelationConcept in Haskell code,
 	the SRS, and the related ODEInfo and code.}
@@ -519,7 +521,14 @@ the expression language, as a whole, allows for poorly typed expressions to be
 formed. We lack enforcement regarding the validity of \Expr{} as
 ``expressions''.
 
-\eztodo{ModelKinds already has some success, shown in Dongs work, where he added
-	a lot more code generation capabilities through ModelKinds. We can now also
-	create an updated copy of the ``Table 3.3: Drasil Case Studies Artifacts
-	Generated.''}
+\ModelKind{} already has some success in enabling more theories to be encoded in
+Drasil and used for code generation. Dong Chens Master's involved exploring
+\acsp{ode} in Drasil and using them to generate code that solves them
+\cite{Chen2022MEng}. Through his work, we have already observed some success
+because more case studies are already capable of generating code (see
+\refCaseStudiesCodeTableAfterDongsWork{}). Namely, \acs{dblpendulum} has working
+code generation for 4 languages (Python, Java, C/C\(++\), and C\#), and
+\acs{pdcontroller} now also supports Java, C/C\(++\), and C\# in addition to
+Python.
+
+\caseStudiesCodeTableAfterDongsWork{}

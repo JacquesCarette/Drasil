@@ -57,9 +57,6 @@ commonly used packet of data associated with names.
 
 \tedioustodo{Example of an uncomplicated chunk definition.}
 
-\eztodo{Discuss what parts are necessary for a chunk to be considered ``valid.''
-      i.e., a UID, a list of references to referred chunks, and a type.}
-
 In the above example, the chunk belongs to a specific \textit{type}
 classification\todo{ref its type definition, from the appendix}. Drasil
 leverages Haskells type system to create a system of reasoning about chunks. As
@@ -235,13 +232,15 @@ And then we would alter our \Chunk{} definition:
 As you can see, adding restrictions on all chunks is now also considerably
 simpler. If we're interested, we can add a ``dump to X'' mechanism, where $X$ is
 any encoding of our choice (such as \acs{json}), similarly. This is omitted for
-brevity, but we chose to add this.
+brevity, but we chose to add this. For now, this chunk structure will be our
+final definition of a chunk: an arbitrary \textit{thing} that has a type which
+indicates how it's usable, a acs{UID}, and a list of \textit{things} it
+references (and hence depends on) to be sufficiently ``understood.''
 
-\tedioustodo{Connect these ideas here better.}
-
-One notable and commonly used feature of the previous generation of the
-\ChunkDB{} was that it allowed the user to grab \textit{all} chunks of a
-particular type. We can re-create this for this new \ChunkDB{} as well by using
+Now, we may move our gaze back to the \ChunkDB{} structure. The most commonly
+used feature of the previous generation of the \ChunkDB{} was that it allowed
+the user to grab \textit{all} chunks of a particular type in one go. We can
+re-create this for this new \ChunkDB{} as well by using
 \inlineHs{Data.Typeable}s \TypeRep{} signature representation of Haskell types:
 
 \begin{pseudohaskell}{Grabbing All Chunks from the New ChunkDB}{grabAllChunksFromNewChunkDB}

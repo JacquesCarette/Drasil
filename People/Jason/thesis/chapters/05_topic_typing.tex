@@ -78,20 +78,24 @@ language, such as numerics, functions/methods, operators, and modules. A series
 of \textit{inference rules} makes up the type rules of a system. Here,
 \textit{type safety} is approximately an assurance of \textit{preservation} and
 \textit{progress} formed through the typing rules \cite{Harper2016}.
+\textit{Preservation} is an assurance that the steps of evaluation preserve
+typing. \textit{Progress} is an assurance that ``well-typed'' expressions can be
+evaluated to value, or they are already a value and no evaluation is necessary.
+For an expression to be ``well-typed'' (or ``well-formed'') means that it is
+guaranteed to evaluate fully to a value without unexpected/illegal operations.
+For a language to be considered \textit{type-safe}, it means that it only admits
+valid well-typed expressions and a definition for what it means to be well-typed
+with respect to some evaluation function.
 
-\eztodo{Discuss ``preservation'' and ``progress,'' and how, together, they make
-      up ``safety'' as discussed in \cite{Harper2016}. Also discuss what it
-      means for things to be well-typed.}
-
-\eztodo{Invalid expressions are also ``bad'' because they make handling of
-      expressions more cumbersome, we can't guarantee analysis makes sense. They
-      break ``preservation'' and ``progress'' in the generated artifacts, they
-      make no real discernible ``sense.'' They might make sense to anyone in
-      particular, but, broadly, they will be gibberish, because they do not obey
-      a globally agreed upon rule set. To avoid issues with ``preservation'' and
-      ``progress,'' we manually ensure that generated artifacts by writing the
-      source input in precise ways that we only happen to be generating the
-      working artifacts. However, this does not scale well.}
+Invalid/ill-typed expressions aren't only ``bad'' because they aren't fully
+evaluable. They're also bad because they dilute the pool of expressions we're
+interested in, and that we may want to analyze. For ill-typed expressions,
+automated analysis is only good for automatically searching for the ill-typed
+areas, not using them to understand the intent of the writer (who may have just
+made a type error). Manual analysis is okay, but it does not scale well against
+large amounts of expressions (for which Drasil handles). Additionally, ill-typed
+expressions add extra overhead on us when handling them, either to ``correct''
+them or to ignore them.
 
 \subsection{A Simple Language}
 

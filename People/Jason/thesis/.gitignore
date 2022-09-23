@@ -1,15 +1,2 @@
 build/
-thesis.pdf
-*.tdo
-*.dvi
-*.bcf
-*.run.xml
-*.acr
-*.ist
-*.lol
-*.lot
-*.pyg
-*.synctex(busy)
-*.fot
-*.lof
-*.fot
+*.log

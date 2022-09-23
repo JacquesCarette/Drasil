@@ -244,12 +244,15 @@ re-create this for this new \ChunkDB{} as well by using
 \inlineHs{Data.Typeable}s \TypeRep{} signature representation of Haskell types:
 
 \begin{pseudohaskell}{Grabbing All Chunks from the New ChunkDB}{grabAllChunksFromNewChunkDB}
-todo :: _
-\end{pseudohaskell}
+findAllByType :: TypeRep -> ChunkDB -> [a]
+findAllByType tr cdb = catMaybes \$ map (\\(_, c) -> if chunkTy c == tr then Just (unChunk c) else Nothing) (M.toList cdb)
 
-\eztodo{I just need an example above, its kind of boring to write though. It
-      would need to show a function that grabs chunks by a specific TypeRep and
-      an example of how to use it.}
+chunkTy :: Chunk -> TypeRep
+chunkTy (Chunk c) = typeOf c
+
+unChunk :: Typeable a => Chunk -> Maybe a
+unChunk (Chunk c) = cast c
+\end{pseudohaskell}
 
 However, this is something of an expensive and commonly performed task, so it's
 inefficient. So, in order to make the \ChunkDB{} more ``industrial-strength,''

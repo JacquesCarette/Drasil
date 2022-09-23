@@ -373,12 +373,14 @@ model is ``fully refined''/``grounded'' or not, and, hence, usable in code
 generation. \refCurrentModelKindsHaskell{} displays the creation of \ModelKind{}
 and \ModelKinds{}. Please note that this aggregation is based purely on the
 existing model examples in the existing Drasil case studies, and the existing
-models are incomplete in the larger scope.
-
-\eztodo{What must each kind of model provide for them to be candidates for a
-	ModelKind type? One: they must be able to re-create the original Expr they
-	had been encoded as, in the new ModelExpr language, via their ``Express''
-	instance.}
+models are incomplete in the larger scope. Each \textit{kind of model} we find
+only has one requirement: that it should carry enough information to, and
+provide a means of, recreating the original expression from which they were
+abstracted out of. This requirement is essentially that of ``viewing'' it in the
+expression language, but it also tends to also add flexibility in how many ways
+that we can ``view'' the information in different forms. In the Haskell code,
+this requirement is enforced through requiring them all to instantiate the
+\Express{} typeclass (\refCurrentExpressHaskell{}).
 
 \currentModelKindsHaskell{}
 

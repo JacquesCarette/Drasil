@@ -65,11 +65,7 @@ monomorphic type signature. Commonly, we create chunks to discuss relations
 between other chunks. As such, chunks commonly also refer to other instances of
 chunks, but, instead of storing whole constituent chunks within them, we store
 \UID{} references to those constituent chunks. In doing this, we ensure that all
-references to that chunk refer to the same piece of immutable data\todo{Is
-memory usage a real issue with this? I also imagine this allows post-facto chunk
-creation too.}.
-
-\tedioustodo{Discuss classy lenses built.}
+references to that chunk refer to the same piece of immutable data.
 
 Searching for chunks by their \UID{}s requires us to have somewhere to search
 from. Drasil requires developers to collect all of their relevant chunks inside

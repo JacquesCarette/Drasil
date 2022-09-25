@@ -290,26 +290,24 @@ language division and type information.
 
 \languageDivision{}
 
-\eztodo{Re: TTF: What Haskell/GHC language extensions did we need to use?}
-
 \Expr{} has its indefinite values split off into \ModelExpr{}
 (\refCurrentModelExprHaskell{})\todo{List notable terms moved, Deriv, Continuous
-	vs Discrete ranges, Space, etc}, a deeply embedded universal mathematical
+vs Discrete ranges, Space, etc}, a deeply embedded universal mathematical
 language. As we desire for it to be equally usable as \Expr{}, it is,
 essentially, the original \Expr{} without the language terms related to
-``code.'' In order to alleviate the stress involved with
-writing out the same expression in two (2) different languages, we use a
-\ACF{ttf} encoding of the two (2) languages (\refCurrentExprTTFHaskell{} and
-\refCurrentModelExprTTFHaskell{}). The \acs{ttf} encoding allows us to
-seamlessly write expressions in either, or both, languages at the same time.
-\ModelExpr{}s \acs{ttf} encoding strictly contains the terms unique to
-\ModelExpr{}. As such, the \acs{ttf} encoding won't allow terms from
-\ModelExpr{} to be interpreted into \Expr{} unless they have a definite value
-because it will be impossible to describe the terms unique to \ModelExpr{} in
-terms of the \Expr{} language. However, it is possible (and is done normally) to
-convert \Expr{}s into \ModelExpr{}s for usage in generating the \acs{srs}
-documents, which primarily expect \ModelExpr{}s for transcribing mathematical
-expressions. Furthermore, with \ModelExpr{}, we may use instances of \Express{}
+``code.'' In order to alleviate the stress involved with writing out the same
+expression in two (2) different languages, we use a \ACF{ttf} encoding of the
+two (2) languages: \refCurrentExprTTFHaskell{} and
+\refCurrentModelExprTTFHaskell{}. The \acs{ttf} encoding allows us to seamlessly
+write expressions in either, or both, languages at the same time. \ModelExpr{}s
+\acs{ttf} encoding strictly contains the terms unique to \ModelExpr{}. As such,
+the \acs{ttf} encoding won't allow terms from \ModelExpr{} to be interpreted
+into \Expr{} unless they have a definite value because it will be impossible to
+describe the terms unique to \ModelExpr{} in terms of the \Expr{} language.
+However, it is possible (and is done normally) to convert \Expr{}s into
+\ModelExpr{}s for usage in generating the \acs{srs} documents, which primarily
+expect \ModelExpr{}s for transcribing mathematical expressions. Furthermore,
+with \ModelExpr{}, we may use instances of \Express{}
 (\refCurrentExpressHaskell{}) to define how various chunks can be described
 visually, using this mathematical modelling language.
 

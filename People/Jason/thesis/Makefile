@@ -1,4 +1,4 @@
-.PHONY: help system_requirements build debug clean
+.PHONY: help system_requirements build debug clean open
 
 help:
 	@echo "Build:"
@@ -21,3 +21,6 @@ debug: # for finding hard issues, this is an interactive version of 'build'
 
 clean:
 	rm -rf build/
+
+open:
+	xdg-open build/thesis.pdf

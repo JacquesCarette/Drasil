@@ -116,7 +116,7 @@ glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String)
 {--}
 
 outputs :: [QuantityDict]
-outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] ++ map qw [stressDistFac]
+outputs = map qw [isSafePb, isSafeLR] ++ [qw probBr, qw stressDistFac]
 
 tmSymbols :: [QuantityDict]
 tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]

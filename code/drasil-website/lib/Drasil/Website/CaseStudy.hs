@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 -- | Case Studies table for the different choices available when generating code from Drasil.
 -- To be used in the Drasil website.
 module Drasil.Website.CaseStudy where
@@ -107,11 +108,11 @@ data CSLegend = CSL {
 
 -- | Make the legend for the case study table as a list.
 caseStudyLegend :: RawContent
-caseStudyLegend = Enumeration $ Bullet $ zip (map mkLegendListFunc legendEntries) $ repeat Nothing
+caseStudyLegend = Enumeration $ Bullet $ map ((, Nothing) . mkLegendListFunc) legendEntries
 
 -- | Helper to convert the Case Study legends into list items.
 mkLegendListFunc :: CSLegend -> ItemType
-mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ zip (map mkTandDSent $ symbAndDefs csleg) $ repeat Nothing
+mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ map ((, Nothing) . mkTandDSent) $ symbAndDefs csleg
 
 -- | Should eventually take Sentences instead of Strings. Converts into the format of "symbol - definition".
 mkTandDSent :: (String, String) -> ItemType

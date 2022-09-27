@@ -1,4 +1,4 @@
-{-# Language PostfixOperators #-}
+{-# Language PostfixOperators, TupleSections #-}
 -- | Miscellaneous utility functions for use throughout Drasil.
 module Language.Drasil.Document.Combinators (
   -- * Reference-related Functions
@@ -193,7 +193,7 @@ unwrap Nothing  = EmptyS
 -- | Converts lists of simple 'ItemType's into a list which may be used
 -- in 'Contents' but is not directly referable.
 noRefs :: [ItemType] -> [(ItemType, Maybe String)]
-noRefs a = zip a $ repeat Nothing
+noRefs = map (, Nothing)
 
 --Doesn't use connection phrase so utils doesn't depend on data
 -- | Returns the 'Sentence' "@('titleize' aNamedIdea)@ Showing the Connections Between @contents@".

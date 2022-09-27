@@ -1,5 +1,4 @@
--- | Defines a structure to contain scientifically-relevant information about
--- an ODE.
+-- | Defines a structure to contain scientifically-relevant information about an ODE.
 module Language.Drasil.Data.ODEInfo (
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
@@ -36,10 +35,7 @@ odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
   [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 odeInfo = ODEInfo
 
-{-
-  Create ODEInfo with 
-  Other variables, ODEOptions, DifferentialModel, and InitialValueProblem
--}
+-- | Create ODEInfo with Other variables, ODEOptions, DifferentialModel, and InitialValueProblem
 odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
 odeInfo' ovs opt dm ivp = ODEInfo 
   (quantvar $ _indepVar dm) 
@@ -51,6 +47,7 @@ odeInfo' ovs opt dm ivp = ODEInfo
   (createFinalExpr dm)
   opt
 
+-- | Other parameters for solving the ODE numerically
 data ODEOptions = ODEOpts {
   -- | Solution method.
   solveMethod :: ODEMethod,

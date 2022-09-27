@@ -1,0 +1,230 @@
+\chapter{External libraries}
+\label{cha_extlib}
+External libraries are from an outside source; they do not originate from the source project. Our current interest is for libraries that are used to support solving scientific problems. We use external libraries to solve the ODE to save resources. Creating a complete ODE solver in Drasil would take considerable time, and there are already many reliable external libraries have been tested by long use. 
+
+The external libraries are bodies of mathematical knowledge that are accessed through a well-defined interface. Since all external libraries are language-dependent, the Drasil framework needs to generate many interfaces to utilize external libraries. GOOL (Generic Object-Oriented Language) is the module to do this job. With the implementation of GOOL, the Drasil framework can generate five different languages: Python, Java, C\texttt{++}, C\#, and Swift. Among those five languages, four programming languages have ODE libraries for solving ODEs; we did not find a suitable library for Swift. In Python, the Scipy library~\citep{scipy} is a well-known scientific library for solving scientific problems, including support for solving ODEs. In Java, a library called Apache Commons Maths (ACM)~\citep{apache} provides a supplementary library for solving mathematical and statistical problems not available in the Java programming language. ACM includes support to solve ODEs. Two less known libraries to solve ODEs are the ODEINT Library~\citep{odeint} in C\texttt{++} and the OSLO Library~\citep{oslo} in C\#. There could be multiple external libraries to solve the ODE in one language, but we currently only support one library for each language.
+
+We believe it is beneficial to conduct a commonalty analysis for all four selected libraries because the Drasil framework is suited to generate program families. A program families~\citep{dp1976} is a set of programs whose common properties are so extensive that it is advantageous to study the common properties of the programs before analyzing individual members. In this case, we may want to instruct the Drasil Code Generator to create programs that solve ODEs in multiple algorithms or allow other output types to interact with other modules. Those programs have parameterizable variabilities, so we can take advantage of developing them as a family~\citep{ss2004}.
+
+The four selected libraries have commonalities and variabilities. Firstly, they all provide a numerical solution for a system of first-order ODEs. Each library can output a value of the dependent variable at a specific time, and we can collect those values in a time range. Secondly, they all provide different algorithms for solving ODEs numerically; we will conduct a rough commonality analysis of available algorithms in Section~\ref{se_algorithmoptiopns}. A complete commonality analysis would be too time-consuming and out of the scope of our study. Lastly, the OSLO library have the potential to output an ODE in different types. This discovery will provide options for the Drasil framework to solve an ODE by generating a library rather than a standalone executable program. 
+
+This chapter will discuss topics related to the commonalities and variabilities of the four libraries, including numerical solutions, algorithms options and outputting an ODE in different types. 
+
+\section{Numerical Solutions}
+We use algorithms to make approximations for mathematical equations and create numerical solutions. All numerical solutions are approximations, and some numerical solutions that utilize better algorithms can produce better results than others. All selected libraries provide numerical solutions for a system of first-order ODEs as an IVP (Initial Value Problem). The IVP requires an initial condition that specifies the function's value at the start point, contrasting with a BVP (Boundary Value Problem). In a BVP, we apply boundary values instead of initial values. In this research, we will solve each scientific problem as an IVP. Let's see how to solve a system of first-order ODEs with an example. 
+
+The following example is derived from Equation~\ref{eq_odeexmaple}. We transform the second-order ODE into a system of first-order ODEs. We replaced $y(t)$ with $x_{1}(t)$, and $y'(t)$ with $x_{2}(t)$. The details on how to convert a higher-order linear ODE to a system of first-order ODEs are shown in Section~\ref{se_hightofirst}. At this point, our goal is to show an example of how we encode a system of first-order ODEs in Drasil.
+
+\begin{flalign} \label{ex_firstorderode}
+& x_{1}'(t) = x_{2}(t) \\ \nonumber
+& x_{2}'(t) = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p} 
+\end{flalign}
+\myequations{System of First-Order ODEs for PDContoller}
+
+In Equation~\ref{ex_firstorderode}, there are two dependent variables: $x_1$ and $x_2$. Both $x_1(t)$ and $x_2(t)$ are functions of the independent variable, in this case time $t$. $x_1$ is the process variable, and $x_2$ is the rate of change of $x_1$. $x_1'$(t) is the first directive of the function $x_1(t)$ with respect to time, and $x_2'$(t) is the first derivative of the function $x_2$(t) with respect to time. $K_d$, $K_p$, and $r_t$ are constant variables; they have the same meaning as in Equation~\ref{eq_odeexmaple} and Equation~\ref{ex_firstorderode}. We can encode Equation~\ref{ex_firstorderode} in all four libraries.
+
+In Python Scipy library, we can write the example as follows:
+\begin{python1}
+def f(t, y_t):
+    return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
+\end{python1}
+In this example, $y\_t$ is a list of dependent variables. The index 0 of $y\_t$ is the dependent variable $x_1$, and the index 1 of $y\_t$ is the dependent variable $x_2$. $y\_t[1]$ represent the first equation $x_{1}'(t) = x_{2}(t)$ in Equation~\ref{ex_firstorderode}. The second value in the returned list $(-(1.0 + K\_d) * y\_t[1] + -(20.0 + K\_p) * y\_t[0] + r\_t * K\_p)$ represents the second equation, $x_{2}'(t) = -(1 + K_{d}) \cdot x_{2}(t) - (20 + K_{p}) \cdot x_{1}(t) + r_{t} \cdot K_{p}$, in Equation~\ref{ex_firstorderode}. 
+
+In Java ACM library, we can write the example using the following code:
+\begin{java1}
+public void computeDeriv(double t, double[] y_t, double[] dy_t) {
+    dy_t[0] = y_t[1];
+    dy_t[1] = -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p;
+}
+\end{java1}
+
+In C\texttt{++} ODEINT library, we can write the example as the following code:
+\begin{cplusplus1}
+void ODE::operator()(vector<double> y_t, vector<double> &dy_t, double t) {
+    dy_t.at(0) = y_t.at(1);
+    dy_t.at(1) = -(1.0 + K_d) * y_t.at(1) + -(20.0 + K_p) * y_t.at(0) + r_t * K_p;
+}	
+\end{cplusplus1}
+
+In C\# OSLO library, we can write the example as the following code:
+\begin{csharp1}
+Func<double, Vector, Vector> f = (t, y_t_vec) => {
+    return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
+};
+\end{csharp1}
+
+Once we capture the information of the system of ODEs, we have to give an initial condition for solving an ODE as an IVP. To solve Equation~\ref{ex_firstorderode}, we must provide the initial value for both $x_1$ and $x_2$. Overall, an ODE is a simulation, and it simulates a function of time. Before we start the simulation, other configurations need to be specified, including the start time, end time, and time step between each iteration. We can also provide values for each library's absolute and relative tolerance. Those two tolerances control the accuracy of the solution. As we mentioned before, all numerical solutions are approximations. High tolerances produce less accurate solutions, and smaller tolerances produce more accurate solutions. Lastly, we have to collect the numerical output for each iteration. The full details on how each library solves Equation~\ref{ex_firstorderode} are shown in Appendix~\ref{numsol} and Code~\ref{code_csharposlo}.
+
+\section{Algorithm Options}
+\label{se_algorithmoptiopns}
+We can solve an ODE with many algorithms. The four selected libraries each provide many algorithms. We roughly classify available algorithms into four categories based on the type of algorithm they use. They are a family of Adams methods, a family of backward differentiation formula methods (BDF), a family of Runge-Kutta (RK) methods, and a ``catch all'' category of other methods. The commonality analysis we provide on available algorithms is a starting point. It is an incomplete approximation. Getting a complete commonality analysis will require help from domain experts in ODE. Although the commonality is incomplete, the team still benefits from the current analysis. Not only can a future student quickly access information on which algorithm is available in each language, but also the analysis reminds us that we can increase the consistency of artifacts by providing one-to-one mapping for each algorithm in the four libraries. For example, if a user explicitly chooses a family of Adams methods as the targeted algorithm, all available libraries should use a family of Adams methods to solve the ODE. Unfortunately, not all libraries provide a family of Adams methods. The targeted algorithm will affect what languages we can generate. Table~\ref{tab_algoexlib} shows the availability of a family of algorithms in each library. The full details of each library's algorithm availability are shown in Appendix~\ref{alg_externallib}.
+
+\begin{sidewaystable}
+\begin{adjustbox}{width=\columnwidth,center}
+\begin{tabular}{p{0.18\textwidth} | p{0.22\textwidth} p{0.22\textwidth} p{0.29\textwidth} p{0.25\textwidth}}\hline
+    \backslashbox{Algorithm}{Library}
+    &\textbf{Scipy-Python}&\textbf{ACM-Java}&\textbf{ODEINT-C\texttt{++}}&\textbf{OSLO-C\#}\\
+    \toprule
+    Family of Adams & 
+        \begin{itemize}[wide]
+        \item Implicit Adams
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Adams Bashforth
+        \item Adams Moulton
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Adams Bashforth Moulton
+        \end{itemize} &\\ \hline
+    Family of BDF & 
+        \begin{itemize}[wide]
+        \item BDF
+        \end{itemize} &&& 
+        \begin{itemize}[wide]
+        \item Gear’s BDF
+        \end{itemize} \\ \hline
+    Family of RK & 
+        \begin{itemize}[wide]
+        \item Dormand Prince (4)5 
+        \item Dormand Prince 8(5,3) 
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Explicit Euler
+        \item 2ed order
+        \item 4th order
+        \item Gill fourth order
+        \item 3/8 fourth order
+        \item Luther sixth order
+        \item Higham and Hall 5(4)
+        \item Dormand Prince 5(4) 
+        \item Dormand Prince 8(5,3) 
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Explicit Euler
+        \item Implicit Euler
+        \item Symplectic Euler
+        \item 4th order
+        \item Dormand Prince 5
+        \item Fehlberg 78
+        \item Controlled Error Stepper
+        \item Dense Output Stepper
+        \item Rosenbrock 4
+        \item Symplectic RKN McLachlan 6
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Dormand Prince RK547M
+        \end{itemize} \\ \hline
+    Others && 
+        \begin{itemize}[wide]
+        \item Gragg Bulirsch Stoer 
+        \end{itemize} & 
+        \begin{itemize}[wide]
+        \item Gragg Bulirsch Stoer 
+        \end{itemize} &\\
+    \bottomrule	
+\end{tabular}
+\end{adjustbox}
+\caption{Algorithms Support in External Libraries}	
+\label{tab_algoexlib}
+\end{sidewaystable}
+
+\section{Output an ODE}
+In the Drasil framework, there is an option to generate modularized software. This modularized software currently contains a controller module, an input module, a calculation module, and an output module. The controller module contains the main function that starts the software. The input module handles all input parameters and constraints. We manually create a text file that contains all input information. For example, in Double Pendulum, the input module will read Code~\ref{code_inputfile} and convert the information to its environment. 
+
+\begin{listing}[ht]
+\begin{python1}
+# Length of the upper rod (m)
+2.0
+# Length of the bottom rod (m)
+1.0
+# Mass of the upper object(kg)
+0.5
+# Mass of the bottom object(kg)
+2.0
+\end{python1}
+\captionof{listing}{A Sample Input File for Double Pendulum}
+\label{code_inputfile}
+\end{listing}
+
+The calculation module contains all the logic for solving the scientific problem. For example, in Double Pendulum, the calculation module contains all functions for calculating the numerical solution. Lastly, the output module will output the solution. In all ODE case studies, the output module will write the values returned by the calculation module as a string. For example, in Double Pendulum, the output module write Code~\ref{code_outputfile} in a text file.
+
+\begin{listing}[ht]
+\begin{python1}
+# this is theta 1
+theta = [1.3463968515384828, 1.3463947169563892, 1.346388313227267, 1.3463776404025904, 1.3463626985681507, 1.3463434878440559, ... ]
+\end{python1}
+\captionof{listing}{A Output File for Double Pendulum}
+\label{code_outputfile}
+\end{listing}
+
+With each module interacting with others we would like to study the output of the calculation module in the ODE case studies. Currently, the calculation module will output a finite sequence of real numbers, $\mathbb{R}^m$, for example, a list of numbers in Python. $m$ is a natural number which depends on the start time, end time, and time step. We have the following specification for the calculation module:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
+    \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
+    \toprule
+    Calculations & $\mathbb{R}^n$ & $\mathbb{R}^m$ \\
+    \bottomrule	
+\end{tabular}	
+\caption{Specification for Calculations Module Returns a Finite Sequence}	
+\label{tab_srsforcal}
+\end{table}
+$\mathbb{R}^n$ represents input values, and the superscript $n$ means how many input values. In our case study, after running the generated program, it will create a file containing the numerical solution of the ODE from the start time to the end time. The numerical solution is written as a stream of real numbers in Code~\ref{code_outputfile}. A finite sequence of real numbers only captures a partial solution; we ideally want to capture a complete solution. Therefore, we would like to explore options to output a different type for the calculation module.
+
+Most selected external libraries only provide numerical solutions in the form of a finite sequence of real numbers, $\mathbb{R}^m$. The C\# OSLO library not only supports outputting a finite sequence of real numbers but also an infinite sequence of real numbers (we use \verb|double| as the type for real numbers in C\# code). In C\# OSLO library, we can get an infinite numerical solution that contains all possible values of the dependent variable over time ($\mathbb{R}^{\infty}$). $\infty$ is the length of the sequence, and it is a natural number. The function \verb|Ode.RK547M| returns an endless enumerable sequence of solution points. If we are interested in a partial solution ($\mathbb{R}^m$), we can filter it with parameters such as start time, end time, and time step. Code~\ref{code_csharposlo} shows the full details of how to solve Equation~\ref{ex_firstorderode} in the OSLO library.
+\begin{listing}[ht]
+\begin{csharp1}
+public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+    List<double> y_t;
+    Func<double, Vector, Vector> f = (t, y_t_vec) => {
+        return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
+    };
+    Options opts = new Options();
+    opts.AbsoluteTolerance = Constants.AbsTol;
+    opts.RelativeTolerance = Constants.RelTol;
+    
+    Vector initv = new Vector(new double[] {0.0, 0.0});
+    IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
+    IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
+    y_t = new List<double> {};
+    foreach (SolPoint sp in points) {
+        y_t.Add(sp.X[0]);
+    }
+    
+    return y_t;
+}
+\end{csharp1}
+\captionof{listing}{Source Code of Solving PDController in OSLO}
+\label{code_csharposlo}
+\end{listing}
+
+In Code~\ref{code_csharposlo}, between line 3 and line 4, we encode the ODE of Equation~\ref{ex_firstorderode} in a \verb|Func|. Between line 7 and line 8, we set the absolute and relative tolerance in the \verb|Options| class. In line 10, we initialize initial values. Next, in line 11, we use \verb|Ode.RK547M| to get an endless sequence of real numbers, $\mathbb{R}^{\infty}$. In line 12, we use \verb|SolveFromToStep| to get a partial solution ($\mathbb{R}^m$) based on the start time, the final time, and the time step. Last, between line 13 and line 15, we run a loop to collect the process variable $x_1$. With the workflow we described above, the \verb|Ode.RK547M(0.0, initv, f, opts)| returns an object with richer data because {}$\mathbb{R}^m \subset \mathbb{R}^{\infty}$. Instead of returning $\mathbb{R}^m$, we can have an option to return $\mathbb{R}^{\infty}$. Here is the new specification.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
+    \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
+    \toprule
+    Calculations & $\mathbb{R}^n$ & $\mathbb{R}^{\infty}$ \\
+    \bottomrule	
+\end{tabular}	
+\caption{Specification for Calculations Module Return an Infinite Sequence}	
+\label{tab_srsforcal}
+\end{table}
+The implementation of this specification is not complete, but we provide an analysis of what options the C\# OSLO library offers.
+
+Ideally, the ODE is a function that means giving an independent variable will output dependent variables. Here is another proposed specification:
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{0.2\textwidth} | p{0.3\textwidth} | p{0.3\textwidth}} \hline
+    \textbf{Module Name}&\textbf{Input}&\textbf{Output}\\
+    \toprule
+    Calculations & $\mathbb{R}^n$ & $\mathbb{R} \rightarrow \mathbb{R}^k$ \\
+    \bottomrule	
+\end{tabular}	
+\caption{Specification for Calculations Return a Funtion}	
+\label{tab_srsforcal}
+\end{table}
+
+In output $\mathbb{R} \rightarrow \mathbb{R}^k$, $\mathbb{R}$ is the independent variable, and $\mathbb{R}^k$ is a sequence that contains dependent variables. For a fourth-order ODE, $\mathbb{R}^k$ would be $\mathbb{R}^4$. Since Drasil Framework can generate a library, the idea of outputting an ODE as a function can be useful. A program can hook up the interface of the generated library, and the library will provide support for calculating the numerical solution of the ODE. The implementation of this specification is not complete, but it gives future students some inspiration on how to generate a library to solve the ODE in Drasil. We defined how to generate the code for external libraries in Drasil Code Generator. To generate new interfaces for each library in each language, future students need to write new instructions. 

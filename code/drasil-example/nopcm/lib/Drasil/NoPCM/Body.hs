@@ -86,13 +86,13 @@ units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
  ++ map dqdWr [tempW, watE]
- ++ [gradient, uNormalVect] ++ map dqdWr [surface]
+ ++ [gradient, uNormalVect] ++ [dqdWr surface]
 
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++
-  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol] ++
+  [qw coilSAMax, qw tauW] ++ map qw [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 

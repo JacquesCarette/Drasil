@@ -1,4 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE PostfixOperators, TupleSections #-}
 -- | Defines functions to create traceability graphs in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
@@ -32,7 +32,7 @@ traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trai
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.
 traceGIntro :: [UID] -> [Sentence] -> [UnlabelledContent]
-traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
+traceGIntro refs trailings = [ulcc $ Paragraph $ foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed",
@@ -162,7 +162,7 @@ allvsallDesc = S "dependencies of assumptions, models, definitions, requirements
 
 -- | Create a list of traceability graph references.
 traceGLst :: Contents
-traceGLst = UlC $ ulcc $ Enumeration $ Bullet $ zip folderList' $ repeat Nothing
+traceGLst = UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) folderList'
 
 -- | The Traceability Graph contents.
 traceGCon :: String -> [Contents]

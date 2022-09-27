@@ -1,0 +1,197 @@
+\documentclass[12pt]{report} % Times New Roman, 12pt
+%\usepackage{gscale_thesis_singlespace} % Single spaced thesis
+\usepackage{gscale_thesis_doublespace} % Double spaced thesis
+\usepackage{fancyheadings} % Header and footer styling
+\usepackage{natbib} % Bibliography formatting
+\usepackage{setspace} % Allows double spacing but skips headers/footers
+\setcounter{tocdepth}{2} % Limits the TOC to chapter and section names
+\setcounter{chapter}{-1}
+
+% Additional packages
+\usepackage{graphicx} % Allows the inclusion of figures
+\usepackage{subcaption} % Allows captions to be added to subfigures
+\usepackage[justification=centering]{caption} % Centres caption text
+\usepackage{array} % Used for table formatting
+\newcolumntype{P}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{booktabs} % Fancy-style tables
+\usepackage{longtable} % Allows for tables that are more than one page long
+\usepackage{float} % Better figure placement control
+\usepackage{enumerate} % Numbered lists
+\usepackage[shortlabels]{enumitem} % For controlling enumerate labels
+\usepackage[shortcuts]{extdash} % Allows manual hyphenation of hypenated words
+\usepackage{amsmath} % Non-standard math symbols
+\usepackage{amsfonts} % Extended fonts for mathematics
+\usepackage[hidelinks]{hyperref} % Linking to LaTeX labels and external URLs
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  filecolor=blue,      
+  urlcolor=blue,
+  citecolor=blue,
+}
+\usepackage{slashbox}
+\usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+
+\numberwithin{equation}{section} % Numbers equations based on their section
+
+\usepackage[newfloat]{minted}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Code, listname=List of Codes}
+
+\usepackage{tcolorbox} % Code section 
+\tcbuselibrary{minted,skins}
+\definecolor{bg}{rgb}{0.99, 0.96, 0.89}
+\newtcblisting{haskell1}{
+  listing engine=minted,
+  colback=bg,
+  colframe=black!70,
+  listing only,
+  minted style=colorful,
+  minted language=haskell,
+  minted options={linenos=true, texcl=true, breaklines=true, tabsize=2},
+  left=1mm,
+}
+\newtcblisting{python1}{
+  listing engine=minted,
+  colback=bg,
+  colframe=black!70,
+  listing only,
+  minted style=colorful,
+  minted language=python,
+  minted options={linenos=true, texcl=true, breaklines=true, tabsize=2},
+  left=1mm,
+}
+\newtcblisting{java1}{
+  listing engine=minted,
+  colback=bg,
+  colframe=black!70,
+  listing only,
+  minted style=colorful,
+  minted language=csharp,
+  minted options={linenos=true, texcl=true, breaklines=true, tabsize=2},
+  left=1mm,
+}
+\newtcblisting{csharp1}{
+  listing engine=minted,
+  colback=bg,
+  colframe=black!70,
+  listing only,
+  minted style=colorful,
+  minted language=csharp,
+  minted options={linenos=true, texcl=true, breaklines=true, tabsize=2},
+  left=1mm,
+}
+\newtcblisting{cplusplus1}{
+  listing engine=minted,
+  colback=bg,
+  colframe=black!70,
+  listing only,
+  minted style=colorful,
+  minted language=csharp,
+  minted options={linenos=true, texcl=true, breaklines=true, tabsize=2},
+  left=1mm,
+}
+
+\usepackage{rotating} 
+\usepackage{adjustbox}
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+
+\newcommand{\highlight}[2]{\colorbox{#1}{$\displaystyle #2$}}
+
+\usepackage{listings}
+\usepackage{tocloft}
+
+% ********************************
+\begin{document}
+\renewcommand\lstlistlistingname{List of Code}
+
+\newcommand{\listequationsname}{List of Equations}
+\newlistof{myequations}{equ}{\listequationsname}
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+\setlength{\cftmyequationsnumwidth}{2.5em}
+
+\include{definitions} % LaTeX variables for preface pages/headers
+    
+\beforepreface % Half title page, title page, declaration page   
+  % \include{layabstr} % Lay Abstract
+  \include{abstr} % Abstract
+  % \include{dedic} % Dedication
+  \include{acknowledgements} % Acknowledgements
+  \tableofcontents
+  \listoffigures
+  \pagebreak
+  \listoftables
+  \pagebreak
+  \lstlistoflistings
+  \pagebreak
+  \listofmyequations
+  % \referencepages % Table of Contents, List of Figures, List of Tables
+  % \include{notation}
+  \lastpageofpreface{notation}
+\afterpreface
+  
+  \include{background}                  
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
+
+  \include{introduction}                  
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
+
+  \include{chapter1}                  
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
+
+  \include{chapter3}                  
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
+
+  \include{chapter4}                  
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
+
+  \include{futurework}                  
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
+
+  % \include{sample_chapter}                  
+  %   \setcounter{figure}{0}
+  %   \setcounter{equation}{0}
+  %   \setcounter{table}{0}
+
+  \include{conclusion}
+    \setcounter{figure}{0}
+    \setcounter{equation}{0}
+    \setcounter{table}{0}
+
+\begin{appendix}
+    \include{appendixA}
+      \setcounter{figure}{0}
+      \setcounter{equation}{0}
+      \setcounter{table}{0}
+
+    % \include{appendixB}
+    %   \setcounter{figure}{0}
+    %   \setcounter{equation}{0}
+    %   \setcounter{table}{0}
+
+\end{appendix}
+
+% The bibliography is set up to allow for multiple bib files
+\bibliographystyle{acm}
+\bibliography{references}
+% \bibliography{references,references_another}
+
+\label{NumDocumentPages}
+
+\end{document}
+% ********************************

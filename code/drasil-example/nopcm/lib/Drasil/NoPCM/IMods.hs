@@ -1,4 +1,4 @@
-module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
+module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro, eBalanceOnWtrRC) where
 
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel')

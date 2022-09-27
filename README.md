@@ -42,16 +42,20 @@ We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/master
 If you are on Windows, we recommend you use [Cygwin](https://cygwin.com/install.html). If you already have MinGW installed, you can use that instead; you will just need to download [util-linux-ng](https://gnuwin32.sourceforge.net/packages/util-linux-ng.htm), which includes various system utilites (one of our scripts uses `rev`), and add its **bin/** to your PATH. `make` is required as well and can be installed following [these steps](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows); on MacOS, you may need to install [XCode](https://developer.apple.com/xcode/) to get that. Most Linux installs have it by default. You may also need to install [git](https://git-scm.com/downloads).
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
-    - Also ensure that your stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](https://docs.haskellstack.org/en/stable/install_and_upgrade/)
-2. Run `stack setup` while in **./code/**
+    - Also ensure that your Stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](https://docs.haskellstack.org/en/stable/install_and_upgrade/)
+2. If using Windows, you might need to add an exclusion to Windows Security for your **bin/** folder where your **stack.exe** is to prevent Windows Security from blocking or even deleting the executable.
+    - This can be done by going to **Start > Settings > Update & Security > Windows Security > Virus & threat protection > Manage settings** (under **Virus & threat protection settings**) > **Add or remove exclusions** (under **Exclusions**), then selecting the **bin/** folder with your **stack.exe**
+    - If Windows Security deletes the executable, simply reinstall it
+    - This issue was encountered in Windows 10
+3. Run `stack setup` while in **./code/**
     - Remember to  change your working directory to **./code/** first
     - Use `cd` to change working directory, `pwd` to print your current working directory
     - Refer to [File Directory](https://swcarpentry.github.io/shell-novice/02-filedir/index.html) for further help regarding file directory commands
     - e.g. **./Users/.../GitHub/Drasil/code** (on MacOS)
-3. Use the basic `make` command to build Drasil and run **all** examples.
+4. Use the basic `make` command to build Drasil and run **all** examples.
     - Run `make help` for a list of available commands.
     - **Warning**: this entire process takes around 10-15 minutes to complete (MacOS estimate)
-4. You can find the generated output in the build folder that appears in the **./code/** folder. Each example will have its own subdirectory.
+5. You can find the generated output in the build folder that appears in the **./code/** folder. Each example will have its own subdirectory.
 
 For more information, please visit the [New Workspace Setup Wiki](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup).
 

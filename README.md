@@ -44,7 +44,7 @@ If you are on Windows, we recommend you use [Cygwin](https://cygwin.com/install.
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
     - Also ensure that your Stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](https://docs.haskellstack.org/en/stable/install_and_upgrade/)
 2. If using Windows, you might need to add an exclusion to Windows Security for your **bin/** folder where your **stack.exe** is to prevent Windows Security from blocking or even deleting the executable.
-    - This can be done by going to **Start > Settings > Update & Security > Windows Security > Virus & threat protection > Manage settings** (under **Virus & threat protection settings**) > **Add or remove exclusions** (under **Exclusions**), then selecting the **bin/** folder with your **stack.exe**
+    - This can be done by going to **Start > Settings > Update & Security > Windows Security > Virus & threat protection > Manage settings** (under **Virus & threat protection settings**) **> Add or remove exclusions** (under **Exclusions**), then selecting the **bin/** folder with your **stack.exe**
     - If Windows Security deletes the executable, simply reinstall it
     - This issue was encountered in Windows 10
 3. Run `stack setup` while in **./code/**

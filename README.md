@@ -26,6 +26,7 @@ For well understood domains, building software ought to be a matter of engineeri
 We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation *`F = ma`* will *look* different when rendered in documentation and in Java or Python, although it will mean the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
 
 Drasil is based on a combination of the following ideas:
+
 1. domain knowledge changes very slowly
 2. software in well-understood domains can be programmatically assembled from existing knowledge
 3. the various artifacts that make up software are different views on the same knowledge
@@ -38,7 +39,7 @@ We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/master
 
 ## Quick Start
 
-If you are on Windows, we recommend you use [cygwin](https://cygwin.com/install.html) (MinGW probably works too, but we have not tested it).  `make` is required as well and can be installed following [these steps](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows); on MacOS, you may need to install [XCode](https://developer.apple.com/xcode/) to get that. Most linux installs have it by default. You may also need to install [git](https://git-scm.com/downloads).
+If you are on Windows, we recommend you use [Cygwin](https://cygwin.com/install.html). If you already have MinGW installed, you can use that instead; you will just need to download [util-linux-ng](https://gnuwin32.sourceforge.net/packages/util-linux-ng.htm), which includes various system utilites (one of our scripts uses `rev`), and add its **bin/** to your PATH. `make` is required as well and can be installed following [these steps](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows); on MacOS, you may need to install [XCode](https://developer.apple.com/xcode/) to get that. Most Linux installs have it by default. You may also need to install [git](https://git-scm.com/downloads).
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
     - Also ensure that your stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](https://docs.haskellstack.org/en/stable/install_and_upgrade/)
@@ -106,43 +107,56 @@ You can run `make docs` from the **./code/** folder to build the documentation. 
 See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#building-up-to-date-documentation) in **./code/** for more information.
 
 --------------------------------------------------
+
 ### Summary of Folder Structure and File Contents
+
 --------------------------------------------------
 
 **code**
-  - The main folder for Drasil source code and example implementations
+
+- The main folder for Drasil source code and example implementations
 
 **doc**
-  - Documents related to Drasil (contains the Contributor's Test)
+
+- Documents related to Drasil (contains the Contributor's Test)
   
 **notes**
-  - Assorted general/administrative notes
+
+- Assorted general/administrative notes
 
 **Papers**
-  - Subdirectory for papers related to Drasil framework, GOOL
+
+- Subdirectory for papers related to Drasil framework, GOOL
   
 **People**
-  - Contains contributions specific to some contributors (not necessarily to be implemented in Drasil)
+
+- Contains contributions specific to some contributors (not necessarily to be implemented in Drasil)
   
 **Presentations**
-  - Presentations on Literate Scientific Software and Drasil
+
+- Presentations on Literate Scientific Software and Drasil
   
 **WindowsFix**
-  - Contains registry files for adding and removing the autorun of the command 
+
+- Contains registry files for adding and removing the autorun of the command
   `chcp 65001`. This is to fix an issue with unicode characters. **ONLY** affects Windows machines.
 
 .gitattributes
-  - Used by git (set language attributes so GitHub Linguist calculates code statistics as desired)
+
+- Used by git (set language attributes so GitHub Linguist calculates code statistics as desired)
   
 .gitignore
-  - Used by git (specifies which file(type)s to ignore when committing)
+
+- Used by git (specifies which file(type)s to ignore when committing)
 
 CITATION.cff
-  - Used to cite Drasil
+
+- Used to cite Drasil
   
 LICENSE
-  - License information
+
+- License information
   
 README.md
-  - This file
- 
+
+- This file

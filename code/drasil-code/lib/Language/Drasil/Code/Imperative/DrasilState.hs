@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
   GenState, DrasilState(..), designLog, inMod, MatchedSpaces, ModExportMap, 
   ClassDefinitionMap, modExportMap, clsDefMap, addToDesignLog, addLoggedSpace
@@ -115,10 +115,11 @@ modExportMap cs@CodeSpec {
     ++ getExpInputFormat prn chs extIns
     ++ getExpCalcs prn chs (execOrder cs)
     ++ getExpOutput prn chs (outputs cs)
-  where mpair (Mod n _ _ cls fs) = (map className cls ++ 
-          concatMap (map (codeName . stVar) . filter ((== Pub) . svScope) . 
-          stateVars) cls ++ map fname (fs ++ concatMap methods cls)) `zip` 
-          repeat (defModName (modularity m) n)
+  where mpair (Mod n _ _ cls fs) = map
+          (, defModName (modularity m) n)
+          (map className cls
+            ++ concatMap (map (codeName . stVar) . filter ((== Pub) . svScope) . stateVars) cls
+            ++ map fname (fs ++ concatMap methods cls))
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
@@ -160,7 +161,7 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp (Modular Separated) Bundled = inVarDefs ipName
         inExp (Modular Combined) Bundled = (ipName , ipName) : inVarDefs ipName
-        inVarDefs n = map codeName ins `zip` repeat n
+        inVarDefs n = map (, n) (map codeName ins)
         ipName = "InputParameters"
 
 -- | Gets input variables for classes for InputParameters module. 
@@ -174,7 +175,7 @@ getInputCls chs ins = inCls (inputModule chs) (inputStructure $ dataInfo chs)
   where inCls _ Unbundled = []
         inCls Combined Bundled = (ipName, ipName) : inVarDefs
         inCls Separated Bundled = inVarDefs
-        inVarDefs = map codeName ins `zip` repeat ipName
+        inVarDefs = map (, ipName) (map codeName ins)
         ipName = "InputParameters"
 
 -- | Gets constants to be exported for InputParameters or Constants module.

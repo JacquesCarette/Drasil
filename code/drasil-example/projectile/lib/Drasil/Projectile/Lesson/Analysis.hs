@@ -37,7 +37,7 @@ coorSystContext = enumBulletU $ map foldlSent
     S "of launching the", phrase projectile `S.andThe` S "final point where it lands." +:+ 
     S "The landing point often has a known", P lY +:+ S "value"]]
 
-kinematicContext = enumBulletU $ 
+kinematicContext = enumBulletU
   [foldlSent 
     [S "Depending upon the known data and what is to be determined, a choice should be made",
     S "as to which three of the following four", plural equation, S "should be applied between",

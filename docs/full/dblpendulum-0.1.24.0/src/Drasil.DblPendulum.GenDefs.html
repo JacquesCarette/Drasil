@@ -786,13 +786,9 @@ forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.DblPendulum.GenDefs.html#velXQD_2"><span class="hs-identifier hs-var">velXQD_2</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; [Sentence]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
-</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="Drasil.DblPendulum.Derivations.html#accelXDerivEqn3_2"><span class="hs-identifier hs-var">D.accelXDerivEqn3_2</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition ModelExpr -&gt; Sentence
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
+</span><a href="Drasil.DblPendulum.Derivations.html#accelXDerivEqn3_2"><span class="hs-identifier hs-var">D.accelXDerivEqn3_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr -&gt; Sentence
 forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition ModelExpr
 </span><a href="Drasil.DblPendulum.GenDefs.html#accelXQD_2"><span class="hs-identifier hs-var">accelXQD_2</span></a></span><span class="hs-special">]</span><span>
@@ -947,11 +943,11 @@ forall e.
 QuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679097252"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679097256"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679097250"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-221"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679097252"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679097252"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679097254"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-221"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679097256"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679097256"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -973,8 +969,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-223"></span><span>          </span><span id="local-6989586621679097250"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679097250"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-223"></span><span>          </span><span id="local-6989586621679097254"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679097254"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-224"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
@@ -1053,11 +1049,11 @@ forall e.
 QuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679097237"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679097241"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679097236"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-241"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679097237"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679097237"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679097240"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-241"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679097241"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679097241"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -1079,8 +1075,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-243"></span><span>          </span><span id="local-6989586621679097236"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679097236"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-243"></span><span>          </span><span id="local-6989586621679097240"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679097240"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-244"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
@@ -1159,11 +1155,11 @@ forall e.
 QuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679097232"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679097236"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679097231"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-261"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679097232"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679097232"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679097235"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-261"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679097236"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679097236"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -1185,8 +1181,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-263"></span><span>          </span><span id="local-6989586621679097231"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679097231"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-263"></span><span>          </span><span id="local-6989586621679097235"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679097235"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-264"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
@@ -1265,11 +1261,11 @@ forall e.
 QuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679097227"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679097231"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679097226"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-281"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679097227"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679097227"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679097230"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-281"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679097231"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679097231"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -1291,8 +1287,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-283"></span><span>          </span><span id="local-6989586621679097226"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679097226"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-283"></span><span>          </span><span id="local-6989586621679097230"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679097230"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-284"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr

@@ -511,7 +511,7 @@ c -&gt; NP -&gt; e -&gt; QDefinition e
 forall r. ExprC r =&gt; r
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-var">newtonSLRExpr</span></a></span><span>
 </span><span id="line-132"></span><span>
-</span><span id="line-133"></span><span id="local-6989586621679067453"><span class="annot"><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-type">newtonSLRExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679067453"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679067453"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-133"></span><span id="local-6989586621679067458"><span class="annot"><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-type">newtonSLRExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679067458"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679067458"><span class="hs-identifier hs-type">r</span></a></span></span><span>
 </span><span id="line-134"></span><span id="newtonSLRExpr"><span class="annot"><span class="annottext">newtonSLRExpr :: r
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-var hs-var">newtonSLRExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -525,10 +525,8 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-135"></span><span>
 </span><span id="line-136"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#newtonSLRNotes"><span class="hs-identifier hs-type">newtonSLRNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-137"></span><span id="newtonSLRNotes"><span class="annot"><span class="annottext">newtonSLRNotes :: [Sentence]
-</span><a href="Data.Drasil.Theories.Physics.html#newtonSLRNotes"><span class="hs-identifier hs-var hs-var">newtonSLRNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
+</span><a href="Data.Drasil.Theories.Physics.html#newtonSLRNotes"><span class="hs-identifier hs-var hs-var">newtonSLRNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span>
 </span><span id="line-138"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The net&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall a. Quantity a =&gt; a -&gt; Sentence

@@ -540,7 +540,12 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
 
 -- | Basic <a>ODEInfo</a> constructor.
 odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
+
+-- | Create ODEInfo with Other variables, ODEOptions, DifferentialModel,
+--   and InitialValueProblem
 odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
+
+-- | Other parameters for solving the ODE numerically
 data ODEOptions
 ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 
@@ -1188,6 +1193,10 @@ mkODELibNoPath :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibr
 
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices
+
+-- | The instruction indicates how the generated program should be written
+--   down. Full details of Choices documentation
+--   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
 Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> Choices
 
@@ -2274,6 +2283,10 @@ readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
 -- | Defines the DataDesc for the file containing a sample data set, which
 --   a user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
+
+-- | The instruction indicates how the generated program should be written
+--   down. Full details of Choices documentation
+--   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
 Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> Choices
 
@@ -3043,7 +3056,12 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExp
 
 -- | Basic <a>ODEInfo</a> constructor.
 odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
+
+-- | Create ODEInfo with Other variables, ODEOptions, DifferentialModel,
+--   and InitialValueProblem
 odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
+
+-- | Other parameters for solving the ODE numerically
 data ODEOptions
 ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 

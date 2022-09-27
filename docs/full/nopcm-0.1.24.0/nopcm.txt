@@ -52,6 +52,7 @@ module Drasil.NoPCM.IMods
 eBalanceOnWtr :: InstanceModel
 iMods :: [InstanceModel]
 instModIntro :: Sentence
+eBalanceOnWtrRC :: DifferentialModel
 
 module Drasil.NoPCM.Changes
 likelyChgs :: [ConceptInstance]

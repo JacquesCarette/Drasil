@@ -137,32 +137,25 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-39"></span><span>
 </span><span id="line-40"></span><span id="kinematicContext"><span class="annot"><span class="annottext">kinematicContext :: Contents
 </span><a href="Drasil.Projectile.Lesson.Analysis.html#kinematicContext"><span class="hs-identifier hs-var hs-var">kinematicContext</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
-</span><span class="hs-identifier hs-var">enumBulletU</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Contents) -&gt; [Sentence] -&gt; Contents
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">enumBulletU</span></span><span>
+</span><span id="line-41"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span>
-</span><span id="line-41"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-42"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Depending upon the known data and what is to be determined, a choice should be made&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-42"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-43"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;as to which three of the following four&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;should be applied between&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-43"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-44"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the two points on the path to obtain the most direct solution to the problem&quot;</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span id="horMotionContext"><span class="annot"><span class="annottext">horMotionContext :: Contents
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span id="horMotionContext"><span class="annot"><span class="annottext">horMotionContext :: Contents
 </span><a href="Drasil.Projectile.Lesson.Analysis.html#horMotionContext"><span class="hs-identifier hs-var hs-var">horMotionContext</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
-</span><span class="hs-identifier hs-var">enumBulletU</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Contents) -&gt; [Sentence] -&gt; Contents
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span>
-</span><span id="line-46"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">enumBulletU</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span>
+</span><span id="line-47"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The *velocity* in the horizontal&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.or_`</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
 </span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
@@ -171,14 +164,14 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">direction</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is *constant*, i.e.,&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-47"></span><span>    </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
+</span><span id="line-48"></span><span>    </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#horMotionEqn1"><span class="hs-identifier hs-var">horMotionEqn1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.Projectile.Derivations.html#horMotionEqn2"><span class="hs-identifier hs-var">horMotionEqn2</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-48"></span><span>
-</span><span id="line-49"></span><span id="verMotionContext"><span class="annot"><span class="annottext">verMotionContext :: Contents
+</span><span id="line-49"></span><span>
+</span><span id="line-50"></span><span id="verMotionContext"><span class="annot"><span class="annottext">verMotionContext :: Contents
 </span><a href="Drasil.Projectile.Lesson.Analysis.html#verMotionContext"><span class="hs-identifier hs-var hs-var">verMotionContext</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">enumBulletU</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Contents) -&gt; [Sentence] -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -186,7 +179,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-50"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-51"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;In the vertical&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.or_`</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
 </span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
@@ -194,9 +187,9 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">direction</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-51"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;*only two* of the following three equations can be used for solution&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-52"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-53"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;For example, if the particle's final&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -206,13 +199,13 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.yVel</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-54"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is not needed, then the first and third of these questions&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Sentence
 </span><span class="hs-identifier hs-var">P</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lY</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-54"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-55"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;will not be useful&quot;</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-55"></span></pre></body></html>
+</span><span id="line-56"></span></pre></body></html>

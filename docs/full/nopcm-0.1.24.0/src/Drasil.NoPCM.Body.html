@@ -167,14 +167,11 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">uNormalVect</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 -&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; DefinedQuantityDict)
--&gt; [UnitalChunk] -&gt; [DefinedQuantityDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; DefinedQuantityDict
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; DefinedQuantityDict
 forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
 c -&gt; DefinedQuantityDict
-</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">surface</span></span><span class="hs-special">]</span><span>
 </span><span id="line-90"></span><span>
 </span><span id="line-91"></span><span class="annot"><a href="Drasil.NoPCM.Body.html#symbolsAll"><span class="hs-identifier hs-type">symbolsAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span> </span><span class="hs-comment">--FIXME: Why is PCM (swhsSymbolsAll) here?</span><span>
@@ -197,18 +194,12 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.NoPCM.Unitals.html#specParamValList"><span class="hs-identifier hs-var">specParamValList</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">(ConstQDef -&gt; QuantityDict) -&gt; [ConstQDef] -&gt; [QuantityDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; QuantityDict
+</span><span id="line-95"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstQDef -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstQDef
-</span><span class="hs-identifier hs-var">coilSAMax</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; QuantityDict) -&gt; [UnitalChunk] -&gt; [QuantityDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
+</span><span class="hs-identifier hs-var">coilSAMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
@@ -644,16 +635,16 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">watE</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>     </span><span class="hs-comment">--outputs</span><span>
 </span><span id="line-188"></span><span>  </span><span class="annot"><span class="annottext">_defSequence :: [Block SimpleQDef]
-</span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679116374"><span class="annot"><span class="annottext">x :: [SimpleQDef]
-</span><a href="#local-6989586621679116374"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; [SimpleQDef] -&gt; Block SimpleQDef
+</span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679116350"><span class="annot"><span class="annottext">x :: [SimpleQDef]
+</span><a href="#local-6989586621679116350"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">SimpleQDef -&gt; [SimpleQDef] -&gt; Block SimpleQDef
 forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-identifier hs-var">Parallel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[SimpleQDef] -&gt; SimpleQDef
 forall a. [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
-</span><a href="#local-6989586621679116374"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[SimpleQDef] -&gt; [SimpleQDef]
+</span><a href="#local-6989586621679116350"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[SimpleQDef] -&gt; [SimpleQDef]
 forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">tail</span></span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
-</span><a href="#local-6989586621679116374"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
+</span><a href="#local-6989586621679116350"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
 </span><a href="Drasil.NoPCM.DataDefs.html#qDefs"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-189"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; ConstrainedChunk) -&gt; [UncertQ] -&gt; [ConstrainedChunk]

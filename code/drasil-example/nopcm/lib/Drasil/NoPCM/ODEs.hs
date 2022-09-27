@@ -1,26 +1,22 @@
 module Drasil.NoPCM.ODEs (noPCMODEOpts, noPCMODEInfo) where
 
-import Language.Drasil (recip_, ExprC(mulRe, idx, sy, ($-)), LiteralC(int, exactDbl))
-import Language.Drasil.Code (odeInfo, odeOptions, quantvar, ODEInfo,
+import Language.Drasil (ExprC(sy),LiteralC(exactDbl), InitialValueProblem, makeAIVP)
+import Language.Drasil.Code (odeInfo', odeOptions, quantvar, ODEInfo,
   ODEMethod(RK45), ODEOptions)
-
-import Data.Drasil.Quantities.Physics (time)
-
-import Drasil.SWHS.Unitals (tauW, tempC, tempInit, tempW, timeFinal, timeStep,
-  absTol, relTol)
+import Drasil.SWHS.Unitals (tauW, tempC, tempInit, timeFinal, timeStep, absTol, relTol)
+import Drasil.NoPCM.IMods(eBalanceOnWtrRC)
 
 
 noPCMODEOpts :: ODEOptions
-noPCMODEOpts = odeOptions 
+noPCMODEOpts = odeOptions
   RK45 (sy absTol) (sy relTol) (sy timeStep)
 
+noPCMIVP :: InitialValueProblem
+noPCMIVP = makeAIVP (exactDbl 0) (sy timeFinal) [sy tempInit]
+
 noPCMODEInfo :: ODEInfo
-noPCMODEInfo = odeInfo
-  (quantvar time)
-  (quantvar tempW)
-  [quantvar tauW, quantvar tempC] 
-  (exactDbl 0) 
-  (sy timeFinal) 
-  [sy tempInit]
-  [recip_ (sy tauW) `mulRe` (sy tempC $- idx (sy tempW) (int 0))] 
+noPCMODEInfo = odeInfo'
+  [quantvar tauW, quantvar tempC]
   noPCMODEOpts
+  eBalanceOnWtrRC
+  noPCMIVP

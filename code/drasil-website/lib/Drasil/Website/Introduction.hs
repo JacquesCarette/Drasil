@@ -11,7 +11,7 @@ import Language.Drasil
 introSec :: Section
 introSec = 
   section (S "Introduction") -- Title
-  ([mkParagraph introParagraph1]) -- Contents
+  [mkParagraph introParagraph1] -- Contents
   [] $ makeSecRef "Introduction" $ S "Introduction" -- Section reference
 
 -- | Paragraph to introduce Drasil and its goals.

@@ -161,7 +161,7 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp (Modular Separated) Bundled = inVarDefs ipName
         inExp (Modular Combined) Bundled = (ipName , ipName) : inVarDefs ipName
-        inVarDefs n = map (, n) (map codeName ins)
+        inVarDefs n = map ((, n) . codeName) ins
         ipName = "InputParameters"
 
 -- | Gets input variables for classes for InputParameters module. 
@@ -175,7 +175,7 @@ getInputCls chs ins = inCls (inputModule chs) (inputStructure $ dataInfo chs)
   where inCls _ Unbundled = []
         inCls Combined Bundled = (ipName, ipName) : inVarDefs
         inCls Separated Bundled = inVarDefs
-        inVarDefs = map (, ipName) (map codeName ins)
+        inVarDefs = map ((, ipName) . codeName) ins
         ipName = "InputParameters"
 
 -- | Gets constants to be exported for InputParameters or Constants module.

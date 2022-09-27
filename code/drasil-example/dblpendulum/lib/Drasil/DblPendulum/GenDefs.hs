@@ -1,4 +1,4 @@
-{-# LANGUAGE PostfixOperators, TupleSections #-}
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.GenDefs (genDefns, velXGD_1, velYGD_1,
          accelXGD_1, accelYGD_1, accelXGD_2, accelYGD_2, xForceGD_1, yForceGD_1,
          xForceGD_2, yForceGD_2) where

@@ -12,7 +12,7 @@ aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Ref
 aboutSec csRef docRef analysisSecRef repoRef wikiRef infoEncodingWiki chunksWiki recipesWiki paperGOOL papersWiki = 
   section (S "About") -- Title
   (map mkParagraph [aboutParagraph1 repoRef wikiRef, aboutParagraph2 csRef docRef analysisSecRef, aboutParagraph3] 
-  ++ [currentlyGeneratedArtifacts] ++ map mkParagraph [aboutParagraph4] ++ [futureGeneratedArtifacts] ++ map mkParagraph 
+  ++ [currentlyGeneratedArtifacts] ++ [mkParagraph aboutParagraph4] ++ [futureGeneratedArtifacts] ++ map mkParagraph 
   [aboutParagraph5 infoEncodingWiki, aboutParagraph6 chunksWiki, aboutParagraph7 recipesWiki, aboutParagraph8 paperGOOL, 
   aboutParagraph9 papersWiki]) -- Contents
   [] $ makeSecRef "About" $ S "About" -- Section reference

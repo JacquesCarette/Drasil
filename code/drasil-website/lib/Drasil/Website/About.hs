@@ -39,7 +39,7 @@ aboutParagraph2 caseStudySecRef docsRef analysisSecRef = S "This webpage is desi
   -- \The footer of this page contains the continuous integration build of the project, \
   -- \as well as the commit number that the build and artifacts are based off of.
 
-  -- | 
+  -- | Lists artifacts that Drasil generates
 aboutParagraph3 :: Sentence
 aboutParagraph3 = S "The following is a list of artifacts that Drasil currently generates:" 
 
@@ -50,6 +50,8 @@ currentlyGeneratedArtifacts = enumBulletU $ map foldlSent_
   [S "README"],
   [S "Makefile"]]
 
+
+  -- | Lists artifacts that we hope to generate with Drasil
 aboutParagraph4 :: Sentence
 aboutParagraph4 = S "We hope to generate the following artifacts in the future:" 
 
@@ -65,6 +67,7 @@ futureGeneratedArtifacts = enumBulletU $ map foldlSent_
   [S "Build Scripts"],
   [S "Test Cases"]]
 
+  -- | Paragraph describing information encoding
 aboutParagraph5 :: Reference -> Sentence
 aboutParagraph5 infoEncodingWiki = S "As described in the" +:+ namedRef infoEncodingWiki (S "Information Encoding") +:+ S " wiki page, \
   \Drasil uses specific terminology to address types of \
@@ -74,6 +77,7 @@ aboutParagraph5 infoEncodingWiki = S "As described in the" +:+ namedRef infoEnco
   \of this methodology. The basic building blocks of the methodology include different expressions for units with a specific meaning. \
   \These are built into ontologies of domains that address broader knowledge. Chunks form a fundamental part of such ontologies."
 
+-- | Paragraph describing chunks
 aboutParagraph6 :: Reference -> Sentence
 aboutParagraph6 chunksWiki = S "As described in the" +:+ namedRef chunksWiki (S "Chunks") +:+ S "wiki page, a chunk is a data type specialized \
   \in holding a specific type of information for \
@@ -82,17 +86,20 @@ aboutParagraph6 chunksWiki = S "As described in the" +:+ namedRef chunksWiki (S 
   \purpose. The structure of a chunk can be thought of as a wrapper of information, and this is all implemented using Haskell's record-type \
   \syntax. Recipes transform the acquired knowledge into a usable format."
 
+-- | Paragraph describing recipes
 aboutParagraph7 :: Reference -> Sentence
 aboutParagraph7 recipesWiki= S "As described in the" +:+ namedRef recipesWiki (S "Recipes") +:+ S "wiki page, recipes are instructions that \
   \unpackage necessary information from chunks and send \
   \that information to Drasil generators/printers to build complete artifacts. When an artifact needs to be changed, the recipe is modified to \
   \unpackage the additional necessary information from a chunk, or alternatively to omit unpackaging information that is no longer required."
 
+-- | Paragraph describing GOOL
 aboutParagraph8 :: Reference -> Sentence
 aboutParagraph8 paperGOOL = S "As described in the" +:+ namedRef paperGOOL (S "GOOL") +:+ S "paper, this is a Generic Object-Oriented Language \
   \that provides intermediary assistance in code \
   \generation, allowing Drasil to more efficiently generate code in several languages, including Python, Java, C-Sharp, and C++."
 
+-- | Paragraph providing a link to Drasil papers and documents
 aboutParagraph9 :: Reference -> Sentence
 aboutParagraph9 papersWiki = S "A list of papers and documents written about Drasil can be found in the" +:+ namedRef papersWiki (S "Drasil Papers \
   \and Documents") +:+ S "wiki page"

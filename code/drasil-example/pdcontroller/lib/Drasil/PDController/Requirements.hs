@@ -26,7 +26,7 @@ verifyInputsDesc
   = foldlSent_
       [S "Ensure that the input values are within the",
          S "limits specified in the"
-         +:+. namedRef (datCon 0 []) (plural datumConstraint)]
+         +:+. namedRef (datCon "" 0 []) (plural datumConstraint)]
 
 calculateValuesDesc
   = foldlSent

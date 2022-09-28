@@ -17,15 +17,15 @@ genSysIntro = foldlSP [S "This", phrase section_, S "provides general",
 
 -- | User Characeristics section constructor. Does not contain any subsections.
 usrCharsF :: [Contents] -> Section
-usrCharsF = SRS.userChar 1
+usrCharsF = SRS.userChar "genSysDes" 1
 
 -- | System Constraints section constructor.
 -- Generalized if no constraints, but if there are, they can be passed through.
 systCon :: [Contents] -> Section
-systCon [] = SRS.sysCon 1 [systCon_none]
+systCon [] = SRS.sysCon "genSysDes" 1 [systCon_none]
             where systCon_none = mkParagraph (S "There are no" +:+. plural systemConstraint)
-systCon a = SRS.sysCon 1 a
+systCon a = SRS.sysCon "genSysDes" 1 a
 
 -- | System Context section constructor. Does not contain any subsections.
 sysContxt :: [Contents] -> Section
-sysContxt = SRS.sysCont 1 
+sysContxt = SRS.sysCont "genSysDes" 1 

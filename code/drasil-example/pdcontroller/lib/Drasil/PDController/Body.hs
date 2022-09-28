@@ -140,7 +140,7 @@ mkSRS
       IPurposeSub $ IPurposeProg [introPurposeOfDoc], 
       IScopeSub $ IScopeProg introscopeOfReq,
       ICharSub $ ICharProg introUserChar1 introUserChar2 [],
-      IOrgSub $ IOrgProg introDocOrg IDict.dataDefn (SRS.inModel 0 [])
+      IOrgSub $ IOrgProg introDocOrg IDict.dataDefn (SRS.inModel "" 0 [])
         (S "The instance model referred as" +:+ refS imPD +:+
          S "provides an" +:+ titleize ode +:+ sParen (short ode) +:+ S "that models the" +:+ phrase pidC),
     GSDSec $ GSDProg EmptyS,

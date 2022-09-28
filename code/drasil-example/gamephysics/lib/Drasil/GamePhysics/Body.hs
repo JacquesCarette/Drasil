@@ -148,7 +148,7 @@ mkSRS = [
     IPurposeSub $ IPurposeProg $ purpDoc gamePhysics Verbose,
     IScopeSub $ IScopeProg scope,
     ICharSub $ ICharProg [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-    IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel 0 []) EmptyS,
+    IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel "" 0 []) EmptyS,
   GSDSec $ GSDProg EmptyS,
     SysCntxt $ SysCntxtProg [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars $ UsrCharsProg [userCharacteristicsIntro], 
@@ -326,14 +326,14 @@ sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   S "Ensure application programming" +:+ phrase interface +:+
   S "use complies with the" +:+ phrase user +:+. phrase guide,
   S "Ensure required" +:+
-  namedRef (SRS.assumpt 0 ([]::[Contents])) (phrase software +:+ plural assumption) +:+
+  namedRef (SRS.assumpt "" 0 ([]::[Contents])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
   phrase problem +:+ phraseNP (the software) +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
     simulation) +:+ S "state satisfy the required" +:+.
-    namedRef (SRS.datCon 0 ([]::[Contents])) (phrase physical `S.and_` plural systemConstraint),
+    namedRef (SRS.datCon "" 0 ([]::[Contents])) (phrase physical `S.and_` plural systemConstraint),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",
@@ -387,7 +387,7 @@ probDescIntro = foldlSent_
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
   plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",
-  namedRef (SRS.offShelfSol 0 ([] :: [Contents])) (plural physLib),
+  namedRef (SRS.offShelfSol "" 0 ([] :: [Contents])) (plural physLib),
   S "available to be used for", phrase consumer, plural product_]
   
 -----------------------------------------
@@ -488,7 +488,7 @@ offShelfSolsIntro, offShelfSols2DList,
   offShelfSolsMid, offShelfSols3DList :: Contents
 
 offShelfSolsIntro = mkParagraph $ foldlSentCol 
-  [S "As mentioned in the", namedRef (SRS.probDesc 0 []) (phrase problemDescription) `sC`
+  [S "As mentioned in the", namedRef (SRS.probDesc "" 0 []) (phrase problemDescription) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
 

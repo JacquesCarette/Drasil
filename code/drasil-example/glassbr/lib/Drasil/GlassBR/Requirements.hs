@@ -68,7 +68,7 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
 -- the assumption(s) that're being followed? (Issue #349)
 
 checkInputWithDataConsDesc = foldlSent [atStartNP (the system), S "shall check the entered",
-  plural inValue, S "to ensure that they do not exceed the" +:+. namedRef (datCon 0 []) (plural datumConstraint), 
+  plural inValue, S "to ensure that they do not exceed the" +:+. namedRef (datCon "" 0 []) (plural datumConstraint), 
   S "If any" `S.ofThe` plural inValue, S "are out" `S.of_` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
@@ -100,7 +100,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", refS (propCorSol 0 [])
+  plural property, S "described in", refS (propCorSol "" 0 [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance

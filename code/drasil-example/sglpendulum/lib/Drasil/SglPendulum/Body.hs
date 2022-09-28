@@ -138,7 +138,7 @@ mkSRS = [TableOfContents $ ToCProg toC,        -- This creates the Table of Cont
     IPurposeSub $ IPurposeProg $ purpDoc progName Verbose,
     IScopeSub $ IScopeProg scope,
     ICharSub $ ICharProg [] charsOfReader [],
-    IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel 0 []) EmptyS,
+    IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel "" 0 []) EmptyS,
   GSDSec $ GSDProg EmptyS,
     SysCntxt $ SysCntxtProg [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars $ UsrCharsProg [userCharacteristicsIntro], 

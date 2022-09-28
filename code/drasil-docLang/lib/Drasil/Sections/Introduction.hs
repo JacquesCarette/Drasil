@@ -61,7 +61,7 @@ introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe)
 --     * programDefinition  - 'Sentence' definition of the specific example.
 --     * subSections        - List of subsections for this section.
 introductionSection :: Sentence -> Sentence -> Section
-introductionSection problemIntroduction programDefinition = SRS.intro 0
+introductionSection problemIntroduction programDefinition = SRS.intro "intro" 0
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 
 
@@ -83,7 +83,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
   S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
   S "basis of" +:+. short proName, S "With the exception of", 
-  namedRef (SRS.sysCon 0 []) (plural systemConstraint) `sC` S "this",
+  namedRef (SRS.sysCon "" 0 []) (plural systemConstraint) `sC` S "this",
   short Doc.srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"] 
 
@@ -99,15 +99,15 @@ purpDoc proName Succinct = [purpDocPara1 proName]
 --     * Given two elements: explains the purpose of the specific example and the development process.
 --     * Otherwise: Uses the default 'developmentProcessParagraph'.
 purposeOfDoc :: [Sentence] -> Section
-purposeOfDoc [purposeOfProgram] = SRS.prpsOfDoc 1 [mkParagraph purposeOfProgram]
-purposeOfDoc [purposeOfProgram, developmentProcess] = SRS.prpsOfDoc 1 
+purposeOfDoc [purposeOfProgram] = SRS.prpsOfDoc "intro" 1 [mkParagraph purposeOfProgram]
+purposeOfDoc [purposeOfProgram, developmentProcess] = SRS.prpsOfDoc "intro" 1 
   [mkParagraph purposeOfProgram, mkParagraph developmentProcess] 
-purposeOfDoc _ = SRS.prpsOfDoc 1 [mkParagraph developmentProcessParagraph]
+purposeOfDoc _ = SRS.prpsOfDoc "intro" 1 [mkParagraph developmentProcessParagraph]
 
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.
 scopeOfRequirements :: Sentence -> Section
-scopeOfRequirements req = SRS.scpOfReq 1 [foldlSP
+scopeOfRequirements req = SRS.scpOfReq "intro" 1 [foldlSP
   [phrase scope `S.the_ofTheC` plural requirement, S "includes", req]]
 
 -- | Constructor for characteristics of the intended reader subsection.
@@ -116,7 +116,7 @@ scopeOfRequirements req = SRS.scpOfReq 1 [foldlSP
 charIntRdrF :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> 
   Section -> Section
 charIntRdrF progName assumed topic asset r = 
-  SRS.charOfIR 1 (intReaderIntro progName assumed topic asset r)
+  SRS.charOfIR "intro" 1 (intReaderIntro progName assumed topic asset r)
 
 -- | Helper that creates a paragraph. Called by 'charIntRdrF'. The parameters (in order) should be:
 --
@@ -142,7 +142,7 @@ intReaderIntro progName assumed topic asset sectionRef =
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
 orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
-orgSec i b s t = SRS.orgOfDoc 1 (orgIntro i b s t)
+orgSec i b s t = SRS.orgOfDoc "intro" 1 (orgIntro i b s t)
 
 -- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
@@ -155,7 +155,7 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
   S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
   S "trace back to find any additional information they require"],
   folder [refineChain (zip [goalStmt, thModel, inModel]
-         [SRS.goalStmt 0 [], SRS.thModel 0 [], SRS.inModel 0 []]), trailingSentence]]
+         [SRS.goalStmt "" 0 [], SRS.thModel "" 0 [], SRS.inModel "" 0 []]), trailingSentence]]
   where
     folder = case trailingSentence of
       EmptyS -> foldlSP_

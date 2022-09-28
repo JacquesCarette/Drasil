@@ -11,7 +11,7 @@ import Control.Lens ((^.))
 
 -- | Gets the auxiliary constant values given an introductory 'Idea' and a 'QDefinition'.
 valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
-valsOfAuxConstantsF kWord listOfConstants = SRS.valsOfAuxCons 0 (contentGenerator kWord listOfConstants)
+valsOfAuxConstantsF kWord listOfConstants = SRS.valsOfAuxCons "valsOfAuxCons" 0 (contentGenerator kWord listOfConstants)
 
 -- | Gets a table of constants from a 'QDefinition'. Also uses an 'Idea' as the introduction.
 contentGenerator :: Idea a => a -> [ConstQDef] -> [Contents]

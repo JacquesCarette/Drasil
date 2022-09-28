@@ -222,7 +222,7 @@ module Language.Drasil (
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
-  , section, section', fig, figWithWidth
+  , section, fig, figWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
@@ -292,7 +292,7 @@ import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
-import Language.Drasil.Document (section, section', fig, figWithWidth
+import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI

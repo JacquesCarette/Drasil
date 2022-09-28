@@ -29,7 +29,7 @@ outputValues = cic "outputValues" outputValuesDesc "Output-Values"       funcReq
 
 verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
 verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
-  S "to ensure that they do not exceed the" +:+. namedRef (datCon 0 []) (plural datumConstraint),
+  S "to ensure that they do not exceed the" +:+. namedRef (datCon "" 0 []) (plural datumConstraint),
   S "If any of the", plural inValue, S "are out of bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
@@ -50,7 +50,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", namedRef (propCorSol 0 []) (titleize' propOfCorSol)
+  plural property, S "described in", namedRef (propCorSol "" 0 []) (titleize' propOfCorSol)
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance

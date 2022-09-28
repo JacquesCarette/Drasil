@@ -16,31 +16,31 @@ import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, ve
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
 intro, prpsOfDoc, body, review, mainIdea, motion, hormotion, vermotion, methAndAnls,
-  coorSyst, kinematic, procForAnls, summary, appendix, reference, example :: Int -> [Contents] -> Section
+  coorSyst, kinematic, procForAnls, summary, appendix, reference, example :: String -> Int -> [Contents] -> Section
   
-intro       d cs = section' d (titleize Doc.introduction)     cs introLabel
-prpsOfDoc   d cs = section' d (titleize Doc.prpsOfDoc)        cs docPurposeLabel
+intro       p d cs = section (mkUid p) d (titleize Doc.introduction)     cs introLabel
+prpsOfDoc   p d cs = section (mkUid p) d (titleize Doc.prpsOfDoc)        cs docPurposeLabel
 
-body        d cs = section' d (titleize Doc.body)             cs bodyLabel
-review      d cs = section' d (titleize Doc.review)           cs reviewLabel
+body        p d cs = section (mkUid p) d (titleize Doc.body)             cs bodyLabel
+review      p d cs = section (mkUid p) d (titleize Doc.review)           cs reviewLabel
 
-mainIdea    d cs = section' d (titleize Doc.mainIdea)         cs mainIdeaLabel
-motion      d cs = section' d (titleize P.motion)             cs motionLabel
-hormotion   d cs = section' d (titleize P.horizontalMotion)   cs hormotionLabel
-vermotion   d cs = section' d (titleize P.verticalMotion)     cs vermotionLabel
+mainIdea    p d cs = section (mkUid p) d (titleize Doc.mainIdea)         cs mainIdeaLabel
+motion      p d cs = section (mkUid p) d (titleize P.motion)             cs motionLabel
+hormotion   p d cs = section (mkUid p) d (titleize P.horizontalMotion)   cs hormotionLabel
+vermotion   p d cs = section (mkUid p) d (titleize P.verticalMotion)     cs vermotionLabel
 
-methAndAnls d cs = section' d (titleize' Doc.methAndAnls)     cs methsAndanlsLabel
+methAndAnls p d cs = section (mkUid p) d (titleize' Doc.methAndAnls)     cs methsAndanlsLabel
 
-summary     d cs = section' d (titleize Doc.summary)          cs summaryLabel
+summary     p d cs = section (mkUid p) d (titleize Doc.summary)          cs summaryLabel
 
-procForAnls d cs = section' d (titleize Doc.procForAnls)     cs anlsProcLabel
-coorSyst    d cs = section' d (titleize Doc.coordinateSystem) cs coorSystLabel
-kinematic   d cs = section' d (titleize P.kinematics)         cs kinematicLabel
+procForAnls p d cs = section (mkUid p) d (titleize Doc.procForAnls)     cs anlsProcLabel
+coorSyst    p d cs = section (mkUid p) d (titleize Doc.coordinateSystem) cs coorSystLabel
+kinematic   p d cs = section (mkUid p) d (titleize P.kinematics)         cs kinematicLabel
 
-appendix    d cs = section' d (titleize Doc.appendix)         cs appendixLabel
+appendix    p d cs = section (mkUid p) d (titleize Doc.appendix)         cs appendixLabel
 
-reference   d cs = section' d (titleize' Doc.reference)       cs referenceLabel
-example     d cs = section' d (titleize Doc.example)          cs exampleLabel
+reference   p d cs = section (mkUid p) d (titleize' Doc.reference)       cs referenceLabel
+example     p d cs = section (mkUid p) d (titleize Doc.example)          cs exampleLabel
 
 --Labels--
 sectionReferences :: [Reference]

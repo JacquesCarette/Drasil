@@ -200,7 +200,7 @@ mkSRS = [
     IPurposeSub $ IPurposeProg $ purpDoc progName Verbose,
     IScopeSub $ IScopeProg scope,
     ICharSub $ ICharProg [] charsOfReader [],
-    IOrgSub $ IOrgProg orgDocIntro inModel (SRS.inModel 0 []) orgDocEnd,
+    IOrgSub $ IOrgProg orgDocIntro inModel (SRS.inModel "" 0 []) orgDocEnd,
   GSDSec $ GSDProg EmptyS,
     SysCntxt $ SysCntxtProg [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets],
     UsrChars $ UsrCharsProg [userChars progName],

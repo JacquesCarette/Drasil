@@ -17,10 +17,10 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Projectile.Derivations (horMotionEqn1, horMotionEqn2)
 
 coorSyst, kinematicEq, horMotionAna, verMotionAna :: Section
-coorSyst = NB.coorSyst 1 [coorSystContext] 
-kinematicEq = NB.kinematic 1 [kinematicContext] 
-horMotionAna = NB.hormotion 1 [horMotionContext] 
-verMotionAna = NB.vermotion 1 [verMotionContext] 
+coorSyst = NB.coorSyst "" 1 [coorSystContext] 
+kinematicEq = NB.kinematic "" 1 [kinematicContext] 
+horMotionAna = NB.hormotion "" 1 [horMotionContext] 
+verMotionAna = NB.vermotion "" 1 [verMotionContext] 
 
 coorSystContext, kinematicContext, horMotionContext, verMotionContext :: Contents
 coorSystContext = enumBulletU $ map foldlSent 

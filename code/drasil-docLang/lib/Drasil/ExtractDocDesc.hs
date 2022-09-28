@@ -69,7 +69,7 @@ egetDocDesc = fmGetDocDesc exprPlate
 
 -- | Extracts expressions from a 'Section'.
 egetSec :: Section -> [ModelExpr]
-egetSec (Section _ _ sc _ ) = concatMap egetSecCon sc
+egetSec (Section _ _ _ sc _ ) = concatMap egetSecCon sc
 
 -- | Extracts expressions from section contents.
 egetSecCon :: SecCons -> [ModelExpr]
@@ -138,7 +138,7 @@ getDocDesc = fmGetDocDesc (sentencePlate id)
 
 -- | Extracts 'Sentence's from a 'Section'.
 getSec :: Section -> [Sentence]
-getSec (Section _ t sc _ ) = t : concatMap getSecCon sc
+getSec (Section _ _ t sc _ ) = t : concatMap getSecCon sc
 
 -- | Extracts 'Sentence's from section contents.
 getSecCon :: SecCons -> [Sentence]

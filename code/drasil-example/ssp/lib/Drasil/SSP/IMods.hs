@@ -611,7 +611,7 @@ crtSlpIdExpr = apply minFunction [sy slopeDist,
 crtSlpIdDesc :: Sentence
 crtSlpIdDesc = foldlSent [atStartNP (the minFunction), S "must enforce the",
   pluralNP (constraint `onThePS` crtSlpSrf), S "expressed in" +:+.
-  (refS assumpSSC `S.and_` refS (propCorSol 0 [])),
+  (refS assumpSSC `S.and_` refS (propCorSol "" 0 [])),
   S "The sizes of", ch waterDist `S.and_` ch waterHght +:+.
   S "must be equal and not 1", S "The", S "sizes of", ch slopeDist `S.and_`
   ch slopeHght +:+. (S "must be equal" `S.and_` S "at least 2"),

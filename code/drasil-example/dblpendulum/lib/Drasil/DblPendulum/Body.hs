@@ -141,7 +141,7 @@ mkSRS = [
     IPurposeSub $ IPurposeProg $ purpDoc progName Verbose,
     IScopeSub $ IScopeProg scope,
     ICharSub $ ICharProg [] charsOfReader [],
-    IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel 0 []) EmptyS,
+    IOrgSub $ IOrgProg organizationOfDocumentsIntro inModel (SRS.inModel "" 0 []) EmptyS,
   GSDSec $ GSDProg EmptyS,
     SysCntxt $ SysCntxtProg [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars $ UsrCharsProg [userCharacteristicsIntro], 
@@ -291,7 +291,7 @@ sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ Doc.variable),
   S "Ensure required" +:+
-  namedRef (SRS.assumpt 0 ([]::[Contents])) (phrase software +:+ plural assumption) +:+
+  namedRef (SRS.assumpt "" 0 ([]::[Contents])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+. phrase software]
 

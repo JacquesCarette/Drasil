@@ -56,7 +56,7 @@ mkInPurpSub (InPurposeProg intro) = Intro.purposeOfDoc intro
 
 -- | Helper for making the 'Body' section
 mkBodySec :: BodySec -> Section
-mkBodySec (BodyProg bodyIntro) = NB.body 0 bodyIntro
+mkBodySec (BodyProg bodyIntro) = NB.body "body" 0 bodyIntro
 
 mkReviewSub :: ReviewSub -> Section
 mkReviewSub (ReviewProg cntnts) = Body.reviewSec cntnts   
@@ -82,14 +82,14 @@ mkExpSub (ExampleProg cntnts) = Body.exampleSec cntnts
 
 -- | Helper for making the 'Summary' section.
 mkSmmrySec :: SmmrySec -> Section
-mkSmmrySec (SmmryProg cs) = NB.summary 0 cs
+mkSmmrySec (SmmryProg cs) = NB.summary "summary" 0 cs
 
 -- | Helper for making the 'Bibliography' section.
 mkBib :: BibRef -> Section
-mkBib bib = NB.reference 0 [UlC $ ulcc (Bib bib)]
+mkBib bib = NB.reference "reference" 0 [UlC $ ulcc (Bib bib)]
 
 -- | Helper for making the 'Appendix' section.
 mkAppndxSec :: ApndxSec -> Section
-mkAppndxSec (ApndxProg cs) = NB.appendix 0 cs 
+mkAppndxSec (ApndxProg cs) = NB.appendix "appendix" 0 cs 
 
     

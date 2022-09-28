@@ -68,7 +68,7 @@ inputSurfacePropsDesc = foldlSent [S "Input", pluralNP (combineNINI CM.surface
 
 verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from the", 
-  namedRef (SRS.solCharSpec 0 []) (phrase solutionCharSpec)]
+  namedRef (SRS.solCharSpec "" 0 []) (phrase solutionCharSpec)]
 
 calcTransOverTimeDesc = requirementS QP.position QP.velocity 
   (S "acted upon by a" +:+ phrase QP.force)

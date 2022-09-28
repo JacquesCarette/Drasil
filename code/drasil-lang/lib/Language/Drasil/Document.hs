@@ -29,7 +29,8 @@ data Partition = Sections
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').
 data Section = Section 
-             { dep  :: Depth 
+             { par  :: UID
+             , dep  :: Depth 
              , tle  :: Title 
              , cons :: [SecCons]
              , _lab :: Reference
@@ -88,9 +89,9 @@ instance HasShortName  Section where shortname = shortname . view lab
 -- | Finds the reference information of a 'Section'.
 instance Referable Section where
   refAdd     = getAdd . getRefAdd . view lab
-  renderRef (Section _ _ _ lb)  = RP (prepend "Sec") (getAdd $ getRefAdd lb)
+  renderRef (Section _ _ _ _ lb)  = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 -- | Finds the reference address of a 'Section'.
-instance HasRefAddress Section where getRefAdd (Section _ _ _ lb) = RP (prepend "Sec") (getAdd $ getRefAdd lb)
+instance HasRefAddress Section where getRefAdd (Section _ _ _ _ lb) = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.
@@ -149,11 +150,14 @@ mkRawLC x lb = llcc lb x
 
 -- | Smart constructor for creating 'Section's with a title ('Sentence'), introductory contents
 -- (ie. paragraphs, tables, etc.), a list of subsections, and a shortname ('Reference').
-section :: Int -> Sentence -> [Contents] -> [Section] -> Reference -> Section
-section depth title intro secs = Section depth title (map Con intro ++ map Sub secs)
+-- TODO: The first 'section' should removed if we confirm the current one works
+--section :: UID -> Int -> Sentence -> [Contents] -> [Section] -> Reference -> Section
+--section parent depth title intro secs = Section parent depth title (map Con intro ++ map Sub secs)
+section :: UID -> Int -> Sentence -> [Contents] -> Reference -> Section
+section parent depth title intro = Section parent depth title (map Con intro)
 
-section' :: Int -> Sentence -> [Contents] -> Reference -> Section
-section' depth title intro = Section depth title (map Con intro)
+--section' :: Int -> Sentence -> [Contents] -> Reference -> Section
+--section' depth title intro = Section depth title (map Con intro)
 
 -- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
 extractSection :: Document -> [Section]
@@ -162,7 +166,7 @@ extractSection (Notebook _ _ sec)   = concatMap getSec sec
 
 -- | Smart constructor for retrieving the subsections ('Section's) within a 'Section'.
 getSec :: Section -> [Section]
-getSec t@(Section _ _ sc _) = t : concatMap getSecCons sc
+getSec t@(Section _ _ _ sc _) = t : concatMap getSecCons sc
 
 -- | Helper to retrieve subsections ('Section's) from section contents ('SecCons').
 getSecCons :: SecCons -> [Section]

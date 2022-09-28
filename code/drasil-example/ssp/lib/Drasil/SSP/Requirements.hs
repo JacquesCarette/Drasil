@@ -42,7 +42,7 @@ readAndStore = cic "readAndStore" ( foldlSent [
 
 verifyInput = cic "verifyInput" ( foldlSent [
   S "Verify that the", plural inDatum, S "lie within the",
-  namedRef (datCon 0 []) (plural physicalConstraint)])
+  namedRef (datCon "" 0 []) (plural physicalConstraint)])
   "Verify-Input" funcReqDom
 
 determineCritSlip = cic "determineCritSlip" ( foldlSent [
@@ -55,7 +55,7 @@ determineCritSlip = cic "determineCritSlip" ( foldlSent [
 
 verifyOutput = cic "verifyOutput" ( foldlSent [
   S "Verify that the", phrase fsMin `S.and_` phrase crtSlpSrf, S "satisfy the",
-  plural physicalConstraint, S "shown in", namedRef (propCorSol 0 []) (titleize' propOfCorSol)])
+  plural physicalConstraint, S "shown in", namedRef (propCorSol "" 0 []) (titleize' propOfCorSol)])
   "Verify-Output" funcReqDom
 
 displayInput = cic "displayInput" ( foldlSent [
@@ -111,7 +111,7 @@ nonFuncReqs = [correct, understandable, reusable, maintainable]
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", refS (propCorSol 0 [])
+  plural property, S "described in", refS (propCorSol "" 0 [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance

@@ -39,7 +39,7 @@ aboutParagraph2 caseStudySecRef docsRef analysisSecRef = S "This webpage is desi
   -- \The footer of this page contains the continuous integration build of the project, \
   -- \as well as the commit number that the build and artifacts are based off of.
 
-  -- | Lists artifacts that Drasil generates
+-- | Lists artifacts that Drasil generates
 aboutParagraph3 :: Sentence
 aboutParagraph3 = S "The following is a list of artifacts that Drasil currently generates:" 
 
@@ -50,8 +50,7 @@ currentlyGeneratedArtifacts = enumBulletU $ map foldlSent_
   [S "README"],
   [S "Makefile"]]
 
-
-  -- | Lists artifacts that we hope to generate with Drasil
+-- | Lists artifacts that we hope to generate with Drasil
 aboutParagraph4 :: Sentence
 aboutParagraph4 = S "We hope to generate the following artifacts in the future:" 
 
@@ -67,7 +66,7 @@ futureGeneratedArtifacts = enumBulletU $ map foldlSent_
   [S "Build Scripts"],
   [S "Test Cases"]]
 
-  -- | Paragraph describing information encoding
+-- | Paragraph describing information encoding
 aboutParagraph5 :: Reference -> Sentence
 aboutParagraph5 infoEncodingWiki = S "As described in the" +:+ namedRef infoEncodingWiki (S "Information Encoding") +:+ S " wiki page, \
   \Drasil uses specific terminology to address types of \

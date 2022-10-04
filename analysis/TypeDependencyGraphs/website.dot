@@ -1,6 +1,8 @@
 digraph alltypes {
 	subgraph main {
 	}
+	subgraph about {
+	}
 	subgraph analyiss {
 	}
 	subgraph body {
@@ -32,6 +34,8 @@ digraph alltypes {
 		Example -> Choices;
 		Example -> FilePath;
 		}
+	}
+	subgraph gettingstarted {
 	}
 	subgraph introduction {
 	}

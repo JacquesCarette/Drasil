@@ -10,6 +10,42 @@
 @version 0.1.0.0
 
 
+-- | About Drasil
+module Drasil.Website.About
+
+-- | Creates the about section.
+aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Section
+
+-- | Paragraph to about Drasil and its goals.
+aboutParagraph1 :: Reference -> Reference -> Sentence
+
+-- | Paragraph to describe the layout of the rest of the Drasil website.
+aboutParagraph2 :: Reference -> Reference -> Reference -> Sentence
+
+-- | Lists artifacts that Drasil generates
+aboutParagraph3 :: Sentence
+currentlyGeneratedArtifacts :: Contents
+
+-- | Lists artifacts that we hope to generate with Drasil
+aboutParagraph4 :: Sentence
+futureGeneratedArtifacts :: Contents
+
+-- | Paragraph describing information encoding
+aboutParagraph5 :: Reference -> Sentence
+
+-- | Paragraph describing chunks
+aboutParagraph6 :: Reference -> Sentence
+
+-- | Paragraph describing recipes
+aboutParagraph7 :: Reference -> Sentence
+
+-- | Paragraph describing GOOL
+aboutParagraph8 :: Reference -> Sentence
+
+-- | Paragraph providing a link to Drasil papers and documents
+aboutParagraph9 :: Reference -> Sentence
+
+
 -- | Contains all the information needed about the structure of the Drasil
 --   framework to be displayed on the Drasil website.
 module Drasil.Website.Analysis
@@ -425,18 +461,69 @@ getConstr :: ConstantStructure -> Sentence
 getConRep :: ConstantRepr -> Sentence
 getRealNum :: [CodeType] -> Sentence
 
+module Drasil.Website.GettingStarted
+gettingStartedSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Section
+
+-- | Getting started section title.
+gettingStartedTitle :: Sentence
+
+-- | Getting started section introduction.
+gettingStartedIntro :: Sentence
+
+-- | Quick Start subsection.
+quickStartSec :: Reference -> Section
+
+-- | Quick Start subsection title.
+quickStartTitle :: Sentence
+
+-- | Link to Quick Start Wiki.
+quickStartDesc :: Reference -> Sentence
+
+-- | New workspace subsection.
+newWorkspaceSec :: Reference -> Section
+
+-- | New workspace subsection title.
+newWorkspaceTitle :: Sentence
+
+-- | Link to new workspace Wiki.
+newWorkspaceDesc :: Reference -> Sentence
+
+-- | Contributor's Guide and Workflow subsection.
+contribGuideWorkflowSec :: Reference -> Reference -> Section
+
+-- | Contributor's Guide and Workflow title.
+contribGuideWorkflowTitle :: Sentence
+
+-- | Link to Contributor's Guide and Workflow Wiki.
+contribGuideWorkflowDesc :: Reference -> Reference -> Sentence
+
+-- | Creating Your Own Project subsection.
+createOwnProjectSec :: Reference -> Section
+
+-- | Creating Your Own Project title.
+createOwnProjectTitle :: Sentence
+
+-- | Link to Creating Your Own Project Wiki.
+createOwnProjectDesc :: Reference -> Sentence
+
+-- | Debugging Drasil subsection.
+debuggingDrasilSec :: Reference -> Section
+
+-- | Debugging Drasil title.
+debuggingDrasilTitle :: Sentence
+
+-- | Debugging Drasil Wiki.
+debuggingDrasilDesc :: Reference -> Sentence
+
 
 -- | Introduce the Drasil website.
 module Drasil.Website.Introduction
 
--- | Creates the introduction section.
-introSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Section
+-- | Creates the about section.
+introSec :: Section
 
 -- | Paragraph to introduce Drasil and its goals.
-introParagraph1 :: Reference -> Reference -> Sentence
-
--- | Paragraph to describe the layout of the Drasil website.
-introParagraph2 :: Reference -> Reference -> Reference -> Sentence
+introParagraph1 :: Sentence
 
 
 -- | Gathers and organizes all the information for the <a>Drasil
@@ -531,6 +618,17 @@ imageContent :: LabelledContent
 -- | Used for the repository link.
 gitHubRef :: Reference
 wikiRef :: Reference
+infoEncodingWiki :: Reference
+chunksWiki :: Reference
+recipesWiki :: Reference
+paperGOOL :: Reference
+papersWiki :: Reference
+quickStartWiki :: Reference
+newWorkspaceSetupWiki :: Reference
+contribGuideWiki :: Reference
+workflowWiki :: Reference
+createProjWiki :: Reference
+debuggingWiki :: Reference
 
 -- | Hardcoded info for the title, URL, and image path.
 websiteTitle :: String

@@ -41,10 +41,102 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
+          Drasil is a framework for generating all of the software artifacts from a stable knowledge base, focusing currently on scientific software. We welcome students and collaborators to assist us as we research optimal ways to extend Drasil's functionality.
+        </p>
+      </div>
+    </div>
+    <div id="Sec:GettingStarted">
+      <div class="section">
+        <h1>Getting Started</h1>
+        <p class="paragraph"></p>
+        <div id="Sec:QuickStart">
+          <div class="subsection">
+            <h2>Quick Start</h2>
+            <p class="paragraph">
+              Navigate to the <a href="https://github.com/JacquesCarette/Drasil#quick-start">Quick Start Guide</a> to see what Drasil can do.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:NewWorkspace">
+          <div class="subsection">
+            <h2>New Workspace Setup</h2>
+            <p class="paragraph">
+              Workspace recommendations are available in the <a href="https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup">New Workspace Setup</a> page.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:ContribGuideWorkflow">
+          <div class="subsection">
+            <h2>Contributor's Guide and Workflow</h2>
+            <p class="paragraph">
+              If you are interested in contributing to the project, please look at the <a href="https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide">Contributor's Guide</a>  as well as the <a href="https://github.com/JacquesCarette/Drasil/wiki/Workflow">Workflow</a> page.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:OwnProject">
+          <div class="subsection">
+            <h2>Creating Your Own Project</h2>
+            <p class="paragraph">
+              If you are interested in creating your own project in Drasil, please look at the <a href="https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil">Creating Your Project in Drasil</a> page.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:DebuggingDrasil">
+          <div class="subsection">
+            <h2>Debugging Drasil</h2>
+            <p class="paragraph">
+              Debugging information can be found in the <a href="https://github.com/JacquesCarette/Drasil/wiki/Debugging-in-Drasil">Debugging in Drasil</a> page.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:About">
+      <div class="section">
+        <h1>About</h1>
+        <p class="paragraph">
           Drasil is a framework for generating all of the software artifacts from a stable knowledge base, focusing currently on scientific software. The main goals are to reduce knowledge duplication and improve traceability. The artifacts are generated from a common knowledge-base using recipes written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of knowledge should be used in which artifacts, how to transform them, and more. For more information on the design, documentation, useage, and specifics of Drasil, please visit the <a href="https://github.com/JacquesCarette/Drasil">GitHub repository</a> or the <a href="https://github.com/JacquesCarette/Drasil/wiki">GitHub Wiki</a>.
         </p>
         <p class="paragraph">
           This webpage is designed to contain the most up to date <a href=#Sec:CaseStudy>case study artifacts</a>, <a href=#Sec:Documentation>Haddock documentation</a>, and <a href=#Sec:Analysis>Drasil analysis</a> from the Drasil repository. The case study artifacts include the Software Requirements Specification (SRS) for each case study, which specifies what the program sets out to achieve. The Haddock Documentation section contains the current documentation for the Drasil framework. The package dependency graphs shows the hierarchy of modules within each package.
+        </p>
+        <p class="paragraph">
+          The following is a list of artifacts that Drasil currently generates:
+        </p>
+        <ul class="list">
+          <li>SRS</li>
+          <li>code</li>
+          <li>README</li>
+          <li>Makefile</li>
+        </ul>
+        <p class="paragraph">
+          We hope to generate the following artifacts in the future:
+        </p>
+        <ul class="list">
+          <li>License</li>
+          <li>Installation Instructions</li>
+          <li>Dependency List</li>
+          <li>Authors</li>
+          <li>Getting Started / User Manual</li>
+          <li>Release Info</li>
+          <li>Design Documentation</li>
+          <li>Build Scripts</li>
+          <li>Test Cases</li>
+        </ul>
+        <p class="paragraph">
+          As described in the <a href="https://github.com/JacquesCarette/Drasil/wiki/Information-Encoding">Information Encoding</a>  wiki page, Drasil uses specific terminology to address types of knowledge for the purpose of encoding information, since we know that we want to eventually generate words, sentences, paragraphs, whole documents with headings, references, formulas, tables, graphs, and code. This is done by trying to understand the basic 'units' of all artifacts, and methods for composing larger structures from these units. The removal of duplicate units is an important feature of this methodology. The basic building blocks of the methodology include different expressions for units with a specific meaning. These are built into ontologies of domains that address broader knowledge. Chunks form a fundamental part of such ontologies.
+        </p>
+        <p class="paragraph">
+          As described in the <a href="https://github.com/JacquesCarette/Drasil/wiki/Chunks">Chunks</a> wiki page, a chunk is a data type specialized in holding a specific type of information for a specific purpose so that knowledge may be used in generated models, definitions, and theories. Chunks are usually made up of several lower-level types that hold lower-lever information; when contained together, these pieces of lower-level information hold a new specific purpose. The structure of a chunk can be thought of as a wrapper of information, and this is all implemented using Haskell's record-type syntax. Recipes transform the acquired knowledge into a usable format.
+        </p>
+        <p class="paragraph">
+          As described in the <a href="https://github.com/JacquesCarette/Drasil/wiki/Recipes">Recipes</a> wiki page, recipes are instructions that unpackage necessary information from chunks and send that information to Drasil generators/printers to build complete artifacts. When an artifact needs to be changed, the recipe is modified to unpackage the additional necessary information from a chunk, or alternatively to omit unpackaging information that is no longer required.
+        </p>
+        <p class="paragraph">
+          As described in the <a href="https://github.com/JacquesCarette/Drasil/blob/master/Papers/GOOL/GOOL.pdf">GOOL</a> paper, this is a Generic Object-Oriented Language that provides intermediary assistance in code generation, allowing Drasil to more efficiently generate code in several languages, including Python, Java, C-Sharp, and C++.
+        </p>
+        <p class="paragraph">
+          A list of papers and documents written about Drasil can be found in the <a href="https://github.com/JacquesCarette/Drasil/wiki/Drasil-Papers-and-Documents">Drasil Papers and Documents</a> wiki page
         </p>
       </div>
     </div>
@@ -65,7 +157,7 @@
                 Generated Code:
                 <ul class="list">
                   <li>
-                    DblPendulum <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/dblpendulum/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/dblpendulum/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/dblpendulum/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/dblpendulum/src/java">[Java]</a>
+                    DblPendulum <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/dblpendulum/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/dblpendulum/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/dblpendulum/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/dblpendulum/src/java">[Java]</a>
                   </li>
                 </ul>
               </li>
@@ -97,7 +189,7 @@
                 Generated Code:
                 <ul class="list">
                   <li>
-                    GlassBR <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/glassbr/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/glassbr/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/glassbr/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/glassbr/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/glassbr/src/swift">[Swift]</a>
+                    GlassBR <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/glassbr/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/glassbr/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/glassbr/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/glassbr/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/glassbr/src/swift">[Swift]</a>
                   </li>
                 </ul>
               </li>
@@ -129,7 +221,7 @@
                 Generated Code:
                 <ul class="list">
                   <li>
-                    NoPCM <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/nopcm/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/nopcm/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/nopcm/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/nopcm/src/java">[Java]</a>
+                    NoPCM <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/nopcm/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/nopcm/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/nopcm/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/nopcm/src/java">[Java]</a>
                   </li>
                 </ul>
               </li>
@@ -153,7 +245,7 @@
                 Generated Code:
                 <ul class="list">
                   <li>
-                    PD Controller <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/pdcontroller/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/pdcontroller/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/pdcontroller/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/pdcontroller/src/cpp">[C++]</a>
+                    PD Controller <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/pdcontroller/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/pdcontroller/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/pdcontroller/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/pdcontroller/src/cpp">[C++]</a>
                   </li>
                 </ul>
               </li>
@@ -177,19 +269,19 @@
                 Generated Code:
                 <ul class="list">
                   <li>
-                    Projectile_U_P_NoL_U_WI_V_D <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/swift">[Swift]</a>
+                    Projectile_U_P_NoL_U_WI_V_D <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/swift">[Swift]</a>
                   </li>
                   <li>
-                    Projectile_C_P_NoL_B_U_V_D <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/swift">[Swift]</a>
+                    Projectile_C_P_NoL_B_U_V_D <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_c_p_nol_b_u_v_d/src/swift">[Swift]</a>
                   </li>
                   <li>
-                    Projectile_S_L_NoL_U_U_V_F <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/swift">[Swift]</a>
+                    Projectile_S_L_NoL_U_U_V_F <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_s_l_nol_u_u_v_f/src/swift">[Swift]</a>
                   </li>
                   <li>
-                    Projectile_U_P_L_B_B_C_D <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/swift">[Swift]</a>
+                    Projectile_U_P_L_B_B_C_D <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_b_c_d/src/swift">[Swift]</a>
                   </li>
                   <li>
-                    Projectile_U_P_L_B_WI_V_F <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/fe2fd07e928df905f30f3a907feef10e6360cb58/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/swift">[Swift]</a>
+                    Projectile_U_P_L_B_WI_V_F <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/1ab7a8c2b875e8a7e6ff6bcc45e74c4e4bc38b32/code/stable/projectile/projectile_u_p_l_b_wi_v_f/src/swift">[Swift]</a>
                   </li>
                 </ul>
               </li>

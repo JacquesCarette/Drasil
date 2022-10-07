@@ -83,32 +83,29 @@
 
 \end{writingdirectives}
 
-When developing software, developers pull information from a common pool of
-domain-specific knowledge, including the requirements and related fields (such
-as physics and financial mathematics). The pool is common, but not necessarily
-formally shared, leading to issues in synchronization, communication, and
-understanding, all of which harm the final software produced in some way. As
-knowledge changes, software artifacts are slow-moving to adjust, requiring
-continued development. For well-understood domains, such as \ACF{scs}, where
-there exists commonly agreed upon ``knowledge'' and software is somehow usable,
-Drasil aims to capture domain-specific knowledge and use a generative approach
-to build software as \textit{view} of the captured knowledge. Drasil is a suite
-for \textit{generative software development}.
+Software developers pull on their understanding of a problem to form a software
+solution. Working together, developers similarly pull their understanding from a
+shared pool of information. The information always belongs to a whole domain of
+other similar problems and information. Often, developers share their knowledge
+through documentation, keeping every product owner ``in the loop.'' However, as
+knowledge and requirements change, the software trails behind it until
+developers manually update the code. This might mean, however, that they need to
+update several areas as a result of one change. Additionally, communication of
+information may be ambiguous at times, which leads to logical issues that others
+may not have expected.
 
-Currently focusing on \acs{scs}, Drasil uses a stable scientific knowledge-base
-to generate families of \acs{scs} conforming to a \ACF{srs}
-\cite{SmithAndLai2005}. By formalizing the language associated with an \acf{srs}
-document (such as symbols, units, mathematical expressions, theories, etc.) and
-how the language terms translate into other languages, Drasil is capable of
-generating \acs{scs} conforming to a \acf{srs}, improving consistency,
-traceability, understandability, maintainability, and reusability of the
-\acf{scs} (but, more importantly, of the domain-specific knowledge as a whole,
-as well).
+Focusing on \ACF{scs}, Drasil allows users to describe their scientific problems
+using a formal \ACF{srs} structure that contains just enough information such
+that Drasil can generate software artifacts that solve said problems. However,
+Drasil is only capable of generating software for the problems that it has
+structural information about and how the relevant information can be transformed
+into other useful forms.
 
-Specifically, in this thesis, we will explore capturing mathematical theories
-frequently pulled from in building \acs{scs}, typing mathematical expressions,
-restricting mathematical expression usage to appropriate contexts, and scaling
-Drasils knowledge database.
+In this thesis, we will explore how Drasil captures information about scientific
+theories and mathematical expressions, and how the way they are captured affects
+how quickly and reliably we can generate relevant solving software.
+Additionally, we will also explore how Drasil stores information in its internal
+information database.
 
 \section{Background}
 \label{sec:intro:background}

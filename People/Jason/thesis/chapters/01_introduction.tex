@@ -248,18 +248,34 @@ dense''\footnote{``Informationally dense'' in a sense that it contains more,
 reusable, meta-level knowledge than produced final software artifacts.} and
 relied upon for the relevant generators to do their tasks appropriately.
 
-The \acs{srs} template heavily relies on encoding scientific knowledge as
-\textit{theories}.
+For example, should a scientist want to create a Real number variable for
+representing ``tolerable load'' with the symbol as $l_{Tol}$, they might encode
+it as:
 
-\imptodo{Example of the encoding of a theory. What does scientific knowledge
-      look like in Drasil? With examples?}
+\originalQuantityDictExampleHaskell{}
+
+Where a \QuantityDict{} represents a basic understanding of a \textit{quantity}:
+
+\originalQuantityDictHaskell{}
 
 \subsubsection{Development}
 
-Drasil is developed using a ``bottom-up'' methodology, meaning that we gather
-and encode information along the way, as needed, testing Drasil according to its
-current capabilities. Currently, Drasil is guided through the development of a
-series of scientific case studies:
+Drasil is developed through a ``bottom-up'' methodology against several
+\acs{scs} case studies (\refCaseStudiesTable{}), capturing and de-duplicating
+knowledge as needed to re-generate the original artifacts. As a result of
+capturing the meaning, we are become able to generate the same ``software
+solution'' using other programming languages and tools.
+
+For example, the \ACF{glassbr} case study (examining predicting whether a glass
+slab can withstand an explosive blast) had \porthref{software
+      artifacts}{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}
+manually written. A coherent net of knowledge/discussion (a ``story'') is then
+formed by dissecting the artifacts, understanding why each piece existed, what
+it relates to and how, and how it can be translated into other things. The
+original artifacts are then
+\porthref{re-generated}{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}
+in a wider variety of other languages by discussing similar usability of the
+knowledge with other tools.
 
 \caseStudiesTable{}
 
@@ -272,14 +288,25 @@ capable of generating conforming software.
 Some case studies aren't capable of generating representational
 code\footnote{``Representational code'' meaning software that solves the problem
 the related \acs{srs} abstraction describes.} because they aren't fully filled
-out yet, but, we won't focus on those here.
+out yet, but, we won't focus on those here. Here, we will focus on a critical
+common denominator between them: capturing mathematical knowledge for reliable
+\acs{srs} artifact generation.
 
 \imptodo{Continue writing here!}
 
-Drasil currently relies on a single universal untyped mathematical language to
-describe general scientific and mathematical knowledge (including, but not
-limited to, equations, relations, theories, derivations, constraints, and
-definitions).
+\begin{enumerate}
+
+      \item These codified pieces of ``knowledge'' are known as \textit{chunks}
+            in Drasil, and are collected in a single database
+            (\refOriginalChunkDBHaskell) of typed maps of chunks, referenced by
+            their \ACFP{uid}.
+
+      \item Drasil currently relies on a single universal untyped mathematical
+            language to describe general scientific and mathematical knowledge
+            (including, but not limited to, equations, relations, theories,
+            derivations, constraints, and definitions).
+      
+\end{enumerate}
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
@@ -358,6 +385,8 @@ others who were also contributing to the project while I was actively
 contributing. The work of others might include, but not limited to, code
 formatting, code commenting, and extensions.
 
+\imptodo{Switch the below notes to point-form notes.}
+
 \imptodo{Below paragraph: move ``new'' information to Background section
       somehow.}
 
@@ -403,86 +432,3 @@ issues associated with the formation of mathematical expressions and what it
 means for expressions to be ``well-formed'' (\ref{rq:typing}).
 \Cref{chap:storingChunks} focuses on how Drasil stores information, and how it
 can scale against future development of Drasil and libraries.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-For example, ``quantities'' (\QuantityDict{}s), as we've currently needed from a
-physics-based point-of-view, are encoded as:
-
-\originalQuantityDictHaskell{}
-
-And an instance of a ``quantity'' might appear as:\\
-
-\originalQuantityDictExampleHaskell{}
-
-The ways that we can translate ``quantities'' into other ``things'' are encoded
-as Haskell-level functions and instances of typeclasses, such as:
-
-\tedioustodo{Code snippet: example of how QuantityDicts are converted into at
-      least 1 or 2 other things (e.g., SRS rows, symbols, etc.).}
-
-These codified pieces of ``knowledge'' are known as \textit{chunks} in Drasil,
-and are collected in a single database (\refOriginalChunkDBHaskell) of typed
-maps of chunks, referenced by their \ACFP{uid}. Drasil is developed through a
-``bottom-up'' methodology against several \acs{scs} case studies
-(\refCaseStudiesTable{}), capturing and de-duplicating knowledge as needed to
-re-generate the original artifacts and more, in a wide variety of similarly
-applicable languages. For example, Drasil makes use of the similarities of
-\ACF{oo} languages by forming expressions in \ACF{gool} before compiling to the
-specific instances of \acs{oo} languages (such as Java, C/C\+\+, C\#, Python,
-etc.). Similarly, textual markup can be exported in similar languages, such as
-\acs{html} and \LaTeX{}.
-
-For example, the \ACF{glassbr} case study (examining predicting whether a glass
-slab can withstand an explosive blast) had \porthref{software
-      artifacts}{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}
-manually written. A coherent net of knowledge/discussion (a ``story'') is then
-formed by dissecting the artifacts, understanding why each piece existed, what
-it relates to and how, and how it can be translated into other things. The
-original artifacts are then
-\porthref{re-generated}{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}
-in a wider variety of other languages by codifying how the net of knowledge can
-be translated into other languages.
-
-However, not all the case studies are capable of generating software artifacts
-yet (\refCaseStudiesCodeTable{}). Each for their own reason, but we will focus
-on a critical common denominator between them all: capturing mathematical
-knowledge for reliable \acs{scs} artifact generation (and more).

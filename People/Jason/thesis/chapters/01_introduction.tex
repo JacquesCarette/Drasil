@@ -205,6 +205,14 @@ as well, allowing us to make use of Haskells rich tooling for creating
 \ACFP{dsl}. A series of \acsp{dsl} are used to represent encoded knowledge and
 their relationships to other pieces of knowledge, and input data into Drasil.
 
+The capture of domain-specific knowledge is what sets \acsp{dsl} apart from
+general-purpose programming languages. Domain-specific abstractions create
+opportunities for domain-specific \textit{interpretation and transformation}
+(e.g., optimization, analysis, error checking, tool support, etc.)
+\cite{Czarnecki2005}. Drasil relies on a \textit{network of domains} (a network
+of domain knowledge connected by \aclp{dsl}) to enable the complex information
+transformation needed to convert an \acs{srs} document into code. 
+
 In Drasil-lingo, \textit{chunks} are the fragments of knowledge\footnote{At
 times, we will also refer to chunks as ``knowledge fragments,'' or, similarly,
 ``fragments of knowledge.''} that carry semantically meaningful information`'.
@@ -222,7 +230,7 @@ transformer works, with each node representing a domain of knowledge, and each
 arrow representing a mapping between them. Realistically, each node in the
 diagram represent an encompassing domain of \acsp{dsl}, they all contain their
 own network of domain knowledge\footnote{In other words, each node is merely the
-``domain'' of a series of \acsp{dsl}. Thuss, the diagram is not an accurate
+``domain'' of a series of \acsp{dsl}. Thus, the diagram is not an accurate
 depiction of all \acsp{dsl} that actually exist in Drasil.}. It uses a pool of
 scientific knowledge to form a coherent \acs{srs} abstraction of a problem, from
 which we can generate both representational \acs{srs} documents and \acs{scs}
@@ -478,24 +486,3 @@ However, not all the case studies are capable of generating software artifacts
 yet (\refCaseStudiesCodeTable{}). Each for their own reason, but we will focus
 on a critical common denominator between them all: capturing mathematical
 knowledge for reliable \acs{scs} artifact generation (and more).
-
-
-
-
-
-
-
-
-
-
-\section{Problem Statement}
-\label{sec:intro:problemStatement}
-
-Domain-specific abstractions are what enable domain-specific
-\textit{interpretation and transformation} (e.g., optimization, analysis, error
-checking, tool support, etc.) \cite{Czarnecki2005}. The capture of
-domain-specific knowledge (through abstractions) is which is what sets
-\acsp{dsl} apart from general-purpose programming languages. Drasil relies on a
-\textit{network of domains} (a network of domain knowledge connected by
-\aclp{dsl}) to enable the complex information transformation needed to convert
-an \acs{srs} document into code. 

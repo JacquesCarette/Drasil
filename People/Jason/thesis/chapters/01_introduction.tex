@@ -147,7 +147,7 @@ of their solutions. In both examples, experts already had a stable understanding
 of the ``story'' and how things should have panned out every step of the way.
 Experts knew how each individual component should have interacted and had sound
 rationale for why and how it worked, and how all the components together fit the
-requirements of the cohesive story.
+requirements of the coherent and cohesive story.
 
 \subsubsection{Thoughts of Generation}
 
@@ -162,23 +162,278 @@ error-free programs which satisfy a precisely defined set of requirements.
 So, now we wonder: why is it still not simple enough? Our end-goal should be
 assembly-line style engineering of the software \cite{well-understood}. Asides
 from human-error, one large issue is the communication itself is very sparse in
-meta-level information and doesn't contain any strong guarantees of cohesion. To
-remedy this, we look to codifying subsets of natural language (English) used to
-communicate ideas, and the rules that ensure that phrases make sense. In other
-words, we look towards additionally communicating the meaning of the words we
-would write down in our software specifications documents. Through sufficiently
-communicating all relevant pieces of information about a story and how that
-story relates to software, we should then be able to \textit{generate}
+meta-level information and doesn't contain any strong guarantees of coherence.
+To remedy this, we look to codifying subsets of natural language (English) used
+to communicate ideas, and the rules that ensure that phrases make sense. In
+other words, we look towards additionally communicating the meaning of the words
+we would write down in our software specifications documents. Through
+sufficiently communicating all relevant pieces of information about a story and
+how that story relates to software, we should then be able to \textit{generate}
 conforming software artifacts. The generated software is then traceable to its
 foundations and can be easily kept in synchronization (i.e., maintained) with
-its story through merely re-generating it.
+its story through merely re-generating it. Furthermore, similar to shared
+libraries, reusability of codified knowledge is strong as well, because codified
+terminology can also be similarly shared. However, unlike shared pieces of code,
+shared pieces of knowledge is even more reusable, in that it can be translated
+into other forms (including programming languages, where applicable).
 
-To my understanding, \textit{Drasil} explores this ideology, focusing on
-generating scientific software from user-described scientific problems using
+To my understanding, Drasil \cite{Drasil2021} explores this ideology, focusing
+on generating scientific software from user-described scientific problems using
 Drasil-understood terminology (i.e., ones that a scientific domain expert
 previously encoded).
 
 \subsection{Drasil}
+
+\drasilLogoImg{}
+
+\porthref{Drasil}{https://jacquescarette.github.io/Drasil/} is a software suite
+for generating software from well-formed stories, providing tools for exporting
+artifacts in various languages, including programming languages (through
+compiling to \ACF{gool} \cite{Carette2019} first), Makefiles, typesetting
+languages, and more. Focused on generating \ACF{scs}, Drasil uses an encoded
+variant of the Smith et al. \cite{SmithAndLai2005} \ACF{srs} template to allow
+users to ``fill in the blanks'' to describe a scientific problem, and,
+ultimately, generate code that solves the described scientific problem. The
+template breaks up scientific software requirements into a series of coherent
+logical components, which guide us in knowing what things we need to
+sufficiently encode in Drasil to give users sufficient expressibility of their
+problems. Filled in \acs{srs} document are, within reason, automatically checked
+for consistency and coherence. The ``blanks'' are cookie-cutter shapes with a
+specific structure that input data must conform to. Drasil is built in Haskell
+\cite{Haskell2010}, and case studies are embedded directly in the Haskell code
+as well, allowing us to make use of Haskells rich tooling for creating
+\ACFP{dsl}. A series of \acsp{dsl} are used to represent encoded knowledge and
+their relationships to other pieces of knowledge, and input data into Drasil.
+
+In Drasil-lingo, \textit{chunks} are the fragments of knowledge\footnote{At
+times, we will also refer to chunks as ``knowledge fragments,'' or, similarly,
+``fragments of knowledge.''} that carry semantically meaningful information`'.
+Haskell records and \ACFP{adt} are used to encode chunks, and functions and
+instantiated typeclasses are used to describe relationships chunks share with
+each other. Each chunk has a \textit{type} denoting the category of knowledge it
+belongs to, and containing structural and capability information about instances
+of it. By connecting and intertwining chunks into large cohesive stories, we're
+able to form a network of domain models \cite{Czarnecki2005}.
+
+\roughNetworkOfDomains{}
+
+Roughly, the above diagram shows how Drasils \textit{Smith et al.} knowledge
+transformer works, with each node representing a domain of knowledge, and each
+arrow representing a mapping between them. Realistically, each node in the
+diagram represent an encompassing domain of \acsp{dsl}, they all contain their
+own network of domain knowledge\footnote{In other words, each node is merely the
+``domain'' of a series of \acsp{dsl}. Thuss, the diagram is not an accurate
+depiction of all \acsp{dsl} that actually exist in Drasil.}. It uses a pool of
+scientific knowledge to form a coherent \acs{srs} abstraction of a problem, from
+which we can generate both representational \acs{srs} documents and \acs{scs}
+that satisfies the requirements set forth. Users of Drasil are quite far-removed
+from the inner workings and ``lower-level''\footnote{While we often think of
+abstractions as being ``higher'' and ``lower'' level than others, we should be
+careful to only discuss them with respect to a particular aspect, as not all
+things may be sensibly related with this dichotomy.} abstractions of resultant
+software artifacts. Drasil allows scientists to ``keep at a safe distance'' from
+software, but only so far as Drasil has encoded the terminology the scientist
+relies on for conveying their problem to Drasil. With respect to generating
+usable software and typeset \acs{srs} documents, the ``higher-level'' domains
+(\acs{srs} abstraction and scientific knowledge) are the most ``informationally
+dense''\footnote{``Informationally dense'' in a sense that it contains more,
+reusable, meta-level knowledge than produced final software artifacts.} and
+relied upon for the relevant generators to do their tasks appropriately.
+
+The \acs{srs} template heavily relies on encoding scientific knowledge as
+\textit{theories}.
+
+\imptodo{Example of the encoding of a theory. What does scientific knowledge
+      look like in Drasil? With examples?}
+
+\subsubsection{Development}
+
+Drasil is developed using a ``bottom-up'' methodology, meaning that we gather
+and encode information along the way, as needed, testing Drasil according to its
+current capabilities. Currently, Drasil is guided through the development of a
+series of scientific case studies:
+
+\caseStudiesTable{}
+
+Each case study currently describes a specific physics-focused problem. Each one
+is capable of generating an \acs{srs} document. However, not all are currently
+capable of generating conforming software.
+
+\caseStudiesCodeTable{}
+
+Some case studies aren't capable of generating representational
+code\footnote{``Representational code'' meaning software that solves the problem
+the related \acs{srs} abstraction describes.} because they aren't fully filled
+out yet, but, we won't focus on those here.
+
+\imptodo{Continue writing here!}
+
+Drasil currently relies on a single universal untyped mathematical language to
+describe general scientific and mathematical knowledge (including, but not
+limited to, equations, relations, theories, derivations, constraints, and
+definitions).
+
+\section{Problem Statement}
+\label{sec:intro:problemStatement}
+
+Unfortunately, as general-purpose programming languages are to domain-specific
+languages, a single universal mathematical language is to a series of formalized
+and structured theory-specific languages. In other words, Drasils reliance on a
+single mathematical language is limiting because of the complexity associated
+with interpreting its terms, which lack information about how they can be
+transformed into other forms (such as code).
+
+As a result, transforming encoded theories into other forms (such as code) is a
+complex task (similar to the complexity associated with transpiling a
+general-purpose program into another \textemdash{} an exercise in futility!). Drasil is
+unable to make intended and appropriate usage of the encoded mathematical
+theories because of a lack of information about the structure of the
+mathematical expressions. Since the language is also universal, there is
+difficulty in separation of expression term-concern (you wouldn't worry about
+derivatives if you were writing down expressions on your standard calculator,
+because your calculator likely doesn't understand what derivatives are!). For
+example, converting a universal mathematical language into Java will be
+difficult, as there are many terms not immediately expressible. Additionally,
+due to Drasils lack of type information about its mathematical expression
+language, invalid expressions (and hence, domain knowledge) are possible to be
+written, causing further issues in reliable formation and transformation into
+usable high-quality \acs{scs}. Together, these issues fundamentally have to do
+with the depth and breadth of the scientific knowledge: we aim to enable Drasils
+network of domain knowledge to grow, and grow it (to some degree).
+
+Finally, as Drasils network of domains continues to grow in different aspects
+(such as creating new kinds of chunks, and creating type parameters for existing
+chunks), Drasil faces difficulties in scaling its database of knowledge because
+of its typed nature.
+
+\section{Research Questions}
+\label{sec:intro:researchquestions}
+
+\imptodo{Make the difference between RQ1 and RQ3 more clear, or, optionally,
+      just get rid of RQ1.}
+
+\imptodo{The Background section should contain concrete examples of the issues
+      that the RQs refer to.}
+
+\begin{enumerate}
+
+      \item[\namedlabel{rq:lang_division}{RQ1}] Drasil has a language of simple
+            mathematical expressions that are used in multiple contexts. But not
+            all expressions are valid in all contexts. How do we fix that?
+
+      \item[\namedlabel{rq:modelkinds}{RQ2}] Drasil's current encoding of
+            ``theories'' are essentially black boxes. We would like to be able
+            to use some structural information present in the short list of the
+            ``kinds'' of theories that show up in scientific computing. How do
+            we codify that?
+
+      \item[\namedlabel{rq:typing}{RQ3}] How can we ensure that our language(s)
+            of simple mathematical expressions admits only valid expressions?
+
+      \item[\namedlabel{rq:chunkdb}{RQ4}] Our current ``typed'' approach to
+            collecting different kinds of data is hard to extend. How can we
+            make it easier to extend?
+
+\end{enumerate}
+
+\section{Contributions of the Author}
+\label{sec:intro:contributions}
+
+In listed code snippets, I will refer to at least two major points of time in
+relation to Drasils development (time measured by their git blob hash):
+``current''\footnote{Blob hash: dc3674274edb00b1ae0d63e04ba03729e1dbc6f9} and
+``original''\footnote{Blob hash: 9c26b43d3e30c3f618e534a3f176a5152729af74}
+\latertodo{Switch these blob hashes to blob tags.}. The ``original'' code refers
+to a code snippet as it was written before I was onboarded to Drasil. The
+``current'' code includes my work, at least, but might also include the work of
+others who were also contributing to the project while I was actively
+contributing. The work of others might include, but not limited to, code
+formatting, code commenting, and extensions.
+
+\imptodo{Below paragraph: move ``new'' information to Background section
+      somehow.}
+
+Drasil has existed since 2014, and has already seen success in its case studies,
+which are used to guide the development of Drasil. Drasils focus on \acs{scs}
+relies on knowledge of mathematical theories and language, for which Drasil has
+a working understanding of before this work. However, some case studies were
+unable to participate in code generation due to a lack of flexible theory
+information (\ref{rq:modelkinds}), or just being inapplicable. This work
+contributes to structuring theory information and allowing for future developers
+to encode more kinds of theories and their relationships with other things
+(discussed in \Cref{chap:modelkinds}). The solution builds on a prototype by Dr.
+Jacques Carette\footnote{Unfortunately, the code associated with the prototype
+had been deleted.} that facilitates structured theories to define relationships
+between ``code'' and ``theories.''
+
+\imptodo{Below paragraph: move ``new'' information to Background section 
+      somehow.}
+
+Theories rely on mathematical expressions as well. We commonly differ the usable
+set of language in different contexts (you are free to write a lot more on your
+pencil and paper derivations than on your typical calculator). To obtain
+information about the expressibility in different contexts, we divide the
+expression language using a \acs{ttf} \cite{Carette2009} encoding, with a
+\acsp{gadt} backend for structural edits (\Cref{chap:modelkinds}). However,
+``expressibility'' also relies on the expressions adhering to a precise
+syntactic set of rules. As such, we build a system of typing rules for the
+expression language (\Cref{chap:typedExpr}).
+
+Finally, to enable capturing data with type parameters and generally scale
+Drasils knowledge database (\ref{rq:chunkdb}), this work merges the typed
+database collections into a single untyped, yet type-preserving, database
+(discussed in \Cref{chap:storingChunks}).
+
+\section{Thesis Outline}
+\label{sec:intro:outline}
+
+\Cref{chap:modelkinds} discusses how Drasil contains captured theories and
+allows users to transcribe instances of them (\ref{rq:modelkinds}), and the
+issues associated with using a single universal mathematical language to
+describe theories (\ref{rq:lang_division}). \Cref{chap:typedExpr} discusses
+issues associated with the formation of mathematical expressions and what it
+means for expressions to be ``well-formed'' (\ref{rq:typing}).
+\Cref{chap:storingChunks} focuses on how Drasil stores information, and how it
+can scale against future development of Drasil and libraries.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Intended to ``generate all the things''\footnote{``Generate All the Things'' is
@@ -231,6 +486,15 @@ yet (\refCaseStudiesCodeTable{}). Each for their own reason, but we will focus
 on a critical common denominator between them all: capturing mathematical
 knowledge for reliable \acs{scs} artifact generation (and more).
 
+
+
+
+
+
+
+
+
+
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
 
@@ -241,135 +505,4 @@ domain-specific knowledge (through abstractions) is which is what sets
 \acsp{dsl} apart from general-purpose programming languages. Drasil relies on a
 \textit{network of domains} (a network of domain knowledge connected by
 \aclp{dsl}) to enable the complex information transformation needed to convert
-an \acs{srs} document into code. In Drasil, this roughly appears as
-\refRoughNetworkOfDomains{}, where the nodes are domains, and the arrows
-represent mappings between them. However, this sketch is only rough;
-realistically, the individual nodes are the ``domains of the \aclp{dsl}'' (i.e.,
-the top-level domains they belong to, and not an accurate depiction of all the
-\aclp{dsl} that actually exist in Drasil).
-
-\roughNetworkOfDomains{}
-
-As Drasil focuses on the generative software development of \acs{scs}, capturing
-the domain of scientific knowledge is at the forefront of its priority list. The
-depth and breadth of the network of domains is directly related to how many
-opportunities for domain-specific transformations we can perform on a specific
-pool of knowledge\qtodo{I feel like I should be able to cite Czarnecki2005 again
-      here, but this isn't really how he worded it, is it fair to cite him here,
-      or should I provide my own justification?}.
-
-Drasil currently relies on a single universal untyped mathematical language to
-describe general scientific and mathematical knowledge (including, but not
-limited to, equations, relations, theories, derivations, constraints, and
-definitions).
-
-\easytodo{Code snippet: Encoding of a theory using a RelationConcept.}
-
-Unfortunately, as general-purpose programming languages are to domain-specific
-languages, a single universal mathematical language is to a series of formalized
-and structured theory-specific languages. In other words, Drasils reliance on a
-single mathematical language is limiting because of the complexity associated
-with interpreting its terms, which lack information about the \textit{domain}
-(science and mathematics).
-
-As a result, transforming encoded theories into other forms (such as code) is a
-complex task (similar to the complexity associated with transpiling a
-general-purpose program into another \textemdash{} an exercise in futility!). Drasil is
-unable to make intended and appropriate usage of the encoded mathematical
-theories because of a lack of information about the structure of the
-mathematical expressions. Since the language is also universal, there is
-difficulty in separation of expression term-concern (you wouldn't worry about
-derivatives if you were writing down expressions on your standard calculator,
-because your calculator likely doesn't understand what derivatives are!). For
-example, converting a universal mathematical language into Java will be
-difficult, as there are many terms not immediately expressible. Additionally,
-due to Drasils lack of type information about its mathematical expression
-language, invalid expressions (and hence, domain knowledge) are possible to be
-written, causing further issues in reliable formation and transformation into
-usable high-quality \acs{scs}. Together, these issues fundamentally have to do
-with the depth and breadth of the scientific knowledge: we aim to enable Drasils
-network of domain knowledge to grow, and grow it (to some degree).
-
-Finally, as Drasils network of domains continues to grow in different aspects
-(such as creating new kinds of chunks, and creating type parameters for existing
-chunks), Drasil faces difficulties in scaling its database of knowledge because
-of its typed nature.
-
-\section{Research Questions}
-\label{sec:intro:researchquestions}
-
-\begin{enumerate}
-
-      \item[\namedlabel{rq:lang_division}{RQ1}] Drasil has a language of simple
-            mathematical expressions that are used in multiple contexts. But not
-            all expressions are valid in all contexts. How do we fix that?
-
-      \item[\namedlabel{rq:modelkinds}{RQ2}] Drasil's current encoding of
-            ``theories'' are essentially black boxes. We would like to be able
-            to use some structural information present in the short list of the
-            ``kinds'' of theories that show up in scientific computing. How do
-            we codify that?
-
-      \item[\namedlabel{rq:typing}{RQ3}] How can we ensure that our language(s)
-            of simple mathematical expressions admits only valid expressions?
-
-      \item[\namedlabel{rq:chunkdb}{RQ4}] Our current ``typed'' approach to
-            collecting different kinds of data is hard to extend. How can we
-            make it easier to extend?
-
-\end{enumerate}
-
-\section{Contributions of the Author}
-\label{sec:intro:contributions}
-
-In listed code snippets, I will refer to at least two major points of time in
-relation to Drasils development (time measured by their git blob hash):
-``current''\footnote{Blob hash: dc3674274edb00b1ae0d63e04ba03729e1dbc6f9} and
-``original''\footnote{Blob hash: 9c26b43d3e30c3f618e534a3f176a5152729af74}
-\latertodo{Switch these blob hashes to blob tags.}. The ``original'' code refers
-to a code snippet as it was written before I was onboarded to Drasil. The
-``current'' code includes my work, at least, but might also include the work of
-others who were also contributing to the project while I was actively
-contributing. The work of others might include, but not limited to, code
-formatting, code commenting, and extensions.
-
-Drasil has existed since 2014, and has already seen success in its case studies,
-which are used to guide the development of Drasil. Drasils focus on \acs{scs}
-relies on knowledge of mathematical theories and language, for which Drasil has
-a working understanding of before this work. However, some case studies were
-unable to participate in code generation due to a lack of flexible theory
-information (\ref{rq:modelkinds}), or just being inapplicable. This work
-contributes to structuring theory information and allowing for future developers
-to encode more kinds of theories and their relationships with other things
-(discussed in \Cref{chap:modelkinds}). The solution builds on a prototype by Dr.
-Jacques Carette\footnote{Unfortunately, the code associated with the prototype
-had been deleted.} that facilitates structured theories to define relationships
-between ``code'' and ``theories.''
-
-Theories rely on mathematical expressions as well. We commonly differ the usable
-set of language in different contexts (you are free to write a lot more on your
-pencil and paper derivations than on your typical calculator). To obtain
-information about the expressibility in different contexts, we divide the
-expression language using a \acs{ttf} \cite{Carette2009} encoding, with a
-\acsp{gadt} backend for structural edits (\Cref{chap:modelkinds}). However,
-``expressibility'' also relies on the expressions adhering to a precise
-syntactic set of rules. As such, we build a system of typing rules for the
-expression language (\Cref{chap:typedExpr}).
-
-Finally, to enable capturing data with type parameters and generally scale
-Drasils knowledge database (\ref{rq:chunkdb}), this work merges the typed
-database collections into a single untyped, yet type-preserving, database
-(discussed in \Cref{chap:storingChunks}).
-
-\section{Thesis Outline}
-\label{sec:intro:outline}
-
-In \Cref{chap:ideology}, we discuss the focal ideology underpinning this work
-and Drasil. \Cref{chap:drasil} describes Drasil, the host project carrying the
-fruits of this work. \Cref{chap:modelkinds} discusses how theories are encoded
-in Drasil (\ref{rq:modelkinds}), the issues associated with using a single
-universal mathematical language to describe theories (\ref{rq:lang_division}),
-and how we can resolve these problems. \Cref{chap:typedExpr} describes issues
-associated with the formation of mathematical expressions (\ref{rq:typing}).
-\Cref{chap:storingChunks} focuses on how Drasil stores information, and how it
-can be scaled.
+an \acs{srs} document into code. 

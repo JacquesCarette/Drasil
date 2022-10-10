@@ -427,30 +427,3 @@ proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
       \item ``Safety = Preservation + Progress'' (\cite{Harper2016}, Ch.6)
 
 \end{itemize}
-
-\section{Solution}
-
-\begin{itemize}
-
-      \item Use TTF encodings of the smart constructors to lessen the cognitive
-            load of handling at least 3 different expression languages.
-
-      \item Statically type all 3 variants of Expr through GADTs.
-
-\end{itemize}
-
-\subsection{Syntax}
-
-\subsubsection{Current}
-
-\input{chapters/typing/syntax/current.tex}
-
-\subsection{Typing Rules}
-
-\subsubsection{Miscellaneous}
-
-\input{chapters/typing/rules/misc}
-
-\subsubsection{Expr}
-
-\input{chapters/typing/rules/expr}

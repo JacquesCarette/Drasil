@@ -124,7 +124,7 @@ library might not be readily accessible to your preferred programming language,
 requiring you to create a \ACF{ffi}, which is often quite brittle and expensive
 due to demanding complex compatibility analysis for each change. Hence, we often
 look towards mature libraries and frameworks to underpin our projects, but
-typically without strong guarantee that using the libraries together is safe. 
+typically without strong guarantee that using the libraries together is safe.
 
 For example, the sinking of the Vasa ship \cite{wiki:Vasa_ship} was partially
 caused by different teams working together but using different ``feet'' units
@@ -190,20 +190,25 @@ previously encoded).
 for generating software from well-formed stories, providing tools for exporting
 artifacts in various languages, including programming languages (through
 compiling to \ACF{gool} \cite{Carette2019} first), Makefiles, typesetting
-languages, and more. Focused on generating \ACF{scs}, Drasil uses an encoded
-variant of the Smith et al. \cite{SmithAndLai2005} \ACF{srs} template to allow
-users to ``fill in the blanks'' to describe a scientific problem, and,
-ultimately, generate code that solves the described scientific problem. The
-template breaks up scientific software requirements into a series of coherent
-logical components, which guide us in knowing what things we need to
-sufficiently encode in Drasil to give users sufficient expressibility of their
-problems. Filled in \acs{srs} document are, within reason, automatically checked
-for consistency and coherence. The ``blanks'' are cookie-cutter shapes with a
-specific structure that input data must conform to. Drasil is built in Haskell
-\cite{Haskell2010}, and case studies are embedded directly in the Haskell code
-as well, allowing us to make use of Haskells rich tooling for creating
-\ACFP{dsl}. A series of \acsp{dsl} are used to represent encoded knowledge and
-their relationships to other pieces of knowledge, and input data into Drasil.
+languages, and more. \porthref{Dr. Jacques
+      Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
+      Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
+Drasil. Drasil is deeply embedded in Haskell \cite{Haskell2010}, relying on
+Stack \cite{HaskellStack}, and compiling against \acs{ghc} 8.8.4 \cite{GHC884}.
+Focused on generating \ACF{scs}, Drasil uses an encoded variant of the Smith et
+al. \cite{SmithAndLai2005} \ACF{srs} template to allow users to ``fill in the
+blanks'' to describe a scientific problem, and, ultimately, generate code that
+solves the described scientific problem. The template breaks up scientific
+software requirements into a series of coherent logical components, which guide
+us in knowing what things we need to sufficiently encode in Drasil to give users
+sufficient expressibility of their problems. Filled in \acs{srs} document are,
+within reason, automatically checked for consistency and coherence. The
+``blanks'' are cookie-cutter shapes with a specific structure that input data
+must conform to. Drasil is built in Haskell \cite{Haskell2010}, and case studies
+are embedded directly in the Haskell code as well, allowing us to use Haskells
+rich tooling for creating \ACFP{dsl}. A series of \acsp{dsl} are used to
+represent encoded knowledge and their relationships to other pieces of
+knowledge, and input data into Drasil.
 
 The capture of domain-specific knowledge is what sets \acsp{dsl} apart from
 general-purpose programming languages. Domain-specific abstractions create
@@ -211,17 +216,17 @@ opportunities for domain-specific \textit{interpretation and transformation}
 (e.g., optimization, analysis, error checking, tool support, etc.)
 \cite{Czarnecki2005}. Drasil relies on a \textit{network of domains} (a network
 of domain knowledge connected by \aclp{dsl}) to enable the complex information
-transformation needed to convert an \acs{srs} document into code. 
+transformation needed to convert an \acs{srs} document into code.
 
-In Drasil-lingo, \textit{chunks} are the fragments of knowledge\footnote{At
-times, we will also refer to chunks as ``knowledge fragments,'' or, similarly,
-``fragments of knowledge.''} that carry semantically meaningful information`'.
-Haskell records and \ACFP{adt} are used to encode chunks, and functions and
-instantiated typeclasses are used to describe relationships chunks share with
-each other. Each chunk has a \textit{type} denoting the category of knowledge it
-belongs to, and containing structural and capability information about instances
-of it. By connecting and intertwining chunks into large cohesive stories, we're
-able to form a network of domain models \cite{Czarnecki2005}.
+In Drasil, \textit{chunks} are the fragments of knowledge\footnote{At times, we
+      will also refer to chunks as ``knowledge fragments,'' or, similarly, ``fragments
+      of knowledge.''} that carry semantically meaningful information`'. Haskell
+records and \ACFP{adt} are used to encode chunks, and functions and instantiated
+typeclasses are used to describe relationships chunks share with each other.
+Each chunk has a \textit{type} denoting the category of knowledge it belongs to,
+and containing structural and capability information about instances of it. By
+connecting and intertwining chunks into large cohesive stories, we're able to
+form a network of domain models \cite{Czarnecki2005}.
 
 \roughNetworkOfDomains{}
 
@@ -230,22 +235,22 @@ transformer works, with each node representing a domain of knowledge, and each
 arrow representing a mapping between them. Realistically, each node in the
 diagram represent an encompassing domain of \acsp{dsl}, they all contain their
 own network of domain knowledge\footnote{In other words, each node is merely the
-``domain'' of a series of \acsp{dsl}. Thus, the diagram is not an accurate
-depiction of all \acsp{dsl} that actually exist in Drasil.}. It uses a pool of
+      ``domain'' of a series of \acsp{dsl}. Thus, the diagram is not an accurate
+      depiction of all \acsp{dsl} that actually exist in Drasil.}. It uses a pool of
 scientific knowledge to form a coherent \acs{srs} abstraction of a problem, from
 which we can generate both representational \acs{srs} documents and \acs{scs}
 that satisfies the requirements set forth. Users of Drasil are quite far-removed
 from the inner workings and ``lower-level''\footnote{While we often think of
-abstractions as being ``higher'' and ``lower'' level than others, we should be
-careful to only discuss them with respect to a particular aspect, as not all
-things may be sensibly related with this dichotomy.} abstractions of resultant
+      abstractions as being ``higher'' and ``lower'' level than others, we should be
+      careful to only discuss them with respect to a particular aspect, as not all
+      things may be sensibly related with this dichotomy.} abstractions of resultant
 software artifacts. Drasil allows scientists to ``keep at a safe distance'' from
 software, but only so far as Drasil has encoded the terminology the scientist
 relies on for conveying their problem to Drasil. With respect to generating
 usable software and typeset \acs{srs} documents, the ``higher-level'' domains
 (\acs{srs} abstraction and scientific knowledge) are the most ``informationally
 dense''\footnote{``Informationally dense'' in a sense that it contains more,
-reusable, meta-level knowledge than produced final software artifacts.} and
+      reusable, meta-level knowledge than produced final software artifacts.} and
 relied upon for the relevant generators to do their tasks appropriately.
 
 For example, should a scientist want to create a Real number variable for
@@ -258,58 +263,103 @@ Where a \QuantityDict{} represents a basic understanding of a \textit{quantity}:
 
 \originalQuantityDictHaskell{}
 
+\imptodo{Any closing thoughts before the move to the next section?}
+
 \subsubsection{Development}
 
-Drasil is developed through a ``bottom-up'' methodology against several
-\acs{scs} case studies (\refCaseStudiesTable{}), capturing and de-duplicating
-knowledge as needed to re-generate the original artifacts. As a result of
-capturing the meaning, we are become able to generate the same ``software
-solution'' using other programming languages and tools.
-
-For example, the \ACF{glassbr} case study (examining predicting whether a glass
-slab can withstand an explosive blast) had \porthref{software
-      artifacts}{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}
-manually written. A coherent net of knowledge/discussion (a ``story'') is then
-formed by dissecting the artifacts, understanding why each piece existed, what
-it relates to and how, and how it can be translated into other things. The
-original artifacts are then
-\porthref{re-generated}{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}
-in a wider variety of other languages by discussing similar usability of the
-knowledge with other tools.
+Drasil is developed through a ``bottom-up'' methodology against several manually
+built physics-focused \acs{scs} case studies (conforming a respective
+\acs{srs}), capturing and de-duplicating knowledge\footnote{In particular, the
+      background scientific knowledge is decoupled from the source artifacts as part
+      of this process.} as needed to re-generate the original artifacts.
 
 \caseStudiesTable{}
 
-Each case study currently describes a specific physics-focused problem. Each one
-is capable of generating an \acs{srs} document. However, not all are currently
-capable of generating conforming software.
+Drasil has already been shown to increase productivity of building and
+maintaining reliable and traceable software artifacts \cite{SzymczakEtAl2016},
+and, in particular, for \acs{scs} \cite{Smith2018}. In particular, as a result
+of capturing the semantic meaning of scientific problems (through the \acs{srs}
+``story'' guiding), we're also able to generate the same \acs{scs} using other
+programming languages and tools. For example, the \ACF{glassbr} case study had
+\porthref{software
+      artifacts}{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}
+manually written, but, thanks to Drasil capturing semantic meaning, Drasil is
+capable of
+\porthref{re-generating}{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}
+the same software solution with extra options, including modularity, logging,
+programming language, and more.
+
+Drasil is currently capable of generating usable software through compiling to
+\ACF{gool}, which can produce Java, C++, Python, C\# \cite{MacLachlan2020}, and
+Swift\footnote{not discussed in MacLachlan's Master's thesis, but created by him
+      as well, and available similarly}. Drasil also contains renderers for HTML,
+Makefile, basic Markdown (enough for README), GraphViz DOT (graph description
+language) \cite{Gansner1993}, plaintext documents, \LaTeX{}, and
+\TeX{}.\qtodo{Is the paragraph, ended here, absolutely needed for my thesis? I
+      think the only part I want to ``shoehorn'' in is Swift, to note the typing
+      issues later.}
+
+In order to make this (re-)generation and options-variability possible, Drasil
+needed an encoding of the semantic meaning of the manually-built artifacts.
+Thankfully, generating original \acs{srs} documents in more typesetting flavours
+(\LaTeX{}/\TeX{} and \acs{html}) is relatively uncomplicated. As such, each case
+study is capable of generating an \acs{srs} document in at least 2 flavours.
+However, generating software artifacts adds considerable complexity. As such,
+unfortunately, not all case studies are currently able to generate software with
+relative ease (compared to the existing code-generating case studies, see
+\refCaseStudiesCodeTable{}). Generating software artifacts requires
+understanding what things you \textit{can say} in desired artifacts, what things
+you \textit{want and need to say}, and how you can transform the latter into the
+former.
 
 \caseStudiesCodeTable{}
 
 Some case studies aren't capable of generating representational
 code\footnote{``Representational code'' meaning software that solves the problem
-the related \acs{srs} abstraction describes.} because they aren't fully filled
+      the related \acs{srs} abstraction describes.} because they aren't fully filled
 out yet, but, we won't focus on those here. Here, we will focus on a critical
 common denominator between them: capturing mathematical knowledge for reliable
 \acs{srs} artifact generation.
 
 \imptodo{Continue writing here!}
 
+Some case studies (\acs{gamephysics}, \acs{hghc}, and \acs{ssp}) are still
+actively being developed, but are left incomplete at the time of writing. The
+\acs{srs} is currently generated in both \LaTeX{}\ and \acs{html} flavours, with
+the \LaTeX{}\ variant having supplementary build information for building to a
+single \acs{pdf} file, and the \acs{html} variant accessible from a web browser
+compliant with \acs{html} version 5 standards. The \acs{glassbr},
+\acs{projectile}, \acs{pdcontroller}, and \acs{nopcm} case studies each are
+capable of generating representational software. \acs{nopcm} is usable in all
+languages supported by \acs{gool} except for Swift due to the lack of a
+Drasil-supported \acs{ode} solving library for the Swift \acs{gool} renderer.
+\acs{pdcontroller} was built outside the normal means of Drasils case studies
+development, being built by Naveen Ganesh Muralidharan \cite{DrasilPR2289Naveen}
+for a class he took at McMaster University. Code generation for
+\acs{pdcontroller} is not impossible, it just requires more investigation for
+the needs of the case study. However, both the issues related to \acs{nopcm} and
+\acs{pdcontroller} are outside the scope of this work.
+
 \begin{enumerate}
+
+      \item Drasil currently relies on a single universal untyped mathematical
+            language to describe general scientific and mathematical knowledge
+            (including, but not limited to, equations, relations, theories,
+            derivations, constraints, and definitions).
 
       \item These codified pieces of ``knowledge'' are known as \textit{chunks}
             in Drasil, and are collected in a single database
             (\refOriginalChunkDBHaskell) of typed maps of chunks, referenced by
             their \ACFP{uid}.
 
-      \item Drasil currently relies on a single universal untyped mathematical
-            language to describe general scientific and mathematical knowledge
-            (including, but not limited to, equations, relations, theories,
-            derivations, constraints, and definitions).
-      
 \end{enumerate}
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
+
+\imptodo{As Dr. Carette said, the Problem Statement should be very short. I
+      should try to ramble less here. I can potentially move some of the content
+      ``up.''}
 
 Unfortunately, as general-purpose programming languages are to domain-specific
 languages, a single universal mathematical language is to a series of formalized
@@ -400,10 +450,10 @@ contributes to structuring theory information and allowing for future developers
 to encode more kinds of theories and their relationships with other things
 (discussed in \Cref{chap:modelkinds}). The solution builds on a prototype by Dr.
 Jacques Carette\footnote{Unfortunately, the code associated with the prototype
-had been deleted.} that facilitates structured theories to define relationships
+      had been deleted.} that facilitates structured theories to define relationships
 between ``code'' and ``theories.''
 
-\imptodo{Below paragraph: move ``new'' information to Background section 
+\imptodo{Below paragraph: move ``new'' information to Background section
       somehow.}
 
 Theories rely on mathematical expressions as well. We commonly differ the usable
@@ -432,3 +482,20 @@ issues associated with the formation of mathematical expressions and what it
 means for expressions to be ``well-formed'' (\ref{rq:typing}).
 \Cref{chap:storingChunks} focuses on how Drasil stores information, and how it
 can scale against future development of Drasil and libraries.
+
+
+
+
+
+
+\imptodo{Move the below sentence, code snippet, and paragraph somewhere else.}
+
+Chunks are funneled into a \textit{chunk database} (a \ChunkDB{}).
+
+\originalChunkDBHaskell{}
+
+A \ChunkDB{} is currently limited to the above listed chunks
+(\refOriginalChunkDBHaskell{}), but one should assume that more data types are
+also \textit{chunks} because this is merely a temporary restriction at the
+moment. The types of each record item is approximately a map from a \UID{} to an
+instance of a chunk (\refOriginalChunkDBTypeMapsHaskell{}).

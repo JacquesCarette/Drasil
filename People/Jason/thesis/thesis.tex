@@ -70,22 +70,6 @@
 ]{geometry}
 \usepackage{afterpage}
 
-% Allow more line breaks in URLs
-\usepackage{xurl}
-
-% Enable links within the document
-\usepackage{hyperref}
-\hypersetup{
-  colorlinks=true,
-  linkcolor=red,
-  urlcolor=red,
-  breaklinks=true,
-  pdftitle={\thesisTitle{}},
-  pdfauthor={\thesisAuthorName{}}
-}
-\urlstyle{rm} % Make URL styled fonts match hyperref's hrefs
-\usepackage[nameinlink]{cleveref} % Fixes capitalization of internal references
-
 % Allow labelling enum items: Credits to: https://texblog.org/2012/03/21/cross-referencing-list-items/
 \usepackage{enumitem}
 \makeatletter
@@ -100,6 +84,10 @@
   % Make footnote counter reset for each new page.
   \usepackage{footnpag}
 \fi
+
+% Set spacing according to manifest
+\usepackage{setspace}
+\thesisSpacing{}
 
 % Required for biblatex, but also adds functionality for quotation
 \usepackage{csquotes}
@@ -120,11 +108,29 @@
 % Fancy Headers
 \usepackage{fancyhdr}
 
+% Allow more line breaks in URLs
+\usepackage{xurl}
+
+% Enable links within the document
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=red,
+  urlcolor=red,
+  breaklinks=true,
+  pdftitle={\thesisTitle{}},
+  pdfauthor={\thesisAuthorName{}}
+}
+\urlstyle{rm} % Make URL styled fonts match hyperref's hrefs
+\usepackage[nameinlink]{cleveref} % Fixes capitalization of internal references
+
 % For abbreviations, we use "acro" package, and mfirstuc to help capitalize long
 % versions normally
 \usepackage{array}
 \usepackage{mfirstuc}
 \MFUhyphentrue % tell mfirstuc to capitalize hyphenated words
+
+% Acronyms
 \usepackage{acro}
 \input{acronyms}
 
@@ -151,10 +157,6 @@
 
 % Counters
 \usepackage{chngcntr}
-
-% Set double spacing
-\usepackage{setspace}
-\thesisSpacing{}
 
 \title{
     {\thesisTitle{}}\\

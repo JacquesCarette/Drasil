@@ -265,18 +265,16 @@ of its typed nature.
 \subsection{Research Questions}
 \label{sec:intro:researchquestions}
 
-\imptodo{Make the difference between RQ1 and RQ3 more clear, or, optionally,
-      just get rid of RQ1.}
-
 \begin{enumerate}
 
-      \item[\namedlabel{rq:lang_division}{RQ1}] Drasil has a language of simple
-            mathematical expressions that are used in multiple contexts. But not
-            all expressions are valid in all contexts. How do we fix that?
-
-            Some mathematical expressions should be avoided in particular
-            contexts, but right now we're not able to do that. How do we fix
-            that?
+      \item[\namedlabel{rq:lang_division}{RQ1}] Drasil uses a single
+            mathematical language to describe mathematical expressions for
+            multiple contexts, including code, abstract discussions, and simple
+            common arithmetic. However, in these different contexts, certain
+            terms should be avoided because of their applicability. How can we
+            restrict term usage by context?\qtodo{Should we remove this as an
+            RQ? It was something we did along the way for ModelKinds,
+            technically, and it might be too basic.}
 
       \item[\namedlabel{rq:modelkinds}{RQ2}] Drasil's current encoding of
             ``theories'' are essentially black boxes. We would like to be able
@@ -307,54 +305,49 @@ others who were also contributing to the project while I was actively
 contributing. The work of others might include, but not limited to, code
 formatting, code commenting, and extensions.
 
-Drasil has existed since 2014, and has already seen success in its case studies,
-which are used to guide the development of Drasil.
+Notable contributions include:
 
-Drasils focus on \acs{scs} relies on knowledge of mathematical theories and
-language, for which Drasil has a working understanding of before this work.
+\begin{itemize}
+      
+      \item Splitting the mathematical expression language into 3, each with
+            their own specific purpose, but using a \acs{ttf} to keep same
+            user-friendliness (resolving \Cref{rq:lang_division}).
 
-However, some case studies were unable to participate in code generation due to
-a lack of flexible theory information (\ref{rq:modelkinds}), or just being
-inapplicable.
+      \item Implementing \ModelKinds{} to expose theory structure knowledge,
+            creating opportunity for new domain-specific interpretation of
+            theory knowledge (resolving \Cref{rq:modelkinds}). The solution
+            builds on a prototype by Dr. Jacques Carette\footnote{Unfortunately,
+            the code associated with the prototype had been deleted.}.
 
-This work contributes to structuring theory information and allowing for future
-developers to encode more kinds of theories and their relationships with other
-things (discussed in \Cref{chap:modelkinds}).
+      \item Adding type checking and inference to mathematical expression
+            languages (resolving \Cref{rq:typing}).
 
-The solution builds on a prototype by Dr. Jacques
-Carette\footnote{Unfortunately, the code associated with the prototype had been
-deleted.} that facilitates structured theories to define relationships between
-``code'' and ``theories.''
+      \item Created an extensible chunk database prototype that can register
+            chunks with types external to core Drasil and chunks with type
+            parameters (resolving \Cref{rq:chunkdb}).
 
-Theories rely on mathematical expressions as well. 
+\end{itemize}
 
 We commonly differ the usable set of language in different contexts (you are
 free to write a lot more on your pencil and paper derivations than on your
-typical calculator).
-
-To obtain information about the expressibility in different contexts, we divide
-the expression language using a \acs{ttf} \cite{Carette2009} encoding, with a
-\acsp{gadt} backend for structural edits (\Cref{chap:modelkinds}).
-
-However, ``expressibility'' also relies on the expressions adhering to a precise
-syntactic set of rules.
-
-As such, we build a system of typing rules for the expression language
-(\Cref{chap:typedExpr}).
-
-Finally, to enable capturing data with type parameters and generally scale
-Drasils knowledge database (\ref{rq:chunkdb}), this work merges the typed
-database collections into a single untyped, yet type-preserving, database
-(discussed in \Cref{chap:storingChunks}).
+typical calculator). To obtain information about the expressibility in different
+contexts, we divide the expression language using a \acs{ttf} \cite{Carette2009}
+encoding, with a \acsp{gadt} backend for structural edits
+(\Cref{chap:modelkinds}).
 
 \section{Thesis Outline}
 \label{sec:intro:outline}
 
-\Cref{chap:modelkinds} discusses how Drasil contains captured theories and
-allows users to transcribe instances of them (\ref{rq:modelkinds}), and the
-issues associated with using a single universal mathematical language to
-describe theories (\ref{rq:lang_division}). \Cref{chap:typedExpr} discusses
-issues associated with the formation of mathematical expressions and what it
-means for expressions to be ``well-formed'' (\ref{rq:typing}).
-\Cref{chap:storingChunks} focuses on how Drasil stores information, and how it
-can scale against future development of Drasil and libraries (\ref{rq:chunkdb}).
+In \Cref{chap:ideology}, we discuss what we can learn from the source code of
+general software, and, specifically, how we can abstract over them to form
+similar software, varying over certain aspects of the software.
+\Cref{chap:drasil} discusses Drasil, a software suite for generating software
+from coherent descriptions of scientific problems. \Cref{chap:modelkinds}
+discusses how Drasil contains captured theories and allows users to transcribe
+instances of them (\ref{rq:modelkinds}), and the issues associated with using a
+single universal mathematical language to describe theories
+(\ref{rq:lang_division}). \Cref{chap:typedExpr} discusses issues associated with
+the formation of mathematical expressions and what it means for expressions to
+be ``well-formed'' (\ref{rq:typing}). \Cref{chap:storingChunks} focuses on how
+Drasil stores information, and how it can scale against future development of
+Drasil and libraries (\ref{rq:chunkdb}).

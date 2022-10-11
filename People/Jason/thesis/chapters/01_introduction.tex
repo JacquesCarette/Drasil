@@ -116,19 +116,27 @@ providing sufficient information in the ``blanks,'' Drasil is able to generate
 to use the relevant information to generate various software artifacts,
 including whole programs (in various target languages), build tools, and
 documentation. The ``blanks'' are holes for domain-specific knowledge and are
-filled in using one of many`' \ACFP{dsl}. Each individual fragment of knowledge
-in Drasil is known as a ``chunk,'' and we encode each useful idea necessary to
-build our desired software artifacts as chunks using \acsp{dsl}.
+filled in using one of many \ACFP{dsl}. Each individual fragment of knowledge in
+Drasil is known as a ``chunk,'' and we encode each useful idea necessary to
+build our desired software artifacts as chunks using \acsp{dsl}. For example, if
+we wanted to encode a variable, \(\theta{}_{c}\), representing the firing angle
+of a cannon, we might write:
 
-\imptodo{Add back the quantity example here.... ``For example, let's say we
-      wanted to encode the quantity ... as an input to Drasil. We might
-      write.... And then, we would need to register this input to Drasils
-      database.''}
+\begin{pseudohaskell}{Example Angle Variable Encoding}{exampleAngleVariableEncoding}
+firingAngle = makeUCWDS "desiredFiringAngle"
+    (cn "desired firing angle")
+    (S "needed firing angle from a cannon to hit a target")
+    (sub lTheta lC)
+    radian
+\end{pseudohaskell}
 
-The many used \acsp{dsl} make up a \textit{network of domains}
-\cite{Czarnecki2005}, which allow Drasil to make domain-specific
-transformations, such as the one most desired in Drasil: generating computation
-software conforming to a precise \acs{srs}.
+Above, we encode our variable with a \acf{uid} (``desiredFiringAngle''), a short
+name (``desired firing angle''), long name (``needed firing angle from a cannon
+to hit a terget''), a symbol (\(\theta{}_{c}\)), and a unit (radians). The many
+used \acsp{dsl} make up a \textit{network of domains} \cite{Czarnecki2005},
+which allow Drasil to make domain-specific transformations, such as the one most
+desired in Drasil: generating computation software conforming to a precise
+\acs{srs}.
 
 \roughNetworkOfDomainsIntro{}
 

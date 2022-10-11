@@ -239,28 +239,20 @@ current chunk database is not \textit{extensible} because of it's typed nature.
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
 
-\imptodo{Re-do the problem statement.}
-
-\begin{itemize}
+\begin{writingdirectives}
       \item theory structural knowledge
       \item scope of the expression language
       \item expression language is untyped
       \item scaling against new types
-\end{itemize}
+\end{writingdirectives}
 
-Additionally, due to Drasils lack of type information about its mathematical
-expression language, invalid expressions (and hence, domain knowledge) are
-possible to be written, causing further issues in reliable formation and
-transformation into usable high-quality \acs{scs}.
-
-Together, these issues fundamentally have to do with the depth and breadth of
-the scientific knowledge: we aim to enable Drasils network of domain knowledge
-to grow, and grow it (to some degree).
-
-Finally, as Drasils network of domains continues to grow in different aspects
-(such as creating new kinds of chunks, and creating type parameters for existing
-chunks), Drasil faces difficulties in scaling its database of knowledge because
-of its typed nature.
+Drasil isn't able to make domain-specific interpretation of encoded scientific
+knowledge because it lacks structural knowledge. Additionally, due to Drasils
+lack of type information impedes from generating reliably usable software (in
+particular, that they type check). Together, these issues affect our ability to
+reliably and flexibly generate software. Finally, Drasils chunk database is not
+extensible, limited admissible chunk types to only those that exist in core
+Drasil.
 
 \subsection{Research Questions}
 \label{sec:intro:researchquestions}
@@ -274,7 +266,8 @@ of its typed nature.
             terms should be avoided because of their applicability. How can we
             restrict term usage by context?\qtodo{Should we remove this as an
             RQ? It was something we did along the way for ModelKinds,
-            technically, and it might be too basic.}
+            technically, and it might be too basic. I'm tending towards ``yes,
+            remove it.''}
 
       \item[\namedlabel{rq:modelkinds}{RQ2}] Drasil's current encoding of
             ``theories'' are essentially black boxes. We would like to be able

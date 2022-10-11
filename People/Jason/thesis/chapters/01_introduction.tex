@@ -219,7 +219,22 @@ respectively. For example, in Swift, you can't add two numbers if they're not of
 the same type (e.g., you can't add a double and an integer), while in Java, you
 can because of implicit type coercion.
 
-\subsection{}
+\subsection{Capturing (\& Remembering) Everything}
+
+The most important component of Drasil is knowledge capture. As already
+mentioned, it's done through encoding the terminology we use to discuss ideas.
+In Drasil, instances of these are referred to as \textit{chunks}, each one has a
+\textit{type} that it belongs to, and a \ACF{uid}. The type is an identifier
+that indicates the structure of the values, and the \acs{uid} is used to
+uniquely name the chunk data. The chunk is unique with respect to a global
+``chunk database'' that Drasil has users register all chunk into. The chunk
+database is intended to carry all newly generated chunks as well. At the moment,
+Drasils chunk database uses a series of typed maps with \acs{uid} keys and chunk
+values, which means that as we create new types of chunks in Drasil, the list
+will grow. Additionally, the list of types have to be known before using Drasil,
+which means that users can't grow the chunk hierarchy if they need something
+custom, unless they're willing to completely fork Drasil. In other words, the
+current chunk database is not \textit{extensible} because of it's typed nature.
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}

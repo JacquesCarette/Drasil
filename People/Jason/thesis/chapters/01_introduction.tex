@@ -263,16 +263,19 @@ current chunk database is not \textit{extensible} because of it's typed nature.
       \item Key problems:
       \begin{itemize}
             \item theory structural knowledge
-            \item scope of the expression language
+            \item scope of the expression language and information about theory usage
             \item expression language is untyped
             \item scaling against new types
       \end{itemize}
 \end{writingdirectives}
 
-Drasil isn't able to make domain-specific interpretation of encoded scientific
-knowledge because it lacks structural knowledge. Additionally, due to Drasils
-lack of type information impedes from generating reliably usable software (in
-particular, that they type check). Together, these issues affect our ability to
+Drasil isn't able to adequately make domain-specific interpretations of encoded
+theories because it lacks structural information about the theories. Theories
+also don't provide static information about the contexts in which they are
+usable, partially because the underlying expression language exposes little
+information about this too. Additionally, Drasils lack of type information stops
+us from reliably generating usable software (in particular, there is no
+assurance of type checking). Together, these issues affect our ability to
 reliably and flexibly generate software. Finally, Drasils chunk database is not
 extensible, limited admissible chunk types to only those that exist in core
 Drasil.
@@ -282,24 +285,25 @@ Drasil.
 
 \begin{enumerate}
 
-      \item[\namedlabel{rq:lang_division}{RQ1}] Drasil uses a single
-            mathematical language to describe mathematical expressions for
-            multiple contexts, including code, abstract discussions, and simple
-            common arithmetic. However, in these different contexts, certain
-            terms should be avoided because of their applicability. How can we
-            restrict term usage by context?\qtodo{Should we remove this as an
-                  RQ? It was something we did along the way for ModelKinds,
-                  technically, and it might be too basic. I'm tending towards ``yes,
-                  remove it.''}
-
-      \item[\namedlabel{rq:modelkinds}{RQ2}] Drasil's current encoding of
+      \item[\namedlabel{rq:modelkinds}{RQ1}] Drasil's current encoding of
             ``theories'' are essentially black boxes. We would like to be able
             to use some structural information present in the short list of the
             ``kinds'' of theories that show up in scientific computing. How do
-            we codify that?
+            we codify that?\qtodo{Would it be better to rephrase this as
+                  desiring domain-specific transformation of theories?}
 
-      \item[\namedlabel{rq:typing}{RQ3}] How can we ensure that our language(s)
-            of simple mathematical expressions admits only valid expressions?
+      \item[\namedlabel{rq:lang_division}{RQ2}] Drasils theory encodings rely on
+            a single mathematical expression language, and doesn't expose
+            information about applicability to different contexts. In each
+            context (e.g., code, theories, and common arithmetic), certain terms
+            of the expression language should be treated differently, or are
+            simply inapplicable. How can we restrict term usage by context?
+            \qtodo{Should we remove this as an RQ? It was something we did along
+                  the way for ModelKinds, technically, and it might be too basic. I'm
+                  tending towards ``yes, we should remove it.''}
+
+      \item[\namedlabel{rq:typing}{RQ3}] How can we ensure that our mathematical
+            expression language admits only valid expressions?
 
       \item[\namedlabel{rq:chunkdb}{RQ4}] Our current ``typed'' approach to
             collecting different kinds of data is hard to extend. How can we

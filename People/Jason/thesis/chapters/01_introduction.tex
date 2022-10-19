@@ -87,12 +87,13 @@ Software developers pull on their understanding of problems to build software
 solutions. Working together, developers similarly pull their understanding from
 a shared pool of knowledge. The knowledge always belongs to a domain of other
 similar problems. Often, developers share their knowledge through documentation,
-keeping every product owner ``in the loop.'' However, as knowledge and
-requirements change, the software trails behind it until developers manually
-update the code. This might mean, however, that they need to update several
-areas as a result of one change. Additionally, communication of information may
-be ambiguous at times, which leads to logical issues that others may not have
-expected.
+keeping every product owner\footnote{Any person, within reason, that has
+      responsibility in the development of a software artifact.} ``in the loop.''
+However, as knowledge and requirements change, the software trails behind it
+until developers manually update the code. This might mean, however, that they
+need to update several areas as a result of one change. Additionally,
+communication of information may be ambiguous at times, which leads to logical
+issues.
 
 Focusing on \ACF{scs}, Drasil allows users to describe their scientific problems
 using an \ACF{srs} structure which conveys sufficient information such that
@@ -100,10 +101,9 @@ Drasil can generate a software solution to the problem they describe. However,
 Drasil is only capable of generating software for the problems that it has
 sufficiently ``understood'' (i.e., ones that have been encoded in Drasil).
 
-In this thesis, we will explore how Drasil captures information about scientific
-theories and mathematical expressions, and how the way they are captured affects
-how quickly and reliably we can generate relevant solving software.
-Additionally, we will explore how Drasil captures general knowledge.
+In this thesis, we will explore how Drasil captures general knowledge. In
+particular, with focus on scientific theories and mathematical expressions, and
+how we can generate reliable \acs{scs}.
 
 \section{Background: Drasil}
 \label{chap:introduction:sec:background}
@@ -115,79 +115,82 @@ scientific problems using a precise \ACF{srs} format \cite{SmithAndLai2005}. By
 providing sufficient information in the ``blanks,'' Drasil is able to generate
 to use the relevant information to generate various software artifacts,
 including whole programs (in various target languages), build tools, and
-documentation. The ``blanks'' are holes for domain-specific knowledge and are
-filled in using one of many \ACFP{dsl}. Each individual fragment of knowledge in
-Drasil is known as a ``chunk,'' and we encode each useful idea necessary to
-build our desired software artifacts as chunks using \acsp{dsl}. For example, if
-we wanted to encode a variable, \(\theta{}_{c}\), representing the firing angle
-of a cannon\footnote{Running example based on Drasils \acs{projectile} case
-      study.}, we might write:
+documentation. The ``blanks'' are holes for \textit{domain-specific knowledge}
+and are filled in using one of many \ACFP{dsl}. Each individual fragment of
+knowledge in Drasil is known as a ``chunk,'' and we encode each useful idea
+necessary to discuss/build our desired software artifacts as chunks using
+\acsp{dsl}. For example, if we wanted to encode a variable, \(\theta{}_{c}\),
+representing the firing angle of a cannon\footnote{Running example based on
+      Drasils \acs{projectile} case study.}, we might write:
 
 \exampleAngleVariableEncoding{}
 
-Above, we encode our variable with a \acs{uid} (``desiredFiringAngle''), a short
-name (``desired firing angle''), long name (``needed firing angle from a cannon
-to hit a target''), a symbol (\(\theta{}_{c}\)), and a unit (radians). The many
-used \acsp{dsl} make up a \textit{network of domains} \cite{Czarnecki2005},
-which allow Drasil to make domain-specific transformations, such as the one most
-desired in Drasil: generating computation software conforming to a precise
-\acs{srs}.
+\refExampleAngleVariableEncoding{} encodes the variable with a \acs{uid}
+(``desiredFiringAngle''), a short name (``desired firing angle''), long name
+(``needed firing angle for a cannon to hit a target''), a symbol
+(\(\theta{}_{c}\)), and a unit (radians). The many used chunks and \acsp{dsl}
+make up a \textit{network of domains} \cite{Czarnecki2005}, which allow Drasil
+to make domain-specific transformations, such as the one most desired in Drasil:
+generating computation software conforming to a precise \acs{srs}.
 
 \roughNetworkOfDomainsIntro{}
 
-Roughly, the above diagram shows how Drasils \textit{Smith et al.} knowledge
-transformer works, with each node representing a domain of knowledge, and each
-arrow representing a mapping between them. Drasil users mostly enter in their
-scientific knowledge near the ``top'' of the diagram to form a coherent
-\acs{srs} abstraction using relevant \acsp{dsl}. Afterwards, Drasil takes their
-\acs{srs} abstraction, audits it, and allows the user to pick from a series of
-options to generate software that conforming to the scientific problem encoded.
+Roughly, \refRoughNetworkOfDomainsIntro{} shows how Drasils \textit{Smith et
+      al.} knowledge transformer works, with each node representing a domain of
+knowledge, and each arrow representing a mapping between them. Drasil users
+mostly enter in their scientific knowledge near the ``top'' of the diagram to
+form a coherent \acs{srs} abstraction using relevant \acsp{dsl}. Drasil takes
+their \acs{srs} abstraction, audits it, and allows the user to pick from a
+series of options to generate software that conforming to the scientific problem
+encoded.
 
 The ``scientific knowledge'' at the top of the diagram is not necessarily a
 complete capture of all scientific knowledge, of course. Rather, it is a
-collection of the scientific knowledge that was captured by dissecting a series
-of case studies. Drasil relies on a series of manually built case studies to
-provide ``seedling'' data to navigate development of Drasil. As more information
-is ``taught'' to Drasil (through providing it with a means of discussing
-relevant terms) and, specifically, the ties between various pieces of knowledge,
-Drasils range of generation increases. However, not all case study projects are
-currently capable of code generation.
+``bubble''/collection of the scientific knowledge. Drasils development follows
+the needs of a series of manually built case studies, using them as ``seeding''
+data to navigate development and language needs to adequately discuss the
+software and the ideas used to form it. As Drasil is ``taught'' more
+information\footnote{By providing it with a means of discussing relevant ideas,
+      using \aclp{dsl}.}, Drasils span of producible artifacts widens. At the moment,
+not all case studies in Drasil contain sufficient information for Drasil to
+generate code for.
 
 Some case studies are currently in-progress (i.e., incomplete) and won't be a
 focus of this work, but left for future work by others. Instead, we will focus
-on those which \textit{we} understand how to produce code for, but that Drasil
-isn't yet capable of generating code for. Specifically, we will largely focus on
-a common denominator, strengthening mathematical knowledge capture, but we will
-also spend time learning how to scale Drasils knowledge (chunk) database against
-more knowledge capture.
+on those which \textit{we} understand how to manually produce code for.
+Specifically, we will largely focus on a common denominator: strengthening
+mathematical knowledge capture, but we will also spend time learning how to
+scale Drasils knowledge (chunk) database against expansion in further chunk type
+creation.
 
 \subsection{Theories and Expressions}
 
 One of the most important aspect of describing scientific problems is:
 describing the relevant \textit{theories}. Drasil relies on users describing
 theory knowledge using \textit{relations} through a \textit{single universal
-      untyped mathematical expression language}. Equations, relations, derivations,
-constraints, and definitions are all described using this single language.
-However, the language does not contain sufficient ``depth'' to adequately make
-use of its encoded information. In other words, this expression language is a
-lower-level view of the information we really need to make domain-specific
-transformations,
+untyped mathematical expression language}. To be clear, this means that Drasil
+relies on on-demand interpretation and comprehension of \textit{terms} from this
+expression language. Equations, relations, derivations, constraints, and
+definitions are all described using this single language. However, the language
+does not contain sufficient ``depth'' to adequately make use of its encoded
+information. In other words, this expression language is a ``lower-level'' view
+of the information we really need to make domain-specific transformations,
 
 Drasil attempts to use the \textit{theories} gathered from a user-filled
 \acs{srs} to understand what problem they intended to describe (i.e.,
 calculating the inputs and outputs, and a sequence of calculation steps that go
 from the former to the latter). Each theory needs to be sufficiently understood
-to produce calculation steps that we can use. For example, if we had an
-equational theory defining our firing angle variable
-(\refExampleAngleVariableEncoding{}), we might write the
-following\footnote{Assuming no air drag or resistance}\footnote{Similar to
-      \refExampleAngleVariableEncoding{}, based on the \acs{projectile} Drasil case
-      study.}:
+to produce calculation steps that we can use. For example, if we wanted to
+define our firing angle variable (\refExampleAngleVariableEncoding{}) in terms
+of the distance of the target, gravity, and the initial
+velocity\footnote{Assuming no air drag or resistance}, we might write:
+\(\arcsin{}(\mathit{targetDistanceFromCannon} \cdot{} g / v^2) / 2\). In Drasil,
+we might encode this as \refExampleAngleEquationEncoding{}.
 
 \exampleAngleEquationEncoding{}
 
-With this theory encoding, we have enough information to generate a pretty
-theory description box for the generated \acs{srs} \LaTeX{} documents
+With this theory encoding, we have enough information to generate a visually
+pleasing description box for the \acs{srs} \LaTeX{} and \acs{html} documents
 (\refExampleAngleEquationEncodingToTeX{}). Converting to typesetting languages
 is reasonably unproblematic because they only use the theory knowledge in a
 shallow light (displaying). More importantly, we can also convert this theory to
@@ -195,66 +198,60 @@ Python code as well:
 
 \exampleAngleEquationEncodingToPython{}
 
-Drasil tries to translate the theory knowledge into other forms, including
-typesetting languages and programming languages, where equally applicable. For
-typesetting languages, this is relatively unproblematic, because typesetting
-languages only use them in a shallow light. However, converting it into a
-snippet of programming language is more complex because it has to follow the
-semantics of the programming language, retaining the same meaning.
-
 However, this example is reasonably simple. If we were handed an equation of
-this \(\nu{} = f(x,y,z)\) form, it's reasonable\footnote{However, it might be an
-      incorrect assumption!} to assume that one way to define \(\nu{}\) is
-\(f(x,y,z)\). However, if we were handed an equivalent, scrambled version of it,
-then we can assume less information\footnote{Though, undocumented and unchecked
-      assumptions are bad anyway!} about it. For example, if we re-wrote it as
-\(\frac{x}{y} - \nu{} = - z + 10\) where \(f(x,y,z) = \frac{x}{y} + z - 10\),
-then we've lost the critical \textit{definition} assumption. Alternatively, if
-we wanted to define something as an infinite geometric series and with a finite
-formula, we might want to write \(y = \sum \cdots{} = \cdots{}\), but we lack
-information about which component to ``pick'' if we wanted to calculate \(y\).
-Additionally, if our original theory was more complex by being an \acs{ode},
-describing multiple ways to define \(\nu{}\), or being purely
-theoretical/abstract, then we might not have even been able to use it in the
-first place, let alone use it with the extra complexity involved with
-translating expressions with higher-order terms to common programming languages.
-In other words, we also lack information about the context under which a theory
-is relevant and usable. For example, if a theory contained an expression that
-deals with derivatives, then we might not be able to natively translate it into
-Java code without extra information about how to or use non-primitive Java. As a
-result, knowing \textit{how to} and \textit{when you can} transform captured
-theories into other forms (such as executable code) is a complex task (similar
-to the complexity associated with transpiling a general-purpose program into
-another \textemdash{} an exercise in futility!).
+this \(\nu{} = f(x,y,z)\) form, it's somewhat reasonable, but perhaps dubious,
+to assume that one way to define \(\nu{}\) is \(f(x,y,z)\). However, if we were
+handed an equivalent, scrambled version of it, then we can assume less
+information about it. For example, if we re-wrote the equation for
+\refExampleAngleEquationEncoding as \(\mathit{targetDistanceFromCannon} \cdot{}
+g = v^2\sin{}(2\theta{}_c)\), then we've lost the critical \textit{definition}
+assumption that we used to write the python code. Automatically isolating for
+\(\theta_c\) is possible, but we're interested in the definitional information,
+and we want it as readily-available as possible. Now, with this scrambled
+variant as well, we similarly can't typeset it in the expected definitional form
+we desired, even though the relation is equivalent. With more complex theories,
+more issues arise. For example, defining theories with multiple definitions
+lacks information about which definition to ``pick'' for software
+implementations, \acsp{ode} lack information about solving methods, and some
+theories may be purely abstract, and entirely unusable for code generation. The
+current encoding of theories lacks information about the structure of the
+theories. Additionally, we also lack information about when expression terms are
+usable in the context of code (e.g., expressions involving derivatives are not
+always directly usable in code), where we expect them to be directly
+translatable to programming languages. As a result, knowing \textit{how to} and
+\textit{when you can} transform captured theories into other forms (such as
+executable code) is a complex task (similar to the complexity associated with
+transpiling a general-purpose program into another \textemdash{} an exercise in
+futility!).
 
-With the theory encoding above, we also never discussed what \(y\), \(m\),
-\(x\), nor \(b\) where. On paper and pencil, it's fairly reasonable to assume
-that they are of the same numeric type, but if they weren't, then they might not
-make much sense anymore. Hence, generating software artifacts wouldn't make
-sense to do because we wouldn't be able to guarantee that they wouldn't reach an
-invalid state. Additionally, each language that deals with computation has its
-own type system, and so we would need to have Drasil understand the types we're
-working with in order to have it handle each target languages type system
-respectively. For example, in Swift, you can't add two numbers if they're not of
-the same type (e.g., you can't add a double and an integer), while in Java, you
-can because of implicit type coercion.
+With the theory encoding above, we also never discussed what
+\(\mathit{targetDistanceFromCannon}\), \(g\), nor \(v\) were. On paper and
+pencil, it's fairly reasonable to assume that they are all some numeric type.
+However, when we generate software, we expect it to be \textit{executed}, and
+hence undergo a type checking phase by compilers/interpreters. As the expression
+language is currently untyped, Drasil currently allows software generation with
+``ill-typed'' (according to the respective compilers and interpreters)
+expressions. In particular, for example, this poses problem for Swift code
+generation because it doesn't allow numeric addition if they're both of the same
+type, while Java uses implicit type coercion to ignore these issues. Ultimately,
+this means that more time is spent developing and debugging generated artifacts
+than we would like. We would prefer that generated software come with an
+assurance of usability.
 
 \subsection{Capturing (\& Remembering) Everything}
 
-The most important component of Drasil is knowledge capture. As already
-mentioned, it's done through encoding the terminology we use to discuss ideas.
-In Drasil, instances of these are referred to as \textit{chunks}, each one has a
-\textit{type} that it belongs to, and a \ACF{uid}. The type is an identifier
-that indicates the structure of the values, and the \acs{uid} is used to
-uniquely name the chunk data. The chunk is unique with respect to a global
-``chunk database'' that Drasil has users register all chunk into. The chunk
-database is intended to carry all newly generated chunks as well. At the moment,
-Drasils chunk database uses a series of typed maps with \acs{uid} keys and chunk
-values, which means that as we create new types of chunks in Drasil, the list
-will grow. Additionally, the list of types have to be known before using Drasil,
-which means that users can't grow the chunk hierarchy if they need something
-custom, unless they're willing to completely fork Drasil. In other words, the
-current chunk database is not \textit{extensible} because of it's typed nature.
+Knowledge capture is at the heart of Drasil. It is what allows Drasil to make
+domain-specific interpretations that we're interested in, to ultimately generate
+software artifacts. \textit{Chunks} are unique instances of knowledge, tagged
+with a \acs{uid} (for referencing them) and a \textit{type} (for understanding
+their structure). The chunk is unique with respect to a global ``chunk
+database'' that Drasil registers all chunk into. At the moment, Drasils chunk
+database uses a series of typed maps (\refOriginalChunkDBHaskell{}) with
+\acs{uid} keys and typed chunk values. This means that as we create new types of
+chunks in Drasil, the list of maps in the database will grow. Additionally, the
+list of types will have to be known before using Drasil, which means that
+extending the list of chunks is difficult for users. In other words, the current
+chunk database is not \textit{extensible} because of it's typed nature.
 
 \section{Problem Statement}
 \label{sec:intro:problemStatement}
@@ -330,8 +327,9 @@ Notable contributions include:
 \begin{itemize}
 
       \item Splitting the mathematical expression language into 3, each with
-            their own specific purpose, but using a \acs{ttf} to keep same
-            user-friendliness (resolving \Cref{rq:lang_division}).
+            their own intended area of usage, but using a \acs{ttf}
+            \cite{Carette2009} to keep same user-friendliness in expression
+            transcription (resolving \Cref{rq:lang_division}).
 
       \item Implementing \ModelKinds{} to expose theory structure knowledge,
             creating opportunity for new domain-specific interpretation of
@@ -347,13 +345,6 @@ Notable contributions include:
             parameters (resolving \Cref{rq:chunkdb}).
 
 \end{itemize}
-
-We commonly differ the usable set of language in different contexts (you are
-free to write a lot more on your pencil and paper derivations than on your
-typical calculator). To obtain information about the expressibility in different
-contexts, we divide the expression language using a \acs{ttf} \cite{Carette2009}
-encoding, with a \acsp{gadt} backend for structural edits
-(\Cref{chap:modelkinds}).
 
 \section{Thesis Outline}
 \label{sec:intro:outline}

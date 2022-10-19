@@ -3,19 +3,19 @@
     I believe to be relevant to this work.}
 \label{chap:ideology}
 
-All software tells a story. Programs made to sanitize data contain a story of
+All software tell a story. Programs made to sanitize data contain a story of
 what data needs adjusting and how it can be done. Programs made to store and
-retrieve data from textual commands contain a story of how data can be stored
-and retrieved. In these stories, we find we commonly use similar terminology and
+query data from textual commands contain a story of how data can be stored and
+queries. In these stories, we find we commonly use similar terminology and
 ideas, which is why shared libraries exist. However, shared libraries typically
 only share reusable code fragments, not necessarily the meta-level information
-about what each component is and how it can be appropriately used. As such, some
-might question the validity of the knowledge it pulls from. Additionally, the
-library might not be readily accessible to your preferred programming language,
-requiring you to create a \ACF{ffi}, which is often quite brittle and expensive
-due to demanding complex compatibility analysis for each change. Hence, we often
-look towards mature libraries and frameworks to underpin our projects, but
-typically without strong guarantee that using the libraries together is safe.
+about what each component is and how it can be appropriately used. Some might
+question the validity of the knowledge it pulls from. Additionally, the library
+might not be readily accessible to your preferred programming language,
+requiring you to create a \ACF{ffi}, which is often quite brittle and demanding
+due to complex compatibility analysis. Hence, we often look towards mature
+libraries and frameworks to underpin our projects, but we don't typically have
+strong guarantee that using various libraries together is safe.
 
 For example, the sinking of the Vasa ship \cite{wiki:Vasa_ship} was partially
 caused by different teams working together but using different ``feet'' units
@@ -33,18 +33,16 @@ In both examples, the issue lies in the \textit{communication} between the story
 and the developers, highlighted by demise of both implementations. Of course,
 most software is not critical, and issues in most software will not result in an
 orbiter disintegrating in Martian atmosphere, but, there is something that we
-can learn: communication and synchronization is vital for problems and execution
-of their solutions. In both examples, experts already had a stable understanding
-of the ``story'' and how things should have panned out every step of the way.
-Experts knew how each individual component should have interacted and had sound
-rationale for why and how it worked, and how all the components together fit the
-requirements of the coherent and cohesive story.
+can learn: communication and synchronization is vital for developing solutions
+to problems. In both examples, experts had an in-depth understanding of the
+``story'' with sound rational for how things worked, and should have worked, yet
+both failed.
 
 \subsubsection{Thoughts of Generation}
 
-For stories where the end product is software, unlike the Vasa, we can remedy
-the communication issue partially by unifying it under one cohesive story.
-\Aclp{srs} play a large role in unifying communication of software needs.
+Unlike the Vasa, for stories where the desired end-product is software, we can
+remedy the communication issue partially by unifying it under one cohesive
+story. \Aclp{srs} play a large role in unifying communication of software needs.
 However, the communication of the software requirements into the final software
 product is still brittle, as it typically heavily relies on manual labour to
 translate it into software. It is not yet simple enough to reliably produce

@@ -3,68 +3,344 @@
     I believe to be relevant to this work.}
 \label{chap:ideology}
 
-All software tell a story. Programs made to sanitize data contain a story of
-what data needs adjusting and how it can be done. Programs made to store and
-query data from textual commands contain a story of how data can be stored and
-queries. In these stories, we find we commonly use similar terminology and
-ideas, which is why shared libraries exist. However, shared libraries typically
-only share reusable code fragments, not necessarily the meta-level information
-about what each component is and how it can be appropriately used. Some might
-question the validity of the knowledge it pulls from. Additionally, the library
-might not be readily accessible to your preferred programming language,
-requiring you to create a \ACF{ffi}, which is often quite brittle and demanding
-due to complex compatibility analysis. Hence, we often look towards mature
-libraries and frameworks to underpin our projects, but we don't typically have
-strong guarantee that using various libraries together is safe.
+``Generation'' is at the heart of this work. However, unlike GitHub and OpenAI's
+Copilot \cite{Copilot}, we don't delve into artificial intelligence. Copilot
+uses AI to autocomplete code using smaller snippets and comments, while we focus
+on capturing the meaning of specific subsets of natural language, and using
+phrases to generate software artifacts through description of their
+requirements. Succinctly, we focus on capturing knowledge through codifying
+well-understood fragments with \aclp{dsl}, which we use to improve
+\textit{reusability} and \textit{maintainability} of software by improving
+knowledge sharing and usability, and creating a more \textbf{harmonious}
+relationship between our \textit{knowledge} and \textit{software artifacts}.
 
+\section{On Developing Software}
+\label{chap:ideology:sec:on_developing_software}
+
+As software developers, we encode ``stories'' through software. Programs made to
+process \acs{csv} files tell a story of how data can be entered, adjusted, and
+output. Compilers tell a story of how human-readable programs can translate to
+various assembly languages. In these stories, we commonly use similar
+terminology and ideas. Thankfully, we avoid writing ``a lot of the same code''
+by sharing by abstracting over variables and sharing reusable code through
+libraries. With libraries, we're able to share our knowledge with our future
+selves and others. Once we've reasonably stabilized our libraries, it becomes a
+large gain in the reusability of our efforts \textemdash we don't need to worry
+about making the same bugs twice! However, a few issues arise: the code might
+become out-of-date (or out-of-sync), others might not understand what we wrote
+(and, thus, not trust/use it), or, we might need to use the same conceptual
+ideas but in a different programming language. If our understanding of key ideas
+changes, we might need to perform large, manual, refactoring of our code, and
+then update our documentation too. While we might write ``idiomatic'' code,
+reverse engineering code is tedious, and even then, we can only analyze the code
+we \textit{see}, and not what knowledge it took to write that code. Finally, we
+might be able to write an \ACF{ffi}, they're often brittle and demanding of our
+time, due to complex compatibility analysis, and repeating the same analysis for
+each library update. We might even be forced to use particular programming
+languages.
+
+Often, we look to use mature libraries and frameworks to underpin our projects,
+but often without guarantee that how we use and connect libraries is ``safe.''
 For example, the sinking of the Vasa ship \cite{wiki:Vasa_ship} was partially
 caused by different teams working together but using different ``feet'' units
 (the Swedish foot is 12'' while the Amsterdam foot is 11'') resulting in
-unexpected weight distribution, contributing to its demise. Similarly, when the
-Mars Climate Orbiter travelled to Mars, it met its demise very early due to a
-navigation issue \cite{Siddiqi2018}. The commands sent from Earth used English
-units (specifically, pound-seconds) while the orbiter assumed that it would
-receive commands using the metric system (Newton-seconds). As such, the orbiter
-missed it's intended orbit altitude, falling into the Martian atmosphere, and
-ultimately disintegrating due to atmospheric stress. Lockheed Martin built the
-orbiter control tool without properly conforming to \acsp{nasa} \ACF{sis}.
+unbalanced weight distribution, contributing to its demise. Similarly, when the
+Mars Climate Orbiter travelled to Mars, it met an early demise due to a
+navigation issue \cite{Siddiqi2018}. Lockheed Martin built the orbiter ground
+controller software, but it didn't conform to \acsp{nasa} \ACF{sis}. The
+commands sent from Earth used English units (specifically, pound-seconds) while
+the orbiter assumed that it would receive commands using the metric system
+(Newton-seconds). As such, the orbiter missed it's intended orbit altitude,
+falling into the Martian atmosphere, and ultimately disintegrating due to
+atmospheric stress.
 
-In both examples, the issue lies in the \textit{communication} between the story
-and the developers, highlighted by demise of both implementations. Of course,
-most software is not critical, and issues in most software will not result in an
-orbiter disintegrating in Martian atmosphere, but, there is something that we
-can learn: communication and synchronization is vital for developing solutions
-to problems. In both examples, experts had an in-depth understanding of the
-``story'' with sound rational for how things worked, and should have worked, yet
-both failed.
+Experts had an in-depth understanding of the ``story'' of each project, with
+sound rationale for how things worked and should have worked, and yet, both
+ended in misfortune. Of course, most software is not critical, and issues in
+most software will not result in an orbiter disintegrating in Martian atmosphere
+or a ship sinking, but, there is something that we can learn:
+\textit{communication} and \textit{synchronization} of development efforts is
+vital for building reliable solutions.
 
-\subsubsection{Thoughts of Generation}
+While we, as developers don't often build and connect physical things, we do
+connect pieces of code, and misunderstandings of tacit project knowledge occur
+as well. Thus, we believe we need to revisit our original sensation when we
+recognized code duplication and decided to make reusable components.
 
-Unlike the Vasa, for stories where the desired end-product is software, we can
-remedy the communication issue partially by unifying it under one cohesive
-story. \Aclp{srs} play a large role in unifying communication of software needs.
-However, the communication of the software requirements into the final software
-product is still brittle, as it typically heavily relies on manual labour to
-translate it into software. It is not yet simple enough to reliably produce
-error-free programs which satisfy a precisely defined set of requirements.
+The reason is obvious\footnote{Ignoring the more obvious reasons, such as
+copy-pasting code, or mere awareness of textual similarities.}! We felt this
+sensation because we already had a mental model that connected some key concepts
+to some code we wrote, so we decided to make reusable views (code) of our
+knowledge. However, the code is only a shallow view of our knowledge, containing
+very little discussion of the conceptual underpinnings and the role they play in
+the greater ``story.'' Shallow views of implicit, unwritten knowledge,
+unfortunately, does not come with guarantee of harmony with the way its used.
 
-So, now we wonder: why is it still not simple enough? Our end-goal should be
-assembly-line style engineering of the software \cite{well-understood}. Asides
-from human-error, one large issue is the communication itself is very sparse in
-meta-level information and doesn't contain any strong guarantees of coherence.
-To remedy this, we look to codifying subsets of natural language (English) used
-to communicate ideas, and the rules that ensure that phrases make sense. In
-other words, we look towards additionally communicating the meaning of the words
-we would write down in our software specifications documents. Through
-sufficiently communicating all relevant pieces of information about a story and
-how that story relates to software, we should then be able to \textit{generate}
-conforming software artifacts. The generated software is then traceable to its
-foundations and can be easily kept in synchronization (i.e., maintained) with
-its story through merely re-generating it. Furthermore, similar to shared
-libraries, reusability of codified knowledge is strong as well, because codified
-terminology can also be similarly shared. However, unlike shared pieces of code,
-shared pieces of knowledge is even more reusable, in that it can be translated
-into other forms (including programming languages, where applicable).
+\section{Dreams of Generation}
+\label{chap:ideology:sec:thoughts_of_generation}
+
+Unlike the Vasa, for stories where the desired end-product somehow involves
+software, we can remedy the communication issue partially by unifying it under
+one cohesive story. \Aclp{srs} play a large role in unifying communication of
+software needs. However, the communication and maintained synchronization of the
+software requirements into the final software product is still brittle (as
+evidenced by the Mars orbiter), as it remains heavily reliant on manual labour
+to translate it into software artifacts. In other words, the translation from
+our knowledge (the important part) is laborious and prone to error, and, hence,
+not simple enough. So, now we wonder: how can we simplify the process?
+
+Our end-goal should be ``assembly-line'' style engineering of the software
+\cite{well-understood}, free of logical issues. To attain this, we need to have
+clear criteria for what it means for our software artifacts to be free of
+logical issues. However, to do this, we need to discuss relevant models. For
+example, if we're interested in the accuracy of a bank accounts cached balance,
+we discuss \textit{the user}, the relevant \textit{transactions}, and then a
+\textit{validation algorithm}. Realizing this example in code might have us
+retrieve a users bank transactions, calculate the expected balance, and compare
+it with a cached balance. The code only contains one dimension of this
+discussion: the actions, it has no understanding of the substance, nor how it
+can be similarly used in other scenarios. To audit the code, we analyze the code
+ourselves, potentially with extra testing tools to make things quicker, but, in
+general, it relies on us and our understanding. To remedy this, we look to
+describing software as we've done here: as a ``view'' of some story or
+discussion. In other words, we want to build software artifacts through
+description as opposed to manual conversion of description to artifact.
+
+\subsection{The Goal}
+\label{chap:ideology:sec:thoughts_of_generation:subsec:the_goal}
+
+Especially in the cases where everything is ``well-understood''
+\cite{well-understood}\footnote{Irrelevant of rarity however!}, we want to focus
+on communicating problems, and how solutions solve them, so that we can
+\textit{generate} a usable solution (a software artifact), rather than manually
+building solutions. Optimally, we would prefer to use our natural language to
+perfectly describe our problems to our computers, and have them magically give
+us a solution. Unfortunately, our computers can't do this.
+
+\subsection{Reconciliation}
+\label{chap:ideology:sec:thoughts_of_generation:subsec:reconciliation}
+
+While it is difficult to have a computer act on a large set of natural language,
+there are generally agreed upon, well-understood subsets \cite{well-understood}
+with respect to particular domains of knowledge. For example, statisticians
+frequently use and discuss various kinds of distributions, such as ``Poisson,''
+``Uniform,'' and ``Normal,'' and, when they do, they're typically familiar with
+their parameters, expectations functions, and how to use them to estimate
+likelihoods. Hence, by focusing on using \textit{\aclp{dsl}}, we can build
+specialized interpreters for them. Furthermore, by connecting them in precise
+manners (with similar precise languages), we can form large meaningful
+\textit{networks of domains} \cite{Czarnecki2005} that form our well-understood
+problem spaces. From well-understood problem spaces, we can compose a series of
+domain-specific interpreters. With enough effort, we could take a whole
+``problem description'' that draws in multiple fields, and generate a software
+that somehow ``solves'' it. 
+
+\imptodo{How does this solve the initial problems?}
+
+\intodo{The generated software is then traceable to its foundations and can be
+easily kept in synchronization (i.e., maintained) with its story through merely
+re-generating it. Furthermore, similar to shared libraries, reusability of
+codified knowledge is strong as well, because codified terminology can also be
+similarly shared. However, unlike shared pieces of code, shared pieces of
+knowledge is even more reusable, in that it can be translated into other forms
+(including programming languages, where applicable).}
+
+
+By switching our focus of manual software development to manual problem
+description and relationships to ``solutions,'' we shift where we can make bugs,
+and how they propagate. Namely, logical bugs will propagate much farther than
+one-offs merely because of increased frequency. All in all, by focusing on
+generating software from meaningful descriptions, we obtain knowledge
+reusability (as opposed to \textit{code} reusability), and increased software
+maintainability, reliability, and traceability.
+
+Of course, ``generating everything'' appears grandiose, and, perhaps, reductive
+or ignorant of many difficulties in software development. Thus, we must discuss
+feasibility\footnote{You may skip the remainder of this chapter if you so wish,
+it is not strictly required to understand the rest of my work, but it doesn't
+hurt.}.
+
+\subsection{Feasibility}
+\label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility}
+
+In order for us to discuss feasibility of this idealized development paradigm,
+we must discuss the \textit{depth} and \textit{breadth} of knowledge we need to
+make this feasible\footnote{Note that ``knowledge'' is captured through
+codifying \acsp{dsl}.}. Depth of knowledge refers to the vertical knowledge
+understood about a specific fragment of knowledge, and it's preciseness. For
+example, we may have a low-depth of knowledge and claim that English sentences
+are a sequence of characters. Alternatively, we might have a slightly ``deeper''
+depth/understanding  of sentences by describing them as a language that follows
+a specific syntax rule set and using a specific set of words. Breadth of
+knowledge is the horizontal domain of knowledge, it is the various kinds of
+knowledge we have in a wide variety of subjects and domains.
+
+\subsubsection{Bottom: The Lowest Depth \& Narrowest Breadth}
+\label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:bottom}
+
+In some sense, at the lowest depth and narrowest breadth of knowledge capture,
+we aren't really capturing any meaning. Rather, we are programming our software
+artifacts directly. Hence, this area is already very feasible, as evidenced by
+the usefulness of software today and the way it was made.
+
+\subsubsection{Shallow Waters: Low Depth \& Narrow Breadth}
+\label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:low}
+
+\imptodo{Continue writing here.}
+
+In low-depth areas, we may observe that this ideology is very practical, and
+heavily used. Widely used \ACFP{cms}, such as WordPress \cite{WordPress} and
+Drupal \cite{Drupal}, and web frameworks, such as Django \cite{Django} and
+Laravel \cite{Laravel}, are arguably also following similar ideals as this
+ideology. They all typically provide a basic understanding of ``users'' of a
+hosted website, facilities to write HTML content in one way or another, plugins,
+and more. While some might be, these listed above are not specific to one
+specific use-case. They are very versatile and highly reusable for a wide
+variety of use-cases because they ship with low but sufficient depth of
+knowledge (though they might call it ``features''). Out of the box, these web
+technologies listed come with simple, common, functionality (features) and
+powerful extensibility through either plugins or through software extension and
+usage. With the basic tooling provided, users are able to rapidly deploy
+websites with content. Through extending the website's knowledge-base (e.g.,
+plugins or software extension), they are able to obtain a wider breadth and
+deeper depth to the knowledge contained within them. Through this, the end-users
+are able to encode increasingly complex and different kinds of data into the
+systems to ultimately obtain increasingly specialized websites, such as
+technical blogs, eCommerce websites, online accounting software, online
+discussion forums, and more. In these technologies, knowledge depth typically
+remains ``shallow'', but through increasing breadth of knowledge, increasingly
+interesting websites may be created. The mechanized generation-related
+components of the ideology is also fairly shallow in this area, but, still,
+highly feasible. In some sense, almost any individual instance of ``generation''
+is an area of low depth and breadth as well.
+
+\subsubsection{Specialization: Deep Depth \& Narrow Breadth}
+\label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:specialization}
+
+\subsubsection{Population: Low Depth \& Wide Breadth}
+\label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:modelling}
+
+\subsubsection{Utopia: Deep Depth \& Wide Breadth}
+\label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:utopia}
+
+In areas of high knowledge density, as long as developers have infinite patience
+and can invest infinite time into transcribing knowledge and information into
+the software, anything is possible, and this ideology is very practical.
+Unfortunately, that situation is not quite realistic. As such, we should
+restrict our scope in high knowledge density areas to only those
+``well-understood'' \cite{well-understood}. In projects with high knowledge
+density, it's crucial to have clear and concise knowledge fragment encodings
+that allow users to directly interact with the decomposed simplicity associated
+with each ``transformation'' operation. Thankfully, since these domains are also
+typically codified (or easily codifiable), this is doable. Through capturing
+many series of incomplex transformations of knowledge into other forms, we are
+able to sequence and compose them until an ultimate large, normally complex and
+complicated, transformation is formed. Finally, through creating a directed
+discussion of ideas, we can form a stable knowledge-base from which we can draw
+information. One large feasible goal from it is to draw out usable software
+artifacts from it by poking and prodding in all areas needed until we can
+deterministically form them, as our needs demand.
+
+With a weak breadth and low depth of captured knowledge, the originating pool of
+knowledge may approximately appear as a description of the software artifacts
+generated. However, with a strong breadth and high depth of captured knowledge,
+the original pool of knowledge may appear far removed from the software
+artifacts generated (it may contain little to no discussion of the desired
+software artifacts at all, or a precise description). In this case, the stress
+of software development is alleviated entirely, and a ``perfect'' software
+artifact (or series of ``perfect'' software artifacts) is (are) constructed.
+
+\section{A Prospective Workflow}
+\label{chap:ideology:sec:a_prospective_workflow}
+
+In theory, this should appear as a \ACF{kms}, where generation phases are passed
+through the knowledge registry until a final knowledge registry is constructed
+such that it satisfies the requirements of the user (e.g., generating some
+desired software artifacts).
+
+Ideally, the workflow associated with building some product artifact will have
+each knowledge/product owner (e.g., actual property ``\textit{owner}'',
+developers, managers, designers, etc.) work on strictly the components that are
+related to them, and nothing else. At the ``bottom'', the final end-user is
+tasked merely with providing feedback that can improve the quality of the
+artifact(s). They are the ones that have an issue that can be resolved with some
+sort of software artifact. At the ``top'', product owners will designate a basic
+set of requirements of the artifact using a coherent \textit{formal language}.
+Product designers/orchestrators will take the requirements and designate
+a/communicate it into a coherent \textit{story} for how the requirements may be
+translated into a final product. The \textit{story} will be built on the
+well-understood knowledge of various domains encoded by experts of those
+domains. The product designer is tasked primarily with translation, while the
+domain developers and product owners are tasked with encoding knowledge and
+instances of knowledge, respectively.
+
+Through product owners describing their requirements coherently (e.g., via some
+formal language), completely non-technical product owners may, and will, still
+be key figures in the production of the product.
+
+As the stress load/burden becomes shared under this paradigm, the sum of the
+parts should be less than the whole. In other words, the cumulative stress of
+associated with creating the whole is greater than the approximate sum of each
+individual's stress associated with focusing on their respective domain.
+
+Following this ideology, there will be at least 3 key types of roles associated
+with developing artifacts: the \textbf{knowledge encoder}, the \textbf{knowledge
+    user}, and the \textbf{end-user} of the produced software artifact.
+
+\subsection{Knowledge Encoder (Domain Expert)}
+
+The knowledge encoder should be a master of a particular domain. They are
+expected to encode the knowledge discussed in their respective domain in such a
+way that is accessible to those without knowledge of their domain. Additionally,
+they should encode information about the ways in which the knowledge can be
+transformed into other forms of knowledge (including that which is
+interdisciplinary). The knowledge they would be encoding should be as well-known
+and globally standardized as possible. As discussed in
+\autoref{sec:idlgy:generate_everything}, it is likely that the knowledge encoder
+will focus on writing a series of highly specific \aclp{dsl}, where the
+languages may be restricted to as specific as one term or a handful.
+
+As a domain expert transcribing knowledge encodings of some well-understood
+domain, one will largely be discussing the ways in which pieces of knowledge are
+\textit{constructed} and \textit{relate to each other}. In order for this
+abstract knowledge encodings to be \textit{usable} in some way, it is vital to
+have ``names'' (\textit{types}) for the knowledge encodings. In working to
+capture the working knowledge of a domain, it's of utmost importance to ensure
+that all ``instances'' of your ``names'' (types) are \textit{always} usable in
+some meaningful way and that the knowledge is exposed in a usable way (e.g.,
+sufficiently through some sort of \acs{api}). In other words, all knowledge
+encodings should create a stringent, explicit set of rules for which all
+``instances'' should conform to, and, arguably, also creates a justification for
+the need to create that particular knowledge/data type. As such, optimally, a
+domain expert would write their knowledge encodings and renderers in a general
+purpose programming language with a sound type system (e.g., Haskell
+\cite{Haskell2010}, Agda \cite{Norell2007}, etc.) \textemdash{} preferring ones
+with a type system based on formal type theories for their feature richness.
+
+\subsection{Knowledge / Domain User \& Orchestrator}
+
+The knowledge user/orchestrator should at least be familiar with a particular
+domain, and have goals in mind for information that they would like to ``seed''
+into their \acl{kms}. They should also have a working understanding of what the
+end-user needs. From this, they should be able to connect the work of the domain
+expert into ``plug-n-play'' stories (arguably, compilers for the end-users to
+use), or be able to encode/reduce friction between knowledge encoded by domain
+experts.
+
+\subsection{End-user}
+
+The final end-user should find the most delight from this ideology. They are the
+actual users of the software artifacts, perhaps tweaking the final build of the
+software artifacts to be accustomed to their workflow. If the tasks assigned to
+the knowledge encoders and the knowledge users are performed correctly, then the
+end-user should have strong confidence in the artifacts as they were built with
+strict adherence to the knowledge captured at \textit{every step of the way}. As
+such, one should confidently expect the final software artifacts to be
+completely devoid of unexpected things (including errors, unconformities to
+specifications, etc.).
+
+\section{Drasil}
+\label{chap:ideology:sec:drasil}
 
 To my understanding, Drasil \cite{Drasil2021} explores this ideology, focusing
 on generating scientific software from user-described scientific problems using

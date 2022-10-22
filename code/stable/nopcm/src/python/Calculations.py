@@ -36,7 +36,7 @@ def func_tau_W(C_W, h_C, A_C, m_W):
 # \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
 def func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W):
     def f(t, T_W):
-        return [1.0 / tau_W * (T_C - T_W[0])]
+        return [-(1.0 / tau_W) * T_W[0] + 1.0 / tau_W * T_C]
     
     r = scipy.integrate.ode(f)
     r.set_integrator("dopri5", atol=A_tol, rtol=R_tol)

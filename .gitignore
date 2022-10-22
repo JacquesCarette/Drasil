@@ -62,3 +62,11 @@ code/Website
 *.iml
 *.vrb
 *.synctex.gz
+*.lof
+*.lot
+*.pygtex
+*.pygstyle
+*.listing
+*.lol
+*.equ
+*.code

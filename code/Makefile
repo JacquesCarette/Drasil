@@ -316,7 +316,7 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
 #----------------------------------------------------------------------------------#
 
-graphs: $(GRAPH_PACKAGES) ##@Analysis Generate all module dependency graphs.
+graphs: $(GRAPH_PACKAGES) packagedeps ##@Analysis Generate all module dependency graphs.
 	- echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
 	
 # Generate individual package module dependency graphs.

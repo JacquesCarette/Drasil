@@ -192,7 +192,7 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbolsAll ++ map qw [mass])
+symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass])
   (nw pidControllerSystem : [nw program, nw angular, nw linear] 
   ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
   ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 

@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 -- | Contains all the information needed about the structure
 -- of the Drasil framework to be displayed on the Drasil website.
 module Drasil.Website.Analysis where
@@ -171,9 +172,9 @@ graphSec path pkgs =
   where
     -- may want to display more graphs later, but for now we only display the "drasil-website"
     -- package dependencies. If you change this, you should also change the introduction.
-    displayGraphs = map (dependencyGraphs path) ["drasil-website"]
+    displayGraphs = [dependencyGraphs path "drasil-website"]
     -- displays the graph showing dpendencies between all packages
-    displayPkgsDepGraph = map (dependencyGraphs path) ["drasil-all-pkgs-deps"]
+    displayPkgsDepGraph = [dependencyGraphs path "drasil-all-pkgs-deps"]
     -- these graphs are listed at the bottom of the Drasil website. They are links to the
     -- pdf versions of the package dependency graphs.
     listOfLinkedGraphs = [UlC $ ulcc $ folderList path pkgs]
@@ -212,7 +213,7 @@ drasilDepGraphRefs path pkgs = zipWith (\x y -> makeURI x y $ shortname' $ S x) 
 
 -- | Create the list of folders with the links to dependency graph pdfs.
 folderList :: FilePath -> [String] -> RawContent
-folderList path pkgs = Enumeration $ Bullet $ zip (folderListItems path pkgs) $ repeat Nothing
+folderList path pkgs = Enumeration $ Bullet $ map (, Nothing) (folderListItems path pkgs)
 
 -- | Helper to create the list items for dependency graph pdfs.
 folderListItems :: FilePath -> [String] -> [ItemType]

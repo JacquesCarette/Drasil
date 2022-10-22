@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 -- | Create the list of Generated Examples for the Drasil website.
 module Drasil.Website.Example where
 
@@ -77,11 +79,11 @@ examples = allExamples allExampleSI allExampleDesc allExampleChoices
 
 -- | Create the full list of examples.
 fullExList :: FilePath -> FilePath -> RawContent
-fullExList codePth srsDoxPth = Enumeration $ Bullet $ zip (allExampleList $ examples codePth srsDoxPth) $ repeat Nothing
+fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampleList $ examples codePth srsDoxPth)
 
 -- | Create each example point and call 'individualExList' to do the rest.
 allExampleList :: [Example] -> [ItemType]
-allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ zip (individualExList x) $ repeat Nothing)
+allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
     nameAndDesc E{sysInfoE = SI{_sys = sys}, descE = desc} = S (abrv sys) +:+ desc
 
@@ -93,8 +95,8 @@ individualExList E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} =
 -- Anything else means we need to display program information, so use versionList.
 individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} = 
   [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]"),
-  Nested (S generatedCodeTitle) $ Bullet $ zip (versionList getCodeRef ex) $ repeat Nothing,
-  Nested (S generatedCodeDocsTitle) $ Bullet $ zip (versionList getDoxRef noSwiftEx) $ repeat Nothing]
+  Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
+  Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftEx)]
     where
       -- For now, swift does not generate any references using doxygen, so we pretend it doesn't exist in the doxygen list
       noSwiftEx = ex {choicesE = map (\x -> x {lang = filter (/= Swift) $ lang x}) $ choicesE ex}

@@ -85,12 +85,11 @@
 
 Software developers pull on their understanding of problems to build software
 solutions. Working together, developers similarly pull their understanding from
-a shared pool of knowledge. The knowledge always belongs to a domain of other
-similar problems. Often, developers share their knowledge through documentation,
-keeping every product owner\footnote{Any person, within reason, that has
-      responsibility in the development of a software artifact.} ``in the loop.''
-However, as knowledge and requirements change, the software trails behind it
-until developers manually update the code. This might mean, however, that they
+a shared pool of knowledge. Often, developers share their knowledge through
+documentation, keeping every product owner\footnote{Any person, within reason,
+      that has responsibility in the development of a software artifact.} ``in the
+loop.'' However, as knowledge and requirements change, the software trails
+behind it until developers manually update the code. This might mean that they
 need to update several areas as a result of one change. Additionally,
 communication of information may be ambiguous at times, which leads to logical
 issues.
@@ -168,7 +167,7 @@ creation.
 One of the most important aspect of describing scientific problems is:
 describing the relevant \textit{theories}. Drasil relies on users describing
 theory knowledge using \textit{relations} through a \textit{single universal
-untyped mathematical expression language}. To be clear, this means that Drasil
+      untyped mathematical expression language}. To be clear, this means that Drasil
 relies on on-demand interpretation and comprehension of \textit{terms} from this
 expression language. Equations, relations, derivations, constraints, and
 definitions are all described using this single language. However, the language
@@ -203,24 +202,24 @@ this \(\nu{} = f(x,y,z)\) form, it's somewhat reasonable, but perhaps dubious,
 to assume that one way to define \(\nu{}\) is \(f(x,y,z)\). However, if we were
 handed an equivalent, scrambled version of it, then we can assume less
 information about it. For example, if we re-wrote the equation for
-\refExampleAngleEquationEncoding as \(\mathit{targetDistanceFromCannon} \cdot{}
-g = v^2\sin{}(2\theta{}_c)\), then we've lost the critical \textit{definition}
-assumption that we used to write the python code. Automatically isolating for
-\(\theta_c\) is possible, but we're interested in the definitional information,
-and we want it as readily-available as possible. Now, with this scrambled
-variant as well, we similarly can't typeset it in the expected definitional form
-we desired, even though the relation is equivalent. With more complex theories,
-more issues arise. For example, defining theories with multiple definitions
-lacks information about which definition to ``pick'' for software
-implementations, \acsp{ode} lack information about solving methods, and some
-theories may be purely abstract, and entirely unusable for code generation. The
-current encoding of theories lacks information about the structure of the
-theories. Additionally, we also lack information about when expression terms are
-usable in the context of code (e.g., expressions involving derivatives are not
-always directly usable in code), where we expect them to be directly
-translatable to programming languages. As a result, knowing \textit{how to} and
-\textit{when you can} transform captured theories into other forms (such as
-executable code) is a complex task (similar to the complexity associated with
+\refExampleAngleEquationEncoding{} as \(\mathit{targetDistanceFromCannon}
+\cdot{} g = v^2\sin{}(2\theta{}_c)\), then we've lost the critical
+\textit{definition} assumption that we used to write the python code.
+Automatically isolating for \(\theta_c\) is possible, but we're interested in
+the definitional information, and we want it as readily-available as possible.
+Now, with this scrambled variant as well, we similarly can't typeset it in the
+expected definitional form we desired, even though the relation is equivalent.
+With more complex theories, more issues arise. For example, defining theories
+with multiple definitions lacks information about which definition to ``pick''
+for software implementations, \acsp{ode} lack information about solving methods,
+and some theories may be purely abstract, and entirely unusable for code
+generation. The current encoding of theories lacks information about the
+structure of the theories. Additionally, we also lack information about when
+expression terms are usable in the context of code (e.g., expressions involving
+derivatives are not always directly usable in code), where we expect them to be
+directly translatable to programming languages. As a result, knowing \textit{how
+      to} and \textit{when you can} transform captured theories into other forms (such
+as executable code) is a complex task (similar to the complexity associated with
 transpiling a general-purpose program into another \textemdash{} an exercise in
 futility!).
 
@@ -232,11 +231,11 @@ hence undergo a type checking phase by compilers/interpreters. As the expression
 language is currently untyped, Drasil currently allows software generation with
 ``ill-typed'' (according to the respective compilers and interpreters)
 expressions. In particular, for example, this poses problem for Swift code
-generation because it doesn't allow numeric addition if they're both of the same
-type, while Java uses implicit type coercion to ignore these issues. Ultimately,
-this means that more time is spent developing and debugging generated artifacts
-than we would like. We would prefer that generated software come with an
-assurance of usability.
+generation because Swift doesn't allow numeric addition if both operants are not
+of the same type, while Java uses implicit type coercion to mask these issues.
+Ultimately, this means that more time is spent developing and debugging
+generated artifacts than we would like. We would prefer that generated software
+come with an assurance of usability.
 
 \subsection{Capturing (\& Remembering) Everything}
 

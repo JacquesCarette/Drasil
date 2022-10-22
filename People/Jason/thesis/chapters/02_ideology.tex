@@ -74,7 +74,7 @@ to some code we wrote, so we decided to make reusable views (code) of our
 knowledge. However, the code is only a shallow view of our knowledge, containing
 very little discussion of the conceptual underpinnings and the role they play in
 the greater ``story.'' Shallow views of implicit, unwritten knowledge,
-unfortunately, does not come with guarantee of harmony with the way its used.
+unfortunately, does not come with guarantee of harmony with the way it's used.
 
 \section{Dreams of Generation}
 \label{chap:ideology:sec:thoughts_of_generation}
@@ -135,24 +135,22 @@ domain-specific interpreters. With enough effort, we could take a whole
 ``problem description'' that draws in multiple fields, and generate a software
 that somehow ``solves'' it. 
 
-\imptodo{How does this solve the initial problems?}
-
-\intodo{The generated software is then traceable to its foundations and can be
-easily kept in synchronization (i.e., maintained) with its story through merely
-re-generating it. Furthermore, similar to shared libraries, reusability of
-codified knowledge is strong as well, because codified terminology can also be
-similarly shared. However, unlike shared pieces of code, shared pieces of
-knowledge is even more reusable, in that it can be translated into other forms
-(including programming languages, where applicable).}
-
-
 By switching our focus of manual software development to manual problem
 description and relationships to ``solutions,'' we shift where we can make bugs,
-and how they propagate. Namely, logical bugs will propagate much farther than
-one-offs merely because of increased frequency. All in all, by focusing on
-generating software from meaningful descriptions, we obtain knowledge
-reusability (as opposed to \textit{code} reusability), and increased software
-maintainability, reliability, and traceability.
+and how they propagate. Namely, logical bugs will occur more than once so as
+long as the same knowledge pulled from is drawn more than once. So, bugs should
+be more prevalent and easier to spot. Additionally, the generated software
+becomes directly \textit{traceable} to its logical foundations. Hopefully, with
+adequate dissection of related concepts, bugs should also be less intricate.
+Furthermore, generated artifacts are simpler to \textit{maintain} (i.e., kept in
+synchronization) with its related knowledge-base and story by
+\textit{regenerating} it. Finally, as opposed to sharing \textit{code}, in this
+paradigm, we \textit{communicate knowledge}, achieving language-agnostic
+reusability, focusing on sharing meanings and families of problems rather than
+solutions. Thus, by focusing on generating from meaningful descriptions, we
+obtain \textit{knowledge reusability} (as opposed to \textit{code} reusability),
+and increased software \textit{maintainability}, \textit{reliability}, and
+\textit{traceability}.
 
 Of course, ``generating everything'' appears grandiose, and, perhaps, reductive
 or ignorant of many difficulties in software development. Thus, we must discuss
@@ -186,77 +184,105 @@ the usefulness of software today and the way it was made.
 \subsubsection{Shallow Waters: Low Depth \& Narrow Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:low}
 
-\imptodo{Continue writing here.}
+At a shallow depth and relatively narrow breadth of knowledge capture, this
+paradigm is very practical, and already heavily used. Widely used \ACFP{cms},
+such as WordPress \cite{WordPress} and Drupal \cite{Drupal}, and web frameworks,
+such as Django \cite{Django} and Laravel \cite{Laravel}, are arguably also
+following similar ideals as this ideology. Notably, they \textit{deeply embed}
+\cite{Carette2009} knowledge in their frameworks and libraries using their host
+programming languages basic features. They all typically provide a basic
+understanding of ``users'' of a hosted website, facilities to write \acs{html}
+content in one way or another (e.g., \acs{wysiwyg} editors, templates, and
+plugins). While some might be, these listed above are not specific to one
+specific use-case. They're versatile products, usable for a wide variety of
+use-cases because they ship with low but sufficient depth of
+knowledge\footnote{They might call it ``features.''} such that you can use them
+for a wide variety of different applications (e.g., blogging, ticketing,
+booking, accounting, etc.). Out of the box, these web technologies listed come
+with simple, common, functionality (features) and powerful extensibility through
+either plugins or through software extension and usage. With the basic tooling
+provided, users are able to rapidly deploy websites with content. Through
+extending the website's knowledge-base (e.g., plugins or software extension),
+they are able to obtain a wider breadth and deeper depth to the knowledge
+contained within them. Through this, end-users may encode increasingly complex
+and different kinds of data into the systems to ultimately obtain increasingly
+specialized websites, such as technical blogs, eCommerce websites, online
+accounting software, online discussion forums, and more.
 
-In low-depth areas, we may observe that this ideology is very practical, and
-heavily used. Widely used \ACFP{cms}, such as WordPress \cite{WordPress} and
-Drupal \cite{Drupal}, and web frameworks, such as Django \cite{Django} and
-Laravel \cite{Laravel}, are arguably also following similar ideals as this
-ideology. They all typically provide a basic understanding of ``users'' of a
-hosted website, facilities to write HTML content in one way or another, plugins,
-and more. While some might be, these listed above are not specific to one
-specific use-case. They are very versatile and highly reusable for a wide
-variety of use-cases because they ship with low but sufficient depth of
-knowledge (though they might call it ``features''). Out of the box, these web
-technologies listed come with simple, common, functionality (features) and
-powerful extensibility through either plugins or through software extension and
-usage. With the basic tooling provided, users are able to rapidly deploy
-websites with content. Through extending the website's knowledge-base (e.g.,
-plugins or software extension), they are able to obtain a wider breadth and
-deeper depth to the knowledge contained within them. Through this, the end-users
-are able to encode increasingly complex and different kinds of data into the
-systems to ultimately obtain increasingly specialized websites, such as
-technical blogs, eCommerce websites, online accounting software, online
-discussion forums, and more. In these technologies, knowledge depth typically
-remains ``shallow'', but through increasing breadth of knowledge, increasingly
-interesting websites may be created. The mechanized generation-related
-components of the ideology is also fairly shallow in this area, but, still,
-highly feasible. In some sense, almost any individual instance of ``generation''
-is an area of low depth and breadth as well.
+The mechanized generation-related components of the ideology is also fairly
+shallow in this area, but, still, highly feasible. In some sense, almost any
+individual instance of ``generation'' is an area of low depth and breadth as
+well.
 
 \subsubsection{Specialization: Deep Depth \& Narrow Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:specialization}
 
-\subsubsection{Population: Low Depth \& Wide Breadth}
+We might think of software that captures deep knowledge about a specific topic
+as \textit{specialized tools}. Tailored to specific needs, they come with extra
+features for highly specific, potentially niche, categories of
+problems\footnote{Think of this category as sharp tools, such as kitchen knives.
+We can generally get away with using basic kitchen knives, but specialty knives
+help us out for particular use-cases, such as serrated knives or filleting
+knives.}. These already exist, and are, similar to
+\autoref{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:low},
+highly practical. For example, \ACFP{aml} (such as HashedExpression
+\cite{HashedExpression}) allow you to describe complex mathematical algorithms
+and generate optimized software tools for solving them. Another example is
+parser generators (such as Happy \cite{Happy}). They capture complex information
+about grammars and allow users to generate specialized parsers for them. When
+needed, specialty tools provide greater functionality than general-purpose
+programming languages for solving specific problems.
+
+\subsubsection{A Wide But Shallow Reaching Net: Low Depth \& Wide Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:modelling}
+
+Orthogonal to
+\autoref{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:specialization},
+a capture of low depth and wide breadth of knowledge is seemingly a jack of all
+trades, master of none. For example, most modern programming languages come with
+a standard library that provide many off-the-shelf solutions to well-understood
+problems, but sticking to very common generic problems. Most users typically
+pull in a library that provides extra specialization for certain problems
+because the standard library didn't go deep enough for their needs. Similar to
+the categories before, these are widely used and similarly practical.
 
 \subsubsection{Utopia: Deep Depth \& Wide Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:utopia}
 
-In areas of high knowledge density, as long as developers have infinite patience
-and can invest infinite time into transcribing knowledge and information into
-the software, anything is possible, and this ideology is very practical.
-Unfortunately, that situation is not quite realistic. As such, we should
-restrict our scope in high knowledge density areas to only those
-``well-understood'' \cite{well-understood}. In projects with high knowledge
-density, it's crucial to have clear and concise knowledge fragment encodings
-that allow users to directly interact with the decomposed simplicity associated
-with each ``transformation'' operation. Thankfully, since these domains are also
-typically codified (or easily codifiable), this is doable. Through capturing
-many series of incomplex transformations of knowledge into other forms, we are
-able to sequence and compose them until an ultimate large, normally complex and
-complicated, transformation is formed. Finally, through creating a directed
-discussion of ideas, we can form a stable knowledge-base from which we can draw
-information. One large feasible goal from it is to draw out usable software
-artifacts from it by poking and prodding in all areas needed until we can
-deterministically form them, as our needs demand.
+Finally, we've reached the deep depth and wide breadth of knowledge capture.
+Here, we capture the meanings of many key ideas and concepts we need to build
+software, making as many conscious decisions explicit and visible as possible.
+Imagine using the specialized tools to develop every aspect of a software some
+software artifact, but for every facet of the artifact, from start to finish.
+This is an idealized method of developing software, where knowledge is strongly
+reusable and composable. Of course, this relies on heavy research on tooling. As
+long as developers have infinite patience and can invest infinite time into
+transcribing and researching to fill in gaps, anything is possible, and this
+ideology is very practical! Unfortunately, that situation is not quite
+realistic. As such, we should restrict our scope of captured knowledge to only
+those ``well-understood'' \cite{well-understood}. For areas of
+``well-understood'' knowledge, this should be more feasible, merely because the
+discussion of key ideas is already coherent and sufficiently codified.
 
-With a weak breadth and low depth of captured knowledge, the originating pool of
-knowledge may approximately appear as a description of the software artifacts
-generated. However, with a strong breadth and high depth of captured knowledge,
-the original pool of knowledge may appear far removed from the software
-artifacts generated (it may contain little to no discussion of the desired
-software artifacts at all, or a precise description). In this case, the stress
-of software development is alleviated entirely, and a ``perfect'' software
-artifact (or series of ``perfect'' software artifacts) is (are) constructed.
+Here, you might use a series of \aclp{dsl} to create a coherent discussion, a
+``story.'' With it, you would have specialized interpreters built, which process
+it, and draw out meaningful byproducts you're interested in (such as usable
+software). This story can be relatively far removed from produced artifacts
+generating (containing potentially little to no discussion of the desired
+artifacts at all, or a precise description). Through creating a story as a
+composition of many other smaller fragments of knowledge and stories, and
+defining interpreters as compositions of other, smaller interpreters, this is
+feasible. Hopefully, with enough effort, this should alleviate considerable
+stress associated with manual software development, by moving the focus to the
+important bits: the story the artifacts tell.
 
 \section{A Prospective Workflow}
 \label{chap:ideology:sec:a_prospective_workflow}
 
-In theory, this should appear as a \ACF{kms}, where generation phases are passed
-through the knowledge registry until a final knowledge registry is constructed
-such that it satisfies the requirements of the user (e.g., generating some
-desired software artifacts).
+In theory, all ``development'' should occur in a \ACF{kms}, where knowledge and
+transformations between fragments of knowledge are transcribed. ``Users'' would
+use a system of pre-filled knowledge to piece together a template story that
+fits their narrative, or they would adapt an existing one to fit theirs.
 
 Ideally, the workflow associated with building some product artifact will have
 each knowledge/product owner (e.g., actual property ``\textit{owner}'',
@@ -264,15 +290,14 @@ developers, managers, designers, etc.) work on strictly the components that are
 related to them, and nothing else. At the ``bottom'', the final end-user is
 tasked merely with providing feedback that can improve the quality of the
 artifact(s). They are the ones that have an issue that can be resolved with some
-sort of software artifact. At the ``top'', product owners will designate a basic
-set of requirements of the artifact using a coherent \textit{formal language}.
+sort of software artifact. At the ``top,'' product owners designate a basic set
+of requirements of the artifacts using a coherent \textit{formal description}.
 Product designers/orchestrators will take the requirements and designate
 a/communicate it into a coherent \textit{story} for how the requirements may be
-translated into a final product. The \textit{story} will be built on the
-well-understood knowledge of various domains encoded by experts of those
-domains. The product designer is tasked primarily with translation, while the
-domain developers and product owners are tasked with encoding knowledge and
-instances of knowledge, respectively.
+translated into a final product. The story builds on well-understood knowledge
+of various domains encoded by domain experts. The product designer is tasked
+primarily with translation, while the domain developers and product owners are
+tasked with encoding knowledge and instances of knowledge, respectively.
 
 Through product owners describing their requirements coherently (e.g., via some
 formal language), completely non-technical product owners may, and will, still
@@ -283,11 +308,12 @@ parts should be less than the whole. In other words, the cumulative stress of
 associated with creating the whole is greater than the approximate sum of each
 individual's stress associated with focusing on their respective domain.
 
-Following this ideology, there will be at least 3 key types of roles associated
-with developing artifacts: the \textbf{knowledge encoder}, the \textbf{knowledge
-    user}, and the \textbf{end-user} of the produced software artifact.
+Following this ideology, there will be at least 3 key roles associated with
+developing artifacts: the \textbf{knowledge encoder}, the \textbf{knowledge
+user}, and the \textbf{end-user} of the produced software artifact.
 
 \subsection{Knowledge Encoder (Domain Expert)}
+\label{chap:ideology:sec:a_prospective_workflow:subsec:knowledge_encoder}
 
 The knowledge encoder should be a master of a particular domain. They are
 expected to encode the knowledge discussed in their respective domain in such a
@@ -296,13 +322,14 @@ they should encode information about the ways in which the knowledge can be
 transformed into other forms of knowledge (including that which is
 interdisciplinary). The knowledge they would be encoding should be as well-known
 and globally standardized as possible. As discussed in
-\autoref{sec:idlgy:generate_everything}, it is likely that the knowledge encoder
-will focus on writing a series of highly specific \aclp{dsl}, where the
-languages may be restricted to as specific as one term or a handful.
+\autoref{chap:ideology:sec:thoughts_of_generation:subsec:reconciliation}, it is
+likely that the knowledge encoder will focus on writing a series of highly
+specific \aclp{dsl}, where the languages may be restricted to as specific as one
+term or a handful.
 
 As a domain expert transcribing knowledge encodings of some well-understood
 domain, one will largely be discussing the ways in which pieces of knowledge are
-\textit{constructed} and \textit{relate to each other}. In order for this
+\textit{constructed} and \textit{relate to each other}. In order for the
 abstract knowledge encodings to be \textit{usable} in some way, it is vital to
 have ``names'' (\textit{types}) for the knowledge encodings. In working to
 capture the working knowledge of a domain, it's of utmost importance to ensure
@@ -318,16 +345,17 @@ purpose programming language with a sound type system (e.g., Haskell
 with a type system based on formal type theories for their feature richness.
 
 \subsection{Knowledge / Domain User \& Orchestrator}
+\label{chap:ideology:sec:a_prospective_workflow:subsec:knowledge_orchestrator}
 
-The knowledge user/orchestrator should at least be familiar with a particular
-domain, and have goals in mind for information that they would like to ``seed''
-into their \acl{kms}. They should also have a working understanding of what the
-end-user needs. From this, they should be able to connect the work of the domain
-expert into ``plug-n-play'' stories (arguably, compilers for the end-users to
-use), or be able to encode/reduce friction between knowledge encoded by domain
-experts.
+The knowledge user/orchestrator is tasked with connecting the work of the domain
+experts into ``plug-n-play'' stories (arguably, compilers for the end-users to
+use). They should also have a working understanding of what the end-user needs,
+and how the needs relate to domains of knowledge. As such, they should be able
+to encode and reduce friction between knowledge encoded by domain experts and
+the goals of product owners.
 
 \subsection{End-user}
+\label{chap:ideology:sec:a_prospective_workflow:subsec:end_user}
 
 The final end-user should find the most delight from this ideology. They are the
 actual users of the software artifacts, perhaps tweaking the final build of the
@@ -338,6 +366,9 @@ strict adherence to the knowledge captured at \textit{every step of the way}. As
 such, one should confidently expect the final software artifacts to be
 completely devoid of unexpected things (including errors, unconformities to
 specifications, etc.).
+
+Any of the three (3) user types may use the ``plug-n-play'' stories to describe
+problems and generate solutions based on them.
 
 \section{Drasil}
 \label{chap:ideology:sec:drasil}

@@ -101,7 +101,7 @@ parseDoc los' =
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
     parseDoc' Table{} = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
-    parseDoc' (HDiv _ slos _) = 
+    parseDoc' (HDiv _ _ slos _) = 
       let res1 = map parseDoc' slos in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in

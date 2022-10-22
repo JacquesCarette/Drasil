@@ -58,7 +58,7 @@ buildStd sm toC (Document t a c) =
 -- | Helper for converting layout objects into a more printable form.
 lo :: LayoutObj -> PrintingInformation -> D
 lo (Header d t l)         _ = sec d (spec t) %% label (spec l)
-lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
+lo (HDiv _ _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents)   _ = toText $ newline (spec contents)
 lo (EqnBlock contents)    _ = makeEquation contents
 lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)

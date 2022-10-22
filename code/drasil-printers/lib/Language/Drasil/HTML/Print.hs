@@ -86,7 +86,7 @@ printMath = (`runPrint` Math)
 -- | Helper for rendering layout objects ('LayoutObj's) into HTML.
 printLO :: LayoutObj -> Doc
 -- FIXME: could be hacky
-printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
+printLO (HDiv _ ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
 -- Creates delimeters to be used for mathjax displayed equations
 -- Latex print sets up a \begin{displaymath} environment instead of this
 printLO (EqnBlock contents)    = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
@@ -95,9 +95,9 @@ printLO (EqnBlock contents)    = mjDelimDisp $ printMath $ toMathHelper $ TeX.sp
     mjDelimDisp d = text "\\[" <> d <> text "\\]"
 -- Non-mathjax
 -- printLO (EqnBlock contents) = pSpec contents
-printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
-printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
-                                 divTag ts (vcat (map printLO layoutObs))
+printLO (HDiv _ ts layoutObs EmptyS) = divTag ts (vcat (map printLO layoutObs))
+printLO (HDiv n ts layoutObs l) = refwrap (pSpec l) $
+                                 divTag ts (vcat (map printLO layoutObs))                           
 printLO (Paragraph contents)   = paragraph $ pSpec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)

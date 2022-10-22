@@ -36,7 +36,7 @@ data LayoutObj =
    | List ListType                                                   -- ^ List.
    | Figure Label Caption Filepath MaxWidthPercent                   -- ^ Holds all information needed for a figure.
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label -- ^ Holds all information needed for a graph.
-   | HDiv Tags [LayoutObj] Label                                     -- ^ Holds tags, more contents, and a label.
+   | HDiv Depth Tags [LayoutObj] Label                               -- ^ Holds tags, more contents, and a label.
    | Cell [LayoutObj] 
    -- this shouldn't be here, it should have been expanded.
    | Bib BibRef                                                      -- ^ Bibliography section.

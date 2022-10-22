@@ -63,7 +63,7 @@ printMath = (`runPrint` Math)
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO (Cell layoutObs)                 = markdownB $$ vcat (map printLO layoutObs) $$ markdownE
-printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
+printLO (HDiv _ _ layoutObs _)             = vcat (map printLO layoutObs)
 --printLO (HDiv _ layoutObs l)             = refID (pSpec l) $$ vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
 printLO (EqnBlock contents)              = nbformat mathEqn

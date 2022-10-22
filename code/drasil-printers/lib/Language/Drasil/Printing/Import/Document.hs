@@ -36,14 +36,14 @@ createLayout' sm = map (cel sm)
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Section -> T.LayoutObj
-sec sm x@(Section depth titleLb contents _) = --FIXME: should ShortName be used somewhere?
+sec sm x@(Section _ depth titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let refr = P.S (refAdd x) in
-  T.HDiv [concat (replicate depth "sub") ++ "section"]
+  T.HDiv depth [concat (replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) refr
 
 cel :: PrintingInformation -> Section -> T.LayoutObj
-cel sm x@(Section depth titleLb contents _) = 
+cel sm x@(Section _ depth titleLb contents _) = 
   let refr = P.S (refAdd x) in
   T.Cell (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) 
@@ -67,7 +67,7 @@ layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
+layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv 0 ["equation"]
   [T.EqnBlock (P.E (modelExpr c sm))]
   (P.S $ getAdd $ getRefAdd x)
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
@@ -81,7 +81,7 @@ layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
   (P.S $ getAdd $ getRefAdd x)
   where layPairs = map (second (map (lay sm)))
 layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
-layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv 0 ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S $ refAdd x ++ "Deriv"
 layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
@@ -93,8 +93,8 @@ layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (modelExpr c sm))] P.EmptyS
-layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
+layUnlabelled sm (EqnBlock c)     = T.HDiv 0 ["equation"] [T.EqnBlock (P.E (modelExpr c sm))] P.EmptyS
+layUnlabelled sm (DerivBlock h d) = T.HDiv 0 ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S "nolabel1"
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs

@@ -3,7 +3,7 @@ module Language.Drasil.Generate (
   -- * Generator Functions
   gen, genDot, genCode, genLog,
   -- * Types (Printing Options)
-  DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC),
+  DocType(..), DocSpec(DocSpec), Format(TeX, HTML, JSON), DocChoices(DC),
   -- * Constructor
   docChoices) where
 
@@ -50,6 +50,7 @@ prntDoc d pinfo fn dtype fmt =
                prntCSS dtype fn d
     TeX -> do prntDoc' (show dtype ++ "/PDF") fn TeX d pinfo
               prntMake $ DocSpec (DC dtype []) fn
+    JSON -> do prntDoc' (show dtype ++ "/JSON") fn JSON d pinfo
     _ -> mempty
 
 -- | Helper that takes the directory name, document name, format of documents,
@@ -58,7 +59,7 @@ prntDoc' :: String -> String -> Format -> Document -> PrintingInformation -> IO 
 prntDoc' dt' fn format body' sm = do
   createDirectoryIfMissing True dt'
   outh <- openFile (dt' ++ "/" ++ fn ++ getExt format) WriteMode
-  hPutStrLn outh $ render $ writeDoc sm format fn body'
+  hPutStrLn outh $ render $ writeDoc sm dt' format fn body'
   hClose outh
   where getExt TeX  = ".tex"
         getExt HTML = ".html"
@@ -83,11 +84,11 @@ prntCSS docType fn body = do
     getFD dtype = show dtype ++ "/HTML/"
 
 -- | Renders the documents.
-writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc
-writeDoc s TeX  _  doc = genTeX doc s
-writeDoc s HTML fn doc = genHTML s fn doc
-writeDoc s JSON _ doc  = genJSON s doc
-writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
+writeDoc :: PrintingInformation -> String -> Format -> Filename -> Document -> Doc
+writeDoc s _  TeX  _  doc = genTeX doc s
+writeDoc s _  HTML fn doc = genHTML s fn doc
+writeDoc s st JSON _  doc = genJSON s st doc
+writeDoc _ _   _   _  _   = error "we can only write TeX/HTML (for now)"
 
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()

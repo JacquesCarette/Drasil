@@ -27,8 +27,9 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv)
 
 -- | Generate a python notebook document (using json).
-genJSON :: PrintingInformation -> L.Document -> Doc
-genJSON sm doc = build (makeDocument sm doc)
+genJSON :: PrintingInformation -> String -> L.Document -> Doc
+genJSON sm "Jupyter" doc = build (makeDocument sm doc)
+genJSON sm _ doc = build' (makeDocument sm doc)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc
@@ -44,6 +45,25 @@ build (Document t a c) =
   markdownE $$
   print c $$
   markdownB $$
+  text "   ]" $$
+  text "  }" $$
+  text " ]," $$
+  makeMetadata $$
+  text "}" 
+
+build' :: Document -> Doc
+build' (Document t a c) = 
+  text "{" $$
+  text " \"cells\": [" $$
+  text "  {" $$
+  text "   \"cell_type\": \"markdown\"," $$
+  text "   \"metadata\": {}," $$
+  text "   \"source\": [" $$
+  nbformat (text "# " <> pSpec t) $$
+  nbformat (text "## " <> pSpec a) $$
+  markdownE $$
+  markdownB $$ 
+  print c $$
   text "   ]" $$
   text "  }" $$
   text " ]," $$

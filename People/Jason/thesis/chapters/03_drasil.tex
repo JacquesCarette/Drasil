@@ -1,21 +1,44 @@
 \chapter{Drasil}
 \label{chap:drasil}
 
+\begin{writingdirectives}
+      
+      \item What is Drasil?
+            \begin{enumerate}
+                  \item What does it do?
+                  \item Who develops it?
+                  \item Where can we find information about it?
+                  \item What are its successes?
+            \end{enumerate}
+
+      \item How does Drasil work?
+            \begin{enumerate}
+                  \item Specifically, what are its current problems?
+            \end{enumerate}
+
+\end{writingdirectives}
+
+\begin{enumerate}
+
+      \item Drasil is deeply embedded in Haskell \cite{Haskell2010}, relying on
+            Stack \cite{HaskellStack}, and compiling against \acs{ghc} 8.8.4
+            \cite{GHC884}.
+
+\end{enumerate}
+
 \drasilLogoImg{}
 
 \porthref{Drasil}{https://jacquescarette.github.io/Drasil/} is a software suite
 for generating software from well-formed, principled ``stories,'' providing
 tools for exporting artifacts in various languages, including programming
-languages (through compiling to \ACF{gool} \cite{Carette2019} first), Makefiles,
-typesetting languages, and more. \porthref{Dr. Jacques
-      Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
-      Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
-Drasil. Drasil is deeply embedded in Haskell \cite{Haskell2010}, relying on
-Stack \cite{HaskellStack}, and compiling against \acs{ghc} 8.8.4 \cite{GHC884}.
-Focused on generating \ACF{scs}, Drasil uses an encoded variant of the Smith et
-al. \cite{SmithAndLai2005} \ACF{srs} template to allow users to ``fill in the
-blanks'' to describe a scientific problem, and, ultimately, generate code that
-solves the described scientific problem. The template breaks up scientific
+languages\footnote{Through compiling to \ACF{gool} \cite{Carette2019} first.},
+Makefiles, typesetting languages, and more. \porthref{Dr. Jacques
+Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr. Spencer
+Smith}{https://www.cas.mcmaster.ca/~smiths/} are the principal investigators of
+Drasil. Focused on generating \ACF{scs}, Drasil uses an encoded variant of the
+Smith et al. \cite{SmithAndLai2005} \ACF{srs} template to allow users to ``fill
+in the blanks'' to describe a scientific problem, and, ultimately, generate code
+that solves the described scientific problem. The template breaks up scientific
 software requirements into a series of coherent logical components, which guide
 us in knowing what things we need to sufficiently encode in Drasil to give users
 sufficient expressibility of their problems. Filled in \acs{srs} document are,

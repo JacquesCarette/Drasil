@@ -87,9 +87,9 @@ software artifacts can be ``grown'' from them. The individual pieces of
 knowledge are known as \textit{chunks} and are encoded as either \ACFP{adt} or
 \ACFP{gadt}. Drasil, and all knowledge captured in Drasil, is deeply embedded in
 Haskell \cite{Haskell2010} \porthref{source
-code}{https://github.com/JacquesCarette/Drasil/}\footnote{The source code
-compiles against \acs{ghc} 8.8.4 \cite{GHC884} and uses \acs{ghc} language
-extensions.}. Each chunk has a \textit{type} which defines its structural
+      code}{https://github.com/JacquesCarette/Drasil/}\footnote{The source code
+      compiles against \acs{ghc} 8.8.4 \cite{GHC884} and uses \acs{ghc} language
+      extensions.}. Each chunk has a \textit{type} which defines its structural
 information. Chunks contain information encoded with various \ACFP{dsl}. The
 network of domains (roughly, \refRoughNetworkOfDomains{}) is made up of a series
 of chunks connecting and discussing one another, similar to how we might discuss
@@ -101,123 +101,52 @@ modelled after the \textit{Smith et al.} formal \acs{srs} template
 interconnected chunks (and, hence, \acsp{dsl}). The ``scientific knowledge''
 chunks are used to fill in the ``gaps'' of the \acs{srs} template. For example,
 if we wanted to encode a variable, \(\hat{q}_{\text{tol}}\), representing a real
-number, ``Tolerable load,'' we might write it as:
+number, ``Tolerable load,'' we might write it as
+\refOriginalQuantityDictExampleHaskell{}, where it is of type \QuantityDict{}
+(\refOriginalQuantityDictHaskell{}), the type of variable encodings.
 
 \originalQuantityDictExampleHaskell{}
 
-\imptodo{Continue writing here!}
+\originalQuantityDictHaskell{}
 
-\begin{enumerate}
+Notably, in \refOriginalQuantityDictExampleHaskell{}, the symbol,
+\(\hat{q}_{\text{tol}}\), is built using a \Symbol{} \acs{dsl}. The capture of
+domain-specific knowledge is what sets \acsp{dsl} apart from general-purpose
+programming languages. Domain-specific abstractions create opportunities for
+domain-specific \textit{interpretation and transformation} (e.g., optimization,
+analysis, error checking, tool support, etc.) \cite{Czarnecki2005}. For example,
+with the symbol for ``tolerable load,'' we have information about the structure
+of the symbol itself: that ``q'' has a ``hat'' and a subscript ``tol.'' From
+this, we can output the same information in alternative flavours if we desired,
+such as plain text, or with Java-compatible naming convention (e.g.,
+``qHatTol'').
 
-      \item Drasil provides users with a formal \ACF{srs} template\footnote{The
-                  \textit{Smith et al.} \cite{SmithAndLai2005} template, in
-                  particular.} for describing their software. The template
-            breaks up common scientific problems into a series of
-            theories, justification, variables, assumptions, and more to
-            ultimately make up a coherent ``story'' describing a problem.
+Drasils \acs{srs} template contains more ``holes''\footnote{Or ``blanks'' if you
+      think of the template as a ``fill-in-the-blanks'' puzzle.} for other information
+necessary to creating a whole ``story'' about how \textit{output variables} can
+be calculated according to a set of \textit{input variables} and algorithm
+derived through a series of \textit{theories}. With sufficient knowledge
+\textit{depth} for each relevant fragment, Drasil is able to automatically
+``check'' it for consistency and coherence, and generate representational
+code\footnote{``Representational code'' meaning software that solves the problem
+      the related \acs{srs} abstraction describes, using the algorithm outlined.}.
 
-            \begin{enumerate}
-
-                  \item The template contains ``holes'' for user entry. The
-                        entries each use a \acs{dsl} to input information.
-
-                  \item Filled in \acs{srs} document are, within reason,
-                        automatically checked for consistency and coherence.
-
-            \end{enumerate}
-
-      \item Drasil is built in Haskell \cite{Haskell2010}, and case studies are
-            embedded directly in the Haskell code as well, allowing us to use
-            Haskells rich tooling for creating \ACFP{dsl}.
-            \begin{enumerate}
-
-                  \item A series of \acsp{dsl} are used to represent encoded
-                        knowledge and their relationships to other pieces of
-                        knowledge, and input data into Drasil.
-
-                  \item The capture of domain-specific knowledge is what sets
-                        \acsp{dsl} apart from general-purpose programming
-                        languages.
-
-                  \item Domain-specific abstractions create opportunities for
-                        domain-specific \textit{interpretation and
-                              transformation} (e.g., optimization, analysis, error
-                        checking, tool support, etc.) \cite{Czarnecki2005}.
-
-                  \item Drasil relies on a \textit{network of domains} (a
-                        network of domain knowledge connected by \aclp{dsl}) to
-                        enable the complex information transformation needed to
-                        convert an \acs{srs} document into code.
-
-            \end{enumerate}
-
-      \item In Drasil, \textit{chunks} are the fragments of
-            knowledge\footnote{At times, we will also refer to chunks as
-                  ``knowledge fragments,'' or, similarly, ``fragments of knowledge.''}
-            that carry semantically meaningful information`'.
-            \begin{enumerate}
-                  \item Haskell records and \ACFP{adt} are used to encode
-                        chunks, and functions and instantiated typeclasses are
-                        used to describe relationships chunks share with each
-                        other.
-
-                  \item Each chunk has a \textit{type} denoting the category of
-                        knowledge it belongs to, and containing structural and
-                        capability information about instances of it.
-
-                  \item By connecting and intertwining chunks into large
-                        cohesive stories, we're able to form a network of domain
-                        models \cite{Czarnecki2005}.
-
-                  \item Roughly, the above diagram shows how Drasils
-                        \textit{Smith et al.} knowledge transformer works, with
-                        each node representing a domain of knowledge, and each
-                        arrow representing a mapping between them.
-
-                  \item Realistically, each node in the diagram represent an
-                        encompassing domain of \acsp{dsl}, they all contain
-                        their own network of domain knowledge\footnote{In other
-                              words, each node is merely the ``domain'' of a series of
-                              \acsp{dsl}. Thus, the diagram is not an accurate
-                              depiction of all \acsp{dsl} that actually exist in
-                              Drasil.}.
-            \end{enumerate}
-
-      \item Through compiling the abstracted calculation sequences to \ACF{gool}
-            \cite{Carette2019}, Drasil is able to generate a host of \acs{oo}
-            programming language source codes.
-
-      \item Generating software artifacts requires understanding what things you
-            \textit{can say} in desired artifacts, what things you \textit{want
-                  and need to say}, and how you can transform the latter into the
-            former.
-
-      \item Some case studies aren't capable of generating representational
-            code\footnote{``Representational code'' meaning software that solves
-                  the problem the related \acs{srs} abstraction describes.} because
-            they aren't fully filled out yet, but, we won't focus on those here.
-
-      \item Here, we will focus on a critical common denominator between them:
-            capturing mathematical knowledge for reliable \acs{srs} artifact
-            generation.
-
-\end{enumerate}
-
-\caseStudiesCodeTable{}
-
-Some case studies (\acs{gamephysics}, \acs{hghc}, and \acs{ssp}) are still
-actively being developed, but are left incomplete at the time of writing.
-
-The \acs{glassbr}, \acs{projectile}, \acs{pdcontroller}, and \acs{nopcm} case
-studies each are capable of generating representational software.
-
-\acs{nopcm} is usable in all languages supported by \acs{gool} except for Swift
-due to the lack of a Drasil-supported \acs{ode} solving library for the Swift
-\acs{gool} renderer.
-
+Unfortunately, not all of Drasils case studies are capable of generating
+representational code (\refCaseStudiesCodeTable{}). Some case studies
+(\acs{gamephysics}, \acs{hghc}, and \acs{ssp}) are still actively being
+developed, but are left incomplete at the time of writing. \acs{nopcm} is usable
+in all languages supported by \acs{gool} except for Swift due to the lack of a
+Drasil-supported \acs{ode} solving library for the Swift \acs{gool} renderer.
 \acs{pdcontroller} was built outside the normal means of Drasils case studies
 development, being built by Naveen Ganesh Muralidharan \cite{DrasilPR2289Naveen}
 for a class he took at McMaster University. Code generation for
 \acs{pdcontroller} is not impossible, it just requires more investigation for
 the needs of the case study. However, both the issues related to \acs{nopcm} and
 \acs{pdcontroller} are outside the scope of this work.
+
+\caseStudiesCodeTable{}
+
+In this work, we will focus on a critical common denominator between them:
+capturing mathematical knowledge for reliable \acs{srs} artifact generation. In
+particular, we will focus on 2 primary aspects of mathematical knowledge: the
+\textit{theories} and the \textit{expressions}.

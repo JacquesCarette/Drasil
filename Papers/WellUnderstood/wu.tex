@@ -185,7 +185,7 @@ straightforward because the domain is well understood.
 \subsection{Long-lived software?}
 \label{subsec:long-lived-software}
 
-For us, long-lived software ~\cite{SPL-long-lived} is software that is expected
+For us, long-lived software~\cite{SPL-long-lived} is software that is expected
 to be in continuous use and evolution for \(20\) or more years. The main
 characteristic of such software is the \emph{expected turnover} of key staff.
 This means that all tacit knowledge about the software will be lost over time if
@@ -207,16 +207,17 @@ it is not captured.
 \subsection{Documentation}
 \label{subsec:documentation}
 
-Our definition of well understood also applies to \textbf{documentation} aimed
+Well understood also applies to \textbf{documentation} aimed
 at humans~\cite{parnas2011precise}. Explicitly:
 \begin{enumerate}
 \item The meaning of the models is understood at a human-pedagogical level,
 i.e.\ it is explainable.
-\item Combining models is explainable. Thus \emph{transformers} simultaneously
+\item Combining models is explainable. Thus the act of combining models
+must simultaneously
 operate on mathematical representations and on explanations. This requires that
 English descriptions also be captured in the same manner as the
 formal-mathematical knowledge.
-\item Similarly, the \emph{transformers} that arise from making software
+\item Similarly, the refinements steps that are performed due to making software
 oriented decisions should be captured with a similar mechanism, and also include
 English explanations.
 \end{enumerate}
@@ -244,14 +245,17 @@ artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
 of the IEEE~\cite{IEEE1998} and Volere
 templates~\cite{RobertsonAndRobertson1999Vol}.
 
-\subsection{Examples of context}
+\subsection{Examples}
 \label{subsec:examples-of-context}
 
-When are these conditions fulfilled? One example is \emph{research software} in
-science and engineering. While the results of running various simulations is
-entirely new, the underlying models and how to simulate them are indeed
-well-known. One particularly long-lived example is embedded software for space
-probes (like Pioneer 10).
+When are these well-understood and long-lived conditions fulfilled? One example
+is \emph{research software} in science and engineering. While the results of
+running various simulations is entirely new, the underlying models and how to
+simulate them are indeed well-known. One particularly long-lived example is
+embedded software for space probes (like Pioneer 10). Another would be ocean
+models, such as NEMO~\cite{madec_gurvan_2022_6334656} which can trace its
+origins to OPA 8~\cite{Madec1998}. In fact, most sub-domains of science and engineering
+harbour their own niche long-lived software.
 
 \section{A New Development Process}
 \label{sec:a-new-development-process}

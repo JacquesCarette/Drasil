@@ -121,28 +121,31 @@
 
 \begin{abstract}
     Current software development is often quite code-centric and aimed at
-    short-term deliverables, due to various contextual forces. We're interested
-    in contexts where different forces are at play.  \textbf{Well understood
-    domains} and \textbf{long-lived software} provide such an opportunity. We
-    use domain specific languages and generative techniques to capture the
-    contents of many of the artifacts of such software.
-  
-    A crucial observation is that currently hand-written software artifacts
-    contain considerable duplication. With proper tooling and
-    appropriate codification of domain knowledge, we find that the resulting
-    de-duplicated sources are shorter and closer to the domain. Our encodings
-    also seem to do well with respect to increasing traceability and change
-    management. We're hopeful that this could lead to long-term productivity
-    improvements.
+    short-term deliverables, due to various contextual forces (such as the
+    need for new revenue streams from many individual buyers). We're interested
+    in software where different forces drive the development. \textbf{Well
+    understood domains} and \textbf{long-lived software} provide one such
+    context.
+
+    A crucial observation is that software artifacts that are currently
+    hand-written contain considerable duplication.  By using domain specific
+    languages and generative techniques, we can capture the contents of many of
+    the artifacts of such software.  Assuming an appropriate codification of
+    domain knowledge, we find that the resulting de-duplicated sources are
+    shorter and closer to the domain.  Our encodings also seem to do well with
+    respect to increasing traceability and change management. We're hopeful
+    that this could lead to long-term productivity improvements for software
+    that fit this context.
 \end{abstract}
 
 \section{The Context}
 \label{sec:the-context}
 
 Not all software is the same. In fact, there is enough variation in the
-context in which various software products are created to warrant exploring
-and using different processes, depending on the ``forces'' at play. Here
-we explore two such forces: ``well understood'' and ``long lived''.
+context in which various software products are created to warrant exploring and
+using different processes, depending on the forces~\cite{alexander1977pattern}
+at play. Here we explore two such forces: ``well understood'' and ``long
+lived''.
 
 \subsection{``Well understood'' software?}
 \label{subsec:well-understood}
@@ -279,8 +282,8 @@ much space.  Instead, we provide an illustrative example.
 We will focus on information capture and the artifacts we can generate. For
 concreteness, we'll use a single example from our suite: GlassBR, used to assess
 the risk for glass facades subject to blast loading. The requirements are based
-on an American Standard Test Method (ASTM) standard \cite{BeasonEtAl1998,
-ASTM2009, ASTM2015}. GlassBR was originally a Visual Basic code/spreadsheet
+on an American Standard Test Method (ASTM) standard \cite{ASTM2009, ASTM2015,
+BeasonEtAl1998}. GlassBR was originally a Visual Basic code/spreadsheet
 created by colleagues in a civil engineering research lab.  We added their
 domain knowledge to our framework, along with recipes to generate relevant
 artifacts.  Not only can we generate code for the necessary calculations (in
@@ -324,14 +327,15 @@ in different projects.
 We describe an ``idealized process'' that we could have used to produce GlassBR,
 following Parnas' idea of faking a rational design process \cite{Parnas1986}.
 
-\subparagraph*{Program Task} Compute the probability that a particular pane of
-(special) glass will break if an explosive is detonated at a given distance.
-This could be in the context of the glass facade for a building.
+\subparagraph*{Undertand the Program's Task} Compute the probability that a
+particular pane of (special) glass will break if an explosive is detonated at a
+given distance.  This could be in the context of the glass facade for a
+building.
 
 \subparagraph*{Is it well-understood?} The details are extensively documented
-in~\cite{BeasonEtAl1998, ASTM2009, ASTM2015}.
+in~\cite{ASTM2009, ASTM2015, BeasonEtAl1998}.
 
-\subparagraph*{Base Domain Knowledge}
+\subparagraph*{Record Base Domain Knowledge}
 A recurring idea is the different types of \texttt{Glass}:
 \begin{center}
   \begin{tabular}{|l|l|l|l|}
@@ -389,25 +393,25 @@ to be necessary to generate our artifacts. In other words, we define a
 
 The most important results of this phase are descriptions of \emph{theories}
 that link all the important concepts together. For example, the description
-of all the elements that comprise Newton's Law \[ F = m a \],
+of all the elements that comprise Newton's Law $F = m a$,
 i.e. what is a force, a mass, acceleration (and how is it related to
 velocity, position and time), what are the units involved, etc.
 
-\subparagraph*{Characteristics of a good solution}
-For example, as one of our outputs is a probability, which means that that
-quantity should be checked to be between \(0\) and \(1\). This can result
+\subparagraph*{Define the characteristics of a good solution}
+For example, one of our outputs is a probability, which means that the output
+should be checked to be between \(0\) and \(1\). This can result
 in assertion code in the end program, or tests, or both. We do not yet
 support full \emph{properties}~\cite{claessen2000quickcheck}, but that is
 indeed the logical next step.
 
-\subparagraph*{Basic Examples}
+\subparagraph*{Record basic examples}
 For the purposes of testing, it is always good to have very simple examples,
-especially ones where the correct answer is known a priori, even the simple
+especially ones where the correct answer is known a priori, even though the simple
 examples are considered ``toy problems''. They provide a useful extra check
-that the narrative is coherent with out expectations.
+that the narrative is coherent with our expectations.
 
 \subparagraph*{Specialization of theories}
-In general, the theories involved will be quite a bit more general than what is
+In general, the theories involved will be much more general than what is
 needed in any given example. For example, Newton's Laws are encoded in their
 vector form in $n$ dimensions, and thus specialization is necessary.
 
@@ -422,7 +426,7 @@ variables, use of closed-forms instead of implicit equations, and so on.
 Often on specialization, driven by underlying assumptions, enable further
 specializations, so that this step is really one of \emph{iterative refinement}.
 
-\subparagraph*{Coherent narrative}
+\subparagraph*{Create a coherent narrative}
 Given the outputs we wish to produce, such as the probability that a glass
 slab will withstand an explosion, we need to ensure that we can go from all
 the given inputs to the desired output, by stringing together various
@@ -435,8 +439,8 @@ For this example, the computations are all quite simple, but in general this
 might involve solving ordinary differential equations, computing a solution to
 an optimization problem, etc.
 
-\subparagraph*{Code-level choices}
-From a \emph{deterministic model of the solution}. From there, it should be
+\subparagraph*{Make code-level choices}
+From a \emph{deterministic model of the solution}, it should be
 possible to output code in a programming language. To get there, we still need
 to make a series of choices.
 
@@ -464,11 +468,11 @@ choices = defaultChoices {
  constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
-  \caption{Code-level choices for GlassBR.}
+  \caption{Code-level choices for GlassBR (compare bold box in Fig~\ref{Fig_DrasilAndChange}).}
   \label{fig:CodeChoices}
 \end{figure}
 
-\subparagraph*{Recipe to generate artifacts}
+\subparagraph*{Create recipes to generate artifacts}
 The information collected in the previous steps form the core of the various
 software artifacts normally written. To perform this assembly, we write
 programs that we dub \emph{recipes}. We have DSLs for creating specifications,
@@ -479,7 +483,7 @@ While we currently generate \texttt{Makefile}s, a good example of a DSL for
 specifying build scripts, bour ideas are more properly compared with
 the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
 
-Finally we can put all of these things together and 
+Finally we can put the contents created via the previous steps together and
 \textbf{generate everything}:
 \begin{lstlisting}
 main :: IO()
@@ -574,7 +578,7 @@ explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 % - future work on "more ontology"
 % - link with Eelco's work
 
-Others~\cite{bjorner2021domeng} have already remarked that for most software,
+Others~\cite{bjorner2021domaineng} have already remarked that for most software,
 the \emph{domain knowledge} is the slowest moving part of the requirements.
 We add to this the ideas that for certain kinds of software, there is a lot of
 \emph{knowledge duplication} amongst the artifacts, much of which is traceable

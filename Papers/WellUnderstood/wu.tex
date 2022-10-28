@@ -575,7 +575,6 @@ explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 %\end{figure}
 
 % TODO
-% - future work on "more ontology"
 % - link with Eelco's work
 
 Others~\cite{bjorner2021domaineng} have already remarked that for most software,
@@ -587,19 +586,18 @@ record the domain knowledge ``once'', and then write recipes to generate
 instances based on refinements. For long-lived software, this kind of up-front
 investment should be worthwhile.
 
-In other words, if we capture the fundamental
-domain knowledge of specific domains (such as mechanics of rigid body motion, dynamics
-of soil, trains, etc), most later development time can be spent on the
-\emph{specifics} of the requirements of a specialized application that may
-well contain novel ideas at the refinement or recipe level.
+In other words, if we capture the fundamental domain knowledge of specific
+domains (such as mechanics of rigid body motion, dynamics of soil, trains,
+etc), most later development time can be spent on the \emph{specifics} of the
+requirements of a specialized application that may well contain novel ideas at
+the refinement or recipe level.
 
-In Drasil, as a side-effect of organizing things as we have,
-we obtain traceability and consistency, by construction.
-Traceability is illustrated by Figure~\ref{Fig_DrasilAndChange}, which shows we
-can track where each of the concepts is used.  An example of consistency is
-found in the table of symbols that appears in our generated documentation.  The
-list of symbols is not entered by the user; it is automatically constructed from
-the base knowledge.
+In Drasil, as a side-effect of organizing things as we have, we obtain
+traceability and consistency, by construction.  Traceability is illustrated by
+Figure~\ref{Fig_DrasilAndChange}, which shows we can track where each of the
+concepts is used.  An example of consistency is found in the table of symbols
+that appears in our generated documentation.  The list of symbols is not
+entered by the user; it is automatically constructed from the base knowledge.
 
 There are further ideas that co-exist smoothly with our framework, most notably
 software families and correctness, particularly correctness of documentation.  
@@ -610,6 +608,22 @@ This is a feature, as they are more likely to be caught that way.
 We've also noticed that we can more easily experiment with ``what if'' scenarios,
 which make it easy to understand the ramifications proposed changes.  
 
+We expect to use formal ontologies as we implement
+more coherence checks on the domain knowledge itself. For example, it should not
+be possible to associate a \textit{weight} attribute to the concept
+\textit{program name}, but only to concepts that are somehow ``physical''. 
+Perhaps a large ontology in the style of Cyc~\cite{lenat1995cyc} would help.
+
+That work of this scale is possible has strongly been influenced by Eelco
+Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
+made it clear that many different artifacts can be generated. He was braver than
+us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
+indeed expected to be long-lived, but certainly was not created for a
+well-understood domain! The domain analysis of web applications is a non-trivial
+contribution of WebDSL. Whether it is product lines or program families, weaving
+them from DSLs is also something he preached~\cite{voelter2011product}.
+We never got a chance to present Drasil to Eelco, but we hope that it would
+have resonated with him.
 %%
 %% Bibliography
 %%

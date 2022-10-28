@@ -128,7 +128,7 @@
     context.
 
     A crucial observation is that software artifacts that are currently
-    hand-written contain considerable duplication.  By using domain specific
+    handwritten contain considerable duplication.  By using domain specific
     languages and generative techniques, we can capture the contents of many of
     the artifacts of such software.  Assuming an appropriate codification of
     domain knowledge, we find that the resulting de-duplicated sources are
@@ -142,7 +142,7 @@
 \label{sec:the-context}
 
 Not all software is the same. In fact, there is enough variation in the
-context in which various software products are created to warrant exploring and
+context in which developers create various software products to warrant exploring and
 using different processes, depending on the forces~\cite{alexander1977pattern}
 at play. Here we explore two such forces: ``well understood'' and ``long
 lived''.
@@ -215,7 +215,7 @@ at humans~\cite{parnas2011precise}. Explicitly:
 \begin{enumerate}
 \item The meaning of the models is understood at a human-pedagogical level,
 i.e.\ it is explainable.
-\item Combining models is explainable. Thus the act of combining models
+\item Combining models is explainable. Thus, the act of combining models
 must simultaneously
 operate on mathematical representations and on explanations. This requires that
 English descriptions also be captured in the same manner as the
@@ -327,7 +327,7 @@ in different projects.
 We describe an ``idealized process'' that we could have used to produce GlassBR,
 following Parnas' idea of faking a rational design process \cite{Parnas1986}.
 
-\subparagraph*{Undertand the Program's Task} Compute the probability that a
+\subparagraph*{Understand the Program's Task} Compute the probability that a
 particular pane of (special) glass will break if an explosive is detonated at a
 given distance.  This could be in the context of the glass facade for a
 building.
@@ -372,7 +372,7 @@ A recurring idea is the different types of \texttt{Glass}:
 % communication and not reveal our identities
   \end{tabular}
 \end{center}
-Some concepts, such as those of \emph{explosion}, \emph{glass slag}, and
+Some concepts, such as those of \emph{explosion}, \emph{glass slab}, and
 \emph{degree} do not need to be defined mathematically -- an Enlish description
 is sufficient.
 
@@ -423,7 +423,7 @@ glass thickness they will provide. (This rationale is also something we capture.
 Most research software examples involve significant specialization, such as
 converting partial differential equations to ordinary, elimination of
 variables, use of closed-forms instead of implicit equations, and so on.
-Often on specialization, driven by underlying assumptions, enable further
+Often specialization, driven by underlying assumptions, enable further
 specializations, so that this step is really one of \emph{iterative refinement}.
 
 \subparagraph*{Create a coherent narrative}
@@ -476,14 +476,14 @@ choices = defaultChoices {
 The information collected in the previous steps form the core of the various
 software artifacts normally written. To perform this assembly, we write
 programs that we dub \emph{recipes}. We have DSLs for creating specifications,
-code~\cite{GOOLPEPM}, dependency diagrams, Makefiles, READMEs and log of all choices
+code~\cite{GOOLPEPM}, dependency diagrams, Makefiles, READMEs and a log of all choices
 used.
 
 While we currently generate \texttt{Makefile}s, a good example of a DSL for
-specifying build scripts, bour ideas are more properly compared with
+specifying build scripts, our ideas are more properly compared with
 the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
 
-Finally we can put the contents created via the previous steps together and
+Finally, we can put the contents created via the previous steps together and
 \textbf{generate everything}:
 \begin{lstlisting}
 main :: IO()
@@ -517,9 +517,9 @@ understood}.
 how the problem description can be turned into a deterministic\footnote{A current
 meta-design choice.} input-output process.
   \begin{enumerate}
-  \item Some refinements will involve \emph{specialization} (eg. from
+  \item Some refinements will involve \emph{specialization} (e.g. from
     \(n\)-dimensional to \(2\)-dimensional, assuming no friction, etc).  These
-    \emph{choices} and their \emph{rationale} need to be documented, as a a
+    \emph{choices} and their \emph{rationale} need to be documented, as a
     crucial part of the solution.  Whether these choices are (un)likely to
     change in the future should also be recorded.
   \item Choices tend to be dependent, and thus (partially) ordered.
@@ -527,8 +527,8 @@ meta-design choice.} input-output process.
   \end{enumerate}
 \item\label{it:narrative} Assemble the ingredients into a coherent narrative.
 \item\label{it:tocode} Describe how the process from step \ref{it:narrative}
-can be turned into code. Many choice can occur here as well.
-\item\label{it:recipe} Turn the steps (i.e.\ from items~\ref{it:refine} and
+can be turned into code. Many choices can occur here as well.
+\item\label{it:recipe} Turn the steps (i.e.,\ from items~\ref{it:refine} and
 \ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together all
 the information into a variety of artifacts (documentation, code, build
 scripts, test cases, etc). These can be read, or executed, or \ldots\, as

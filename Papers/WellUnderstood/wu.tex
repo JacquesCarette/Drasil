@@ -554,64 +554,57 @@ explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 \label{sec:concluding-remarks}
 
 
-% To summarize:
-% \\
-
-\begin{figure}
-  \centering
-  \fbox{
-    \begin{minipage}[c]{0.65\textwidth}
-      \centering
-      \begin{tabular}{rcl}
-        \textbf{Opportunity} & : & well-understood + long-lived \\
-        \textbf{Tools}       & : & knowledge capture + DSLs + generators \\
-        \textbf{Result}      & : & \emph{long-term productivity gain}
-      \end{tabular}
-
-      % \begin{itemize}%[leftmargin=\widthof{[\textbf{Opportunity}]}]
-      %   \item[\textbf{Opportunity}]: well-understood + long-lived
-      %   \item[\textbf{Tools}]: knowledge capture + DSLs + generators
-      %   \item[\textbf{Result}]: \emph{long-term productivity gain}
-      % \end{itemize}
-    \end{minipage}
-  }
-  \caption{Summary}
-  \label{fig:summary}
-\end{figure}
+%\begin{figure}
+%  \centering
+%  \fbox{
+%    \begin{minipage}[c]{0.65\textwidth}
+%      \centering
+%      \begin{tabular}{rcl}
+%        \textbf{Opportunity} & : & well-understood + long-lived \\
+%        \textbf{Tools}       & : & knowledge capture + DSLs + generators \\
+%        \textbf{Result}      & : & \emph{long-term productivity gain}
+%      \end{tabular}
+%   \end{minipage}
+% }
+% \caption{Summary}
+% \label{fig:summary}
+%\end{figure}
 
 % TODO
-% - de-emphasize productivity
 % - future work on "more ontology"
+% - link with Eelco's work
 
-We get productivity gains because there is in fact an incredible amount of
-\emph{knowledge duplication} present in software, especially in well understood
-domains. For these domains building software really should be a matter of
-assembly-line style engineering. Furthermore, there is also inherent knowledge
-duplication between the artifacts of a project because \emph{they are about the
-same topic}.
+Others~\cite{bjorner2021domeng} have already remarked that for most software,
+the \emph{domain knowledge} is the slowest moving part of the requirements.
+We add to this the ideas that for certain kinds of software, there is a lot of
+\emph{knowledge duplication} amongst the artifacts, much of which is traceable
+to domain knowledge. Thus, in well understood domains, it should be feasible to
+record the domain knowledge ``once'', and then write recipes to generate
+instances based on refinements. For long-lived software, this kind of up-front
+investment should be worthwhile.
 
-This means that if we spend some up-front time capturing the fundamental
-knowledge of specific domains (such as mechanics of rigid body motion, dynamics
+In other words, if we capture the fundamental
+domain knowledge of specific domains (such as mechanics of rigid body motion, dynamics
 of soil, trains, etc), most later development time can be spent on the
-\emph{specifics} of the given requirements.
+\emph{specifics} of the requirements of a specialized application that may
+well contain novel ideas at the refinement or recipe level.
 
-As a side-effect, we obtain traceability and consistency, by construction.
+In Drasil, as a side-effect of organizing things as we have,
+we obtain traceability and consistency, by construction.
 Traceability is illustrated by Figure~\ref{Fig_DrasilAndChange}, which shows we
 can track where each of the concepts is used.  An example of consistency is
 found in the table of symbols that appears in our generated documentation.  The
 list of symbols is not entered by the user; it is automatically constructed from
-the base knowledge (Step 3a).
+the base knowledge.
 
 There are further ideas that co-exist smoothly with our framework, most notably
-software families and correctness.  Our process will remove human errors from
-generating and maintaining documentation, code, test cases and build
-environments, since these mundane details are handled by the generator.
-Furthermore, our work makes it easy to experiment with ``what if'' scenarios,
-which make it easy to explicitly track the ramifications proposed changes.  
+software families and correctness, particularly correctness of documentation.  
+As the documentation is generated in tandem with, and using the same information as,
+the source code, these will necessarily be synchronized. Errors will co-occur in both.
+This is a feature, as they are more likely to be caught that way.
 
-With the right up-front investment, we can have sustainable software development
-because stable knowledge is separated from local context, which is where most of
-the rapidly changing assumptions and requirements reside.
+We've also noticed that we can more easily experiment with ``what if'' scenarios,
+which make it easy to understand the ramifications proposed changes.  
 
 %%
 %% Bibliography

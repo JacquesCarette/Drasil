@@ -222,7 +222,6 @@ oriented decisions should be captured with a similar mechanism, and also include
 English explanations.
 \end{enumerate}
 
-
 We dub these \emph{triform theories}, as a nod to \emph{biform
 theories}~\cite{Farmer2007}. We couple 
 \begin{enumerate} % TODO: We're not allowed to inline lists! Perhaps we can make it definition, similar to ``well-understood''?
@@ -245,7 +244,7 @@ artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
 of the IEEE~\cite{IEEE1998} and Volere
 templates~\cite{RobertsonAndRobertson1999Vol}.
 
-\subsection{Examples}
+\subsection{Instances of our context}
 \label{subsec:examples-of-context}
 
 When are these well-understood and long-lived conditions fulfilled? One example
@@ -257,77 +256,26 @@ models, such as NEMO~\cite{madec_gurvan_2022_6334656} which can trace its
 origins to OPA 8~\cite{Madec1998}. In fact, most sub-domains of science and engineering
 harbour their own niche long-lived software.
 
-\section{A New Development Process}
-\label{sec:a-new-development-process}
-
-Given appropriate infrastructure, what would be an \emph{idealized process}
-(akin to Parnas' ideas of faking a rational design process \cite{Parnas1986})?
-
-
-\begin{enumerate}
-\item\label{it:problem} Have a task to achieve where \emph{software} can
-play a central part in the solution.
-\item\label{it:understood} The underlying problem domain is \emph{well
-understood}.
-\item\label{it:probdesc} Describe the problem:
-  \begin{enumerate}
-  \item Find the base knowledge (theory) in the pre-existing library or,
-    failing that, write it if it does not yet exist, for instance the
-    naturally occurring known quantities and associated constraints.
-  \item Assemble the ingredients into a coherent narrative,
-  \item Describe the characteristics of a good solution,
-  \item Come up with basic examples (to test correctness, intuitions, etc).
-  \end{enumerate}
-\item\label{it:refine} Describe, by successive refinement transformations,
-how the above can be turned into a deterministic\footnote{A current
-meta-design choice.} input-output process.
-  \begin{enumerate}
-  \item Some refinements will involve \emph{specialization} (eg. from
-    \(n\)-dimensional to \(2\)-dimensional, assuming no friction, etc).  These
-    \emph{choices} and their \emph{rationale} need to be documented, as a a
-    crucial part of the solution.  Whether these choices are (un)likely to
-    change in the future should be recorded.
-  \item Choices tend to be dependent, and thus (partially) ordered.
-   \emph{Decisions} frequently enable or reveal downstream choices.
-  \end{enumerate}
-\item\label{it:tocode} Describe how the process from step \ref{it:refine}
-can be turned into code. The same kinds of choice can occur here.
-\item\label{it:recipe} Turn the steps (i.e.\ from items~\ref{it:refine} and
-\ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together all
-the information into a variety of artifacts (documentation, code, build
-scripts, test cases, etc). These can be read, or executed, or \ldots\, as
-appropriate.
-\end{enumerate}
-
-While this last step might appear somewhat magical, it isn't. The whole point of
-defining \emph{well understood} is to enable it! A \emph{suitable} knowledge
-encoding is key. This is usually tacit knowledge that entirely resides in
-developers' heads.
-
-What is missing is an explicit \emph{information architecture} of each of the
-necessary artifact. In other words, what information is necessary to enable the
-mechanized generation of each artifact? It turns out that many of them are quite
-straightforward.
-
-Often steps~\ref{it:problem} and~\ref{it:probdesc} are skipped; this is
-part of the \textbf{tacit knowledge} of a lot
-of software.  Our process requires that this knowledge be made explicit,
-a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
-
-% TODO: insert graphical illustration of the funnel from information to
-% artifacts.
-
 \section{An Example}
 \label{sec:example}
 
-We have built the needed infrastructure. It consists of 60KLoc of Haskell
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-11ptFont-squished-blind-v1-300dpi.png}
+  \caption{Colors and shapes mapping from captured domain knowledge to generated
+  artifacts.}
+  \label{Fig_DrasilAndChange}
+\end{figure*}
+
+We have built infrastructure%
+\footnote{\url{https://github.com/JacquesCarette/Drasil}} 
+to carry out these ideas. It consists of 60KLoc of Haskell
 implementing a series of interacting Domain Specific Languages (DSLs) for
 knowledge encodings, mathematical expressions, theories, English fragments,
-code generation and document generation.\footnote{We will provide a link
-if the paper is accepted.} A full description would take too much space.
-%because of the double blind review process, we can't really cite Drasil here
-Instead, we provide an illustrative example.
+code generation and document generation.  A full description would take too
+much space.  Instead, we provide an illustrative example.
 
+\subsection{GlassBR}
 We will focus on information capture and the artifacts we can generate. For
 concreteness, we'll use a single example from our suite: GlassBR, used to assess
 the risk for glass facades subject to blast loading. The requirements are based
@@ -336,21 +284,13 @@ ASTM2009, ASTM2015}. GlassBR was originally a Visual Basic code/spreadsheet
 created by colleagues in a civil engineering research lab.  We added their
 domain knowledge to our framework, along with recipes to generate relevant
 artifacts.  Not only can we generate code for the necessary calculations (in
-\CC, C\#, Java, Python and Swift), we added documentation that was absent in the
+\CC, C\#, Java, Python and Swift), we also generated documentation that was absent in the
 original (Software Requirements Specification, doxygen, README.md and a
 Makefile). Moreover, our implementation is actually a family of implementations,
 since some design decisions are explicitly exposed as changeable variabilities,
 as described below.
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-11ptFont-squished-blind-v1-300dpi.png}
-  \caption{Colors and shapes mapping from captured knowledge to generated
-  artifacts.}
-  \label{Fig_DrasilAndChange}
-\end{figure*}
-
-The transformation of captured knowledge is illustrated in
+The transformation of captured domain knowledge is illustrated in
 Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper right
 box. Each piece of information in this figure has its own shape and colour
 (orange-cloud, pink lozenge, etc). It should be immediately clear that all
@@ -367,25 +307,31 @@ computation in those languages, user instructions for running the code, and the
 processed \LaTeX{} for the requirements.
 
 The name GlassBR is probably the simplest example of what we mean by
-\emph{knowledge}: here, the concept ``program name'' is internally defined, and
-its \emph{value} is used throughout. A more complex example is the assumption
+\emph{duplication}: here, the concept ``program name'' is internally defined, and
+its \emph{value} is used throughout. 
+
+In general, we capture more complex knowledge. An example is the assumption
 that the ``Load Distribution Factor'' (LDF) is constant (pink lozenge). If this
 needs to be modified to instead be an input, the generated software will now
-have LDF as an input variable.  We also capture design decisions, such as
+have LDF as an input variable.  
+
+We also capture design decisions, such as
 whether to log all calculations, whether to in-line constants rather than show
-them symbolically, etc. The knowledge for GlassBR can also be reused in
-different projects.
+them symbolically, etc. These different pieces of knowledge can also be reused
+in different projects.
 
-We now give example conceptual encodings corresponding to steps of the process.
+\subsection{The Steps}
+We describe an ``idealized process'' that we could have used to produce GlassBR,
+following Parnas' idea of faking a rational design process \cite{Parnas1986}.
 
-\subparagraph*{Step 1: Task} Compute the probability that a particular pane of
+\subparagraph*{Program Task} Compute the probability that a particular pane of
 (special) glass will break if an explosive is detonated at a given distance.
 This could be in the context of the glass facade for a building.
 
-\subparagraph*{Step 2: Understood} The details are extensively documented
+\subparagraph*{Is it well-understood?} The details are extensively documented
 in~\cite{BeasonEtAl1998, ASTM2009, ASTM2015}.
 
-\subparagraph*{Step 3a: Base Knowledge}
+\subparagraph*{Base Domain Knowledge}
 A recurring idea is the different types of \texttt{Glass}:
 \begin{center}
   \begin{tabular}{|l|l|l|l|}
@@ -399,38 +345,33 @@ A recurring idea is the different types of \texttt{Glass}:
   \end{tabular}
 \end{center}
 
-\noindent The ``Risk of Failure'' is definable, using the following template for a
-\textit{data definition}:
+\noindent The ``Risk of Failure'' is definable:
 \begin{center}
   \begin{tabular}{|l|l|}
     \hline
     \textbf{Label} & Risk of Failure \\ \hline
-%    \textbf{Symbol} & $B$ \\ \hline
-%    \textbf{Units} & Unitless \\ \hline
+    \textbf{Symbol} & $B$ \\ \hline
+    \textbf{Units} & Unitless \\ \hline
     \textbf{Equation} & \(B = \frac{k}{(ab)^{m-1}}(Eh^2)^m\mathit{LDF}e^J\) \\ \hline
     \textbf{Description} & \vbox{
       \hbox{\strut \(B\) is the Risk of Failure (Unitless)}
       \hbox{\strut \(k\) is the surface flaw parameter (\(\frac{m^{12}}{N^7}\))}
       \hbox{\strut \(a\) \& \(b\) are the plate length \& width (\textit{m})}
-      \hbox{\strut \(...\)}
-% Do we want to have all of the variables listed? - No - there isn't room
-%      \hbox{\strut $m$ is the surface flaw parameter ($\frac{m^{12}}{N^7}$)}
-%      \hbox{\strut $E$ is the modulus of elasticity of glass (\textit{Pa})}
-%      \hbox{\strut $h$ is the minimum thickness (\textit{m})}
-%      \hbox{\strut $LDF$ is the load duration factor (Unitless)}
-%      \hbox{\strut $J$ is the stress distribution factor (Unitless)}
+      \hbox{\strut $m$ is the surface flaw parameter ($\frac{m^{12}}{N^7}$)}
+      \hbox{\strut $E$ is the modulus of elasticity of glass (\textit{Pa})}
+      \hbox{\strut $h$ is the minimum thickness (\textit{m})}
+      \hbox{\strut $LDF$ is the load duration factor (Unitless)}
+      \hbox{\strut $J$ is the stress distribution factor (Unitless)}
     } \\ \hline
     \textbf{Source} & \cite{ASTM2009}, \cite{BeasonEtAl1998} \\ \hline 
 % The Campidelli reference was removed because we cannot really cite personal
 % communication and not reveal our identities
   \end{tabular}
 \end{center}
+Some concepts, such as those of \emph{explosion}, \emph{glass slag}, and
+\emph{degree} do not need to be defined mathematically -- an Enlish description
+is sufficient.
 
-% explosion - concept chunk
-% glass slag - named chunk
-% degree - concept chunk
-% user input - named chunk
-\subparagraph*{Step 3b: Coherent narrative}
 The descriptions in GlassBR are produced using an experimental language using
 specialized markup for describing relations between knowledge. For example, the
 goal of GlassBR (``Predict-Glass-Withstands-Explosion'') is to ``Analyze and
@@ -442,53 +383,69 @@ of related ideas). We call this goal a ``concept instance'' (a concept chunk
 applied in some way). This language lets us perform various static analyses on
 our artifacts.
 
-\subparagraph*{Step 3c: Characteristics of a good solution}
-One of our outputs is a probability, which should be checked to be between \(0\)
-and \(1\) (code not shown).
+This doesn't build a complete ontology of concepts, as we have not found that
+to be necessary to generate our artifacts. In other words, we define a
+\emph{good enough} fraction of the domain ontology.
 
-\subparagraph*{Step 4: Specialization of theories}
-In the GlassBR example, the main specialization is that the thickness parameter
+The most important results of this phase are descriptions of \emph{theories}
+that link all the important concepts together. For example, the description
+of all the elements that comprise Newton's Law \[ F = m a \],
+i.e. what is a force, a mass, acceleration (and how is it related to
+velocity, position and time), what are the units involved, etc.
+
+\subparagraph*{Characteristics of a good solution}
+For example, as one of our outputs is a probability, which means that that
+quantity should be checked to be between \(0\) and \(1\). This can result
+in assertion code in the end program, or tests, or both. We do not yet
+support full \emph{properties}~\cite{claessen2000quickcheck}, but that is
+indeed the logical next step.
+
+\subparagraph*{Basic Examples}
+For the purposes of testing, it is always good to have very simple examples,
+especially ones where the correct answer is known a priori, even the simple
+examples are considered ``toy problems''. They provide a useful extra check
+that the narrative is coherent with out expectations.
+
+\subparagraph*{Specialization of theories}
+In general, the theories involved will be quite a bit more general than what is
+needed in any given example. For example, Newton's Laws are encoded in their
+vector form in $n$ dimensions, and thus specialization is necessary.
+
+In the GlassBR example, the thickness parameter
 is not free to vary, but must take one of a specific set of values. The
 rationale for this specialization is that manufacturers have standardized the
-glass thickness they will provide.
+glass thickness they will provide. (This rationale is also something we capture.)
 
-The phenomenological nature of the GlassBR example is atypical in this way; most
-research software examples involve more significant specialization, such as
-partial differential equations to ordinary, elimination of variables, use of
-closed-forms instead of implicit equations, and so on.
+Most research software examples involve significant specialization, such as
+converting partial differential equations to ordinary, elimination of
+variables, use of closed-forms instead of implicit equations, and so on.
+Often on specialization, driven by underlying assumptions, enable further
+specializations, so that this step is really one of \emph{iterative refinement}.
 
-%% Commenting this out, as it didn't really represent 4b
-%
-%\heading{Step 4b: Choices}
-%
-%We create a closed harmonic system containing all related knowledge (in
-%particular, the grounded theories), which is as simple as collecting them into a
-%single system.
-%
-%\begin{lstlisting}
-%iMods :: [InstanceModel]
-%iMods = [pbIsSafe, lrIsSafe]
-%
-%si :: SystemInformation
-%si = SI {
-%_sys = glassBR, _kind = Doc.srs, _authors = [nikitha],
-%_purpose = purpDoc glassBR Verbose, _quants = symbolsForTable,
-%_concepts = [] :: [DefinedQuantityDict], _instModels = iMods,
-%_datadefs = GB.dataDefs, _configFiles = configFp,
-%_inputs = inputs, _outputs = outputs,
-%_defSequence = qDefns, _constraints = constrained,
-%_constants = constants, _sysinfodb = symbMap,
-%_usedinfodb = usedDB, refdb = refDB
-%}
-%\end{lstlisting}
+\subparagraph*{Coherent narrative}
+Given the outputs we wish to produce, such as the probability that a glass
+slab will withstand an explosion, we need to ensure that we can go from all
+the given inputs to the desired output, by stringing together various
+definitions given in a computational manner. In other words, we need to
+ensure that there exists a deterministic path from the inputs we are given,
+through the equations we have, to all of the outputs we've declared we are
+interested in.
 
-\subparagraph*{Step 5: Code-level choices}
-We can choose the output programming language, how ``modular'' the generated
-code is, whether we want programs or libraries, the level of logging and
-comments, etc. Here we show the actual code we use for this, as it is reasonably
-direct.
+For this example, the computations are all quite simple, but in general this
+might involve solving ordinary differential equations, computing a solution to
+an optimization problem, etc.
 
+\subparagraph*{Code-level choices}
+From a \emph{deterministic model of the solution}. From there, it should be
+possible to output code in a programming language. To get there, we still need
+to make a series of choices.
 
+Drasil lets you choose output programming language(s) (see below), but also how
+``modular'' the generated code is, whether we want programs or libraries, the
+level of logging and comments, etc. Here we show the actual code we use for
+this, as it is reasonably direct.
+
+\begin{figure}[htb]
 \begin{lstlisting}
 code :: CodeSpec
 code = codeSpec fullSI choices allMods
@@ -507,21 +464,23 @@ choices = defaultChoices {
  constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
+  \caption{Code-level choices for GlassBR.}
+  \label{fig:CodeChoices}
+\end{figure}
 
-\subparagraph*{Step 6: Recipe to generate artifacts}
+\subparagraph*{Recipe to generate artifacts}
+The information collected in the previous steps form the core of the various
+software artifacts normally written. To perform this assembly, we write
+programs that we dub \emph{recipes}. We have DSLs for creating specifications,
+code~\cite{GOOLPEPM}, dependency diagrams, Makefiles, READMEs and log of all choices
+used.
 
-The various pieces of knowledge specified in the previous steps are assembled
-into \emph{recipes} for generating the artifacts, for example specification,
-code, dependency diagrams and log of all choices used.  Each one of these has
-its own DSL that encodes the parts of a specification, the requirements for
-code\footnote{which has been already published and will be cited later}, etc.
-
-The venerable \texttt{Makefile} language is a good example of a DSL for
-specifying build scripts, but where our ideas are more properly compared with
+While we currently generate \texttt{Makefile}s, a good example of a DSL for
+specifying build scripts, bour ideas are more properly compared with
 the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
 
-And finally, we can put all of these things together, and generate
-\textbf{everything}:
+Finally we can put all of these things together and 
+\textbf{generate everything}:
 \begin{lstlisting}
 main :: IO()
 main = do
@@ -531,6 +490,65 @@ main = do
   genDot fullSI
   genLog fullSI printSetting
 \end{lstlisting}
+
+\section{An Idealized Process}
+\label{sec:idealized-process}
+
+It is useful to summarize the \emph{idealized process} we used above.
+
+\begin{enumerate}
+\item\label{it:problem} Have a task to achieve where \emph{software} can
+play a central part in the solution.
+\item\label{it:understood} Verify that the underlying problem domain is \emph{well
+understood}.
+\item\label{it:probdesc} Describe the problem:
+  \begin{enumerate}
+  \item Find the base knowledge (theories) in the pre-existing library or,
+    failing that, write it if it does not yet exist, for instance the
+    naturally occurring known quantities and associated constraints.
+  \item Describe the characteristics of a good solution,
+  \item Come up with basic examples (to test correctness, intuitions, etc).
+  \end{enumerate}
+\item\label{it:refine} Describe, by successive refinement transformations,
+how the problem description can be turned into a deterministic\footnote{A current
+meta-design choice.} input-output process.
+  \begin{enumerate}
+  \item Some refinements will involve \emph{specialization} (eg. from
+    \(n\)-dimensional to \(2\)-dimensional, assuming no friction, etc).  These
+    \emph{choices} and their \emph{rationale} need to be documented, as a a
+    crucial part of the solution.  Whether these choices are (un)likely to
+    change in the future should also be recorded.
+  \item Choices tend to be dependent, and thus (partially) ordered.
+   \emph{Decisions} frequently enable or reveal downstream choices.
+  \end{enumerate}
+\item\label{it:narrative} Assemble the ingredients into a coherent narrative.
+\item\label{it:tocode} Describe how the process from step \ref{it:narrative}
+can be turned into code. Many choice can occur here as well.
+\item\label{it:recipe} Turn the steps (i.e.\ from items~\ref{it:refine} and
+\ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together all
+the information into a variety of artifacts (documentation, code, build
+scripts, test cases, etc). These can be read, or executed, or \ldots\, as
+appropriate.
+\end{enumerate}
+
+The fundamental reason for focusing on \emph{well understood} software is to
+make the various steps in this process feasible. Another enabler is a
+\emph{suitable} knowledge encoding. Rather than define this a priori, we have
+used a \emph{bottom up} process to capture ``good enough'' ontologies to get the
+job done.
+
+What is missing in the above description is an explicit \emph{information
+architecture} of each of the necessary artifact. In other words, what
+information is necessary to enable the mechanized generation of each artifact?
+It turns out that many of them are quite straightforward.
+
+Note that in many software projects, steps~\ref{it:problem}
+and~\ref{it:probdesc} are skipped; this is part of the \textbf{tacit knowledge}
+of a lot of software.  Our process requires that this knowledge be made
+explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
+
+% TODO: insert graphical illustration of the funnel from information to
+% artifacts.
 
 \section{Concluding Remarks}
 \label{sec:concluding-remarks}
@@ -560,6 +578,10 @@ main = do
   \caption{Summary}
   \label{fig:summary}
 \end{figure}
+
+% TODO
+% - de-emphasize productivity
+% - future work on "more ontology"
 
 We get productivity gains because there is in fact an incredible amount of
 \emph{knowledge duplication} present in software, especially in well understood

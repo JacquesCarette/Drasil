@@ -592,21 +592,18 @@ etc), most later development time can be spent on the \emph{specifics} of the
 requirements of a specialized application that may well contain novel ideas at
 the refinement or recipe level.
 
-In Drasil, as a side-effect of organizing things as we have, we obtain
-traceability and consistency, by construction.  Traceability is illustrated by
-Figure~\ref{Fig_DrasilAndChange}, which shows we can track where each of the
-concepts is used.  An example of consistency is found in the table of symbols
-that appears in our generated documentation.  The list of symbols is not
-entered by the user; it is automatically constructed from the base knowledge.
+In Drasil, as a side effect of organizing things as we have, we obtain
+traceability and consistency, by construction.  Figure~\ref{Fig_DrasilAndChange} illustrates traceability by showing that we can track where we use each
+concept.  The table of symbols in our generated documentation shows an example of consistency.  The user does not enter the list of symbols; it is automatically constructed from the base knowledge.
 
 There are further ideas that co-exist smoothly with our framework, most notably
 software families and correctness, particularly correctness of documentation.  
-As the documentation is generated in tandem with, and using the same information as,
+As we generate the documentation in tandem with, and using the same information as,
 the source code, these will necessarily be synchronized. Errors will co-occur in both.
 This is a feature, as they are more likely to be caught that way.
 
 We've also noticed that we can more easily experiment with ``what if'' scenarios,
-which make it easy to understand the ramifications proposed changes.  
+which make it easy to understand the ramifications of proposed changes.  
 
 We expect to use formal ontologies as we implement
 more coherence checks on the domain knowledge itself. For example, it should not

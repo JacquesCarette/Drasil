@@ -128,7 +128,7 @@
     context.
 
     A crucial observation is that software artifacts that are currently
-    handwritten contain considerable duplication.  By using domain specific
+    handwritten contain considerable duplication.  By using domain-specific
     languages and generative techniques, we can capture the contents of many of
     the artifacts of such software.  Assuming an appropriate codification of
     domain knowledge, we find that the resulting de-duplicated sources are
@@ -147,7 +147,7 @@ using different processes, depending on the forces~\cite{alexander1977pattern}
 at play. Here we explore two such forces: ``well understood'' and ``long
 lived''.
 
-\subsection{``Well understood'' software?}
+\subsection{``Well-understood'' software?}
 \label{subsec:well-understood}
 
 \begin{definition}
@@ -253,10 +253,10 @@ templates~\cite{RobertsonAndRobertson1999Vol}.
 \subsection{Instances of our context}
 \label{subsec:examples-of-context}
 
-When are these well-understood and long-lived conditions fulfilled? One example
+When are these well understood and long lived conditions fulfilled? One example
 is \emph{research software} in science and engineering. While the results of
 running various simulations is entirely new, the underlying models and how to
-simulate them are indeed well-known. One particularly long-lived example is
+simulate them are indeed well known. One particularly long-lived example is
 embedded software for space probes (like Pioneer 10). Another would be ocean
 models, such as NEMO~\cite{madec_gurvan_2022_6334656} which can trace its
 origins to OPA 8~\cite{Madec1998}. In fact, most sub-domains of science and engineering
@@ -299,7 +299,7 @@ as described below.
 The transformation of captured domain knowledge is illustrated in
 Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper right
 box. Each piece of information in this figure has its own shape and colour
-(orange-cloud, pink lozenge, etc). It should be immediately clear that all
+(orange cloud, pink lozenge, etc). It should be immediately clear that all
 pieces of information reappear in multiple places in the generated artifacts.
 For example, the name of the software (GlassBR) ends up appearing more than 80
 times in the generated artifacts (in the folder structure, requirements, README,
@@ -322,7 +322,7 @@ needs to be modified to instead be an input, the generated software will now
 have LDF as an input variable.  
 
 We also capture design decisions, such as
-whether to log all calculations, whether to in-line constants rather than show
+whether to log all calculations, whether to inline constants rather than show
 them symbolically, etc. These different pieces of knowledge can also be reused
 in different projects.
 
@@ -335,7 +335,7 @@ particular pane of (special) glass will break if an explosive is detonated at a
 given distance.  This could be in the context of the glass facade for a
 building.
 
-\subparagraph*{Is it well-understood?} The details are extensively documented
+\subparagraph*{Is it well understood?} The details are extensively documented
 in~\cite{ASTM2009, ASTM2015, BeasonEtAl1998}.
 
 \subparagraph*{Record Base Domain Knowledge}
@@ -385,7 +385,7 @@ goal of GlassBR (``Predict-Glass-Withstands-Explosion'') is to ``Analyze and
 predict whether the \textit{glass slab} under consideration will be able to
 withstand the \textbf{explosion} of a certain \textbf{degree} which is
 calculated based on \textit{user input}.'', where italicized names are ``named
-ideas'', and bold-faced names are ``concept chunks'' (named ideas with a domain
+ideas'', and bold faced names are ``concept chunks'' (named ideas with a domain
 of related ideas). We call this goal a ``concept instance'' (a concept chunk
 applied in some way). This language lets us perform various static analyses on
 our artifacts.
@@ -425,7 +425,7 @@ glass thickness they will provide. (This rationale is also something we capture.
 
 Most research software examples involve significant specialization, such as
 converting partial differential equations to ordinary, elimination of
-variables, use of closed-forms instead of implicit equations, and so on.
+variables, use of closed forms instead of implicit equations, and so on.
 Often specialization, driven by underlying assumptions, enable further
 specializations, so that this step is really one of \emph{iterative refinement}.
 
@@ -442,7 +442,7 @@ For this example, the computations are all quite simple, but in general this
 might involve solving ordinary differential equations, computing a solution to
 an optimization problem, etc.
 
-\subparagraph*{Make code-level choices}
+\subparagraph*{Make code level choices}
 From a \emph{deterministic model of the solution}, it should be
 possible to output code in a programming language. To get there, we still need
 to make a series of choices.
@@ -471,7 +471,7 @@ choices = defaultChoices {
  constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
-  \caption{Code-level choices for GlassBR (compare bold box in \Cref{Fig_DrasilAndChange}).}
+  \caption{Code level choices for GlassBR (compare bold box in \Cref{Fig_DrasilAndChange}).}
   \label{fig:CodeChoices}
 \end{figure}
 
@@ -538,7 +538,7 @@ scripts, test cases, etc). These can be read, or executed, or \ldots\, as
 appropriate.
 \end{enumerate}
 
-The fundamental reason for focusing on \emph{well understood} software is to
+The fundamental reason for focusing on \emph{well-understood} software is to
 make the various steps in this process feasible. Another enabler is a
 \emph{suitable} knowledge encoding. Rather than define this a priori, we have
 used a \emph{bottom up} process to capture ``good enough'' ontologies to get the
@@ -584,7 +584,7 @@ Others~\cite{bjorner2021domaineng} have already remarked that for most software,
 the \emph{domain knowledge} is the slowest moving part of the requirements.
 We add to this the ideas that for certain kinds of software, there is a lot of
 \emph{knowledge duplication} amongst the artifacts, much of which is traceable
-to domain knowledge. Thus, in well understood domains, it should be feasible to
+to domain knowledge. Thus, in well-understood domains, it should be feasible to
 record the domain knowledge ``once'', and then write recipes to generate
 instances based on refinements. For long-lived software, this kind of up-front
 investment should be worthwhile.
@@ -596,8 +596,11 @@ requirements of a specialized application that may well contain novel ideas at
 the refinement or recipe level.
 
 In Drasil, as a side effect of organizing things as we have, we obtain
-traceability and consistency, by construction.  Figure~\ref{Fig_DrasilAndChange} illustrates traceability by showing that we can track where we use each
-concept.  The table of symbols in our generated documentation shows an example of consistency.  The user does not enter the list of symbols; it is automatically constructed from the base knowledge.
+traceability and consistency, by construction.  Tracking where we use each
+concept, i.e. traceability, is illustrated in Figure~\ref{Fig_DrasilAndChange}.
+We obtain consistency in our documentation by generating items such as the
+table of symbols from those symbols actually used in the document, and whose
+definition is automatically extracted from the base knowledge.
 
 There are further ideas that co-exist smoothly with our framework, most notably
 software families and correctness, particularly correctness of documentation.  
@@ -618,7 +621,7 @@ That work of this scale is possible has strongly been influenced by Eelco
 Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
 made it clear that many different artifacts can be generated. He was braver than
 us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
-indeed expected to be long-lived, but certainly was not created for a
+indeed expected to be long lived, but certainly was not created for a
 well-understood domain! The domain analysis of web applications is a non-trivial
 contribution of WebDSL. Whether it is product lines or program families, weaving
 them from DSLs is also something he preached~\cite{voelter2011product}.

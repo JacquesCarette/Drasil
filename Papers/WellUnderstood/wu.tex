@@ -447,10 +447,10 @@ From a \emph{deterministic model of the solution}, it should be
 possible to output code in a programming language. To get there, we still need
 to make a series of choices.
 
-Drasil lets you choose output programming language(s) (see below), but also how
-``modular'' the generated code is, whether we want programs or libraries, the
-level of logging and comments, etc. Here we show the actual code we use for
-this, as it is reasonably direct.
+Drasil lets you choose output programming language(s) (see
+\Cref{fig:CodeChoices}), but also how ``modular'' the generated code is, whether
+we want programs or libraries, the level of logging and comments, etc. Here we
+show the actual code we use for this, as it is reasonably direct.
 
 \begin{figure}[htb]
 \begin{lstlisting}
@@ -471,7 +471,7 @@ choices = defaultChoices {
  constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
-  \caption{Code-level choices for GlassBR (compare bold box in Fig~\ref{Fig_DrasilAndChange}).}
+  \caption{Code-level choices for GlassBR (compare bold box in \Cref{Fig_DrasilAndChange}).}
   \label{fig:CodeChoices}
 \end{figure}
 

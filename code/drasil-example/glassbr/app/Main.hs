@@ -8,7 +8,7 @@ import Drasil.GlassBR.Choices (choices, code)
 main :: IO()
 main = do
   setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "GlassBR_SRS") srs printSetting
   genCode choices code
   genDot fullSI
   genLog fullSI printSetting

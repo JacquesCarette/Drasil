@@ -9,7 +9,7 @@ import Language.Drasil.Generate (gen, genCode, genDot, genLog, DocSpec(DocSpec),
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "PDController_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "PDController_SRS") srs printSetting
   genCode codeChoices codeSpecs
   genDot fullSI
   genLog fullSI printSetting

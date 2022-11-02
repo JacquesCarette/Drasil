@@ -9,7 +9,7 @@ main :: IO ()
 main = 
   do
     setLocaleEncoding utf8
-    gen (DocSpec (docChoices SRS [HTML, TeX]) "SWHS_SRS") srs printSetting
+    gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "SWHS_SRS") srs printSetting
     genDot fullSI
     genLog fullSI printSetting
     -- When ready to generate code from SWHS, uncomment this file and Choices

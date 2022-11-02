@@ -9,7 +9,7 @@ import Drasil.DblPendulum.Choices (choices, code)
 main :: IO()
 main = do
   setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "DblPendulum_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "DblPendulum_SRS") srs printSetting
   genCode choices code
   genDot fullSI
   genLog fullSI printSetting

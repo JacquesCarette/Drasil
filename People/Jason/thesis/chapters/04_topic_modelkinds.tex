@@ -3,35 +3,6 @@
 \chapter{Framing Theories}
 \label{chap:modelkinds}
 
-In working to understand some phenomenon, we often look to the boundaries of our
-understandings of the phenomenon \textemdash{} the open-ended questions and gaps in our
-knowledge.
-
-In any domain of knowledge (such as mathematics, philosophy, physics, chemistry,
-biology, computer science, or any other studied subject), we often think about
-various phenomenon in logical terms of theories and axioms, where the theories
-and axioms are written using a formal \acs{dsl} tailored to the field of
-knowledge.
-
-As this work pertains to Drasil, one language of interest to this research is
-that of the mathematical language.
-
-A mathematical language is heavily used in science, conveying important
-theories, axioms, corollaries, amongst other things.
-
-As mathematicians transferring knowledge to one another, we often use a written
-form of knowledge, though unlikely, potentially, with a precise structure to our
-transcription of the knowledge, but still, the structure is textual.
-
-We might break up the transcription of the knowledge into its logical
-constituents.
-
-The components of a theory may be a name, a natural language description, a
-derivation, some information regarding its origin (e.g., a reference), and a
-formalization of the theories important information in a precise language.
-
-Of course, for a mathematical theory, a mathematical language would be used.
-
 Describing a programming language artifact, we might prefer to call our theories
 by a series of other names (e.g., functions/methods, constants, modules,
 packages, libraries, \acsp{api}, \acsp{ast}).
@@ -52,35 +23,7 @@ The Smith et al. \acs{srs} \cite{SmithAndLai2005} template generator uses
 knowledge transcribed as scientific requirements to automatically generate a
 series of representational software programs.
 
-Thankfully, Smith and Lai \cite{SmithAndLai2005} break down theories relevant to
-\acs{scs} into at least four (4) kinds for their \acs{srs} template:
 
-\begin{enumerate}
-
-	\item \textbf{Theory Models}: A ``theory presentation'' \qtodo{How should I
-		      cite ``Theory Presentations?''}: an abstract theory, highly
-	      general and unspecific, with room for refinement. Typically, these
-	      are names coupled with information contained as axioms and data
-	      that make up a coherent story, but that are too vague to be
-	      immediately usable by the developers other than for refining into
-	      Instance Models.
-
-	\item \textbf{General Definitions}: A partially refined\footnote{Similar to
-	      a theory model, but made less abstract in some way.} theory,
-	      typically bearing a stronger relation to the context of the \acs{srs}
-	      than the Theory Models. However, still, these are generally
-	      theoretical and abstract, much like Theory Models.
-
-	\item \textbf{Instance Models}: A fully refined theory, derived from the
-	      Theory Models and General Definitions, and directly usable by
-	      implementors of the \acs{srs}.
-
-	\item \textbf{Data Definitions}: Symbols that are defined with basic
-	      expressions of other symbols and inputs. Typically, these are
-	      definitions that are ``given'', and used for making inputs easier to
-	      work with for the instance models.
-
-\end{enumerate}
 
 \eztodo{Example of a theory/instance model here.}
 

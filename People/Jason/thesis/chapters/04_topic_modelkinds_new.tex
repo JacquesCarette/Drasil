@@ -1,0 +1,45 @@
+\chapter*{Classifying Theories}
+\label{chap:framing-theories}
+
+\begin{writingdirectives}
+    \item What are they?
+    \item What are theories used for?
+    \item How are they captured in Drasil?
+    \item Current problems? Solutions?
+\end{writingdirectives}
+
+In this chapter, we will focus on improving how Drasil captures ``theory''
+knowledge to improve inspection and specialized interpretation. Specifically,
+with focus on interpreting them for generating software artifacts.
+
+\section{Theories}
+\label{chap:framing-theories:sec:theories}
+
+As mentioned in \Cref{chap:drasil}, the \acs{srs} template
+\cite{SmithAndLai2005} breaks up software requirements and problems into a
+series of well-understood components, providing developers with concrete
+solution requirements they must satisfy, and domain experts with justification
+for problem solutions. Notably, the \acs{srs} relates a programs \textit{inputs}
+to a set of \textit{outputs} using a set of \textit{theories}. The inputs and
+outputs are sets of variables, with data that need to be somehow fed into the
+program, or calculated and output by the program. The theories connect the input
+variables to the output by forming a \textit{solution/calculation path}. There
+are at least 3 kinds of theories\footnote{There's also a minor $4^{th}$ kind:
+Data Definitions, intended for explaining how input variables should be
+interpreted by the solution program, thus also explaining how they should be
+formatted.}: Theory Models, General Definitions, and Instance Models. Theory
+Models and General Definitions provide justification for the mathematics of the
+solution: the Instance Models. The Instance Models, specifically, together form
+the calculation path.
+
+For example, Drasils \acs{projectile} case study describes how to estimate if a
+launcher, aligned at a particular angle, will hit a target from a specific
+distance. The \acs{srs} requires users to fill in the:
+\begin{enumerate}
+    \item input variables, such as \(a_x\) and \(a_y\) (x and y components of
+    acceleration), \(\mathbf{g}\) (gravitational acceleration constant),
+    \(p^{i}\) (initial position)
+\end{enumerate}
+
+\section{Classifying by Structure}
+\label{chap:framing-theories:sec:classifying-and-structuring}

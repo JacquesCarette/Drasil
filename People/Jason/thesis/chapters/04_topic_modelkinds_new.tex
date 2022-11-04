@@ -24,21 +24,23 @@ to a set of \textit{outputs} using a set of \textit{theories}. The inputs and
 outputs are sets of variables, with data that need to be somehow fed into the
 program, or calculated and output by the program. The theories connect the input
 variables to the output by forming a \textit{solution/calculation path}. There
-are at least 3 kinds of theories\footnote{There's also a minor $4^{th}$ kind:
-Data Definitions, intended for explaining how input variables should be
-interpreted by the solution program, thus also explaining how they should be
-formatted.}: Theory Models, General Definitions, and Instance Models. Theory
-Models and General Definitions provide justification for the mathematics of the
-solution: the Instance Models. The Instance Models, specifically, together form
-the calculation path.
+are at least 3 kinds of theories: Theory Models, General Definitions, and
+Instance Models. Theory Models and General Definitions provide justification for
+the mathematics of the solution: the Instance Models. The Instance Models,
+specifically, together form the calculation path. There's also a 4th kind: Data
+Definitions, intended for explaining how input variables should be interpreted
+by the solution program, thus also explaining how they should be formatted; they
+are typically intended to be implementation-focused, rather than theoretical.
 
 For example, Drasils \acs{projectile} case study describes how to estimate if a
 launcher, aligned at a particular angle, will hit a target from a specific
 distance. The \acs{srs} requires users to fill in the:
 \begin{enumerate}
     \item input variables, such as \(a_x\) and \(a_y\) (x and y components of
-    acceleration), \(\mathbf{g}\) (gravitational acceleration constant),
-    \(p^{i}\) (initial position)
+          acceleration), \(\mathbf{g}\) (gravitational acceleration constant),
+          \(p^{i}\) (initial position)
+    \item output variables, such as
+    \item and theories connecting them, such as
 \end{enumerate}
 
 \section{Classifying by Structure}

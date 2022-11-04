@@ -1,110 +1,11 @@
-% ModelKinds -- Theory types / discrimination -- ``Expressions in context''
-
 \chapter{Framing Theories}
 \label{chap:modelkinds}
-
-Describing a programming language artifact, we might prefer to call our theories
-by a series of other names (e.g., functions/methods, constants, modules,
-packages, libraries, \acsp{api}, \acsp{ast}).
-
-
-
-
-
-In Drasil, both of these languages are of great importance.
-
-The mathematical field of knowledge is directly used in at least two domains
-currently captured: the scientific theories, and \acs{gool} \cite{Carette2019}.
-
-Meanwhile, the programming language theory (artifacts) is only directly used in
-\acs{gool}, and its various renderers.
-
-The Smith et al. \acs{srs} \cite{SmithAndLai2005} template generator uses
-knowledge transcribed as scientific requirements to automatically generate a
-series of representational software programs.
-
-
-
-\eztodo{Example of a theory/instance model here.}
-
-The Instance Models and Data Definitions are to be directly used in the solving
-algorithm for the whole system, while the General Definitions and Theory Models
-provide justification for the existence of the Instance Models, and the Data
-Definitions are provided and relatively unimportant/uncritical to the system.
-
-
-
-
-Since the Smith et al. generator focuses itself on knowledge captured in the
-form of the \acs{srs} template, Drasil requires a comprehensive understanding of
-both fields in order to generate representational software for the \acs{srs}.
-
-The focus of the scientific requirements documents are to transcribe the
-relevant knowledge of a \acs{scs} system for end-user developers to satisfy when
-developing \acs{scs}, and as developed by a domain/scientific expert.
-
-For example, the \porthref{\acs{glassbr}
-\acs{srs}}{https://jacquescarette.github.io/Drasil/examples/glassbr/SRS/srs/GlassBR_SRS.html}
-is used to explain a scientific experiment, where a blast stresses glasses, such
-that a software developer can construct a program based on it.
-
-Of course, if the \acs{srs} document is to be truly sufficient for a software
-developer to unambiguously create a representational software artifact, then the
-software developer (who potentially knows nothing about the domain discussed in
-the \acs{srs} document) will need to be able to credibly transcribe everything
-into their program, matching the requirements as set by the \acs{srs} document.
-
-Drasil is an apparatus for testing our understanding of these scenarios, rather
-than having a read-only ``view'' of the scientists/domain experts knowledge
-available to the software developer, the knowledge itself is available, in its
-most raw encoded form.
-
-
-
-
-Drasil relies on searching for a calculation path that relates the inputs and
-outputs designated in an \acs{srs} document.
-
-The relations are based on the grounded theories (\textit{Instance Models})
-designated in the \acs{srs}.
-
-The relations themselves are currently required to be of the form \(x = f(a, b,
-c, \ldots{})\), with some exceptions made for \acsp{ode}. \acsp{ode} are being
-actively developed to remove the manually written exceptions made for them
-(outside the scope of this work).
-
-
-
-
-Instance Models, General Definitions, and Data Definitions each rely on a
-\textit{Relation Concept} (\RelationConcept{}): a notable and named mathematical
-relation with a description and abbreviated name.
-
-A \RelationConcept{} is modelled as a \Relation{} coupled with a \ConceptChunk{}
-(\refOriginalConceptChunkHaskell{}, a named \textit{thing} with a name,
-abbreviation, and natural language description):
-
-\originalRelationConcept{}
-
-The \Relation{}s (\refOriginalRelation{}) in the \RelationConcept{} are,
-fundamentally, just an instance of a universal mathematical language which
-conveys their information, but given a type synonym to indicate that the
-instance should be a mathematical relation.
-
-
-
 
 
 \section{A Universal Math Language}
 \label{sec:modelkinds:language}
 
-
-
-
 \originalExprHaskell
-
-
-
 
 \Expr{} (defined above, in \refOriginalExprHaskell{} with an \ACF{adt})
 represents the hypothetical mathematical language used to discuss the
@@ -132,9 +33,9 @@ simplifications along the way (such as folding \(1 \cdot x\) into \(x\)).
 
 
 
+
+
 \section{A Universal Theory Description Language}
-
-
 
 The \acs{srs} document organizes theoretical information of different kinds in
 various ways: instance models (\InstanceModel{}), general definitions
@@ -156,18 +57,10 @@ we have provided no means of discussion to them.
 In other words, Drasil does not yet understand the language of the associated
 context.
 
-This work aims to fix this issue.
 
 
 
 
-\section{Theories to Specifications and Software}
-
-Drasil relies on converting the various kinds of theories described in the
-\acs{srs} template \cite{SmithAndLai2005}, essentially encoded in Drasil as
-\RelationConcept{}s, into representational code.
-
-\tedioustodo{Example of an IMs conversion into Java code.}
 
 Unfortunately, issues occur when attempting to convert the knowledge contained
 in \RelationConcept{}s.
@@ -180,9 +73,13 @@ information).
 
 
 
+
+
+
+
+
+
 \subsection{It's Not Total}
-
-
 
 As the \acs{srs} is purely for \textit{display}, any \Expr{} expression can be
 converted to something for display.
@@ -206,34 +103,8 @@ code generator.
 
 
 
-\subsection{It Requires Complex Analysis}
 
 
-
-\imptodo{This subsection is still very awkward, I need to re-write it.}
-
-
-
-Assume we have a theory that describes the equation of a line. There are many
-ways we can describe the equation: polynomial (\(a \cdot{} x + b \cdot{} y + c =
-0\)), slope-intercept form (\(y = m \cdot{} x + b\)), point-slope form (\(y_1 -
-y_2 = m(x_1 - x_2)\)), and so on.
-
-Although we fundamentally understand the equation of a line, even we might find
-difficulty in recognizing the equation of a line from any provided equation.
-
-However, when calculating our dependent variable, we'll always need to end with
-a specific form: \(y = \ldots{}\).
-
-Similarly, when calculating this in ``code,'' we'll need this form. However, if
-we struggle to even recognize the form, we will similarly find difficulty in
-converting it to the specifically required form.
-
-Thus, it requires complex analysis of the expressions to even create such a
-\(\Expr{} \rightarrow \acs{gool}\) mapping.
-
-\RelationConcept{} exhibits the same issues as our hypothetical example
-\textemdash{} it requires brittle, complex analysis.
 
 
 
@@ -245,6 +116,9 @@ For example, it is possible to create expressions for which aren't directly
 calculable (i.e., things that require an extra paper and pencil/mental
 mathematics before performing), either without extra surrounding information or
 simply impossible.
+
+
+
 
 
 
@@ -272,6 +146,8 @@ generation.
 
 
 
+
+
 In general, it is important that each knowledge encoding in Drasil exposes as
 much information as reasonably possible (and useful).
 
@@ -284,6 +160,8 @@ precise form, \(x = f(a, b, c, \ldots{})\), in code generation.
 
 Any other forms of theories were unusable. This was known as the ``\relToQD{}
 hack.''
+
+
 
 
 

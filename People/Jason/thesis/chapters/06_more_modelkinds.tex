@@ -10,6 +10,97 @@
 
 
 
+
+\section{\textquotedblleft{}Classify All The Theories\textquotedblright{}}
+
+\subsection{Constraints}
+
+\currentConstraintSetHaskell{}
+
+Theories that define expressions that constrain models in some way are defined
+using \EquationalConstraints{}, which use \ConstraintSet{}s under the hood
+(\refCurrentConstraintSetHaskell{})\todo{Describe what a ConstraintSet actually
+	is.}.
+	
+At the moment, these are not used in code generation, and are pending design for
+usage in code generation as the translation from them into software is unclear
+and may be interpreted differently by readers.
+
+This model can, and should, eventually also be usable in code generation once
+there is interest in creating runtime assertions of symbols.
+
+\eztodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
+	the SRS.}
+
+\subsection{Definition Realms}
+
+\currentDefiningExprHaskell{}
+
+\currentMultiDefnHaskell{}
+
+The Theory Models and General Definition Models are unrefined, and may contain
+multiple ways for a particular theoretical symbol to be defined. This is
+captured in Drasil by \EquationalRealm{}s: modelled after realms\qtodo{Cite Dr.
+Carette and Yasmines paper?}.
+
+This model kind is intended specifically for retaining information about
+conscious choices made along the way to create Instance Models.
+
+An \EquationalRealm{} is based on a \MultiDefn{}
+(\refCurrentMultiDefnHaskell{}), and is intended for forming \QDefinition{}s
+through choosing definitions (encoded as \DefiningExpr{}s,
+\refCurrentDefiningExprHaskell{}), through refinements, from the \MultiDefn{}s.
+
+\eztodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
+
+\subsection{Differential Equations}
+
+\DEModel{} is the simple \RelationConcept{}-style capture of differential
+equation-related theories, and only exists as a placeholder until all
+differential equation models are converted into one of the other \ModelKinds{}.
+
+For related solving of differential equations, \DEModel{} implicitly relies on a
+developer writing a related \ODEInfo{}\todo{ref Current ODEInfo} packet which
+the code generator can use to solve the system.
+
+Actively being reconstructed in Drasil \cite{Chen2022MEng} \footnote{Shortly
+after I implemented \ModelKind{}, Dong continued working on exploring
+\DEModel{}s and created \NewDEModel{} as a result.}, \NewDEModel{} is the
+replacement for \DEModel{}, aiming to expose more information about
+well-understood differential equations and related areas.
+
+\NewDEModel{} will eventually be renamed to \DEModel{} once all existing
+\DEModel{} models have been upgraded.
+
+\intodo{Example of a DEModel/NewDEModel and a RelationConcept in Haskell code,
+	the SRS, and the related ODEInfo and code.}
+
+\subsection{Leftovers}
+
+\imptodo{Leftover model kinds.}
+
+\section{Theories Undiscussed}
+
+\ModelKinds{} is an enumeration of the currently handled model types.
+
+Each ``model'' is meant to expose information to the Haskell compiler and for
+other fragments of knowledge to make use of.
+
+\ModelKinds{} is obviously an incomplete enumeration, and will grow as the need
+for more kinds of models arises.
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Success}
 \label{chap:more-theory-kinds:sec:success}
 

@@ -136,6 +136,24 @@ forms and may prefer to describe it in other forms.
 
 \imptodo{Continue writing here!}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Classifying by Structure}
 \label{chap:framing-theories:sec:classifying-and-structuring}
 
@@ -152,10 +170,12 @@ forms and may prefer to describe it in other forms.
 
 
 
-The \acs{srs} document organizes theoretical information of different kinds in
-various ways: instance models (\InstanceModel{}), general definitions
-(\GenDefn{}), and theoretical models (\TheoryModel{}). However, each way relies
-on flat \Relation{}s, either directly or through \RelationConcept{}s.
+
+
+An \Expr{} alone is a weak conveyor of the inner knowledge of theories, similar
+to normal ``pencil and paper'' mathematical expressions, without extra
+information, the expression alone may be ineffectual or nearly unusable in code
+generation.
 
 The theories are ``shallow'', or ``flat,'' representations of the theoretical
 information because they do not directly provide information about the structure
@@ -171,24 +191,6 @@ we have provided no means of discussion to them.
 
 In other words, Drasil does not yet understand the language of the associated
 context.
-
-
-
-
-
-
-
-An \Expr{} alone is a weak conveyor of the inner knowledge of theories, similar
-to normal ``pencil and paper'' mathematical expressions, without extra
-information, the expression alone may be ineffectual or nearly unusable in code
-generation.
-
-
-
-
-
-
-
 
 In general, it is important that each knowledge encoding in Drasil exposes as
 much information as reasonably possible (and useful).
@@ -206,16 +208,6 @@ hack.''
 no static checks for consistency that an input ``theory'' was indeed usable in
 code generation.
 
-
-
-
-
-
-
-
-
-
-
 More generally, it is very easy to write ``difficult/impossible to interpret''
 expressions.
 
@@ -223,6 +215,11 @@ For example, it is possible to create expressions for which aren't directly
 calculable (i.e., things that require an extra paper and pencil/mental
 mathematics before performing), either without extra surrounding information or
 simply impossible.
+
+
+
+
+
 
 
 
@@ -261,6 +258,11 @@ generating usable software, but we currently primarily target general-purpose
 
 
 
+
+
+
+
+
 To resolve this, we need to reconcile \textit{theories} with
 \textit{mathematical knowledge}, strengthening the \textit{depth of knowledge}
 contained in a theory.
@@ -280,6 +282,14 @@ are usable in code generation, and which aren't.
 Additionally, we will be able to better handle more \textit{kinds} of theories
 without needing to create complex traversal and analysis algorithms to recognize
 when certain kinds of theories were transcribed in the expressions.
+
+
+
+
+
+
+
+
 
 
 

@@ -1,2 +1,187 @@
-\chapter{Mathematical Language Division}
+\chapter{Expression Language Division}
 \label{chap:lang-division}
+
+\imptodo{Continue writing here!}
+
+
+
+
+
+
+
+\section{A Universal Math Language}
+\label{sec:modelkinds:language}
+
+\originalExprHaskell
+
+\Expr{} (defined above, in \refOriginalExprHaskell{} with an \ACF{adt})
+represents the hypothetical mathematical language used to discuss the
+mathematics relevant to common \acs{scs}, specifically, at least to
+under/graduate-level physics problems.
+
+The language contains the commonly found operations in a well-understood physics
+textbook (here, with a focus on graduate-level scientific problems).
+
+The mathematical language is universal, covering a wide range of knowledge,
+including facilities for creating commonly used primitive data types,
+operations, and functions  in mathematics, physics, and computer science and
+programming languages.
+
+For example, one might transcribe \(3 e^{x + 2} = y\) in Drasil as:
+
+\pseudoExampleExpression{}
+
+This transcription relies on smart constructors, such as those in
+\refOriginalFewExprSmartConstructorsHaskell{}.
+
+The smart constructors used are all specialized to \Expr{} and perform
+simplifications along the way (such as folding \(1 \cdot x\) into \(x\)).
+
+
+
+
+
+
+
+
+
+
+
+Unfortunately, issues occur when attempting to convert the knowledge contained
+in \RelationConcept{}s.
+
+Namely, we have two (2) main issues with it: the transformation is not
+\textit{total} (and we don't have structural information about when it is
+defined versus when it's not), and transformation requires complex analysis of
+expressions (as such, we're currently limited to relying on implicit
+information).
+
+\subsection{It's Not Total}
+
+As the \acs{srs} is purely for \textit{display}, any \Expr{} expression can be
+converted to something for display.
+
+However, the transformation of \(\RelationConcept{} \rightarrow \acs{gool}\) (in
+particular, the \(\Expr{} \rightarrow \acs{gool}\) component) is not
+\textit{total} (i.e., not all possible expressions of the \Expr{} language can
+be converted into a representational \acs{gool} expression), and we have no
+information about \textit{when} they do.
+
+As \acs{gool} is \Expr{}s primary ``code'' target, through which we compile to
+other \acs{oo} languages, we're only able to directly translate terms from
+\Expr{} into \acs{gool} that have definite values.
+
+The terms in \Expr{} that require extra information before they can be converted
+into code also cannot be directly converted, they need to be refined first.
+
+At times, this refinement information is also a conscious choice that the
+developer should be making instead of having a choice imposed on them by the
+code generator.
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Language Division}
+
+\acs{gool} currently bears the burden of creating a family of software artifacts
+through describing a single \acs{gool} program.
+
+As we are specifically interested in generating families of \acs{scs} through
+strong knowledge capture, this work partially bears the burden ensuring that the
+conversion of the knowledge contained in the Smith et al. \acs{srs} template
+\cite{SmithAndLai2005} to software is possible.
+
+At the moment, it is possible to describe mathematical expressions that are
+completely unusable in \acs{gool} because \acsp{gool} primary targets are
+languages that rely on expressions with, at least, definite values.
+
+Of course, \Expr{} already contains terms that are without definite values.
+
+For example, \Expr{} (\refOriginalExprHaskell{}) discusses derivations,
+integrations, spaces as primitive/literal values (largely symbolic, and
+unavailable in \acs{oo} languages), definition statements, and infinite series.
+Realistically, this information already \textit{exists} in Drasil, but it is not
+strongly enforced at Drasils Haskell-level compile-time.
+
+In other words, the information is not \textit{exposed} to Haskells type system,
+but to Drasils runtime.
+
+
+
+
+
+
+
+
+
+
+
+In order to ensure that developers can only write ``usable'' grounded theories
+(``InstanceModels'') for the code generator to use, we have chosen to expose
+this information to the compiler.
+
+Specifically, we have chosen to expose it via language division and type
+information.
+
+\languageDivision{}
+
+\Expr{} has its indefinite values split off into \ModelExpr{}
+(\refCurrentModelExprHaskell{})\todo{List notable terms moved, Deriv, Continuous
+vs Discrete ranges, Space, etc}, a deeply embedded universal mathematical
+language.
+
+As we desire for it to be equally usable as \Expr{}, it is, essentially, the
+original \Expr{} without the language terms related to ``code.''
+
+In order to alleviate the stress involved with writing out the same expression
+in two (2) different languages, we use a \ACF{ttf} encoding of the two (2)
+languages: \refCurrentExprTTFHaskell{} and \refCurrentModelExprTTFHaskell{}. 
+
+The \acs{ttf} encoding allows us to seamlessly write expressions in either, or
+both, languages at the same time. 
+
+\ModelExpr{}s \acs{ttf} encoding strictly contains the terms unique to
+\ModelExpr{}.
+
+As such, the \acs{ttf} encoding won't allow terms from \ModelExpr{} to be
+interpreted into \Expr{} unless they have a definite value because it will be
+impossible to describe the terms unique to \ModelExpr{} in terms of the \Expr{}
+language.
+
+However, it is possible (and is done normally) to convert \Expr{}s into
+\ModelExpr{}s for usage in generating the \acs{srs} documents, which primarily
+expect \ModelExpr{}s for transcribing mathematical expressions.
+
+Furthermore, with \ModelExpr{}, we may use instances of \Express{}
+(\refCurrentExpressHaskell{}) to define how various chunks can be described
+visually, using this mathematical modelling language.
+
+\currentExpressHaskell{}
+
+Continuing, we've noticed that there are residual terms left in \Expr{} that
+don't quite relate to mathematics, but to ``code'' specifically (here, ``code''
+meaning the \acs{oo} ``code'').
+
+As such, we continue the division by moving those less related into their own
+language, specifically tailored to ``code'' expressions: \CodeExpr{} (\todo{ref
+Current CodeExpr Haskell}).
+
+
+
+
+Finally, we end up with 3 languages, as shown in \refLanguageDivision{}: \Expr{}
+(\refCurrentExprHaskell{}), \ModelExpr{} (\refCurrentModelExprHaskell{}), and
+\CodeExpr{} (\todo{ref Current CodeExpr Haskell}).
+
+Each language has its own specific domain, and, although there is some overlap
+between each, we are able to enforce weaker rules on each formation through
+their \acs{ttf} instances if needed.
+

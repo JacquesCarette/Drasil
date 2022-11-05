@@ -144,3 +144,146 @@ forms and may prefer to describe it in other forms.
     such that a developer can use them to immediately write code. Similarly, it
     should also expose enough information such that we can describe how it
     translates to code.}
+
+\imptodo{Note something about increasing the ``depth'' and ``breadth'' of
+    captured knowledge.}
+
+
+
+
+
+The \acs{srs} document organizes theoretical information of different kinds in
+various ways: instance models (\InstanceModel{}), general definitions
+(\GenDefn{}), and theoretical models (\TheoryModel{}). However, each way relies
+on flat \Relation{}s, either directly or through \RelationConcept{}s.
+
+The theories are ``shallow'', or ``flat,'' representations of the theoretical
+information because they do not directly provide information about the structure
+of the information they carry.
+
+When transmitting information on pencil and paper to your colleagues, this is
+fine, because they will likely read extra contextual information from it, and
+know how to use it accordingly.
+
+However, our machines aren't able to infer as well as we're able to. Our
+machines are clueless to the contextual information about the theories because
+we have provided no means of discussion to them.
+
+In other words, Drasil does not yet understand the language of the associated
+context.
+
+
+
+
+
+
+
+An \Expr{} alone is a weak conveyor of the inner knowledge of theories, similar
+to normal ``pencil and paper'' mathematical expressions, without extra
+information, the expression alone may be ineffectual or nearly unusable in code
+generation.
+
+
+
+
+
+
+
+
+In general, it is important that each knowledge encoding in Drasil exposes as
+much information as reasonably possible (and useful).
+
+We want to expose the ``specifications'' of each piece of knowledge that we are
+encoding so that transformers and generators may appropriately make use of
+contained knowledge.
+
+Any other forms of theories were unusable. This was known as the ``\relToQD{}
+hack.''
+
+\refOriginalRelToQDHaskell{} is a symptom of insufficient knowledge capture.
+
+\relToQD{} relied on implicit (and unguaranteed) requirements of inputs. It had
+no static checks for consistency that an input ``theory'' was indeed usable in
+code generation.
+
+
+
+
+
+
+
+
+
+
+
+More generally, it is very easy to write ``difficult/impossible to interpret''
+expressions.
+
+For example, it is possible to create expressions for which aren't directly
+calculable (i.e., things that require an extra paper and pencil/mental
+mathematics before performing), either without extra surrounding information or
+simply impossible.
+
+
+
+
+
+
+
+\section{Reconciling Mathematical Knowledge}
+
+Fundamentally, the issues arise because the information is too ``shallow'' for
+Drasil to adequately make use of them \textemdash{} it can't infer from
+expressions.
+
+The raw expressions are great for viewing and human-guided inference by experts,
+but not an inexperienced person, or for a computer to systematically use to
+generate things.
+
+At the moment, the available tools' type signatures would appear as something
+too amazing, so much so in fact, that one would (and should) question its
+accuracy.
+
+A hypothetical type signature, \inlineHs{RelationConcept -> Code}, is quite far
+fetched.
+
+Not all expressions that can possibly be contained in a \RelationConcept{} are
+usable in code\footnote{When we discuss ``code'' generation, we target
+generating usable software, but we currently primarily target general-purpose
+\acs{oo} programs.} generation.
+
+
+
+
+
+
+
+
+
+
+To resolve this, we need to reconcile \textit{theories} with
+\textit{mathematical knowledge}, strengthening the \textit{depth of knowledge}
+contained in a theory.
+
+Should this occur, we should observe \refTheoriesWithoutModelKinds{} having the
+\textit{Theory} and \textit{Mathematical Knowledge} nodes merged, and have the
+expressions understood to only be one of many possible ``views'' of higher-level
+usable knowledge.
+
+In other words, the expressions would not be used to transfer knowledge any
+longer, but they might remain as one component of it.
+
+Through resolving these issues, we will have deeper knowledge available at
+Drasils compile-time, and we will be able to better understand which theories
+are usable in code generation, and which aren't.
+
+Additionally, we will be able to better handle more \textit{kinds} of theories
+without needing to create complex traversal and analysis algorithms to recognize
+when certain kinds of theories were transcribed in the expressions.
+
+
+
+
+
+
+

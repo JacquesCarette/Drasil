@@ -128,13 +128,13 @@ capture this background knowledge because raw relations carry too little
 information about how to transform into coded. So, now, more concretely, we ask:
 how could we have avoided these individual problems?
 
-\begin{longtable}[c]{>{\raggedright}p{0.2\linewidth}>{\raggedright\arraybackslash}p{0.5\linewidth}}
-    \textit{To avoid~\ldots{}} & \textit{we needed~\ldots{}}                                 \\
-    \ref{mk:issue:1}           & knowledge about more \textit{kinds} of theories,            \\
+\begin{longtable}[c]{>{\raggedright}p{0.2\linewidth}>{\raggedright\arraybackslash}p{0.65\linewidth}}
+    \textit{To avoid~\ldots{}} & \textit{we needed~\ldots{}}                                    \\
+    \ref{mk:issue:1}           & knowledge about more \textit{kinds} of theories,               \\
     \ref{mk:issue:2}           & to decompose the relations into its set of
     logical components and capture information about how instances can be
-    transformed into various forms,                                                          \\
-    \ref{mk:issue:3}           & a signifier for each theory \textit{kind} we're interested. \\
+    transformed into various forms,                                                             \\
+    \ref{mk:issue:3}           & a signifier for each theory \textit{kind} we're interested in. \\
 \end{longtable}
 
 Succinctly, this means we need a system for \textit{classifying} and
@@ -179,20 +179,22 @@ theories.'' Additionally, since all existing instance models are processed by
 \RelationConcept{}s into \QDefinition{}s where applicable. Specifically, to
 convert them, we merely need to hand-process \relToQD{} in the case studies,
 where we normally write \RelationConcept{}s\footnote{Note: since the
-\QDefinition{}s are merely unpacked copies of the existing \RelationConcept{}s
-used in code generation, we can also similarly re-create those
-\RelationConcept{}s we're aiming to replace. In other words, we can also make
-\RelationConcept{}s a ``view'' of \QDefinition{} by re-interpreting them while
-connecting the formula to the defined variable with an equality.}.
+    \QDefinition{}s are merely unpacked copies of the existing \RelationConcept{}s
+    used in code generation, we can also similarly re-create those
+    \RelationConcept{}s we're aiming to replace. In other words, we can also make
+    \RelationConcept{}s a ``view'' of \QDefinition{} by re-interpreting them while
+    connecting the formula to the defined variable with an equality.}.
+
+\imptodo{Add the landPosRC conversion to a QD here!}
 
 However, merely replacing all \RelationConcept{}s with \QDefinition{}s is also
 limiting. We want to use more \textit{kinds} of theories too! Thus,
 \ModelKinds{} \footnote{\ModelKinds{} is based on a prototype by Dr. Jacques
-Carette. Shortly after implementing it, the Drasil Research Team discussed
-changing the name of ``models'' to ``theories,'' to which, we did, but have not
-propagated through the Drasil codebase, pending analysis on how it might affect
-the \acs{srs} template \cite{DrasilIssue2599RenamingModels}.}\latertodo{Citation
-for the footnote + ModelKinds?} (\refOriginalNewModelKindsHaskell{}) is created
+    Carette. Shortly after implementing it, the Drasil Research Team discussed
+    changing the name of ``models'' to ``theories,'' to which, we did, but have not
+    propagated through the Drasil codebase, pending analysis on how it might affect
+    the \acs{srs} template \cite{DrasilIssue2599RenamingModels}.}\latertodo{Citation
+    for the footnote + ModelKinds?} (\refOriginalNewModelKindsHaskell{}) is created
 and propagated through the various \acsp{im}, \acsp{gd}, and \acsp{tm}, to
 replace \RelationConcept{}s (and \Relation{}s).
 
@@ -200,14 +202,27 @@ replace \RelationConcept{}s (and \Relation{}s).
 
 \ModelKinds{} is an \ACF{adt}, enumerating over all currently
 known\footnote{Criteria for ``currently known'' being ``ones this work has
-discussed up until this point.''} \textit{kinds} of theories in Drasil.
+    discussed up until this point.''} \textit{kinds} of theories in Drasil. In
+\ModelKinds{}, there are 3 \textit{kinds} of ``models'' (theories) that can be
+created:
+
+\begin{enumerate}
+    \item \EquationalModel{}s, for theories that define a variable with some
+          expression
+    \item \DEModel{}s, for theories involve \acsp{ode},
+    \item and \OthModel{}s, for everything else.
+\end{enumerate}
+
+Now, with \EquationalModel{}, we may finally rebuild \inlineHs{landPosIM} using
+the improved structure.
+
+\imptodo{landPosIM converted into an equational model}
+
+
 
 \imptodo{Continue writing here!}
 
 \begin{enumerate}
-    \item Discuss EquationalModel, OthModel, and ODEModel.
-    \item Show how landPosRC was converted into a QDefinition, and how landPosIM
-    was modified to use EquationalModel.
     \item Briefly talk about how we also want to know when which theories are
-    actually usable in code generation too.
+          actually usable in code generation too.
 \end{enumerate}

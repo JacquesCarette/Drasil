@@ -128,105 +128,86 @@ capture this background knowledge because raw relations carry too little
 information about how to transform into coded. So, now, more concretely, we ask:
 how could we have avoided these individual problems?
 
-\begin{longtable}[c]{>{\raggedright}p{0.3\linewidth}>{\raggedright\arraybackslash}p{0.54\linewidth}}
-    \textit{To avoid~\ldots{}} & \textit{we needed~\ldots{}}                                    \\
-    \ref{mk:issue:1}              & knowledge about more \textit{kinds} of theories,            \\
-    \ref{mk:issue:2}              & to decompose the relations into its set of
+\begin{longtable}[c]{>{\raggedright}p{0.2\linewidth}>{\raggedright\arraybackslash}p{0.5\linewidth}}
+    \textit{To avoid~\ldots{}} & \textit{we needed~\ldots{}}                                 \\
+    \ref{mk:issue:1}           & knowledge about more \textit{kinds} of theories,            \\
+    \ref{mk:issue:2}           & to decompose the relations into its set of
     logical components and capture information about how instances can be
-    transformed into various forms,                                                             \\
-    \ref{mk:issue:3}              & a signifier for each theory \textit{kind} we're interested. \\
+    transformed into various forms,                                                          \\
+    \ref{mk:issue:3}           & a signifier for each theory \textit{kind} we're interested. \\
 \end{longtable}
 
+Succinctly, this means we need a system for \textit{classifying} and
+capturing/exposing the \textit{structure} of more \textit{kinds} of theories.
+This also means \RelationConcept{}s and \Relation{}s are insufficient couriers
+of ``theory knowledge.''
 
+\section{Classifying Theories}
+\label{chap:modelkinds:sec:classifying-theories}
 
+As a result of the inability to enter in complex theories not of the form \(x =
+f(a, b, c, \ldots{})\) and the desire to encode theories with
+\acsp{ode}\footnote{As Drasils examples are physics focused and \acsp{ode} are
+    common in physics problems, the ability to generate software that can solve
+    \acsp{ode} is desired.}, Drasils existing \acsp{ode} has a bit of temporary code
+to circumvent the ``1 Theory Kind'' restriction. However, we won't focus on
+\acsp{ode} in this work. Since we only have one kind of theory that is processed
+down the ``normal'' route (\relToQD{}) along the path of code generation, we
+will focus on it.
 
+Continuing to use \(p_\text{land}\) as an example, recall
+\refOriginalLandPosTheoryDefinition{}, as it is similar to any one of the other
+theories in Drasil used for code generation (other than \acsp{ode}!). The code
+generator currently understands how to convert ``quantity definitions''
+(\QDefinition{}s, \refOriginalQDefinitionHaskell{}) into various snippets of
+usable code that it can use to generate a whole software artifact.
 
+\originalQDefinitionHaskell{}
 
+\QDefinition{}s are ``higher-level'' versions of the existing theories. A
+\QDefinition{} breaks up an equational theory (i.e., theories of the form \(x =
+f(a, b, c, \ldots{}\)) into its logical constituents:
+\begin{enumerate}
+    \item a variable to be defined,
+    \item an expression (formula) defining the variable,
+    \item and a natural language explanation of the coupling.
+\end{enumerate}
+
+For our current needs, this is a sufficient interpretation of ``equational
+theories.'' Additionally, since all existing instance models are processed by
+\relToQD{}, we similarly have a clear path to converting the existing
+\RelationConcept{}s into \QDefinition{}s where applicable. Specifically, to
+convert them, we merely need to hand-process \relToQD{} in the case studies,
+where we normally write \RelationConcept{}s\footnote{Note: since the
+\QDefinition{}s are merely unpacked copies of the existing \RelationConcept{}s
+used in code generation, we can also similarly re-create those
+\RelationConcept{}s we're aiming to replace. In other words, we can also make
+\RelationConcept{}s a ``view'' of \QDefinition{} by re-interpreting them while
+connecting the formula to the defined variable with an equality.}.
+
+However, merely replacing all \RelationConcept{}s with \QDefinition{}s is also
+limiting. We want to use more \textit{kinds} of theories too! Thus,
+\ModelKinds{} \footnote{\ModelKinds{} is based on a prototype by Dr. Jacques
+Carette. Shortly after implementing it, the Drasil Research Team discussed
+changing the name of ``models'' to ``theories,'' to which, we did, but have not
+propagated through the Drasil codebase, pending analysis on how it might affect
+the \acs{srs} template \cite{DrasilIssue2599RenamingModels}.}\latertodo{Citation
+for the footnote + ModelKinds?} (\refOriginalNewModelKindsHaskell{}) is created
+and propagated through the various \acsp{im}, \acsp{gd}, and \acsp{tm}, to
+replace \RelationConcept{}s (and \Relation{}s).
+
+\originalNewModelKindsHaskell{}
+
+\ModelKinds{} is an \ACF{adt}, enumerating over all currently
+known\footnote{Criteria for ``currently known'' being ``ones this work has
+discussed up until this point.''} \textit{kinds} of theories in Drasil.
 
 \imptodo{Continue writing here!}
 
-\section{\textquotedblleft{}Classify All The Theories\textquotedblright{}}
-
-Issues occurring due to weak knowledge capture may be resolved through strong
-knowledge capture.
-
-Beginning with the existing case studies of Drasil, we will attempt to classify
-our existing knowledge better.
-
-We aim to make \RelationConcept{} a ``view'' of other more information-dense
-encodings.
-
-In other words, we replace \Expr{} as a knowledge container, and restrict its
-usage to strictly ``mathematical expressions'', as opposed to ``expressions''
-and information about models/theories.
-
-One notable change is that we will require the new theory knowledge containers
-to be able to fully re-create the original shallow/raw \Expr{}s as a property of
-the new theory encodings.
-
-The once meta-level knowledge of the theories, lost in the Haskell
-implementation, becomes exposed and understood to Drasil.
-
-Ultimately, this is done through replacing \RelationConcept{} usage with
-\ModelKind{}\footnote{\ModelKind{} is built upon Dr. Jacques Carettes prototype
-    of an earlier version of \ModelKinds{}}, an aggregation of existing
-Drasil-related knowledge of mathematical theories. \ModelKind{} is defined using
-a \acs{gadt}, with one (1) type parameter. The type parameter is currently used
-to determine whether the model is ``fully refined''/``grounded'' or not, and,
-hence, usable in code generation.
-
-\refCurrentModelKindsHaskell{} displays the creation of \ModelKind{} and
-\ModelKinds{}.
-
-Please note that this aggregation is based purely on the existing model examples
-in the existing Drasil case studies, and the existing models are incomplete in
-the larger scope.
-
-Each \textit{kind of model} we find only has one requirement: that it should
-carry enough information to, and provide a means of, recreating the original
-expression from which they were abstracted out of.
-
-This requirement is essentially that of ``viewing'' it in the expression
-language, but it also tends to also add flexibility in how many ways that we can
-``view'' the information in different forms.
-
-In the Haskell code, this requirement is enforced through requiring them all to
-instantiate the \Express{} typeclass (\refCurrentExpressHaskell{}).
-
-\currentModelKindsHaskell{}
-
-In the above \ModelKinds{} definition, there are two (2) TODO notes that you may
-disregard.
-
-The first one is merely a note for analyzing ``well-understood'' copies of our
-existing \acsp{ode}, and the second one refers to models that haven't yet been
-fully analyzed for how they will be used (other than for display).
-
-\subsection{Quantity Definitions}
-
-\currentQDefinitionHaskell{}
-
-Assume \(y = x\) is transcribed as a \RelationConcept{}: while \(y = x\) might
-conventionally be seen as ``y is equal to x'', we might want, in our model, for
-it to be understood as ``x is defined by y'' but displayed differently.
-
-Here, \(=\) is overloaded as ``definition'', instead of what \(=\) was defined
-as in \Expr{}, as an ``equality'' operator.
-
-To resolve this overloading and weak knowledge capture of definitions, we create
-\EquationalModel{}s: theories that contain information about definitions of
-symbols, built using a \QDefinition{} (\refCurrentQDefinitionHaskell{}).
-
-If an \EquationalModel{} deals with theoretical symbols and is defined using
-either a \ModelExpr{} or an \Expr{}, it may be used in Theory Models and General
-Definitions.
-
-If an \EquationalModel{} is defined using an \Expr{} and deals with only the
-concrete (non-abstract) symbols, then the \EquationalModel{} is usable for code
-generation.
-
-At the moment, there is no information attached to symbols yet regarding whether
-they are abstract or instanced, so that portion of the rule is not enforced.
-
-\eztodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and
-    the generated code.}
+\begin{enumerate}
+    \item Discuss EquationalModel, OthModel, and ODEModel.
+    \item Show how landPosRC was converted into a QDefinition, and how landPosIM
+    was modified to use EquationalModel.
+    \item Briefly talk about how we also want to know when which theories are
+    actually usable in code generation too.
+\end{enumerate}

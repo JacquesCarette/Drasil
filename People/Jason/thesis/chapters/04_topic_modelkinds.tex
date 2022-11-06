@@ -1,4 +1,4 @@
-\chapter{Classifying Theories}
+\chapter{Theories}
 \label{chap:modelkinds}
 
 \begin{writingdirectives}
@@ -183,9 +183,12 @@ where we normally write \RelationConcept{}s\footnote{Note: since the
     used in code generation, we can also similarly re-create those
     \RelationConcept{}s we're aiming to replace. In other words, we can also make
     \RelationConcept{}s a ``view'' of \QDefinition{} by re-interpreting them while
-    connecting the formula to the defined variable with an equality.}.
+    connecting the formula to the defined variable with an equality.}. For example,
+if we wanted to convert \inlineHs{landPosRC} into a \QDefinition, we might do it
+as \refOriginalLandPosRCtoQD{}, where \inlineHs{E.landPosExpr} is a variable
+containing the expression (formula) defining the \inlineHs{landPos} symbol.
 
-\imptodo{Add the landPosRC conversion to a QD here!}
+\originalLandPosRCtoQD{}
 
 However, merely replacing all \RelationConcept{}s with \QDefinition{}s is also
 limiting. We want to use more \textit{kinds} of theories too! Thus,
@@ -214,15 +217,43 @@ created:
 \end{enumerate}
 
 Now, with \EquationalModel{}, we may finally rebuild \inlineHs{landPosIM} using
-the improved structure.
+the improved structure (\refOriginalLandPosIMQD{}). At the moment, it does not
+change the expected generated artifacts, however, if desired, one can change
+output types of theories in the \acs{srs} (or code) by adding new kinds of
+\QDefinition{} and \ModelKinds{} interpretations.
 
-\imptodo{landPosIM converted into an equational model}
+\originalLandPosIMQD{}
 
+Continuing, the \DEModel{}s still require a bit of manual circumvention, but
+bringing some of the information back into the core ``theories'' (e.g.,
+\acsp{im}, \acsp{gd}, and \acsp{tm}) to use in the intended flow of knowledge,
+should be possible \cite{Chen2022MEng}. Drasil also currently has many more
+kinds of theories, not all usable in code generation \textemdash{} more than
+just equational models! However, we won't focus on them \textit{quite yet},
+we'll get back to this \Cref{chap:more-theory-kinds}.
 
-
-\imptodo{Continue writing here!}
-
-\begin{enumerate}
-    \item Briefly talk about how we also want to know when which theories are
-          actually usable in code generation too.
+Finally, as a result of incorporating \ModelKinds{} in Drasil, we:
+\begin{enumerate}[label={(\alph*)}]
+    \item add a system of classifying theories (through type information and
+          constructors),
+    \item change how users enter theories in Drasil (by making them enter in the
+          structural components into ``cookie cutter'' shapes),
+    \item and gain information about theory capabilities (based on type
+          information).
 \end{enumerate}
+
+Now, on the note of exposing theory capabilities, we mean that we know have
+static type information, at the level of the whole Haskell code compilation,
+about how theories can be used. For example, if we previously had a function
+that converts \RelationConcept{}s into pretty typeset boxes in \LaTeX{}, we
+likely would have had similar troubles (as discussed above) in adding an
+alternative printing form of the theory. However, now, we might, for examlpe,
+create a sub-kind of \EquationalModel{}s that are for equations of lines. Then
+we can re-create the printing function for them, adding a parameter for the
+printing form. The printing function now is able to more easily make use of the
+logical constituents of a theory now.
+
+More important than printing to textual artifacts, we are interested in
+generating code. Specifically, we are interested in knowing which
+\EquationalModel{}s are usable in code generation, based on their defining
+expressions.

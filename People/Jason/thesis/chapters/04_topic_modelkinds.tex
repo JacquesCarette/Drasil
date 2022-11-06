@@ -1,120 +1,92 @@
 \chapter{Classifying Theories}
-\label{chap:framing-theories}
+\label{chap:modelkinds}
 
 \begin{writingdirectives}
-    \item What are they?
-    \item What are theories used for?
+    \item What are theories used for in Drasil?
     \item How are they captured in Drasil?
-    \item Current problems? Solutions?
+    \item Current problems? Solution?
 \end{writingdirectives}
 
 In this chapter, we will focus on improving inspection and interpretation
 capabilities of theories in Drasil. Specifically, with focus on interpreting
 them for generating software artifacts.
 
-\section{Theories}
-\label{chap:framing-theories:sec:theories}
+\section{Transforming Theories to Code}
+\label{chap:modelkinds:sec:transforming-theories-to-code}
 
-As mentioned in \Cref{chap:drasil}, the \acs{srs} template
-\cite{SmithAndLai2005} breaks up software requirements and problems into a
-series of well-understood components, providing developers with concrete
-solution requirements they must satisfy, and domain experts with justification
-for problem solutions. Notably, the \acs{srs} relates a programs \textit{inputs}
-to a set of \textit{outputs} using a set of \textit{theories}. The inputs and
-outputs are sets of variables, with data that need to be somehow fed into the
-program, or calculated and output by the program. The theories connect the input
-variables to the output by forming a \textit{solution/calculation path}. There
-are at least 3 kinds of theories\footnote{There's also a 4th kind: Data
-Definitions, intended for explaining how input variables should be interpreted
-by the solution program, thus also explaining how they should be formatted; they
-are typically intended to be implementation-focused, rather than theoretical.}:
-Theory Models, General Definitions, and Instance Models. Theory Models and
-General Definitions provide justification for the mathematics of the solution:
-the Instance Models. The Instance Models, specifically, together form the
-calculation path.
+As seen in \refOriginalJavaProjectileMain{}, it relies on a few methods
+calculating the related ``instance models'' on its behalf. Those methods are a
+specific \textit{interpretation}\footnote{Or ``view.''} of the theory knowledge.
+Specifically, it is a \textit{calculation-focused} interpretation. For example,
+to calculate \(p_\text{land}\), \refOriginalJavaProjectileMain{} relies on the
+method \inlineCode{java}{func_p_land} to calculate the landing position.
+\refOriginalJavaProjectilePLandMethod{} is one possible exported method for
+calculating \(p_\text{land}\) given \(v_\text{launch}\), \(\theta\), and
+\(\mathbf{g}\).
 
-For example, Drasils \porthref{\acs{projectile} case
-study}{https://jacquescarette.github.io/Drasil/examples/projectile/SRS/srs/Projectile_SRS.html}
-describes how to estimate if a launcher, aligned at a particular angle, will hit
-a target from a specific distance. The \acs{srs} requires users to fill in the:
-\begin{enumerate}
-    \item input variables:
-          \begin{enumerate}
-              \item \(p_\mathit{target}\), the targets distance from the
-                    launcher,
-              \item \(v_\mathit{launch}\), the projectile launch speed,
-              \item and \(\theta\), the launch angle.
-          \end{enumerate}
-    \item output variables:
-          \begin{enumerate}
-              \item \(s\), a message, explaining if the projectile hit the
-                    target, fell short, or went long,
-              \item and \(d_\mathit{offset}\), the expected distance between the
-                    target position and the landing position.
-          \end{enumerate}
-    \item and theories, connecting the inputs to the outputs:
-          \begin{enumerate}
-              \item \({t_{\text{flight}}}=\frac{2 {v_{\text{launch}}}
-                        \sin\left(\theta{}\right)}{\mathbf{g}}\), estimating
-                    flight time with \(v_{\mathit{launch}}\) and \(\theta\),
-              \item \({p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2}
-                        \sin\left(\theta{}\right)
-                        \cos\left(\theta{}\right)}{\mathbf{g}}\), a calculation
-                    of the landing position,
-              \item \({d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}\),
-                    calculation of distance between the targets position and the
-                    expected landing position of the projectile,
-              \item and \(s=\begin{cases} \text{``The target was hit.''}, &
-              |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}| < \varepsilon{}
-              \\
-              \text{``The projectile fell short.''}, & {d_{\text{offset}}} < 0 \\
-              \text{``The projectile went long.''},  & {d_{\text{offset}}} >
-              0\end{cases}\), \newline{}calculating the output message.
-          \end{enumerate}
-\end{enumerate}
+\originalJavaProjectilePLandMethod{}
 
-From these 3 key bodies of information along with some supporting background
-knowledge (such as assumptions, constants, etc.), Drasil forms a calculation
-path, deriving the output variables from the input variables using the instance
-models\footnote{And, less importantly, data definitions.}. Here, Drasil
-approximately recognizes that to calculate the outputs, it approximately needs
-to follow a path along the lines of the order of presented theories. With it,
-Drasil is able to generate representational code. For example, \acsp{projectile}
-generates \refOriginalJavaProjectileMain{} for one of the Java-flavoured
-artifacts. In \refOriginalJavaProjectileMain{}, it uses a
-\inlineCode{java}{write_output} method to output the calculated output variables
-after calculating them using the relevant theories\footnote{Note:
-\(t_\text{flight}\) is seemingly unused in the generated code, but it is used in
-the derivation of \(p_\text{land}\). However, it being ``unused'' is irrelevant
-to this work.}.
+Of course, to generate this method in \refOriginalJavaProjectilePLandMethod{},
+Drasil relies on a sufficient capture of its underlying knowledge, and a means
+of transforming said knowledge to ``code'' (e.g., sufficient information that
+answers: What do we want to define? How can it be converted to code?). This
+capture of theories is done using Drasils representation of an ``Instance
+Model.'' To build it, Drasil uses information gathered from what users fed in
+about it, via \refOriginalLandPosTheoryDefinition{}.
 
-\originalJavaProjectileMain{}
+\originalLandPosTheoryDefinition{}
 
-In order to build the quantities, one does it similar to
-\refOriginalQuantityDictExampleHaskell{}. Similarly, in order to build the
-theories, Drasil also has a \acs{dsl}, \RelationConcept{}s
-(\refOriginalRelationConcept{}); they are used in Drasils representation of
-Instance Models, and allow users to couple a mathematical relation (encoded
-using \Relation{}s), a natural language description of the relation, and a name.
+Now, let's unpack \refOriginalLandPosTheoryDefinition{}. \inlineHs{landPosIM} is
+an instance of an \InstanceModel{}\footnote{Drasils encoding of the ``Instance
+    Models.''}, containing the equational definition component
+(\inlineHs{landPosRC}), and meta-level information about the theory, including
+constraint ranges, notes, and a derivation\footnote{Mostly omitted here for the
+    sake of conserving space.}.
 
-\originalRelationConcept{}
-
-Notably, the \Relation{}s are any mathematical relation. To make use of them,
-Drasil tries to analyze them (\refOriginalRelToQDHaskell{}) to understand their
-capabilities, and, where designated, attempt to generate code fragments through
-\acs{gool}. Unfortunately, this analysis is brittle, relying on Drasils users
-encoding their theory knowledge in precise forms.
+In order to transform \refOriginalLandPosTheoryDefinition{} into
+\refOriginalJavaProjectilePLandMethod{}, \textit{interpretation}\footnote{More
+    accurately, this interpretation is ``domain-specific interpretation''
+    \cite{Czarnecki2005}.} occurs on \inlineHs{landPosRC}
+(\refOriginalRelToQDHaskell{}).
 
 \originalRelToQDHaskell{}
 
-As we can see in \refOriginalRelToQDHaskell{}, the current analysis only covers
-relations of the form \(x = f(a, b, c, \ldots{})\). Here arises 2 notable
-issues:
+\refOriginalRelToQDHaskell{} shows the definition of \relToQD{}, a function that
+attempts to convert arbitrary relations into coherent ``quantity
+definitions''\footnote{Or, ``variable definitions.''} (\QDefinition{}), which
+Drasils ``\acs{srs} to code'' generator relies on. \inlineHs{landPosRC} is an
+instance of a \RelationConcept{} (\refOriginalRelationConcept{}), a coupled
+mathematical relation (encoded using \Relation{}s\footnote{\Relation{} is
+    Drasils \acs{dsl} encoding arbitrary mathematical relations. We will talk more
+    about this later. For now, this is enough.}), natural language description of
+the relation, and descriptive name.
+
+\originalRelationConcept{}
+
+\relToQD{} is used on \textit{all} of the captured \InstanceModel{}s of a case
+study to find code it can generate. However, these \InstanceModel{}s carry
+arbitrary \Relation{}s, which are arbitrary mathematical relations. As such, an
+issue arises: since \relToQD{} only works with ``variable defining''
+relations\footnote{In some sense, calling these relations ``variable defining''
+    is also an issue of itself. We're overloading \(=\) to mean definition.}, we're
+limited to only one \textit{kind} of theory. Even with this restriction, we're
+further limited to only a specific formation of that theory (e.g., relations of
+the form \(x = f(a, b, c, \ldots{})\))!
+
+\subsection{Problems}
+\label{chap:modelkinds:sec:transforming-theories-to-code:subsec:problems}
+
+In the sense that we really want to be able to use \relToQD{} (or something like
+it) to transform arbitrary well-understood \textit{theories} into code fragments
+for Drasils code generator, it has at least 3 problems:
 \begin{enumerate}
-    \item[\namedlabel{mk:issue:1}{Issue 1}] it only handles one theory kind:
-    variable definitions,
-    \item[\namedlabel{mk:issue:2}{Issue 2}] and, for those definitions, it
-    requires a specific form.
+    \item[\namedlabel{mk:issue:1}{P1}] it only handles one theory kind:
+        variable definitions,
+    \item[\namedlabel{mk:issue:2}{P2}] and for those definitions, it requires a
+        specific form, thereby limiting users to very specific usage, views, and
+        transcription,
+    \item[\namedlabel{mk:issue:3}{P3}] and it implicitly assumes that all inputs
+        will be of this theory kind, or else it causes a panic.
 \end{enumerate}
 
 As a result of \ref{mk:issue:1}, we aren't able to encode adequately all the
@@ -131,175 +103,47 @@ Assuming we wanted to describe the theory of a line, there are many ways we can
 describe the equation: polynomial (\(a \cdot{} x + b \cdot{} y + c = 0\)),
 slope-intercept form (\(y = m \cdot{} x + b\)), point-slope form (\(y_1 - y_2 =
 m(x_1 - x_2)\)), and so on. However, as a result of \ref{mk:issue:2}, we are
-forced to use ``simple'' slope-intercept form, even though we are aware of other
-forms and may prefer to describe it in other forms.
+forced to use the ``simple'' slope-intercept form, even though we are aware of
+other forms and may prefer to describe it in other forms.
+
+As a result of \ref{mk:issue:3}, when Drasils users are encoding theories in
+Drasil, they might be misled to think that any of their encoded theories is
+fully-understood to Drasil and actually usable as part of the generated solution.
+
+Together, these issues arise because of a lack of sufficient \textit{depth} and
+\textit{breadth} in the contained knowledge of the theory encodings. Because the
+theory encodings rely on ``flat'' information (e.g., the relations),
+transforming them programmatically is challenging. Of course, if two programmers
+were to read this information in the \acs{srs}, they might be able to use it.
+However, the programmers understand the context of the theory, and are able to
+\textit{recognize} (from any form of a theory) if and how it can be transcribed
+as a computation. Now, imagine if we wanted to  So, how can we mitigate all of
+these issues?
+
+Just as we may discuss the specifics of implementing any particular theory in
+our manual implementation of a software artifact, we assume prior learned
+knowledge about mathematical expressions, such as which ones we know we can
+somehow translate into code. In order to mitigate these issues, we must further
+capture this background knowledge because raw relations carry too little
+information about how to transform into coded. So, now, more concretely, we ask:
+how could we have avoided these individual problems?
+
+\begin{longtable}[c]{>{\raggedright}p{0.3\linewidth}>{\raggedright\arraybackslash}p{0.54\linewidth}}
+    \textit{To avoid~\ldots{}} & \textit{we needed~\ldots{}}                                    \\
+    \ref{mk:issue:1}              & knowledge about more \textit{kinds} of theories,            \\
+    \ref{mk:issue:2}              & to decompose the relations into its set of
+    logical components and capture information about how instances can be
+    transformed into various forms,                                                             \\
+    \ref{mk:issue:3}              & a signifier for each theory \textit{kind} we're interested. \\
+\end{longtable}
+
+
+
+
+
+
 
 \imptodo{Continue writing here!}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Classifying by Structure}
-\label{chap:framing-theories:sec:classifying-and-structuring}
-
-
-\imptodo{Now, recall, the theories are supposed to expose sufficient information
-    such that a developer can use them to immediately write code. Similarly, it
-    should also expose enough information such that we can describe how it
-    translates to code.}
-
-\imptodo{Note something about increasing the ``depth'' and ``breadth'' of
-    captured knowledge.}
-
-
-
-
-
-
-
-An \Expr{} alone is a weak conveyor of the inner knowledge of theories, similar
-to normal ``pencil and paper'' mathematical expressions, without extra
-information, the expression alone may be ineffectual or nearly unusable in code
-generation.
-
-The theories are ``shallow'', or ``flat,'' representations of the theoretical
-information because they do not directly provide information about the structure
-of the information they carry.
-
-When transmitting information on pencil and paper to your colleagues, this is
-fine, because they will likely read extra contextual information from it, and
-know how to use it accordingly.
-
-However, our machines aren't able to infer as well as we're able to. Our
-machines are clueless to the contextual information about the theories because
-we have provided no means of discussion to them.
-
-In other words, Drasil does not yet understand the language of the associated
-context.
-
-In general, it is important that each knowledge encoding in Drasil exposes as
-much information as reasonably possible (and useful).
-
-We want to expose the ``specifications'' of each piece of knowledge that we are
-encoding so that transformers and generators may appropriately make use of
-contained knowledge.
-
-Any other forms of theories were unusable. This was known as the ``\relToQD{}
-hack.''
-
-\refOriginalRelToQDHaskell{} is a symptom of insufficient knowledge capture.
-
-\relToQD{} relied on implicit (and unguaranteed) requirements of inputs. It had
-no static checks for consistency that an input ``theory'' was indeed usable in
-code generation.
-
-More generally, it is very easy to write ``difficult/impossible to interpret''
-expressions.
-
-For example, it is possible to create expressions for which aren't directly
-calculable (i.e., things that require an extra paper and pencil/mental
-mathematics before performing), either without extra surrounding information or
-simply impossible.
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Reconciling Mathematical Knowledge}
-
-Fundamentally, the issues arise because the information is too ``shallow'' for
-Drasil to adequately make use of them \textemdash{} it can't infer from
-expressions.
-
-The raw expressions are great for viewing and human-guided inference by experts,
-but not an inexperienced person, or for a computer to systematically use to
-generate things.
-
-At the moment, the available tools' type signatures would appear as something
-too amazing, so much so in fact, that one would (and should) question its
-accuracy.
-
-A hypothetical type signature, \inlineHs{RelationConcept -> Code}, is quite far
-fetched.
-
-Not all expressions that can possibly be contained in a \RelationConcept{} are
-usable in code\footnote{When we discuss ``code'' generation, we target
-generating usable software, but we currently primarily target general-purpose
-\acs{oo} programs.} generation.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-To resolve this, we need to reconcile \textit{theories} with
-\textit{mathematical knowledge}, strengthening the \textit{depth of knowledge}
-contained in a theory.
-
-Should this occur, we should observe \refTheoriesWithoutModelKinds{} having the
-\textit{Theory} and \textit{Mathematical Knowledge} nodes merged, and have the
-expressions understood to only be one of many possible ``views'' of higher-level
-usable knowledge.
-
-In other words, the expressions would not be used to transfer knowledge any
-longer, but they might remain as one component of it.
-
-Through resolving these issues, we will have deeper knowledge available at
-Drasils compile-time, and we will be able to better understand which theories
-are usable in code generation, and which aren't.
-
-Additionally, we will be able to better handle more \textit{kinds} of theories
-without needing to create complex traversal and analysis algorithms to recognize
-when certain kinds of theories were transcribed in the expressions.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \section{\textquotedblleft{}Classify All The Theories\textquotedblright{}}
 
@@ -325,7 +169,7 @@ implementation, becomes exposed and understood to Drasil.
 
 Ultimately, this is done through replacing \RelationConcept{} usage with
 \ModelKind{}\footnote{\ModelKind{} is built upon Dr. Jacques Carettes prototype
-of an earlier version of \ModelKinds{}}, an aggregation of existing
+    of an earlier version of \ModelKinds{}}, an aggregation of existing
 Drasil-related knowledge of mathematical theories. \ModelKind{} is defined using
 a \acs{gadt}, with one (1) type parameter. The type parameter is currently used
 to determine whether the model is ``fully refined''/``grounded'' or not, and,
@@ -385,8 +229,4 @@ At the moment, there is no information attached to symbols yet regarding whether
 they are abstract or instanced, so that portion of the rule is not enforced.
 
 \eztodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and
-	the generated code.}
-
-
-
-
+    the generated code.}

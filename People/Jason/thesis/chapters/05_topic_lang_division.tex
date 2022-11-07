@@ -21,18 +21,66 @@ them. However, we never discussed the relation encoding: \Relation{}.
 
 \originalRelation{}
 
+\Relation{}s are actually \Expr{}s, mathematical ``expressions.''
 
+\originalExprHaskell{}
 
-\subsection{They're Expressions, Really}
-\label{chap:lang-division:sec:relations:subsec:expressions}
+\section{A Mathematical Language}
+\label{chap:lang-division:sec:a-mathematical-language}
 
+\Expr{} (\refOriginalExprHaskell{}) is an \acs{adt}, representing the \ACF{ast}
+of a mathematical expression language. It was grown following the needs of
+encoding the case studies in Drasil. As such, it contains a wide range of
+``mathematical'' terms, including variables, numerics, derivatives, common
+mathematical operations, and function applications. In addition to the example
+expression (a relation) from \refOriginalLandPosTheoryDefinition{}, if, for
+example, we wanted to transcribe \(3 e^{x + 2} = y\) in Drasil, we might write
+\refPseudoExampleExpression{}.
+
+\pseudoExampleExpression{}
+
+Notably, \refPseudoExampleExpression{} uses smart constructors\footnote{The
+smart constructors used are all specialized to \Expr{} and perform
+simplifications along the way (such as folding \(1 \cdot x\) into \(x\)).} and
+infix functions to make the code readable. 
+
+As already mentioned in \Cref{chap:modelkinds}, theories are a key component of
+the code generation phase for any Drasil-encoded \acs{srs}
+instance\footnote{Theories are where we get information about things to
+generate!}. Taking \refOriginalLandPosIMQD{} as an example of a usable theory
+for code generation, if we were to change the defining expression to some
+expression involving definite description or a derivative, then converting the
+theory to Java code is a bit more complicated. In some instances, conversion to
+usable ``code'' can also be merely impossible without extra information, or
+commitment to an approximation formula at least (both options should not be
+imposed on users by Drasil either!).
+
+\subsection{A Problem}
+\label{chap:lang-division:sec:a-mathematical-language:subsec:a-problem}
+
+In other words, the transformation of \Expr{}s to ``code''\footnote{Through
+\acs{gool}!} is not \textit{total} (i.e., not all possible expressions of the
+\Expr{} language can be converted into a representational \acs{gool}
+expression). Additionally, we lack static information about when instances of
+expressions are actually usable in code generation. As such, we're currently
+limited to relying on implicit information. Of course, in order to fix this
+problem, we need to make the information \textit{explicit} in Drasil, and use it
+appropriately. However, before we can make it explicit, we need to understand
+the contexts in which Drasil needs mathematical expressions and how they are
+used in those contexts.
+
+Namely, there are 2 main situations for using mathematical expressions in
+Drasil: describing theories as part of an \acs{srs} that should appear in
+``code,'' or describing theories as part of an \acs{srs} that should appear in
+the generated (textual) \acs{srs} artifacts. Thankfully, since textual artifacts
+don't typically undergo an automatic checking process for anything other than
+grammar, we need not concern about the transformation of
+expressions\footnote{Though unneeded because Drasil focuses on well-understood
+ideas, if desired, we can create new textual markup for any terms output.}.
 
 \imptodo{Continue writing here!}
 
 \begin{enumerate}
-    \item Relations
-    \item Expr
-    \item Problems with our usage of Expr
     \item A solution? Splitting it up
     \begin{enumerate}
         \item CodeExpr
@@ -40,104 +88,6 @@ them. However, we never discussed the relation encoding: \Relation{}.
         \item ModelExpr
     \end{enumerate}
 \end{enumerate}
-
-
-
-
-
-
-
-
-
-\section{A Universal Math Language}
-\label{sec:modelkinds:language}
-
-\originalExprHaskell
-
-\Expr{} (defined above, in \refOriginalExprHaskell{} with an \ACF{adt})
-represents the hypothetical mathematical language used to discuss the
-mathematics relevant to common \acs{scs}, specifically, at least to
-under/graduate-level physics problems.
-
-The language contains the commonly found operations in a well-understood physics
-textbook (here, with a focus on graduate-level scientific problems).
-
-The mathematical language is universal, covering a wide range of knowledge,
-including facilities for creating commonly used primitive data types,
-operations, and functions  in mathematics, physics, and computer science and
-programming languages.
-
-For example, one might transcribe \(3 e^{x + 2} = y\) in Drasil as:
-
-\pseudoExampleExpression{}
-
-This transcription relies on smart constructors, such as those in
-\refOriginalFewExprSmartConstructorsHaskell{}.
-
-The smart constructors used are all specialized to \Expr{} and perform
-simplifications along the way (such as folding \(1 \cdot x\) into \(x\)).
-
-
-
-
-
-
-
-
-
-
-
-Unfortunately, issues occur when attempting to convert the knowledge contained
-in \RelationConcept{}s.
-
-Namely, we have two (2) main issues with it: the transformation is not
-\textit{total} (and we don't have structural information about when it is
-defined versus when it's not), and transformation requires complex analysis of
-expressions (as such, we're currently limited to relying on implicit
-information).
-
-\subsection{It's Not Total}
-
-As the \acs{srs} is purely for \textit{display}, any \Expr{} expression can be
-converted to something for display.
-
-However, the transformation of \(\RelationConcept{} \rightarrow \acs{gool}\) (in
-particular, the \(\Expr{} \rightarrow \acs{gool}\) component) is not
-\textit{total} (i.e., not all possible expressions of the \Expr{} language can
-be converted into a representational \acs{gool} expression), and we have no
-information about \textit{when} they do.
-
-As \acs{gool} is \Expr{}s primary ``code'' target, through which we compile to
-other \acs{oo} languages, we're only able to directly translate terms from
-\Expr{} into \acs{gool} that have definite values.
-
-The terms in \Expr{} that require extra information before they can be converted
-into code also cannot be directly converted, they need to be refined first.
-
-At times, this refinement information is also a conscious choice that the
-developer should be making instead of having a choice imposed on them by the
-code generator.
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Language Division}
-
-\acs{gool} currently bears the burden of creating a family of software artifacts
-through describing a single \acs{gool} program.
-
-As we are specifically interested in generating families of \acs{scs} through
-strong knowledge capture, this work partially bears the burden ensuring that the
-conversion of the knowledge contained in the Smith et al. \acs{srs} template
-\cite{SmithAndLai2005} to software is possible.
 
 At the moment, it is possible to describe mathematical expressions that are
 completely unusable in \acs{gool} because \acsp{gool} primary targets are
@@ -150,15 +100,6 @@ integrations, spaces as primitive/literal values (largely symbolic, and
 unavailable in \acs{oo} languages), definition statements, and infinite series.
 Realistically, this information already \textit{exists} in Drasil, but it is not
 strongly enforced at Drasils Haskell-level compile-time.
-
-In other words, the information is not \textit{exposed} to Haskells type system,
-but to Drasils runtime.
-
-
-
-
-
-
 
 
 
@@ -216,7 +157,6 @@ Current CodeExpr Haskell}).
 
 
 
-
 Finally, we end up with 3 languages, as shown in \refLanguageDivision{}: \Expr{}
 (\refCurrentExprHaskell{}), \ModelExpr{} (\refCurrentModelExprHaskell{}), and
 \CodeExpr{} (\todo{ref Current CodeExpr Haskell}).
@@ -224,4 +164,3 @@ Finally, we end up with 3 languages, as shown in \refLanguageDivision{}: \Expr{}
 Each language has its own specific domain, and, although there is some overlap
 between each, we are able to enforce weaker rules on each formation through
 their \acs{ttf} instances if needed.
-

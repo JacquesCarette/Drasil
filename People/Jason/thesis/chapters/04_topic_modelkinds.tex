@@ -238,8 +238,9 @@ Finally, as a result of incorporating \ModelKinds{} in Drasil, we:
           constructors),
     \item change how users enter theories in Drasil (by making them enter in the
           structural components into ``cookie cutter'' shapes),
-    \item and gain information about theory capabilities (based on type
+    \item gain information about theory capabilities (based on type
           information).
+    \item and, ultimately, don't need \relToQD{} anymore.
 \end{enumerate}
 
 Now, on the note of exposing theory capabilities, we mean that we know have
@@ -247,7 +248,7 @@ static type information, at the level of the whole Haskell code compilation,
 about how theories can be used. For example, if we previously had a function
 that converts \RelationConcept{}s into pretty typeset boxes in \LaTeX{}, we
 likely would have had similar troubles (as discussed above) in adding an
-alternative printing form of the theory. However, now, we might, for examlpe,
+alternative printing form of the theory. However, now, we might, for example,
 create a sub-kind of \EquationalModel{}s that are for equations of lines. Then
 we can re-create the printing function for them, adding a parameter for the
 printing form. The printing function now is able to more easily make use of the

@@ -35,14 +35,12 @@ encoding the case studies in Drasil. As such, it contains a wide range of
 mathematical operations, and function applications. In addition to the example
 expression (a relation) from \refOriginalLandPosTheoryDefinition{}, if, for
 example, we wanted to transcribe \(3 e^{x + 2} = y\) in Drasil, we might write
-\refPseudoExampleExpression{}.
+\refPseudoExampleExpression{}. Notably, \refPseudoExampleExpression{} uses smart
+constructors\footnote{The smart constructors used are all specialized to \Expr{}
+and perform simplifications along the way (such as folding \(1 \cdot x\) into
+\(x\)).} and infix functions to make the code readable. 
 
 \pseudoExampleExpression{}
-
-Notably, \refPseudoExampleExpression{} uses smart constructors\footnote{The
-smart constructors used are all specialized to \Expr{} and perform
-simplifications along the way (such as folding \(1 \cdot x\) into \(x\)).} and
-infix functions to make the code readable. 
 
 As already mentioned in \Cref{chap:modelkinds}, theories are a key component of
 the code generation phase for any Drasil-encoded \acs{srs}
@@ -69,98 +67,87 @@ appropriately. However, before we can make it explicit, we need to understand
 the contexts in which Drasil needs mathematical expressions and how they are
 used in those contexts.
 
-Namely, there are 2 main situations for using mathematical expressions in
-Drasil: describing theories as part of an \acs{srs} that should appear in
-``code,'' or describing theories as part of an \acs{srs} that should appear in
-the generated (textual) \acs{srs} artifacts. Thankfully, since textual artifacts
-don't typically undergo an automatic checking process for anything other than
-grammar, we need not concern about the transformation of
-expressions\footnote{Though unneeded because Drasil focuses on well-understood
-ideas, if desired, we can create new textual markup for any terms output.}.
+Namely, there are 2 main use-cases of mathematical expressions in Drasil:
+describing theories as part of an \acs{srs} that should appear in ``code,'' or
+describing theories as part of an \acs{srs} that should appear in the generated
+(textual) \acs{srs} artifacts. The ``code'' is expected to be a
+computer-executable artifact. Thus, the code has clearly defined rules for a
+usable program. Generated textual artifacts are checked for consistency by
+readers and writers alike. However, the textual artifacts do have some amount of
+``automated'' consistency checking done on them. More specifically, the textual
+artifacts are generated from the same chunks used to generate the software
+artifacts, and, by extension, the instances of theories that ``go into the
+code'' should all be grounded. Specifically, the instance models should all be
+grounded theories that can be unambiguously re-written in the form of an
+executable program. The language associated with the output \acs{oo} languages
+slightly differs from our common mathematical language (e.g., they typically
+don't have curried functions). Thus, we have approximately 3 use-cases for
+mathematical expressions in Drasil: in software, in writing grounded theories,
+and in general mathematical discussion. Finally, to solve this issue, we need to
+restrict terms to their appropriate usage contexts.
 
-\imptodo{Continue writing here!}
+\section{Splitting}
+\label{chap:lang-division:sec:splitting}
 
-\begin{enumerate}
-    \item A solution? Splitting it up
-    \begin{enumerate}
-        \item CodeExpr
-        \item Expr
-        \item ModelExpr
-    \end{enumerate}
-\end{enumerate}
-
-At the moment, it is possible to describe mathematical expressions that are
-completely unusable in \acs{gool} because \acsp{gool} primary targets are
-languages that rely on expressions with, at least, definite values.
-
-Of course, \Expr{} already contains terms that are without definite values.
-
-For example, \Expr{} (\refOriginalExprHaskell{}) discusses derivations,
-integrations, spaces as primitive/literal values (largely symbolic, and
-unavailable in \acs{oo} languages), definition statements, and infinite series.
-Realistically, this information already \textit{exists} in Drasil, but it is not
-strongly enforced at Drasils Haskell-level compile-time.
-
-
-
-
-
-In order to ensure that developers can only write ``usable'' grounded theories
-(``InstanceModels'') for the code generator to use, we have chosen to expose
-this information to the compiler.
-
-Specifically, we have chosen to expose it via language division and type
-information.
+In order to appropriately restrict terms to their appropriate usage contexts, we
+need to gain structural information about the expressions. Specifically, we
+would like to do this using type information as it allows us to restrict usage
+by type easily.
 
 \languageDivision{}
 
-\Expr{} has its indefinite values split off into \ModelExpr{}
+As we've recognized 3 contexts in which mathematical expressions are used, we
+may split the mathematical language accordingly, re-building the languages for
+each context. We end up with 3 languages, as shown in \refLanguageDivision{}:
+\Expr{} (\refCurrentExprHaskell{}), \ModelExpr{}
+(\refCurrentModelExprHaskell{}), and \CodeExpr{} (\todo{ref Current CodeExpr
+Haskell}). \Expr{} has its indefinite values split off into \ModelExpr{}
 (\refCurrentModelExprHaskell{})\todo{List notable terms moved, Deriv, Continuous
 vs Discrete ranges, Space, etc}, a deeply embedded universal mathematical
-language.
+language. As we desire for it to be equally usable as the \Expr{} used in
+instance models, it is essentially the original \Expr{} without the language
+terms related to code nor indefinite valued terms. \ModelExpr{} is approximately
+the ``old'' \Expr{} with nearly everything from the original \Expr{}, except
+without code-oriented terms (as they should not be discussed in the \acs{srs}
+documents at all!). Additionally, now, \ModelExpr{} becomes the preferred
+mathematical language for \acs{srs} documents. Finally, code-related terms are
+moved to a clone of the new \Expr{} language.
 
-As we desire for it to be equally usable as \Expr{}, it is, essentially, the
-original \Expr{} without the language terms related to ``code.''
+Now, we have 3 \acsp{gadt} available for different kinds of expression
+languages, with ``mathematics'' as a common tie. One issue with splitting is
+that we now force users of the languages to make a conscious choice about which
+language they are using and which language they need to import into their
+working files respectively. This can become quite frustrating given the amount
+of overlap. Thus, in order to alleviate the stress involved with writing out the
+same expression in different languages, we use a \ACF{ttf} encoding of the smart
+constructors to build expressions. The \acs{ttf} encoding allows us to
+seamlessly write expressions in any of the languages at the same time, allowing
+type variability along the type constraints of any expression.
 
-In order to alleviate the stress involved with writing out the same expression
-in two (2) different languages, we use a \ACF{ttf} encoding of the two (2)
-languages: \refCurrentExprTTFHaskell{} and \refCurrentModelExprTTFHaskell{}. 
-
-The \acs{ttf} encoding allows us to seamlessly write expressions in either, or
-both, languages at the same time. 
-
-\ModelExpr{}s \acs{ttf} encoding strictly contains the terms unique to
-\ModelExpr{}.
-
-As such, the \acs{ttf} encoding won't allow terms from \ModelExpr{} to be
-interpreted into \Expr{} unless they have a definite value because it will be
-impossible to describe the terms unique to \ModelExpr{} in terms of the \Expr{}
-language.
-
-However, it is possible (and is done normally) to convert \Expr{}s into
-\ModelExpr{}s for usage in generating the \acs{srs} documents, which primarily
-expect \ModelExpr{}s for transcribing mathematical expressions.
-
-Furthermore, with \ModelExpr{}, we may use instances of \Express{}
-(\refCurrentExpressHaskell{}) to define how various chunks can be described
-visually, using this mathematical modelling language.
+While \ModelExpr{}s \acs{ttf} encoding strictly contains the terms unique to
+\ModelExpr{}, it is possible (and is done normally) to convert \Expr{}s into
+\ModelExpr{}s for usage in generating the \acs{srs} documents. Additionally,
+since many theories need to be representable as a single \Relation{}, we may
+create a typeclass to create enforcement (\refCurrentExpressHaskell{}). By
+instantiating it for various types, we are explaining how those terms can be
+interpreted as a \ModelExpr{}.
 
 \currentExpressHaskell{}
+ 
+\section{Back to Theories}
+\label{chap:lang-division:sec:back-to-theories}
 
-Continuing, we've noticed that there are residual terms left in \Expr{} that
-don't quite relate to mathematics, but to ``code'' specifically (here, ``code''
-meaning the \acs{oo} ``code'').
+Now that we've split up the expression languages, we may restrict their usage to
+appropriate theory contexts (in \ModelKinds{} as per \Cref{chap:modelkinds}).
+Approximately, we can ``upgrade'' \ModelKinds according to
+\refPseudoPartialModelKindsUpgrade{}, creating a type argument in \ModelKinds{}
+so that instance models can restrict to carry ``\ModelKinds{} \Expr{}'' while
+the other theory types may carry ``\ModelKinds{}
+\ModelExpr{}''\footnote{However, using \Expr{} and \ModelExpr{} is not quite
+accurately representative of ``usable in code'' versus ``not,'' which we are
+attempting to fix \cite{DrasilIssue2853AlternativeModelKinds}}. This allows us
+to ensure that all expressions written in Drasil for instance models have an
+semantic counterpart that they can be translated into for code generation in
+various \acs{oo} languages.
 
-As such, we continue the division by moving those less related into their own
-language, specifically tailored to ``code'' expressions: \CodeExpr{} (\todo{ref
-Current CodeExpr Haskell}).
-
-
-
-Finally, we end up with 3 languages, as shown in \refLanguageDivision{}: \Expr{}
-(\refCurrentExprHaskell{}), \ModelExpr{} (\refCurrentModelExprHaskell{}), and
-\CodeExpr{} (\todo{ref Current CodeExpr Haskell}).
-
-Each language has its own specific domain, and, although there is some overlap
-between each, we are able to enforce weaker rules on each formation through
-their \acs{ttf} instances if needed.
+\pseudoPartialModelKindsUpgrade{}

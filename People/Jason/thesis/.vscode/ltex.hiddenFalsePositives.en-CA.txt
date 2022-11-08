@@ -1,3 +1,4 @@
 {"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qwritingdirectives\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_CA","sentence":"^\\Qlisting name=Source Code, listname=List of Source Codes haskell[3] [#1]#1 #3\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q pseudohaskell[2] [#1]Pseudocode: #1\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_CA","sentence":"^\\QThe depth and breadth of the network of domains is directly related to how many opportunities for domain-specific transformations we can perform on a specific pool of knowledgeI feel like I should be able to cite Czarnecki2005 again here, but this isn't really how he worded it, is it fair to cite him here, or should I provide my own justification?.\\E$"}
+{"rule":"COMMA_PERIOD","sentence":"^\\QFinally, now that we've analyzed the currently discussed theories in Drasil, we may at least start to improve their capture in , .\\E$"}

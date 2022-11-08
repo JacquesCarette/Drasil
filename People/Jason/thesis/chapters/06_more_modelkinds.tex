@@ -1,89 +1,19 @@
 \chapter{More Theory Kinds}
 \label{chap:more-theory-kinds}
 
-\imptodo{Continue writing here!}
-
-
-
-
-
-
-
-
+In this chapter, we return to analyzing the existing theories in Drasil, hoping
+to discover more \textit{kinds} of theories in them to create further
+opportunities for domain-specific interpretation.
 
 \section{\textquotedblleft{}Classify All The Theories\textquotedblright{}}
 
-In other words, we replace \Expr{} as a knowledge container, and restrict its
-usage to strictly ``mathematical expressions'', as opposed to ``expressions''
-and information about models/theories.
+With \Cref{chap:lang-division}, we divided the \Expr{} language into 3 variants,
+and, now, we can be careful to ensure that all created theory kinds are
+expressible in the ``general mathematical language'' (i.e., \ModelExpr{}). We
+may do this by ensuring they all instantiate the \Express{}
+(\refCurrentExpressHaskell{}) typeclass.
 
-One notable change is that we will require the new theory knowledge containers
-to be able to fully re-create the original shallow/raw \Expr{}s as a property of
-the new theory encodings.
-
-Ultimately, this is done through replacing \RelationConcept{} usage with
-\ModelKind{}\footnote{\ModelKind{} is built upon Dr. Jacques Carettes prototype
-    of an earlier version of \ModelKinds{}}, an aggregation of existing
-Drasil-related knowledge of mathematical theories. \ModelKind{} is defined using
-a \acs{gadt}, with one (1) type parameter. The type parameter is currently used
-to determine whether the model is ``fully refined''/``grounded'' or not, and,
-hence, usable in code generation.
-
-\refCurrentModelKindsHaskell{} displays the creation of \ModelKind{} and
-\ModelKinds{}.
-
-Please note that this aggregation is based purely on the existing model examples
-in the existing Drasil case studies, and the existing models are incomplete in
-the larger scope.
-
-Each \textit{kind of model} we find only has one requirement: that it should
-carry enough information to, and provide a means of, recreating the original
-expression from which they were abstracted out of.
-
-This requirement is essentially that of ``viewing'' it in the expression
-language, but it also tends to also add flexibility in how many ways that we can
-``view'' the information in different forms.
-
-In the Haskell code, this requirement is enforced through requiring them all to
-instantiate the \Express{} typeclass (\refCurrentExpressHaskell{}).
-
-\currentModelKindsHaskell{}
-
-In the above \ModelKinds{} definition, there are two (2) TODO notes that you may
-disregard.
-
-The first one is merely a note for analyzing ``well-understood'' copies of our
-existing \acsp{ode}, and the second one refers to models that haven't yet been
-fully analyzed for how they will be used (other than for display).
-
-\subsection{Quantity Definitions}
-
-\currentQDefinitionHaskell{}
-
-Assume \(y = x\) is transcribed as a \RelationConcept{}: while \(y = x\) might
-conventionally be seen as ``y is equal to x'', we might want, in our model, for
-it to be understood as ``x is defined by y'' but displayed differently.
-
-Here, \(=\) is overloaded as ``definition'', instead of what \(=\) was defined
-as in \Expr{}, as an ``equality'' operator.
-
-To resolve this overloading and weak knowledge capture of definitions, we create
-\EquationalModel{}s: theories that contain information about definitions of
-symbols, built using a \QDefinition{} (\refCurrentQDefinitionHaskell{}).
-
-If an \EquationalModel{} deals with theoretical symbols and is defined using
-either a \ModelExpr{} or an \Expr{}, it may be used in Theory Models and General
-Definitions.
-
-If an \EquationalModel{} is defined using an \Expr{} and deals with only the
-concrete (non-abstract) symbols, then the \EquationalModel{} is usable for code
-generation.
-
-At the moment, there is no information attached to symbols yet regarding whether
-they are abstract or instanced, so that portion of the rule is not enforced.
-
-\eztodo{Example of an EquationalModel/QDefinition in Haskell code, the SRS, and
-    the generated code.}
+\imptodo{Continue writing here.}
 
 \subsection{Constraints}
 
@@ -103,6 +33,33 @@ there is interest in creating runtime assertions of symbols.
 
 \eztodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
 	the SRS.}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Definition Realms}
 
@@ -124,6 +81,39 @@ through choosing definitions (encoded as \DefiningExpr{}s,
 \refCurrentDefiningExprHaskell{}), through refinements, from the \MultiDefn{}s.
 
 \eztodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Differential Equations}
 
@@ -147,9 +137,62 @@ well-understood differential equations and related areas.
 \intodo{Example of a DEModel/NewDEModel and a RelationConcept in Haskell code,
 	the SRS, and the related ODEInfo and code.}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \subsection{Leftovers}
 
 \imptodo{Leftover model kinds.}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Theories Undiscussed}
 
@@ -160,6 +203,60 @@ other fragments of knowledge to make use of.
 
 \ModelKinds{} is obviously an incomplete enumeration, and will grow as the need
 for more kinds of models arises.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\imptodo{Continue writing here!}
+
+Finally, now that we've analyzed the currently discussed theories in Drasil, we
+may at least start to improve their capture in \ModelKinds{},
+\refCurrentModelKindsHaskell{} \footnote{In the \refCurrentModelKindsHaskell{}
+definition, there are two (2) TO-DO notes that you may disregard. The first one
+is merely a note for analyzing ``well-understood'' copies of our existing
+\acsp{ode}, and the second one refers to models that haven't yet been fully
+analyzed for how they will be used (other than for display).}.
+
+\currentModelKindsHaskell{}
+
+\imptodo{Note that there is a remaining ticket to re-build ModelKinds to make it
+	extensible.}
+
+\imptodo{Get rid of everything below this comment.}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -186,9 +283,8 @@ Through his work, we have already observed some success because more case
 studies are already capable of generating code (see
 \refCaseStudiesCodeTableAfterDongsWork{}).
 
-Namely, \acs{dblpendulum} has working code generation for 4 languages (Python,
-Java, C/C\(++\), and C\#), and \acs{pdcontroller} now also supports Java,
-C/C\(++\), and C\# in addition to Python.
+Specifically, \acs{dblpendulum} has working code generation for 4 languages
+(Python, Java, C/C\(++\), and C\#) now, and while using theories encoding using
+the upgraded theory capture through \ModelKinds{}.
 
 \caseStudiesCodeTableAfterDongsWork{}
-

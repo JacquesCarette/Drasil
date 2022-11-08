@@ -140,14 +140,18 @@ interpreted as a \ModelExpr{}.
 Now that we've split up the expression languages, we may restrict their usage to
 appropriate theory contexts (in \ModelKinds{} as per \Cref{chap:modelkinds}).
 Approximately, we can ``upgrade'' \ModelKinds according to
-\refPseudoPartialModelKindsUpgrade{}, creating a type argument in \ModelKinds{}
-so that instance models can restrict to carry ``\ModelKinds{} \Expr{}'' while
-the other theory types may carry ``\ModelKinds{}
+\refPseudoPartialModelKindsUpgrade{} \footnote{Note that we also need to
+slightly update \QDefinition{}s: \refCurrentQDefinitionHaskell{} to create a
+type parameter for the used expression type.}, creating a type argument in
+\ModelKinds{} so that instance models can restrict to carry ``\ModelKinds{}
+\Expr{}'' while the other theory types may carry ``\ModelKinds{}
 \ModelExpr{}''\footnote{However, using \Expr{} and \ModelExpr{} is not quite
 accurately representative of ``usable in code'' versus ``not,'' which we are
 attempting to fix \cite{DrasilIssue2853AlternativeModelKinds}}. This allows us
 to ensure that all expressions written in Drasil for instance models have an
 semantic counterpart that they can be translated into for code generation in
-various \acs{oo} languages.
+various \acs{oo} languages. Furthermore, now we may return to \ModelKinds{} and
+continue uncovering the various \textit{kinds} of theories currently discussed
+in Drasils case studies.
 
 \pseudoPartialModelKindsUpgrade{}

@@ -4,7 +4,7 @@
 \begin{writingdirectives}
 	\item What other theory kinds can we find in the existing Drasil examples?
 	\item How is ModelKinds affected by the language division in
-	      \Cref{chap:lang-division}?
+	\Cref{chap:lang-division}?
 	\item What theories currently are used in Drasil?
 \end{writingdirectives}
 
@@ -23,10 +23,10 @@ mathematical language'' (i.e., \ModelExpr{}). We may do this by ensuring they
 all instantiate the \Express{} (\refCurrentExpressHaskell{}) typeclass. Starting
 at the end and working our way back, we end with
 \refCurrentModelKindsHaskell{}\footnote{In the \refCurrentModelKindsHaskell{}
-definition, there are two (2) TO-DO notes that you may disregard. The first one
-is merely a note for analyzing ``well-understood'' copies of our existing
-\acsp{ode}, and the second one refers to models that haven't yet been fully
-analyzed for how they will be used (other than for display).}.
+	definition, there are two (2) TO-DO notes that you may disregard. The first one
+	is merely a note for analyzing ``well-understood'' copies of our existing
+	\acsp{ode}, and the second one refers to models that haven't yet been fully
+	analyzed for how they will be used (other than for display).}.
 
 \currentModelKindsHaskell{}
 
@@ -46,7 +46,7 @@ other theories. They use \ConstraintSet{}s under the hood
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms}
 
 Equational realms represent ``realms'' \cite{Carette2014realms}\qtodo{@JC: Is
-this the preferred reference?}, sets of unique axioms that are equivalently
+	this the preferred reference?}, sets of unique axioms that are equivalently
 interpretable, focused on different ways to define a particular variable. They
 may be specialized to become equational models. \EquationalRealm{}s represent
 ``equational realm'' theories in Drasil and are effectively \MultiDefn{}s. For
@@ -82,8 +82,8 @@ Following Drasils methodology, they will only be analyzed and captured as
 necessary. Notably, \ModelKinds{} still contains \OthModel{}, meaning that there
 still exist theories in Drasil, which are used in justifications, of which we
 haven't yet figured out how we want to use fully yet\footnote{This is ``future
-work'' for now.}.
+	work'' for now.}.
 
 \eztodo{This last blurb reminds me: I should probably highlight the alternative
-printing method for equational models, and use it to show the equation of a
-line, perhaps.}
+	printing method for equational models, and use it to show the equation of a
+	line, perhaps.}

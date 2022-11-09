@@ -65,12 +65,13 @@
 % Configure page shape
 \usepackage[
   a4paper,
-  top=3.8cm,
-  bottom=2.5cm,
-  inner=3.8cm,
-  outer=2.5cm,
-  headheight=15pt,
+  top=\thesisMarginTop{},
+  bottom=\thesisMarginBottom{},
+  inner=\thesisMarginInner{},
+  outer=\thesisMarginOuter{},
+  headheight=\thesisMarginHeadheight{},
 ]{geometry}
+
 \usepackage{afterpage}
 
 % Allow labelling enum items: Credits to: https://texblog.org/2012/03/21/cross-referencing-list-items/
@@ -171,7 +172,7 @@
 % START : TODO LIST SETUP
 \ifshowwritingdirectives
   \usepackage[backgroundcolor=yellow,colorinlistoftodos]{todonotes}
-  \setlength{\marginparwidth}{3.5cm}
+  \setlength{\marginparwidth}{\thesisTODOMarginSize{}}
   \reversemarginpar % place on left-hand side
 \else
   \usepackage[disable]{todonotes}
@@ -205,7 +206,7 @@
 
 % START : HEADER %
 \fancyhead[R]{\thesisInstitution{} \textemdash{} \thesisInstitutionDepartmentShort{}}
-\fancyhead[L]{\thesisTargetDegreeNameShort{} Thesis \textemdash{} \thesisAuthorName{}}
+\fancyhead[L]{\thesisTargetDegreeNameShort{} Thesis \textemdash{} \thesisAuthorNameShort{}}
 % END   : HEADER %
 
 \input{chapters}

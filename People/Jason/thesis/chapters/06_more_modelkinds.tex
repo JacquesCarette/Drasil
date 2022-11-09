@@ -33,7 +33,6 @@ analyzed for how they will be used (other than for display).}.
 \subsection{Equational Constraints}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-constraints}
 
-\currentConstraintSetHaskell{}
 
 ``Equational constraints'' are theories that assert certain properties over
 other theories. They use \ConstraintSet{}s under the hood
@@ -41,258 +40,50 @@ other theories. They use \ConstraintSet{}s under the hood
 
 \currentExampleEquationalConstraintsHaskell{}
 
+\currentConstraintSetHaskell{}
+
 \subsection{Equational Realms}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms}
-
-\currentDefiningExprHaskell{}
-
-\currentMultiDefnHaskell{}
 
 Equational realms represent ``realms'' \cite{Carette2014realms}\qtodo{@JC: Is
 this the preferred reference?}, sets of unique axioms that are equivalently
 interpretable, focused on different ways to define a particular variable. They
-may be specialized to become equational models.
+may be specialized to become equational models. \EquationalRealm{}s represent
+``equational realm'' theories in Drasil and are effectively \MultiDefn{}s. For
+example, we may define a theory with multiple ways to define the horizontal
+force on an object: \refCurrentExampleEquationalRealmHaskell{}.
 
+\currentExampleEquationalRealmHaskell{}
 
+\currentMultiDefnHaskell{}
 
-
-
-
-
-\imptodo{Continue writing here!}
-
-The Theory Models and General Definition Models are unrefined, and may contain
-multiple ways for a particular theoretical symbol to be defined. This is
-captured in Drasil by \EquationalRealm{}s: modelled after realms.
-
-This model kind is intended specifically for retaining information about
-conscious choices made along the way to create Instance Models.
-
-An \EquationalRealm{} is based on a \MultiDefn{}
-(\refCurrentMultiDefnHaskell{}), and is intended for forming \QDefinition{}s
-through choosing definitions (encoded as \DefiningExpr{}s,
-\refCurrentDefiningExprHaskell{}), through refinements, from the \MultiDefn{}s.
-
-\eztodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
-
-
-
-
-
-
-
-
-
+\currentDefiningExprHaskell{}
 
 \subsection{Differential Equations}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:differential-equations}
 
-\imptodo{Continue writing here!}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+The capture of differential equations in Drasil is an active area of research.
+Dong Chen continued work here, creating \NewDEModel{} \cite{Chen2022MEng} to
+start capturing information about linear \acs{ode} systems. \DEModel{} is left
+as a temporary carriage for the remaining theories to be similarly analyzed and
+re-built with a deeper depth of knowledge capture, so that we can make better
+use of the information in them. Thanks to Dongs work, Drasil is now able to
+generate software for the \acs{dblpendulum} case study in Java, Python, C/C$++$,
+and C\# \cite{Chen2022MEng}. As such, this research already has some success in
+enabling more theories to be encoded in Drasil and appropriately used for
+various purposes.
 
 \subsection{Theories Left Undiscussed}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:theories-left-undiscussed}
 
-\imptodo{Continue writing here!}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\subsection{Differential Equations}
-
-\DEModel{} is the simple \RelationConcept{}-style capture of differential
-equation-related theories, and only exists as a placeholder until all
-differential equation models are converted into one of the other \ModelKinds{}.
-
-For related solving of differential equations, \DEModel{} implicitly relies on a
-developer writing a related \ODEInfo{}\todo{ref Current ODEInfo} packet which
-the code generator can use to solve the system.
-
-Actively being reconstructed in Drasil \cite{Chen2022MEng} \footnote{Shortly
-	after I implemented \ModelKind{}, Dong continued working on exploring
-	\DEModel{}s and created \NewDEModel{} as a result.}, \NewDEModel{} is the
-replacement for \DEModel{}, aiming to expose more information about
-well-understood differential equations and related areas.
-
-\NewDEModel{} will eventually be renamed to \DEModel{} once all existing
-\DEModel{} models have been upgraded.
-
-\intodo{Example of a DEModel/NewDEModel and a RelationConcept in Haskell code,
-	the SRS, and the related ODEInfo and code.}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\subsection{Leftovers}
-
-\imptodo{Leftover model kinds.}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Theories Undiscussed}
-
-\ModelKinds{} is an enumeration of the currently handled model types.
-
-Each ``model'' is meant to expose information to the Haskell compiler and for
-other fragments of knowledge to make use of.
-
-\ModelKinds{} is obviously an incomplete enumeration, and will grow as the need
-for more kinds of models arises.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Success}
-\label{chap:more-theory-kinds:sec:success}
-
-\ModelKind{} already has some success in enabling more theories to be encoded in
-Drasil and used for code generation.
-
-Dong Chens Master's involved exploring \acsp{ode} in Drasil and using them to
-generate code that solves them \cite{Chen2022MEng}.
-
-Through his work, we have already observed some success because more case
-studies are already capable of generating code (see
-\refCaseStudiesCodeTableAfterDongsWork{}).
-
-Specifically, \acs{dblpendulum} has working code generation for 4 languages
-(Python, Java, C/C\(++\), and C\#) now, and while using theories encoding using
-the upgraded theory capture through \ModelKinds{}.
-
-\caseStudiesCodeTableAfterDongsWork{}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\imptodo{Continue writing here!}
-
-At the moment, these are not used in code generation, and are pending design for
-usage in code generation as the translation from them into software is unclear
-and may be interpreted differently by readers.
-
-This model can, and should, eventually also be usable in code generation once
-there is interest in creating runtime assertions of symbols.
+While we have analyzed a few theories and how they're used, there are still many
+theories left undiscussed\footnote{\ModelKinds{} is an incomplete enumeration.}.
+Following Drasils methodology, they will only be analyzed and captured as
+necessary. Notably, \ModelKinds{} still contains \OthModel{}, meaning that there
+still exist theories in Drasil, which are used in justifications, of which we
+haven't yet figured out how we want to use fully yet\footnote{This is ``future
+work'' for now.}.
+
+\eztodo{This last blurb reminds me: I should probably highlight the alternative
+printing method for equational models, and use it to show the equation of a
+line, perhaps.}

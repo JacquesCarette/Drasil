@@ -80,5 +80,14 @@ theories left undiscussed\footnote{\ModelKinds{} is an incomplete enumeration.}.
 Following Drasils methodology, they will only be analyzed and captured as
 necessary. Notably, \ModelKinds{} still contains \OthModel{}, meaning that there
 still exist theories in Drasil, which are used in justifications, of which we
-haven't yet figured out how we want to use fully yet\footnote{This is ``future
-	work'' for now.}.
+haven't yet decided how we want to use yet\footnote{This is ``future work'' for
+now.}.
+
+Finally, as a result of implementing \ModelKinds{} (\Cref{chap:modelkinds}) and
+the expression language division (\Cref{chap:lang-division}), we are now able
+to, in at least one way, restrict the terms we use in different kinds of
+theories across different contexts. Ultimately, this adds some assurance that
+all generated artifacts only contain relevant language in them, because we have
+filtered out terms by their context. However, we have yet to discuss
+\textit{coherence}\footnote{Here, meaning well-formedness.} of expressions in
+their contexts.

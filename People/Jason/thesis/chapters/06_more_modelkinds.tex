@@ -1,76 +1,69 @@
 \chapter{More Theory Kinds}
 \label{chap:more-theory-kinds}
 
-In this chapter, we return to analyzing the existing theories in Drasil, hoping
+\begin{writingdirectives}
+	\item What other theory kinds can we find in the existing Drasil examples?
+	\item How is ModelKinds affected by the language division in
+	      \Cref{chap:lang-division}?
+	\item What theories currently are used in Drasil?
+\end{writingdirectives}
+
+In this chapter, we return to examining the existing theories in Drasil, hoping
 to discover more \textit{kinds} of theories in them to create further
 opportunities for domain-specific interpretation.
 
 \section{\textquotedblleft{}Classify All The Theories\textquotedblright{}}
+\label{chap:more-theory-kinds:sec:classify-all-the-theories}
 
-With \Cref{chap:lang-division}, we divided the \Expr{} language into 3 variants,
-and, now, we can be careful to ensure that all created theory kinds are
-expressible in the ``general mathematical language'' (i.e., \ModelExpr{}). We
-may do this by ensuring they all instantiate the \Express{}
-(\refCurrentExpressHaskell{}) typeclass.
+With \Cref{chap:lang-division}, we divided the \Expr{} language into 3 variants
+and use them to indicate usability of theories in code generation. Now, we may
+return to examining the existing encoded theories in Drasil, while also begin
+careful to ensure that all created theory kinds are expressible in the ``general
+mathematical language'' (i.e., \ModelExpr{}). We may do this by ensuring they
+all instantiate the \Express{} (\refCurrentExpressHaskell{}) typeclass. Starting
+at the end and working our way back, we end with
+\refCurrentModelKindsHaskell{}\footnote{In the \refCurrentModelKindsHaskell{}
+definition, there are two (2) TO-DO notes that you may disregard. The first one
+is merely a note for analyzing ``well-understood'' copies of our existing
+\acsp{ode}, and the second one refers to models that haven't yet been fully
+analyzed for how they will be used (other than for display).}.
 
-\imptodo{Continue writing here.}
+\currentModelKindsHaskell{}
 
-\subsection{Constraints}
+\subsection{Equational Constraints}
+\label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-constraints}
 
 \currentConstraintSetHaskell{}
 
-Theories that define expressions that constrain models in some way are defined
-using \EquationalConstraints{}, which use \ConstraintSet{}s under the hood
-(\refCurrentConstraintSetHaskell{})\todo{Describe what a ConstraintSet actually
-	is.}.
-	
-At the moment, these are not used in code generation, and are pending design for
-usage in code generation as the translation from them into software is unclear
-and may be interpreted differently by readers.
+``Equational constraints'' are theories that assert certain properties over
+other theories. They use \ConstraintSet{}s under the hood
+(\refCurrentConstraintSetHaskell{}) to hold a list of relations for assertion.
 
-This model can, and should, eventually also be usable in code generation once
-there is interest in creating runtime assertions of symbols.
+\currentExampleEquationalConstraintsHaskell{}
 
-\eztodo{Example of an EquationalConstraints/ConstraintSet in Haskell code, and
-	the SRS.}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\subsection{Definition Realms}
+\subsection{Equational Realms}
+\label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms}
 
 \currentDefiningExprHaskell{}
 
 \currentMultiDefnHaskell{}
 
+Equational realms represent ``realms'' \cite{Carette2014realms}\qtodo{@JC: Is
+this the preferred reference?}, sets of unique axioms that are equivalently
+interpretable, focused on different ways to define a particular variable. They
+may be specialized to become equational models.
+
+
+
+
+
+
+
+\imptodo{Continue writing here!}
+
 The Theory Models and General Definition Models are unrefined, and may contain
 multiple ways for a particular theoretical symbol to be defined. This is
-captured in Drasil by \EquationalRealm{}s: modelled after realms\qtodo{Cite Dr.
-Carette and Yasmines paper?}.
+captured in Drasil by \EquationalRealm{}s: modelled after realms.
 
 This model kind is intended specifically for retaining information about
 conscious choices made along the way to create Instance Models.
@@ -81,6 +74,52 @@ through choosing definitions (encoded as \DefiningExpr{}s,
 \refCurrentDefiningExprHaskell{}), through refinements, from the \MultiDefn{}s.
 
 \eztodo{Example of an EquationalRealm/MultiDefn in Haskell code, and the SRS.}
+
+
+
+
+
+
+
+
+
+
+\subsection{Differential Equations}
+\label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:differential-equations}
+
+\imptodo{Continue writing here!}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Theories Left Undiscussed}
+\label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:theories-left-undiscussed}
+
+\imptodo{Continue writing here!}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -126,8 +165,8 @@ developer writing a related \ODEInfo{}\todo{ref Current ODEInfo} packet which
 the code generator can use to solve the system.
 
 Actively being reconstructed in Drasil \cite{Chen2022MEng} \footnote{Shortly
-after I implemented \ModelKind{}, Dong continued working on exploring
-\DEModel{}s and created \NewDEModel{} as a result.}, \NewDEModel{} is the
+	after I implemented \ModelKind{}, Dong continued working on exploring
+	\DEModel{}s and created \NewDEModel{} as a result.}, \NewDEModel{} is the
 replacement for \DEModel{}, aiming to expose more information about
 well-understood differential equations and related areas.
 
@@ -136,14 +175,6 @@ well-understood differential equations and related areas.
 
 \intodo{Example of a DEModel/NewDEModel and a RelationConcept in Haskell code,
 	the SRS, and the related ODEInfo and code.}
-
-
-
-
-
-
-
-
 
 
 
@@ -225,51 +256,6 @@ for more kinds of models arises.
 
 
 
-
-
-
-\imptodo{Continue writing here!}
-
-Finally, now that we've analyzed the currently discussed theories in Drasil, we
-may at least start to improve their capture in \ModelKinds{},
-\refCurrentModelKindsHaskell{} \footnote{In the \refCurrentModelKindsHaskell{}
-definition, there are two (2) TO-DO notes that you may disregard. The first one
-is merely a note for analyzing ``well-understood'' copies of our existing
-\acsp{ode}, and the second one refers to models that haven't yet been fully
-analyzed for how they will be used (other than for display).}.
-
-\currentModelKindsHaskell{}
-
-\imptodo{Note that there is a remaining ticket to re-build ModelKinds to make it
-	extensible.}
-
-\imptodo{Get rid of everything below this comment.}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Success}
 \label{chap:more-theory-kinds:sec:success}
 
@@ -288,3 +274,25 @@ Specifically, \acs{dblpendulum} has working code generation for 4 languages
 the upgraded theory capture through \ModelKinds{}.
 
 \caseStudiesCodeTableAfterDongsWork{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\imptodo{Continue writing here!}
+
+At the moment, these are not used in code generation, and are pending design for
+usage in code generation as the translation from them into software is unclear
+and may be interpreted differently by readers.
+
+This model can, and should, eventually also be usable in code generation once
+there is interest in creating runtime assertions of symbols.

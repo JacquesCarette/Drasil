@@ -30,6 +30,11 @@
 \usepackage{longtable}
 \usepackage{svg}
 
+% Since LaTeX doesn't, and many fonts rarely, fully support unicode, we need to
+% manually create characters to replace missing glyphs.
+\usepackage{newunicodechar}
+\input{unicode_chars}
+
 % Tiny package for easily grabbing the page count of the "main matter"
 \usepackage{lastpage}
 

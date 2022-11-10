@@ -148,9 +148,11 @@ see:
 
 \brokenChunkRetriever{}
 
-\Chunk{}s are currently an informational void. So, this results in a type
-error\todo{Show the type error here.}. Haskell is unable to create the infinite
-type coercion from \inlineHs{expectedQd}'s unknown type to a \QuantityDict{}.
+\Chunk{}s are currently an informational void. So, this results in a type error
+(\refChunkRetrieverError{}). Haskell is unable to coerce the rigid type \(a\)
+into the \QuantityDict{} type.
+
+\chunkRetrieverError{}
 
 So, how can we try to fix this? \inlineHs{Data.Typeable} to the rescue! With
 \inlineHs{Data.Typeable}, we're able to work with any piece of data given to us
@@ -226,8 +228,11 @@ And then we would alter our \Chunk{} definition:
 \chunksWithUidAndRefListConstraint{}
 
 As you can see, adding restrictions on all chunks is now also considerably
-simpler. If we're interested, we can add a ``dump to X'' mechanism, where $X$ is
-any encoding of our choice (such as \acs{json}), similarly. This is omitted for
+simpler\footnote{We can also wrap up the constraints together for easier use by
+enabling ``constraint kinds'' language extension \cite{GHC2020ConstraintKinds},
+and bundling the constraints together (e.g., \refProtoIsChunkHaskell{}).}. If
+we're interested, we can add a ``dump to X'' mechanism, where $X$ is any
+encoding of our choice (such as \acs{json}), similarly. This is omitted for
 brevity, but we chose to add this. For now, this chunk structure will be our
 final definition of a chunk: an arbitrary \textit{thing} that has a type which
 indicates how it's usable, a acs{UID}, and a list of \textit{things} it
@@ -276,19 +281,15 @@ The \acs{uid} conflicts occur because of how they were structured. The chunks
 follow a ``gradual building'' pattern, similar to Matryoshka nesting
 dolls (\refMatryoshkaDollsImg{}).
 
-\eztodo{Example chunk definition.}
+\pseudoChunkNestingHaskell{}
 
-\eztodo{Example chunk definition.}
-
-\eztodo{Example common chunk definition.}
-
-In these above examples\footnote{The examples do not exist in Drasil, but they
-represent how chunks are ``gradually built.''}, chunks rely on a common data
-type for functionality related to displaying text related to the name, short
-name, and abbreviation of things. The current system assumes that the chunks
-share a \acs{uid}. In the previous generation of \ChunkDB{}, this is allowed
-because there was no \UID{} uniqueness checking across types. However, the new
-\ChunkDB{}s require \UID{} uniqueness across chunk types, leading to
+In \refPseudoChunkNestingHaskell{}\footnote{The examples do not exist in Drasil,
+but they represent how chunks are ``gradually built.''}, chunks rely on a common
+data type for functionality related to displaying text related to the name,
+short name, and abbreviation of things. The current system assumes that the
+chunks share a \acs{uid}. In the previous generation of \ChunkDB{}, this is
+allowed because there was no \UID{} uniqueness checking across types. However,
+the new \ChunkDB{}s require \UID{} uniqueness across chunk types, leading to
 incompatibility issues. As such, the structure comes in to question. They're
 currently built in such a way that relies on assuming that certain chunk types
 exist and are related to other chunk types that share a \UID{} with them. In

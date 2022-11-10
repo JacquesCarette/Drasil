@@ -239,29 +239,25 @@ the user to grab \textit{all} chunks of a particular type in one go. We can
 re-create this for this new \ChunkDB{} as well by using
 \inlineHs{Data.Typeable}s \TypeRep{} signature representation of Haskell types:
 
-\begin{pseudohaskell}{Grabbing All Chunks from the New ChunkDB}{grabAllChunksFromNewChunkDB}
-findAllByType :: TypeRep -> ChunkDB -> [a]
-findAllByType tr cdb = catMaybes \$ map (\\(_, c) -> if chunkTy c == tr then Just (unChunk c) else Nothing) (M.toList cdb)
-
-chunkTy :: Chunk -> TypeRep
-chunkTy (Chunk c) = typeOf c
-
-unChunk :: Typeable a => Chunk -> Maybe a
-unChunk (Chunk c) = cast c
-\end{pseudohaskell}
+\pseudoGrabAllChunksFromNewChunkDB{}
 
 However, this is something of an expensive and commonly performed task, so it's
 inefficient. So, in order to make the \ChunkDB{} more ``industrial-strength,''
 we can add an extra mechanism for caching in various ways to trade a bit of
-memory for a frequent and expensive search operation.
+memory for a frequent and expensive search operation: \refProtoChunkDBHaskell{}.
 
-\eztodo{Haskell code: new chunk database structure.}
+\protoChunkDBHaskell{}
 
 Now, we have extra functionality for caching by \TypeRep{}s without needing to
 calculate it every time we need it. Since it's frequently used in Drasils case
 studies and artifact generation, this will save \acs{cpu} time. Additionally, we
 added a traceability matrix to easily find which chunks depend on which (direct
-ones only, indirect ones can be calculated later if needed).
+ones only, indirect ones can be calculated later if needed). 
+
+With this upgraded \ChunkDB{}, we can also now build typed \acs{uid} references:
+\refProtoTypedUIDHaskell{}.
+
+\protoTypedUIDHaskell{}
 
 \ChunkDB{} is now a usable core across Drasil-like projects (ones thriving on
 the same ``knowledge-based programming'' ideology). At the moment, the database
@@ -273,8 +269,6 @@ repository}{https://github.com/balacij/ProtoChunkDB} (in prototype form) and a
 branch}{https://github.com/JacquesCarette/Drasil/tree/newChunkDB} on Drasils git
 repository, but can only be merged into the stable branch once we resolve the
 \acs{uid} conflicts.
-
-\eztodo{Mention typed UID references.}
 
 \matryoshkaDollsImg{}
 

@@ -9,6 +9,7 @@
 \newcommand{\codeAssets}{\assets/code}
 \newcommand{\currentCode}{\codeAssets/current}
 \newcommand{\originalCode}{\codeAssets/original}
+\newcommand{\protoCode}{\codeAssets/prototypes}
 \newcommand{\pseudoCode}{\codeAssets/pseudo}
 
 %------------------------------------------------------------------------------
@@ -163,6 +164,17 @@
 \newcommand{\originalUidHaskell}{\input{\originalCode/uid}}
 \newcommand{\refOriginalUidHaskell}{\Cref{lst:origUidDef}}
 
+% Prototypes
+%--------------------------------------
+
+% chunk
+\newcommand{\protoChunkDBHaskell}{\input{\protoCode/chunkdb}}
+\newcommand{\refProtoChunkDBHaskell}{\Cref{lst:protoChunkDB}}
+
+% typed uid references
+\newcommand{\protoTypedUIDHaskell}{\input{\protoCode/protoTypedUID}}
+\newcommand{\refProtoTypedUIDHaskell}{\Cref{lst:protoTypedUID}}
+
 % Pseudocode
 %--------------------------------------
 
@@ -217,6 +229,10 @@
 % working chunk retriever
 \newcommand{\workingChunkRetriever}{\input{\pseudoCode/workingChunkRetriever}}
 \newcommand{\refWorkingChunkRetriever}{\Cref{lst:workingChunkRetriever}}
+
+% working chunk retriever
+\newcommand{\pseudoGrabAllChunksFromNewChunkDB}{\input{\pseudoCode/grabAllChunksFromNewChunkDB}}
+\newcommand{\refPseudoGrabAllChunksFromNewChunkDB}{\Cref{lst:grabAllChunksFromNewChunkDB}}
 
 % uid ownership contract
 \newcommand{\uidOwnershipContract}{\input{\pseudoCode/uidOwnershipContract}}

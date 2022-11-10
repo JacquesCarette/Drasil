@@ -51,20 +51,19 @@ In Drasil vernacular, as discussed in \Cref{chap:drasil}, we call encoded
 fragments of knowledge, ``chunks.'' In practice, users encode chunks using
 Haskells basic \inlineHs{data} types (example later), tagging it with a
 \ACF{uid}. \acsp{uid} are represented by the \UID{} data type (a string of text,
-\refOriginalUidHaskell{}). For example, the theory related to \(p_\text{land}\)
-(\refOriginalLandPosTheoryDefinition{}) has a manually defined \acs{uid}: ``''
+\refOriginalUidHaskell{}). For example, \refOriginalQuantityDictExampleHaskell{}
+has the manually defined \acs{uid}: \textit{tolLoad}.
 
-\tedioustodo{Example of an uncomplicated chunk definition.}
-
-In the above example, the chunk belongs to a specific \textit{type}
-classification\todo{ref its type definition, from the appendix}. Drasil
-leverages Haskells type system to create a system of reasoning about chunks. As
-such, when we create instances of chunks, they are ``typed'' with a single fully
-monomorphic type signature. Commonly, we create chunks to discuss relations
-between other chunks. As such, chunks commonly also refer to other instances of
-chunks, but, instead of storing whole constituent chunks within them, we store
-\UID{} references to those constituent chunks. In doing this, we ensure that all
-references to that chunk refer to the same piece of immutable data.
+Additionally, all chunks also have a specific \textit{type} they belong to. For
+example, \refOriginalQuantityDictExampleHaskell{} is a \QuantityDict{}
+(\refOriginalQuantityDictHaskell{}). Drasil leverages Haskells type system to
+create a system of reasoning about chunks. As such, when we create instances of
+chunks, they are ``typed'' with a single fully monomorphic type signature.
+Commonly, we create chunks to discuss relations between other chunks. As such,
+chunks commonly also refer to other instances of chunks, but, instead of storing
+whole constituent chunks within them, we store \UID{} references to those
+constituent chunks. In doing this, we ensure that all references to that chunk
+refer to the same piece of immutable data.
 
 Searching for chunks by their \UID{}s requires us to have somewhere to search
 from. Drasil requires developers to collect all of their relevant chunks inside
@@ -268,11 +267,14 @@ ones only, indirect ones can be calculated later if needed).
 the same ``knowledge-based programming'' ideology). At the moment, the database
 prototype lies in a separate Haskell project. Work on incorporating the database
 in Drasil has been halted due to \acs{uid} conflicts arising in the case
-studies. The port lies in both a separate repository (in prototype form) and a
-separate branch on Drasils git repository, but can only be merged into the
-stable branch once we resolve the \acs{uid} conflicts.
+studies. The port lies in both a \porthref{separate
+repository}{https://github.com/balacij/ProtoChunkDB} (in prototype form) and a
+\porthref{separate
+branch}{https://github.com/JacquesCarette/Drasil/tree/newChunkDB} on Drasils git
+repository, but can only be merged into the stable branch once we resolve the
+\acs{uid} conflicts.
 
-\eztodo{Link to my prototyped source code for the upgraded chunk database.}
+\eztodo{Mention typed UID references.}
 
 \matryoshkaDollsImg{}
 

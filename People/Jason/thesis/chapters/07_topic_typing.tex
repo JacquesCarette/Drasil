@@ -370,16 +370,18 @@ altered later, if desired.
 
 \imptodo{Continue writing here!}
 
-\tedioustodo{Draw out the syntax diagram of each language, but start with Expr
-      and discuss how CodeExpr and ModelExpr are extensions of Expr.}
+\begin{itemize}
+      \item Draw out the syntax diagram of each language, but start with Expr
+            and discuss how CodeExpr and ModelExpr are extensions of Expr.
 
-\tedioustodo{Re-write the typing rules without the Haskell code references (keep
-      it mathematical/theoretical).}
+      \item Re-write the typing rules without the Haskell code references (keep
+            it mathematical/theoretical).
 
-\tedioustodo{Discuss how and where we can add type information to Drasils
-      expression languages, and the pros/cons of the solutions. For example,
-      should type enforcement done at the construction-level or post-facto
-      processed?}
+      \item Discuss how and where we can add type information to Drasils
+            expression languages, and the pros/cons of the solutions. For
+            example, should type enforcement done at the construction-level or
+            post-facto processed?
+\end{itemize}
 
 In Haskell, there are at least two ways that we can perform these type rules: at
 creation, and after creation. If we choose to restrict at the construction, we
@@ -387,9 +389,6 @@ have a stronger sense of type safety for any and all expressions, unlike with
 post-creation manual checking of expressions, where you can't necessarily share
 proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
       perhaps in Agda!}.
-
-\imptodo{Either preserve some stuff from the below content of this chapter, or
-      delete it all.}
 
 \begin{itemize}
 
@@ -406,7 +405,6 @@ proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
             burden and mental overhead.
 
 \end{itemize}
-
 
 \section{Requirements \& properties of a good solution}
 

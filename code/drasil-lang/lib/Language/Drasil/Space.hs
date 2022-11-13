@@ -1,5 +1,9 @@
 {-# LANGUAGE GADTs, DataKinds #-}
 {-# LANGUAGE KindSignatures #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE InstanceSigs #-}
 
 -- | Number space types and functions.
 module Language.Drasil.Space (
@@ -17,6 +21,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil.Symbol (Symbol)
 import Control.Lens (Lens')
+import Language.Drasil.WellTyped
 
 -- FIXME: These need to be spaces and not just types.
 
@@ -34,6 +39,7 @@ data Space =
   | String
   | Radians
   | Vect Space
+  | Matrix Int Int Space
   | Array Space
   | Actor String
   | DiscreteD [Double]
@@ -76,6 +82,20 @@ data RealInterval a b where
   Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- ^ Interval from (x .. y).
   UpTo    :: (Inclusive, a) -> RealInterval a b                   -- ^ Interval from (-infinity .. x).
   UpFrom  :: (Inclusive, b) -> RealInterval a b                   -- ^ Interval from (x .. infinity).
+
+-- Typed (RealInterval Expr Expr) Space
+instance (Typed a Space) => Typed (RealInterval a a) Space where
+  infer :: Typed a Space => TypingContext Space -> RealInterval a a -> Either Space TypeError
+  infer cxt (Bounded (_, l) (_, r)) = case (infer cxt l, infer cxt r) of
+    (Left Real, Right Real) -> Left Boolean
+  infer cxt (UpTo (_, x0)) = case infer cxt x0 of
+    Left Real -> Left Boolean
+    Left sp   -> Right $ "Expression in 'real interval' not Real-typed, but `" ++ show sp ++ "`-typed"
+    x         -> x
+  infer cxt (UpFrom (_, x0)) = case infer cxt x0 of
+    Left Real -> Left Boolean
+    Left sp   -> Right $ "Expression in 'real interval' not Real-typed, but `" ++ show sp ++ "`-typed"
+    x         -> x
 
 -- | Gets the name of an 'Actor'.
 getActorName :: Space -> String

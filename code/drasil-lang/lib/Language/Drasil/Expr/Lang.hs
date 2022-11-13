@@ -1,12 +1,16 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE InstanceSigs #-}
 
 -- | The Drasil Expression language 
 module Language.Drasil.Expr.Lang where
 
 import Language.Drasil.Literal.Lang (Literal(..))
-import Language.Drasil.Space (DiscreteDomainDesc, RealInterval)
+import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space)
+import qualified Language.Drasil.Space as S
 import Language.Drasil.UID (UID)
 import Language.Drasil.Literal.Class (LiteralC(..))
+import Language.Drasil.WellTyped
 
 -- * Expression Types
 
@@ -102,7 +106,7 @@ data Expr where
   Case     :: Completeness -> [(Expr, Relation)] -> Expr
   -- | Represents a matrix of expressions.
   Matrix   :: [[Expr]] -> Expr
-  
+
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -146,7 +150,7 @@ instance Eq Expr where
   AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
   C a                 == C b                 =   a == b
   FCall a b c         == FCall d e f         =   a == d && b == e && c == f
-  Case a b            == Case c d            =   a == c && b == d 
+  Case a b            == Case c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
   UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
@@ -175,7 +179,7 @@ instance Eq Expr where
 --   a              * b              = AssocA Mul [a, b]
 
 --   a - b = ArithBinaryOp Subt a b
-  
+
 --   fromInteger = Int
 --   abs         = UnaryOp Abs
 --   negate      = UnaryOp Neg
@@ -194,3 +198,84 @@ instance LiteralC Expr where
   dbl = Lit . dbl
   exactDbl = Lit . exactDbl
   perc l r = Lit $ perc l r
+
+expectedAssocATy :: AssocArithOper -> Space
+expectedAssocATy AddI = S.Integer
+expectedAssocATy MulI = S.Integer
+expectedAssocATy _ = S.Real
+
+expUnaryOpTy :: UFunc -> (Space, Space)
+expUnaryOpTy Abs = _wa
+expUnaryOpTy Log = _wb
+expUnaryOpTy Ln = _wc
+expUnaryOpTy Sin = _wd
+expUnaryOpTy Cos = _we
+expUnaryOpTy Tan = _wf
+expUnaryOpTy Sec = _wg
+expUnaryOpTy Csc = _wh
+expUnaryOpTy Cot = _wi
+expUnaryOpTy Arcsin = _wj
+expUnaryOpTy Arccos = _wk
+expUnaryOpTy Arctan = _wl
+expUnaryOpTy Exp = _wm
+expUnaryOpTy Sqrt = _wn
+expUnaryOpTy Neg = _wo
+
+instance Typed Expr Space where
+  infer :: TypingContext Space -> Expr -> Either Space TypeError
+  infer cxt (Lit lit) = infer cxt lit
+  
+  infer cxt (AssocA op exs)
+    | allOfType cxt exs t = Left t
+    | otherwise = Right "Associative arithmetic operation does not contain strictly the same numeric type."
+      where t = expectedAssocATy op
+
+  infer cxt (AssocB _ exs)
+    | allOfType cxt exs S.Boolean = Left S.Boolean
+    | otherwise = Right "Associative boolean operation does not contain strictly boolean operands."
+  
+  infer cxt (C uid) = inferFromContext cxt uid
+
+  infer cxt (FCall uid exs x0) = _we
+  
+  infer cxt (Case _ ers) -- = _ -- all (\(e, r) -> infer cxt e) ers
+    | null ers = Right "Case contains no expressions, no type to infer."
+    | all (\(ne, _) -> infer cxt ne == eT) (tail ers) = eT
+    | otherwise = Right "Expressions in case statement contain different types."
+      where
+        (fe, _) = head ers
+        eT = infer cxt fe
+  
+  infer cxt (Matrix exss)
+    | null exss = Right "Matrix has no rows."
+    | null $ head exss = Right "Matrix has no columns."
+    | allRowsHaveSameColumnsAndSpace = Left $ S.Matrix rows columns t
+    | otherwise = Right "Not all rows have the same number of columns or the same value types."
+    where
+        rows = length exss
+        columns = if rows > 0 then length $ head exss else 0
+        sss = map (map (infer cxt)) exss
+        expT = head $ head sss
+        allRowsHaveSameColumnsAndSpace
+          = either
+              (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
+              (const False) expT
+        (Left t) = expT
+  
+  infer cxt (UnaryOp uf ex) = case infer cxt ex of
+    Left sp -> _
+    x -> x
+  
+  infer cxt (UnaryOpB ufb ex) = _wi
+  infer cxt (UnaryOpVV ufv ex) = _wj
+  infer cxt (UnaryOpVN ufv ex) = _wk
+  infer cxt (ArithBinaryOp abo ex ex') = _wl
+  infer cxt (BoolBinaryOp bbo ex ex') = _wm
+  infer cxt (EqBinaryOp ebo ex ex') = _wn
+  infer cxt (LABinaryOp lbo ex ex') = _wo
+  infer cxt (OrdBinaryOp obo ex ex') = _wp
+  infer cxt (VVVBinaryOp vbo ex ex') = _wq
+  infer cxt (VVNBinaryOp vbo ex ex') = _wr
+  infer cxt (Operator aao dd ex) = _ws
+
+  infer cxt (RealI uid ri) = _wt

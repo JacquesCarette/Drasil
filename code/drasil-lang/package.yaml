@@ -16,6 +16,7 @@ dependencies:
 - Decimal
 - unicode-names >= 3.2.0.0
 - drasil-utils
+- containers
 
 ghc-options:
 - -Wall

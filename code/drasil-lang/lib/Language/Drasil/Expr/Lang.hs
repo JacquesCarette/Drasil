@@ -1,16 +1,20 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs                 #-}
+{-# LANGUAGE InstanceSigs          #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE InstanceSigs #-}
 
--- | The Drasil Expression language 
+-- | The Drasil Expression language
 module Language.Drasil.Expr.Lang where
 
-import Language.Drasil.Literal.Lang (Literal(..))
-import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space)
-import qualified Language.Drasil.Space as S
-import Language.Drasil.UID (UID)
-import Language.Drasil.Literal.Class (LiteralC(..))
-import Language.Drasil.WellTyped
+import           Language.Drasil.Literal.Class (LiteralC (..))
+import           Language.Drasil.Literal.Lang  (Literal (..))
+import           Language.Drasil.Space         (DiscreteDomainDesc,
+                                                RealInterval, Space)
+import qualified Language.Drasil.Space         as S
+import           Language.Drasil.UID           (UID)
+import           Language.Drasil.WellTyped
+import qualified Language.Drasil.WellTyped     as S
+import Data.Either (lefts)
+import qualified Data.Foldable as NE
 
 -- * Expression Types
 
@@ -51,6 +55,7 @@ data VVVBinOp = Cross
 data VVNBinOp = Dot
   deriving Eq
 
+-- TODO: I suppose these can be merged to just Add and Mul?
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = AddI | AddRe | MulI | MulRe
   deriving Eq
@@ -62,7 +67,7 @@ data AssocBoolOper = And | Or
 -- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
   | Arccos | Arctan | Exp | Sqrt | Neg
-  deriving Eq
+  deriving (Eq, Show)
 
 -- | @Bool -> Bool@ operators.
 data UFuncB = Not
@@ -199,45 +204,35 @@ instance LiteralC Expr where
   exactDbl = Lit . exactDbl
   perc l r = Lit $ perc l r
 
-expectedAssocATy :: AssocArithOper -> Space
-expectedAssocATy AddI = S.Integer
-expectedAssocATy MulI = S.Integer
-expectedAssocATy _ = S.Real
-
-expUnaryOpTy :: UFunc -> (Space, Space)
-expUnaryOpTy Abs = _wa
-expUnaryOpTy Log = _wb
-expUnaryOpTy Ln = _wc
-expUnaryOpTy Sin = _wd
-expUnaryOpTy Cos = _we
-expUnaryOpTy Tan = _wf
-expUnaryOpTy Sec = _wg
-expUnaryOpTy Csc = _wh
-expUnaryOpTy Cot = _wi
-expUnaryOpTy Arcsin = _wj
-expUnaryOpTy Arccos = _wk
-expUnaryOpTy Arctan = _wl
-expUnaryOpTy Exp = _wm
-expUnaryOpTy Sqrt = _wn
-expUnaryOpTy Neg = _wo
+assocArithOperToTy :: AssocArithOper -> Space
+assocArithOperToTy AddI = S.Integer
+assocArithOperToTy MulI = S.Integer
+assocArithOperToTy _    = S.Real
 
 instance Typed Expr Space where
   infer :: TypingContext Space -> Expr -> Either Space TypeError
   infer cxt (Lit lit) = infer cxt lit
-  
+
   infer cxt (AssocA op exs)
     | allOfType cxt exs t = Left t
     | otherwise = Right "Associative arithmetic operation does not contain strictly the same numeric type."
-      where t = expectedAssocATy op
+      where t = assocArithOperToTy op
 
   infer cxt (AssocB _ exs)
     | allOfType cxt exs S.Boolean = Left S.Boolean
     | otherwise = Right "Associative boolean operation does not contain strictly boolean operands."
-  
+
   infer cxt (C uid) = inferFromContext cxt uid
 
-  infer cxt (FCall uid exs x0) = _we
-  
+  -- FIXME: It seems odd having named arguments here. Should we remove it? For
+  -- now, I'm not type checking them.
+  infer cxt (FCall uid exs _) = case (inferFromContext cxt uid, map (infer cxt) exs) of
+    (Left (S.Function params out), exst) -> if NE.toList params == lefts exst
+      then Left out
+      else Right $ "Function `" ++ show uid ++ "` expects parameters of types: " ++ show params
+    (Left _, _) -> Right $ "Function application on non-function: " ++ show uid
+    (Right x, _) -> Right x
+
   infer cxt (Case _ ers) -- = _ -- all (\(e, r) -> infer cxt e) ers
     | null ers = Right "Case contains no expressions, no type to infer."
     | all (\(ne, _) -> infer cxt ne == eT) (tail ers) = eT
@@ -245,7 +240,7 @@ instance Typed Expr Space where
       where
         (fe, _) = head ers
         eT = infer cxt fe
-  
+
   infer cxt (Matrix exss)
     | null exss = Right "Matrix has no rows."
     | null $ head exss = Right "Matrix has no columns."
@@ -261,21 +256,150 @@ instance Typed Expr Space where
               (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
               (const False) expT
         (Left t) = expT
-  
-  infer cxt (UnaryOp uf ex) = case infer cxt ex of
-    Left sp -> _
-    x -> x
-  
-  infer cxt (UnaryOpB ufb ex) = _wi
-  infer cxt (UnaryOpVV ufv ex) = _wj
-  infer cxt (UnaryOpVN ufv ex) = _wk
-  infer cxt (ArithBinaryOp abo ex ex') = _wl
-  infer cxt (BoolBinaryOp bbo ex ex') = _wm
-  infer cxt (EqBinaryOp ebo ex ex') = _wn
-  infer cxt (LABinaryOp lbo ex ex') = _wo
-  infer cxt (OrdBinaryOp obo ex ex') = _wp
-  infer cxt (VVVBinaryOp vbo ex ex') = _wq
-  infer cxt (VVNBinaryOp vbo ex ex') = _wr
-  infer cxt (Operator aao dd ex) = _ws
 
-  infer cxt (RealI uid ri) = _wt
+  infer cxt (UnaryOp uf ex) = case infer cxt ex of
+    Left sp -> case uf of
+      Abs -> if S.isNumericSpace sp && sp /= S.Natural
+        then Left sp
+        else Right "numeric 'absolute' value operator only applies to, non-natural, numeric types"
+      Neg -> if S.isNumericSpace sp && sp /= S.Natural
+        then Left sp
+        else Right "negation only applies to, non-natural, numeric types"
+      Exp -> if sp == S.Real || sp == S.Integer then Left S.Real else Right $ show Exp ++ " only applies to reals"
+      x -> if sp == S.Real then Left S.Real else Right $ show x ++ " only applies to reals"
+    x       -> x
+
+  infer cxt (UnaryOpB Not ex) = case infer cxt ex of
+    Left S.Boolean -> Left S.Boolean
+    Left _         -> Right "¬ on non-boolean operand"
+    x              -> x
+
+  -- TODO: What about "Vect Vect ... Vect X"?
+  infer cxt (UnaryOpVV NegV e) = case infer cxt e of
+    Left (S.Vect sp) -> if S.isNumericSpace sp && sp /= S.Natural
+      then Left $ S.Vect sp
+      else Right "Vector negation only applies to, non-natural, numbered vectors"
+    Left _ -> Right "Vector negation should only be applied to numeric vectors."
+    Right ex -> Right ex
+
+  infer cxt (UnaryOpVN Norm e) = case infer cxt e of
+    Left (S.Vect sp) -> if sp == S.Real
+      then Left S.Real
+      else Right "Vector norm only applies to vectors of real numbers"
+    Left _ -> Right "Vector norm only applies to vectors of real numbers"
+    ex -> ex
+
+  infer cxt (UnaryOpVN Dim e) = case infer cxt e of
+    Left _ -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    ex -> ex
+
+  infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt) -> if S.isNumericSpace lt && lt == rt -- FIXME: What do we want here?
+      then Left lt
+      else Right "Fractions/divisions should only be applied to the same numeric typed operands"
+    (_      , Right e) -> Right e
+    (Right e, _      ) -> Right e
+
+  infer cxt (ArithBinaryOp Pow l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt) -> if S.isNumericSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
+      then Left lt
+      else Right "Powers only be applied to the same numeric type in both operands, or real base with integer exponent"
+    (_      , Right x) -> Right x
+    (Right x, _      ) -> Right x
+
+  infer cxt (ArithBinaryOp Subt l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt) -> if S.isNumericSpace lt && lt == rt
+      then Left lt
+      else Right "Both operands of a subtraction must be the same numeric type"
+    (_, Right re) -> Right re
+    (Right le, _) -> Right le
+
+  infer cxt (BoolBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Left S.Boolean, Left S.Boolean) -> Left S.Boolean
+    (Left _, Left _) -> Right "Boolean expression contains non-boolean operand"
+    (_     , Right er) -> Right er
+    (Right el, _     ) -> Right el
+
+  infer cxt (EqBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt) -> if lt == rt
+      then Left S.Boolean
+      else Right "Both operands of an (in)equality (=/≠) must be of the same type"
+    (_, Right re) -> Right re
+    (Right le, _) -> Right le
+
+  infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
+    (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+      then Left lt
+      else Right "List accessor not of type integer nor natural"
+    (Left _          , _      ) -> Right "List accessor expects a list/vector"
+    (_               , Right e) -> Right e
+    (Right e         , _      ) -> Right e
+
+  infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt) -> if S.isNumericSpace lt && lt == rt
+      then Left S.Boolean
+      else Right "Both operands of a numeric comparison must be the same numeric type"
+    (_, Right re) -> Right re
+    (Right le, _) -> Right le
+
+  infer cxt (VVVBinaryOp Cross l r) = case (infer cxt l, infer cxt r) of
+    (Left lTy, Left rTy) -> if lTy == rTy
+      then Left lTy
+      else Right "Vector cross product expects both operands to have the same time"
+    (_       , Right re) -> Right re
+    (Right le, _       ) -> Right le
+
+  infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
+    (Left (S.Vect lsp), Left (S.Vect rsp)) -> if lsp == rsp && S.isNumericSpace lsp
+      then Left lsp
+      else Right "Vector dot product expects numeric vector operands"
+    (Left _, Left _) -> Right "Vector dot product expects vector operands"
+    (_, Right rx) -> Right rx
+    (Right lx, _) -> Right lx
+
+  infer cxt (Operator aao (S.BoundedDD _ _ bot top) body) = let expTy = assocArithOperToTy aao
+    in case (infer cxt bot, infer cxt top, infer cxt body) of
+      (Left botTy, Left topTy, Left bodyTy) -> if expTy == botTy
+        then if expTy == topTy
+          then if expTy == bodyTy
+            then Left expTy
+            else Right $ "'Big' operator range body not of expected type: " ++ show expTy
+          else Right $ "'Big' operator range top not of expected type: " ++ show expTy
+        else Right $ "'Big' operator range bottom not of expected type: " ++ show expTy
+      (_         , _         , Right x    ) -> Right x
+      (_         , Right x   , _          ) -> Right x
+      (Right x   , _         , _          ) -> Right x
+
+  infer cxt (RealI uid ri) = case inferFromContext cxt uid of
+    Left uidSp -> case riOfTy uidSp ri of
+      Left True -> Left S.Boolean
+      Left _    -> Right "Interval not of same type as variable"
+      Right s   -> Right s
+    x -> x
+    where
+      riOfTy :: Space -> RealInterval Expr Expr -> Either Bool TypeError
+      riOfTy sp (S.Bounded (_, lx) (_, rx)) = case (isOfTy sp cxt lx, isOfTy sp cxt rx) of
+        (Left l, Left r)  -> Left $ l && r
+        (Left _, Right r) -> Right r
+        (Right l, _)      -> Right l
+      riOfTy sp (S.UpTo (_, x)) = isOfTy sp cxt x
+      riOfTy sp (S.UpFrom (_, x)) = isOfTy sp cxt x
+
+      isOfTy :: S.Typed e t => t -> TypingContext t -> e -> Either Bool TypeError
+      isOfTy sp cxt' e = case infer cxt' e of
+        Left x  -> Left $ x == sp
+        Right x -> Right x -- This can't be "x -> x" due to type of "x" in this case conflicting!
+
+
+-- instance (Typed a Space) => Typed (RealInterval a a) Space where
+--   infer :: Typed a Space => TypingContext Space -> RealInterval a a -> Either Space TypeError
+--   infer cxt (Bounded (_, l) (_, r)) = case (infer cxt l, infer cxt r) of
+--     (Left Real, Right Real) -> Left Boolean
+--   infer cxt (UpTo (_, x0)) = case infer cxt x0 of
+--     Left Real -> Left Boolean
+--     Left sp   -> Right $ "Expression in 'real interval' not Real-typed, but `" ++ show sp ++ "`-typed"
+--     x         -> x
+--   infer cxt (UpFrom (_, x0)) = case infer cxt x0 of
+--     Left Real -> Left Boolean
+--     Left sp   -> Right $ "Expression in 'real interval' not Real-typed, but `" ++ show sp ++ "`-typed"
+--     x         -> x

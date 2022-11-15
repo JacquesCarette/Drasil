@@ -1,5 +1,6 @@
 {-# LANGUAGE RankNTypes, FlexibleInstances, GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | Contains chunks related to adding an expression to a quantitative concept. 
 module Language.Drasil.Chunk.Eq (
@@ -22,6 +23,7 @@ import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Expr.Class (ExprC(apply, sy))
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
@@ -30,6 +32,7 @@ import Language.Drasil.Space (mkFunction, Space, Space, HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (UID, HasUID(..))
+import Language.Drasil.WellTyped
 
 data QDefinition e where
   QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
@@ -60,6 +63,9 @@ instance Express e => Express (QDefinition e) where
         [] -> defines (sy q)
         is -> defines $ apply q (map C is)
 instance ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
+
+instance TypeChecks (QDefinition Expr) Expr Space where
+  typeCheckExpr (QD q _ e) = (e, q ^. typ)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.

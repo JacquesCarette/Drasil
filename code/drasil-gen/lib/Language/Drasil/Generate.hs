@@ -1,11 +1,15 @@
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate (
+  -- * Type checking
+  typeCheckSIQDs,
   -- * Generator Functions
   gen, genDot, genCode, genLog,
   -- * Types (Printing Options)
   DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC),
   -- * Constructor
   docChoices) where
+
+import qualified Data.Map.Strict as M
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -15,6 +19,7 @@ import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 
+import Database.Drasil (symbolTable)
 import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
@@ -28,6 +33,10 @@ import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, 
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 import Data.Char (isSpace)
+import Language.Drasil (TypeChecks(typeCheckExpr))
+
+import Control.Lens ((^.))
+import Theory.Drasil (getEqModQdsFromIm)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -89,6 +98,26 @@ writeDoc s HTML fn doc = genHTML s fn doc
 writeDoc s JSON _ doc  = genJSON s doc
 writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
+-- FIXME: I don't quite like this placement. I like the idea of it being done on
+-- the entire system at once, it makes debugging (right now) easily, but it
+-- should be closer to individual instances in the future.
+typeCheckSIQDs :: SystemInformation -> IO ()
+typeCheckSIQDs
+  (SI _ _ _ _ _ _ ims _ _ _ _ _ _ _ _ chks _)
+  = do
+    putStrLn "Type checking"
+    let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
+    mapM_ (\qd -> 
+      let
+        (e, sp) = typeCheckExpr qd :: (Expr, Space)
+      in either
+        (\x -> if x == sp
+          then return ()
+          else putStrLn $ show (qd ^. uid) ++ " does not type check as expected, wanted: " ++ show sp ++ ", got: " ++ show x)
+        (\x -> putStrLn $ show (qd ^. uid) ++ " fails type checking: " ++ x)
+        (infer cxt e)
+      ) (getEqModQdsFromIm ims)
+
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()
 genDot si = do
@@ -110,7 +139,7 @@ genLog SI{_sys = sysName} pinfo = do
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
-genCode chs spec = do 
+genCode chs spec = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD 

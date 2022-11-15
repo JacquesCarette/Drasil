@@ -22,6 +22,7 @@ space _  Char           = P.Ident "Char"
 space _  String         = P.Ident "String"
 space _  Radians        = error "Radians not translated"
 space _  (Vect _)       = error "Vector space not translated"
+space _  (Matrix _ _ _) = error "Matrix space not translated"
 space _  (Array _)      = error "Array space not translated"
 space _  (Actor s)      = P.Ident s
 space sm (DiscreteD l)  = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]

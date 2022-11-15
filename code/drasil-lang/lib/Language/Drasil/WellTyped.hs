@@ -6,7 +6,7 @@ import qualified Data.Map.Strict as M
 -- import qualified Data.Text as T
 import Language.Drasil.UID (UID)
 
-type TypeError = String --T.Text
+type TypeError = String -- T.Text
 
 type TypingContext t = M.Map UID t
 
@@ -30,6 +30,9 @@ check cxt e t = either
 class (Eq t, Show t) => Typed e t where
   infer :: TypingContext t -> e -> Either t TypeError
 --   check :: TypingContext t -> e -> t -> Either t TypeError
+
+class Typed e t => TypeChecks c e t where
+  typeCheckExpr :: c -> (e, t)
 
 allOfType :: (Traversable tr, Typed e t) => TypingContext t -> tr e -> t -> Bool
 allOfType cxt es t = foldr (\e acc -> acc && either (== t) (const False) (infer cxt e)) True es

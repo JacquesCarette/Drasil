@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
+{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, MultiParamTypeClasses #-}
 -- | Defines types and functions for Instance Models.
 module Theory.Drasil.InstanceModel(
   -- * Type

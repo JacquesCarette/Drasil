@@ -24,17 +24,19 @@ import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation(SI, _sys))
-import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
+import Language.Drasil.Printers (Format(TeX, HTML, JSON),
  makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot, printAllDebugInfo)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
-  Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
+  Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
 import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 import Data.Char (isSpace)
 
+import Data.Either (isRight)
 import Control.Lens ((^.))
+import Control.Monad (when)
 import Theory.Drasil (getEqModQdsFromIm)
 
 -- | Generate a number of artifacts based on a list of recipes.
@@ -106,18 +108,20 @@ typeCheckSIQDs
   = do
     putStrLn "[ Start type checking ]"
     let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
-    mapM_ (\qd -> 
-      let
-        (e, sp) = typeCheckExpr qd :: (Expr, Space)
-      in either
-        (\x -> if x == sp
-          then --return ()
-            putStrLn $ show (qd ^. uid) ++ " (the IM) OK!"
-          else putStrLn $ show (qd ^. uid) ++ " (the IM) does not type check as expected, wanted: " ++ show sp ++ ", got: " ++ show x)
-        (\x -> putStrLn $ show (qd ^. uid) ++ " (the IM) fails type checking: " ++ x)
-        (infer cxt e)
-      ) (getEqModQdsFromIm ims)
+    let chkd = map (\qd ->
+          let
+            (e, sp) = typeCheckExpr qd :: (Expr, Space)
+          in either
+            (\x -> if x == sp
+              then Left $ show (qd ^. uid) ++ " (the IM) OK!"
+              else Right $ show (qd ^. uid) ++ " (the IM) does not type check as expected, wanted: " ++ show sp ++ ", got: " ++ show x)
+            (\x -> Right $ show (qd ^. uid) ++ " (the IM) fails type checking: " ++ x)
+            (infer cxt e)
+          ) (getEqModQdsFromIm ims)
+    mapM_ (either print print) chkd
     putStrLn "[ Finished type checking ]"
+    -- FIXME: We want the program to "error out," but from where? Here doesn't seem right.
+    -- when (any isRight chkd) $ error "Type errors occurred, please check your expressions and adjust accordingly"
 
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()
@@ -143,7 +147,7 @@ genCode :: Choices -> CodeSpec -> IO ()
 genCode chs spec = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
-  sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD 
+  sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (extInputs spec)) (getSampleData chs)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
@@ -152,7 +156,7 @@ genCode chs spec = do
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genLangCode Swift = genCall Swift unSC unSP
-      genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr 
+      genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir

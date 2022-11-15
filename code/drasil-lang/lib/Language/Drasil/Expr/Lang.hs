@@ -338,7 +338,7 @@ instance Typed Expr Space where
   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if S.isNumericSpace lt && lt == rt
       then Left S.Boolean
-      else Right "Both operands of a numeric comparison must be the same numeric type"
+      else Right $ "Both operands of a numeric comparison must be the same numeric type, got: " ++ show lt ++ ", " ++ show rt
     (_, Right re) -> Right re
     (Right le, _) -> Right le
 

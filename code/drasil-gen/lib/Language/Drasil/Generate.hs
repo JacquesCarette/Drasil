@@ -33,7 +33,6 @@ import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, 
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 import Data.Char (isSpace)
-import Language.Drasil (TypeChecks(typeCheckExpr))
 
 import Control.Lens ((^.))
 import Theory.Drasil (getEqModQdsFromIm)
@@ -103,20 +102,22 @@ writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 -- should be closer to individual instances in the future.
 typeCheckSIQDs :: SystemInformation -> IO ()
 typeCheckSIQDs
-  (SI _ _ _ _ _ _ ims _ _ _ _ _ _ _ _ chks _)
+  (SI _ _ _ _ _ _ ims _ _ _ _ _ _ _ chks _ _)
   = do
-    putStrLn "Type checking"
+    putStrLn "[ Start type checking ]"
     let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
     mapM_ (\qd -> 
       let
         (e, sp) = typeCheckExpr qd :: (Expr, Space)
       in either
         (\x -> if x == sp
-          then return ()
-          else putStrLn $ show (qd ^. uid) ++ " does not type check as expected, wanted: " ++ show sp ++ ", got: " ++ show x)
-        (\x -> putStrLn $ show (qd ^. uid) ++ " fails type checking: " ++ x)
+          then --return ()
+            putStrLn $ show (qd ^. uid) ++ " (the IM) OK!"
+          else putStrLn $ show (qd ^. uid) ++ " (the IM) does not type check as expected, wanted: " ++ show sp ++ ", got: " ++ show x)
+        (\x -> putStrLn $ show (qd ^. uid) ++ " (the IM) fails type checking: " ++ x)
         (infer cxt e)
       ) (getEqModQdsFromIm ims)
+    putStrLn "[ Finished type checking ]"
 
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()

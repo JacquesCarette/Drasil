@@ -23,7 +23,7 @@ inferFromContext cxt u = maybe
 
 check :: Typed e t => TypingContext t -> e -> t -> Either t TypeError
 check cxt e t = either
-    (\infT -> if t == infT then Left t else Right $ "Type `" ++ show t ++ "` does not match expected type ``")
+    (\infT -> if t == infT then Left t else Right $ "Type `" ++ show t ++ "` does not match expected type `" ++ show infT ++ "`")
     (\te -> Right $ "Input is ill-typed, error: " ++ te)
     (infer cxt e)
 

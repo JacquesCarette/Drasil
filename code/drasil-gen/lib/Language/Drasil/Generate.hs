@@ -112,11 +112,9 @@ typeCheckSIQDs
           let
             (e, sp) = typeCheckExpr qd :: (Expr, Space)
           in either
-            (\x -> if x == sp
-              then Left $ show (qd ^. uid) ++ " (the IM) OK!"
-              else Right $ show (qd ^. uid) ++ " (the IM) does not type check as expected, wanted: " ++ show sp ++ ", got: " ++ show x)
+            (\_ -> Left $ show (qd ^. uid) ++ " (the IM) OK!")
             (\x -> Right $ show (qd ^. uid) ++ " (the IM) fails type checking: " ++ x)
-            (infer cxt e)
+            (check cxt e sp)
           ) (getEqModQdsFromIm ims)
     mapM_ (either print print) chkd
     putStrLn "[ Finished type checking ]"

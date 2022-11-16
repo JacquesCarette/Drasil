@@ -100,8 +100,8 @@ As we've recognized 3 contexts in which mathematical expressions are used, we
 may split the mathematical language accordingly, re-building the languages for
 each context. We end up with 3 languages, as shown in \refLanguageDivision{}:
 \Expr{} (\refCurrentExprHaskell{}), \ModelExpr{}
-(\refCurrentModelExprHaskell{}), and \CodeExpr{} (\todo{ref Current CodeExpr
-Haskell}). \Expr{} has its indefinite values split off into \ModelExpr{}
+(\refCurrentModelExprHaskell{}), and \CodeExpr{} (\refCurrentCodeExprHaskell{}).
+\Expr{} has its indefinite values split off into \ModelExpr{}
 (\refCurrentModelExprHaskell{})\todo{List notable terms moved, Deriv, Continuous
 vs Discrete ranges, Space, etc}, a deeply embedded universal mathematical
 language. As we desire for it to be equally usable as the \Expr{} used in
@@ -120,9 +120,14 @@ language they are using and which language they need to import into their
 working files respectively. This can become quite frustrating given the amount
 of overlap. Thus, in order to alleviate the stress involved with writing out the
 same expression in different languages, we use a \ACF{ttf} encoding of the smart
-constructors to build expressions. The \acs{ttf} encoding allows us to
-seamlessly write expressions in any of the languages at the same time, allowing
-type variability along the type constraints of any expression.
+constructors to build expressions. Using \Expr{} has a ``base'' shared language
+between \ModelExpr{} and \CodeExpr{}, we can write \acs{ttf} encoding for them
+individually that extends on \Expr{}s functionality
+(\refCurrentExprTTFHaskell{}, \refCurrentModelExprTTFHaskell{},
+\refCurrentCodeExprTTFHaskell{}). The \acs{ttf} encoding allows us to seamlessly
+write expressions in any of the languages at the same time, allowing type
+variability along the type constraints of any expression. The typeclasses used
+in the languages may be used to create constriants on the language used.
 
 While \ModelExpr{}s \acs{ttf} encoding strictly contains the terms unique to
 \ModelExpr{}, it is possible (and is done normally) to convert \Expr{}s into

@@ -36,8 +36,6 @@ import Data.Char (isSpace)
 
 import Data.Either (isRight)
 import Control.Lens ((^.))
-import Control.Monad (when)
-import Theory.Drasil (getEqModQdsFromIm)
 import Data.Bifunctor (second)
 import Data.List (partition)
 
@@ -142,6 +140,7 @@ typeCheckSIQDs
       ) formattedChkd
     putStrLn "[ Finished type checking ]"
     -- FIXME: We want the program to "error out," but from where? Here doesn't seem right.
+    -- add back import: Control.Monad (when)
     -- when (any isRight formattedChkd) $ error "Type errors occurred, please check your expressions and adjust accordingly"
 
 -- | Generates traceability graphs as .dot files.

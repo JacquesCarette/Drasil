@@ -1,38 +1,55 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE Rank2Types #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TupleSections #-}
 
 -- | Defines types used in models and theories.
-module Theory.Drasil.ConstraintSet (
-  -- * Type
-  ConstraintSet,
-  -- * Constructor
-  mkConstraintSet) where
+module Theory.Drasil.ConstraintSet
+  ( -- * Type
+    ConstraintSet,
 
-import Control.Lens ((^.), makeLenses)
+    -- * Constructor
+    mkConstraintSet,
+  )
+where
 
-import Language.Drasil
+import Control.Lens (makeLenses, (^.))
 import qualified Data.List.NonEmpty as NE
+import Language.Drasil
 
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
-data ConstraintSet e = CL {
-    _con  :: ConceptChunk,
+data ConstraintSet e = CL
+  { _con :: ConceptChunk,
     _invs :: NE.NonEmpty e
-}
+  }
+
 makeLenses ''ConstraintSet
 
 -- | Finds the 'UID' of the 'ConstraintSet'.
-instance HasUID        (ConstraintSet e) where uid   = con . uid
+instance HasUID (ConstraintSet e) where uid = con . uid
+
 -- | Finds the term ('NP') of the 'ConstraintSet'.
-instance NamedIdea     (ConstraintSet e) where term  = con . term
+instance NamedIdea (ConstraintSet e) where term = con . term
+
 -- | Finds the idea of the 'ConstraintSet'.
-instance Idea          (ConstraintSet e) where getA  = getA . (^. con)
+instance Idea (ConstraintSet e) where getA = getA . (^. con)
+
 -- | Finds the definition of the 'ConstraintSet'.
-instance Definition    (ConstraintSet e) where defn  = con . defn
+instance Definition (ConstraintSet e) where defn = con . defn
+
 -- | Finds the domain of the 'ConstraintSet'.
-instance ConceptDomain (ConstraintSet e) where cdom  = cdom . (^. con)
+instance ConceptDomain (ConstraintSet e) where cdom = cdom . (^. con)
+
 -- | The complete 'ModelExpr' of a ConstraintSet is the logical conjunction of
 --   all the underlying relations (e.g., `a $&& b $&& ... $&& z`).
 instance Express e => Express (ConstraintSet e) where
-    express = foldr1 ($&&) . map express . NE.toList . (^. invs)
+  express = foldr1 ($&&) . map express . NE.toList . (^. invs)
+
+instance TypeChecks (ConstraintSet Expr) Expr Space where
+  typeCheckExpr cs = map (,Boolean) $ NE.toList (cs ^. invs)
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NE.NonEmpty e -> ConstraintSet e

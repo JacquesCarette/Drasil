@@ -82,6 +82,9 @@ instance HasSpace           InstanceModel where typ = output . typ
 -- | Finds the units of the 'InstanceModel'.
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
+instance TypeChecks InstanceModel Expr Space where
+  typeCheckExpr = typeCheckExpr . (^. mk)
+
 -- | Smart constructor for instance models with everything defined.
 im :: ModelKind Expr -> Inputs -> Output -> 
   OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel

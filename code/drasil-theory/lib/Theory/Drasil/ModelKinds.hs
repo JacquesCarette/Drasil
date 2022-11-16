@@ -1,4 +1,6 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators, GADTs  #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 -- | Defines types and functions for creating models.
 module Theory.Drasil.ModelKinds (
   -- * Types
@@ -18,7 +20,7 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
-  UID, DifferentialModel, mkUid)
+  UID, DifferentialModel, mkUid, TypeChecks (..), Space, HasSpace(typ), DefiningExpr (defnExpr))
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -126,6 +128,14 @@ instance ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom)
 instance Express e => Express (ModelKinds e) where
   express = elimMk (to express) (to express) (to express) (to express) (to express)
 
+instance TypeChecks (ModelKinds Expr) Expr Space where
+  typeCheckExpr (NewDEModel dm)            = typeCheckExpr dm
+  typeCheckExpr (DEModel _)                = mempty
+  typeCheckExpr (EquationalConstraints cs) = typeCheckExpr cs
+  typeCheckExpr (EquationalModel qd)       = pure (qd ^. defnExpr, qd ^. typ)
+  typeCheckExpr (EquationalRealm md)       = typeCheckExpr md
+  typeCheckExpr (OthModel _)               = mempty
+
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
 -- | Finds the 'UID' of the 'ModelKind'.
@@ -141,6 +151,9 @@ instance ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKind e) where
   express = express . (^. mk)
+
+instance TypeChecks (ModelKind Expr) Expr Space where
+  typeCheckExpr = typeCheckExpr . (^. mk)
 
 -- | Retrieve internal data from ModelKinds
 elimMk :: Getter DifferentialModel a 

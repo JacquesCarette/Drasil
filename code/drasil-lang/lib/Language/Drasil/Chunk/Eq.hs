@@ -65,7 +65,7 @@ instance Express e => Express (QDefinition e) where
 instance ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
 
 instance TypeChecks (QDefinition Expr) Expr Space where
-  typeCheckExpr (QD q _ e) = (e, q ^. typ)
+  typeCheckExpr (QD q _ e) = pure (e, q ^. typ)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.

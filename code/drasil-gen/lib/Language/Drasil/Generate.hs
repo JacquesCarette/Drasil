@@ -38,6 +38,8 @@ import Data.Either (isRight)
 import Control.Lens ((^.))
 import Control.Monad (when)
 import Theory.Drasil (getEqModQdsFromIm)
+import Data.Bifunctor (second)
+import Data.List (partition)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -107,19 +109,40 @@ typeCheckSIQDs
   (SI _ _ _ _ _ _ ims _ _ _ _ _ _ _ chks _ _)
   = do
     putStrLn "[ Start type checking ]"
+
+    -- build a variable context (a map of UIDs to "Space"s [types])
     let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
-    let chkd = map (\qd ->
-          let
-            (e, sp) = typeCheckExpr qd :: (Expr, Space)
-          in either
-            (\_ -> Left $ show (qd ^. uid) ++ " (the IM) OK!")
-            (\x -> Right $ show (qd ^. uid) ++ " (the IM) fails type checking: " ++ x)
-            (check cxt e sp)
-          ) (getEqModQdsFromIm ims)
-    mapM_ (either print print) chkd
+
+    -- grab all of the IMs and their type-check-able expressions
+    let toChk = map (\im -> (im ^. uid, typeCheckExpr im :: [(Expr, Space)])) ims
+
+    let (notChkd, chkd) = partition (\(_, exsps) -> null exsps) toChk
+
+    mapM_ (\(im, _) -> putStrLn $ "WARNING: `" ++ show im ++ "` does not expose any expressions to type check.") notChkd
+
+    -- type check them
+    let chkdd = map (second (map (uncurry (check cxt)))) chkd
+
+    -- format 'ok' messages and 'type error' messages, as applicable
+    let formattedChkd :: [Either [Char] ([Char], [Either Space TypeError])]
+        formattedChkd = map 
+                          (\(im, tcs) -> if any isRight tcs
+                            then Right ("`" ++ show im ++ "` exposes ill-typed expressions!", filter isRight tcs)
+                            else Left $ "`" ++ show im ++ "` OK!") 
+                          chkdd
+
+    mapM_ (either
+            putStrLn
+            (\(imMsg, tcs) -> do 
+              putStrLn imMsg
+              mapM_ (\(Right s) -> do
+                putStr "  - " -- TODO: we need to be able to dump the expression to the console so that we can identify which expression caused the issue
+                putStrLn s) tcs
+              )
+      ) formattedChkd
     putStrLn "[ Finished type checking ]"
     -- FIXME: We want the program to "error out," but from where? Here doesn't seem right.
-    -- when (any isRight chkd) $ error "Type errors occurred, please check your expressions and adjust accordingly"
+    -- when (any isRight formattedChkd) $ error "Type errors occurred, please check your expressions and adjust accordingly"
 
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()

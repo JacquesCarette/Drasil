@@ -389,17 +389,3 @@ instance Typed Expr Space where
       isOfTy sp cxt' e = case infer cxt' e of
         Left x  -> Left $ x == sp
         Right x -> Right x -- This can't be "x -> x" due to type of "x" in this case conflicting!
-
-
--- instance (Typed a Space) => Typed (RealInterval a a) Space where
---   infer :: Typed a Space => TypingContext Space -> RealInterval a a -> Either Space TypeError
---   infer cxt (Bounded (_, l) (_, r)) = case (infer cxt l, infer cxt r) of
---     (Left Real, Right Real) -> Left Boolean
---   infer cxt (UpTo (_, x0)) = case infer cxt x0 of
---     Left Real -> Left Boolean
---     Left sp   -> Right $ "Expression in 'real interval' not Real-typed, but `" ++ show sp ++ "`-typed"
---     x         -> x
---   infer cxt (UpFrom (_, x0)) = case infer cxt x0 of
---     Left Real -> Left Boolean
---     Left sp   -> Right $ "Expression in 'real interval' not Real-typed, but `" ++ show sp ++ "`-typed"
---     x         -> x

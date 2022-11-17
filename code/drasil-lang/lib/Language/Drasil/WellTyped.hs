@@ -45,4 +45,6 @@ allOfType cxt es expect ret s
     allTsAreSp = all (\case
       Left  t -> t == expect
       Right _ -> False) allTs
+    -- FIXME: If an error is embedded within an error, then it will display
+    -- poorly because of hard-coded spacing. We need Docs instead of Strings!
     dumpAllTs = intercalate "\n" $ map (("      - " ++) . either show ("ERROR: " ++)) allTs

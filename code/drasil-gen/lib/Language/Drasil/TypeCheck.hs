@@ -1,41 +1,20 @@
 module Language.Drasil.TypeCheck where
 
-
 import qualified Data.Map.Strict as M
 
-import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
-import Text.PrettyPrint.HughesPJ (Doc, render)
-import Prelude hiding (id)
-import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
-  setCurrentDirectory)
-import Data.Time.Clock (getCurrentTime, utctDay)
-import Data.Time.Calendar (showGregorian)
-
-import Database.Drasil (symbolTable)
-import Build.Drasil (genMake)
 import Language.Drasil
-import Drasil.DocLang (mkGraphInfo)
-import SysInfo.Drasil (SystemInformation(SI, _sys))
-import Language.Drasil.Printers (Format(TeX, HTML, JSON),
- makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot, printAllDebugInfo)
-import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
-  Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
-  unPP, unJP, unCSP, unCPPP, unSP)
-import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec), DocChoices(DC))
-
-import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
-import Data.Char (isSpace)
-
+import Database.Drasil (symbolTable)
 import Data.Either (isRight)
 import Control.Lens ((^.))
 import Data.Bifunctor (second)
 import Data.List (partition)
+import SysInfo.Drasil (SystemInformation(SI))
 
 -- FIXME: I don't quite like this placement. I like the idea of it being done on
 -- the entire system at once, it makes debugging (right now) easily, but it
 -- should be closer to individual instances in the future.
-typeCheckSIQDs :: SystemInformation -> IO ()
-typeCheckSIQDs
+typeCheckSI :: SystemInformation -> IO ()
+typeCheckSI
   (SI _ _ _ _ _ _ ims _ _ _ _ _ _ _ chks _ _)
   = do
     putStrLn "[ Start type checking ]"

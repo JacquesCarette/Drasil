@@ -1,15 +1,13 @@
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate (
   -- * Type checking
-  typeCheckSIQDs,
+  typeCheckSI,
   -- * Generator Functions
   gen, genDot, genCode, genLog,
   -- * Types (Printing Options)
   DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC),
   -- * Constructor
   docChoices) where
-
-import qualified Data.Map.Strict as M
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -19,7 +17,6 @@ import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 
-import Database.Drasil (symbolTable)
 import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
@@ -35,11 +32,6 @@ import Language.Drasil.TypeCheck
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 import Data.Char (isSpace)
-
-import Data.Either (isRight)
-import Control.Lens ((^.))
-import Data.Bifunctor (second)
-import Data.List (partition)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()

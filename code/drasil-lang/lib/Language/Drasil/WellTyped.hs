@@ -1,10 +1,14 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Language.Drasil.WellTyped where
 
 import qualified Data.Map.Strict as M
 import Language.Drasil.UID (UID)
+import Data.List (intercalate)
 
+-- TODO: TypeError should be a Doc type instead, so that we can have cleaner
+-- error messages and formatting.
 type TypeError = String
 
 type TypingContext t = M.Map UID t
@@ -31,8 +35,14 @@ class Typed e t => TypeChecks c e t where
   -- checked at once, which a chunk may or may not expose.
   typeCheckExpr :: c -> [(e, t)]
 
-allOfType :: (Traversable tr, Typed e t) => TypingContext t -> tr e -> t -> Bool
-allOfType cxt es t = foldr
-  (\e acc -> acc && either (== t) (const False) (infer cxt e))
-  True
-  es
+-- TODO: This should be formatted with Docs rather than hacking together Strings.
+allOfType :: Typed e t => TypingContext t -> [e] -> t -> t -> TypeError -> Either t TypeError
+allOfType cxt es expect ret s
+  | allTsAreSp = Left ret
+  | otherwise  = Right $ s ++ "\n    Received:\n" ++ dumpAllTs
+  where
+    allTs = map (infer cxt) es
+    allTsAreSp = all (\case
+      Left  t -> t == expect
+      Right _ -> False) allTs
+    dumpAllTs = intercalate "\n" $ map (("      - " ++) . either show ("ERROR: " ++)) allTs

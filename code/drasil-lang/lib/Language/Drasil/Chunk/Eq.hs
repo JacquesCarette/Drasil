@@ -24,16 +24,15 @@ import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
+import Language.Drasil.Expr.Class (ExprC(apply, sy))
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Space (mkFunction, Space(..), HasSpace(..))
+import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (UID, HasUID(..))
-import Language.Drasil.WellTyped
-import qualified Data.Foldable as NE
+import Language.Drasil.WellTyped (TypeChecks(..))
 
 data QDefinition e where
   QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e

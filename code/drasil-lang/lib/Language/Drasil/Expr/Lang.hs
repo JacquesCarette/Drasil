@@ -214,14 +214,13 @@ instance Typed Expr Space where
   infer :: TypingContext Space -> Expr -> Either Space TypeError
   infer cxt (Lit lit) = infer cxt lit
 
-  infer cxt (AssocA op exs)
-    | allOfType cxt exs t = Left t
-    | otherwise = Right "Associative arithmetic operation does not contain strictly the same numeric type."
-      where t = assocArithOperToTy op
+  infer cxt (AssocA op exs) = allOfType cxt exs sp sp
+      "Associative arithmetic operation expects all operands to be of the same type."
+    where
+      sp = assocArithOperToTy op
 
-  infer cxt (AssocB _ exs)
-    | allOfType cxt exs S.Boolean = Left S.Boolean
-    | otherwise = Right "Associative boolean operation does not contain strictly boolean operands."
+  infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
+    "Associative boolean operation expects all operands to be of the same type."
 
   infer cxt (C uid) = inferFromContext cxt uid
 

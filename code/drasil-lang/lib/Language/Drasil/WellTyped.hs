@@ -11,6 +11,8 @@ import Data.List (intercalate)
 -- error messages and formatting.
 type TypeError = String
 
+-- | We can only type check 'UID's within a type context relating 'UID's to
+-- types since they don't carry any type information.
 type TypingContext t = M.Map UID t
 
 inferFromContext :: TypingContext t -> UID -> Either t TypeError

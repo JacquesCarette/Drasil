@@ -23,17 +23,19 @@ type Inputs = [Input]
 type Output = QuantityDict
 type OutputConstraints = [RealInterval Expr Expr]
 
--- | An instance model is a ModelKind that may have specific inputs, outputs, and output
--- constraints. It also has attributes like references, derivation, labels ('ShortName'), reference address, and notes.
-data InstanceModel = IM { _mk       :: ModelKind Expr
-                        , _imInputs :: Inputs
-                        , _imOutput :: (Output, OutputConstraints)
-                        , _rf       :: [DecRef]
-                        , _deri     :: Maybe Derivation
-                        ,  lb       :: ShortName
-                        ,  ra       :: String
-                        , _notes    :: [Sentence]
-                        }
+-- | An instance model is a ModelKind that may have specific inputs, outputs,
+-- and output constraints. It also has attributes like references, derivation,
+-- labels ('ShortName'), reference address, and notes.
+data InstanceModel = IM {
+    _mk       :: ModelKind Expr
+  , _imInputs :: Inputs
+  , _imOutput :: (Output, OutputConstraints)
+  , _rf       :: [DecRef]
+  , _deri     :: Maybe Derivation
+  ,  lb       :: ShortName
+  ,  ra       :: String
+  , _notes    :: [Sentence]
+}
 makeLenses ''InstanceModel
 
 -- | Finds the 'UID' of an 'InstanceModel'.
@@ -76,12 +78,13 @@ instance HasOutput          InstanceModel where
   output          = imOutput . _1
   out_constraints = imOutput . _2
 -- | Finds the output 'Symbol's of the 'InstanceModel'.
-instance HasSymbol          InstanceModel where symbol = symbol . view output -- ???
+instance HasSymbol          InstanceModel where symbol = symbol . view output -- FIXME: InstanceModels don't necessarily need to have a symbol.
 -- | Finds the output 'Space' of the 'InstanceModel'.
 instance HasSpace           InstanceModel where typ = output . typ
 -- | Finds the units of the 'InstanceModel'.
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
+-- | Expose all expressions that need to be type-checked.
 instance TypeChecks InstanceModel Expr Space where
   typeCheckExpr = typeCheckExpr . (^. mk)
 

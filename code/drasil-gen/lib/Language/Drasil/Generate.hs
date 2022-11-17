@@ -111,6 +111,7 @@ typeCheckSIQDs
     -- build a variable context (a map of UIDs to "Space"s [types])
     let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
 
+    -- dump out the list of variables
     print $ M.toList cxt
 
     -- grab all of the IMs and their type-check-able expressions

@@ -23,7 +23,6 @@ dependencies:
 - drasil-lang
 - drasil-printers
 - drasil-sysinfo
-- drasil-theory
 - lens
 
 ghc-options:

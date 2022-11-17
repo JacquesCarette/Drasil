@@ -22,7 +22,7 @@ symbols:: [QuantityDict]
 symbols = map qw unitalChunks ++ map qw unitless
 
 inputs :: [QuantityDict]
-inputs = map qw [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle] 
+inputs = map qw [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
 
 outputs :: [QuantityDict]
 outputs = [qw pendDisplacementAngle]

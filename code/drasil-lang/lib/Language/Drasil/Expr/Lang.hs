@@ -260,10 +260,10 @@ instance Typed Expr Space where
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
     Left sp -> case uf of
-      Abs -> if S.isNumericSpace sp && sp /= S.Natural
+      Abs -> if S.isBasicNumSpace sp && sp /= S.Natural
         then Left sp
         else Right "numeric 'absolute' value operator only applies to, non-natural, numeric types"
-      Neg -> if S.isNumericSpace sp && sp /= S.Natural
+      Neg -> if S.isBasicNumSpace sp && sp /= S.Natural
         then Left sp
         else Right "negation only applies to, non-natural, numeric types"
       Exp -> if sp == S.Real || sp == S.Integer then Left S.Real else Right $ show Exp ++ " only applies to reals"
@@ -277,7 +277,7 @@ instance Typed Expr Space where
 
   -- TODO: What about "Vect Vect ... Vect X"?
   infer cxt (UnaryOpVV NegV e) = case infer cxt e of
-    Left (S.Vect sp) -> if S.isNumericSpace sp && sp /= S.Natural
+    Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
       then Left $ S.Vect sp
       else Right "Vector negation only applies to, non-natural, numbered vectors"
     Left _ -> Right "Vector negation should only be applied to numeric vectors."
@@ -295,21 +295,21 @@ instance Typed Expr Space where
     ex -> ex
 
   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left rt) -> if S.isNumericSpace lt && lt == rt -- FIXME: What do we want here?
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt -- FIXME: What do we want here?
       then Left lt
       else Right "Fractions/divisions should only be applied to the same numeric typed operands"
     (_      , Right e) -> Right e
     (Right e, _      ) -> Right e
 
   infer cxt (ArithBinaryOp Pow l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left rt) -> if S.isNumericSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
       then Left lt
       else Right "Powers only be applied to the same numeric type in both operands, or real base with integer exponent"
     (_      , Right x) -> Right x
     (Right x, _      ) -> Right x
 
   infer cxt (ArithBinaryOp Subt l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left rt) -> if S.isNumericSpace lt && lt == rt
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Left lt
       else Right "Both operands of a subtraction must be the same numeric type"
     (_, Right re) -> Right re
@@ -337,7 +337,7 @@ instance Typed Expr Space where
     (Right e         , _      ) -> Right e
 
   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left rt) -> if S.isNumericSpace lt && lt == rt
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Left S.Boolean
       else Right $ "Both operands of a numeric comparison must be the same numeric type, got: " ++ show lt ++ ", " ++ show rt
     (_, Right re) -> Right re
@@ -351,7 +351,7 @@ instance Typed Expr Space where
     (Right le, _       ) -> Right le
 
   infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Left (S.Vect lsp), Left (S.Vect rsp)) -> if lsp == rsp && S.isNumericSpace lsp
+    (Left (S.Vect lsp), Left (S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
       then Left lsp
       else Right "Vector dot product expects numeric vector operands"
     (Left _, Left _) -> Right "Vector dot product expects vector operands"

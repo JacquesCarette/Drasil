@@ -15,7 +15,7 @@ module Language.Drasil.Space (
   -- * Class
   HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction, isNumericSpace
+  getActorName, getInnerSpace, mkFunction, isBasicNumSpace
 ) where
 
 import qualified Data.List.NonEmpty        as NE
@@ -93,10 +93,21 @@ getInnerSpace :: Space -> Space
 getInnerSpace (Vect s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
-isNumericSpace :: Space -> Bool
-isNumericSpace Integer  = True
-isNumericSpace Rational = True
-isNumericSpace Real     = True
-isNumericSpace Natural  = True
-isNumericSpace Radians  = True
-isNumericSpace _        = False
+-- | Is this Space a basic numeric space?
+isBasicNumSpace :: Space -> Bool
+isBasicNumSpace Integer      = True
+isBasicNumSpace Rational     = True
+isBasicNumSpace Real         = True
+isBasicNumSpace Natural      = True
+isBasicNumSpace Radians      = True
+isBasicNumSpace Boolean      = False
+isBasicNumSpace Char         = False
+isBasicNumSpace String       = False
+isBasicNumSpace Vect {}      = False
+isBasicNumSpace Matrix {}    = False
+isBasicNumSpace Array {}     = False
+isBasicNumSpace Actor {}     = False
+isBasicNumSpace DiscreteD {} = False
+isBasicNumSpace DiscreteS {} = False
+isBasicNumSpace Function {}  = False
+isBasicNumSpace Void         = False

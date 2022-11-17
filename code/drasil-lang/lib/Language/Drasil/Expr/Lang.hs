@@ -205,9 +205,10 @@ instance LiteralC Expr where
   perc l r = Lit $ perc l r
 
 assocArithOperToTy :: AssocArithOper -> Space
-assocArithOperToTy AddI = S.Integer
-assocArithOperToTy MulI = S.Integer
-assocArithOperToTy _    = S.Real
+assocArithOperToTy AddI  = S.Integer
+assocArithOperToTy MulI  = S.Integer
+assocArithOperToTy AddRe = S.Real
+assocArithOperToTy MulRe = S.Real
 
 instance Typed Expr Space where
   infer :: TypingContext Space -> Expr -> Either Space TypeError

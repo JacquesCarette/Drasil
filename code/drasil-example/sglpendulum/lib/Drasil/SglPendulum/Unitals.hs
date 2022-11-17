@@ -43,9 +43,11 @@ lenRod = makeUCWDS "l_rod" (cn "length of the rod")
         (phraseNP (len `the_ofThe` rod))
         (sub cL lRod) metre
 
+-- pendDisplacementAngle = ucsWS "pendDisplacementAngle" (cn "displacement angle of the pendulum")
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of the pendulum")
         (phraseNP (angle `the_ofThe` pendulum))
         (sub lTheta lP) radian
+        -- (sub lTheta lP) (mkFunction [Real] Real) radian
 
 initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
         (phraseNP (NP.the (CM.iAngle `of_` pendulum)))

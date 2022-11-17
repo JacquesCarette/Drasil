@@ -1,6 +1,6 @@
 {-# LANGUAGE RankNTypes, FlexibleInstances, GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE MultiParamTypeClasses, TupleSections #-}
 
 -- | Contains chunks related to adding an expression to a quantitative concept. 
 module Language.Drasil.Chunk.Eq (
@@ -28,7 +28,7 @@ import Language.Drasil.Expr.Class (ExprC(apply, sy))
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Space (mkFunction, Space, Space, HasSpace(..))
+import Language.Drasil.Space (mkFunction, Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (UID, HasUID(..))
@@ -65,7 +65,12 @@ instance Express e => Express (QDefinition e) where
 instance ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
 
 instance TypeChecks (QDefinition Expr) Expr Space where
-  typeCheckExpr (QD q _ e) = pure (e, q ^. typ)
+  -- the expectation of the type of the expression should be the type of the
+  -- output of the defined variable.
+  typeCheckExpr (QD q _ e) = pure $ (e,) $ case (q ^. typ) of
+    (Function _ o) -> o
+    x -> x
+    -- pure (e, q ^. typ)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
@@ -122,7 +127,8 @@ mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
   (dqd' (cc' (nw (ncUID (f ^. uid) n)) s) (symbol f)
-    (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
+    (f ^. typ) u) (map (^. uid) is)
+    -- (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, resultant units, and a defining Expr
 mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f,

@@ -265,6 +265,7 @@ module Language.Drasil (
   , RealInterval(..), Inclusive(..)
   , DomainDesc(..), RTopology(..), ContinuousDomainDesc, DiscreteDomainDesc
   , getActorName, getInnerSpace
+  , mkFunction, Primitive
   -- Language.Drasil.Symbol
   , Decoration, Symbol
   -- Language.Drasil.UnitLang
@@ -365,7 +366,7 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
-  getActorName, getInnerSpace, HasSpace(..))
+  getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold

@@ -9,7 +9,7 @@
 -- | Number space types and functions.
 module Language.Drasil.Space (
   -- * Types
-  Space(..),
+  Space(..), Primitive,
   RealInterval(..), Inclusive(..),
   DomainDesc(..), RTopology(..), DiscreteDomainDesc, ContinuousDomainDesc,
   -- * Class

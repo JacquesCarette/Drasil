@@ -24,7 +24,7 @@ import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Expr.Class (ExprC(apply, sy))
+import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
@@ -33,6 +33,7 @@ import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (UID, HasUID(..))
 import Language.Drasil.WellTyped
+import qualified Data.Foldable as NE
 
 data QDefinition e where
   QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
@@ -65,9 +66,10 @@ instance Express e => Express (QDefinition e) where
 instance ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
 
 instance TypeChecks (QDefinition Expr) Expr Space where
+  -- FIXME: Does not type check input parameters are the right parameter types.
   -- the expectation of the type of the expression should be the type of the
   -- output of the defined variable.
-  typeCheckExpr (QD q _ e) = pure $ (e,) $ case (q ^. typ) of
+  typeCheckExpr (QD q _ e) = pure $ (e,) $ case q ^. typ of
     (Function _ o) -> o
     x -> x
     -- pure (e, q ^. typ)
@@ -130,20 +132,23 @@ mkFuncDef0 f n s u is = QD
     (f ^. typ) u) (map (^. uid) is)
     -- (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 
--- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, resultant units, and a defining Expr
+-- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
+-- resultant units, and a defining Expr
 mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f,
               HasUID i, HasSymbol i, HasSpace i,
               IsUnit u) =>
   f -> NP -> Sentence -> u -> [i] -> e -> QDefinition e
 mkFuncDef f n s u = mkFuncDef0 f n s (Just $ unitWrapper u)
 
--- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, and a defining Expr
+-- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
+-- and a defining Expr
 mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f,
                HasUID i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> [i] -> e -> QDefinition e
 mkFuncDef' f n s = mkFuncDef0 f n s Nothing
 
--- | Create a 'QDefinition' functions using a symbol, list of inputs, and a defining Expr
+-- | Create a 'QDefinition' functions using a symbol, list of inputs, and a
+-- defining Expr
 mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c,
                  Quantity i, HasSpace i) =>
   c -> [i] -> e -> QDefinition e

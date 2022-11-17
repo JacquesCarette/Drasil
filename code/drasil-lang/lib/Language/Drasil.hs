@@ -290,12 +290,12 @@ module Language.Drasil (
   , check
   , Typed(..)
   , TypeChecks(..)
-  , allOfType
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 
-import Language.Drasil.WellTyped
+import Language.Drasil.WellTyped (TypeChecks(..), Typed(..), TypingContext,
+  TypeError, inferFromContext, check )
 
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2)

@@ -54,40 +54,41 @@ Haskells basic \inlineHs{data} types (example later), tagging it with a
 \refOriginalUidHaskell{}). For example, \refOriginalQuantityDictExampleHaskell{}
 has the manually defined \acs{uid}: \textit{tolLoad}.
 
-Additionally, all chunks also have a specific \textit{type} they belong to. For
-example, \refOriginalQuantityDictExampleHaskell{} is a \QuantityDict{}
+More importantly, all chunks also have a specific \textit{type} they belong to.
+For example, \refOriginalQuantityDictExampleHaskell{} is a \QuantityDict{}
 (\refOriginalQuantityDictHaskell{}). Drasil leverages Haskells type system to
 create a system of reasoning about chunks. As such, when we create instances of
-chunks, they are ``typed'' with a single fully monomorphic type signature.
-Commonly, we create chunks to discuss relations between other chunks. As such,
-chunks commonly also refer to other instances of chunks, but, instead of storing
-whole constituent chunks within them, we store \UID{} references to those
-constituent chunks. In doing this, we ensure that all references to that chunk
-refer to the same piece of immutable data.
+chunks, they are ``typed'' with a single fully monomorphic type signature. There
+is no hard criteria yet for knowing what \inlineHs{data} types are chunks or
+not, but we do have basic requirements: they must have a \acs{uid}, they must
+expose, in some way, what chunks they depend on, and they must be usable in some
+way. Commonly, we create chunks to discuss relations between other chunks. To
+discuss the relationships, we refer to related chunks by their \acsp{uid} rather
+than the whole constituent chunk to ensure that all references are the same with
+respect to the global set of \acsp{uid}.
 
-Searching for chunks by their \UID{}s requires us to have somewhere to search
-from. Drasil requires developers to collect all of their relevant chunks inside
-of an encompassing ``chunk database.'' The ``chunk database'' (\ChunkDB{}) is
-built (as seen in \refOriginalChunkDBHaskell{}) using a series of maps
-(\refOriginalChunkDBTypeMapsHaskell) that map \UID{} keys to chunk data. Each
-map is a map from a \UID{} to a specific data monomorphic data type. As such, in
-order to access a chunk by its \UID{}, the associated type of the chunk must be
-known, even if operations we intended to use on the grabbed chunk are generic,
-applicable to any similar category of chunks (such as those satisfying a
-particular typeclass constraint set), or all ``chunks''. Additionally, since
-there is one map per monomorphic type, it means that all chunk types must be
-known and coded in the \ChunkDB{} beforehand. Of course, this means that set of
-types that Drasil can work with is fixed, and, that if we have \(N\) types (with
-no type parameters), then there must be \(N\) maps in the \ChunkDB{} data type.
-However, for each chunk type with type parameters, each argument combination
-would need to also be registered. Together, this leads to an ever-growing series
-of maps, and scales poorly against new knowledge being ``taught'' to Drasil.
-Additionally, since we have a collection of maps, ensuring \UID{} collisions
-never occur becomes tedious.
+We call the global set of chunks (and \acsp{uid}) the ``chunk database.'' The
+chunk database (\ChunkDB{}, \refOriginalChunkDBHaskell{}) is built using a
+series of maps (\refOriginalChunkDBTypeMapsHaskell) that map \UID{} keys to
+chunk data. Each map is a map from a \UID{} to a specific data monomorphic data
+type. As such, in order to access a chunk by its \UID{}, the associated type of
+the chunk must be known, even if operations we intended to use on the chunk are
+generic, applicable to any similar category of chunks (such as those satisfying
+a particular typeclass constraint set) or all chunks. Additionally, since there
+is one map per chunk type, all chunk types must be known and coded in the
+\ChunkDB{} beforehand. Of course, this means the set of types that Drasil can
+work with is fixed and difficult to extend. For example, if we have \(n\) types
+(with no type parameters), then there must be \(n\) maps in the \ChunkDB{} data
+type. However, for each chunk type with type parameters, each argument
+combination would need to also be registered. Together, this leads to an
+ever-growing series of maps, which scales poorly against new knowledge being
+``taught'' to (encoded in) Drasil. Additionally, since we have a collection of
+maps, ensuring \UID{} collisions never occur becomes tedious.
 
 \originalChunkDBHaskell{}
 
 \section{Scaling Against New Types}
+\label{chap:storingChunks:sec:scaling-against-new-types}
 
 Fundamentally, the issue with the \ChunkDB{} is that it caters to each
 individual type by creating a map for each type, leading to tedious busy work to
@@ -99,42 +100,43 @@ references to any specific type, but describe what kinds of types are admissible
 (which should be any valid chunk). However, this isn't to say that we should
 erase all types. Rather, we should mask the type information for the purpose of
 storage and minimum viable usage, but ensure that the type information can be
-unmasked for retrieval and normal usage.
+unmasked for retrieval and normal usage. Thus, the question arises: how can we
+achieve this?
 
-The question: how can we achieve this?
-
-To collapse the series of maps into a single one, we need to have a common data
-type for the maps ``value'' type. 
+To collapse the series of maps into a single one, we need to have a common
+``box'' data type that can be used as the value, which carries the actual chunk
+data. Notably, we need a box that retains type information that we can use to
+unbox them to use the chunks as normally.
 
 \badUniversalChunkCarriage{}
 
-Now, we have a common data type to wrap our data in: \Chunk{}. Since the type
-parameters expose the type of the internal data, we will be able to unpack the
-Chunk box into the internal data as well. However, this type parameter is also
-an issue for storage, we run into the same issue of needing to create a series
-of maps, one for each type:
+Now, we have a common data type to wrap our data in: \Chunk{}. The type
+parameter exposes type information for us to be able to unpack the \Chunk{} box
+back to its actual chunk content, so that we may use it as normal. However, this
+type parameter is also an issue for storage, we run into the same issue of
+needing to create a series of maps, one for each type:
 
 \showingBadChunkWouldFailChunkDB{}
 
-We need to be able to ignore the type parameter entirely without losing the
-ability to unpack the data as needed. The nice thing about this ``as needed''
-clause is that we will have an explicit expectation of what the type
-\textit{should} be. In other words, it is sufficient that we can \textit{safely
-attempt} to unpack data and cast it to a specific data.
+Hence, carrying type information as a parameter is not the solution. We need to
+have a single monomorphic data type that we can use to carry all chunk data
+along with their type information. The type information allows us to
+\textit{safely} attempt to cast the data back to its original chunk form, before
+being placed into the \ChunkDB{}.
 
 Thankfully, \acs{ghc} provides us with the ``Existential Quantification''
-language feature \cite{GHC2020ExistentialQuantification} that we can enable by
-placing a small compiler option at the top of our Haskell files (e.g.,
+language feature \cite{GHC2020ExistentialQuantification}\footnote{We can enable
+it by placing a small compiler option at the top of our Haskell files (e.g.,
 \mintinline{haskell}{{-# LANGUAGE ExistentialQuantification #-}}), or, in our
-\texttt{package.yaml} files. The ``Existential Quantification'' feature allows
-us to qualify over variable types. In  particular, this is useful for
-heterogeneous lists with elements, sub-typed against a set of constraints, in
-Haskell (which isn't normally encouraged, nor directly possible). In other
-words, it is useful because it allows us to ignore the type while retaining the
-value and a common basic functionality to all sub-typed elements through
-accessing the structural information through a set of constraints. With this, we
-can re-create \Chunk{} using \ExistentialQuantification{} to hide the type
-parameter:
+\texttt{package.yaml} files}. ``Existential Quantification'' allows us to
+quantify over the type parameter in the \Chunk{} constructor while retaining the
+context (the type information). In  particular, this is useful for heterogeneous
+lists with elements, sub-typed against a set of constraints, in Haskell (which
+isn't normally encouraged, nor directly possible). In other words, it is useful
+because it allows us to ignore the type while retaining the value and a common
+basic functionality to all sub-typed elements through accessing the structural
+information through a set of constraints. With this, we can re-create \Chunk{}
+using \ExistentialQuantification{} to hide the type parameter:
 
 \voidDataChunks{}
 
@@ -148,15 +150,17 @@ see:
 
 \brokenChunkRetriever{}
 
-\Chunk{}s are currently an informational void. So, this results in a type error
-(\refChunkRetrieverError{}). Haskell is unable to coerce the rigid type \(a\)
-into the \QuantityDict{} type.
+\Chunk{}s are currently an informational void. We have the type information
+accessible, but no way to use that type information to restore the chunk data to
+its original typed form. So, this doesn't quite work yet. For example, in
+\refChunkRetrieverError{}, Haskell is unable to coerce the rigid parameter type
+\(a\) into the \QuantityDict{} type.
 
 \chunkRetrieverError{}
 
-So, how can we try to fix this? \inlineHs{Data.Typeable} to the rescue! With
-\inlineHs{Data.Typeable}, we're able to work with any piece of data given to us
-without being provided any information about the data directly.
+So, how can we try to fix this? \inlineHs{Data.Typeable} \textit{to the rescue!}
+With \inlineHs{Data.Typeable}, we're able to work with any piece of data given
+to us without being provided any information about the data directly.
 \inlineHs{Data.Typeable} allows us to create constrained types with extra
 functionality for casting (amongst other common reflection operations). First,
 we need to alter our \Chunk{} data type to make the contained data satisfy the
@@ -191,7 +195,7 @@ To sum up, at this point:
 \end{itemize}
 
 Now, let's impose restrictions on the admissible chunks, to ensure that they are
-indeed ``admissible,'' namely:
+indeed ``admissible,'' namely we desire the following restrictions:
 
 \begin{enumerate}
       
@@ -203,11 +207,13 @@ indeed ``admissible,'' namely:
 
 One implicit contract we had with the chunks in the past, was that they were all
 expected to have \UID{}s. Now, we can try to make this contract more explicit
-through imposing typeclass constraints, as below:
+through imposing typeclass constraints. For example, \refUidOwnershipContract{}
+is one possible way.
 
 \uidOwnershipContract{}
 
-And then we would alter our \Chunk{} definition:
+Afterwards, we would alter our \Chunk{} definition
+(\refChunksWithUidConstraint{}) to add it.
 
 \chunksWithUidConstraint{}
 
@@ -217,62 +223,71 @@ by a single instance of any chunk. This is fine for now, and is left for future
 work as part of future work (\Cref{chap:futureWork:sec:chunks}).
 
 For the last restriction we want to impose, we want to ensure that chunks are
-always ``understandable'' in a sense that all chunks they depend on have already
-been entered in the chunk database as well. In other words, all information they
-depend on should have already been entered before they are entered.
+always ``understandable'' in a sense that all chunks they depend exist and have
+already been registered in the chunk database as well. In other words, all
+information they depend on should have already been entered before they are
+entered.
 
 \chunkDependenciesContract{}
 
-And then we would alter our \Chunk{} definition:
+Once again, we would alter our \Chunk{} definition accordingly
+(\refChunksWithUidAndRefListConstraint{}).
 
 \chunksWithUidAndRefListConstraint{}
 
-As you can see, adding restrictions on all chunks is now also considerably
-simpler\footnote{We can also wrap up the constraints together for easier use by
-enabling ``constraint kinds'' language extension \cite{GHC2020ConstraintKinds},
-and bundling the constraints together (e.g., \refProtoIsChunkHaskell{}).}. If
-we're interested, we can add a ``dump to X'' mechanism, where $X$ is any
-encoding of our choice (such as \acs{json}), similarly. This is omitted for
-brevity, but we chose to add this. For now, this chunk structure will be our
-final definition of a chunk: an arbitrary \textit{thing} that has a type which
-indicates how it's usable, a acs{UID}, and a list of \textit{things} it
-references (and hence depends on) to be sufficiently ``understood.''
+Adding restrictions on all chunks is now also considerably simpler\footnote{We
+can also wrap up the constraints together under a single constraint by using the
+``constraint kinds'' language extension \cite{GHC2020ConstraintKinds} (e.g.,
+\refProtoIsChunkHaskell{}).}. If we're interested, we can add a ``dump to X''
+mechanism, where $X$ is any encoding of our choice (such as \acs{json}),
+similarly. This is omitted for brevity, but we chose to add this. For now, this
+chunk structure will be our final specification of a chunk: an arbitrary
+\textit{thing} that has a type which indicates how it's usable, a \acs{uid}, and
+a list of \textit{things} it references (and hence depends on) to be
+sufficiently ``understood.''
 
-Now, we may move our gaze back to the \ChunkDB{} structure. The most commonly
-used feature of the previous generation of the \ChunkDB{} was that it allowed
-the user to grab \textit{all} chunks of a particular type in one go. We can
-re-create this for this new \ChunkDB{} as well by using
-\inlineHs{Data.Typeable}s \TypeRep{} signature representation of Haskell types:
+Now, we may return to discussing the \ChunkDB{} structure. We often perform
+actions (e.g., generation, validation, etc.) on all chunks of a particular type
+or belonging to a set of types. Thus, \textit{retrieval} by type is a needed
+feature of \ChunkDB{}s. Originally, this was done by selecting the right map and
+using it normally. However, with the upgraded variant of chunk databases
+(\refProtoChunkDBHaskell{{}}), this is not as simple, albeit more flexible. We
+can re-create this for the new \ChunkDB{} as well by using
+\inlineHs{Data.Typeable}s \TypeRep{} signature representation of Haskell types
+(\refPseudoGrabAllChunksFromNewChunkDB{}).
 
 \pseudoGrabAllChunksFromNewChunkDB{}
 
-However, this is something of an expensive and commonly performed task, so it's
-inefficient. So, in order to make the \ChunkDB{} more ``industrial-strength,''
-we can add an extra mechanism for caching in various ways to trade a bit of
-memory for a frequent and expensive search operation: \refProtoChunkDBHaskell{}.
+However, this is an expensive operation because it tests every chunk registered
+in the chunk database. Since retrieval is a commonly performed task, it will
+slow down Drasil. So, in order to make the \ChunkDB{} more
+``industrial-strength,'' we can add an extra mechanism for caching (in various
+ways) to trade a bit of memory for a frequent and expensive search operation:
+\refProtoChunkDBHaskell{}.
 
 \protoChunkDBHaskell{}
 
 Now, we have extra functionality for caching by \TypeRep{}s without needing to
-calculate it every time we need it. Since it's frequently used in Drasils case
-studies and artifact generation, this will save \acs{cpu} time. Additionally, we
-added a traceability matrix to easily find which chunks depend on which (direct
-ones only, indirect ones can be calculated later if needed). 
-
-With this upgraded \ChunkDB{}, we can also now build typed \acs{uid} references:
-\refProtoTypedUIDHaskell{}.
+calculate it every time we need it, saving \acs{cpu} time. Additionally, we
+added a traceability matrix to quickly find which chunks depend on which (direct
+ones only, indirect ones can be calculated later if needed)\footnote{i.e., a
+mechanism for listing which chunks depend on a specific chunk.}.
 
 \protoTypedUIDHaskell{}
 
-\ChunkDB{} is now a usable core across Drasil-like projects (ones thriving on
-the same ``knowledge-based programming'' ideology). At the moment, the database
+With this upgraded \ChunkDB{}, we can also now build typed \acs{uid} references:
+\refProtoTypedUIDHaskell{}. These are useful for chunk-level assurance that
+\acsp{uid} relate to something of an expected type.
+
+\ChunkDB{} is a usable core across Drasil-like projects (ones thriving on the
+same ``knowledge-based programming'' ideology). At the moment, the database
 prototype lies in a separate Haskell project. Work on incorporating the database
 in Drasil has been halted due to \acs{uid} conflicts arising in the case
 studies. The port lies in both a \porthref{separate
 repository}{https://github.com/balacij/ProtoChunkDB} (in prototype form) and a
 \porthref{separate
 branch}{https://github.com/JacquesCarette/Drasil/tree/newChunkDB} on Drasils git
-repository, but can only be merged into the stable branch once we resolve the
+repository, but can only be merged into the stable branch once we resolve some
 \acs{uid} conflicts.
 
 \matryoshkaDollsImg{}
@@ -283,14 +298,16 @@ dolls (\refMatryoshkaDollsImg{}).
 
 \pseudoChunkNestingHaskell{}
 
-In \refPseudoChunkNestingHaskell{}\footnote{The examples do not exist in Drasil,
-but they represent how chunks are ``gradually built.''}, chunks rely on a common
-data type for functionality related to displaying text related to the name,
-short name, and abbreviation of things. The current system assumes that the
-chunks share a \acs{uid}. In the previous generation of \ChunkDB{}, this is
-allowed because there was no \UID{} uniqueness checking across types. However,
-the new \ChunkDB{}s require \UID{} uniqueness across chunk types, leading to
-incompatibility issues. As such, the structure comes in to question. They're
+For example, in \refPseudoChunkNestingHaskell{}\footnote{Which does not exist in
+Drasil, but is here purely for explanation purposes.}, chunks rely on a common
+data type for their \acs{uid}. In Drasil, this is a common structure for
+building up chunks using smaller ``inner'' chunks to quickly get some basic
+features in a chunk, such as a name, short name, or abbreviation. In the
+previous generation of \ChunkDB{}, \acs{uid} sharing across types is allowed
+because there was no \UID{} uniqueness checking across types. However, the new
+\ChunkDB{}s strictly require \UID{} uniqueness across chunk types because there
+is only one ``chunk'' map under it. Unfortunately, this leads to compatibility
+issues. As such, the structure of chunk building comes in to question. They're
 currently built in such a way that relies on assuming that certain chunk types
 exist and are related to other chunk types that share a \UID{} with them. In
 other words, a ``whole chunk'' is the union of the chunks with the same \UID{}
@@ -299,7 +316,8 @@ resolved, all depending on the needs of ``chunk building.'' For example, there
 are at least three (3) possible resolutions: 
 \begin{inparaenum}[(i)]
       
-      \item forcibly/naively changing the \UID{}s, 
+      \item forcibly/naively changing the \UID{}s, creating a strict distinction
+            between them, 
 
       \item forcibly/naively collapsing the chunk structure, and 
       

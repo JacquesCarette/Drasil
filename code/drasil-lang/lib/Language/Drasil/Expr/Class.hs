@@ -408,8 +408,6 @@ instance ExprC Expr where
 
   -- Some helper functions to do function application
   
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
   apply f ps = FCall (f ^. uid) ps []
   

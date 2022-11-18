@@ -24,9 +24,10 @@ import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Expr.Class (ExprC(apply, sy))
+import qualified Language.Drasil.Expr.Lang as E (Expr(C))
+import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
-import Language.Drasil.ModelExpr.Lang (ModelExpr(C))
+import qualified Language.Drasil.ModelExpr.Lang as M (ModelExpr(C))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
@@ -61,17 +62,19 @@ instance Express e => Express (QDefinition e) where
     where
       f = case q ^. qdInputs of
         [] -> defines (sy q)
-        is -> defines $ apply q (map C is)
+        is -> defines $ apply q (map M.C is) 
+        -- FIXME: The fact that we have to manually use `C` here is because our
+        -- UID references don't carry enough information. This feels hacky at
+        -- the moment, and should eventually be fixed.
 instance ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
 
 instance TypeChecks (QDefinition Expr) Expr Space where
-  -- FIXME: Does not type check input parameters are the right parameter types.
-  -- the expectation of the type of the expression should be the type of the
-  -- output of the defined variable.
-  typeCheckExpr (QD q _ e) = pure $ (e,) $ case q ^. typ of
-    (Function _ o) -> o
-    x -> x
-    -- pure (e, q ^. typ)
+  -- FIXME: Here, we are type-checking QDefinitions by building it as a relation
+  -- and running the relation through the type-checker. We do this because the
+  -- "normal" way does not work for Functions because it leaves function input
+  -- parameters left unchecked. It's probably preferred to be doing type
+  -- checking at time of chunk creation rather than here, really.
+  typeCheckExpr (QD q is e) = pure (apply q (map E.C is) $= e, Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.

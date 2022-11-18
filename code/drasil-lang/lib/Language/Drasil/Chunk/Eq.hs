@@ -1,6 +1,6 @@
 {-# LANGUAGE RankNTypes, FlexibleInstances, GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-{-# LANGUAGE MultiParamTypeClasses, TupleSections #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | Contains chunks related to adding an expression to a quantitative concept. 
 module Language.Drasil.Chunk.Eq (
@@ -62,7 +62,7 @@ instance Express e => Express (QDefinition e) where
     where
       f = case q ^. qdInputs of
         [] -> defines (sy q)
-        is -> defines $ apply q (map M.C is) 
+        is -> defines $ apply q (map M.C is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.

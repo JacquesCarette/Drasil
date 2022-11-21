@@ -1,6 +1,101 @@
 \chapter{Background}
 \section{Software Artifacts}
 \label{sec:sfs}
+
+Software artifacts (or \sfs{}) come in a wide variety of forms and have existed 
+since the first programs were created. In the broadest sense, we can think of 
+\sfs{} as anything produced during the creation of a piece of software that 
+serves some purpose. Any document detailing what the software should do, how it 
+was designed, how it was implemented, how to test it, and so on would be 
+considered a \sf{}, as would the source code whether as a text file, stack of 
+punched cards, magnetic tapes, or other media.
+
+Software design can follow a number of different design processes, each with 
+their own collection of \sfs{}. A common, traditional approach is the Waterfall 
+model of software development~\cite{}(Figure~\ref{fig:Waterfall}). However, 
+Parnas and Clements~\cite{ParnasAndClements1986} detailed what they dubbed a 
+``rational" design process; an idealized version of software development which 
+includes what needs to be documented in corresponding \sfs{}. The rational 
+design process involves the following:
+
+\begin{enumerate}
+\item Establish/Document Requirements
+\item Design and Document the Module Structure
+\item Design and Document the Module Interfaces
+\item Design and Document the Module Internal Structures
+\item Write Programs
+\item Maintain
+\end{enumerate}
+
+Parnas provided a list of the most important documents~\cite{Parnas2010} 
+required for the rational design process, which 
+Smith~\cite{SmithAndKoothoor2016} expanded upon by including complimentary 
+artifacts such as source code, verification and validation plans, test cases, 
+and build instructions. While there have been many proposed artifacts, the 
+following curated list covers those most relevant to this thesis:
+
+\begin{enumerate}
+\item System Requirements
+\item System Design Document
+\item Module Guide
+\item Module Interface Specification
+\item Program Source Code
+\item Verification and Validation Plan
+\item Test cases
+\item Verification and Validation Report
+\item User Manual
+\end{enumerate}
+
+This list is not exhaustive of all the types of \sfs{}, as there are many other
+design processes which use different types of \sfs{}. Looking at an agile 
+approach using Scrum/Kanban, the \sfs{} tend to be distributed in different 
+ways. Requirements are documented in tickets under so-called `epics', 
+`stories', and `tasks' as opposed to a singular requirements artifact, and the 
+acceptance criteria listed on those tickets make up the validation and 
+verification plan.
+
+Using the waterfall model as an example, we can see 
+(Table~\ref{tab:RatWatComp}) the rational design process and its artifacts map 
+onto the model in a very straightforward manner.
+
+\begin{table}[htbp]
+\caption{Comparison of Rational Design Process and Waterfall Model}
+\label{tab:RatWatComp}
+\begin{tabular}{|p{.25\linewidth}|p{.35\linewidth}|p{.4\linewidth}|}
+\hline &&\\
+Rational Design phase & Corresponding Waterfall phase(s) & Common \SFS{}
+\\&&\\ \hline &&\\
+	Establish/ Document Requirements & Requirements Analysis & System 
+	Requirements Specification \newline \newline
+	Verification and Validation plan
+\\&&\\ \hline &&\\
+	Design and Document the Module Structure & 
+	System Design  & 
+	Design Document
+\\&&\\ \hline &&\\
+	Design and Document the Module Interfaces & 
+	Program Design & 
+	Module Interface Specification
+\\&&\\ \hline &&\\
+	Design and Document the Module Internal Structures &
+	Program Design &
+	Module Guide
+\\&&\\ \hline &&\\
+	Write Programs & 
+	Coding &
+	Source code  \newline \newline
+	Build instructions
+\\&&\\ \hline &&\\
+	Maintain & 
+	Unit \& Integration Testing \newline \newline System Testing \newline 
+	\newline Acceptance 
+	Testing \newline \newline Operation \& Maintenance &
+	Test cases \newline \newline
+	Verification and Validation Report
+\\&&\\ \hline
+\end{tabular}
+\end{table}
+
  -  (Reference a lot of Parnas)
  - Rational designs (how/why to fake)
 \section{Software Reuse and Software Families}

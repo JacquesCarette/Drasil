@@ -134,7 +134,7 @@ newtonSLRExpr :: ExprC r => r
 newtonSLRExpr = sy QP.momentOfInertia `mulRe` sy QP.angularAccel
 
 newtonSLRNotes :: [Sentence]
-newtonSLRNotes = map foldlSent [
+newtonSLRNotes = [foldlSent
   [S "The net", getTandS QP.torque, S "on a", phrase rigidBody `S.is`
    S "proportional to its", getTandS QP.angularAccel `sC` S "where",
    ch QP.momentOfInertia, S "denotes", phrase QP.momentOfInertia `S.the_ofThe`

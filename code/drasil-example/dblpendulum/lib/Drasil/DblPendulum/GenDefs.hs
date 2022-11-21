@@ -183,7 +183,7 @@ accelXDerivSents_2:: [Sentence]
 accelXDerivSents_2= [accelDerivSent1, accelXDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelXDerivEqns_2 :: [Sentence]
-accelXDerivEqns_2 = eS D.accelDerivEqn1 : eS' velXQD_2 : map eS [D.accelXDerivEqn3_2] ++ [eS' accelXQD_2]
+accelXDerivEqns_2 = eS D.accelDerivEqn1 : eS' velXQD_2 : [eS D.accelXDerivEqn3_2, eS' accelXQD_2]
 
 accelXDerivSent2_2 :: Sentence
 accelXDerivSent2_2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"

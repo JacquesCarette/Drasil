@@ -21,8 +21,8 @@ import GOOL.Drasil (CodeType)
 import Control.Lens ((^.))
 import Data.Map (Map, fromList)
 
--- Full details of Choices documentation 
--- https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
+-- | The instruction indicates how the generated program should be written down.
+-- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
 data Choices = Choices {
   -- | Target languages.
   -- Choosing multiple means program will be generated in multiple languages.

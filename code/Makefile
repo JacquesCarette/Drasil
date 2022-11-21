@@ -232,6 +232,14 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 # then make pdfs from the generated TeX files.
 tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
+# Generate graph of package dependencies
+packagedeps: graphmod check_dot
+	@mkdir -p $(GRAPH_FOLDER)
+	@echo ----------------------------
+	@echo Generating package dependency graph
+	@echo ----------------------------
+	@stack dot --prune dblpendulum,gamephysics,glassbr,hghc,nopcm,pdcontroller,projectile,sglpendulum,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
+
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
@@ -308,7 +316,7 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
 #----------------------------------------------------------------------------------#
 
-graphs: $(GRAPH_PACKAGES) ##@Analysis Generate all module dependency graphs.
+graphs: $(GRAPH_PACKAGES) packagedeps ##@Analysis Generate all module dependency graphs.
 	- echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
 	
 # Generate individual package module dependency graphs.
@@ -425,7 +433,7 @@ deploy_lite: ##@Deploy Deploy the Drasil website without regenerating artifacts.
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: analysis graphs docs tex doxygen website ##@Deploy Generates all artifacts and the Drasil website locally.
+deploy: analysis graphs packagedeps docs tex doxygen website ##@Deploy Generates all artifacts and the Drasil website locally.
 	"$(MAKE)" deploy_lite
 
 #-----------------------#

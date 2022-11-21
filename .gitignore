@@ -64,3 +64,9 @@ code/Website
 *.synctex.gz
 *.lof
 *.lot
+*.pygtex
+*.pygstyle
+*.listing
+*.lol
+*.equ
+*.code

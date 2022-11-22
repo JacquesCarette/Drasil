@@ -32,11 +32,11 @@ may not be necessary}
 
 To simplify the process of identifying redundancies and patterns, we have chosen
 several case studies developed using common artifact templates, specifically 
-those used by \smithea{} \ds{source\citep{SmithEtAlXXXX}} Also, as mentioned in 
-\ds{[SCOPE]}, we have chosen software systems that follow the $`input' 
-\rightarrow `process' \rightarrow `output'$ pattern. These systems cover a 
-variety of use cases, to help avoid over-specializing into one particular 
-system-type. 
+those used by \smithea{} \ds{source?} Also, as mentioned in 
+Section~\ref{sec:scope}, we have chosen software systems that follow the 
+$`input' \rightarrow `process' \rightarrow `output'$ pattern. These systems 
+cover a variety of use cases, to help avoid over-specializing into one 
+particular system type. 
 
 The majority of the aforementioned case studies were developed to solve real
 problems, with a few minor exceptions listed below their relevant cards.
@@ -124,7 +124,63 @@ contents for an SRS using the \smithea{} template.
 
 \fig{
   \begin{center}
-    \emph{Figure showing the ToC of \smithea{} template}
+\footnotesize
+Table of Contents
+\begin{enumerate}[nosep, label*=\arabic*.]
+\item Reference Material
+\begin{enumerate}[label*=\arabic*.]
+  \item Table of Units
+  \item Table of Symbols
+  \item Abbreviations and Acronyms
+\end{enumerate}
+\item Introduction
+\begin{enumerate}[label*=\arabic*.]
+  \item Purpose of Document
+  \item Scope of Requirements
+  \item Characteristics of Intended Reader
+  \item Organization of Document
+\end{enumerate}
+\item Stakeholders
+\begin{enumerate}[label*=\arabic*.]
+  \item The Customer
+  \item The Client
+\end{enumerate}
+\item General System Description
+\begin{enumerate}[label*=\arabic*.]
+  \item System Context
+  \item User Characteristics
+  \item System Constraints
+\end{enumerate}
+\item Specific System Description
+\begin{enumerate}[label*=\arabic*.]
+  \item Problem Description
+\begin{enumerate}[label*=\arabic*.]
+    \item Physical System Description
+    \item Goal Statements
+\end{enumerate}
+  \item Solution Characteristics Specification
+\begin{enumerate}[label*=\arabic*.]
+    \item Assumptions
+    \item Theoretical Models
+    \item General Definitions
+    \item Data Definitions
+    \item Instance Models
+    \item Data Constraints
+    \item Properties of a Correct Solution
+\end{enumerate}
+\end{enumerate}
+\item Requirements
+\begin{enumerate}[label*=\arabic*.]
+  \item Functional Requirements
+  \item Non-Functional Requirements         
+\end{enumerate}
+\item Likely Changes
+\item Unlikely Changes
+\item Traceability Matrices and Graphs
+\item Values of Auxiliary Constants
+\item References
+\item Appendix
+\end{enumerate}
   \end{center}
 }{The Table of Contents from the \smithea{} template}{fig:SRSToC}
 
@@ -140,10 +196,30 @@ commonality. \sout{We are strictly looking for patterns! Patterns will give
 us insight into the root of \emph{what} is being said in each section.}\ds{Not 
 really true, will need to rework}
 
-\fig{\begin{center}
-\emph{Figure showing the Ref Section of one case 
-study, split into multiple subfigures - case study TBD}\end{center}}{The 
-reference sections of \ds{TBD} respectively}
+\fig{
+\centering
+%\emph{Figure showing the Ref Section of one case 
+%			study, split into multiple subfigures - case study TBD}
+\begin{subfigure}{\textwidth}
+\centering
+
+\caption{Table of Units}
+\label{fig:gbrtou}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+\centering
+
+\caption{Table of Symbols}
+\label{fig:gbrtos}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+\centering
+
+\caption{Table of Abbreviations and Acronyms}
+\label{fig:gbrtoa}
+\end{subfigure}
+}
+{The reference sections of \ds{TBD} respectively}
 {fig:csRefSecs}
 
 Looking at the Table of Symbols, Table of Units, and Table of Abbreviations and 
@@ -174,7 +250,7 @@ breakdown of the Reference Material section) it should be unsurprising that
 each section maps to the definition provided in the \smithea{} template. 
 However, as noted above, we can see distinct differences in the types of 
 information contained in each section. Again we find some is boilerplate text 
-meant to give a generic  (non-specific) overview, some is specific to the 
+meant to give a generic (non-system-specific) overview, some is specific to the 
 proposed system, and some is in-between: it is specific to the 
 problem domain for the proposed system, but not necessarily specific to the 
 system itself.
@@ -206,7 +282,8 @@ problem that \sf{} is solving}
 	All developers \newline \newline
 	QA analysts  & 
 
-	\ds{TODO}
+	Outline implementation decisions around the separation of functionality 
+	into modules and give an overview of each module.
 \\ \hline
 	Module Interface Specifications & 
 
@@ -214,14 +291,15 @@ problem that \sf{} is solving}
 	Developers who use the module \newline \newline
 	QA analysts & 
 
-	\ds{TODO}
+	Detail the exact interfaces of the modules from the Module Guide.
 \\ \hline
 	Verification and Validation Plan &
 	
 	Developers who implement the module \newline \newline
 	QA analysts &
 
-	\ds{TODO}
+	Describe how the software should be verified using tests that can be 
+	validated. Includes module-specific and system-wide plans.
 \\ \hline
 \end{tabular}
 \end{table}

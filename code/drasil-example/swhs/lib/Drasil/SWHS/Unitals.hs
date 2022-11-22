@@ -349,7 +349,7 @@ coilSA = uqc "coilSA"
 -- Constraint 11
 tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
   "the average kinetic energy of the particles within the coil"
-  (sub (eqSymb temp) lCoil) centigrade Rational
+  (sub (eqSymb temp) lCoil) centigrade Real
   [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 50) defaultUncrt
 
 -- Constraint 12

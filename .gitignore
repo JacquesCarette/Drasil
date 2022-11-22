@@ -70,3 +70,5 @@ code/Website
 *.lol
 *.equ
 *.code
+*.bcf
+*.run.xml

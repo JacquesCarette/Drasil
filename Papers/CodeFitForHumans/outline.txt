@@ -1,0 +1,38 @@
+Title: Generating code fit for humans
+
+Rationale: titles with "documentation" in them all sound odd. "Generating code for humans" or "Generating human-readable code" don't prime the right thinking, because it's still too tied to 'code', whereas the "fit for humans" seems to shift the balance. It gives us an opportunity to explain what we mean by 'fit'.
+
+Problem: we want well-documented, well laid out and 'readable' code (meaningful names). This is our primary target. But we can have much more, essentially at the same price: program families available in multiple languages\footnote{within a family of languages with similar semantics}.
+
+Take-home: To generate multi-lingual program families of code fit for humans, we need to start from a knowledge base describing the problem space, and create on top of that a DSL whose job is to describe how to assemble solutions to those problems.
+
+Story outline:
+- give examples of increasingly fit-for-humans code
+  - first example:
+    - multiple versions of code:
+      - no white-space, obscure identifiers, non-idiomatic, no comment
+      - + laid out
+      - + idiomatic (GOOL get us to here)
+      - + real identifiers
+      - + proper documentation
+    - probably give all of the above in one big figure
+    - accompanying text will give hints as to what's needed to achieve each bit
+  - second example:
+    - in multiple languages (probably without documentation, for space reasons? have that online?)
+    - maybe use HGHC here?
+  - third example:
+    - with design choices changed (again, maybe no comments)
+- deconstruct how, based on the examples, one would "get there"
+  - notice all the duplication
+  - write out the ingredients that make up a piece 'linearly'
+  - notice how a human would describe putting the pieces together (our current 'recipes')
+  - that's our primary DSL
+- further analyze
+  - basically, we can't have a jumble of pieces
+  - see what the pieces actually are / say
+  - build up an organization of them
+- ta da, Drasil!
+- related work. This is going to be difficult too.
+
+The "deconstruct" and "further analyze" are basically going to be new, as we have yet to actually do that work properly. It's implicit all over Drasil, but that's just it, it's implicit.
+

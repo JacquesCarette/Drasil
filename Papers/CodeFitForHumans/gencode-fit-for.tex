@@ -1,0 +1,193 @@
+% -*- coding: utf-8; -*-
+% vim: set fileencoding=utf-8 :
+\documentclass[english,submission]{programming}
+%% First parameter: the language is 'english'.
+%% Second parameter: use 'submission' for initial submission, remove it for camera-ready (see 5.1)
+
+\usepackage[backend=biber]{biblatex}
+%\addbibresource{example.bib}
+
+%%%%%%%%%%%%%%%%%%
+%% These data MUST be filled for your submission. (see 5.3)
+\paperdetails{
+  %% perspective options are: art, sciencetheoretical, scienceempirical, engineering.
+  %% Choose exactly the one that best describes this work. (see 2.1)
+  perspective=art,
+  %% State one or more areas, separated by a comma. (see 2.2)
+  %% Please see list of areas in http://programming-journal.org/cfp/
+  %% The list is open-ended, so use other areas if yours is/are not listed.
+  area={Modeling and Modularity, Generative Programming},
+  %% You may choose the license for your paper (see 3.)
+  %% License options include: cc-by (default), cc-by-nc
+  license=cc-by
+}
+%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%
+%% These data are provided by the editors. May be left out on submission.
+%\paperdetails{
+%  submitted=2016-08-10,
+%  published=2016-10-11,
+%  year=2016,
+%  volume=1,
+%  issue=1,
+%  articlenumber=1,
+%}
+%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\title{Generating code fit for humans} % Working title
+% \subtitle{}
+\titlerunning{Generating code fit for humans}
+
+\author[a]{Jacques Carette}
+\author[a]{Spencer Smith}
+\affiliation[a]{Department of Computing and Software, McMaster University, Canada}
+
+\keywords{Code generation, documentation, layout, knowledge capture} % please provide 1--5 keywords
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Please go to https://dl.acm.org/ccs/ccs.cfm and generate your Classification
+% System [view CCS TeX Code] stanz and copy _all of it_ to this place.
+%% From HERE
+% To HERE
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\maketitle
+
+% Please always include the abstract.
+% The abstract MUST be written according to the directives stated in 
+% http://programming-journal.org/submission/
+% Failure to adhere to the abstract directives may result in the paper
+% being returned to the authors.
+\begin{abstract}
+  Context:
+
+  Inquiry:
+
+  Approach:
+
+  Knowledge:
+
+  Grounding:
+
+  Importance:
+
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+Short. High-level of the problem.
+
+\section{The problem}
+\label{sec:problem}
+
+Subsection of intro? But give examples, well illustrated. See outline.txt.
+
+\section{Analysis}
+\label{sec:analysis}
+
+Analyse the actual content of the examples. See what makes them tick.
+
+\section{Organize}
+
+The content previously outlined is not a jumble.
+
+\section{Recipes}
+
+The programs that weave together things.
+
+\section{Technology}
+
+GOOL, pretty-printing.
+
+\acks
+Our zillions of students who built large parts of the software.
+
+%\appendix
+%\section{A Famous Filler Text}
+
+\begin{comment}
+\section{Submission Checklist}
+\smaller
+\begin{itemize}
+\renewcommand*\labelitemi{\ensuremath{\square}}
+\item All authors are listed, with affiliation
+\item The abstract is not longer than 500 words.
+\item The abstract states, in this order, \emph{Context},
+  \emph{Inquiry}, \emph{Approach}, \emph{Knowledge}, \emph{Grounding}, and
+  \emph{Importance} of the submission.
+\item The ACM CCS 2012 classification is included.
+\item A list of relevant keywords is provided.
+\item One \emph{perspective} has been chosen.
+\item One or more \emph{area(s) of submission} have been chosen.
+\item The license has been acknowledged or changed to fit.
+\item The title page does not spill onto the second page.
+\item The running title on even pages' heads is not wider than the text block.
+\item The running list of author on odd pages' heads is not wider than the text
+  block.
+\item The only text encoding used is \textsc{utf-8}.
+\item The fonts, margins, and spacings are unchanged.
+\item All \textsc{url}s are marked using the \lstinline|\url| command.
+\item All units are separated from their values with a half space, consistently
+  (see ~\cite{siunitx}).
+\item Bold font is not used (or only in exceptional circumstances).
+\item Underlining is not used (no exceptions).
+\item Bold or bright colors are only ever used sparingly.
+\item The captions of (a) tables, (b) listings, and (c) algorithms are
+  \emph{above} the content, flush left.
+\item The captions of (a) figures, (b) charts, (c) combined content, and
+  similar are \emph{below} the content, flush left.
+\item %
+  \begin{minipage}[t]{.4\linewidth}
+    Tables adhere to best practice layout~\cite{booktabs}. They do not contain
+  vertical lines and only few horizontal lines.
+  \end{minipage}
+  {\renewcommand{\arraystretch}{.6}
+    \hspace{2em} \textcolor{DarkGreen}{Yes} \hspace{1em}
+      \begin{tabular}[t]{ll}\noalign{\vspace*{-2.2ex}}
+        \toprule
+        \emph{a} & \emph{b}\\
+        \midrule
+        x & abc \\
+        y & def \\
+        \bottomrule
+      \end{tabular}
+      \hspace{2em} \textcolor{DarkRed}{No} \hspace{1em}
+      \begin{tabular}[t]{|l|l|}\noalign{\vspace*{-1.6ex}}
+        \hline
+        \emph{a} & \emph{b}\\
+        \hline\hline
+        x & abc \\\hline
+        y & def \\\hline
+      \end{tabular}}
+\item All fonts are embedded. This includes the fonts for any included
+  (\textsc{pdf}-)graphics.
+\item All graphics are either vector graphics or have at least 300\,dpi.
+  \item Acknowledgements, including statement of funding bodies or projects, is
+  placed before the references, using the \lstinline|\acks| command.
+\item Citations in the text are preceded by a non-breaking space.
+  (\(\rightarrow\) Citations do not appear at the beginning of a line)
+\item The bibliography lists all cited works, all authors are given (no
+  \emph{et. al.}), the full names of the authors are used.
+\item All bibliography entries have a \textsc{doi} (unless not applicable, such as for
+  slides or unpublished work).
+\item All bibliography entries show an \textsc{isbn}, if they have one assigned.
+\item All bibliography entries that represent web sites have a \textsc{url} and
+  an \emph{access date}.
+\item No bibliography entries have duplicate information in \textsc{url} and
+  \textsc{doi}.
+\end{itemize}
+\end{comment}
+% 
+\printbibliography
+
+\end{document}
+
+% Local Variables:
+% TeX-engine: pdflatex
+% End:

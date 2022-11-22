@@ -10,6 +10,8 @@ was designed, how it was implemented, how to test it, and so on would be
 considered a \sf{}, as would the source code whether as a text file, stack of 
 punched cards, magnetic tapes, or other media.
 
+\ds{Need to work in (here?) why \sfs{} are important}
+
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Waterfall.png}
 \caption{The Waterfall Model of Software Development}
@@ -18,12 +20,18 @@ punched cards, magnetic tapes, or other media.
 
 Software design can follow a number of different design processes, each with 
 their own collection of \sfs{}. A common, traditional approach is the Waterfall 
-model of software 
-development~\cite{PfleegerAndAtlee2010Ch2}(Figure~\ref{fig:Waterfall}). 
+model (Figure~\ref{fig:Waterfall}) of software 
+development~\cite{PfleegerAndAtlee2010Ch2}. 
 However, Parnas and Clements~\cite{ParnasAndClements1986} detailed what they 
 dubbed a ``rational" design process; an idealized version of software 
-development which includes what needs to be documented in corresponding \sfs{}. 
-The rational design process involves the following:
+development which includes what needs to be documented in corresponding \sfs{}.
+The rational design process is not meant to be a linear process like the 
+Waterfall model, but instead an iterative process using section stubs for 
+information that is not yet available or not fully clear during the time of 
+writing. Those stubs are then filled in over the development process, and 
+existing documentation is updated so it appears to have been created in a 
+linear fashion for ease of review later in the software lifecycle. The rational 
+design process involves the following:
 
 \begin{enumerate}
 \item Establish/Document Requirements
@@ -104,6 +112,30 @@ Rational Design phase & Corresponding Waterfall phase(s) & Common \SFS{}
 \end{tabular}
 \end{table}
 
+\SFS{} are important to development in a number of ways, such as easing the 
+burden of maintenance and training. We outline the artifacts we are most 
+interested below with a brief description of their purpose.
+
+\cardifact{Software Requirements Specification}{Contains the functional and 
+nonfunctional requirements detailing what the desired software system should 
+do.}
+\cardifact{System Design Document}{Explains how the system should be broken 
+down and documents implementation-level decisions that have been made for the 
+design of the system.}
+\cardifact{Module Guide}{In-depth explanation of the modules outlined in the 
+System Design Document.}
+\cardifact{Module Interface Specification}{Interface specification for each of 
+the modules outlined in the System Design Document/Module Guide.}
+\cardifact{Program Source Code}{The source code of the implemented software 
+system.}
+\cardifact{Verification and Validation Plan}{Uses the system requirements to 
+document acceptance criteria for each requirement that can be validated.}
+\cardifact{Test cases}{Implementation of the Verification and Validation Plan 
+in source code (where applicable) or as a step-by-step guide for testers.}
+\cardifact{Verification and Validation Report}{Report outlining the results 
+after undertaking all of the testing initiatives outlined in the Verification 
+and Validation plan and test cases.}
+
 \section{Software Reuse and Software Families}
 \subsection{Software/Program Families}
   - Bring up GNU/Linux and different distros as examples of software families
@@ -147,7 +179,9 @@ artifacts from a knowledge base.
 \section{Literate Approaches to Software Development}
 
 There have been several approaches attempting to combine development of program 
-code with documentation.\ds{Something something...}
+code with documentation. Literate Programming and literate software are two 
+such approaches that have influenced the direction of this thesis. Each of 
+these approaches is outlined in the following sections.
 
 \subsection{Literate Programming}
 

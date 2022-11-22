@@ -76,7 +76,7 @@
 
 % *******Custom commands**********
 
-%Card
+%Cards
 \newcommand{\card}[3]{
   \begin{center}
     \begin{tabular}{||p{0.8\linewidth}||}
@@ -84,6 +84,17 @@
 	\textbf{Name}: {\textbf{#1}} \\ \hline
 	\textbf{Problem being solved}: #2 \\ \\
 	Relevant artifacts: #3 \\
+	\hline
+    \end{tabular}
+  \end{center}
+}
+
+\newcommand{\cardifact}[2]{
+  \begin{center}
+    \begin{tabular}{||p{0.8\linewidth}||}
+	\hline
+	\textbf{Name}: {\textbf{#1}} \\ \hline
+	\textbf{Description}: #2 \\
 	\hline
     \end{tabular}
   \end{center}

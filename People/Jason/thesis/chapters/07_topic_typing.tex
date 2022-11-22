@@ -1,6 +1,14 @@
 \chapter{Typing the Expression Language}
 \label{chap:typedExpr}
 
+\begin{writingdirectives}
+      \item What does it mean for expressions to be ``coherent?''
+      \item How can we make enforce coherence in Drasils expression languages?
+      \item What is a type system?
+      \item What is a bidirectional type system?
+      \item How can this be implemented in Drasil?
+\end{writingdirectives}
+
 In \Cref{chap:lang-division}, we discussed how we broke up the single,
 universal, expression language into three different variants. One for ``simple''
 definite valued mathematics. One for ``code'' (with focus on \acs{oo} programs).
@@ -70,8 +78,9 @@ only admits valid well-typed expressions and a definition for what it means to
 be well-typed with respect to some evaluation function.
 
 In order to determine whether an expression is well-typed or not, we look to the
-the \textit{typing rules} of the relevant type system. The typing rules are
-typically written as a set of inference rules.
+the \textit{typing rules} of the relevant type system. 
+
+The typing rules are typically written as a set of inference rules.
 
 \subsubsection{A Simple Language}
 \label{chap:typedExpr:sec:coherence:subsec:type-safety:subsubsec:a-simple-language}
@@ -229,29 +238,32 @@ judgments, as follows:
 
 So as long as we follow these typing rules while we build our expressions, when
 we try to evaluate any of these expressions, we should not arrive at invalid
-expressions where evaluation cannot be completed.
+expressions where evaluation cannot be completed. In other words, so as long as
+expressions conform to these typing rules, the language is type-safe:
+preservation and progress hold.
 
 Notably, on paper and pencil, or common typesetting, there is nothing tangibly
 stopping us from continuing to write invalid expressions. However, with
-computerized languages, we're able to tangibly (as far as ``tangible'' goes with
-computers) stop users from writing invalid expressions. This is a huge gain over
-conventional pencil and paper, because we're able to type check statements with
-far less time and effort than if we were to do it manually.
+computerized languages, we're able to stop users from writing invalid
+expressions. For Drasil, where the focus of scientific software heavily uses
+mathematics, this will result in a considerable gain over conventional manual
+type-checking because it allows for more type-checking, faster, and more
+reliably.
 
 \section{Back to Our Expression Languages}
+\label{chap:typedExpr:sec:back-to-our-expression-languages}
 
 Similar to the untyped \(\bb{L}\), in Drasil, our expression languages (\Expr{},
 \CodeExpr{}, and \ModelExpr{}) are \textit{untyped}\footnote{i.e., they don't
-      have type information, and are not type checked.}. We currently need to manually
+have type information, and are not type checked.}. We currently need to manually
 ensure that our generated artifacts \textit{type check}. If we only had a few
 expressions, then it would not be much of an issue to manually type check them.
-However, with scale, it becomes problematic. In particular, just throwing
+However, with scale, it becomes problematic. In particular, throwing
 ``generation'' into the mix makes it an area of concern, because there is no
-assurance of type safety. In this chapter, we aim to bring type information to
-the expression languages, and see how we can improve type safety and expression
-usage.
+assurance of type safety.
 
 \subsection{Decomposing the Expression Languages}
+\label{chap:typedExpr:sec:back-to-our-expression-languages:subsec:decomposing-the-expression-languages}
 
 Before we begin to decompose the expression languages into their semantics,
 syntax, and typing rules, we will start off with a common denominator language
@@ -391,25 +403,13 @@ proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
 
 \end{itemize}
 
-\imptodo{Figure out what to do with the below (i):}
 
-Invalid/ill-typed expressions aren't only ``bad'' because they aren't fully
-evaluable.
 
-They're also bad because they dilute the pool of expressions we're interested
-in, and that we may want to analyze.
 
-For ill-typed expressions, automated analysis is only good for automatically
-searching for the ill-typed areas, not using them to understand the intent of
-the writer (who may have just made a type error).
 
-Manual analysis is okay, but it does not scale well against large amounts of
-expressions (for which Drasil handles).
 
-Additionally, ill-typed expressions add extra overhead on us when handling them,
-either to ``correct'' them or to ignore them.
 
-\imptodo{Figure out what to do with the below (ii):}
+\imptodo{Figure out what to do with the below:}
 
 The objective of this chapter is to create a system of type rules, and enforce
 well-formedness/typedness\footnote{Please note that I will be using

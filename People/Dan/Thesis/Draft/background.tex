@@ -10,13 +10,20 @@ was designed, how it was implemented, how to test it, and so on would be
 considered a \sf{}, as would the source code whether as a text file, stack of 
 punched cards, magnetic tapes, or other media.
 
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Waterfall.png}
+\caption{The Waterfall Model of Software Development}
+\label{fig:Waterfall}
+\end{figure}
+
 Software design can follow a number of different design processes, each with 
 their own collection of \sfs{}. A common, traditional approach is the Waterfall 
-model of software development~\cite{}(Figure~\ref{fig:Waterfall}). However, 
-Parnas and Clements~\cite{ParnasAndClements1986} detailed what they dubbed a 
-``rational" design process; an idealized version of software development which 
-includes what needs to be documented in corresponding \sfs{}. The rational 
-design process involves the following:
+model of software 
+development~\cite{PfleegerAndAtlee2010Ch2}(Figure~\ref{fig:Waterfall}). 
+However, Parnas and Clements~\cite{ParnasAndClements1986} detailed what they 
+dubbed a ``rational" design process; an idealized version of software 
+development which includes what needs to be documented in corresponding \sfs{}. 
+The rational design process involves the following:
 
 \begin{enumerate}
 \item Establish/Document Requirements
@@ -52,11 +59,12 @@ approach using Scrum/Kanban, the \sfs{} tend to be distributed in different
 ways. Requirements are documented in tickets under so-called `epics', 
 `stories', and `tasks' as opposed to a singular requirements artifact, and the 
 acceptance criteria listed on those tickets make up the validation and 
-verification plan.
+verification plan. 
 
-Using the waterfall model as an example, we can see 
-(Table~\ref{tab:RatWatComp}) the rational design process and its artifacts map 
-onto the model in a very straightforward manner.
+Regardless of the process used, most attempt to document very similar 
+information to that of the rational design process. Using the waterfall model 
+as an example, we can see (Table~\ref{tab:RatWatComp}) the rational design 
+process and its artifacts map onto the model in a very straightforward manner.
 
 \begin{table}[htbp]
 \caption{Comparison of Rational Design Process and Waterfall Model}
@@ -92,12 +100,10 @@ Rational Design phase & Corresponding Waterfall phase(s) & Common \SFS{}
 	Testing \newline \newline Operation \& Maintenance &
 	Test cases \newline \newline
 	Verification and Validation Report
-\\&&\\ \hline
+\\ \hline
 \end{tabular}
 \end{table}
 
- -  (Reference a lot of Parnas)
- - Rational designs (how/why to fake)
 \section{Software Reuse and Software Families}
 \subsection{Software/Program Families}
   - Bring up GNU/Linux and different distros as examples of software families

@@ -7,6 +7,7 @@
       \item What is a type system?
       \item What is a bidirectional type system?
       \item How can this be implemented in Drasil?
+      \item ``Safety = Preservation + Progress'' (\cite{Harper2016}, Ch.6)
 \end{writingdirectives}
 
 In \Cref{chap:lang-division}, we discussed how we broke up the single,
@@ -345,6 +346,10 @@ Note that the ``Whole-numbered Reals'' and ``Reals'' may have overlap. The
 difference is merely the information difference. This is something that can be
 altered later, if desired.
 
+
+
+
+
 \imptodo{Continue writing here!}
 
 \begin{itemize}
@@ -383,25 +388,10 @@ proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
 
 \end{itemize}
 
-\section{Requirements \& properties of a good solution}
 
-\begin{itemize}
 
-      \item Invalid expressions should not be representable in the various
-            expression languages (i.e., the expression types should strictly
-            indicate valid expression constructions), without loss of
-            generality.
 
-      \item Invalid expression formation attempts should be statically found and
-            reported by the compiler, at compile-time. This will move the
-            previously runtime errors to compile-time.
 
-      \item Invalid expression cases should not need to be considered when
-            working (e.g., case-ing) with expressions.
-
-      \item ``Safety = Preservation + Progress'' (\cite{Harper2016}, Ch.6)
-
-\end{itemize}
 
 
 

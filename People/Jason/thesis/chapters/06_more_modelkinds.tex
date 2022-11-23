@@ -55,13 +55,13 @@ other theories. They use \ConstraintSet{}s under the hood
 \subsection{Equational Realms}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms}
 
-Equational realms represent ``realms'' \cite{Carette2014realms}\qtodo{@JC: Is
-	this the preferred reference?}, sets of unique axioms that are equivalently
-interpretable, focused on different ways to define a particular variable. They
-may be specialized to become equational models. \EquationalRealm{}s represent
-``equational realm'' theories in Drasil and are effectively \MultiDefn{}s. For
-example, we may define a theory with multiple ways to define the horizontal
-force on an object: \refCurrentExampleEquationalRealmHaskell{}.
+Equational realms represent ``realms'' \cite{Carette2014realms}, sets of unique
+axioms that are equivalently interpretable, focused on different ways to define
+a particular variable. They may be specialized to become equational models.
+\EquationalRealm{}s represent ``equational realm'' theories in Drasil and are
+effectively \MultiDefn{}s. For example, we may define a theory with multiple
+ways to define the horizontal force on an object:
+\refCurrentExampleEquationalRealmHaskell{}.
 
 \currentExampleEquationalRealmHaskell{}
 
@@ -77,7 +77,7 @@ Dong Chen continued work here, creating \NewDEModel{} \cite{Chen2022MEng} to
 start capturing information about linear \acs{ode} systems. \DEModel{} is left
 as a temporary carriage for the remaining theories to be similarly analyzed and
 re-built with a deeper depth of knowledge capture, so that we can make better
-use of the information in them. Thanks to Dongs work, Drasil is now able to
+use of the information in them. Thanks to Dong's work, Drasil is now able to
 generate software for the \acs{dblpendulum} case study in Java, Python, C/C$++$,
 and C\# \cite{Chen2022MEng}. As such, this research already has some success in
 enabling more theories to be encoded in Drasil and appropriately used for

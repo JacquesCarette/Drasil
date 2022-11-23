@@ -123,7 +123,7 @@ tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
-  (sub cP lBreak) Rational
+  (sub cP lBreak) Real
   [probConstr] (Just $ dbl 0.4)
 
 stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 

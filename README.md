@@ -110,6 +110,17 @@ You can run `make docs` from the **./code/** folder to build the documentation. 
 
 See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#building-up-to-date-documentation) in **./code/** for more information.
 
+## Citation
+
+Please use our provided `CITATION.cff` file for our preferred citation
+information. GitHub provides an export of it in BibTeX and APA if needed.
+
+### For Any Developers
+
+Please note that we only add to our `CITATION.cff`/preferred citation file on a
+consensual basis. If you would like your name added, please submit a PR with
+your information added to the `CITATION.cff` file.
+
 --------------------------------------------------
 
 ### Summary of Folder Structure and File Contents

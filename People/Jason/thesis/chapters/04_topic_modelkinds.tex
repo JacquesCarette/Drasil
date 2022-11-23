@@ -14,6 +14,79 @@ them for generating software artifacts.
 \section{Transforming Theories to Code}
 \label{chap:modelkinds:sec:transforming-theories-to-code}
 
+As already mentioned in \Cref{chap:drasil}, the \acs{srs} template
+\cite{SmithAndLai2005} breaks up software requirements and problems into a
+series of well-understood components, providing developers with concrete
+solution requirements they must satisfy, and domain experts with justification
+for problem solutions. Notably, the \acs{srs} relates a programs \textit{inputs}
+to a set of \textit{outputs} using a set of \textit{theories}. The inputs and
+outputs are sets of variables, with data that need to be somehow fed into the
+program, or calculated and output by the program. The theories connect the input
+variables to the output by forming a \textit{solution/calculation path}.
+Notably, the \ACF{im} \cite{SmithAndLai2005} theories together largely form the
+calculation path, while other background theories provide justification for
+them.
+
+\subsection{An Example}
+\label{chap:modelkinds:sec:transforming-theories-to-code:subsec:an-example}
+
+For example, Drasils \porthref{\acs{projectile} case
+study}{https://jacquescarette.github.io/Drasil/examples/projectile/SRS/srs/Projectile_SRS.html}
+describes how to estimate if a launcher, aligned at a particular angle, will hit
+a target from a specific distance. The \acs{srs} requires users to fill in the:
+\begin{enumerate}
+    \item input variables:
+          \begin{enumerate}
+              \item \(p_\mathit{target}\), the targets distance from the
+                    launcher,
+              \item \(v_\mathit{launch}\), the projectile launch speed,
+              \item and \(\theta\), the launch angle.
+          \end{enumerate}
+    \item output variables:
+          \begin{enumerate}
+              \item \(s\), a message, explaining if the projectile hit the
+                    target, fell short, or went long,
+              \item and \(d_\mathit{offset}\), the expected distance between the
+                    target position and the landing position.
+          \end{enumerate}
+    \item and theories, connecting the inputs to the outputs:
+          \begin{enumerate}
+              \item \({t_{\text{flight}}}=\frac{2 {v_{\text{launch}}}
+                        \sin\left(\theta{}\right)}{\mathbf{g}}\), estimating
+                    flight time with \(v_{\mathit{launch}}\) and \(\theta\),
+              \item \({p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2}
+                        \sin\left(\theta{}\right)
+                        \cos\left(\theta{}\right)}{\mathbf{g}}\), a calculation
+                    of the landing position,
+              \item \({d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}\),
+                    calculation of distance between the targets position and the
+                    expected landing position of the projectile,
+              \item and \(s=\begin{cases} \text{``The target was hit.''}, &
+              |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}| < \varepsilon{}
+              \\
+              \text{``The projectile fell short.''}, & {d_{\text{offset}}} < 0 \\
+              \text{``The projectile went long.''},  & {d_{\text{offset}}} >
+              0\end{cases}\), \newline{}calculating the output message.
+          \end{enumerate}
+\end{enumerate}
+
+From these 3 key bodies of information along with some supporting background
+knowledge (such as assumptions, constants, etc.), Drasil forms a calculation
+path, deriving the output variables from the input variables using the instance
+models\footnote{And, less importantly, data definitions.}. Here, Drasil
+approximately recognizes that to calculate the outputs, it approximately needs
+to follow a path along the lines of the order of presented theories. With it,
+Drasil is able to generate representational code. For example, \acsp{projectile}
+generates \refOriginalJavaProjectileMain{} for one of the Java-flavoured
+artifacts. In \refOriginalJavaProjectileMain{}, it uses a
+\inlineCode{java}{write_output} method to output the calculated output variables
+after calculating them using the relevant theories\footnote{Note:
+\(t_\text{flight}\) is seemingly unused in the generated code, but it is used in
+the derivation of \(p_\text{land}\). However, it being ``unused'' is irrelevant
+to this work.}.
+
+\originalJavaProjectileMain{}
+
 As seen in \refOriginalJavaProjectileMain{}, it relies on a few methods
 calculating the related ``instance models'' on its behalf. Those methods are a
 specific \textit{interpretation}\footnote{Or ``view.''} of the theory knowledge.
@@ -230,12 +303,11 @@ output types of theories in the \acs{srs} (or code) by adding new kinds of
 \originalLandPosIMQD{}
 
 Continuing, the \DEModel{}s still require a bit of manual circumvention, but
-bringing some of the information back into the core ``theories'' (e.g.,
-\acsp{im}, \acsp{gd}, and \acsp{tm}) to use in the intended flow of knowledge,
-should be possible \cite{Chen2022MEng}. Drasil also currently has many more
-kinds of theories, not all usable in code generation \textemdash{} more than
-just equational models! However, we won't focus on them \textit{quite yet},
-we'll get back to this \Cref{chap:more-theory-kinds}.
+bringing some of the information back into the core ``theories'' to use in the
+intended flow of knowledge, should be possible \cite{Chen2022MEng}. Drasil also
+currently has many more kinds of theories, not all usable in code generation
+\textemdash{} more than just equational models! However, we won't focus on them
+\textit{quite yet}, we'll get back to this \Cref{chap:more-theory-kinds}.
 
 Finally, as a result of incorporating \ModelKinds{} in Drasil, we:
 \begin{enumerate}[label={(\alph*)}]

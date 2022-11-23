@@ -113,21 +113,27 @@ description as opposed to manual conversion of description to artifact.
 \subsection{The Goal}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:the_goal}
 
+If we think of a Java compiler as a sort of \textit{generator} of \acs{jvm}
+bytecode, we can think of the Java programs as the instructions and inputs to
+the generator. We rarely look at the actual bytecode ourselves, but we do have
+confidence in knowing what it will do when executed. Now, we look to go one
+``level'' up. In other words, we look to inputting our understanding of
+particular applications through another generator (a abstraction level up) to
+somehow obtain code for it.
+
 Especially in the cases where everything is ``well-understood''
-\cite{well-understood}\footnote{Irrelevant of rarity however!}, we want to focus
-on communicating problems, and how solutions solve them, so that we can
-\textit{generate} a usable solution (a software artifact), rather than manually
-building solutions. Optimally, we would prefer to use our natural language to
-perfectly describe our problems to our computers, and have them magically give
-us a solution. Unfortunately, our computers can't do this.
+\cite{well-understood}\footnote{Irrelevant of rarity!}, we want to focus on
+communicating problems and how solutions solve them so that we can
+\textit{generate} usable solutions (a software artifact), and keep them
+up-to-date through re-generation.
 
 \subsection{Reconciliation}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:reconciliation}
 
-While it is difficult to have a computer act on a large set of natural language,
-there are generally agreed upon, well-understood subsets \cite{well-understood}
-with respect to particular domains of knowledge. For example, statisticians
-frequently use and discuss various kinds of distributions, such as ``Poisson,''
+By focusing on capturing well-understood \cite{well-understood} knowledge, we
+can use (and re-use) knowledge across specialized generators to generate
+software for specific kinds of problems. For example, statisticians frequently
+use and discuss various kinds of distributions, such as ``Poisson,''
 ``Uniform,'' and ``Normal,'' and, when they do, they're typically familiar with
 their parameters, expectations functions, and how to use them to estimate
 likelihoods. Hence, by focusing on using \textit{\aclp{dsl}}, we can build
@@ -137,7 +143,7 @@ manners (with similar precise languages), we can form large meaningful
 problem spaces. From well-understood problem spaces, we can compose a series of
 domain-specific interpreters. With enough effort, we could take a whole
 ``problem description'' that draws in multiple fields, and generate a software
-that somehow ``solves'' it. 
+that somehow ``solves'' it.
 
 By switching our focus of manual software development to manual problem
 description and relationships to ``solutions,'' we shift where we can make bugs,

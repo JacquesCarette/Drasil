@@ -15,8 +15,7 @@ standardization. Ironically, this has led to many different `standardized'
 templates. Through the examination of a number of different artifact templates, 
 we have concluded they convey roughly the same overall information for a given 
 artifact. Most differences are stylistic or related to content 
-organization and naming conventions, as we will demonstrate in the following 
-sections.
+organization and naming conventions.
 
 Once we understand our artifacts, we take a practical, example-driven approach
 to identifying redundancy through the use of existing software system case
@@ -39,18 +38,15 @@ cover a variety of use cases, to help avoid over-specializing into one
 particular system type. 
 
 The majority of the aforementioned case studies were developed to solve real
-problems, with a few minor exceptions listed below their relevant cards.
-  \ds{**NOTE: trying to find a good way to say `these are not just things we 
-  cooked up to make Drasil look good'}
-The cards below are meant to be used as a high-level reference to each case 
-study, providing the general details at a glance. For the specifics of each 
-system, all relevant case study artifacts can be found at \ds{Add a link here or
-put in appendices?}.
+problems. The following cards are meant to be used as a high-level reference to 
+each case study, providing the general details at a glance. For the specifics 
+of each system, all relevant case study artifacts can be found at \ds{Add a 
+link here or put in appendices?}.
 
 \card{\gb}
 {We need to efficiently and correctly predict whether a glass 
 slab can withstand a blast under given conditions.}
-{\ds{TODO}}
+{\ds{TODO - Fill in once all examples in the thesis are done}}
 
 \card{\sw}
 {Solar water heating systems incorporating phase change 
@@ -115,6 +111,8 @@ of our artifacts are trying to say and to whom. By selecting our case studies
 from those developed using common artifact templates, we have given ourselves a
 head start on that process, however, there is still much work to be done.
 
+\subsection{SRS}
+
 To start, we look at the Software Requirements Specification (SRS). The SRS
 (or some incarnation of it) is one of the most important artifacts for any
 software project as it specifies what problem the software is trying to solve.
@@ -125,41 +123,40 @@ contents for an SRS using the \smithea{} template.
 \fig{
   \begin{center}
 \footnotesize
-Table of Contents
 \begin{enumerate}[nosep, label*=\arabic*.]
 \item Reference Material
-\begin{enumerate}[label*=\arabic*.]
+\begin{enumerate}[nosep, label*=\arabic*.]
   \item Table of Units
   \item Table of Symbols
   \item Abbreviations and Acronyms
 \end{enumerate}
 \item Introduction
-\begin{enumerate}[label*=\arabic*.]
+\begin{enumerate}[nosep, label*=\arabic*.]
   \item Purpose of Document
   \item Scope of Requirements
   \item Characteristics of Intended Reader
   \item Organization of Document
 \end{enumerate}
 \item Stakeholders
-\begin{enumerate}[label*=\arabic*.]
+\begin{enumerate}[nosep, label*=\arabic*.]
   \item The Customer
   \item The Client
 \end{enumerate}
 \item General System Description
-\begin{enumerate}[label*=\arabic*.]
+\begin{enumerate}[nosep, label*=\arabic*.]
   \item System Context
   \item User Characteristics
   \item System Constraints
 \end{enumerate}
 \item Specific System Description
-\begin{enumerate}[label*=\arabic*.]
+\begin{enumerate}[nosep, label*=\arabic*.]
   \item Problem Description
-\begin{enumerate}[label*=\arabic*.]
+\begin{enumerate}[nosep, label*=\arabic*.]
     \item Physical System Description
     \item Goal Statements
 \end{enumerate}
   \item Solution Characteristics Specification
-\begin{enumerate}[label*=\arabic*.]
+\begin{enumerate}[nosep, label*=\arabic*.]
     \item Assumptions
     \item Theoretical Models
     \item General Definitions
@@ -170,7 +167,7 @@ Table of Contents
 \end{enumerate}
 \end{enumerate}
 \item Requirements
-\begin{enumerate}[label*=\arabic*.]
+\begin{enumerate}[nosep, label*=\arabic*.]
   \item Functional Requirements
   \item Non-Functional Requirements         
 \end{enumerate}
@@ -182,19 +179,20 @@ Table of Contents
 \item Appendix
 \end{enumerate}
   \end{center}
-}{The Table of Contents from the \smithea{} template}{fig:SRSToC}
+}{The Table of Contents from the (\ds{expanded?}) \smithea{} 
+template}{fig:SRSToC}
 
 With the structure of the document in mind, let us look at several of our case
 studies' SRS documents to get a deeper understanding of what each section truly
 represents. Figure~\ref{fig:csRefSecs} shows the reference section of the SRS 
-for \ds{TODO}. Each of the case studies' SRS contains a similar section so for 
+for \gb. Each of the case studies' SRS contains a similar section so for 
 brevity we will omit the others here, but they can be found at \ds{TODO}. 
 % Provide a link / ref to relevant appendix
 We will look into the case studies in more detail later, for now we will try to 
-ignore the superficial differences in each of them while we look for 
-commonality. \sout{We are strictly looking for patterns! Patterns will give 
-us insight into the root of \emph{what} is being said in each section.}\ds{Not 
-really true, will need to rework}
+ignore any superficial differences (spelling, grammar, phrasing, etc.) in each 
+of them while we look for commonality. We are also trying to determine how the 
+non-superficial differences relate to the document template, general problem 
+domain, and specific system information.
 
 \fig{
 \centering
@@ -202,37 +200,45 @@ really true, will need to rework}
 %			study, split into multiple subfigures - case study TBD}
 \begin{subfigure}{\textwidth}
 \centering
-
-\caption{Table of Units}
+\fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToU.png}}
+\caption{Table of Units Section}
 \label{fig:gbrtou}
 \end{subfigure}
+
+\end{figure}
+
+\begin{figure}\ContinuedFloat
+
 \begin{subfigure}{\textwidth}
 \centering
-
-\caption{Table of Symbols}
+\fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToS.png}}
+\caption{Table of Symbols (truncated) Section}
 \label{fig:gbrtos}
 \end{subfigure}
+
+
 \begin{subfigure}{\textwidth}
 \centering
-
-\caption{Table of Abbreviations and Acronyms}
+\fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToAA.png}}
+\caption{Table of Abbreviations and Acronyms (truncated) Section}
 \label{fig:gbrtoa}
 \end{subfigure}
 }
-{The reference sections of \ds{TBD} respectively}
+{The reference sections of \gb}
 {fig:csRefSecs}
 
-Looking at the Table of Symbols, Table of Units, and Table of Abbreviations and 
-Acronyms from Figure~\ref{fig:csRefSecs} we can see that, barring the table 
-values themselves, they are almost identical. The Table of Symbols is simply a 
-table of values, akin to a glossary, specific to the symbols that 
-appear throughout the rest of the document. For each of those symbols, we see 
-the symbol itself, a brief description of what that symbol represents, and the 
-units it is measured in, if applicable. Similarly, the Table of Units lists the
-Syst\`eme International d'Unit\'es (SI) Units used throughout the document, 
-their descriptions, and the SI name. Finally, the table of Abbreviations and 
-Acronyms lists the abbreviations and their full forms, which are 
-essentially the symbols and their descriptions for each of the abbreviations.
+Looking at the (truncated for space) Table of Symbols, Table of Units, and 
+Table of Abbreviations and Acronyms sections (Figure~\ref{fig:csRefSecs}) we 
+can see that, barring the table values themselves, they are almost identical. 
+The Table of Symbols is simply a table of values, akin to a glossary, specific 
+to the symbols that appear throughout the rest of the document. For each of 
+those symbols, we see the symbol itself, a brief description of what that 
+symbol represents, and the units it is measured in, if applicable. Similarly, 
+the Table of Units lists the Syst\`eme International d'Unit\'es (SI) Units used 
+throughout the document, their descriptions, and the SI name. Finally, the 
+table of Abbreviations and Acronyms lists the abbreviations and their full 
+forms, which are essentially the symbols and their descriptions for each of the 
+abbreviations.
 
 While the reference material section should be fairly self-explanatory as to 
 what it contains, other sections and subsections may not be so clear from their 
@@ -255,8 +261,32 @@ proposed system, and some is in-between: it is specific to the
 problem domain for the proposed system, but not necessarily specific to the 
 system itself.
 
+Observing the contents of an SRS template adhere to said template may seem 
+unimpressive, but it is a necessary step before we can move on to other \sfs{}. 
+Without understanding what the SRS template intends to convey it is hard to 
+assess weather or not the case study SRS conveys that information. With that in 
+mind, we can move on to the MG, MIS, and source code.
+
+\ds{Current plan for following subsections: Brief description of the \sf{}, 
+show an example of similarities within (ex. MG/MIS have a section per module, 
+each section is organized the same way, some are filled in, some aren't), then 
+follow a requirement through the MG to something in the MIS and finally to 
+code. We'll dissect differences between case studies when looking at the 
+patterns in Section~\ref{sec:patterns}. This also plants the seeds of "see, 
+there's the same info moving from SRS -> MG -> MIS -> Code without stating it 
+explicitly which we can do in the pattern section.}
+
+\subsection{MG}
+\subsection{MIS}
+\subsection{Source Code}
+
 \section{\SF{} Summary}
 \label{sec:sfsummary}
+
+\ds{This section may need to swap with the breakdown section for better flow. 
+This feels like a good place for a soft-intro to some of the things I could've 
+covered to help the previous section, or maybe it should get wrapped into the 
+\sfs{} section in the BG}
 
 Parnas~\citep{Parnas2010} does an excellent job of defining the target audience 
 for each of the most common \sfs{} and we extend that alongside our work. A 
@@ -306,13 +336,18 @@ problem that \sf{} is solving}
 
 \section{Patterns and repetition and patterns and repetition -- (OR -- 
 Repeating patterns and patterns that repeat --)}
-  \ds{**Make sure to mention "We actually found that some
+\label{sec:patterns}
+  \ds{\sout{**Make sure to mention "We actually found that some
   info is boilerplate, some is system-specific, and some is general to all
-  members of a software family, but more specific than generic boilerplate"}
+  members of a software family, but more specific than generic boilerplate"}}
+\ds{Pretty sure I got that covered earlier}
 
-From the above sections, we see many emerging patterns in our \sfs{}. Ignoring, 
+\ds{This part isn't exactly true with the reorg of info. I'm going to show some 
+patterns here instead}. \sout{From the above sections, we see many emerging 
+patterns 
+in our \sfs{}. Ignoring, 
 for now, the organizational patterns from the \smithea{} templates we can 
-already see simple patterns emerging.
+already see simple patterns emerging.}
 
 Returning to our example from Section~\ref{sec:breakdown}, looking only at the 
 reference section of our SRS template, we have already found
@@ -325,12 +360,20 @@ we can see that the introduction to the Table of Units is simply boilerplate
 text dropped into each case study verbatim, thus is completely generic and 
 applicable to \emph{any} software system using SI units. The introduction to 
 the Table of Symbols appears to be boilerplate across several examples, 
-however, it does have some variation (see: \gp{} compared to \gb).
+however, it does have some variation which we can see by comparing 
+Figure~\ref{fig:gbrtos} to Figure~\ref{fig:gptos} (\gb{} compared to \gp{}).
 These variations reveal the obvious: the variability between systems is greater 
 than simply a difference in choice of symbols, and so there is some 
 system-specific knowledge being encoded. We can intuit this conclusion based 
 solely on each system solving a different problem, however, we have confirmed 
 this by solely looking at the structure (patterns) of one section of the SRS.
+
+\fig{
+\centering
+\fbox{\includegraphics[width=\textwidth]{figures/gp_SRS_ToS.png}}
+}
+{Table of Symbols (truncated) Section from \gp{}}
+{fig:gptos}
 
 The reference section of the SRS provides a lot of knowledge in a very 
 straightforward and organized manner. The basic units provided in the table of 

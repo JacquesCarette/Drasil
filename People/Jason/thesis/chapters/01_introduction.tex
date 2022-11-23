@@ -86,23 +86,28 @@
 Software developers pull on their understanding of problems to build software
 solutions. Working together, developers similarly pull their understanding from
 a shared pool of knowledge. Often, developers share their knowledge through
-documentation, keeping every product owner\footnote{Any person, within reason,
-      that has responsibility in the development of a software artifact.} ``in the
-loop.'' However, as knowledge and requirements change, the software trails
-behind it until developers manually update the code. This might mean that they
-need to update several areas as a result of one change. Additionally,
-communication of information may be ambiguous at times, which leads to logical
-issues.
+documentation, keeping every product owner\footnote{For our purposes, defining a
+``product owner'' as all people that have any responsibility in the development
+of a software artifact.} ``in the loop.'' As knowledge and requirements change,
+software implementations trail behind the current needs and understand, until
+developers manually update the code. Additionally, communication of information
+may be ambiguous at times, leading to logical issues. By applying generative
+techniques to software development, we may have some, or \textit{all}, of the
+manual updates performed for us.
 
-Focusing on \ACF{scs}, Drasil allows users to describe their scientific problems
-using an \ACF{srs} structure which conveys sufficient information such that
-Drasil can generate a software solution to the problem they describe. However,
-Drasil is only capable of generating software for the problems that it has
-sufficiently ``understood'' (i.e., ones that have been encoded in Drasil).
+Drasil \cite{Drasil2021} is an exploration of applying generative techniques to
+well-understood domains to create an alternative way of developing software.
+Focused on building \ACF{scs}, Drasil allows users to describe scientific
+problems using an abstracted \ACF{srs} template to automatically build a
+software solution conforming to the specifications outlined. However, Drasil is
+only capable of generating software for the problems that it has sufficiently
+``understood'' (i.e., ones that have been sufficiently dissected and encoded in
+Drasil).
 
-In this thesis, we will explore how Drasil captures general knowledge. In
-particular, with focus on scientific theories and mathematical expressions, and
-how we can generate reliable \acs{scs}.
+With a focus on scientific theories and mathematical expressions, in this
+thesis, we aim to make some improvements to how Drasil captures certain kinds of
+knowledge. However, we will also make improvements to how Drasil stores
+knowledge in general as well.
 
 \section{Background: Drasil}
 \label{chap:introduction:sec:background}

@@ -53,7 +53,7 @@ typeCheckSI
             (\(tMsg, tcs) -> do
               putStrLn tMsg
               mapM_ (\(Right s) -> do
-                putStr "  - " -- TODO: we need to be able to dump the expression to the console so that we can identify which expression caused the issue
+                putStr "  - ERROR: " -- TODO: we need to be able to dump the expression to the console so that we can identify which expression caused the issue
                 putStrLn $ temporaryIndent "  " s) tcs
               )
       ) formattedChkd

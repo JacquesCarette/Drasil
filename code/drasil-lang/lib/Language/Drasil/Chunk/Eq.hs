@@ -74,6 +74,7 @@ instance TypeChecks (QDefinition Expr) Expr Space where
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
+  typeCheckExpr (QD q [] e) = pure (sy q $= e, Boolean)
   typeCheckExpr (QD q is e) = pure (apply q (map E.C is) $= e, Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',

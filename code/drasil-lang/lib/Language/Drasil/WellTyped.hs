@@ -8,7 +8,9 @@ import Language.Drasil.UID (UID)
 import Data.List (intercalate)
 
 -- TODO: TypeError should be a Doc type instead, so that we can have cleaner
--- error messages and formatting.
+-- error messages and formatting. It might be good to have a "breadcrumb"-style
+-- error type that shows a path to the problematic section, with an error
+-- message.
 type TypeError = String
 
 -- | We can only type check 'UID's within a type context relating 'UID's to
@@ -41,12 +43,18 @@ class Typed e t => TypeChecks c e t where
 allOfType :: Typed e t => TypingContext t -> [e] -> t -> t -> TypeError -> Either t TypeError
 allOfType cxt es expect ret s
   | allTsAreSp = Left ret
-  | otherwise  = Right $ s ++ "\n    Received:\n" ++ dumpAllTs
+  | otherwise  = Right $ temporaryIndent "  " (s ++ "\nReceived:\n" ++ dumpAllTs)
   where
     allTs = map (infer cxt) es
     allTsAreSp = all (\case
       Left  t -> t == expect
       Right _ -> False) allTs
-    -- FIXME: If an error is embedded within an error, then it will display
-    -- poorly because of hard-coded spacing. We need Docs instead of Strings!
-    dumpAllTs = intercalate "\n" $ map (("      - " ++) . either show ("ERROR: " ++)) allTs
+    dumpAllTs = intercalate "\n" $ map (("- " ++) . either show ("ERROR: " ++)) allTs
+
+-- | A temporary, hacky, indentation function. It should be removed when we
+-- switch to using something else for error messages, which can be later
+-- formatted nicely.
+temporaryIndent :: String -> String -> String
+temporaryIndent r ('\n' : s) = '\n' : (r ++ temporaryIndent r s)
+temporaryIndent r (c    : s) = c : temporaryIndent r s
+temporaryIndent _ []         = []

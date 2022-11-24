@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module Language.Drasil.TypeCheck where
 
 import qualified Data.Map.Strict as M
@@ -15,22 +16,26 @@ import SysInfo.Drasil (SystemInformation(SI))
 -- should be closer to individual instances in the future.
 typeCheckSI :: SystemInformation -> IO ()
 typeCheckSI
-  (SI _ _ _ _ _ _ ims _ _ _ _ _ _ _ chks _ _)
+  (SI _ _ _ _ _ _ ims dds _ _ _ _ _ _ chks _ _)
   = do
-    putStrLn "[ Start type checking ]"
-
     -- build a variable context (a map of UIDs to "Space"s [types])
     let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
 
     -- dump out the list of variables
+    putStr "Symbol Table: "
     print $ M.toList cxt
 
-    -- grab all of the IMs and their type-check-able expressions
-    let toChk = map (\im -> (im ^. uid, typeCheckExpr im :: [(Expr, Space)])) ims
+    putStrLn "=====[ Start type checking ]====="
+    let
+      exprSpaceTups :: (HasUID t, TypeChecks t Expr Space) => [t] -> [(UID, [(Expr, Space)])] 
+      exprSpaceTups = map (\t -> (t ^. uid, typeCheckExpr t))
+
+    -- grab all type-check-able expressions (w.r.t. Space) from DDs and IMs
+    let toChk = exprSpaceTups ims ++ exprSpaceTups dds
 
     let (notChkd, chkd) = partition (\(_, exsps) -> null exsps) toChk
 
-    mapM_ (\(im, _) -> putStrLn $ "WARNING: `" ++ show im ++ "` does not expose any expressions to type check.") notChkd
+    mapM_ (\(t, _) -> putStrLn $ "WARNING: `" ++ show t ++ "` does not expose any expressions to type check.") notChkd
 
     -- type check them
     let chkdd = map (second (map (uncurry (check cxt)))) chkd
@@ -38,15 +43,15 @@ typeCheckSI
     -- format 'ok' messages and 'type error' messages, as applicable
     let formattedChkd :: [Either [Char] ([Char], [Either Space TypeError])]
         formattedChkd = map 
-                          (\(im, tcs) -> if any isRight tcs
-                            then Right ("`" ++ show im ++ "` exposes ill-typed expressions!", filter isRight tcs)
-                            else Left $ "`" ++ show im ++ "` OK!") 
+                          (\(t, tcs) -> if any isRight tcs
+                            then Right ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isRight tcs)
+                            else Left $ "`" ++ show t ++ "` OK!") 
                           chkdd
 
     mapM_ (either
             putStrLn
-            (\(imMsg, tcs) -> do 
-              putStrLn imMsg
+            (\(tMsg, tcs) -> do
+              putStrLn tMsg
               mapM_ (\(Right s) -> do
                 putStr "  - " -- TODO: we need to be able to dump the expression to the console so that we can identify which expression caused the issue
                 putStrLn s) tcs

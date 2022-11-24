@@ -1,4 +1,5 @@
 {-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs, TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 -- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition where
 
@@ -88,6 +89,10 @@ instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
 instance Referable          DataDefinition where
   refAdd      = (^. ddPkt pktS)
   renderRef l = RP (prepend $ abrv l) (refAdd l)
+-- | Expose all expressions that need to be type-checked.
+instance TypeChecks DataDefinition Expr Space where
+  typeCheckExpr (DDE  qd _) = typeCheckExpr qd
+  typeCheckExpr  DDME {}    = []
 
 -- * Constructors
 

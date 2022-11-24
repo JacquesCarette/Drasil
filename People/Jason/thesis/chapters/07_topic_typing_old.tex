@@ -1,0 +1,456 @@
+\chapter{Typing the Expression Language}
+\label{chap:typedExpr}
+
+\begin{writingdirectives}
+      \item What does it mean for expressions to be ``coherent?''
+      \item How can we make and enforce coherence in Drasils expression
+            languages?
+      \item What is a type system?
+            \begin{itemize}
+                  \item ``Safety = Preservation + Progress'' \cite{Harper2016}
+            \end{itemize}
+      \item What is a bidirectional type system? Why bidirectional over a normal
+            ``simply-typed'' system?
+      \item How can this be implemented in Drasil?
+      \item What errors did the type checker currently find?
+\end{writingdirectives}
+
+In \Cref{chap:lang-division}, we discussed how we broke up the single,
+universal, expression language into three different variants. One for ``simple''
+definite valued mathematics. One for ``code'' (with focus on \acs{oo} programs).
+And, finally, one for the classical mathematics we know and love. By doing this,
+we added assurance that the mathematical expressions in our instance models must
+use language that is directly translatable into expressions in code. In some
+sense, we improved the reliability of code generator in Drasil by ensuring that
+all terminology is usable in targeted programming language. In this chapter, we
+aim to improve reliability of the code generator in another sense: the
+\textit{coherence} of the expressions and their usability in software.
+
+\section{Coherence}
+\label{chap:typedExpr:sec:coherence}
+
+By ``coherence'' of the expressions, we imply two major things: (i) there exists
+a definition\footnote{With respect to the language of the expressions.} of
+``coherence,'' and (ii) there exists a method to determine whether an expression
+conforms to the definition of coherence, or not. Here, we're interested in
+coherence in two facets: (a) that expressions users transcribe in Drasil make
+sense, and (b) the expression statements that we generate are immediately
+usable, without worry of invalid instruction. With (a), we're interested in
+assuring that all expressions described are coherent with respect to the
+conventional sense\footnote{Which also translates well to software!}. With (b),
+we're interested in assuring that all generated expressions conform to the
+semantic conventions of the target programming languages. As \acs{gool} is the
+target intermediate language for Drasils code generator, we will focus (b) on
+\acs{gool} as opposed to any of the languages \acs{gool} compiles to.
+
+\textit{Type systems} are what dictate the rules of coherence for expressions in
+programming languages. Similar to the languages \acs{gool} targets, we will need
+to capture knowledge about their type systems to ensure that we only work with
+coherent expressions in both the \acs{srs} abstraction and the generated
+software artifacts.
+
+\subsection{Type Systems \& Safety}
+\label{chap:typedExpr:sec:coherence:subsec:type-safety}
+
+\pseudoExampleJavaTypeError{}
+
+Before compilation/execution, programming language compilers and interpreters
+check if programs conform to their \textit{type systems} to ensure that the
+program evaluation never contains invalid instructions. For example, in Java,
+you wouldn't be able to execute a program containing the statement
+\inlineCode{java}{int x = false;} because it would encounter a \textit{type
+error} (e.g., as in \refPseudoExampleJavaTypeError{}), telling us that the
+\textit{types} are incompatible. \textit{Types} are the meta-level information
+about the structure of \textit{terms} (values), providing information about how
+terms can be manipulated and used, according to their type. Here, the type of
+\inlineCode{java}{x} is \inlineCode{java}{int}, while the type of
+\inlineCode{java}{false} is \inlineCode{java}{bool}. The compiler tells us that
+we cannot assign a boolean value to an integer variable because it has no way of
+interpreting booleans as integers. By denying compilation, the compiler assures
+that the semantics of Javas language are upheld and that all Java programs are
+\textit{type-safe}.
+
+\textit{Type safety} is approximately an assurance of two properties of
+programs: \textit{preservation}, and \textit{progress} \cite{Harper2016}.
+\textit{Preservation} is an assurance that the steps of evaluation of statements
+preserve typing, while \textit{progress} is an assurance that any expression is
+either a final value or contains a well-defined method for obtaining its final
+evaluated value. For an expression to be \textit{well-typed} means that it is
+guaranteed to evaluate fully to a value without unexpected/illegal
+operations\footnote{On the contrary, we call an expression, or program,
+\textit{ill-typed} if it contains expressions that don't conform to the type
+system.}. For a language to be considered \textit{type-safe}, it means that it
+only admits valid well-typed expressions and a definition for what it means to
+be well-typed with respect to some evaluation function.
+
+In order to determine whether an expression is well-typed or not, we look to the
+the \textit{typing rules} of the relevant type system. 
+
+The typing rules are typically written as a set of inference rules.
+
+\subsubsection{A Simple Language}
+\label{chap:typedExpr:sec:coherence:subsec:type-safety:subsubsec:a-simple-language}
+
+For example, if we had a small ``simple'' language, \(\bb{L}\), that contains
+integer and boolean values, with functionality for addition, ``less than''
+comparison, conjunction, and if-then-else (ternary operators)\footnote{Assume
+the definitions of the functions be total and understood/used under the
+conventional sense that mathematicians so often do.}, we might write the syntax
+inductively, as follows\footnote{Note that I will be using a traditional
+math-oriented syntax definition here, but if we were to transcribe it in
+Haskell, we may find differences.}:
+
+\begin{longtable}{ r c c l}
+      \(\bb{L}(l)\) & ::=       & \(n\)                                                        & Integers (where \(n\) is any integer) \\
+                    & \(\vert\) & \texttt{true}                                                & True                                  \\
+                    & \(\vert\) & \texttt{false}                                               & False                                 \\
+                    & \(\vert\) & \(l_1\ \texttt{+}\ l_2\)                                     & Addition                              \\
+                    & \(\vert\) & \(l_1\ \texttt{<}\ l_2\)                                     & ``Less than'' comparison              \\
+                    & \(\vert\) & \(l_1\ \texttt{\land}\ l_2\)                                 & Conjunction                           \\
+                    & \(\vert\) & \(\texttt{if}\ l_1\ \texttt{then}\ l_2\ \texttt{else}\ l_3\) & if-then-else (ternary ``if'')         \\
+\end{longtable}
+
+Now, we can form expressions, such as:
+
+\begin{equation}
+      10
+      \label{ex:sl:s:good1}
+\end{equation}
+
+\begin{equation}
+      23 + (400\ \texttt{+}\ 4000)
+      \label{ex:sl:s:good2}
+\end{equation}
+
+\begin{equation}
+      \texttt{if}\ \texttt{true}\ \texttt{then}\ 95\ \texttt{else}\ 96
+      \label{ex:sl:s:good3}
+\end{equation}
+
+\begin{equation}
+      42\ \texttt{+}\ \texttt{false}
+      \label{ex:sl:s:bad1}
+\end{equation}
+
+\begin{equation}
+      \texttt{if}\ (0\ \texttt{<}\ \texttt{false})\ \texttt{then}\ 1\ \texttt{else}\ \texttt{true}
+      \label{ex:sl:s:bad2}
+\end{equation}
+
+% Forcibly rename the "equation" environment tags to "expression" for the sake
+% of the below discussion.
+\Crefname{equation}{Expression}{Expressions}
+
+Now, let's evaluate these expressions.
+\Cref{ex:sl:s:good1,ex:sl:s:good2,ex:sl:s:good3} can be calculated with a
+conventional understanding of the operations, respectively, as \(10\), \(4423\),
+and \(95\). However, \Cref{ex:sl:s:bad1,ex:sl:s:bad2} are worrisome. Regarding,
+\Cref{ex:sl:s:bad1}, we don't have any conventional sense of addition on
+integers with booleans, so evaluation is unclear. In \Cref{ex:sl:s:bad2}, we
+have two issues: we're trying to relate an integer with a boolean value, and our
+if-then-else construction returns differently-typed values depending on the
+condition.
+
+\Crefname{equation}{Equation}{Equations}
+
+Other than modifying the syntax into a convoluted mess to avoid issues like
+these (which won't be easy, and might not be possible), we look to type systems
+to make all expressions of \(\bb{L}\) sound. The key is in understanding that
+there are different ``kinds'' (\textit{types}) of values (\textit{terms}), and
+forming a system of figuring out which ones are valid (well-typed) or not
+(ill-typed). Thus, first, we must analyze and capture our universe of types of
+\(\bb{L}\), \(\tau\):
+
+\begin{longtable}{ r c c l}
+      \(\Tau(\tau)\) & ::=       & \(\bb{B}\) & Booleans \\
+                     & \(\vert\) & \(\bb{Z}\) & Integers
+\end{longtable}
+
+Note that we are restricting the numeric-related operations to strictly
+integers. The restriction is only there for simplification of numerics. \(\tau\)
+is an enumeration of all permissible \textit{types} of \textit{terms} we can
+have in \(\bb{L}\).
+
+Next, we need to add the typing rules. They will restrict our syntax to only
+those constructions which are semantically valid. We will do so using inference
+judgments, as follows:
+
+\begin{equation}
+      \left.
+      \infer{n : \bb{Z}}{}
+      \right.
+      \qquad
+      \text{(where \(n\) is any integer.)}
+      \label{eq:exTR:int}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{\texttt{true} : \bb{B}}{}
+      \right.
+      \qquad
+      \text{True}
+      \label{eq:exTR:true}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{\texttt{false} : \bb{B}}{}
+      \right.
+      \qquad
+      \text{False}
+      \label{eq:exTR:false}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{+}\ b) : \bb{Z}}
+      {a : \bb{Z}  &  b : \bb{Z}}
+      \right.
+      \qquad
+      \text{Addition}
+      \label{eq:exTR:addition}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{<}\ b) : \bb{B}}
+      {a : \bb{Z}  &  b : \bb{Z}}
+      \right.
+      \qquad
+      \text{``Less than'' comparison}
+      \label{eq:exTR:lessThan}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{\wedge}\ b) : \bb{B}}
+      {a : \bb{B}  &  b : \bb{B}}
+      \right.
+      \qquad
+      \text{Conjunction}
+      \label{eq:exTR:conjunction}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(\texttt{if}\ b\ \texttt{then}\ x\ \texttt{else}\ y) : \tau}
+      {b : \bb{B}  &  x : \tau  &  y : \tau}
+      \right.
+      \qquad
+      \text{if-then-else (ternary ``if'')}
+      \label{eq:exTR:ifThenElse}
+\end{equation}
+
+So as long as we follow these typing rules while we build our expressions, when
+we try to evaluate any of these expressions, we should not arrive at invalid
+expressions where evaluation cannot be completed. In other words, so as long as
+expressions conform to these typing rules, the language is type-safe:
+preservation and progress hold.
+
+Notably, on paper and pencil, or common typesetting, there is nothing tangibly
+stopping us from continuing to write invalid expressions. However, with
+computerized languages, we're able to stop users from writing invalid
+expressions. For Drasil, where the focus of scientific software heavily uses
+mathematics, this will result in a considerable gain over conventional manual
+type-checking because it allows for more type-checking, faster, and more
+reliably.
+
+\section{Back to Our Expression Languages}
+\label{chap:typedExpr:sec:back-to-our-expression-languages}
+
+Similar to the untyped \(\bb{L}\), in Drasil, our expression languages (\Expr{},
+\CodeExpr{}, and \ModelExpr{}) are \textit{untyped}\footnote{i.e., they don't
+have type information, and are not type checked.}. We currently need to manually
+ensure that our generated artifacts \textit{type check}. If we only had a few
+expressions, then it would not be much of an issue to manually type check them.
+However, with scale, it becomes problematic. In particular, throwing
+``generation'' into the mix makes it an area of concern, because there is no
+assurance of type safety.
+
+\subsection{Decomposing the Expression Languages}
+\label{chap:typedExpr:sec:back-to-our-expression-languages:subsec:decomposing-the-expression-languages}
+
+Before we begin to decompose the expression languages into their semantics,
+syntax, and typing rules, we will start off with a common denominator language
+to all the three (3): \Literal{}. The \Literal{} language is a simple
+non-recursive sum type, where each possible value is a different kind of
+``literal'' value\footnote{Note that this work is basing it's understanding on
+      the existing syntax and usage, and does not intend to argue the existence of
+      certain operations or kinds of values necessarily.}. The syntax is as follows:
+
+\begin{longtable}{ r c c l}
+      \(\mathit{Literal}(l)\) & ::=       & \(n\)              & Integers (where \(n \in \bb{Z}\))                \\
+                              & \(\vert\) & \(s\)              & Strings (where \(s\) is any string of text)      \\
+                              & \(\vert\) & \(r\)              & Real numbers (where \(r \in \bb{R}\)             \\
+                              & \(\vert\) & \(r_w\)            & Whole-numbered
+      reals (where \(r_w \in \bb{R} \land r_w \in \bb{Z}\)\
+      \footnote{Intentionally redundant to indicate that \(r_w\) is a real
+      number, but it should also be ``whole,'' and, as such, an integer.})                                        \\
+                              & \(\vert\) & \(n \texttt{/} d\) & Fractions/percentages (where \(n,d \in \bb{Z}\)) \\
+\end{longtable}
+
+The types are as follows:
+
+\begin{longtable}{ r c c l}
+      \(\Tau_{\mathit{Literal}}(\tau)\) & ::=       & \(\bb{R}\) & Reals    \\
+                                        & \(\vert\) & \(\bb{Z}\) & Integers \\
+                                        & \(\vert\) & \(\bb{S}\) & Strings
+      \footnote{For sake of brevity, we will think of \(\bb{S}\) as the type of
+            all possible strings of text.}
+\end{longtable}
+
+Creating the typing rules is a fairly straightforward process:
+
+\begin{equation}
+      \left.
+      \infer{n : \bb{Z}}{}
+      \right.
+      \qquad
+      \text{(where \(n \in \bb{Z}\))}
+      \label{tr:lit:int}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{n : \bb{S}}{}
+      \right.
+      \qquad
+      \text{(where \(s\) is any string of text.)}
+      \label{tr:lit:string}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{r : \bb{R}}{}
+      \right.
+      \qquad
+      \text{(where \(r \in \bb{R}\).)}
+      \label{tr:lit:real}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{r_w : \bb{R}}{}
+      \right.
+      \qquad
+      \text{(where \(r_w \in \bb{R} \land \lfloor{} r_w \rfloor{} = r_w\).)}
+      \label{tr:lit:wholeReal}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(n\ \texttt{/}\ d) : \bb{R}}{}
+      \right.
+      \qquad
+      \text{(where \(n, d \in \bb{Z}\).)}
+      \label{tr:lit:fraction}
+\end{equation}
+
+Note that the ``Whole-numbered Reals'' and ``Reals'' may have overlap. The
+difference is merely the information difference. This is something that can be
+altered later, if desired.
+
+
+
+
+
+\imptodo{Continue writing here!}
+
+\begin{itemize}
+      \item Draw out the syntax diagram of each language, but start with Expr
+            and discuss how CodeExpr and ModelExpr are extensions of Expr.
+
+      \item Re-write the typing rules without the Haskell code references (keep
+            it mathematical/theoretical).
+
+      \item Discuss how and where we can add type information to Drasils
+            expression languages, and the pros/cons of the solutions. For
+            example, should type enforcement done at the construction-level or
+            post-facto processed?
+\end{itemize}
+
+In Haskell, there are at least two ways that we can perform these type rules: at
+creation, and after creation. If we choose to restrict at the construction, we
+have a stronger sense of type safety for any and all expressions, unlike with
+post-creation manual checking of expressions, where you can't necessarily share
+proofs that an expression ``well-typed''\footnote{At least not in Haskell, but
+      perhaps in Agda!}.
+
+\begin{itemize}
+
+      \item Compiling to ``lower languages'' requires special type checking
+            before compiling to them. For example, the Swift code generator has
+            to ensure that there are no ambiguously typed numerals as the types
+            of numerics are not overloaded in Swift.
+
+      \item Dynamically checking for invalid expression states is possible, but
+            difficult and would result in increasingly difficult term tracking
+            as terms in the expression language grow/are added.
+
+      \item In general, being able to express invalid expressions causes large
+            burden and mental overhead.
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+\imptodo{Figure out what to do with the below:}
+
+The objective of this chapter is to create a system of type rules, and enforce
+well-formedness/typedness\footnote{Please note that I will be using
+``well-formed'' and ``well-typed'' interchangeably.} through them, for Drasils
+mathematical expression languages.
+
+\section{Recap of Drasils Math-related Expression Languages}
+
+To recap, at this point, we have three (3) relevant and used ``mathematical
+expression'' languages.
+
+\subsection{One for \textquotedblleft{}Simple\textquotedblright{} Mathematics}
+
+\Expr{} is a mathematical expression languages whose vocabulary is intended to
+always have a definite value. In other words, with little to no extra work on
+your end, you should be able to directly input these expressions in your
+standard calculator (perhaps with a bit of work to handle vectors, functions,
+etc.) to evaluate them.
+
+\subsection{One For \textquotedblleft{}Code\textquotedblright{}}
+
+\CodeExpr{} is a heavily mathematics-focused expression language with a few
+extra features over \Expr{} for \acs{gool}/``code.'' The vocabulary should be
+nearly directly usable in \acs{gool} for outputting to general-purpose
+object-oriented programming languages. \CodeExpr{} is a superset of \Expr{}:
+\(\Expr{} \subseteq{} \CodeExpr{}\).
+
+\subsection{And One For General Mathematics}
+
+\ModelExpr{} is the classical mathematics we know and love. It contains nearly
+everything we know (up to what we've encoded thus far) and is intended to be a
+descriptive language, with no particular restrictions on its terms (other than
+that they should at least be describable on pencil and paper too). \ModelExpr{}
+is also a superset of \Expr{}: \(\Expr{} \subseteq{} \ModelExpr{}\).
+
+However, \ModelExpr{}s terms are unlikely to appear in \CodeExpr{} due to their
+indescribable nature in computable \acs{oo} ``code.''
+
+As of right now, these languages have proven themselves to be effective
+encodings, weakly proven through Drasils case studies being able to produce
+working software artifacts. However, they are not without issue. Notably, at the
+moment, Drasil does not have any readily-available type information about their
+constructions. This lack of type information hampers the ``reliability'' aspect
+of the code generator because the generator is unable to restrict its output
+artifacts to those which are directly usable. In order for the generated
+artifacts to be directly usable, they must be \textit{well-typed} programs. In
+other words, we need to make sure that the generated expressions and programs
+conform to the \textit{type rules} of the respective interpreters and/or
+compilers.

@@ -12,7 +12,6 @@ import           Language.Drasil.Space         (DiscreteDomainDesc,
 import qualified Language.Drasil.Space         as S
 import           Language.Drasil.UID           (UID)
 import           Language.Drasil.WellTyped
-import qualified Language.Drasil.WellTyped     as S
 import Data.Either (lefts)
 import qualified Data.Foldable as NE
 
@@ -215,12 +214,12 @@ instance Typed Expr Space where
   infer cxt (Lit lit) = infer cxt lit
 
   infer cxt (AssocA op exs) = allOfType cxt exs sp sp
-      "Associative arithmetic operation expects all operands to be of the same type."
+      $ "Associative arithmetic operation expects all operands to be of the same expected type (" ++ show sp ++ ")."
     where
       sp = assocArithOperToTy op
 
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
-    "Associative boolean operation expects all operands to be of the same type."
+    $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
 
   infer cxt (C uid) = inferFromContext cxt uid
 
@@ -229,8 +228,8 @@ instance Typed Expr Space where
   infer cxt (FCall uid exs _) = case (inferFromContext cxt uid, map (infer cxt) exs) of
     (Left (S.Function params out), exst) -> if NE.toList params == lefts exst
       then Left out
-      else Right $ "Function `" ++ show uid ++ "` expects parameters of types: " ++ show params
-    (Left _, _) -> Right $ "Function application on non-function: " ++ show uid
+      else Right $ "Function `" ++ show uid ++ "` expects parameters of types: " ++ show params ++ ", but received: " ++ show (lefts exst) ++ "."
+    (Left s, _) -> Right $ "Function application on non-function `" ++ show uid ++ "` (" ++ show s ++ ")."
     (Right x, _) -> Right x
 
   infer cxt (Case _ ers) -- = _ -- all (\(e, r) -> infer cxt e) ers
@@ -261,99 +260,103 @@ instance Typed Expr Space where
     Left sp -> case uf of
       Abs -> if S.isBasicNumSpace sp && sp /= S.Natural
         then Left sp
-        else Right "numeric 'absolute' value operator only applies to, non-natural, numeric types"
+        else Right $ "Numeric 'absolute' value operator only applies to, non-natural, numeric types. Received `" ++ show sp ++ "`."
       Neg -> if S.isBasicNumSpace sp && sp /= S.Natural
         then Left sp
-        else Right "negation only applies to, non-natural, numeric types"
-      Exp -> if sp == S.Real || sp == S.Integer then Left S.Real else Right $ show Exp ++ " only applies to reals"
-      x -> if sp == S.Real then Left S.Real else Right $ show x ++ " only applies to reals"
+        else Right $ "Negation only applies to, non-natural, numeric types. Received `" ++ show sp ++ "`."
+      Exp -> if sp == S.Real || sp == S.Integer then Left S.Real else Right $ show Exp ++ " only applies to reals."
+      x -> if sp == S.Real
+        then Left S.Real
+        else Right $ show x ++ " only applies to Reals. Received `" ++ show sp ++ "`."
     x       -> x
 
   infer cxt (UnaryOpB Not ex) = case infer cxt ex of
     Left S.Boolean -> Left S.Boolean
-    Left _         -> Right "¬ on non-boolean operand"
+    Left sp        -> Right $ "¬ on non-boolean operand, " ++ show sp ++ "."
     x              -> x
 
   -- TODO: What about "Vect Vect ... Vect X"?
   infer cxt (UnaryOpVV NegV e) = case infer cxt e of
     Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
       then Left $ S.Vect sp
-      else Right "Vector negation only applies to, non-natural, numbered vectors"
-    Left _ -> Right "Vector negation should only be applied to numeric vectors."
+      else Right $ "Vector negation only applies to, non-natural, numbered vectors. Received `" ++ show sp ++ "`."
+    Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
     Right ex -> Right ex
 
   infer cxt (UnaryOpVN Norm e) = case infer cxt e of
     Left (S.Vect sp) -> if sp == S.Real
       then Left S.Real
-      else Right "Vector norm only applies to vectors of real numbers"
-    Left _ -> Right "Vector norm only applies to vectors of real numbers"
+      else Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
+    Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
     ex -> ex
 
   infer cxt (UnaryOpVN Dim e) = case infer cxt e of
-    Left _ -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
-    ex -> ex
+    Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left sp         -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
+    ex              -> ex
 
   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt -- FIXME: What do we want here?
       then Left lt
-      else Right "Fractions/divisions should only be applied to the same numeric typed operands"
+      else Right $ "Fractions/divisions should only be applied to the same numeric typed operands. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
     (_      , Right e) -> Right e
     (Right e, _      ) -> Right e
 
   infer cxt (ArithBinaryOp Pow l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
       then Left lt
-      else Right "Powers only be applied to the same numeric type in both operands, or real base with integer exponent"
+      else Right $
+        "Powers only be applied to the same numeric type in both operands, or real base with integer exponent. Received `" ++ show lt ++ "` ^ `" ++ show rt ++ "`."
     (_      , Right x) -> Right x
     (Right x, _      ) -> Right x
 
   infer cxt (ArithBinaryOp Subt l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Left lt
-      else Right "Both operands of a subtraction must be the same numeric type"
+      else Right $ "Both operands of a subtraction must be the same numeric type. Received `" ++ show lt ++ "` - `" ++ show rt ++ "`."
     (_, Right re) -> Right re
     (Right le, _) -> Right le
 
   infer cxt (BoolBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left S.Boolean, Left S.Boolean) -> Left S.Boolean
-    (Left _, Left _) -> Right "Boolean expression contains non-boolean operand"
+    (Left lt, Left rt) -> Right $ "Boolean expression contains non-boolean operand. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
     (_     , Right er) -> Right er
     (Right el, _     ) -> Right el
 
   infer cxt (EqBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if lt == rt
       then Left S.Boolean
-      else Right "Both operands of an (in)equality (=/≠) must be of the same type"
+      else Right $ "Both operands of an (in)equality (=/≠) must be of the same type. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
     (_, Right re) -> Right re
     (Right le, _) -> Right le
 
   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
     (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
       then Left lt
-      else Right "List accessor not of type integer nor natural"
-    (Left _          , _      ) -> Right "List accessor expects a list/vector"
+      else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+    (Left lt         , _      ) -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
     (_               , Right e) -> Right e
     (Right e         , _      ) -> Right e
 
   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Left S.Boolean
-      else Right $ "Both operands of a numeric comparison must be the same numeric type, got: " ++ show lt ++ ", " ++ show rt
+      else Right $ "Both operands of a numeric comparison must be the same numeric type, got: " ++ show lt ++ ", " ++ show rt ++ "."
     (_, Right re) -> Right re
     (Right le, _) -> Right le
 
   infer cxt (VVVBinaryOp Cross l r) = case (infer cxt l, infer cxt r) of
     (Left lTy, Left rTy) -> if lTy == rTy
       then Left lTy
-      else Right "Vector cross product expects both operands to have the same time"
+      else Right $ "Vector cross product expects both operands to have the same time. Received `" ++ show lTy ++ "` X `" ++ show rTy ++ "`."
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
 
   infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Left (S.Vect lsp), Left (S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
+    (Left lt@(S.Vect lsp), Left rt@(S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
       then Left lsp
-      else Right "Vector dot product expects numeric vector operands"
-    (Left _, Left _) -> Right "Vector dot product expects vector operands"
+      else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
+    (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
@@ -363,29 +366,31 @@ instance Typed Expr Space where
         then if expTy == topTy
           then if expTy == bodyTy
             then Left expTy
-            else Right $ "'Big' operator range body not of expected type: " ++ show expTy
-          else Right $ "'Big' operator range top not of expected type: " ++ show expTy
-        else Right $ "'Big' operator range bottom not of expected type: " ++ show expTy
+            else Right $ "'Big' operator range body not of expected type: " ++ show expTy ++ ", found: " ++ show bodyTy ++ "."
+          else Right $ "'Big' operator range top not of expected type: " ++ show expTy ++ ", found: " ++ show topTy ++ "."
+        else Right $ "'Big' operator range bottom not of expected type: " ++ show expTy ++ ", found: " ++ show botTy ++ "."
       (_         , _         , Right x    ) -> Right x
       (_         , Right x   , _          ) -> Right x
       (Right x   , _         , _          ) -> Right x
 
-  infer cxt (RealI uid ri) = case inferFromContext cxt uid of
-    Left uidSp -> case riOfTy uidSp ri of
-      Left True -> Left S.Boolean
-      Left _    -> Right "Interval not of same type as variable"
-      Right s   -> Right s
-    x -> x
+  infer cxt (RealI uid ri) = 
+    case (inferFromContext cxt uid, riTy ri) of
+      (Left S.Real, Left riSp) -> if riSp == S.Real
+        then Left S.Boolean
+        else Right $
+          "Real interval expects interval bounds to be of type Real, but received: " ++ show riSp ++ "."
+      (Left uidSp, _         ) -> Right $
+        "Real interval expects variable to be of type Real, but received `" ++ show uid ++ "` of type `" ++ show uidSp ++ "`."
+      (_          , Right x  ) -> Right x
+      (Right x    , _        ) -> Right x
     where
-      riOfTy :: Space -> RealInterval Expr Expr -> Either Bool TypeError
-      riOfTy sp (S.Bounded (_, lx) (_, rx)) = case (isOfTy sp cxt lx, isOfTy sp cxt rx) of
-        (Left l, Left r)  -> Left $ l && r
-        (Left _, Right r) -> Right r
-        (Right l, _)      -> Right l
-      riOfTy sp (S.UpTo (_, x)) = isOfTy sp cxt x
-      riOfTy sp (S.UpFrom (_, x)) = isOfTy sp cxt x
-
-      isOfTy :: S.Typed e t => t -> TypingContext t -> e -> Either Bool TypeError
-      isOfTy sp cxt' e = case infer cxt' e of
-        Left x  -> Left $ x == sp
-        Right x -> Right x -- This can't be "x -> x" due to type of "x" in this case conflicting!
+      riTy :: RealInterval Expr Expr -> Either Space TypeError
+      riTy (S.Bounded (_, lx) (_, rx)) = case (infer cxt lx, infer cxt rx) of
+        (Left lt, Left rt) -> if lt == rt
+          then Left lt
+          else Right $
+            "Bounded real interval contains mismatched types for bottom and top. Received `" ++ show lt ++ "` to `" ++ show rt ++ "`."
+        (_      , Right x) -> Right x
+        (Right x, _      ) -> Right x
+      riTy (S.UpTo (_, x)) = infer cxt x
+      riTy (S.UpFrom (_, x)) = infer cxt x

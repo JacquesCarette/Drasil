@@ -85,8 +85,8 @@ instance HasSpace           InstanceModel where typ = output . typ
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
 -- | Expose all expressions that need to be type-checked.
-instance TypeChecks InstanceModel Expr Space where
-  typeCheckExpr = typeCheckExpr . (^. mk)
+instance RequiresChecking InstanceModel Expr Space where
+  requiredChecks = requiredChecks . (^. mk)
 
 -- | Smart constructor for instance models with everything defined.
 im :: ModelKind Expr -> Inputs -> Output -> 

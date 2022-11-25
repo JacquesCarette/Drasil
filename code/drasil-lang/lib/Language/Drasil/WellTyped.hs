@@ -37,10 +37,11 @@ class (Eq t, Show t) => Typed e t where
   --   expression can satisfy the expectation.
   check :: TypingContext t -> e -> t -> Either t TypeError
 
-class Typed e t => TypeChecks c e t where
-  -- Why is this a list, you ask? So that we can have multiple expressions type
-  -- checked at once, which a chunk may or may not expose.
-  typeCheckExpr :: c -> [(e, t)]
+-- | For all containers, c, which contain typed expressions, e, against a
+--   specific type universe, t.
+class Typed e t => RequiresChecking c e t where
+  -- | All things that need type checking.
+  requiredChecks :: c -> [(e, t)]
 
 -- | ``Check'' an expressions type based by an inference.
 typeCheckByInfer :: Typed e t => TypingContext t -> e -> t -> Either t TypeError

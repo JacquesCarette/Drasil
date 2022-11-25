@@ -57,20 +57,20 @@ data MultiDefn e = MultiDefn{
 
 makeLenses ''MultiDefn
 
-instance HasUID        (MultiDefn e) where uid     = rUid
-instance HasSymbol     (MultiDefn e) where symbol  = symbol . (^. qd)
-instance NamedIdea     (MultiDefn e) where term    = qd . term
-instance Idea          (MultiDefn e) where getA    = getA . (^. qd)
-instance HasSpace      (MultiDefn e) where typ     = qd . typ
-instance Definition    (MultiDefn e) where defn    = rDesc
-instance Quantity      (MultiDefn e)
-instance MayHaveUnit   (MultiDefn e) where getUnit = getUnit . view qd
+instance HasUID           (MultiDefn e) where uid     = rUid
+instance HasSymbol        (MultiDefn e) where symbol  = symbol . (^. qd)
+instance NamedIdea        (MultiDefn e) where term    = qd . term
+instance Idea             (MultiDefn e) where getA    = getA . (^. qd)
+instance HasSpace         (MultiDefn e) where typ     = qd . typ
+instance Definition       (MultiDefn e) where defn    = rDesc
+instance Quantity         (MultiDefn e)
+instance MayHaveUnit      (MultiDefn e) where getUnit = getUnit . view qd
 -- | The concept domain of a MultiDefn is the union of the concept domains of
 -- the underlying variants.
-instance ConceptDomain (MultiDefn e) where
+instance ConceptDomain    (MultiDefn e) where
   cdom = foldr1 union . NE.toList . NE.map (^. cd) . (^. rvs)
-instance TypeChecks    (MultiDefn Expr) Expr Space where
-  typeCheckExpr md = map (\x -> (x ^. expr, md ^. typ)) $ NE.toList $ md ^. rvs
+instance RequiresChecking (MultiDefn Expr) Expr Space where
+  requiredChecks md = map (\x -> (x ^. expr, md ^. typ)) $ NE.toList $ md ^. rvs
 
 -- | The complete Relation of a MultiDefn is defined as the quantity and the
 --   related expressions being equal (e.g., `q $= a $= b $= ... $= z`)

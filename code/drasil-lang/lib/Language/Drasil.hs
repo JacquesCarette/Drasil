@@ -288,13 +288,13 @@ module Language.Drasil (
   , TypeError
   , inferFromContext
   , Typed(..)
-  , TypeChecks(..)
+  , RequiresChecking(..)
   , temporaryIndent -- FIXME: Once a proper breadcrumb system is built (hopefully soon, we can remove this export.)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 
-import Language.Drasil.WellTyped (TypeChecks(..), Typed(..), TypingContext,
+import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
   TypeError, inferFromContext, temporaryIndent)
 
 import Language.Drasil.Expr.Class (ExprC(..),

@@ -42,8 +42,8 @@ instance ConceptDomain (ConstraintSet e) where cdom = cdom . (^. con)
 instance Express e => Express (ConstraintSet e) where
   express = foldr1 ($&&) . map express . NE.toList . (^. invs)
 -- | Exposes all relations and an expectation of the type of a relation (Bool)
-instance TypeChecks (ConstraintSet Expr) Expr Space where
-  typeCheckExpr cs = map (,Boolean) $ NE.toList (cs ^. invs)
+instance RequiresChecking (ConstraintSet Expr) Expr Space where
+  requiredChecks cs = map (,Boolean) $ NE.toList (cs ^. invs)
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NE.NonEmpty e -> ConstraintSet e

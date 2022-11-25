@@ -27,8 +27,8 @@ typeCheckSI
 
     putStrLn "=====[ Start type checking ]====="
     let
-      exprSpaceTups :: (HasUID t, TypeChecks t Expr Space) => [t] -> [(UID, [(Expr, Space)])] 
-      exprSpaceTups = map (\t -> (t ^. uid, typeCheckExpr t))
+      exprSpaceTups :: (HasUID t, RequiresChecking t Expr Space) => [t] -> [(UID, [(Expr, Space)])] 
+      exprSpaceTups = map (\t -> (t ^. uid, requiredChecks t))
 
     -- grab all type-check-able expressions (w.r.t. Space) from DDs and IMs
     let toChk = exprSpaceTups ims ++ exprSpaceTups dds

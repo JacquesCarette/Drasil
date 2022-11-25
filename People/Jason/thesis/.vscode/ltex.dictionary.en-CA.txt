@@ -121,3 +121,4 @@ GraphViz
 READMEs
 evaluable
 booleans
+DifferentialModel

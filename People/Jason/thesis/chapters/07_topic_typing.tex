@@ -98,10 +98,10 @@ and type mismatches are possible. Thus, we must make \Expr{} type-safe.
 \section{Type-Safe Expressions}
 \label{chap:typed-expr:sec:type-safe-expressions}
 
-In order to make \Expr{} type-safe, we must build a type system for it to
-restrict valid \Expr{} terms. A system of typing rules that dictate what
-well-formed expressions will allow us to determine which expressions are
-well-typed or not.
+In order to make \Expr{} type-safe, we must build a type system for it so that
+we can obtain information about which \Expr{} terms are coherent/valid or not. A
+system of typing rules that dictate what well-formed expressions will allow us
+to determine which expressions are well-typed.
 
 \imptodo{Since Drasil is deeply embedded in Haskell, we were initially tempted
       to use a \acs{gadt} and typed \acs{ttf}, but...}
@@ -305,13 +305,44 @@ With our goal in mind and our tools in hand, we need to capture two things about
 \subsection{Type Universe}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-universe}
 
-Thankfully, there already exists an unused type universe, \Space{}, in Drasil
-that we can extend and start using\todo{ref original space}.
+Thankfully, there already exists an unused type universe, \Space{}
+(\refOriginalSpaceHaskell{}), in Drasil that we can extend\todo{Move below
+pseudohaskell snippet of Space to the appendix, and reference it here} and start
+using as intended.
 
 \begin{longtable}{ r c c l}
-      \(\texttt{Space}(s)\) & ::=       & \(\bb{B}\) & Booleans \\
-                            & \(\vert\) & \(\bb{Z}\) & Integers
+      \(\texttt{Space}(s)\) & ::=       & \(\bb{Z}\)                                  & Integers   \\
+                            & \(\vert\) & \(\bb{Q}\)                                  & Rationals  \\
+                            & \(\vert\) & \(\bb{R}\)                                  & Reals      \\
+                            & \(\vert\) & \(\bb{N}\)                                  & Naturals   \\
+                            & \(\vert\) & \(\bb{B}\)                                  & Booleans   \\
+                            & \(\vert\) & \(\texttt{Ch}\)                             & Characters \\
+                            & \(\vert\) & \(\texttt{String}\)                         & Strings    \\
+                            & \(\vert\) & \(\texttt{Vector}(s)\)                      & Vectors    \\
+                            & \(\vert\) & \(\texttt{Matrix}(s)\)                      & Matrices   \\
+                            & \(\vert\) & \((s_1, s_2, \ldots{}, s_n) \rightarrow s\) & Functions  \\
 \end{longtable}
+
+\begin{pseudohaskell}{Type Universe}{pseudoTypeUniverse}
+data Space =
+    Integer
+  | Rational
+  | Real
+  | Natural
+  | Boolean
+  | Char
+  | String
+  | Radians
+  | Vect Space -- TODO: Length for vectors?
+  | Matrix Int Int Space
+  | Array Space
+  | Actor String
+  | DiscreteD [Double]
+  | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
+  | Function (NE.NonEmpty Primitive) Primitive
+  | Void
+  deriving (Eq, Show)
+\end{pseudohaskell}
 
 \subsection{Type Rules}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-rules}
@@ -327,21 +358,25 @@ the bidirectional type checking and inferencing in Drasil.
 Thus, we need to build out the typing context, \(\Gamma\). \(\Gamma\) is the set
 of expression terms for which we already know the type of. While \(\Gamma\)
 might include whole expressions, the most important information we need while
-traversing \Expr{}s is information about the types associated with \UID{}s.
-Since each \UID{} relates to a symbol with a unique type, we can build a map
-that carries everything for us.
+traversing \Expr{}s is information about the types associated with \UID{}s
+(since \Expr{}s, when referring to chunks, only carry \acs{uid} information,
+such as for symbols and function applications). Since each \UID{} relates to a
+symbol with a unique type, we can build a map that carries everything for us.
 
 \begin{pseudohaskell}{Typing Context, \(\Gamma\)}{pseudoTypingContext}
 type TypingContext t = M.Map UID t
 \end{pseudohaskell}
 
-Now, we may build our type checker. However, as we might want to implement type
-checking for any expression types (not just \Expr{}) with respect to any type
-universe (not just \Space{}), we prefer to build the bidirectional type checker
-with a typeclass\footnote{Note: we needed to enable the multi-parameter
-type-classes \acs{ghc} language extension to create and use this type class, at
-times with the flexible contexts extension too.}\todo{cite flexible contexts and
-multi-param type-classes in footnote}, instantiated as needed.
+Now we may build our type checker. As we will want to implement type checking
+for any expression types (such as for \CodeExpr{} and \ModelExpr{} eventually)
+with respect to any type universe (not just \Space{}), we prefer to build the
+bidirectional type checker with a typeclass\footnote{Note: we needed to enable
+the multi-parameter type-classes \acs{ghc} language extension to create and use
+this type class, at times with the flexible contexts extension too.}\todo{cite
+flexible contexts and multi-param type-classes in footnote}, instantiated as
+needed. Using a typeclass with 2 parameters (\(e\) and \(t\)) allows us to build
+out a bidirectional type checker with respect to any language, \(e\), and type
+universe, \(t\).
 
 \begin{pseudohaskell}{Modelling Bidirectional Type Checking}{pseudoModellingBidirectionalTypeChecking}
 -- | Build a bidirectional type checker for your expression language, e, with
@@ -357,23 +392,124 @@ class (Eq t, Show t) => Typed e t where
   check :: TypingContext t -> e -> t -> Either t TypeError
 \end{pseudohaskell}
 
+At the moment, \inlineHs{TypeError} is merely a type alias for a
+\inlineHs{String}, for which we manually typeset in a reasonably okay fashion.
+Eventually, it should be replaced with a whole ``breadcrumbs''-like system that
+elegantly displays a traversal over an expression, showing where type checking
+may have gone awry and why an expression is ill-typed.
+
+Now we may build out the bidirectional type checker for \Expr{}: \todo{insert
+code snippet for Typed instance for Expr \& Space}. All that's left is to
+actually use the type checker.
+
+While we would prefer to localize type-checking to the instant applicable chunks
+are created (and expressions too), we unfortunately aren't able to. As
+expressions are formed and symbols are referenced, the whole symbol type context
+is missing. At the moment, Drasil gathers all chunks at once, registers them in
+memory, and then performs various ``checks'' and generation steps to produce
+software artifacts. In order to build the type context, we would need to build
+it manually, in a very tedious fashion, for each expression we build. However,
+this idea does not scale very well. In order to localize type-checking without
+the extra work, we would need to make our chunk registration gradual and add a
+feature for exposing assertions that needs to be asserted/proven before
+registration in memory\footnote{We will take steps towards this in
+\Cref{chap:storingChunks}, but this task will largely be left for future work.}.
+To make a compromise, we will settle for type-checking just before code and
+\acs{srs} generation, so that we can notify Drasil-users of any issues and stop
+generation. With this information in mind, we need to be able to extract all
+expressions and expected types, and relations from our \InstanceModel{}s and
+\DataDefinition{}s.
+
+\begin{pseudohaskell}{Requiring Type-checking Constraint}{pseudoRequiringTypecheckingConstraint}
+-- | For all containers, c, which contain typed expressions, e, against a
+--   specific type universe, t, expose all expressions and relations that need 
+--   to be type-checked.
+class Typed e t => RequiresChecking c e t where
+  -- | All things that need type checking.
+  requiredChecks :: c -> [(e, t)]
+\end{pseudohaskell}
+
+With \inlineHs{RequiresChecking}, we have a typeclass for any instance of a
+type, \(c\), which may contain any number of expressions of type \(e\) that are
+expected to be type-checked w.r.t. a specific type from a type universe \(t\).
+By instantiating this typeclass for \DataDefinition{}s, we expose a single
+relation to be type-checked: that a specific \QDefinition{} is well-formed.
+Interestingly, by instantiating this typeclass for \InstanceModel{}s, we
+potentially expose more than one expression, depending on the \ModelKind{}
+variant. Recall from \Cref{chap:modelkinds} that any of our theories (including
+\InstanceModel{}s) may take on any of our theory kinds (\ModelKinds{}). For the
+complicated theories that might stack have a stack of expressions (such as
+equational realms,
+\Cref{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms}),
+we are able to type-check them all, individually. For other theories, such as
+the new \acs{ode} model variant, \NewDEModel{} (\DifferentialModel{}), we may
+also have a solution system of equations \cite{Chen2022MEng} that need to be
+type-checked. Moving on, we may finally plug in our type-checker!
+
+\begin{pseudohaskell}{Type-checking a System}{pseudoTypeCheckingASystem}
+typeCheckSI :: SystemInformation -> IO ()
+typeCheckSI
+  (SI _ _ _ _ _ _ ims dds _ _ _ _ _ _ chks _ _)
+  = do
+    -- build a variable context (a map of UIDs to "Space"s [types])
+    let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
+
+    -- dump out the list of variables
+    putStr "Symbol Table: "
+    print $ M.toList cxt
+
+    putStrLn "=====[ Start type checking ]====="
+    let
+      exprSpaceTups :: (HasUID t, RequiresChecking t Expr Space) => [t] -> [(UID, [(Expr, Space)])] 
+      exprSpaceTups = map (\t -> (t ^. uid, requiredChecks t))
+
+    -- grab all type-check-able expressions (w.r.t. Space) from DDs and IMs
+    let toChk = exprSpaceTups ims ++ exprSpaceTups dds
+
+    let (notChkd, chkd) = partition (\(_, exsps) -> null exsps) toChk
+
+    mapM_ (\(t, _) -> putStrLn $ "WARNING: `" ++ show t ++ "` does not expose any expressions to type check.") notChkd
+
+    -- type check them
+    let chkdd = map (second (map (uncurry (check cxt)))) chkd
+
+    -- format 'ok' messages and 'type error' messages, as applicable
+    let formattedChkd :: [Either [Char] ([Char], [Either Space TypeError])]
+        formattedChkd = map 
+                          (\(t, tcs) -> if any isRight tcs
+                            then Right ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isRight tcs)
+                            else Left $ "`" ++ show t ++ "` OK!") 
+                          chkdd
+
+    mapM_ (either
+            putStrLn
+            (\(tMsg, tcs) -> do
+              putStrLn tMsg
+              mapM_ (\(Right s) -> do
+                putStr "  - ERROR: " -- TODO: we need to be able to dump the expression to the console so that we can identify which expression caused the issue
+                putStrLn $ temporaryIndent "  " s) tcs
+              )
+      ) formattedChkd
+    putStrLn "[ Finished type checking ]"
+\end{pseudohaskell}
+
+By using this function anywhere before our code generation step, we will be able
+to type-check all of our instance models and data definitions exposed relations
+and expressions. As of writing, we found enough such that it's best to keep
+type-checking done en masse, as it is right now, and without causing a compiler
+panic for our case studies. Notably, by adding type-checking to Drasil, we also
+bring into question the coherence of our \acs{srs} documents. By forcing the
+\acs{srs} abstraction to provide sufficiently coherent information to generate
+code, we also have an equal assurance that the \acs{srs} is sufficiently
+coherent for developers to manually build similar software artifacts.
+
 \imptodo{Continue writing here!}
 
 
 
-% `infer` is meant to pull type information from 'e's for a specific 'type'
-% typeset, 't'. Since we don't have any sort of parameter types in our Expr, I
-% chose to keep the 'check' function out of the `Typed` typeclass, but perhaps
-% this wasn't the best choice since, to my understanding, infer and check can be
-% based on each other (and it's helpful to base them off each other specifically
-% in cases where ambiguous types exist). However, pushing 'check' into 'infer'
-% isn't particularly difficult.
 
-% Now, why a typeclass? Because we want to be able to type-check various things,
-% which might contain systems, with respect to particular various type contexts,
-% so having a single name is simpler since they will always be type-checked with
-% respect to different types. It's also the same concept, just across different
-% expression languages and type systems.
+
+
 
 % Now, why the `type TypingContext t = M.Map UID t`? This is because of Expr, but
 % I think it's a good thing. Since Expr contains references to `UID`s for certain
@@ -395,42 +531,6 @@ class (Eq t, Show t) => Typed e t where
 % However, we do ultimately build our TypingContext from the ChunkDBs because I
 % wanted to check all of our IMs at once, and all expressions they expose.
 
-
-
-
-% So, now we can add type information to `Expr`, with respect to `Space` as it's
-% type-system. I won't add the code here, but I'm referring to building the typing
-% rules for inferring the type of an Expr-expression with respect to a
-% `Space`-based type-system.
-
-
-
-
-% Here's where the issue with ChunkDBs are highlighted a bit more. Since we don't
-% build our ChunkDBs gradually (yet), we would need to create type contexts for
-% each chunk as we build them so that they can be type-checked. Thus, to simplify,
-% we don't. Rather, we type-check after ChunkDB creation so that we can check
-% everything at once, in one go. However, I don't want to hard-code type checking
-% for just InstanceModels, so I created a typeclass for things that need to be
-% type-checked. Notably, at times, chunks will have a single expression but then
-% also expose different kinds of expressions, such as @cd155's NewDEModel, which
-% exposes a system of equations.
-
-% ```
-% class Typed e t => TypeChecks c e t where
-%   -- Why is this a list, you ask? So that we can have multiple expressions type
-%   -- checked at once, which a chunk may or may not expose.
-%   typeCheckExpr :: c -> [(e, t)]
-% ```
-
-% The typeclass is with respect to a particular expression language and
-% type-system, but it's not difficult to make it type-system and
-% expression-language agnostic, but I think that is something that should be
-% automated instead (a case where we would want Drasil to have a
-% meta-understanding of this system). 
-
-% Now, we just need to instantiate this for InstanceModels, ModelKinds, and
-% everything they are based on.
 
 
 

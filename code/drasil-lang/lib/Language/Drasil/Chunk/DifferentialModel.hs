@@ -28,7 +28,7 @@ import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
 import Data.List (find)
-import Language.Drasil.WellTyped (TypeChecks (typeCheckExpr))
+import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
 import Language.Drasil.Space (Space (Boolean))
 
 -- | Unknown is nth order of the dependent variable 
@@ -126,8 +126,8 @@ instance ConceptDomain DifferentialModel where cdom = cdom . view dmconc
 -- | Convert the 'DifferentialModel' into the model expression language.
 instance Express       DifferentialModel where express = formStdODE
 
-instance TypeChecks DifferentialModel Expr Space where
-  typeCheckExpr dmo = map (, Boolean) $ formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
+instance RequiresChecking DifferentialModel Expr Space where
+  requiredChecks dmo = map (, Boolean) $ formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
     where dm = makeAODESolverFormat dmo
 
 -- | Set the expression be a system of linear ODE to Ax = b

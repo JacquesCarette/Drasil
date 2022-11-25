@@ -33,7 +33,7 @@ import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (UID, HasUID(..))
-import Language.Drasil.WellTyped (TypeChecks(..))
+import Language.Drasil.WellTyped (RequiresChecking(..))
 
 data QDefinition e where
   QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
@@ -68,14 +68,14 @@ instance Express e => Express (QDefinition e) where
         -- the moment, and should eventually be fixed.
 instance ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
 
-instance TypeChecks (QDefinition Expr) Expr Space where
+instance RequiresChecking (QDefinition Expr) Expr Space where
   -- FIXME: Here, we are type-checking QDefinitions by building it as a relation
   -- and running the relation through the type-checker. We do this because the
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
-  typeCheckExpr (QD q [] e) = pure (sy q $= e, Boolean)
-  typeCheckExpr (QD q is e) = pure (apply q (map E.C is) $= e, Boolean)
+  requiredChecks (QD q [] e) = pure (sy q $= e, Boolean)
+  requiredChecks (QD q is e) = pure (apply q (map E.C is) $= e, Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.

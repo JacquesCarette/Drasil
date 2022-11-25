@@ -20,8 +20,8 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
-  UID, DifferentialModel, mkUid, TypeChecks (..), Space, HasSpace(typ),
-  DefiningExpr (..))
+  UID, DifferentialModel, mkUid, RequiresChecking(..), Space, HasSpace(typ),
+  DefiningExpr(..))
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -134,13 +134,13 @@ instance Express e => Express (ModelKinds e) where
   express = elimMk (to express) (to express) (to express) (to express) (to express)
 -- | Expose all expressions that need to be type-checked for theories that need
 --   expose 'Expr's.
-instance TypeChecks (ModelKinds Expr) Expr Space where
-  typeCheckExpr (NewDEModel dm)            = typeCheckExpr dm
-  typeCheckExpr (DEModel _)                = mempty
-  typeCheckExpr (EquationalConstraints cs) = typeCheckExpr cs
-  typeCheckExpr (EquationalModel qd)       = pure (qd ^. defnExpr, qd ^. typ)
-  typeCheckExpr (EquationalRealm md)       = typeCheckExpr md
-  typeCheckExpr (OthModel _)               = mempty
+instance RequiresChecking (ModelKinds Expr) Expr Space where
+  requiredChecks (NewDEModel dm)            = requiredChecks dm
+  requiredChecks (DEModel _)                = mempty
+  requiredChecks (EquationalConstraints cs) = requiredChecks cs
+  requiredChecks (EquationalModel qd)       = pure (qd ^. defnExpr, qd ^. typ)
+  requiredChecks (EquationalRealm md)       = requiredChecks md
+  requiredChecks (OthModel _)               = mempty
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
@@ -159,8 +159,8 @@ instance Express e => Express (ModelKind e) where
   express = express . (^. mk)
 -- | Expose all expressions that need to be type-checked for theories that need
 --   expose 'Expr's.
-instance TypeChecks (ModelKind Expr) Expr Space where
-  typeCheckExpr = typeCheckExpr . (^. mk)
+instance RequiresChecking (ModelKind Expr) Expr Space where
+  requiredChecks = requiredChecks . (^. mk)
 
 -- | Retrieve internal data from ModelKinds
 elimMk :: Getter DifferentialModel a 

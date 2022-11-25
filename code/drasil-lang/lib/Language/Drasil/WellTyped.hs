@@ -7,39 +7,53 @@ import qualified Data.Map.Strict as M
 import Language.Drasil.UID (UID)
 import Data.List (intercalate)
 
--- TODO: TypeError should be a Doc type instead, so that we can have cleaner
--- error messages and formatting. It might be good to have a "breadcrumb"-style
--- error type that shows a path to the problematic section, with an error
--- message.
+-- TODO: Rather than using a flat String, it would be better to a
+--       ``breadcrumb''-style error data type that can provide a traceable path
+--       to issues in an expression. The breadcrumbs could then be formatted
+--       into a flat String, such as it is now, or into alternative AST views
+--       that show exactly where typing went awry.
 type TypeError = String
 
 -- | We can only type check 'UID's within a type context relating 'UID's to
--- types since they don't carry any type information.
+--   types since they don't carry any type information.
 type TypingContext t = M.Map UID t
 
+-- | Look for a known type of a specific 'UID'.
 inferFromContext :: TypingContext t -> UID -> Either t TypeError
 inferFromContext cxt u = maybe
     (Right $ "`" ++ show u ++ "` lacks type binding in context")
     Left
     (M.lookup u cxt)
 
-check :: Typed e t => TypingContext t -> e -> t -> Either t TypeError
-check cxt e t = either
+-- | Build a bidirectional type checker for your expression language, e, with
+--   respect to a specific type universe, t.
+class (Eq t, Show t) => Typed e t where
+  
+  -- | Given a typing context and an expression, infer a unique type or explain
+  --   what went awry.
+  infer :: TypingContext t -> e -> Either t TypeError
+
+  -- | Given a typing context, an expression, and an expected type, check if the
+  --   expression can satisfy the expectation.
+  check :: TypingContext t -> e -> t -> Either t TypeError
+
+-- | For all containers, c, which contain typed expressions, e, against a
+--   specific type universe, t.
+class Typed e t => RequiresChecking c e t where
+  -- | All things that need type checking.
+  requiredChecks :: c -> [(e, t)]
+
+-- | ``Check'' an expressions type based by an inference.
+typeCheckByInfer :: Typed e t => TypingContext t -> e -> t -> Either t TypeError
+typeCheckByInfer cxt e t = either
     (\infT -> if t == infT
       then Left t
       else Right $ "Inferred type `" ++ show t ++ "` does not match expected type `" ++ show infT ++ "`")
     Right
     (infer cxt e)
 
-class (Eq t, Show t) => Typed e t where
-  infer :: TypingContext t -> e -> Either t TypeError
+{- FIXME: temporary hacks, pending removal when TypeError is upgraded -}
 
-class Typed e t => TypeChecks c e t where
-  -- Why is this a list, you ask? So that we can have multiple expressions type
-  -- checked at once, which a chunk may or may not expose.
-  typeCheckExpr :: c -> [(e, t)]
-
--- TODO: This should be formatted with Docs rather than hacking together Strings.
 allOfType :: Typed e t => TypingContext t -> [e] -> t -> t -> TypeError -> Either t TypeError
 allOfType cxt es expect ret s
   | allTsAreSp = Left ret

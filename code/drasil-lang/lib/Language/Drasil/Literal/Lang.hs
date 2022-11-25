@@ -31,3 +31,6 @@ instance Typed Literal Space where
   infer _ (Dbl _)      = Left Real
   infer _ (ExactDbl _) = Left Real
   infer _ (Perc _ _)   = Left Real
+
+  check :: TypingContext Space -> Literal -> Space -> Either Space TypeError
+  check = typeCheckByInfer

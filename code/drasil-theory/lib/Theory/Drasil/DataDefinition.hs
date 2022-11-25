@@ -90,9 +90,9 @@ instance Referable          DataDefinition where
   refAdd      = (^. ddPkt pktS)
   renderRef l = RP (prepend $ abrv l) (refAdd l)
 -- | Expose all expressions that need to be type-checked.
-instance TypeChecks DataDefinition Expr Space where
-  typeCheckExpr (DDE  qd _) = typeCheckExpr qd
-  typeCheckExpr  DDME {}    = []
+instance RequiresChecking DataDefinition Expr Space where
+  requiredChecks (DDE  qd _) = requiredChecks qd
+  requiredChecks  DDME {}    = []
 
 -- * Constructors
 

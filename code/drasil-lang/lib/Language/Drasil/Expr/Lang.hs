@@ -306,7 +306,7 @@ instance Typed Expr Space where
     (Left lt, Left rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
       then Left lt
       else Right $
-        "Powers only be applied to the same numeric type in both operands, or real base with integer exponent. Received `" ++ show lt ++ "` ^ `" ++ show rt ++ "`."
+        "Powers should only be applied to the same numeric type in both operands, or real base with integer exponent. Received `" ++ show lt ++ "` ^ `" ++ show rt ++ "`."
     (_      , Right x) -> Right x
     (Right x, _      ) -> Right x
 

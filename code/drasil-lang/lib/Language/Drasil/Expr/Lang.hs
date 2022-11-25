@@ -210,6 +210,9 @@ assocArithOperToTy AddRe = S.Real
 assocArithOperToTy MulRe = S.Real
 
 instance Typed Expr Space where
+  check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
+  check = typeCheckByInfer
+
   infer :: TypingContext Space -> Expr -> Either Space TypeError
   infer cxt (Lit lit) = infer cxt lit
 

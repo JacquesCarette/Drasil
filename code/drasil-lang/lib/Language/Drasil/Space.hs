@@ -38,7 +38,7 @@ data Space =
   | String
   | Radians
   | Vect Space -- TODO: Length for vectors?
-  | Matrix Int Int Space -- TODO: Do we not want matrices? I know have Vects already, but its just easier to work with.
+  | Matrix Int Int Space
   | Array Space
   | Actor String
   | DiscreteD [Double]

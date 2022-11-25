@@ -5,22 +5,24 @@
       \item How is \Expr{} used?
       \item What are current problems with \Expr{} usage?
       \item What does it mean for expressions to be well-formed/well-typed?
-      \item What is a type system? How can we build one for \Expr{}?
+      \item How does a type system work? How can we build one for \Expr{}?
             \begin{itemize}
                   \item ``Safety = Preservation + Progress'' \cite{Harper2016}
-                  \item What is a bidirectional type system? Why bidirectional
-                        over a normal ``simply-typed'' system?
+                  \item Why bidirectional type rules over a normal declarative
+                        style?
                   \item How can this be implemented in Drasil?
             \end{itemize}
       \item What errors did the type checker currently find?
 \end{writingdirectives}
 
 In \Cref{chap:lang-division}, we discussed Drasils single mathematical
-expression language, and split it into three variants, each specialized for
-their intended usage context. As a result, we don't need to be concerned about
-encountering terms inapplicable to the various contexts. However, we did not
-speak about what it means for expressions to be considered \textit{well-formed}
-for each context. In this chapter, we will focus on improving well-formedness
+expression language and split it into three variants, each specialized for their
+intended usage context. As a result, users don't need to worry about using terms
+inapplicable in various contexts. However, an issue remains with expressions:
+Drasils standard mathematical language (\Expr{}) remains untyped, and, thus
+Drasil does not detect malformed expressions, allowing users to make errors that
+affect both the problem descriptions in the \acs{srs} and the usability of
+generated software. In this chapter, we will focus on improving well-formedness
 for the most important context: grounded theories used for code generation.
 
 \section{Expressions, Instance Models, and Data Definitions}
@@ -77,7 +79,9 @@ despite our encoding having it be an integer. All code Drasil generates should
 be reliably compile-able and usable, and all errors should be noted as Drasil is
 used. The issue here lies in that the initial expression was incoherent (and the
 Java code was \textit{ill-typed}). So, now, how can we avoid this situation
-altogether? We need all expressions to be \textit{well-formed}.
+altogether? We need all expressions to be \textit{well-formed}. However, Drasil
+doesn't have a working understanding of what it means for expressions to be
+well-formed.
 
 Ultimately, the issue lies in that \Expr{} is not type-safe \cite{Harper2016}
 and that we don't capture any knowledge about what it means for expressions to
@@ -264,55 +268,93 @@ expressions where evaluation cannot be completed. In other words, so as long as
 expressions conform to these typing rules, the language is type-safe:
 preservation and progress hold.
 
-Now, we'd like to build a similar system for \Expr{}. However, the
-typing-judgment style is not future-proof\qtodo{@JC: can I cite our conversation
-here?}, and we'd also like to avoid any potential issues with it. Thus, we look
-to building a \textit{bidirectional} type system \cite{Christiansen2013}.
+Now, we'd like to build a similar system for \Expr{}. However, one of the issues
+with the traditional declaration-style is that expressions made without explicit
+type annotations might have ambiguous types should we try to infer one
+\cite{nlab:bidirectional_typechecking}. While we don't have expect any of these
+scenarios to occur with \Expr{}, we might if we also added type-checking to
+\ModelExpr{}, where we would like to have higher-order functions and function
+abstractions. Thus, we prefer to build the typing rules with a modern,
+future-proof scheme that will scale against our expectations\qtodo{@JC: can I
+cite our conversation here?}: \textit{bidirectionally}.
 
-\subsection{Bidirectional Typing}
-\label{chap:typed-expr:sec:type-safe-expressions:subsec:bidirectional-typing}
+\subsection{Bidirectional Type Rules}
+\label{chap:typed-expr:sec:type-safe-expressions:subsec:bidirectional-type-rules}
 
-A bidirectional type system is very similar to the traditional typing-judgment
-style, except that it replaces typing judgments with two others: a
-\textit{checking} judgment and an \textit{inference} judgment
+Bidirectional typing rules break the declarative typing judgments into two
+typing judgments: a \textit{check} judgment and an \textit{inference} judgment
 \cite{Christiansen2013}. The checking judgment, \(\Gamma{} \vdash{} e \Leftarrow
 \tau{}\), says that the expression \(e\) can be \textit{checked} to be of the
 type \(\tau\) within the context \(\Gamma\). The inference judgment, \(\Gamma{}
 \vdash{} e \Rightarrow \tau{}\), says that, within the context \(\Gamma\), we
-can \textit{infer} the type of expression \(e\), \(\tau\).
-
-Notably, A bidirectional type system allows us to future-proof the type system
-we build for \Expr{}, and, later, scale up to the task of typing \ModelExpr{},
-where we might need to handle ambiguous type cases that might not be as easy to
-deal with in a regular simply-typed system. Hence, we would prefer to build one
-from the start.\todo{This subsection seems a bit weak.}
+can \textit{infer} the type of expression \(e\), \(\tau\). Checking and
+inferencing may be mutually recursive \textemdash{} this is helpful for type
+checking in cases where expressions are ambiguous and may take on many shapes
+(i.e., may be polymorphic) \cite{nlab:bidirectional_typechecking}.
 
 \section{Typing the Expression Language}
 \label{chap:typed-expr:sec:typing-the-expression-language}
 
-\begin{pseudohaskell}{Modelling Bidirectional Typing}{modellingBidirectionalTyping}
-type TypeError = String
+With our goal in mind and our tools in hand, we need to capture two things about
+\Expr{}:
+\begin{itemize}
+      \item the type universe its term belong to,
+      \item and the bidirectional typing rules and algorithm.
+\end{itemize}
 
--- | We can only type check 'UID's within a type context relating 'UID's to
--- types since they don't carry any type information.
+\subsection{Type Universe}
+\label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-universe}
+
+Thankfully, there already exists an unused type universe, \Space{}, in Drasil
+that we can extend and start using\todo{ref original space}.
+
+\begin{longtable}{ r c c l}
+      \(\texttt{Space}(s)\) & ::=       & \(\bb{B}\) & Booleans \\
+                            & \(\vert\) & \(\bb{Z}\) & Integers
+\end{longtable}
+
+\subsection{Type Rules}
+\label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-rules}
+
+\imptodo{typing rules, once solidified}
+
+Finally, after having built our type universe and typing rules, we may implement
+the bidirectional type checking and inferencing in Drasil.
+
+\subsection{Implementation}
+\label{chap:typed-expr:sec:typing-the-expression-language:subsec:implementation}
+
+Thus, we need to build out the typing context, \(\Gamma\). \(\Gamma\) is the set
+of expression terms for which we already know the type of. While \(\Gamma\)
+might include whole expressions, the most important information we need while
+traversing \Expr{}s is information about the types associated with \UID{}s.
+Since each \UID{} relates to a symbol with a unique type, we can build a map
+that carries everything for us.
+
+\begin{pseudohaskell}{Typing Context, \(\Gamma\)}{pseudoTypingContext}
 type TypingContext t = M.Map UID t
+\end{pseudohaskell}
 
-inferFromContext :: TypingContext t -> UID -> Either t TypeError
-inferFromContext cxt u = maybe
-    (Right $ "`" ++ show u ++ "` lacks type binding in context")
-    Left
-    (M.lookup u cxt)
+Now, we may build our type checker. However, as we might want to implement type
+checking for any expression types (not just \Expr{}) with respect to any type
+universe (not just \Space{}), we prefer to build the bidirectional type checker
+with a typeclass\footnote{Note: we needed to enable the multi-parameter
+type-classes \acs{ghc} language extension to create and use this type class, at
+times with the flexible contexts extension too.}\todo{cite flexible contexts and
+multi-param type-classes in footnote}, instantiated as needed.
 
-check :: Typed e t => TypingContext t -> e -> t -> Either t TypeError
-check cxt e t = either
-    (\infT -> if t == infT
-      then Left t
-      else Right $ "Inferred type `" ++ show t ++ "` does not match expected type `" ++ show infT ++ "`")
-    Right
-    (infer cxt e)
-
+\begin{pseudohaskell}{Modelling Bidirectional Type Checking}{pseudoModellingBidirectionalTypeChecking}
+-- | Build a bidirectional type checker for your expression language, e, with
+--   respect to a specific type universe, t.
 class (Eq t, Show t) => Typed e t where
+  
+  -- | Given a typing context and an expression, infer a unique type or explain
+  --   what went awry.
   infer :: TypingContext t -> e -> Either t TypeError
+
+  -- | Given a typing context, an expression, and an expected type, check if the
+  --   expression can satisfy the expectation.
+  check :: TypingContext t -> e -> t -> Either t TypeError
 \end{pseudohaskell}
 
 \imptodo{Continue writing here!}

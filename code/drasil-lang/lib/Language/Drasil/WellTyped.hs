@@ -38,7 +38,8 @@ class (Eq t, Show t) => Typed e t where
   check :: TypingContext t -> e -> t -> Either t TypeError
 
 -- | For all containers, c, which contain typed expressions, e, against a
---   specific type universe, t.
+--   specific type universe, t, expose all expressions and relations that need
+--   to be type-checked.
 class Typed e t => RequiresChecking c e t where
   -- | All things that need type checking.
   requiredChecks :: c -> [(e, t)]

@@ -44,7 +44,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
   period, frequency, chgMomentum :: UnitalChunk
 
-acceleration         = uc CP.acceleration (vec lA) accelU
+acceleration         = ucs' CP.acceleration (vec lA) (Vect Real) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
 angularFrequency     = uc CP.angFreq cOmega second
@@ -82,7 +82,7 @@ scalarPos            = uc CP.scalarPos lP metre
 tension              = uc CP.tension (vec cT) newton
 time                 = uc CP.time lT second
 torque               = uc CP.torque (vec lTau) torqueU
-velocity             = uc CP.velocity (vec lV) velU
+velocity             = ucs' CP.velocity (vec lV) (Vect Real) velU
 weight               = uc CP.weight cW newton
 fOfGravity           = uc CP.fOfGravity (sub (vec cF) (vec lG)) newton
 

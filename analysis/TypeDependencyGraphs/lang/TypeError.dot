@@ -1,0 +1,4 @@
+digraph typeerror{
+TypeError	[shape=oval, color=red2, label="TypeError"];
+TypeError -> String;
+}

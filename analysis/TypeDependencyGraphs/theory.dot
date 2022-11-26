@@ -92,6 +92,9 @@ digraph alltypes {
 		ModelKindse -> ModelKinds;
 		ModelKindse -> e;
 		ModelKindse -> RelationConcept;
+		ModelKindse -> ConstraintSet;
+		ModelKindse -> QDefinition;
+		ModelKindse -> MultiDefn;
 		}
 	}
 	subgraph multidefn {

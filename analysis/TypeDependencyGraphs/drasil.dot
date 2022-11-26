@@ -1860,6 +1860,8 @@ digraph alltypes {
 	}
 	subgraph generate {
 	}
+	subgraph typececkh {
+	}
 	subgraph clike {
 	}
 	subgraph csarprendererh {
@@ -3706,6 +3708,16 @@ digraph alltypes {
 		USymb -> Integer;
 		}
 	}
+	subgraph welltyped {
+		subgraph typeerror{
+		TypeError	[shape=oval, color=red2, label="TypeError"];
+		TypeError -> String;
+		}
+		subgraph typingcontextt{
+		TypingContextt	[shape=oval, color=red2, label="TypingContextt"];
+		TypingContextt -> MapUIDt;
+		}
+	}
 	subgraph drails {
 	}
 	subgraph domains {
@@ -4124,6 +4136,9 @@ digraph alltypes {
 		ModelKindse -> ModelKinds;
 		ModelKindse -> e;
 		ModelKindse -> RelationConcept;
+		ModelKindse -> ConstraintSet;
+		ModelKindse -> QDefinition;
+		ModelKindse -> MultiDefn;
 		}
 	}
 	subgraph multidefn {

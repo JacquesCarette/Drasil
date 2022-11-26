@@ -31,4 +31,6 @@ digraph alltypes {
 	}
 	subgraph generate {
 	}
+	subgraph typececkh {
+	}
 }

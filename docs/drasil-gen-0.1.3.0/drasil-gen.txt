@@ -12,6 +12,7 @@
 
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate
+typeCheckSI :: SystemInformation -> IO ()
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()

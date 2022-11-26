@@ -133,14 +133,14 @@ forall a. [[a]] -&gt; [a]
 </span><a href="Drasil.Projectile.GenDefs.html#rectDeriv"><span class="hs-identifier hs-var">rectDeriv</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">acceleration</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679094958"><span class="hs-identifier hs-var">motSent</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679095202"><span class="hs-identifier hs-var">motSent</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iVel</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">accelerationTM</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.GenDefs.html#rearrAndIntSent"><span class="hs-identifier hs-var">rearrAndIntSent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.GenDefs.html#performIntSent"><span class="hs-identifier hs-var">performIntSent</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-48"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-49"></span><span>    </span><span id="local-6989586621679094958"><span class="annot"><span class="annottext">motSent :: Sentence
-</span><a href="#local-6989586621679094958"><span class="hs-identifier hs-var hs-var">motSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-49"></span><span>    </span><span id="local-6989586621679095202"><span class="annot"><span class="annottext">motSent :: Sentence
+</span><a href="#local-6989586621679095202"><span class="hs-identifier hs-var hs-var">motSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -289,7 +289,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="Drasil.Projectile.GenDefs.html#rectDeriv"><span class="hs-identifier hs-var">rectDeriv</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">position</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679094939"><span class="hs-identifier hs-var">motSent</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679095183"><span class="hs-identifier hs-var">motSent</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iPos</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">velocityTM</span></span><span class="hs-special">,</span><span>
 </span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">Sentence
@@ -302,8 +302,8 @@ r -&gt; UnitalChunk -&gt; Sentence
 </span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.GenDefs.html#performIntSent"><span class="hs-identifier hs-var">performIntSent</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-73"></span><span>    </span><span class="hs-keyword">where</span><span>
-</span><span id="line-74"></span><span>      </span><span id="local-6989586621679094939"><span class="annot"><span class="annottext">motSent :: Sentence
-</span><a href="#local-6989586621679094939"><span class="hs-identifier hs-var hs-var">motSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-74"></span><span>      </span><span id="local-6989586621679095183"><span class="annot"><span class="annottext">motSent :: Sentence
+</span><a href="#local-6989586621679095183"><span class="hs-identifier hs-var hs-var">motSent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
@@ -519,12 +519,12 @@ PExpr
 -&gt; UnitalChunk
 -&gt; TheoryModel
 -&gt; Sentence
-</span><a href="Drasil.Projectile.GenDefs.html#rectDeriv"><span class="hs-identifier hs-var hs-var">rectDeriv</span></a></span></span><span> </span><span id="local-6989586621679094918"><span class="annot"><span class="annottext">c1 :: UnitalChunk
-</span><a href="#local-6989586621679094918"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679094917"><span class="annot"><span class="annottext">c2 :: UnitalChunk
-</span><a href="#local-6989586621679094917"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span id="local-6989586621679094916"><span class="annot"><span class="annottext">motSent :: Sentence
-</span><a href="#local-6989586621679094916"><span class="hs-identifier hs-var">motSent</span></a></span></span><span> </span><span id="local-6989586621679094915"><span class="annot"><span class="annottext">initc :: UnitalChunk
-</span><a href="#local-6989586621679094915"><span class="hs-identifier hs-var">initc</span></a></span></span><span> </span><span id="local-6989586621679094914"><span class="annot"><span class="annottext">ctm :: TheoryModel
-</span><a href="#local-6989586621679094914"><span class="hs-identifier hs-var">ctm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.Projectile.GenDefs.html#rectDeriv"><span class="hs-identifier hs-var hs-var">rectDeriv</span></a></span></span><span> </span><span id="local-6989586621679095162"><span class="annot"><span class="annottext">c1 :: UnitalChunk
+</span><a href="#local-6989586621679095162"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679095161"><span class="annot"><span class="annottext">c2 :: UnitalChunk
+</span><a href="#local-6989586621679095161"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span id="local-6989586621679095160"><span class="annot"><span class="annottext">motSent :: Sentence
+</span><a href="#local-6989586621679095160"><span class="hs-identifier hs-var">motSent</span></a></span></span><span> </span><span id="local-6989586621679095159"><span class="annot"><span class="annottext">initc :: UnitalChunk
+</span><a href="#local-6989586621679095159"><span class="hs-identifier hs-var">initc</span></a></span></span><span> </span><span id="local-6989586621679095158"><span class="annot"><span class="annottext">ctm :: TheoryModel
+</span><a href="#local-6989586621679095158"><span class="hs-identifier hs-var">ctm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Assume we have&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
@@ -563,25 +563,25 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094918"><span class="hs-identifier hs-var">c1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679095162"><span class="hs-identifier hs-var">c1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-</span><a href="#local-6989586621679094909"><span class="hs-identifier hs-var">getScalar</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094918"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679095153"><span class="hs-identifier hs-var">getScalar</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679095162"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.andThe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094917"><span class="hs-identifier hs-var">c2</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679095161"><span class="hs-identifier hs-var">c2</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-</span><a href="#local-6989586621679094909"><span class="hs-identifier hs-var">getScalar</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094917"><span class="hs-identifier hs-var">c2</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679095153"><span class="hs-identifier hs-var">getScalar</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679095161"><span class="hs-identifier hs-var">c2</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679094916"><span class="hs-identifier hs-var">motSent</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679095160"><span class="hs-identifier hs-var">motSent</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094915"><span class="hs-identifier hs-var">initc</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679095159"><span class="hs-identifier hs-var">initc</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;at&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
@@ -605,15 +605,15 @@ r -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;represented by&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
-</span><a href="#local-6989586621679094909"><span class="hs-identifier hs-var">getScalar</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094915"><span class="hs-identifier hs-var">initc</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679095153"><span class="hs-identifier hs-var">getScalar</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679095159"><span class="hs-identifier hs-var">initc</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;From&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679094914"><span class="hs-identifier hs-var">ctm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679095158"><span class="hs-identifier hs-var">ctm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;using the above&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
@@ -622,11 +622,11 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we have&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-124"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-125"></span><span>    </span><span id="local-6989586621679094909"><span class="annot"><span class="annottext">getScalar :: UnitalChunk -&gt; Sentence
-</span><a href="#local-6989586621679094909"><span class="hs-identifier hs-var hs-var">getScalar</span></a></span></span><span> </span><span id="local-6989586621679094902"><span class="annot"><span class="annottext">c :: UnitalChunk
-</span><a href="#local-6989586621679094902"><span class="hs-identifier hs-var">c</span></a></span></span><span>
+</span><span id="line-125"></span><span>    </span><span id="local-6989586621679095153"><span class="annot"><span class="annottext">getScalar :: UnitalChunk -&gt; Sentence
+</span><a href="#local-6989586621679095153"><span class="hs-identifier hs-var hs-var">getScalar</span></a></span></span><span> </span><span id="local-6989586621679095146"><span class="annot"><span class="annottext">c :: UnitalChunk
+</span><a href="#local-6989586621679095146"><span class="hs-identifier hs-var">c</span></a></span></span><span>
 </span><span id="line-126"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094902"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
+</span><a href="#local-6989586621679095146"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">position</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -634,7 +634,7 @@ forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">scalarPos</span></span><span>
 </span><span id="line-127"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094902"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
+</span><a href="#local-6989586621679095146"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -642,7 +642,7 @@ forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">speed</span></span><span>
 </span><span id="line-128"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094902"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
+</span><a href="#local-6989586621679095146"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">acceleration</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -650,7 +650,7 @@ forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">scalarAccel</span></span><span>
 </span><span id="line-129"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094902"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
+</span><a href="#local-6989586621679095146"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iPos</span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -658,7 +658,7 @@ forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iPos</span></span><span>
 </span><span id="line-130"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094902"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
+</span><a href="#local-6989586621679095146"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iVel</span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -693,9 +693,9 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-137"></span><span class="hs-comment">-- Helper for making vector derivations</span><span>
 </span><span id="line-138"></span><span class="annot"><a href="Drasil.Projectile.GenDefs.html#vecDeriv"><span class="hs-identifier hs-type">vecDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-139"></span><span id="vecDeriv"><span class="annot"><span class="annottext">vecDeriv :: [(UnitalChunk, ModelExpr)] -&gt; GenDefn -&gt; Sentence
-</span><a href="Drasil.Projectile.GenDefs.html#vecDeriv"><span class="hs-identifier hs-var hs-var">vecDeriv</span></a></span></span><span> </span><span id="local-6989586621679094900"><span class="annot"><span class="annottext">vecs :: [(UnitalChunk, ModelExpr)]
-</span><a href="#local-6989586621679094900"><span class="hs-identifier hs-var">vecs</span></a></span></span><span> </span><span id="local-6989586621679094899"><span class="annot"><span class="annottext">gdef :: GenDefn
-</span><a href="#local-6989586621679094899"><span class="hs-identifier hs-var">gdef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.Projectile.GenDefs.html#vecDeriv"><span class="hs-identifier hs-var hs-var">vecDeriv</span></a></span></span><span> </span><span id="local-6989586621679095144"><span class="annot"><span class="annottext">vecs :: [(UnitalChunk, ModelExpr)]
+</span><a href="#local-6989586621679095144"><span class="hs-identifier hs-var">vecs</span></a></span></span><span> </span><span id="local-6989586621679095143"><span class="annot"><span class="annottext">gdef :: GenDefn
+</span><a href="#local-6989586621679095143"><span class="hs-identifier hs-var">gdef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-140"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;For a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
@@ -727,22 +727,22 @@ r -&gt; Sentence
 </span><span id="line-142"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">((UnitalChunk, ModelExpr) -&gt; Sentence)
 -&gt; [(UnitalChunk, ModelExpr)] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679094894"><span class="annot"><span class="annottext">c :: UnitalChunk
-</span><a href="#local-6989586621679094894"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679094893"><span class="annot"><span class="annottext">e :: ModelExpr
-</span><a href="#local-6989586621679094893"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679095138"><span class="annot"><span class="annottext">c :: UnitalChunk
+</span><a href="#local-6989586621679095138"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679095137"><span class="annot"><span class="annottext">e :: ModelExpr
+</span><a href="#local-6989586621679095137"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679094894"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><a href="#local-6989586621679095138"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">vector</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;as&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679094893"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UnitalChunk, ModelExpr)]
-</span><a href="#local-6989586621679094900"><span class="hs-identifier hs-var">vecs</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679095137"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UnitalChunk, ModelExpr)]
+</span><a href="#local-6989586621679095144"><span class="hs-identifier hs-var">vecs</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-143"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP
@@ -823,7 +823,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
-</span><a href="#local-6989586621679094899"><span class="hs-identifier hs-var">gdef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679095143"><span class="hs-identifier hs-var">gdef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;can be applied to each&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
@@ -840,7 +840,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[(UnitalChunk, ModelExpr)] -&gt; (UnitalChunk, ModelExpr)
 forall a. [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UnitalChunk, ModelExpr)]
-</span><a href="#local-6989586621679094900"><span class="hs-identifier hs-var">vecs</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><a href="#local-6989586621679095144"><span class="hs-identifier hs-var">vecs</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">vector</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence

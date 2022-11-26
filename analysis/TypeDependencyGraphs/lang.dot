@@ -829,6 +829,16 @@ digraph alltypes {
 		USymb -> Integer;
 		}
 	}
+	subgraph welltyped {
+		subgraph typeerror{
+		TypeError	[shape=oval, color=red2, label="TypeError"];
+		TypeError -> String;
+		}
+		subgraph typingcontextt{
+		TypingContextt	[shape=oval, color=red2, label="TypingContextt"];
+		TypingContextt -> MapUIDt;
+		}
+	}
 	subgraph drails {
 	}
 }

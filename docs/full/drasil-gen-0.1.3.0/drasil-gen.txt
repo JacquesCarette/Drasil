@@ -52,9 +52,13 @@ ExDoc :: Maybe String -> String -> ExDoc
 instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Output.Formats.DocSpec
 instance GHC.Show.Show Language.Drasil.Output.Formats.DocType
 
+module Language.Drasil.TypeCheck
+typeCheckSI :: SystemInformation -> IO ()
+
 
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate
+typeCheckSI :: SystemInformation -> IO ()
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()

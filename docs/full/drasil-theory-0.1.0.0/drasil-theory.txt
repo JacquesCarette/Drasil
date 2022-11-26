@@ -73,6 +73,7 @@ instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ConstraintSet.Const
 instance Language.Drasil.Classes.Definition (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.ConstraintSet.ConstraintSet e)
+instance Language.Drasil.WellTyped.RequiresChecking (Theory.Drasil.ConstraintSet.ConstraintSet Language.Drasil.Expr.Lang.Expr) Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 
 
 -- | Defines types and functions for Data Definitions.
@@ -148,6 +149,7 @@ instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.DataDefinition.D
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Label.Type.Referable Theory.Drasil.DataDefinition.DataDefinition
+instance Language.Drasil.WellTyped.RequiresChecking Theory.Drasil.DataDefinition.DataDefinition Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 
 
 -- | Defines types and functions for creating mult-definitions.
@@ -186,10 +188,11 @@ instance Language.Drasil.Symbol.HasSymbol (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Space.HasSpace (Theory.Drasil.MultiDefn.MultiDefn e)
+instance Language.Drasil.Classes.Definition (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Classes.Quantity (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.MultiDefn.MultiDefn e)
-instance Language.Drasil.Classes.Definition (Theory.Drasil.MultiDefn.MultiDefn e)
+instance Language.Drasil.WellTyped.RequiresChecking (Theory.Drasil.MultiDefn.MultiDefn Language.Drasil.Expr.Lang.Expr) Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.MultiDefn.MultiDefn e)
 instance GHC.Classes.Eq (Theory.Drasil.MultiDefn.DefiningExpr e)
 instance Language.Drasil.UID.HasUID (Theory.Drasil.MultiDefn.DefiningExpr e)
@@ -220,8 +223,8 @@ MK :: ModelKinds e -> UID -> NP -> ModelKind e
 --   <li><a>EquationalModel</a>s represent quantities that are calculated
 --   via a single definition/<a>QDefinition</a>.</li>
 --   <li><a>EquationalRealm</a>s represent MultiDefns; quantities that may
---   be calculated using any one of many <tt>DefiningExpr</tt>s (e.g., 'x =
---   A = ... = Z')</li>
+--   be calculated using any one of many <a>DefiningExpr</a>s (e.g., 'x = A
+--   = ... = Z')</li>
 --   <li><tt>FunctionalModel</tt>s represent quantity-resulting function
 --   definitions.</li>
 --   <li><a>OthModel</a>s are placeholders for models. No new
@@ -311,12 +314,14 @@ instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ModelKinds.ModelKin
 instance Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.ModelKinds.ModelKinds e)
+instance Language.Drasil.WellTyped.RequiresChecking (Theory.Drasil.ModelKinds.ModelKinds Language.Drasil.Expr.Lang.Expr) Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 instance Language.Drasil.UID.HasUID (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.ModelKinds.ModelKind e)
+instance Language.Drasil.WellTyped.RequiresChecking (Theory.Drasil.ModelKinds.ModelKind Language.Drasil.Expr.Lang.Expr) Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 
 
 -- | Defines types and functions for Instance Models.
@@ -370,6 +375,7 @@ instance Theory.Drasil.Classes.HasOutput Theory.Drasil.InstanceModel.InstanceMod
 instance Language.Drasil.Symbol.HasSymbol Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Space.HasSpace Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.InstanceModel.InstanceModel
+instance Language.Drasil.WellTyped.RequiresChecking Theory.Drasil.InstanceModel.InstanceModel Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 
 
 -- | Defines types and functions for General Definitions.

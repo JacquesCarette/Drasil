@@ -40,12 +40,12 @@ vArb        = makeVC "arb"        (nounPhrase "arb")        (Atomic "arb")
 
 --arbiterGetCount, arbiterGetNormal, arbiterIsFirstContact :: funcDef
 
-arbiterGetCount = funcDef "arbiterGetCount" [arb] Rational
+arbiterGetCount = funcDef "arbiterGetCount" [arb] Real
   [
     FRet (FCall (funcUID getCount) [arb])
   ]
 
-arbiterGetNormal = funcDef "arbiterGetNormal" [arb] Rational
+arbiterGetNormal = funcDef "arbiterGetNormal" [arb] Real
   [
     FRet (FCall (funcUID getNormal) [arb])
   ]

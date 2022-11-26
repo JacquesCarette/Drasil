@@ -5,6 +5,7 @@ module Language.Drasil.ModelExpr.Convert where
 import Data.Bifunctor (bimap, second)
 
 import Language.Drasil.Space
+    (RealInterval(..), DiscreteDomainDesc, DomainDesc(BoundedDD))
 import qualified Language.Drasil.Expr.Lang as E
 import Language.Drasil.ModelExpr.Lang
 

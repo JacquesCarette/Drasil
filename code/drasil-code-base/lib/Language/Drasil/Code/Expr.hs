@@ -2,7 +2,7 @@
 
 module Language.Drasil.Code.Expr where
 
-import Language.Drasil
+import Language.Drasil hiding (Matrix)
 import Language.Drasil.Literal.Development
 import Prelude hiding (sqrt)
 import Control.Lens

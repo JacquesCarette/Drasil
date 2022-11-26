@@ -264,7 +264,8 @@ module Language.Drasil (
   , Space(..)
   , RealInterval(..), Inclusive(..)
   , DomainDesc(..), RTopology(..), ContinuousDomainDesc, DiscreteDomainDesc
-  , getActorName, getInnerSpace, mkFunction
+  , getActorName, getInnerSpace
+  , mkFunction, Primitive
   -- Language.Drasil.Symbol
   , Decoration, Symbol
   -- Language.Drasil.UnitLang
@@ -281,9 +282,20 @@ module Language.Drasil (
   -- * Type Synonyms
   , ConstQDef, SimpleQDef, ModelQDef
   , PExpr
+
+  -- * Type systems
+  , TypingContext
+  , TypeError
+  , inferFromContext
+  , Typed(..)
+  , RequiresChecking(..)
+  , temporaryIndent -- FIXME: Once a proper breadcrumb system is built (hopefully soon, we can remove this export.)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
+
+import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
+  TypeError, inferFromContext, temporaryIndent)
 
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2)
@@ -354,7 +366,7 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
-  getActorName, getInnerSpace, mkFunction, HasSpace(..))
+  getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold

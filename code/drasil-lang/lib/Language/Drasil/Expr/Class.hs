@@ -202,13 +202,12 @@ class ExprC r where
   -- | Create a column vector
   columnVec :: [r] -> r
 
+  -- FIXME: This doesn't look like it needs to be here.
   -- | Change row vector to column vector
   toColumn ::  [r] -> [[r]]
 
   -- Some helper functions to do function application
   
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
   
@@ -410,8 +409,6 @@ instance ExprC Expr where
 
   -- Some helper functions to do function application
   
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
   apply f ps = FCall (f ^. uid) ps []
   

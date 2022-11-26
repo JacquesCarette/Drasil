@@ -1,5 +1,7 @@
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate (
+  -- * Type checking
+  typeCheckSI,
   -- * Generator Functions
   gen, genDot, genCode, genLog,
   -- * Types (Printing Options)
@@ -19,12 +21,14 @@ import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation(SI, _sys))
-import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
+import Language.Drasil.Printers (Format(TeX, HTML, JSON),
  makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot, printAllDebugInfo)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
-  Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
+  Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
 import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec), DocChoices(DC))
+
+import Language.Drasil.TypeCheck
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 import Data.Char (isSpace)
@@ -110,10 +114,10 @@ genLog SI{_sys = sysName} pinfo = do
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
-genCode chs spec = do 
+genCode chs spec = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
-  sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD 
+  sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (extInputs spec)) (getSampleData chs)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
@@ -122,7 +126,7 @@ genCode chs spec = do
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genLangCode Swift = genCall Swift unSC unSP
-      genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr 
+      genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir

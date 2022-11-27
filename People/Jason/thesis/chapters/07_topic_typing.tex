@@ -682,12 +682,12 @@ Now we may build our type checker. As we will want to implement type checking
 for any expression types (such as for \CodeExpr{} and \ModelExpr{} eventually)
 with respect to any type universe (not just \Space{}), we prefer to build the
 bidirectional type checker with a typeclass\footnote{Note: we needed to enable
-the multi-parameter type-classes \acs{ghc} language extension to create and use
-this type class, at times with the flexible contexts extension too.}\todo{cite
-flexible contexts and multi-param type-classes in footnote}, instantiated as
-needed. Using a typeclass with 2 parameters (\(e\) and \(t\)) allows us to build
-out a bidirectional type checker with respect to any language, \(e\), and type
-universe, \(t\).
+the ``multi-parameter type-classes'' \cite{GHC2020MultiParamTypeClasses}
+\acs{ghc} language extension to create and use this type class, at times with
+the ``flexible contexts'' \cite{GHC2020FlexibleContexts} extension too.},
+instantiated as needed. Using a typeclass with 2 parameters (\(e\) and \(t\))
+allows us to build out a bidirectional type checker with respect to any
+language, \(e\), and type universe, \(t\).
 
 \begin{pseudohaskell}{Modelling Bidirectional Type Checking}{pseudoModellingBidirectionalTypeChecking}
 -- | Build a bidirectional type checker for your expression language, e, with

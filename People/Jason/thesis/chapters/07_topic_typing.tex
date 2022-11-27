@@ -273,8 +273,8 @@ type annotations might have ambiguous types should we try to infer one
 scenarios to occur with \Expr{}, we might if we also added type-checking to
 \ModelExpr{}, where we would like to have higher-order functions and function
 abstractions. Thus, we prefer to build the typing rules with a modern,
-future-proof scheme that will scale against our expectations\qtodo{@JC: can I
-cite our conversation here?}: \textit{bidirectionally}.
+future-proof scheme that will scale against our
+expectations\cite{CaretteDiscussion2022}: \textit{bidirectional type-checking}.
 
 \subsection{Bidirectional Type Rules}
 \label{chap:typed-expr:sec:type-safe-expressions:subsec:bidirectional-type-rules}
@@ -304,9 +304,8 @@ With our goal in mind and our tools in hand, we need to capture two things about
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-universe}
 
 Thankfully, there already exists an unused type universe, \Space{}
-(\refOriginalSpaceHaskell{}), in Drasil that we can extend\todo{Move below
-pseudohaskell snippet of Space to the appendix, and reference it here} and start
-using as intended.
+(\refOriginalSpaceHaskell{}), in Drasil that we can work with and start using as
+intended.
 
 \begin{longtable}{ r c c l}
       \(\texttt{Space}(s)\) & ::=       & \(\bb{Z}\)                                                  & Integers   \\
@@ -320,26 +319,6 @@ using as intended.
                             & \(\vert\) & \(\texttt{Matrix}(s)\)                                      & Matrices   \\
                             & \(\vert\) & \(s_1 \times s_2 \times \ldots{} \times s_n \rightarrow s\) & Functions  \\
 \end{longtable}
-
-\begin{pseudohaskell}{Type Universe}{pseudoTypeUniverse}
-data Space =
-    Integer
-  | Rational
-  | Real
-  | Natural
-  | Boolean
-  | Char
-  | String
-  | Vect Space -- TODO: Length for vectors?
-  | Matrix Int Int Space
-  | Array Space
-  | Actor String
-  | DiscreteD [Double]
-  | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
-  | Function (NE.NonEmpty Primitive) Primitive
-  | Void
-  deriving (Eq, Show)
-\end{pseudohaskell}
 
 \subsection{Type Rules}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-rules}
@@ -854,3 +833,6 @@ enable a ``hard'' type-checking requirement for all relevant expressions
 
 \imptodo{Add a future work note, in the chunkdb section, about extending the
       type-checking functionality to general chunk assertions.}
+
+\imptodo{Add a future work note, building ``breadcrumbs''-style explanation of
+      explaining where a type issue arose.}

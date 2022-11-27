@@ -97,23 +97,23 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 --FIXME: add (x,y) when we can index or make related unitals
 --FIXME: add constraints to coordinate unitals when that is possible (constraints currently in the Notes section of the crtSlpId IM instead)
 
-slopeDist = uq (constrained' (makeUCWDS "x_slope,i"
+slopeDist = uq (constrained' (ucsWS "x_slope,i"
   (nounPhraseSent $ plural xCoord `S.of_` S "the slope")
   (plural xCoord `S.of_` S "points on the soil slope")
-  (sub (vec lX) lSlope) metre) [] (exactDbl 0)) defaultUncrt
+  (sub (vec lX) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
 
-slopeHght = uq (constrained' (makeUCWDS "y_slope,i"
+slopeHght = uq (constrained' (ucsWS "y_slope,i"
   (nounPhraseSent $ plural yCoord `S.of_` S "the slope")
   (plural yCoord `S.of_` S "points on the soil slope")
-  (sub (vec lY) lSlope) metre) [] (exactDbl 0)) defaultUncrt
+  (sub (vec lY) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
 
 waterDist = uqc "x_wt,i" (nounPhraseSent $ plural xCoord `S.of_` S "the water table")
   "x-positions of the water table"
-  (sub (vec lX) lWatTab) metre Real [] (exactDbl 0) defaultUncrt
+  (sub (vec lX) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
 
 waterHght = uqc "y_wt,i" (nounPhraseSent $ plural yCoord `S.of_` S "the water table")
   "heights of the water table"
-  (sub (vec lY) lWatTab) metre Real [] (exactDbl 0) defaultUncrt
+  (sub (vec lY) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
 
 xMaxExtSlip = uq (constrained' (makeUCWDS "x_slip^maxExt"
   (nounPhraseSent $ S "maximum exit" +:+ phrase xCoord)
@@ -227,13 +227,13 @@ intNormForce = makeUCWDS "G_i" (cn "interslice normal forces")
    S "exerted between each pair of adjacent slices")
   (vec cG) forcePerMeterU
 
-slipHght = uc' "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip surface")
+slipHght = ucs "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip surface")
   "heights of the slip surface"
-  (sub (vec lY) lSlip) metre
+  (sub (vec lY) lSlip) (Vect Real) metre
 
-slipDist = makeUCWDS "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the slip surface")
+slipDist = ucsWS "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the slip surface")
   (plural xCoord `S.of_` S "points on the slip surface")
-  (sub (vec lX) lSlip) metre
+  (sub (vec lX) lSlip) (Vect Real) metre
 
 xi     = makeUCWDS "x_i" (nounPhraseSent $ phrase xCoord)
   (phraseNP (NP.the (xCoord `inThe` cartesian))) lX metre
@@ -324,29 +324,29 @@ surfLoad = makeUCWDS "Q_i" (cn "external forces")
    S "acting into the surface from the midpoint of each slice")
   (vec cQ) forcePerMeterU
 
-baseAngle = uc' "alpha_i" (cn "base angles")
+baseAngle = ucs "alpha_i" (cn "base angles")
   "the angles between the base of each slice and the horizontal"
-  (vec lAlpha) degree
+  (vec lAlpha) (Vect Real) degree
 
-surfAngle = uc' "beta_i" (cn "surface angles")
+surfAngle = ucs "beta_i" (cn "surface angles")
   "the angles between the surface of each slice and the horizontal"
-  (vec lBeta) degree
+  (vec lBeta) (Vect Real) degree
 
-impLoadAngle = uc' "omega_i" (cn "imposed load angles")
+impLoadAngle = ucs "omega_i" (cn "imposed load angles")
   "the angles between the external force acting into the surface of each slice and the vertical"
-  (vec lOmega) degree
+  (vec lOmega) (Vect Real) degree
 
-baseWthX = makeUCWDS "b_i" (cn "base width of slices")
+baseWthX = ucsWS "b_i" (cn "base width of slices")
   (S "the width of each slice" `S.inThe` phrase xDir)
-  (vec lB) metre
+  (vec lB) (Vect Real) metre
 
-baseLngth = uc' "l_b,i" (cn "total base lengths of slices") 
+baseLngth = ucs "l_b,i" (cn "total base lengths of slices") 
   "the lengths of each slice in the direction parallel to the slope of the base"
-  (sub (vec cL) lB) metre
+  (sub (vec cL) lB) (Vect Real) metre
 
-surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
+surfLngth = ucs "l_s,i" (cn "surface lengths of slices")
   "the lengths of each slice in the direction parallel to the slope of the surface"
-  (sub (vec cL) lS) metre
+  (sub (vec cL) lS) (Vect Real) metre
 
 midpntHght = makeUCWDS "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights of slices")
   (S "the heights" `S.inThe` phrase yDir +:+ S "from the base of each slice" `S.toThe`
@@ -397,13 +397,13 @@ watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces")
   "the sums of the normal water forces acting on each pair of adjacent interslice boundaries"
   (sup (subX (vec cF)) lNormWat) newton
 
-sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices") 
+sliceHghtRight = ucs "h^R" (cn "heights of the right side of slices") 
   "the heights of the right side of each slice, assuming slice surfaces have negative slope"
-  (sup (vec lH) lRight) metre
+  (sup (vec lH) lRight) (Vect Real) metre
 
-sliceHghtLeft = uc' "h^L" (cn "heights of the left side of slices") 
+sliceHghtLeft = ucs "h^L" (cn "heights of the left side of slices") 
   "the heights of the left side of each slice, assuming slice surfaces have negative slope"
-  (sup (vec lH) lLeft) metre
+  (sup (vec lH) lLeft) (Vect Real) metre
 
 totNormStress = uc' "sigma" (cn' "total normal stress")
   "the total force per area acting on the soil mass" lSigma pascal
@@ -463,9 +463,10 @@ scalFunc = dqd' (dccWDS "f_i"
    S "that describes the variation of the interslice normal to shear ratio"))
   (const (vec lF)) Real Nothing 
 
+-- As we're going to subtract from this, can't type it 'Natural'.
 numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   "the number of slices into which the slip surface is divided")
-  (const lN) Natural Nothing
+  (const lN) Integer Nothing
 
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
   "generic minimization function or algorithm")
@@ -481,7 +482,7 @@ shrResC = dqd' (dcc "Phi"
   (nounPhraseSP "first function for incorporating interslice forces into shear force")
   ("the function for converting resistive shear " ++ wiif ++
    ", to a calculation considering the interslice forces"))
-  (const (vec cPhi)) Real Nothing
+  (const (vec cPhi)) (Vect Real) Nothing
 
 --------------------
 -- Index Function --
@@ -491,9 +492,10 @@ varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   "used as a bound variable index in calculations")
   (const lV) Natural Nothing
 
+-- As we do arithmetic on index, must type it 'Integer' right now
 index = dqd' (dcc "index" (nounPhraseSP "index")
   "a number representing a single slice")
-  (const lI) Natural Nothing 
+  (const lI) Integer Nothing 
 
 -- FIXME: move to drasil-lang
 indx1 :: (ExprC r, LiteralC r, Quantity a) => a -> r

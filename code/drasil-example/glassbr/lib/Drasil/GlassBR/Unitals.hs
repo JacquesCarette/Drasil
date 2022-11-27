@@ -253,8 +253,8 @@ isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance 
 isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
   (variable "isSafeLoad") Boolean
 
-interpY = vc "interpY" (nounPhraseSP "interpY") (variable "interpY") Real
-interpZ = vc "interpZ" (nounPhraseSP "interpZ") (variable "interpZ") Real
+interpY = vc "interpY" (nounPhraseSP "interpY") (variable "interpY") (mkFunction [String, Real, Real] Real)
+interpZ = vc "interpZ" (nounPhraseSP "interpZ") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
 
 lDurFac       = vc'' loadDurFactor (variable "LDF") Real

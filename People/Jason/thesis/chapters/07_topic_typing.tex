@@ -4,7 +4,7 @@
 \begin{writingdirectives}
       \item How is \Expr{} used?
       \item What are current problems with \Expr{} usage?
-      \item What does it mean for expressions to be well-formed/well-typed?
+      \item What does it mean for expressions to be well-typed?
       \item How does a type system work? How can we build one for \Expr{}?
             \begin{itemize}
                   \item ``Safety = Preservation + Progress'' \cite{Harper2016}
@@ -22,8 +22,9 @@ inapplicable in various contexts. However, an issue remains with expressions:
 Drasils standard mathematical language (\Expr{}) remains untyped, and, thus
 Drasil does not detect malformed expressions, allowing users to make errors that
 affect both the problem descriptions in the \acs{srs} and the usability of
-generated software. In this chapter, we will focus on improving well-formedness
-for the most important context: concrete theories used for code generation.
+generated software. In this chapter, we will focus on mitigating expression
+typing issues for the most important context: concrete theories used for code
+generation.
 
 \section{Expressions, Instance Models, and Data Definitions}
 \label{chap:typed-expr:sec:expressions-instance-models-and-data-definitions}
@@ -79,19 +80,19 @@ despite our encoding having it be an integer. All code Drasil generates should
 be reliably compile-able and usable, and all errors should be noted as Drasil is
 used. The issue here lies in that the initial expression was incoherent (and the
 Java code was \textit{ill-typed}). So, now, how can we avoid this situation
-altogether? We need all expressions to be \textit{well-formed}. However, Drasil
+altogether? We need all expressions to be \textit{well-typed}. However, Drasil
 doesn't have a working understanding of what it means for expressions to be
-well-formed.
+well-typed.
 
 Ultimately, the issue lies in that \Expr{} is not type-safe \cite{Harper2016}
 and that we don't capture any knowledge about what it means for expressions to
-be \textit{well-typed} (i.e., well-formed). In other words, \Expr{} is not
-closed under \textit{preservation}\footnote{\textit{Preservation} is a rule that
-evaluation of a language should preserve typing of expressions
-\cite{Harper2016}.} and \textit{progress}\footnote{\textit{Progress} is a rule
-that says that any well-typed expression is either a value or something that can
-be further evaluated \cite{Harper2016}.} \cite{Harper2016}, which means that
-during evaluation\footnote{Of course, ``evaluation'' here is also related to the
+be \textit{well-typed}. In other words, \Expr{} is not closed under
+\textit{preservation}\footnote{\textit{Preservation} is a rule that evaluation
+of a language should preserve typing of expressions \cite{Harper2016}.} and
+\textit{progress}\footnote{\textit{Progress} is a rule that says that any
+well-typed expression is either a value or something that can be further
+evaluated \cite{Harper2016}.} \cite{Harper2016}, which means that during
+evaluation\footnote{Of course, ``evaluation'' here is also related to the
 evaluation of \acs{gool}-generated code.} of expressions, illegal instructions
 and type mismatches are possible. Thus, we must make \Expr{} type-safe.
 
@@ -100,8 +101,8 @@ and type mismatches are possible. Thus, we must make \Expr{} type-safe.
 
 In order to make \Expr{} type-safe, we must build a type system for it so that
 we can obtain information about which \Expr{} terms are coherent/valid or not. A
-system of typing rules that dictate what well-formed expressions will allow us
-to determine which expressions are well-typed.
+system of typing rules that dictate what well-typed expressions will allow us to
+determine which expressions are well-typed.
 
 \subsection{Example: A \textquotedblleft{}Simple\textquotedblright{} Language}
 \label{chap:typed-expr:sec:type-safe-expressions:subsec:example-a-simple-language}

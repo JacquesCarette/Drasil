@@ -688,13 +688,14 @@ bidirectional type checking and inferencing for \Expr{} in Drasil.
 \subsection{Implementation}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:implementation}
 
-\imptodo{Note: if we were to go directly with a ChunkDB, then it would mean that
-      a ChunkDB would need to be formed before we add each new chunk (which is
-      an issue with the current system, but less so with the ``Upgraded
-      ChunkDB'' and
-      \url{https://github.com/JacquesCarette/Drasil/issues/2873\#issuecomment-957059049}).
-      Thus, we keep it separate, and use a TypingContext instead, to keep track
-      of UID type information.}
+For a first-pass at adding a type-checker and expression validation in Drasil,
+it would be beneficial to be able to check each chunk and expression at once,
+displaying all typing issues at once. In other words, it is helpful to perform
+type-checking retroactively as opposed to performing interactively, where we
+would be forced to create a compiler panic on sight of the first ill-typed
+expression. By viewing all typing issues at once, we will be able to rapidly
+view what type issues our type-checker implementation causes and revise
+accordingly.
 
 Thus, we need to build out the typing context, \(\Gamma\). \(\Gamma\) is the set
 of expression terms for which we already know the type of. While \(\Gamma\)

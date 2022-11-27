@@ -311,16 +311,16 @@ pseudohaskell snippet of Space to the appendix, and reference it here} and start
 using as intended.
 
 \begin{longtable}{ r c c l}
-      \(\texttt{Space}(s)\) & ::=       & \(\bb{Z}\)                                  & Integers   \\
-                            & \(\vert\) & \(\bb{Q}\)                                  & Rationals  \\
-                            & \(\vert\) & \(\bb{R}\)                                  & Reals      \\
-                            & \(\vert\) & \(\bb{N}\)                                  & Naturals   \\
-                            & \(\vert\) & \(\bb{B}\)                                  & Booleans   \\
-                            & \(\vert\) & \(\texttt{Ch}\)                             & Characters \\
-                            & \(\vert\) & \(\texttt{String}\)                         & Strings    \\
-                            & \(\vert\) & \(\texttt{Vector}(s)\)                      & Vectors    \\
-                            & \(\vert\) & \(\texttt{Matrix}(s)\)                      & Matrices   \\
-                            & \(\vert\) & \((s_1, s_2, \ldots{}, s_n) \rightarrow s\) & Functions  \\
+      \(\texttt{Space}(s)\) & ::=       & \(\bb{Z}\)                                                  & Integers   \\
+                            & \(\vert\) & \(\bb{Q}\)                                                  & Rationals  \\
+                            & \(\vert\) & \(\bb{R}\)                                                  & Reals      \\
+                            & \(\vert\) & \(\bb{N}\)                                                  & Naturals   \\
+                            & \(\vert\) & \(\bb{B}\)                                                  & Booleans   \\
+                            & \(\vert\) & \(\texttt{Ch}\)                                             & Characters \\
+                            & \(\vert\) & \(\texttt{String}\)                                         & Strings    \\
+                            & \(\vert\) & \(\texttt{Vector}(s)\)                                      & Vectors    \\
+                            & \(\vert\) & \(\texttt{Matrix}(s)\)                                      & Matrices   \\
+                            & \(\vert\) & \(s_1 \times s_2 \times \ldots{} \times s_n \rightarrow s\) & Functions  \\
 \end{longtable}
 
 \begin{pseudohaskell}{Type Universe}{pseudoTypeUniverse}
@@ -346,57 +346,55 @@ data Space =
 \subsection{Type Rules}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-rules}
 
+\newcommand{\isNum}[1]{\mathit{isNum}(#1)}
+Let \(\isNum{s} = s \in \set{\bb{Z}, \bb{Q}, \bb{R}, \bb{N}}\).
+
 \newcommand{\newTypeRule}[4]{%
 \begin{equation}%
-      \left.%
-      \infer{#3}{#4}%
-      \right.%
-      \qquad%
-      \text{#1}%
+      \inferrule*[right=#1]{#3}{#4}%
       \label{eq:tr:#2}%
 \end{equation}%
 }
 
 % instance Typed Expr Space where
 
-% \begin{equation}
-      % \left.
-      % \infer{(\texttt{if}\ b\ \texttt{then}\ x\ \texttt{else}\ y) : \tau}
-      % {b : \bb{B}  &  x : \tau  &  y : \tau}
-      % \right.
-      % \qquad
-      % \text{}
-      % \label{eq:etr:}
-% \end{equation}
-
-
 %   check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
 %   check = typeCheckByInfer
 
-\newTypeRule{Check}{check}{\Gamma \vdash a \Leftarrow s}{\Gamma \vdash a \Rightarrow s}
+\newTypeRule{Checked by Inference}{check}
+      {\Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash e \Leftarrow s}
 
 %   infer :: TypingContext Space -> Expr -> Either Space TypeError
 %   infer cxt (Lit lit) = infer cxt lit
 
-\imptodo{``literal'' typing rule}
+\newTypeRule{Literals}{literals}
+      {l~\text{is a literal of type}~s}
+      {\Gamma \vdash l \Rightarrow s}
 
 %   infer cxt (AssocA op exs) = allOfType cxt exs sp sp
 %       $ "Associative arithmetic operation expects all operands to be of the same expected type (" ++ show sp ++ ")."
 %     where
 %       sp = assocArithOperToTy op
 
-\newTypeRule{Associative Arithmetic}{assocA}
-      {\Gamma \vdash (a_1 \oplus a_2 \oplus \ldots{} \oplus a_n) \Rightarrow s}
-      {\Gamma \vdash \oplus \Rightarrow (s \rightarrow s \rightarrow s) & \Gamma \vdash a_1 \Rightarrow s & \Gamma \vdash a_2 \Rightarrow s & \ldots{} & \Gamma \vdash a_n \Rightarrow s}
+\newTypeRule{Assoc. Arith. Ops}{assocA}
+      {\oplus \in \set{+, \cdot{}} \\ \isNum{s} \\\\%
+       \Gamma \vdash e_1 \Rightarrow s \\ \Gamma \vdash e_2 \Rightarrow s \\ \ldots{} \\ \Gamma \vdash e_n \Rightarrow s}
+      {\Gamma \vdash (e_1 \oplus e_2 \oplus \ldots{} \oplus e_n) \Rightarrow s}
 
 %   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
 %     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
 
-\imptodo{associative boolean}
+\newTypeRule{Assoc. Bool. Ops}{assocB}
+      {\oplus \in \set{\land{}, \lor{}} \\\\%
+       \Gamma \vdash e_1 \Rightarrow \bb{B} \\ \Gamma \vdash e_2 \Rightarrow \bb{B} \\ \ldots{} \\ \Gamma \vdash e_n \Rightarrow \bb{B}}
+      {\Gamma \vdash (e_1 \oplus e_2 \oplus \ldots{} \oplus e_n) \Rightarrow \bb{B}}
 
 %   infer cxt (C uid) = inferFromContext cxt uid
 
-\imptodo{symbols}
+\newTypeRule{Symbols}{symbols}
+      {v : s \in \Gamma{}}
+      {\Gamma \vdash v \Rightarrow s}
 
 %   -- FIXME: It seems odd having named arguments here. Should we remove it? For
 %   -- now, I'm not type checking them.
@@ -407,7 +405,10 @@ data Space =
 %     (Left s, _) -> Right $ "Function application on non-function `" ++ show uid ++ "` (" ++ show s ++ ")."
 %     (Right x, _) -> Right x
 
-\imptodo{function calls}
+\newTypeRule{Fun. App.}{funApp}
+      {f : (s_1 \times s_2 \times \ldots{} \times s_n) \rightarrow s \in \Gamma{} \\\\%
+       \Gamma \vdash e_1 \Rightarrow s_1 \\ \Gamma \vdash e_2 \Rightarrow s_2 \\ \ldots{} \\ \Gamma \vdash e_n \Rightarrow s_n}
+      {\Gamma \vdash f(e_1, e_2, \ldots{}, e_n) \Rightarrow s}
 
 %   infer cxt (Case _ ers) -- = _ -- all (\(e, r) -> infer cxt e) ers
 %     | null ers = Right "Case contains no expressions, no type to infer."
@@ -417,7 +418,12 @@ data Space =
 %         (fe, _) = head ers
 %         eT = infer cxt fe
 
-\imptodo{cases}
+\newTypeRule{Cases}{cases}
+      {\Gamma \vdash e_1 \Rightarrow s \\ \Gamma \vdash c_1 \Rightarrow \bb{B}\\\\%
+       \Gamma \vdash e_2 \Rightarrow s \\ \Gamma \vdash c_2 \Rightarrow \bb{B}\\\\%
+       \vdots{}\\\\%
+       \Gamma \vdash e_n \Rightarrow s \\ \Gamma \vdash c_n \Rightarrow \bb{B}}
+      {\Gamma \vdash \texttt{Cases}(e_1, \ldots{}, e_n, c_1, \ldots{}, c_n) \Rightarrow s}
 
 %   infer cxt (Matrix exss)
 %     | null exss = Right "Matrix has no rows."
@@ -435,7 +441,12 @@ data Space =
 %               (const False) expT
 %         (Left t) = expT
 
-\imptodo{matrices}
+\newTypeRule{Matrix}{matrices}
+      {\Gamma \vdash e_{11} \Rightarrow s \\ \Gamma \vdash e_{12} \Rightarrow s \\ \ldots{} \\ \Gamma \vdash e_{1n} \Rightarrow s \\\\%
+       \Gamma \vdash e_{21} \Rightarrow s \\ \Gamma \vdash e_{22} \Rightarrow s \\ \ldots{} \\ \Gamma \vdash e_{2n} \Rightarrow s \\\\%
+       \vdots{}\\\\%
+       \Gamma \vdash e_{m1} \Rightarrow s \\ \Gamma \vdash e_{m2} \Rightarrow s \\ \ldots{} \\ \Gamma \vdash e_{mn} \Rightarrow s}
+      {Matrix(e_{11}, \ldots{}, e_{mn}) \Rightarrow \texttt{Matrix}(m,n,s)}
 
 %   infer cxt (UnaryOp uf ex) = case infer cxt ex of
 %     Left sp -> case uf of
@@ -451,14 +462,30 @@ data Space =
 %         else Right $ show x ++ " only applies to Reals. Received `" ++ show sp ++ "`."
 %     x       -> x
 
-\imptodo{unary numeric operations}
+\newTypeRule{Abs.}{absUnOp}
+      {\isNum{s} \\ s \neq \bb{N} \\ \Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash |e| \Rightarrow s}
+
+\newTypeRule{Neg.}{negUnOp}
+      {\isNum{s} \\ s \neq \bb{N} \\ \Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash - e \Rightarrow s}
+
+\newTypeRule{Exp.}{expUnOp}
+      {s \in \set{\bb{R}, \bb{Z}} \\ \Gamma \vdash p \Rightarrow s}
+      {\Gamma \vdash \texttt{e}^p \Rightarrow \bb{R}}
+
+\newTypeRule{Un. Ops}{unOps}
+      {\oplus \in \set{\texttt{log}, \texttt{ln}, \texttt{sin}, \texttt{cos}, \texttt{tan}, \texttt{sec}, \texttt{csc}, \texttt{cot}, \texttt{arcsin}, \texttt{arccos}, \texttt{arctan}, \texttt{sqrt}} \\ \Gamma \vdash e \Rightarrow \bb{R}}
+      {\Gamma \vdash \oplus e \Rightarrow \bb{R}}
 
 %   infer cxt (UnaryOpB Not ex) = case infer cxt ex of
 %     Left S.Boolean -> Left S.Boolean
 %     Left sp        -> Right $ "¬ on non-boolean operand, " ++ show sp ++ "."
 %     x              -> x
 
-\imptodo{logical negation}
+\newTypeRule{Logical Neg.}{logNeg}
+      {\Gamma \vdash e \Rightarrow \bb{B}}
+      {\Gamma \vdash \lnot e \Rightarrow \bb{B}}
 
 %   -- TODO: What about "Vect Vect ... Vect X"?
 %   infer cxt (UnaryOpVV NegV e) = case infer cxt e of
@@ -468,7 +495,9 @@ data Space =
 %     Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
 %     Right ex -> Right ex
 
-\imptodo{more unary operations}
+\newTypeRule{Vec. Neg.}{vecNegOp}
+      {\isNum{s} \\ s \neq \bb{N} \\ \Gamma \vdash v \Rightarrow \texttt{Vector}(s)}
+      {\Gamma \vdash - v \Rightarrow \texttt{Vector}(s)}
 
 %   infer cxt (UnaryOpVN Norm e) = case infer cxt e of
 %     Left (S.Vect sp) -> if sp == S.Real
@@ -477,14 +506,18 @@ data Space =
 %     Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
 %     ex -> ex
 
-\imptodo{more unary operations}
+\newTypeRule{Vec. Norm}{vecNormOp}
+      {\Gamma \vdash v \Rightarrow \texttt{Vector}(\bb{R})}
+      {\Gamma \vdash \| v \| \Rightarrow \bb{R}}
 
 %   infer cxt (UnaryOpVN Dim e) = case infer cxt e of
 %     Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
 %     Left sp         -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
 %     ex              -> ex
 
-\imptodo{more unary operations}
+\newTypeRule{Vec. Dim.}{vecDimOp}
+      {\Gamma \vdash v \Rightarrow \texttt{Vector}(s)}
+      {\Gamma \vdash \texttt{dim}(v) \Rightarrow \bb{Z}}
 
 %   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
 %     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt -- FIXME: What do we want here?
@@ -493,7 +526,9 @@ data Space =
 %     (_      , Right e) -> Right e
 %     (Right e, _      ) -> Right e
 
-\imptodo{binary operations}
+\newTypeRule{Frac. Bin. Op}{fracBinOp}
+      {\isNum{s} \\ \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
+      {\Gamma \vdash \frac{l}{r} \Rightarrow \bb{B}}
 
 %   infer cxt (ArithBinaryOp Pow l r) = case (infer cxt l, infer cxt r) of
 %     (Left lt, Left rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
@@ -503,7 +538,10 @@ data Space =
 %     (_      , Right x) -> Right x
 %     (Right x, _      ) -> Right x
 
-\imptodo{more binary operations}
+\newTypeRule{Powers}{powBinOp}
+      {\isNum{s} \\ s = r \lor (s = \bb{R} \land r = \bb{Z}) \\\\%
+       \Gamma \vdash b \Rightarrow s \\ \Gamma \vdash e \Rightarrow r}
+      {\Gamma \vdash b^e \Rightarrow s}
 
 %   infer cxt (ArithBinaryOp Subt l r) = case (infer cxt l, infer cxt r) of
 %     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
@@ -512,7 +550,9 @@ data Space =
 %     (_, Right re) -> Right re
 %     (Right le, _) -> Right le
 
-\imptodo{more binary operations}
+\newTypeRule{Sub. Bin. Op}{subBinOp}
+      {\isNum{s} \\ \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
+      {\Gamma \vdash l - r \Rightarrow s}
 
 %   infer cxt (BoolBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
 %     (Left S.Boolean, Left S.Boolean) -> Left S.Boolean
@@ -520,7 +560,9 @@ data Space =
 %     (_     , Right er) -> Right er
 %     (Right el, _     ) -> Right el
  
-\imptodo{more binary operations}
+\newTypeRule{Bool. Bin. Ops}{boolBinOp}
+      {\oplus \in \set{\implies, \equiv} \\ \Gamma \vdash l \Rightarrow \bb{B} \\ \Gamma \vdash r \Rightarrow \bb{B}}
+      {\Gamma \vdash l \oplus r \Rightarrow \bb{B}}
 
 %   infer cxt (EqBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
 %     (Left lt, Left rt) -> if lt == rt
@@ -529,7 +571,9 @@ data Space =
 %     (_, Right re) -> Right re
 %     (Right le, _) -> Right le
 
-\imptodo{more binary operations}
+\newTypeRule{Eq. Bin. Ops}{eqBinOp}
+      {\oplus \in \set{=, \neq} \\ \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
+      {\Gamma \vdash l \oplus r \Rightarrow \bb{B}}
 
 %   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
 %     (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
@@ -539,7 +583,9 @@ data Space =
 %     (_               , Right e) -> Right e
 %     (Right e         , _      ) -> Right e
 
-\imptodo{more binary operations}
+\newTypeRule{Vec. Proj.}{vecProjOp}
+      {\Gamma \vdash v \Rightarrow \texttt{Vector}(s) \\ \Gamma \vdash i \Rightarrow \bb{N}}
+      {\Gamma \vdash v\texttt{[}i\texttt{]} \Rightarrow s}
 
 %   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
 %     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
@@ -548,7 +594,10 @@ data Space =
 %     (_, Right re) -> Right re
 %     (Right le, _) -> Right le
 
-\imptodo{more binary operations}
+\newTypeRule{Ord. Bin. Ops}{ordBinOp}
+      {\oplus \in \set{>, \geq, <, \leq} \\ \isNum{s} \\\\%
+       \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
+      {\Gamma \vdash l \oplus r \Rightarrow \bb{B}}
 
 %   infer cxt (VVVBinaryOp Cross l r) = case (infer cxt l, infer cxt r) of
 %     (Left lTy, Left rTy) -> if lTy == rTy
@@ -557,7 +606,9 @@ data Space =
 %     (_       , Right re) -> Right re
 %     (Right le, _       ) -> Right le
 
-\imptodo{more binary operations}
+\newTypeRule{Vec. Cross Prod.}{vecCrossProd}
+      {\Gamma \vdash l \Rightarrow \texttt{Vector}(\bb{R}) \\ \Gamma \vdash r \Rightarrow \texttt{Vector}(\bb{R})}
+      {\Gamma \vdash l \times r \Rightarrow \texttt{Vector}(\bb{R})}
 
 %   infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
 %     (Left lt@(S.Vect lsp), Left rt@(S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
@@ -567,7 +618,9 @@ data Space =
 %     (_, Right rx) -> Right rx
 %     (Right lx, _) -> Right lx
 
-\imptodo{more unary operations}
+\newTypeRule{Vec. Dot Prod.}{vecDotProd}
+      {\isNum{s} \\ \Gamma \vdash l \Rightarrow \texttt{Vector}(s) \\ \Gamma \vdash r \Rightarrow \texttt{Vector}(s)}
+      {\Gamma \vdash l \cdot{} r \Rightarrow s}
 
 %   infer cxt (Operator aao (S.BoundedDD _ _ bot top) body) = let expTy = assocArithOperToTy aao
 %     in case (infer cxt bot, infer cxt top, infer cxt body) of
@@ -582,7 +635,10 @@ data Space =
 %       (_         , Right x   , _          ) -> Right x
 %       (Right x   , _         , _          ) -> Right x
 
-\imptodo{large operations}
+\newTypeRule{``Big'' Arith. Op.}{bigOp}
+      {\oplus \in \set{+, \cdot{}} \\ \isNum{s} \\\\%
+       \Gamma \vdash b \Rightarrow s \\ \Gamma \vdash t \Rightarrow s \\ \Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash \bigoplus_{b}^{t} e \Rightarrow s}
 
 %   infer cxt (RealI uid ri) = 
 %     case (inferFromContext cxt uid, riTy ri) of
@@ -606,7 +662,18 @@ data Space =
 %       riTy (S.UpTo (_, x)) = infer cxt x
 %       riTy (S.UpFrom (_, x)) = infer cxt x
 
-\imptodo{real intervals}
+\newTypeRule{``Is In'' Interval (Bottom)}{isInIntervalBot}
+      {x : \bb{R} \in \Gamma \\ \Gamma \vdash b \Rightarrow \bb{R}}
+      {\Gamma \vdash x \in (b, \infty{}) \Rightarrow \bb{B} \\ \Gamma \vdash x \in [b, \infty{}) \Rightarrow \bb{B}}
+
+\newTypeRule{``Is In'' Interval (Top)}{isInIntervalTop}
+      {x : \bb{R} \in \Gamma \\ \Gamma \vdash t \Rightarrow \bb{R}}
+      {\Gamma \vdash x \in (\infty{}, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in (\infty{}, t] \Rightarrow \bb{B}}
+
+\newTypeRule{``Is In'' Interval}{isInInterval}
+      {x : \bb{R} \in \Gamma \\ \Gamma \vdash b \Rightarrow \bb{R} \\ \Gamma \vdash t \Rightarrow \bb{R}}
+      {\Gamma \vdash x \in (b, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in (b, t] \Rightarrow \bb{B} \\\\%
+      \Gamma \vdash x \in [b, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in [b, t] \Rightarrow \bb{B}}
 
 Finally, after having built our type universe and typing rules, we may implement
 the bidirectional type checking and inferencing in Drasil.

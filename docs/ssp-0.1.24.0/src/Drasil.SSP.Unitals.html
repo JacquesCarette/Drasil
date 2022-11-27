@@ -239,11 +239,12 @@ c -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
 c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
-</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;x_slope,i&quot;</span></span><span>
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucsWS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;x_slope,i&quot;</span></span><span>
 </span><span id="line-101"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; NP) -&gt; Sentence -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -263,7 +264,9 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lX</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.SSP.Unitals.html#lSlope"><span class="hs-identifier hs-var">lSlope</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.SSP.Unitals.html#lSlope"><span class="hs-identifier hs-var">lSlope</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
@@ -279,11 +282,12 @@ c -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
 c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
-</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;y_slope,i&quot;</span></span><span>
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucsWS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;y_slope,i&quot;</span></span><span>
 </span><span id="line-106"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; NP) -&gt; Sentence -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -303,7 +307,9 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lY</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.SSP.Unitals.html#lSlope"><span class="hs-identifier hs-var">lSlope</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.SSP.Unitals.html#lSlope"><span class="hs-identifier hs-var">lSlope</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
@@ -347,8 +353,9 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lX</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.SSP.Unitals.html#lWatTab"><span class="hs-identifier hs-var">lWatTab</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
@@ -391,8 +398,9 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lY</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.SSP.Unitals.html#lWatTab"><span class="hs-identifier hs-var">lWatTab</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
@@ -1087,11 +1095,12 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">forcePerMeterU</span></span><span>
 </span><span id="line-229"></span><span>
 </span><span id="line-230"></span><span id="slipHght"><span class="annot"><span class="annottext">slipHght :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#slipHght"><span class="hs-identifier hs-var hs-var">slipHght</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#slipHght"><span class="hs-identifier hs-var hs-var">slipHght</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;y_slip,i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+String -&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs</span></span><span> </span><span class="annot"><span class="hs-string">&quot;y_slip,i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; NP) -&gt; Sentence -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -1105,15 +1114,18 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lY</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.SSP.Unitals.html#lSlip"><span class="hs-identifier hs-var">lSlip</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.SSP.Unitals.html#lSlip"><span class="hs-identifier hs-var">lSlip</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-233"></span><span>
 </span><span id="line-234"></span><span id="slipDist"><span class="annot"><span class="annottext">slipDist :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#slipDist"><span class="hs-identifier hs-var hs-var">slipDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#slipDist"><span class="hs-identifier hs-var hs-var">slipDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;x_slip,i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucsWS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;x_slip,i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; NP) -&gt; Sentence -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -1132,7 +1144,9 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lX</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.SSP.Unitals.html#lSlip"><span class="hs-identifier hs-var">lSlip</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.SSP.Unitals.html#lSlip"><span class="hs-identifier hs-var">lSlip</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-237"></span><span>
 </span><span id="line-238"></span><span id="xi"><span class="annot"><span class="annottext">xi :: UnitalChunk
@@ -1584,50 +1598,60 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">forcePerMeterU</span></span><span>
 </span><span id="line-326"></span><span>
 </span><span id="line-327"></span><span id="baseAngle"><span class="annot"><span class="annottext">baseAngle :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var hs-var">baseAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var hs-var">baseAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;alpha_i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+String -&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs</span></span><span> </span><span class="annot"><span class="hs-string">&quot;alpha_i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;base angles&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-328"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the angles between the base of each slice and the horizontal&quot;</span></span><span>
 </span><span id="line-329"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lAlpha</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">lAlpha</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">degree</span></span><span>
 </span><span id="line-330"></span><span>
 </span><span id="line-331"></span><span id="surfAngle"><span class="annot"><span class="annottext">surfAngle :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#surfAngle"><span class="hs-identifier hs-var hs-var">surfAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#surfAngle"><span class="hs-identifier hs-var hs-var">surfAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;beta_i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+String -&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs</span></span><span> </span><span class="annot"><span class="hs-string">&quot;beta_i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;surface angles&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-332"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the angles between the surface of each slice and the horizontal&quot;</span></span><span>
 </span><span id="line-333"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lBeta</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">lBeta</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">degree</span></span><span>
 </span><span id="line-334"></span><span>
 </span><span id="line-335"></span><span id="impLoadAngle"><span class="annot"><span class="annottext">impLoadAngle :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var hs-var">impLoadAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var hs-var">impLoadAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;omega_i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+String -&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs</span></span><span> </span><span class="annot"><span class="hs-string">&quot;omega_i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;imposed load angles&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-336"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the angles between the external force acting into the surface of each slice and the vertical&quot;</span></span><span>
 </span><span id="line-337"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lOmega</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">lOmega</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">degree</span></span><span>
 </span><span id="line-338"></span><span>
 </span><span id="line-339"></span><span id="baseWthX"><span class="annot"><span class="annottext">baseWthX :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var hs-var">baseWthX</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var hs-var">baseWthX</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;b_i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucsWS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;b_i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;base width of slices&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-340"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the width of each slice&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1637,37 +1661,45 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">xDir</span></span><span class="hs-special">)</span><span>
 </span><span id="line-341"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lB</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">lB</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-342"></span><span>
 </span><span id="line-343"></span><span id="baseLngth"><span class="annot"><span class="annottext">baseLngth :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#baseLngth"><span class="hs-identifier hs-var hs-var">baseLngth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#baseLngth"><span class="hs-identifier hs-var hs-var">baseLngth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;l_b,i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+String -&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs</span></span><span> </span><span class="annot"><span class="hs-string">&quot;l_b,i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;total base lengths of slices&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-344"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the lengths of each slice in the direction parallel to the slope of the base&quot;</span></span><span>
 </span><span id="line-345"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cL</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lB</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">lB</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-346"></span><span>
 </span><span id="line-347"></span><span id="surfLngth"><span class="annot"><span class="annottext">surfLngth :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#surfLngth"><span class="hs-identifier hs-var hs-var">surfLngth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#surfLngth"><span class="hs-identifier hs-var hs-var">surfLngth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;l_s,i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+String -&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs</span></span><span> </span><span class="annot"><span class="hs-string">&quot;l_s,i&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;surface lengths of slices&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-348"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the lengths of each slice in the direction parallel to the slope of the surface&quot;</span></span><span>
 </span><span id="line-349"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cL</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lS</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">lS</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-350"></span><span>
 </span><span id="line-351"></span><span id="midpntHght"><span class="annot"><span class="annottext">midpntHght :: UnitalChunk
@@ -1917,33 +1949,39 @@ String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">newton</span></span><span>
 </span><span id="line-399"></span><span>
 </span><span id="line-400"></span><span id="sliceHghtRight"><span class="annot"><span class="annottext">sliceHghtRight :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#sliceHghtRight"><span class="hs-identifier hs-var hs-var">sliceHghtRight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#sliceHghtRight"><span class="hs-identifier hs-var hs-var">sliceHghtRight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;h^R&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+String -&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs</span></span><span> </span><span class="annot"><span class="hs-string">&quot;h^R&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;heights of the right side of slices&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-401"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the heights of the right side of each slice, assuming slice surfaces have negative slope&quot;</span></span><span>
 </span><span id="line-402"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sup</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lH</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.SSP.Unitals.html#lRight"><span class="hs-identifier hs-var">lRight</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.SSP.Unitals.html#lRight"><span class="hs-identifier hs-var">lRight</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-403"></span><span>
 </span><span id="line-404"></span><span id="sliceHghtLeft"><span class="annot"><span class="annottext">sliceHghtLeft :: UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#sliceHghtLeft"><span class="hs-identifier hs-var hs-var">sliceHghtLeft</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.SSP.Unitals.html#sliceHghtLeft"><span class="hs-identifier hs-var hs-var">sliceHghtLeft</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;h^L&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+String -&gt; NP -&gt; String -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs</span></span><span> </span><span class="annot"><span class="hs-string">&quot;h^L&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="hs-string">&quot;heights of the left side of slices&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-405"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the heights of the left side of each slice, assuming slice surfaces have negative slope&quot;</span></span><span>
 </span><span id="line-406"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sup</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lH</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.SSP.Unitals.html#lLeft"><span class="hs-identifier hs-var">lLeft</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.SSP.Unitals.html#lLeft"><span class="hs-identifier hs-var">lLeft</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-407"></span><span>
 </span><span id="line-408"></span><span id="totNormStress"><span class="annot"><span class="annottext">totNormStress :: UnitalChunk
@@ -2160,7 +2198,8 @@ forall a b. a -&gt; b -&gt; a
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span>
 </span><span id="line-465"></span><span>
-</span><span id="line-466"></span><span id="numbSlices"><span class="annot"><span class="annottext">numbSlices :: DefinedQuantityDict
+</span><span id="line-466"></span><span class="hs-comment">-- As we're going to subtract from this, can't type it 'Natural'.</span><span>
+</span><span id="line-467"></span><span id="numbSlices"><span class="annot"><span class="annottext">numbSlices :: DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#numbSlices"><span class="hs-identifier hs-var hs-var">numbSlices</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
 -&gt; Space
@@ -2169,16 +2208,16 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;n&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;number of slices&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-467"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the number of slices into which the slip surface is divided&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-468"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-468"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the number of slices into which the slip surface is divided&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-469"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lN</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Natural</span></span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
+</span><span class="hs-identifier hs-var">Integer</span></span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-469"></span><span>
-</span><span id="line-470"></span><span id="minFunction"><span class="annot"><span class="annottext">minFunction :: DefinedQuantityDict
+</span><span id="line-470"></span><span>
+</span><span id="line-471"></span><span id="minFunction"><span class="annot"><span class="annottext">minFunction :: DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#minFunction"><span class="hs-identifier hs-var hs-var">minFunction</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
 -&gt; Space
@@ -2187,16 +2226,16 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Upsilon&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;minimization function&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-471"></span><span>  </span><span class="annot"><span class="hs-string">&quot;generic minimization function or algorithm&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-472"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-472"></span><span>  </span><span class="annot"><span class="hs-string">&quot;generic minimization function or algorithm&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-473"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cUpsilon</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-473"></span><span>
-</span><span id="line-474"></span><span id="mobShrC"><span class="annot"><span class="annottext">mobShrC :: DefinedQuantityDict
+</span><span id="line-474"></span><span>
+</span><span id="line-475"></span><span id="mobShrC"><span class="annot"><span class="annottext">mobShrC :: DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#mobShrC"><span class="hs-identifier hs-var hs-var">mobShrC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
 -&gt; Space
@@ -2204,16 +2243,16 @@ forall a. Maybe a
 -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Psi&quot;</span></span><span>
-</span><span id="line-475"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-476"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;second function for incorporating interslice forces into shear force&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-476"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;the function for converting mobile shear &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><span id="line-477"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;the function for converting mobile shear &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.SSP.Unitals.html#wiif"><span class="hs-identifier hs-var">wiif</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-477"></span><span>   </span><span class="annot"><span class="hs-string">&quot;, to a calculation considering the interslice forces&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-478"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-478"></span><span>   </span><span class="annot"><span class="hs-string">&quot;, to a calculation considering the interslice forces&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-479"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
@@ -2221,8 +2260,8 @@ forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-479"></span><span>
-</span><span id="line-480"></span><span id="shrResC"><span class="annot"><span class="annottext">shrResC :: DefinedQuantityDict
+</span><span id="line-480"></span><span>
+</span><span id="line-481"></span><span id="shrResC"><span class="annot"><span class="annottext">shrResC :: DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#shrResC"><span class="hs-identifier hs-var hs-var">shrResC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
 -&gt; Space
@@ -2230,29 +2269,30 @@ forall a. Maybe a
 -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Phi&quot;</span></span><span>
-</span><span id="line-481"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-482"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;first function for incorporating interslice forces into shear force&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-482"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;the function for converting resistive shear &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><span id="line-483"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;the function for converting resistive shear &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="Drasil.SSP.Unitals.html#wiif"><span class="hs-identifier hs-var">wiif</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-483"></span><span>   </span><span class="annot"><span class="hs-string">&quot;, to a calculation considering the interslice forces&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-484"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-484"></span><span>   </span><span class="annot"><span class="hs-string">&quot;, to a calculation considering the interslice forces&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-485"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">cPhi</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
+</span><span class="hs-identifier hs-var">cPhi</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-485"></span><span>
-</span><span id="line-486"></span><span class="hs-comment">--------------------</span><span>
-</span><span id="line-487"></span><span class="hs-comment">-- Index Function --</span><span>
-</span><span id="line-488"></span><span class="hs-comment">--------------------</span><span>
-</span><span id="line-489"></span><span>
-</span><span id="line-490"></span><span id="varblV"><span class="annot"><span class="annottext">varblV :: DefinedQuantityDict
+</span><span id="line-486"></span><span>
+</span><span id="line-487"></span><span class="hs-comment">--------------------</span><span>
+</span><span id="line-488"></span><span class="hs-comment">-- Index Function --</span><span>
+</span><span id="line-489"></span><span class="hs-comment">--------------------</span><span>
+</span><span id="line-490"></span><span>
+</span><span id="line-491"></span><span id="varblV"><span class="annot"><span class="annottext">varblV :: DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#varblV"><span class="hs-identifier hs-var hs-var">varblV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
 -&gt; Space
@@ -2261,16 +2301,17 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;varblV&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;local index&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-491"></span><span>  </span><span class="annot"><span class="hs-string">&quot;used as a bound variable index in calculations&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-492"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-492"></span><span>  </span><span class="annot"><span class="hs-string">&quot;used as a bound variable index in calculations&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-493"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lV</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Natural</span></span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-493"></span><span>
-</span><span id="line-494"></span><span id="index"><span class="annot"><span class="annottext">index :: DefinedQuantityDict
+</span><span id="line-494"></span><span>
+</span><span id="line-495"></span><span class="hs-comment">-- As we do arithmetic on index, must type it 'Integer' right now</span><span>
+</span><span id="line-496"></span><span id="index"><span class="annot"><span class="annottext">index :: DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var hs-var">index</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
 -&gt; Space
@@ -2279,75 +2320,75 @@ forall a. Maybe a
 </span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;index&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;index&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-495"></span><span>  </span><span class="annot"><span class="hs-string">&quot;a number representing a single slice&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-496"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-497"></span><span>  </span><span class="annot"><span class="hs-string">&quot;a number representing a single slice&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-498"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lI</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Natural</span></span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
+</span><span class="hs-identifier hs-var">Integer</span></span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span>
-</span><span id="line-497"></span><span>
-</span><span id="line-498"></span><span class="hs-comment">-- FIXME: move to drasil-lang</span><span>
-</span><span id="line-499"></span><span id="local-6989586621679102555"><span id="local-6989586621679102556"><span class="annot"><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-type">indx1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102556"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102556"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102555"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102556"><span class="hs-identifier hs-type">r</span></a></span></span></span><span>
-</span><span id="line-500"></span><span id="indx1"><span class="annot"><span class="annottext">indx1 :: a -&gt; r
-</span><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-var hs-var">indx1</span></a></span></span><span> </span><span id="local-6989586621679102553"><span class="annot"><span class="annottext">a :: a
-</span><a href="#local-6989586621679102553"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span id="line-499"></span><span>
+</span><span id="line-500"></span><span class="hs-comment">-- FIXME: move to drasil-lang</span><span>
+</span><span id="line-501"></span><span id="local-6989586621679102564"><span id="local-6989586621679102565"><span class="annot"><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-type">indx1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102565"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102565"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679102564"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102564"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102565"><span class="hs-identifier hs-type">r</span></a></span></span></span><span>
+</span><span id="line-502"></span><span id="indx1"><span class="annot"><span class="annottext">indx1 :: a -&gt; r
+</span><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-var hs-var">indx1</span></a></span></span><span> </span><span id="local-6989586621679102562"><span class="annot"><span class="annottext">a :: a
+</span><a href="#local-6989586621679102562"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679102553"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; r
+</span><a href="#local-6989586621679102562"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-501"></span><span>
-</span><span id="line-502"></span><span id="local-6989586621679102548"><span id="local-6989586621679102549"><span class="annot"><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-type">indxn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102549"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679102548"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102548"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102549"><span class="hs-identifier hs-type">r</span></a></span></span></span><span>
-</span><span id="line-503"></span><span id="indxn"><span class="annot"><span class="annottext">indxn :: a -&gt; r
-</span><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-var hs-var">indxn</span></a></span></span><span> </span><span id="local-6989586621679102546"><span class="annot"><span class="annottext">a :: a
-</span><a href="#local-6989586621679102546"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span id="line-503"></span><span>
+</span><span id="line-504"></span><span id="local-6989586621679102557"><span id="local-6989586621679102558"><span class="annot"><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-type">indxn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102558"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679102557"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102557"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102558"><span class="hs-identifier hs-type">r</span></a></span></span></span><span>
+</span><span id="line-505"></span><span id="indxn"><span class="annot"><span class="annottext">indxn :: a -&gt; r
+</span><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-var hs-var">indxn</span></a></span></span><span> </span><span id="local-6989586621679102555"><span class="annot"><span class="annottext">a :: a
+</span><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679102546"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
+</span><a href="#local-6989586621679102555"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#numbSlices"><span class="hs-identifier hs-var">numbSlices</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-504"></span><span>
-</span><span id="line-505"></span><span id="local-6989586621679102544"><span id="local-6989586621679102545"><span class="annot"><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-type">inxi</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#inxiP1"><span class="hs-identifier hs-type">inxiP1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-type">inxiM1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102545"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102545"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679102544"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102544"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102545"><span class="hs-identifier hs-type">r</span></a></span></span></span><span>
-</span><span id="line-506"></span><span id="inxiP1"><span class="annot"><span class="annottext">inxiP1 :: e -&gt; r
-</span><a href="Drasil.SSP.Unitals.html#inxiP1"><span class="hs-identifier hs-var hs-var">inxiP1</span></a></span></span><span> </span><span id="local-6989586621679102540"><span class="annot"><span class="annottext">e :: e
-</span><a href="#local-6989586621679102540"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; r
+</span><span id="line-506"></span><span>
+</span><span id="line-507"></span><span id="local-6989586621679102553"><span id="local-6989586621679102554"><span class="annot"><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-type">inxi</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#inxiP1"><span class="hs-identifier hs-type">inxiP1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-type">inxiM1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102554"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102554"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679102553"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102553"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102554"><span class="hs-identifier hs-type">r</span></a></span></span></span><span>
+</span><span id="line-508"></span><span id="inxiP1"><span class="annot"><span class="annottext">inxiP1 :: e -&gt; r
+</span><a href="Drasil.SSP.Unitals.html#inxiP1"><span class="hs-identifier hs-var hs-var">inxiP1</span></a></span></span><span> </span><span id="local-6989586621679102549"><span class="annot"><span class="annottext">e :: e
+</span><a href="#local-6989586621679102549"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; Integer -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var">inx</span></a></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679102540"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span>
-</span><span id="line-507"></span><span id="inxi"><span class="annot"><span class="annottext">inxi :: e -&gt; r
-</span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var hs-var">inxi</span></a></span></span><span>   </span><span id="local-6989586621679102538"><span class="annot"><span class="annottext">e :: e
-</span><a href="#local-6989586621679102538"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; r
+</span><a href="#local-6989586621679102549"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span>
+</span><span id="line-509"></span><span id="inxi"><span class="annot"><span class="annottext">inxi :: e -&gt; r
+</span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var hs-var">inxi</span></a></span></span><span>   </span><span id="local-6989586621679102547"><span class="annot"><span class="annottext">e :: e
+</span><a href="#local-6989586621679102547"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; Integer -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var">inx</span></a></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679102538"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
-</span><span id="line-508"></span><span id="inxiM1"><span class="annot"><span class="annottext">inxiM1 :: e -&gt; r
-</span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var hs-var">inxiM1</span></a></span></span><span> </span><span id="local-6989586621679102537"><span class="annot"><span class="annottext">e :: e
-</span><a href="#local-6989586621679102537"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; r
+</span><a href="#local-6989586621679102547"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
+</span><span id="line-510"></span><span id="inxiM1"><span class="annot"><span class="annottext">inxiM1 :: e -&gt; r
+</span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var hs-var">inxiM1</span></a></span></span><span> </span><span id="local-6989586621679102546"><span class="annot"><span class="annottext">e :: e
+</span><a href="#local-6989586621679102546"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">e -&gt; Integer -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; Integer -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var">inx</span></a></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679102537"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-509"></span><span>
-</span><span id="line-510"></span><span id="local-6989586621679102822"><span id="local-6989586621679102823"><span class="annot"><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-type">inx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102823"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102823"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679102822"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102822"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102823"><span class="hs-identifier hs-type">r</span></a></span></span></span><span>
-</span><span id="line-511"></span><span id="inx"><span class="annot"><span class="annottext">inx :: e -&gt; Integer -&gt; r
-</span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var hs-var">inx</span></a></span></span><span> </span><span id="local-6989586621679102536"><span class="annot"><span class="annottext">e :: e
-</span><a href="#local-6989586621679102536"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679102535"><span class="annot"><span class="annottext">n :: Integer
-</span><a href="#local-6989586621679102535"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span>
-</span><span id="line-512"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679102535"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679102546"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
+</span><span id="line-511"></span><span>
+</span><span id="line-512"></span><span id="local-6989586621679102835"><span id="local-6989586621679102836"><span class="annot"><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-type">inx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102836"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102836"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679102835"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102835"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102836"><span class="hs-identifier hs-type">r</span></a></span></span></span><span>
+</span><span id="line-513"></span><span id="inx"><span class="annot"><span class="annottext">inx :: e -&gt; Integer -&gt; r
+</span><a href="Drasil.SSP.Unitals.html#inx"><span class="hs-identifier hs-var hs-var">inx</span></a></span></span><span> </span><span id="local-6989586621679102545"><span class="annot"><span class="annottext">e :: e
+</span><a href="#local-6989586621679102545"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679102544"><span class="annot"><span class="annottext">n :: Integer
+</span><a href="#local-6989586621679102544"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span>
+</span><span id="line-514"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679102544"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&lt;</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">e -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679102536"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
+</span><a href="#local-6989586621679102545"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var">index</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
@@ -2355,26 +2396,26 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679102535"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-513"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679102535"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679102544"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-515"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679102544"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">e -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679102536"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
+</span><a href="#local-6989586621679102545"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var">index</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-514"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-516"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">e -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">e
-</span><a href="#local-6989586621679102536"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
+</span><a href="#local-6989586621679102545"><span class="hs-identifier hs-var">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var">index</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
@@ -2382,10 +2423,10 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">`addI`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679102535"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-515"></span><span>
-</span><span id="line-516"></span><span id="local-6989586621679102531"><span class="annot"><a href="Drasil.SSP.Unitals.html#sum1toN"><span class="hs-identifier hs-type">sum1toN</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102531"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102531"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102531"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102531"><span class="hs-identifier hs-type">r</span></a></span></span><span>
-</span><span id="line-517"></span><span id="sum1toN"><span class="annot"><span class="annottext">sum1toN :: r -&gt; r
+</span><a href="#local-6989586621679102544"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-517"></span><span>
+</span><span id="line-518"></span><span id="local-6989586621679102540"><span class="annot"><a href="Drasil.SSP.Unitals.html#sum1toN"><span class="hs-identifier hs-type">sum1toN</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102540"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679102540"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102540"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679102540"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-519"></span><span id="sum1toN"><span class="annot"><span class="annottext">sum1toN :: r -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#sum1toN"><span class="hs-identifier hs-var hs-var">sum1toN</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defsum</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Symbol
@@ -2397,79 +2438,79 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#numbSlices"><span class="hs-identifier hs-var">numbSlices</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-518"></span><span>
-</span><span id="line-519"></span><span class="hs-comment">-- Labels</span><span>
 </span><span id="line-520"></span><span>
-</span><span id="line-521"></span><span class="annot"><a href="Drasil.SSP.Unitals.html#lBase"><span class="hs-identifier hs-type">lBase</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lCoeff"><span class="hs-identifier hs-type">lCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lCoords"><span class="hs-identifier hs-type">lCoords</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lCSlip"><span class="hs-identifier hs-type">lCSlip</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lDen"><span class="hs-identifier hs-type">lDen</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lDry"><span class="hs-identifier hs-type">lDry</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lHeights"><span class="hs-identifier hs-type">lHeights</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lLeft"><span class="hs-identifier hs-type">lLeft</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lMaxEtr"><span class="hs-identifier hs-type">lMaxEtr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lMaxExt"><span class="hs-identifier hs-type">lMaxExt</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-522"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lMinEtr"><span class="hs-identifier hs-type">lMinEtr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lMinExt"><span class="hs-identifier hs-type">lMinExt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lNorm"><span class="hs-identifier hs-type">lNorm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lNormWat"><span class="hs-identifier hs-type">lNormWat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lNum"><span class="hs-identifier hs-type">lNum</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lRight"><span class="hs-identifier hs-type">lRight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lRot"><span class="hs-identifier hs-type">lRot</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSafety"><span class="hs-identifier hs-type">lSafety</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSat"><span class="hs-identifier hs-type">lSat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSlip"><span class="hs-identifier hs-type">lSlip</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-523"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSlope"><span class="hs-identifier hs-type">lSlope</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSurface"><span class="hs-identifier hs-type">lSurface</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lWatTab"><span class="hs-identifier hs-type">lWatTab</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
-</span><span id="line-524"></span><span id="lBase"><span class="annot"><span class="annottext">lBase :: Symbol
+</span><span id="line-521"></span><span class="hs-comment">-- Labels</span><span>
+</span><span id="line-522"></span><span>
+</span><span id="line-523"></span><span class="annot"><a href="Drasil.SSP.Unitals.html#lBase"><span class="hs-identifier hs-type">lBase</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lCoeff"><span class="hs-identifier hs-type">lCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lCoords"><span class="hs-identifier hs-type">lCoords</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lCSlip"><span class="hs-identifier hs-type">lCSlip</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lDen"><span class="hs-identifier hs-type">lDen</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lDry"><span class="hs-identifier hs-type">lDry</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lHeights"><span class="hs-identifier hs-type">lHeights</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lLeft"><span class="hs-identifier hs-type">lLeft</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lMaxEtr"><span class="hs-identifier hs-type">lMaxEtr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lMaxExt"><span class="hs-identifier hs-type">lMaxExt</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-524"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lMinEtr"><span class="hs-identifier hs-type">lMinEtr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lMinExt"><span class="hs-identifier hs-type">lMinExt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lNorm"><span class="hs-identifier hs-type">lNorm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lNormWat"><span class="hs-identifier hs-type">lNormWat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lNum"><span class="hs-identifier hs-type">lNum</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lRight"><span class="hs-identifier hs-type">lRight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lRot"><span class="hs-identifier hs-type">lRot</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSafety"><span class="hs-identifier hs-type">lSafety</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSat"><span class="hs-identifier hs-type">lSat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSlip"><span class="hs-identifier hs-type">lSlip</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-525"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSlope"><span class="hs-identifier hs-type">lSlope</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lSurface"><span class="hs-identifier hs-type">lSurface</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#lWatTab"><span class="hs-identifier hs-type">lWatTab</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
+</span><span id="line-526"></span><span id="lBase"><span class="annot"><span class="annottext">lBase :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lBase"><span class="hs-identifier hs-var hs-var">lBase</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;b&quot;</span></span><span>
-</span><span id="line-525"></span><span id="lCoeff"><span class="annot"><span class="annottext">lCoeff :: Symbol
+</span><span id="line-527"></span><span id="lCoeff"><span class="annot"><span class="annottext">lCoeff :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lCoeff"><span class="hs-identifier hs-var hs-var">lCoeff</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;c&quot;</span></span><span>
-</span><span id="line-526"></span><span id="lCoords"><span class="annot"><span class="annottext">lCoords :: Symbol
+</span><span id="line-528"></span><span id="lCoords"><span class="annot"><span class="annottext">lCoords :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lCoords"><span class="hs-identifier hs-var hs-var">lCoords</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;(x,y)&quot;</span></span><span>
-</span><span id="line-527"></span><span id="lCSlip"><span class="annot"><span class="annottext">lCSlip :: Symbol
+</span><span id="line-529"></span><span id="lCSlip"><span class="annot"><span class="annottext">lCSlip :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lCSlip"><span class="hs-identifier hs-var hs-var">lCSlip</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;cs&quot;</span></span><span>
-</span><span id="line-528"></span><span id="lDen"><span class="annot"><span class="annottext">lDen :: Symbol
+</span><span id="line-530"></span><span id="lDen"><span class="annot"><span class="annottext">lDen :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lDen"><span class="hs-identifier hs-var hs-var">lDen</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;den&quot;</span></span><span>
-</span><span id="line-529"></span><span id="lDry"><span class="annot"><span class="annottext">lDry :: Symbol
+</span><span id="line-531"></span><span id="lDry"><span class="annot"><span class="annottext">lDry :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lDry"><span class="hs-identifier hs-var hs-var">lDry</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dry&quot;</span></span><span>
-</span><span id="line-530"></span><span id="lHeights"><span class="annot"><span class="annottext">lHeights :: Symbol
+</span><span id="line-532"></span><span id="lHeights"><span class="annot"><span class="annottext">lHeights :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lHeights"><span class="hs-identifier hs-var hs-var">lHeights</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;z,w&quot;</span></span><span>
-</span><span id="line-531"></span><span id="lLeft"><span class="annot"><span class="annottext">lLeft :: Symbol
+</span><span id="line-533"></span><span id="lLeft"><span class="annot"><span class="annottext">lLeft :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lLeft"><span class="hs-identifier hs-var hs-var">lLeft</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;L&quot;</span></span><span>
-</span><span id="line-532"></span><span id="lMaxEtr"><span class="annot"><span class="annottext">lMaxEtr :: Symbol
+</span><span id="line-534"></span><span id="lMaxEtr"><span class="annot"><span class="annottext">lMaxEtr :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lMaxEtr"><span class="hs-identifier hs-var hs-var">lMaxEtr</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;maxEtr&quot;</span></span><span>
-</span><span id="line-533"></span><span id="lMaxExt"><span class="annot"><span class="annottext">lMaxExt :: Symbol
+</span><span id="line-535"></span><span id="lMaxExt"><span class="annot"><span class="annottext">lMaxExt :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lMaxExt"><span class="hs-identifier hs-var hs-var">lMaxExt</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;maxExt&quot;</span></span><span>
-</span><span id="line-534"></span><span id="lMinEtr"><span class="annot"><span class="annottext">lMinEtr :: Symbol
+</span><span id="line-536"></span><span id="lMinEtr"><span class="annot"><span class="annottext">lMinEtr :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lMinEtr"><span class="hs-identifier hs-var hs-var">lMinEtr</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;minEtr&quot;</span></span><span>
-</span><span id="line-535"></span><span id="lMinExt"><span class="annot"><span class="annottext">lMinExt :: Symbol
+</span><span id="line-537"></span><span id="lMinExt"><span class="annot"><span class="annottext">lMinExt :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lMinExt"><span class="hs-identifier hs-var hs-var">lMinExt</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;minExt&quot;</span></span><span>
-</span><span id="line-536"></span><span id="lNorm"><span class="annot"><span class="annottext">lNorm :: Symbol
+</span><span id="line-538"></span><span id="lNorm"><span class="annot"><span class="annottext">lNorm :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lNorm"><span class="hs-identifier hs-var hs-var">lNorm</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;G&quot;</span></span><span>
-</span><span id="line-537"></span><span id="lNormWat"><span class="annot"><span class="annottext">lNormWat :: Symbol
+</span><span id="line-539"></span><span id="lNormWat"><span class="annot"><span class="annottext">lNormWat :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lNormWat"><span class="hs-identifier hs-var hs-var">lNormWat</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;H&quot;</span></span><span>
-</span><span id="line-538"></span><span id="lNum"><span class="annot"><span class="annottext">lNum :: Symbol
+</span><span id="line-540"></span><span id="lNum"><span class="annot"><span class="annottext">lNum :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lNum"><span class="hs-identifier hs-var hs-var">lNum</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;num&quot;</span></span><span>
-</span><span id="line-539"></span><span id="lRight"><span class="annot"><span class="annottext">lRight :: Symbol
+</span><span id="line-541"></span><span id="lRight"><span class="annot"><span class="annottext">lRight :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lRight"><span class="hs-identifier hs-var hs-var">lRight</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;R&quot;</span></span><span>
-</span><span id="line-540"></span><span id="lRot"><span class="annot"><span class="annottext">lRot :: Symbol
+</span><span id="line-542"></span><span id="lRot"><span class="annot"><span class="annottext">lRot :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lRot"><span class="hs-identifier hs-var hs-var">lRot</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;rot&quot;</span></span><span>
-</span><span id="line-541"></span><span id="lSafety"><span class="annot"><span class="annottext">lSafety :: Symbol
+</span><span id="line-543"></span><span id="lSafety"><span class="annot"><span class="annottext">lSafety :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lSafety"><span class="hs-identifier hs-var hs-var">lSafety</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;S&quot;</span></span><span>
-</span><span id="line-542"></span><span id="lSat"><span class="annot"><span class="annottext">lSat :: Symbol
+</span><span id="line-544"></span><span id="lSat"><span class="annot"><span class="annottext">lSat :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lSat"><span class="hs-identifier hs-var hs-var">lSat</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;sat&quot;</span></span><span>
-</span><span id="line-543"></span><span id="lSlip"><span class="annot"><span class="annottext">lSlip :: Symbol
+</span><span id="line-545"></span><span id="lSlip"><span class="annot"><span class="annottext">lSlip :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lSlip"><span class="hs-identifier hs-var hs-var">lSlip</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;slip&quot;</span></span><span>
-</span><span id="line-544"></span><span id="lSlope"><span class="annot"><span class="annottext">lSlope :: Symbol
+</span><span id="line-546"></span><span id="lSlope"><span class="annot"><span class="annottext">lSlope :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lSlope"><span class="hs-identifier hs-var hs-var">lSlope</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;slope&quot;</span></span><span>
-</span><span id="line-545"></span><span id="lSurface"><span class="annot"><span class="annottext">lSurface :: Symbol
+</span><span id="line-547"></span><span id="lSurface"><span class="annot"><span class="annottext">lSurface :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lSurface"><span class="hs-identifier hs-var hs-var">lSurface</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;g&quot;</span></span><span>
-</span><span id="line-546"></span><span id="lWatTab"><span class="annot"><span class="annottext">lWatTab :: Symbol
+</span><span id="line-548"></span><span id="lWatTab"><span class="annot"><span class="annottext">lWatTab :: Symbol
 </span><a href="Drasil.SSP.Unitals.html#lWatTab"><span class="hs-identifier hs-var hs-var">lWatTab</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;wt&quot;</span></span><span>
-</span><span id="line-547"></span></pre></body></html>
+</span><span id="line-549"></span></pre></body></html>

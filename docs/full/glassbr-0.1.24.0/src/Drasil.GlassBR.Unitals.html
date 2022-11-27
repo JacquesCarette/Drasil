@@ -1144,7 +1144,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#glTyFac"><span class="hs-identifier hs-var">glTyFac</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;GTF&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span class="hs-identifier hs-var">Integer</span></span><span>
 </span><span id="line-246"></span><span>
 </span><span id="line-247"></span><span id="isSafePb"><span class="annot"><span class="annottext">isSafePb :: QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#isSafePb"><span class="hs-identifier hs-var hs-var">isSafePb</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
@@ -1179,14 +1179,22 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#interpY"><span class="hs-identifier hs-var hs-var">interpY</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;interpY&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;interpY&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
-</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;interpY&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;interpY&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Space] -&gt; Space -&gt; Space
+</span><span class="hs-identifier hs-var">mkFunction</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">String</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span>
 </span><span id="line-257"></span><span id="interpZ"><span class="annot"><span class="annottext">interpZ :: QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#interpZ"><span class="hs-identifier hs-var hs-var">interpZ</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;interpZ&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;interpZ&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
-</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;interpZ&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;interpZ&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Space] -&gt; Space -&gt; Space
+</span><span class="hs-identifier hs-var">mkFunction</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">String</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span>
 </span><span id="line-258"></span><span>
 </span><span id="line-259"></span><span>
 </span><span id="line-260"></span><span id="lDurFac"><span class="annot"><span class="annottext">lDurFac :: QuantityDict

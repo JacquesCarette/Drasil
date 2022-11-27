@@ -42,6 +42,22 @@ Less operationally important, there is current discussion of renaming
 discussion of abstraction, unlike ``model,'' which is typically instantiated to
 some ``theory.''
 
+\section{Expressions}
+\label{chap:futureWork:sec:expressions}
+
+In \Cref{chap:typed-expr}, we had built a type-checker for the expression
+language, \Expr{}, and while our type errors had been sufficient for us to track
+down significant errors with relative ease, they are suboptimal. For example,
+the current type-error messages shown do not show a ``breadcrumbs''-like path to
+the root problematic area(s) of an expression. Furthermore, we only added typing
+to \Expr{} but not to our other related languages, \CodeExpr{}, \ModelExpr{},
+and \acs{gool}. In the near future, we hope to add optional typing for
+\ModelExpr{}\footnote{it is at times helpful to have malformed expressions for
+purely demonstrative purposes}, and split up the \Space{} type to accommodate
+the 3 variants. Finally, after having added type information to \CodeExpr{}, we
+may begin to also add type rules to \acs{gool}, to finally assure that
+expression generation will only create well-typed expressions.
+
 \section{Chunks}
 \label{chap:futureWork:sec:chunks}
 
@@ -71,6 +87,18 @@ chunks in our new \ChunkDB{}s. In doing this, we will be able to perform a wider
 range of analysis on our necessary ``knowledge'' (chunks). For example, we
 should be able to better understand how much mental effort is needed to produce
 software artifacts.
+
+Addititionally, in
+\Cref{chap:typed-expr:sec:typing-the-expression-language:subsec:implementation},
+we implemented type-checking for our basic mathematical expression language
+(\Expr{}), but we added it at the \textit{database level}, checking each chunk
+registered. We can abstract over what we did and make type-checking a variant of
+what we really did: validated properties about a chunk. Thus, we can extend the
+implementation for type-checking at the level of the \ChunkDB{} and have
+specialized validation, creating constraints that each chunk type require of
+their chunks that we validate before entering any chunk into the chunk database.
+By doing this, we will be able to categorize our chunk assertions and learn more
+about what was embedded in the Haskell source code.
 
 \subsection{Math-specific Instances}
 \label{chap:futureWork:sec:chunks:sub:mathSpecific}

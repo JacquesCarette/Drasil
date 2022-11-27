@@ -227,13 +227,13 @@ intNormForce = makeUCWDS "G_i" (cn "interslice normal forces")
    S "exerted between each pair of adjacent slices")
   (vec cG) forcePerMeterU
 
-slipHght = uc' "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip surface")
+slipHght = ucs "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip surface")
   "heights of the slip surface"
-  (sub (vec lY) lSlip) metre
+  (sub (vec lY) lSlip) (Vect Real) metre
 
-slipDist = makeUCWDS "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the slip surface")
+slipDist = ucsWS "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the slip surface")
   (plural xCoord `S.of_` S "points on the slip surface")
-  (sub (vec lX) lSlip) metre
+  (sub (vec lX) lSlip) (Vect Real) metre
 
 xi     = makeUCWDS "x_i" (nounPhraseSent $ phrase xCoord)
   (phraseNP (NP.the (xCoord `inThe` cartesian))) lX metre
@@ -324,21 +324,21 @@ surfLoad = makeUCWDS "Q_i" (cn "external forces")
    S "acting into the surface from the midpoint of each slice")
   (vec cQ) forcePerMeterU
 
-baseAngle = uc' "alpha_i" (cn "base angles")
+baseAngle = ucs "alpha_i" (cn "base angles")
   "the angles between the base of each slice and the horizontal"
-  (vec lAlpha) degree
+  (vec lAlpha) (Vect Real) degree
 
-surfAngle = uc' "beta_i" (cn "surface angles")
+surfAngle = ucs "beta_i" (cn "surface angles")
   "the angles between the surface of each slice and the horizontal"
-  (vec lBeta) degree
+  (vec lBeta) (Vect Real) degree
 
-impLoadAngle = uc' "omega_i" (cn "imposed load angles")
+impLoadAngle = ucs "omega_i" (cn "imposed load angles")
   "the angles between the external force acting into the surface of each slice and the vertical"
-  (vec lOmega) degree
+  (vec lOmega) (Vect Real) degree
 
-baseWthX = makeUCWDS "b_i" (cn "base width of slices")
+baseWthX = ucsWS "b_i" (cn "base width of slices")
   (S "the width of each slice" `S.inThe` phrase xDir)
-  (vec lB) metre
+  (vec lB) (Vect Real) metre
 
 baseLngth = uc' "l_b,i" (cn "total base lengths of slices") 
   "the lengths of each slice in the direction parallel to the slope of the base"

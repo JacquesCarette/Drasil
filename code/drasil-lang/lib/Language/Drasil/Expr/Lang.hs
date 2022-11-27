@@ -337,7 +337,7 @@ instance Typed Expr Space where
     (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
       then Left lt
       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
-    (Left lt         , _      ) -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+    (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
     (_               , Right e) -> Right e
     (Right e         , _      ) -> Right e
 

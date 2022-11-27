@@ -25,7 +25,7 @@ class InputParameters {
         double SD_z;
         double h;
         double LDF;
-        double GTF;
+        int GTF;
         double SD;
         double AR;
         double w_TNT;

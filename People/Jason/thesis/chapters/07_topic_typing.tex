@@ -264,17 +264,38 @@ So as long as we follow these typing rules while we build our expressions, when
 we try to evaluate any of these expressions, we should not arrive at invalid
 expressions where evaluation cannot be completed. In other words, so as long as
 expressions conform to these typing rules, the language is type-safe:
-preservation and progress hold.
+preservation and progress hold. As such, we would like to build a similar system
+for \Expr{}\footnote{To begin, we will have \Expr{} typed as that is the main
+entry for user-error, but we will eventually also add typing to the other
+expression languages in Drasil.}.
 
-Now, we'd like to build a similar system for \Expr{}. However, one of the issues
-with the traditional declaration-style is that expressions made without explicit
-type annotations might have ambiguous types should we try to infer one
+Initially, when we sought to implement a type system for \Expr{}, we tried to
+piggyback on Haskells type system using type parameters in \Expr{}, \acsp{gadt},
+and \acs{ttf}. We were hopeful that we would be able to defer manually checking
+our desired type rules to the type signatures of expressions, having \acs{ghc}
+provide users with elegant error messages and feedback about typing issues.
+While we had success with typing \Expr{}, the implementation didn't fit in well
+with the rest of Drasil. Adding it relied on us adding type parameters to
+\QuantityDict{}s, having users manually type in the type in the types of
+variables in the declarations of quantities. It also required us to use the
+``data kinds'' Haskell extension \cite{GHC2020DataKinds} leading to difficulties
+with handling and flexibility of types. Additionally, we weren't able to
+adequately analyze and work with the types of expressions as we needed. For
+example, in cases where Drasil allows users to map theoretical data types (such
+as reals, integers, naturals, etc.) to concrete ``code'' data types (such as
+int, double, float, etc.), it ended up needing us to drop type information.
+Thus, we decided rolling our own type system, manually checking expressions as
+we needed.
+
+Now the question arises: how should we build it? One of the issues with the
+traditional declaration-style is that expressions made without explicit type
+annotations might have ambiguous types should we try to infer one
 \cite{nlab:bidirectional_typechecking}. While we don't have expect any of these
 scenarios to occur with \Expr{}, we might if we also added type-checking to
 \ModelExpr{}, where we would like to have higher-order functions and function
-abstractions. Thus, we prefer to build the typing rules with a modern,
-future-proof scheme that will scale against our
-expectations\cite{CaretteDiscussion2022}: \textit{bidirectional type-checking}.
+abstractions. Thus, we decided to build the type-checker with a modern,
+future-proof scheme that will scale against our expected
+needs\cite{CaretteDiscussion2022}: with \textit{bidirectional type-checking}.
 
 \subsection{Bidirectional Type Rules}
 \label{chap:typed-expr:sec:type-safe-expressions:subsec:bidirectional-type-rules}
@@ -304,8 +325,8 @@ With our goal in mind and our tools in hand, we need to capture two things about
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-universe}
 
 Thankfully, there already exists an unused type universe, \Space{}
-(\refOriginalSpaceHaskell{}), in Drasil that we can work with and start using as
-intended.
+(\refOriginalSpaceHaskell{}), in Drasil that we can model our type universe
+after and potentially start using as intended.
 
 \begin{longtable}{ r c c l}
       \(\texttt{Space}(s)\) & ::=       & \(\bb{Z}\)                                                  & Integers   \\
@@ -322,9 +343,14 @@ intended.
 
 \subsection{Type Rules}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-rules}
-
 \newcommand{\isNum}[1]{\mathit{isNum}(#1)}
-Let \(\isNum{s} = s \in \set{\bb{Z}, \bb{Q}, \bb{R}, \bb{N}}\).
+
+We will base our typing rules on the existing \Expr{} language syntax, and focus
+on enriching it, not extending it for extra syntax. By applying these typing
+rules, we will catch any existing typing issues in the case studies. 
+
+Let \(\isNum{s} = s \in \set{\bb{Z}, \bb{Q}, \bb{R}, \bb{N}}\). The following
+rules explain our bidirectional type-checker's rules.
 
 \newcommand{\newTypeRule}[4]{%
 \begin{equation}%
@@ -652,8 +678,12 @@ Let \(\isNum{s} = s \in \set{\bb{Z}, \bb{Q}, \bb{R}, \bb{N}}\).
       {\Gamma \vdash x \in (b, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in (b, t] \Rightarrow \bb{B} \\\\%
       \Gamma \vdash x \in [b, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in [b, t] \Rightarrow \bb{B}}
 
+
+Notably, the ``check'' rule is purely based on type inference because \Expr{} is
+a relatively straight-forward language, for which we can reasonably infer the
+type of any expression. However, for \ModelExpr{}, this will not be the case.
 Finally, after having built our type universe and typing rules, we may implement
-the bidirectional type checking and inferencing in Drasil.
+bidirectional type checking and inferencing for \Expr{} in Drasil.
 
 \subsection{Implementation}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:implementation}

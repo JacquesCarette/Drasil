@@ -1,13 +1,14 @@
-\begin{haskell}{``MultiDefinitions'' (MultiDefn) Definition}{curMultiDefn}{https://github.com/JacquesCarette/Drasil/blob/dc3674274edb00b1ae0d63e04ba03729e1dbc6f9/code/drasil-theory/lib/Theory/Drasil/MultiDefn.hs\#L35-L43}
--- | 'MultiDefn's are QDefinition factories, used for showing one or more ways we
---   can define a QDefinition.
-data MultiDefn e = MultiDefn {
-    _rUid  :: UID,                         -- ^ UID
-    _qd    :: QuantityDict,                -- ^ Underlying quantity it defines
-    _rDesc :: Sentence,                    -- ^ Defining description/statement
-    _rvs   :: NE.NonEmpty (DefiningExpr e) -- ^ All possible/omitted ways we can define the related quantity
-           -- TODO: Why is this above constraint redundant according to the smart constructors?
+\begin{haskell}{``MultiDefinitions'' (MultiDefn) Definition}{curMultiDefn}{https://github.com/JacquesCarette/Drasil/blob/051b9881a6417e51e818c6673c5eab0f48bd5af2/code/drasil-theory/lib/Theory/Drasil/MultiDefn.hs\#L45-L56}
+-- | 'MultiDefn's are QDefinition factories, used for showing one or more ways
+--   we can define a QDefinition.
+data MultiDefn e = MultiDefn{
+  -- | UID
+  _rUid :: UID,
+  -- | Underlying quantity it defines.
+  _qd :: QuantityDict,
+  -- | Explanation of the different ways we can define a quantity.
+  _rDesc :: Sentence,
+  -- | All possible ways we can define the related quantity.
+  _rvs :: NE.NonEmpty (DefiningExpr e)
 }
 \end{haskell}
-
-\intodo{The last TODO note in this MultiDefn code snippet is wrong!}

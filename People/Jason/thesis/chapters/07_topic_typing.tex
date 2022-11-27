@@ -23,12 +23,12 @@ Drasils standard mathematical language (\Expr{}) remains untyped, and, thus
 Drasil does not detect malformed expressions, allowing users to make errors that
 affect both the problem descriptions in the \acs{srs} and the usability of
 generated software. In this chapter, we will focus on improving well-formedness
-for the most important context: grounded theories used for code generation.
+for the most important context: concrete theories used for code generation.
 
 \section{Expressions, Instance Models, and Data Definitions}
 \label{chap:typed-expr:sec:expressions-instance-models-and-data-definitions}
 
-To generate code, Drasil's code generator relies on a series of grounded
+To generate code, Drasil's code generator relies on a series of concrete
 theories as part of it's input. There are two kinds of theories that the code
 generator uses from the abstracted \acs{srs} template: instance models and data
 definitions. Data definitions are, as the name suggests, concrete symbol
@@ -102,9 +102,6 @@ In order to make \Expr{} type-safe, we must build a type system for it so that
 we can obtain information about which \Expr{} terms are coherent/valid or not. A
 system of typing rules that dictate what well-formed expressions will allow us
 to determine which expressions are well-typed.
-
-\imptodo{Since Drasil is deeply embedded in Haskell, we were initially tempted
-      to use a \acs{gadt} and typed \acs{ttf}, but...}
 
 \subsection{Example: A \textquotedblleft{}Simple\textquotedblright{} Language}
 \label{chap:typed-expr:sec:type-safe-expressions:subsec:example-a-simple-language}

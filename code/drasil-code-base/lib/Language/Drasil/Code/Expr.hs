@@ -8,8 +8,6 @@ import Prelude hiding (sqrt)
 import Control.Lens
 import Language.Drasil.Expr.Development (Completeness(Complete, Incomplete))
 
-import Utils.Drasil (toColumn)
-
 -- * Operators (mostly binary)
 
 -- | Arithmetic operators (fractional, power, and subtraction).
@@ -306,37 +304,9 @@ instance ExprC CodeExpr where
   
   matrix = Matrix
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 a b c d = matrix [[a,b],[c,d]]
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = matrix [[a],[b]]
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (int 0) (int 0)
-  
-  -- | Create a row vector
-  rowVec a = matrix [a] 
-
-  -- | Create a column vector
-  columnVec a = matrix $ toColumn a
-
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps []
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f [] [] = sy f
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
   
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.

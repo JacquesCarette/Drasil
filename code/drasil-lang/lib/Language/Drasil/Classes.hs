@@ -136,6 +136,6 @@ class DefiningExpr c where
   --         It just needs to be _something_, and it would have approximately have same meaning.
   defnExpr :: Lens' (c e) e
 
--- TODO: This doesn't look like it's used yet.
+-- TODO: This should be moved to `drasil-code-base`.
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

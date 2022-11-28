@@ -53,7 +53,8 @@ typeCheckByInfer cxt e t = either
     Right
     (infer cxt e)
 
-{- FIXME: temporary hacks, pending removal when TypeError is upgraded -}
+{- FIXME: temporary hacks below (they're aware of the "printing" code!), pending
+          replacement when TypeError is upgraded -}
 
 allOfType :: Typed e t => TypingContext t -> [e] -> t -> t -> TypeError -> Either t TypeError
 allOfType cxt es expect ret s

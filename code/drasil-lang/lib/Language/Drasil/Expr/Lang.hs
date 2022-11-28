@@ -99,13 +99,8 @@ data Expr where
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C        :: UID -> Expr
-  -- | A function call accepts a list of parameters and a list of named parameters.
-  --   For example
-  --
-  --   * F(x) is (FCall F [x] []).
-  --   * F(x,y) would be (FCall F [x,y]).
-  --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
-  FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+  -- | Function applications.
+  FCall    :: UID -> [Expr] -> Expr
   -- | For multi-case expressions, each pair represents one case.
   Case     :: Completeness -> [(Expr, Relation)] -> Expr
   -- | Represents a matrix of expressions.
@@ -148,7 +143,7 @@ instance Eq Expr where
   AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
   AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
   C a                 == C b                 =   a == b
-  FCall a b c         == FCall d e f         =   a == d && b == e && c == f
+  FCall a b           == FCall c d           =   a == c && b == d
   Case a b            == Case c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
@@ -221,16 +216,14 @@ instance Typed Expr Space where
 
   infer cxt (C uid) = inferFromContext cxt uid
 
-  -- FIXME: It seems odd having named arguments here. Should we remove it? For
-  -- now, I'm not type checking them.
-  infer cxt (FCall uid exs _) = case (inferFromContext cxt uid, map (infer cxt) exs) of
+  infer cxt (FCall uid exs) = case (inferFromContext cxt uid, map (infer cxt) exs) of
     (Left (S.Function params out), exst) -> if NE.toList params == lefts exst
       then Left out
       else Right $ "Function `" ++ show uid ++ "` expects parameters of types: " ++ show params ++ ", but received: " ++ show (lefts exst) ++ "."
     (Left s, _) -> Right $ "Function application on non-function `" ++ show uid ++ "` (" ++ show s ++ ")."
     (Right x, _) -> Right x
 
-  infer cxt (Case _ ers) -- = _ -- all (\(e, r) -> infer cxt e) ers
+  infer cxt (Case _ ers)
     | null ers = Right "Case contains no expressions, no type to infer."
     | all (\(ne, _) -> infer cxt ne == eT) (tail ers) = eT
     | otherwise = Right "Expressions in case statement contain different types."
@@ -273,28 +266,25 @@ instance Typed Expr Space where
     Left sp        -> Right $ "¬ on non-boolean operand, " ++ show sp ++ "."
     x              -> x
 
-  -- TODO: What about "Vect Vect ... Vect X"?
   infer cxt (UnaryOpVV NegV e) = case infer cxt e of
     Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
       then Left $ S.Vect sp
       else Right $ "Vector negation only applies to, non-natural, numbered vectors. Received `" ++ show sp ++ "`."
     Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
-    Right ex -> Right ex
+    x -> x
 
   infer cxt (UnaryOpVN Norm e) = case infer cxt e of
-    Left (S.Vect sp) -> if sp == S.Real
-      then Left S.Real
-      else Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
+    Left (S.Vect S.Real) -> Left S.Real
     Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
-    ex -> ex
+    x -> x
 
   infer cxt (UnaryOpVN Dim e) = case infer cxt e of
     Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
-    Left sp         -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
-    ex              -> ex
+    Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
+    x -> x
 
   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt -- FIXME: What do we want here?
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Left lt
       else Right $ "Fractions/divisions should only be applied to the same numeric typed operands. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
     (_      , Right e) -> Right e
@@ -344,9 +334,9 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (VVVBinaryOp Cross l r) = case (infer cxt l, infer cxt r) of
-    (Left lTy, Left rTy) -> if lTy == rTy
+    (Left lTy, Left rTy) -> if lTy == rTy && S.isBasicNumSpace lTy && lTy /= S.Natural
       then Left lTy
-      else Right $ "Vector cross product expects both operands to have the same time. Received `" ++ show lTy ++ "` X `" ++ show rTy ++ "`."
+      else Right $ "Vector cross product expects both operands to be vectors of non-natural numbers. Received `" ++ show lTy ++ "` X `" ++ show rTy ++ "`."
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
 

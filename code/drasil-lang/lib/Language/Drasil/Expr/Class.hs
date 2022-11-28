@@ -20,7 +20,7 @@ import qualified Language.Drasil.ModelExpr.Lang as M
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.UID (HasUID(..))
 
--- TODO: figure out which ones can be moved outside of the ExprC class
+import Utils.Drasil (toColumn)
 
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
@@ -202,12 +202,6 @@ class ExprC r where
   -- | Create a column vector
   columnVec :: [r] -> r
 
-  -- FIXME: This doesn't look like it needs to be here.
-  -- | Change row vector to column vector
-  toColumn ::  [r] -> [[r]]
-
-  -- Some helper functions to do function application
-  
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
   
@@ -401,10 +395,6 @@ instance ExprC Expr where
 
   -- | Create a column vector
   columnVec a = matrix $ toColumn a
-
-  -- | Change row vector to column vector
-  toColumn [] = []
-  toColumn (x:xs) = [x]:toColumn xs
 
   -- Some helper functions to do function application
   
@@ -603,10 +593,6 @@ instance ExprC M.ModelExpr where
 
   -- | Create a column vector
   columnVec a = matrix $ toColumn a
-
-  -- | Change row vector to column vector
-  toColumn [] = []
-  toColumn (x:xs) = [x]:toColumn xs
 
   -- Some helper functions to do function application
 

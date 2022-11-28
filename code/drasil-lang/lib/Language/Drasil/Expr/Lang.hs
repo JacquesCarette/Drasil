@@ -286,7 +286,7 @@ instance Typed Expr Space where
     ex              -> ex
 
   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt -- FIXME: What do we want here?
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Left lt
       else Right $ "Fractions/divisions should only be applied to the same numeric typed operands. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
     (_      , Right e) -> Right e

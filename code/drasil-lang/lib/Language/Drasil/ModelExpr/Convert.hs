@@ -2,7 +2,7 @@
 -- | Defines functions to convert from the base expression language to 'ModelExpr's.
 module Language.Drasil.ModelExpr.Convert where
 
-import Data.Bifunctor (bimap, second)
+import Data.Bifunctor (bimap)
 
 import Language.Drasil.Space
     (RealInterval(..), DiscreteDomainDesc, DomainDesc(BoundedDD))
@@ -75,31 +75,31 @@ vvnBinOp :: E.VVNBinOp -> VVNBinOp
 vvnBinOp E.Dot = Dot
 
 expr :: E.Expr -> ModelExpr
-expr (E.Lit a) = Lit a
-expr (E.AssocA ao es) = AssocA (assocArithOper ao) $ map expr es
-expr (E.AssocB bo es) = AssocB (assocBoolOper bo) $ map expr es
-expr (E.C u) = C u
-expr (E.FCall u es nes) = FCall u (map expr es) (map (second expr) nes)
-expr (E.Case c ces) = Case c (map (bimap expr expr) ces)
-expr (E.Matrix es) = Matrix $ map (map expr) es
-expr (E.UnaryOp u e) = UnaryOp (uFunc u) (expr e)
-expr (E.UnaryOpB u e) = UnaryOpB (uFuncB u) (expr e)
-expr (E.UnaryOpVV u e) = UnaryOpVV (uFuncVV u) (expr e)
-expr (E.UnaryOpVN u e) = UnaryOpVN (uFuncVN u) (expr e)
+expr (E.Lit a)               = Lit a
+expr (E.AssocA ao es)        = AssocA (assocArithOper ao) $ map expr es
+expr (E.AssocB bo es)        = AssocB (assocBoolOper bo) $ map expr es
+expr (E.C u)                 = C u
+expr (E.FCall u es)          = FCall u (map expr es)
+expr (E.Case c ces)          = Case c (map (bimap expr expr) ces)
+expr (E.Matrix es)           = Matrix $ map (map expr) es
+expr (E.UnaryOp u e)         = UnaryOp (uFunc u) (expr e)
+expr (E.UnaryOpB u e)        = UnaryOpB (uFuncB u) (expr e)
+expr (E.UnaryOpVV u e)       = UnaryOpVV (uFuncVV u) (expr e)
+expr (E.UnaryOpVN u e)       = UnaryOpVN (uFuncVN u) (expr e)
 expr (E.ArithBinaryOp a l r) = ArithBinaryOp (arithBinOp a) (expr l) (expr r)
-expr (E.BoolBinaryOp b l r) = BoolBinaryOp (boolBinOp b) (expr l) (expr r)
-expr (E.EqBinaryOp e l r) = EqBinaryOp (eqBinOp e) (expr l) (expr r)
-expr (E.LABinaryOp la l r) = LABinaryOp (laBinOp la) (expr l) (expr r)
-expr (E.OrdBinaryOp o l r) = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
-expr (E.VVVBinaryOp v l r) = VVVBinaryOp (vvvBinOp v) (expr l) (expr r)
-expr (E.VVNBinaryOp v l r) = VVNBinaryOp (vvnBinOp v) (expr l) (expr r)
-expr (E.Operator ao dd e) = Operator (assocArithOper ao) (domainDesc dd) (expr e)
-expr (E.RealI u ri) = RealI u (realInterval ri)
+expr (E.BoolBinaryOp b l r)  = BoolBinaryOp (boolBinOp b) (expr l) (expr r)
+expr (E.EqBinaryOp e l r)    = EqBinaryOp (eqBinOp e) (expr l) (expr r)
+expr (E.LABinaryOp la l r)   = LABinaryOp (laBinOp la) (expr l) (expr r)
+expr (E.OrdBinaryOp o l r)   = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
+expr (E.VVVBinaryOp v l r)   = VVVBinaryOp (vvvBinOp v) (expr l) (expr r)
+expr (E.VVNBinaryOp v l r)   = VVNBinaryOp (vvnBinOp v) (expr l) (expr r)
+expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)
+expr (E.RealI u ri)          = RealI u (realInterval ri)
 
 realInterval :: RealInterval E.Expr E.Expr -> RealInterval ModelExpr ModelExpr
 realInterval (Bounded (li, l) (ri, r)) = Bounded (li, expr l) (ri, expr r)
-realInterval (UpTo (i, e)) = UpTo (i, expr e)
-realInterval (UpFrom (i, e)) = UpFrom (i, expr e)
+realInterval (UpTo (i, e))             = UpTo (i, expr e)
+realInterval (UpFrom (i, e))           = UpFrom (i, expr e)
 
 domainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc ModelExpr ModelExpr
 domainDesc (BoundedDD s rt l r) = BoundedDD s rt (expr l) (expr r)

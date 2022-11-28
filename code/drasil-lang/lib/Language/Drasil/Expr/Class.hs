@@ -15,7 +15,6 @@ import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
-import Language.Drasil.Classes (IsArgumentName)
 import qualified Language.Drasil.ModelExpr.Lang as M
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.UID (HasUID(..))
@@ -204,11 +203,7 @@ class ExprC r where
 
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 
-    -> [r] -> [(a, r)] -> r
-  
+   
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
@@ -400,12 +395,7 @@ instance ExprC Expr where
   
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
-  apply f ps = FCall (f ^. uid) ps []
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f [] [] = sy f
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
+  apply f ps = FCall (f ^. uid) ps
   
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
@@ -598,12 +588,7 @@ instance ExprC M.ModelExpr where
 
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
-  apply f ps = M.FCall (f ^. uid) ps []
-
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f [] [] = sy f
-  applyWithNamedArgs f ps ns = M.FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
+  apply f ps = M.FCall (f ^. uid) ps
 
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.

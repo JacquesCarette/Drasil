@@ -333,11 +333,6 @@ instance ExprC CodeExpr where
   apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps []
   
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f [] [] = sy f
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
-  
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C (x ^. uid)

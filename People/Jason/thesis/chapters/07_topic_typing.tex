@@ -835,16 +835,18 @@ typeCheckSI
     putStrLn "[ Finished type checking ]"
 \end{pseudohaskell}
 
-By using this function anywhere before our code generation step, we will be able
-to type-check all of our instance models and data definitions exposed relations
-and expressions. As of writing, we found enough such that it's best to keep
-type-checking done en masse, as it is right now, and without causing a compiler
-panic for our case studies (because it has already uncovered many typing issues
-in the expressions both used and intended to be used in code generation).
-Notably, by adding type-checking to Drasil, we also bring into question the
-coherence of our \acs{srs} documents. By forcing the \acs{srs} abstraction to
-provide sufficiently coherent information to generate code, we also have an
-equal assurance that the \acs{srs} is sufficiently coherent for developers to
+By using this function anywhere, before our code generation step, we are able to
+type-check all relations and expressions relevant to code generation. As of
+writing, we found enough such that it's best to keep type-checking done en
+masse, as it is right now, because it has already uncovered many typing issues.
+Interestingly, we also found that we had used temporary operations when we meant
+other things (e.g., using absolute value in place where we intended to use
+vector norm). We may enable a compiler panic for our case studies later, once
+we've cleared through the majority of the existing found type errors. Notably,
+by adding type-checking to Drasil, we also bring into question the coherence of
+our \acs{srs} documents. By forcing the \acs{srs} abstraction to provide
+sufficiently coherent information to generate code, we also have an equal
+assurance that the \acs{srs} is sufficiently \emph{coherent} for developers to
 manually build similar software artifacts.
 
 To sum up, at this point, we have:

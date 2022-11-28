@@ -101,17 +101,18 @@ may split the mathematical language accordingly, re-building the languages for
 each context. We end up with 3 languages, as shown in \refLanguageDivision{}:
 \Expr{} (\refCurrentExprHaskell{}), \ModelExpr{}
 (\refCurrentModelExprHaskell{}), and \CodeExpr{} (\refCurrentCodeExprHaskell{}).
-\Expr{} has its indefinite values split off into \ModelExpr{}
-(\refCurrentModelExprHaskell{})\todo{List notable terms moved, Deriv, Continuous
-vs Discrete ranges, Space, etc}, a deeply embedded universal mathematical
-language. As we desire for it to be equally usable as the \Expr{} used in
-instance models, it is essentially the original \Expr{} without the language
-terms related to code nor indefinite valued terms. \ModelExpr{} is approximately
-the ``old'' \Expr{} with nearly everything from the original \Expr{}, except
-without code-oriented terms (as they should not be discussed in the \acs{srs}
-documents at all!). Additionally, now, \ModelExpr{} becomes the preferred
-mathematical language for \acs{srs} documents. Finally, code-related terms are
-moved to a clone of the new \Expr{} language.
+\Expr{} has its indefinite valued terms split off into \ModelExpr{}
+(\refCurrentModelExprHaskell{})\footnote{Including, but not limited to,
+derivatives, integrals, quantification, types as values, definitions (e.g.,
+\(::=\)), and continuous ranges for summations and products.}, a deeply embedded
+universal mathematical language. As we desire for it to be equally usable as the
+\Expr{} used in instance models, it is essentially the original \Expr{} without
+the language terms related to code nor indefinite valued terms. \ModelExpr{} is
+approximately the ``old'' \Expr{} with nearly everything from the original
+\Expr{}, except without code-oriented terms (as they should not be discussed in
+the \acs{srs} documents at all!). Additionally, now, \ModelExpr{} becomes the
+preferred mathematical language for \acs{srs} documents. Finally, code-related
+terms are moved to a clone of the new \Expr{} language.
 
 Now, we have 3 \acsp{gadt} available for different kinds of expression
 languages, with ``mathematics'' as a common tie. One issue with splitting is

@@ -30,7 +30,7 @@ generation.
 \label{chap:typed-expr:sec:expressions-instance-models-and-data-definitions}
 
 To generate code, Drasil's code generator relies on a series of concrete
-theories as part of it's input. There are two kinds of theories that the code
+theories as part of its input. There are two kinds of theories that the code
 generator uses from the abstracted \acs{srs} template: instance models and data
 definitions. Data definitions are, as the name suggests, concrete symbol
 definitions using expressions (similar to the \EquationalModel{} \ModelKind{}
@@ -64,7 +64,7 @@ algorithm that doesn't exactly make sense, and (b) a generated software source
 code that does what we wanted it to do
 (\refPseudoExampleLandPosQDBadTypingJavaCode{}), but which isn't actually
 compilable software (\refPseudoExampleLandPosQDBadTypingJavaCodeCompErr{}).
-Despite the examples simplicity, assuming it was derived from other theories
+Despite the example's simplicity, assuming it was derived from other theories
 that somehow went awry, then we should have caught the type error before we
 generated code.
 
@@ -280,17 +280,14 @@ with the rest of Drasil. Adding it relied on us adding type parameters to
 variables in the declarations of quantities. It also required us to use the
 ``data kinds'' Haskell extension \cite{GHC2020DataKinds} leading to difficulties
 with handling and flexibility of types. Additionally, we weren't able to
-adequately analyze and work with the types of expressions as we needed. For
-example, in cases where Drasil allows users to map theoretical data types (such
-as reals, integers, naturals, etc.) to concrete ``code'' data types (such as
-int, double, float, etc.), it ended up needing us to drop type information.
-Thus, we decided rolling our own type system, manually checking expressions as
-we needed.
+adequately analyze and work with the types of expressions as we needed. Thus, we
+decided rolling our own type system would be beneficial, and that we would
+manually check expressions as we needed.
 
 Now the question arises: how should we build it? One of the issues with the
 traditional declaration-style is that expressions made without explicit type
 annotations might have ambiguous types should we try to infer one
-\cite{nlab:bidirectional_typechecking}. While we don't have expect any of these
+\cite{nlab:bidirectional_typechecking}. While we don't expect any of these
 scenarios to occur with \Expr{}, we might if we also added type-checking to
 \ModelExpr{}, where we would like to have higher-order functions and function
 abstractions. Thus, we decided to build the type-checker with a modern,
@@ -779,14 +776,15 @@ relation to be type-checked: that a specific \QDefinition{} is well-formed.
 Interestingly, by instantiating this typeclass for \InstanceModel{}s, we
 potentially expose more than one expression, depending on the \ModelKind{}
 variant. Recall from \Cref{chap:modelkinds} that any of our theories (including
-\InstanceModel{}s) may take on any of our theory kinds (\ModelKinds{}). For the
-complicated theories that might stack have a stack of expressions (such as
-equational realms,
-\Cref{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms}),
-we are able to type-check them all, individually. For other theories, such as
-the new \acs{ode} model variant, \NewDEModel{} (\DifferentialModel{}), we may
-also have a solution system of equations \cite{Chen2022MEng} that need to be
-type-checked. Moving on, we may finally plug in our type-checker!
+\InstanceModel{}s) may take on any of our theory kinds (\ModelKinds{}), and that
+some of them may work with and expose expressions (such as equational realms,
+\Cref{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms})
+in various ways for use. Thus, we allow them to expose the expressions and
+relations individually, and we will type-check them similarly. For other
+theories, such as the new \acs{ode} model variant, \NewDEModel{}
+(\DifferentialModel{}), we may also have a solution system of equations
+\cite{Chen2022MEng} that need to be type-checked. Moving on, we may finally plug
+in our type-checker!
 
 \begin{pseudohaskell}{Type-checking a System}{pseudoTypeCheckingASystem}
 typeCheckSI :: SystemInformation -> IO ()
@@ -835,7 +833,7 @@ typeCheckSI
     putStrLn "[ Finished type checking ]"
 \end{pseudohaskell}
 
-By using this function anywhere, before our code generation step, we are able to
+By using this function anywhere before our code generation step, we are able to
 type-check all relations and expressions relevant to code generation. As of
 writing, we found enough such that it's best to keep type-checking done en
 masse, as it is right now, because it has already uncovered many typing issues.
@@ -852,8 +850,10 @@ manually build similar software artifacts.
 To sum up, at this point, we have:
 
 \begin{itemize}
-      \item type-checking, bidirectionally, allowed the expression level with
-            respect to any designated type-system,
+      \item bidirectional type-checking done for our concrete mathematical
+            langauge with respect to a specific type universe, but creating a
+            reusable interface to create similar type-checkers for other
+            languages with respect to any type universe,
       \item type-checking performed after all chunks are gathered and registered
             in memory, and
       \item we've found several existing typing issues in the current case

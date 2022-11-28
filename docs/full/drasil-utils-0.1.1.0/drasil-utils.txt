@@ -63,6 +63,9 @@ foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
 --   for empty list.
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 
+-- | Convert "row" of elements into "column" of elements.
+toColumn :: [a] -> [[a]]
+
 module Utils.Drasil.Strings
 
 -- | Replace occurences of special characters
@@ -115,6 +118,9 @@ foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
 --   to last element and accumulator without starting value, does not work
 --   for empty list.
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
+
+-- | Convert "row" of elements into "column" of elements.
+toColumn :: [a] -> [[a]]
 
 -- | Replace occurences of special characters
 --   (<tt>",~`-=!</tt>#$%^&amp;*+[]\;'/|"&lt;&gt;? "<tt>) with underscores

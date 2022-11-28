@@ -69,6 +69,9 @@ foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
 --   for empty list.
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 
+-- | Convert "row" of elements into "column" of elements.
+toColumn :: [a] -> [[a]]
+
 -- | Replace occurences of special characters
 --   (<tt>",~`-=!</tt>#$%^&amp;*+[]\;'/|"&lt;&gt;? "<tt>) with underscores
 --   (</tt>"_"@).

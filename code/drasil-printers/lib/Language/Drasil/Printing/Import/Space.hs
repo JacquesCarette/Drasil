@@ -20,7 +20,6 @@ space _  Natural        = P.MO P.Natural
 space _  Boolean        = P.MO P.Boolean
 space _  Char           = P.Ident "Char"
 space _  String         = P.Ident "String"
-space _  Radians        = error "Radians not translated"
 space _  (Vect _)       = error "Vector space not translated"
 space _  Matrix {}      = error "Matrix space not translated"
 space _  (Array _)      = error "Array space not translated"

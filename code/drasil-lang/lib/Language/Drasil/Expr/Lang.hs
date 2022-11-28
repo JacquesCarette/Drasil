@@ -144,12 +144,7 @@ data Expr where
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq Expr where
-  Lit (Int l)         == Lit (Int r)         =  l == r
-  Lit (Str l)         == Lit (Str r)         =  l == r
-  Lit (Dbl l)         == Lit (Dbl r)         =  l == r
-  Lit (ExactDbl l)    == Lit (ExactDbl r)    =  l == r
-  Lit (Perc l1 l2)    == Lit (Perc r1 r2)    =  l1 == r1 && l2 == r2
-  -- Lit a               == Lit b               =   a == b -- TODO: When we have typed expressions, I think this will be possible.
+  Lit a               == Lit b               =   a == b
   AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
   AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
   C a                 == C b                 =   a == b

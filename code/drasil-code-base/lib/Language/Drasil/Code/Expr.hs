@@ -8,6 +8,8 @@ import Prelude hiding (sqrt)
 import Control.Lens
 import Language.Drasil.Expr.Development (Completeness(Complete, Incomplete))
 
+import Utils.Drasil (toColumn)
+
 -- * Operators (mostly binary)
 
 -- | Arithmetic operators (fractional, power, and subtraction).
@@ -327,12 +329,6 @@ instance ExprC CodeExpr where
   -- | Create a column vector
   columnVec a = matrix $ toColumn a
 
-  -- | Change row vector to column vector
-  toColumn [] = []
-  toColumn (x:xs) = [x]:toColumn xs
-
-  -- Some helper functions to do function application
-  
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps []

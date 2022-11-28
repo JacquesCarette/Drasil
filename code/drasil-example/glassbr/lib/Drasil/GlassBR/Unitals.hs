@@ -242,7 +242,7 @@ gTF, loadSF :: DefinedQuantityDict
 
 dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
-gTF           = dqdNoUnit glTyFac (variable "GTF") Real
+gTF           = dqdNoUnit glTyFac (variable "GTF") Integer
 
 isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
   (variable "isSafePb")   Boolean
@@ -253,8 +253,8 @@ isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance 
 isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
   (variable "isSafeLoad") Boolean
 
-interpY = vc "interpY" (nounPhraseSP "interpY") (variable "interpY") Real
-interpZ = vc "interpZ" (nounPhraseSP "interpZ") (variable "interpZ") Real
+interpY = vc "interpY" (nounPhraseSP "interpY") (variable "interpY") (mkFunction [String, Real, Real] Real)
+interpZ = vc "interpZ" (nounPhraseSP "interpZ") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
 
 lDurFac       = vc'' loadDurFactor (variable "LDF") Real

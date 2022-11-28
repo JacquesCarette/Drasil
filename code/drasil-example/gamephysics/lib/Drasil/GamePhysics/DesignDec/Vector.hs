@@ -132,9 +132,9 @@ vectForAngle = funcDef "vectForAngle" [rad] (Vect Real)
     )
   ]
 
-vectToAngle = funcDef "vectToAngle" [v_v] Radians
+vectToAngle = funcDef "vectToAngle" [v_v] Real
   [
-    FRet (FCall (funcUID atan2) 
+    FRet (FCall (funcUID atan2)
       [
         FCall (funcUID getY) [v_v],
         FCall (funcUID getX) [v_v]

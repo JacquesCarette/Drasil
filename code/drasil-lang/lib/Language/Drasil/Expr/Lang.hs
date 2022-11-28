@@ -271,19 +271,17 @@ instance Typed Expr Space where
       then Left $ S.Vect sp
       else Right $ "Vector negation only applies to, non-natural, numbered vectors. Received `" ++ show sp ++ "`."
     Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
-    Right ex -> Right ex
+    x -> x
 
   infer cxt (UnaryOpVN Norm e) = case infer cxt e of
-    Left (S.Vect sp) -> if sp == S.Real
-      then Left S.Real
-      else Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
+    Left (S.Vect S.Real) -> Left S.Real
     Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
-    ex -> ex
+    x -> x
 
   infer cxt (UnaryOpVN Dim e) = case infer cxt e of
     Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
-    Left sp         -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
-    ex              -> ex
+    Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
+    x -> x
 
   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
@@ -336,9 +334,9 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (VVVBinaryOp Cross l r) = case (infer cxt l, infer cxt r) of
-    (Left lTy, Left rTy) -> if lTy == rTy
+    (Left lTy, Left rTy) -> if lTy == rTy && S.isBasicNumSpace lTy && lTy /= S.Natural
       then Left lTy
-      else Right $ "Vector cross product expects both operands to have the same time. Received `" ++ show lTy ++ "` X `" ++ show rTy ++ "`."
+      else Right $ "Vector cross product expects both operands to be vectors of non-natural numbers. Received `" ++ show lTy ++ "` X `" ++ show rTy ++ "`."
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
 

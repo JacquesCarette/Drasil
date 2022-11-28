@@ -585,15 +585,8 @@ data ModelExpr
 --   Implicitly assumes that the chunk has a symbol.
 [C] :: UID -> ModelExpr
 
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [ModelExpr] -> [(UID, ModelExpr)] -> ModelExpr
+-- | Function applications.
+[FCall] :: UID -> [ModelExpr] -> ModelExpr
 
 -- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
@@ -821,15 +814,8 @@ data Expr
 --   Implicitly assumes that the chunk has a symbol.
 [C] :: UID -> Expr
 
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+-- | Function applications.
+[FCall] :: UID -> [Expr] -> Expr
 
 -- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(Expr, Relation)] -> Expr
@@ -1585,49 +1571,17 @@ completeCase :: ExprC r => [(r, r)] -> r
 -- | Smart constructor for case statements with an incomplete set of cases.
 incompleteCase :: ExprC r => [(r, r)] -> r
 
--- | Create a matrix. TODO: Re-work later.
+-- | Create a matrix.
 matrix :: ExprC r => [[r]] -> r
-
--- | Create a two-by-two matrix from four given values. For example:
---   
---   <pre>
---   &gt;&gt;&gt; m2x2 1 2 3 4
---   [ [1,2],
---     [3,4] ]
---   </pre>
-m2x2 :: ExprC r => r -> r -> r -> r -> r
-
--- | Create a 2D vector (a matrix with two rows, one column). First
---   argument is placed above the second.
-vec2D :: ExprC r => r -> r -> r
-
--- | Creates a diagonal two-by-two matrix. For example:
---   
---   <pre>
---   &gt;&gt;&gt; dgnl2x2 1 2
---   [ [1, 0],
---     [0, 2] ]
---   </pre>
-dgnl2x2 :: ExprC r => r -> r -> r
-
--- | Create a row vector
-rowVec :: ExprC r => [r] -> r
-
--- | Create a column vector
-columnVec :: ExprC r => [r] -> r
 
 -- | Applies a given function with a list of parameters.
 apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
 
--- | Similar to <a>apply</a>, but takes a relation to apply to
---   <a>FCall</a>.
-applyWithNamedArgs :: (ExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [r] -> [(a, r)] -> r
-
 -- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
 sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
-infixl 7 $/
 infixr 4 $=
 infixr 9 $&&
+infixl 7 $/
 infixr 8 $^
 infixr 9 $||
 
@@ -1656,6 +1610,34 @@ apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
 -- | Similar to <a>apply</a>, but the applied function takes two parameters
 --   (which are both <a>Symbol</a>s).
 apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
+
+-- | Create a two-by-two matrix from four given values. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; m2x2 1 2 3 4
+--   [ [1,2],
+--     [3,4] ]
+--   </pre>
+m2x2 :: ExprC r => r -> r -> r -> r -> r
+
+-- | Create a 2D vector (a matrix with two rows, one column). First
+--   argument is placed above the second.
+vec2D :: ExprC r => r -> r -> r
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; dgnl2x2 1 2
+--   [ [1, 0],
+--     [0, 2] ]
+--   </pre>
+dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
+
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
 
 -- | For case expressions (either complete or incomplete).
 data Completeness

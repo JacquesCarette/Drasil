@@ -1460,15 +1460,8 @@ data Expr
 --   Implicitly assumes that the chunk has a symbol.
 [C] :: UID -> Expr
 
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+-- | Function applications.
+[FCall] :: UID -> [Expr] -> Expr
 
 -- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(Expr, Relation)] -> Expr
@@ -1668,15 +1661,8 @@ data ModelExpr
 --   Implicitly assumes that the chunk has a symbol.
 [C] :: UID -> ModelExpr
 
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [ModelExpr] -> [(UID, ModelExpr)] -> ModelExpr
+-- | Function applications.
+[FCall] :: UID -> [ModelExpr] -> ModelExpr
 
 -- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
@@ -1940,15 +1926,8 @@ data ModelExpr
 --   Implicitly assumes that the chunk has a symbol.
 [C] :: UID -> ModelExpr
 
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [ModelExpr] -> [(UID, ModelExpr)] -> ModelExpr
+-- | Function applications.
+[FCall] :: UID -> [ModelExpr] -> ModelExpr
 
 -- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
@@ -3260,15 +3239,8 @@ data Expr
 --   Implicitly assumes that the chunk has a symbol.
 [C] :: UID -> Expr
 
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+-- | Function applications.
+[FCall] :: UID -> [Expr] -> Expr
 
 -- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(Expr, Relation)] -> Expr
@@ -3439,6 +3411,204 @@ precB :: AssocBoolOper -> Int
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
 
+module Language.Drasil.Expr.Class
+class ExprC r
+lit :: ExprC r => Literal -> r
+($=) :: ExprC r => r -> r -> r
+($!=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($<) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($>) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($<=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($>=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for the dot product of two equations.
+($.) :: ExprC r => r -> r -> r
+
+-- | Add two expressions (Integers).
+addI :: ExprC r => r -> r -> r
+
+-- | Add two expressions (Real numbers).
+addRe :: ExprC r => r -> r -> r
+
+-- | Multiply two expressions (Integers).
+mulI :: ExprC r => r -> r -> r
+
+-- | Multiply two expressions (Real numbers).
+mulRe :: ExprC r => r -> r -> r
+($-) :: ExprC r => r -> r -> r
+($/) :: ExprC r => r -> r -> r
+($^) :: ExprC r => r -> r -> r
+($=>) :: ExprC r => r -> r -> r
+($<=>) :: ExprC r => r -> r -> r
+($&&) :: ExprC r => r -> r -> r
+($||) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for taking the absolute value of an expression.
+abs_ :: ExprC r => r -> r
+
+-- | Smart constructor for negating an expression.
+neg :: ExprC r => r -> r
+
+-- | Smart constructor to take the log of an expression.
+log :: ExprC r => r -> r
+
+-- | Smart constructor to take the ln of an expression.
+ln :: ExprC r => r -> r
+
+-- | Smart constructor to take the square root of an expression.
+sqrt :: ExprC r => r -> r
+
+-- | Smart constructor to apply sin to an expression.
+sin :: ExprC r => r -> r
+
+-- | Smart constructor to apply cos to an expression.
+cos :: ExprC r => r -> r
+
+-- | Smart constructor to apply tan to an expression.
+tan :: ExprC r => r -> r
+
+-- | Smart constructor to apply sec to an expression.
+sec :: ExprC r => r -> r
+
+-- | Smart constructor to apply csc to an expression.
+csc :: ExprC r => r -> r
+
+-- | Smart constructor to apply cot to an expression.
+cot :: ExprC r => r -> r
+
+-- | Smart constructor to apply arcsin to an expression.
+arcsin :: ExprC r => r -> r
+
+-- | Smart constructor to apply arccos to an expression.
+arccos :: ExprC r => r -> r
+
+-- | Smart constructor to apply arctan to an expression.
+arctan :: ExprC r => r -> r
+
+-- | Smart constructor for the exponential (base e) function.
+exp :: ExprC r => r -> r
+
+-- | Smart constructor for calculating the dimension of a vector.
+dim :: ExprC r => r -> r
+
+-- | Smart constructor for calculating the normal form of a vector.
+norm :: ExprC r => r -> r
+
+-- | Smart constructor for negating vectors.
+negVec :: ExprC r => r -> r
+
+-- | Smart constructor for applying logical negation to an expression.
+not_ :: ExprC r => r -> r
+
+-- | Smart constructor for indexing.
+idx :: ExprC r => r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defint :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defsum :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defprod :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for 'real interval' membership.
+realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
+
+-- | Euclidean function : takes a vector and returns the sqrt of the
+--   sum-of-squares.
+euclidean :: ExprC r => [r] -> r
+
+-- | Smart constructor to cross product two expressions.
+cross :: ExprC r => r -> r -> r
+
+-- | Smart constructor for case statements with a complete set of cases.
+completeCase :: ExprC r => [(r, r)] -> r
+
+-- | Smart constructor for case statements with an incomplete set of cases.
+incompleteCase :: ExprC r => [(r, r)] -> r
+
+-- | Create a matrix.
+matrix :: ExprC r => [[r]] -> r
+
+-- | Applies a given function with a list of parameters.
+apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
+
+-- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
+sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
+infixr 4 $=
+infixr 9 $&&
+infixl 7 $/
+infixr 8 $^
+infixr 9 $||
+
+-- | Smart constructor for fractions.
+frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
+
+-- | Smart constructor for rational expressions (only in 1/x form).
+recip_ :: (ExprC r, LiteralC r) => r -> r
+
+-- | Smart constructor to square a function.
+square :: (ExprC r, LiteralC r) => r -> r
+
+-- | Smart constructor to half a function exactly.
+half :: (ExprC r, LiteralC r) => r -> r
+
+-- | 1/2, as an expression.
+oneHalf :: (ExprC r, LiteralC r) => r
+
+-- | 1/3rd, as an expression.
+oneThird :: (ExprC r, LiteralC r) => r
+
+-- | Similar to <a>apply</a>, but converts second argument into
+--   <a>Symbol</a>s.
+apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
+
+-- | Similar to <a>apply</a>, but the applied function takes two parameters
+--   (which are both <a>Symbol</a>s).
+apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
+
+-- | Create a two-by-two matrix from four given values. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; m2x2 1 2 3 4
+--   [ [1,2],
+--     [3,4] ]
+--   </pre>
+m2x2 :: ExprC r => r -> r -> r -> r -> r
+
+-- | Create a 2D vector (a matrix with two rows, one column). First
+--   argument is placed above the second.
+vec2D :: ExprC r => r -> r -> r
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; dgnl2x2 1 2
+--   [ [1, 0],
+--     [0, 2] ]
+--   </pre>
+dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
+
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
+instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
+instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
+
 
 -- | Defines types and functions for constrained values.
 module Language.Drasil.Constraint
@@ -3583,208 +3753,6 @@ class DefiningExpr c
 --   needs to be _something_, and it would have approximately have same
 --   meaning.
 defnExpr :: DefiningExpr c => Lens' (c e) e
-
-module Language.Drasil.Expr.Class
-class ExprC r
-lit :: ExprC r => Literal -> r
-($=) :: ExprC r => r -> r -> r
-($!=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($<) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($>) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($<=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($>=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for the dot product of two equations.
-($.) :: ExprC r => r -> r -> r
-
--- | Add two expressions (Integers).
-addI :: ExprC r => r -> r -> r
-
--- | Add two expressions (Real numbers).
-addRe :: ExprC r => r -> r -> r
-
--- | Multiply two expressions (Integers).
-mulI :: ExprC r => r -> r -> r
-
--- | Multiply two expressions (Real numbers).
-mulRe :: ExprC r => r -> r -> r
-($-) :: ExprC r => r -> r -> r
-($/) :: ExprC r => r -> r -> r
-($^) :: ExprC r => r -> r -> r
-($=>) :: ExprC r => r -> r -> r
-($<=>) :: ExprC r => r -> r -> r
-($&&) :: ExprC r => r -> r -> r
-($||) :: ExprC r => r -> r -> r
-
--- | Smart constructor for taking the absolute value of an expression.
-abs_ :: ExprC r => r -> r
-
--- | Smart constructor for negating an expression.
-neg :: ExprC r => r -> r
-
--- | Smart constructor to take the log of an expression.
-log :: ExprC r => r -> r
-
--- | Smart constructor to take the ln of an expression.
-ln :: ExprC r => r -> r
-
--- | Smart constructor to take the square root of an expression.
-sqrt :: ExprC r => r -> r
-
--- | Smart constructor to apply sin to an expression.
-sin :: ExprC r => r -> r
-
--- | Smart constructor to apply cos to an expression.
-cos :: ExprC r => r -> r
-
--- | Smart constructor to apply tan to an expression.
-tan :: ExprC r => r -> r
-
--- | Smart constructor to apply sec to an expression.
-sec :: ExprC r => r -> r
-
--- | Smart constructor to apply csc to an expression.
-csc :: ExprC r => r -> r
-
--- | Smart constructor to apply cot to an expression.
-cot :: ExprC r => r -> r
-
--- | Smart constructor to apply arcsin to an expression.
-arcsin :: ExprC r => r -> r
-
--- | Smart constructor to apply arccos to an expression.
-arccos :: ExprC r => r -> r
-
--- | Smart constructor to apply arctan to an expression.
-arctan :: ExprC r => r -> r
-
--- | Smart constructor for the exponential (base e) function.
-exp :: ExprC r => r -> r
-
--- | Smart constructor for calculating the dimension of a vector.
-dim :: ExprC r => r -> r
-
--- | Smart constructor for calculating the normal form of a vector.
-norm :: ExprC r => r -> r
-
--- | Smart constructor for negating vectors.
-negVec :: ExprC r => r -> r
-
--- | Smart constructor for applying logical negation to an expression.
-not_ :: ExprC r => r -> r
-
--- | Smart constructor for indexing.
-idx :: ExprC r => r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defint :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defsum :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defprod :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for 'real interval' membership.
-realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
-
--- | Euclidean function : takes a vector and returns the sqrt of the
---   sum-of-squares.
-euclidean :: ExprC r => [r] -> r
-
--- | Smart constructor to cross product two expressions.
-cross :: ExprC r => r -> r -> r
-
--- | Smart constructor for case statements with a complete set of cases.
-completeCase :: ExprC r => [(r, r)] -> r
-
--- | Smart constructor for case statements with an incomplete set of cases.
-incompleteCase :: ExprC r => [(r, r)] -> r
-
--- | Create a matrix. TODO: Re-work later.
-matrix :: ExprC r => [[r]] -> r
-
--- | Create a two-by-two matrix from four given values. For example:
---   
---   <pre>
---   &gt;&gt;&gt; m2x2 1 2 3 4
---   [ [1,2],
---     [3,4] ]
---   </pre>
-m2x2 :: ExprC r => r -> r -> r -> r -> r
-
--- | Create a 2D vector (a matrix with two rows, one column). First
---   argument is placed above the second.
-vec2D :: ExprC r => r -> r -> r
-
--- | Creates a diagonal two-by-two matrix. For example:
---   
---   <pre>
---   &gt;&gt;&gt; dgnl2x2 1 2
---   [ [1, 0],
---     [0, 2] ]
---   </pre>
-dgnl2x2 :: ExprC r => r -> r -> r
-
--- | Create a row vector
-rowVec :: ExprC r => [r] -> r
-
--- | Create a column vector
-columnVec :: ExprC r => [r] -> r
-
--- | Applies a given function with a list of parameters.
-apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
-
--- | Similar to <a>apply</a>, but takes a relation to apply to
---   <a>FCall</a>.
-applyWithNamedArgs :: (ExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [r] -> [(a, r)] -> r
-
--- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
-sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
-infixl 7 $/
-infixr 4 $=
-infixr 9 $&&
-infixr 8 $^
-infixr 9 $||
-
--- | Smart constructor for fractions.
-frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
-
--- | Smart constructor for rational expressions (only in 1/x form).
-recip_ :: (ExprC r, LiteralC r) => r -> r
-
--- | Smart constructor to square a function.
-square :: (ExprC r, LiteralC r) => r -> r
-
--- | Smart constructor to half a function exactly.
-half :: (ExprC r, LiteralC r) => r -> r
-
--- | 1/2, as an expression.
-oneHalf :: (ExprC r, LiteralC r) => r
-
--- | 1/3rd, as an expression.
-oneThird :: (ExprC r, LiteralC r) => r
-
--- | Similar to <a>apply</a>, but converts second argument into
---   <a>Symbol</a>s.
-apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
-
--- | Similar to <a>apply</a>, but the applied function takes two parameters
---   (which are both <a>Symbol</a>s).
-apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
-instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
-instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 
 
 -- | Various helpers for building Sentences from other bits. Really ought
@@ -5588,49 +5556,17 @@ completeCase :: ExprC r => [(r, r)] -> r
 -- | Smart constructor for case statements with an incomplete set of cases.
 incompleteCase :: ExprC r => [(r, r)] -> r
 
--- | Create a matrix. TODO: Re-work later.
+-- | Create a matrix.
 matrix :: ExprC r => [[r]] -> r
-
--- | Create a two-by-two matrix from four given values. For example:
---   
---   <pre>
---   &gt;&gt;&gt; m2x2 1 2 3 4
---   [ [1,2],
---     [3,4] ]
---   </pre>
-m2x2 :: ExprC r => r -> r -> r -> r -> r
-
--- | Create a 2D vector (a matrix with two rows, one column). First
---   argument is placed above the second.
-vec2D :: ExprC r => r -> r -> r
-
--- | Creates a diagonal two-by-two matrix. For example:
---   
---   <pre>
---   &gt;&gt;&gt; dgnl2x2 1 2
---   [ [1, 0],
---     [0, 2] ]
---   </pre>
-dgnl2x2 :: ExprC r => r -> r -> r
-
--- | Create a row vector
-rowVec :: ExprC r => [r] -> r
-
--- | Create a column vector
-columnVec :: ExprC r => [r] -> r
 
 -- | Applies a given function with a list of parameters.
 apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
 
--- | Similar to <a>apply</a>, but takes a relation to apply to
---   <a>FCall</a>.
-applyWithNamedArgs :: (ExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [r] -> [(a, r)] -> r
-
 -- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
 sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
-infixl 7 $/
 infixr 4 $=
 infixr 9 $&&
+infixl 7 $/
 infixr 8 $^
 infixr 9 $||
 
@@ -5659,6 +5595,34 @@ apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
 -- | Similar to <a>apply</a>, but the applied function takes two parameters
 --   (which are both <a>Symbol</a>s).
 apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
+
+-- | Create a two-by-two matrix from four given values. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; m2x2 1 2 3 4
+--   [ [1,2],
+--     [3,4] ]
+--   </pre>
+m2x2 :: ExprC r => r -> r -> r -> r -> r
+
+-- | Create a 2D vector (a matrix with two rows, one column). First
+--   argument is placed above the second.
+vec2D :: ExprC r => r -> r -> r
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; dgnl2x2 1 2
+--   [ [1, 0],
+--     [0, 2] ]
+--   </pre>
+dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
+
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
 
 -- | For case expressions (either complete or incomplete).
 data Completeness

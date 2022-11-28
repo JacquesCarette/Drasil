@@ -1038,7 +1038,7 @@ neg :: PrintingInformation -> ModelExpr -> Expr
 indx :: PrintingInformation -> ModelExpr -> ModelExpr -> Expr
 
 -- | For printing expressions that call something.
-call :: PrintingInformation -> UID -> [ModelExpr] -> [(UID, ModelExpr)] -> Expr
+call :: PrintingInformation -> UID -> [ModelExpr] -> Expr
 
 -- | Helper function for addition <tt>EOperator</tt>s.
 eopAdds :: PrintingInformation -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> Expr

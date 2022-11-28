@@ -409,9 +409,11 @@ instance ExprC Expr where
   -- Some helper functions to do function application
   
   -- | Applies a given function with a list of parameters.
+  apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps []
   
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
+  applyWithNamedArgs f [] [] = sy f
   applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
     (map snd ns))
   
@@ -608,12 +610,12 @@ instance ExprC M.ModelExpr where
 
   -- Some helper functions to do function application
 
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
+  apply f [] = sy f
   apply f ps = M.FCall (f ^. uid) ps []
 
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
+  applyWithNamedArgs f [] [] = sy f
   applyWithNamedArgs f ps ns = M.FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
     (map snd ns))
 

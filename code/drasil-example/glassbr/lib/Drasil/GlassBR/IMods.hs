@@ -43,7 +43,7 @@ lrIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-LR") lrIsSafeQD
   [qwC lRe $ UpFrom (Exc, exactDbl 0), qwC demand $ UpFrom (Exc, exactDbl 0)]
   (qw isSafeLR) []
   [dRef astm2009] "isSafeLR"
-  [lrIsSafeDesc, capRef, qRef] 
+  [lrIsSafeDesc, capRef, qRef]
 
 lrIsSafeQD :: SimpleQDef 
 lrIsSafeQD = mkQuantDef isSafeLR (sy lRe $> sy demand)

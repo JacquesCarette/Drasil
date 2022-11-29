@@ -130,7 +130,7 @@ stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (F
   cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
-  (sub cP lFail) Rational
+  (sub cP lFail) Real
   [probConstr] (Just $ dbl 0.4)
 
 pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
@@ -159,15 +159,15 @@ dimMin     = mkQuantDef (unitary "dimMin"
 
 arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
-  (subMax (variable "AR")) Rational) (exactDbl 5)
+  (subMax (variable "AR")) Real) (exactDbl 5)
 
 cWeightMax = mkQuantDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (subMax (eqSymb charWeight)) kilogram Rational) (exactDbl 910)
+  (subMax (eqSymb charWeight)) kilogram Real) (exactDbl 910)
 
 cWeightMin = mkQuantDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (subMin (eqSymb charWeight)) kilogram Rational) (dbl 4.5)
+  (subMin (eqSymb charWeight)) kilogram Real) (dbl 4.5)
 
 sdMax     = mkQuantDef (unitary "sdMax"
   (nounPhraseSP "maximum stand off distance permissible for input")
@@ -192,15 +192,15 @@ minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
 
 demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: UnitalChunk
 
-demand      = ucs' demandq lQ Rational pascal --correct Space used?
+demand      = ucs' demandq lQ Real pascal --correct Space used?
 
-tmDemand    = ucs' load (variable "Load") Rational pascal --correct Space used?
+tmDemand    = ucs' load (variable "Load") Real pascal --correct Space used?
   
-lRe         = ucs' loadResis (variable "LR") Rational pascal --correct Space used?
+lRe         = ucs' loadResis (variable "LR") Real pascal --correct Space used?
 
-tmLRe       = ucs' capacity (variable "capacity") Rational pascal --correct Space used?
+tmLRe       = ucs' capacity (variable "capacity") Real pascal --correct Space used?
 
-nonFactorL  = ucs' nonFactoredL (variable "NFL") Rational pascal --correct Space used?
+nonFactorL  = ucs' nonFactoredL (variable "NFL") Real pascal --correct Space used?
 
 eqTNTWeight = ucs' eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real 
   kilogram
@@ -209,7 +209,7 @@ loadDur     = unitary "loadDur"    (nounPhraseSP "duration of load")
   (sub lT lDur) second Real
 
 minThick    = unitary "minThick"   (nounPhraseSP "minimum thickness")
-  lH metre Rational
+  lH metre Real
 
 sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
   (subX (eqSymb standOffDist)) metre Real

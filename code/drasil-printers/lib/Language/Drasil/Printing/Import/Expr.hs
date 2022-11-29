@@ -3,7 +3,7 @@
 -- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr (expr) where
 
-import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix)
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),

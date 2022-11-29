@@ -2700,7 +2700,7 @@
                       <td>
                         \[\symbf{H}=\begin{cases}
                                     \frac{\left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}+\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}\right)^{2} {γ_{w}}, & {\symbf{y}_{\text{wt},i}}\geq{}{\symbf{y}_{\text{slope},i}}\\
-                                    \frac{\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}, & {\symbf{y}_{\text{slope},i}}\gt{}{\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slip},i}}\\
+                                    \frac{\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}, & {\symbf{y}_{\text{slope},i}}\gt{}{\symbf{y}_{\text{wt},i}}\land{}{\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slip},i}}\\
                                     0, & {\symbf{y}_{\text{wt},i}}\leq{}{\symbf{y}_{\text{slip},i}}
                                     \end{cases}\]
                       </td>
@@ -3071,7 +3071,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{h}=\frac{1}{2} \left({\symbf{h}^{\text{R}}}+{\symbf{h}^{\text{L}}}\right)\]
+                        \[\symbf{h}=\frac{1}{2} \left({{\symbf{h}^{\text{R}}}}_{i}+{{\symbf{h}^{\text{L}}}}_{i}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -3084,6 +3084,7 @@
                           <li>
                             <em><b>h</b><sup>R</sup></em> is the heights of the right side of slices (<em>m</em>)
                           </li>
+                          <li><em>i</em> is the index (Unitless)</li>
                           <li>
                             <em><b>h</b><sup>L</sup></em> is the heights of the left side of slices (<em>m</em>)
                           </li>

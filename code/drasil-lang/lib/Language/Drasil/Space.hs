@@ -36,7 +36,6 @@ data Space =
   | Boolean
   | Char
   | String
-  | Radians
   | Vect Space -- TODO: Length for vectors?
   | Matrix Int Int Space
   | Array Space
@@ -98,7 +97,6 @@ isBasicNumSpace Integer      = True
 isBasicNumSpace Rational     = True
 isBasicNumSpace Real         = True
 isBasicNumSpace Natural      = True
-isBasicNumSpace Radians      = True
 isBasicNumSpace Boolean      = False
 isBasicNumSpace Char         = False
 isBasicNumSpace String       = False

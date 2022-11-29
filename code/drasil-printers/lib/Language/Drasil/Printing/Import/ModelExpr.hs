@@ -70,11 +70,11 @@ indx sm (C c) i = f s
 indx sm a i = P.Row [P.Row [modelExpr a sm], P.Sub $ modelExpr i sm]
 
 -- | For printing expressions that call something.
-call :: PrintingInformation -> UID -> [ModelExpr] -> [(UID, ModelExpr)] -> P.Expr
-call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`modelExpr` sm) ps ++
-  zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n,
-  P.MO P.Eq, modelExpr a sm]) (map fst ns) (map snd ns)]
+call :: PrintingInformation -> UID -> [ModelExpr] -> P.Expr
+call sm f ps = P.Row [
+    symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
+    parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`modelExpr` sm) ps
+  ]
 
 -- | Helper function for addition 'EOperator's.
 eopAdds :: PrintingInformation -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> P.Expr
@@ -133,9 +133,9 @@ modelExpr (Deriv n Total a b)        sm =
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
         (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
 modelExpr (C c)                      sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-modelExpr (FCall f [x] [])           sm =
+modelExpr (FCall f [x])              sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ modelExpr x sm]
-modelExpr (FCall f l ns)             sm = call sm f l ns
+modelExpr (FCall f l)                sm = call sm f l
 modelExpr (Case _ ps)                sm =
   if length ps < 2
     then error "Attempting to use multi-case modelExpr incorrectly"

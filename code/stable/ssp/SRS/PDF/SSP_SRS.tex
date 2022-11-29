@@ -1419,7 +1419,7 @@ Units & $\frac{\text{N}}{\text{m}}$
 Equation & \begin{displaymath}
            \symbf{H}=\begin{cases}
                      \frac{\left({\symbf{y}_{\text{slope},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}+\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}\right)^{2} {γ_{w}}, & {\symbf{y}_{\text{wt},i}}\geq{}{\symbf{y}_{\text{slope},i}}\\
-                     \frac{\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}, & {\symbf{y}_{\text{slope},i}}\gt{}{\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slip},i}}\\
+                     \frac{\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}, & {\symbf{y}_{\text{slope},i}}\gt{}{\symbf{y}_{\text{wt},i}}\land{}{\symbf{y}_{\text{wt},i}}\gt{}{\symbf{y}_{\text{slip},i}}\\
                      0, & {\symbf{y}_{\text{wt},i}}\leq{}{\symbf{y}_{\text{slip},i}}
                      \end{cases}
            \end{displaymath}
@@ -1656,12 +1656,13 @@ Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{h}=\frac{1}{2} \left({\symbf{h}^{\text{R}}}+{\symbf{h}^{\text{L}}}\right)
+           \symbf{h}=\frac{1}{2} \left({{\symbf{h}^{\text{R}}}}_{i}+{{\symbf{h}^{\text{L}}}}_{i}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{h}$ is the $y$-direction heights of slices (${\text{m}}$)}
               \item{${\symbf{h}^{\text{R}}}$ is the heights of the right side of slices (${\text{m}}$)}
+              \item{$i$ is the index (Unitless)}
               \item{${\symbf{h}^{\text{L}}}$ is the heights of the left side of slices (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\

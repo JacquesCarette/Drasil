@@ -103,7 +103,7 @@ choiceCombos = [baseChoices,
   }]
 
 matchToFloats :: SpaceMatch
-matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
+matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Rational])
 
 baseChoices :: Choices
 baseChoices = defaultChoices {

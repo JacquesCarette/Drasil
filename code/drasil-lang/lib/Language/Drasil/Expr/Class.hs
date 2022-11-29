@@ -4,7 +4,8 @@ module Language.Drasil.Expr.Class (
   frac, recip_,
   square, half,
   oneHalf, oneThird,
-  apply1, apply2
+  apply1, apply2,
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -15,12 +16,11 @@ import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
-import Language.Drasil.Classes (IsArgumentName)
 import qualified Language.Drasil.ModelExpr.Lang as M
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.UID (HasUID(..))
 
--- TODO: figure out which ones can be moved outside of the ExprC class
+import Utils.Drasil (toColumn)
 
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
@@ -54,6 +54,34 @@ apply1 f a = apply f [sy a]
 apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) 
     => f -> a -> b -> r
 apply2 f a b = apply f [sy a, sy b]
+
+-- | Create a two-by-two matrix from four given values. For example:
+--
+-- >>> m2x2 1 2 3 4
+-- [ [1,2],
+--   [3,4] ]
+m2x2 :: ExprC r => r -> r -> r -> r -> r
+m2x2 a b c d = matrix [[a,b],[c,d]]
+
+-- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
+vec2D :: ExprC r => r -> r -> r
+vec2D a b = matrix [[a],[b]]
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--
+-- >>> dgnl2x2 1 2
+-- [ [1, 0],
+--   [0, 2] ]
+dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
+dgnl2x2 a = m2x2 a (int 0) (int 0)
+
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+rowVec a = matrix [a]
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
+columnVec a = matrix $ toColumn a
 
 class ExprC r where
   infixr 8 $^
@@ -161,9 +189,6 @@ class ExprC r where
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean :: [r] -> r
   
--- TODO:  sum' :: (Num a, Foldable t) => t a -> a
--- TODO:  sum' = foldr1 (+)
-    
   -- | Smart constructor to cross product two expressions.
   cross :: r -> r -> r
   
@@ -174,47 +199,11 @@ class ExprC r where
   incompleteCase :: [(r, r)] -> r
   
   -- | Create a matrix.
-  -- TODO: Re-work later.
   matrix :: [[r]] -> r
 
-  -- TODO: The 3 below smart constructors can be re-built above without needing to be inside of this typeclass definition.
-
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 :: r -> r -> r -> r -> r
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D :: r -> r -> r
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 :: r -> r -> r
-  
-  -- | Create a row vector
-  rowVec :: [r] -> r
-
-  -- | Create a column vector
-  columnVec :: [r] -> r
-
-  -- FIXME: This doesn't look like it needs to be here.
-  -- | Change row vector to column vector
-  toColumn ::  [r] -> [[r]]
-
-  -- Some helper functions to do function application
-  
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 
-    -> [r] -> [(a, r)] -> r
-  
+   
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
@@ -379,43 +368,10 @@ instance ExprC Expr where
   
   matrix = Matrix
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 a b c d = matrix [[a,b],[c,d]]
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = matrix [[a],[b]]
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (int 0) (int 0)
-  
-  -- | Create a row vector
-  rowVec a = matrix [a]
-
-  -- | Create a column vector
-  columnVec a = matrix $ toColumn a
-
-  -- | Change row vector to column vector
-  toColumn [] = []
-  toColumn (x:xs) = [x]:toColumn xs
-
-  -- Some helper functions to do function application
-  
   -- | Applies a given function with a list of parameters.
-  apply f ps = FCall (f ^. uid) ps []
+  apply f [] = sy f
+  apply f ps = FCall (f ^. uid) ps
   
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
-  
-  -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C (x ^. uid)
   
@@ -579,43 +535,9 @@ instance ExprC M.ModelExpr where
 
   matrix = M.Matrix
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 a b c d = matrix [[a,b],[c,d]]
-
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = matrix [[a],[b]]
-
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (int 0) (int 0)
-
-  -- | Create a row vector
-  rowVec a = matrix [a]
-
-  -- | Create a column vector
-  columnVec a = matrix $ toColumn a
-
-  -- | Change row vector to column vector
-  toColumn [] = []
-  toColumn (x:xs) = [x]:toColumn xs
-
-  -- Some helper functions to do function application
-
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
-  apply f ps = M.FCall (f ^. uid) ps []
-
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f ps ns = M.FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
+  apply f [] = sy f
+  apply f ps = M.FCall (f ^. uid) ps
 
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.

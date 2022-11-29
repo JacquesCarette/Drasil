@@ -100,13 +100,8 @@ data ModelExpr where
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C         :: UID -> ModelExpr
-  -- | A function call accepts a list of parameters and a list of named parameters.
-  --   For example
-  --
-  --   * F(x) is (FCall F [x] []).
-  --   * F(x,y) would be (FCall F [x,y]).
-  --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
-  FCall     :: UID -> [ModelExpr] -> [(UID, ModelExpr)] -> ModelExpr
+  -- | Function applications.
+  FCall     :: UID -> [ModelExpr] -> ModelExpr
   -- | For multi-case expressions, each pair represents one case.
   Case      :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
   -- | Represents a matrix of expressions.
@@ -177,13 +172,12 @@ type Variable = String
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq ModelExpr where
-  Lit l              == Lit r                =  l == r
-  -- Lit a               == Lit b               =   a == b -- TODO: When we have typed expressions, I think this will be possible.
+  Lit l               == Lit r               =   l == r
   AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
   AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
   Deriv a t1 b c      == Deriv d t2 e f      =   a == d && t1 == t2 && b == e && c == f
   C a                 == C b                 =   a == b
-  FCall a b c         == FCall d e f         =   a == d && b == e && c == f
+  FCall a b           == FCall c d           =   a == c && b == d
   Case a b            == Case c d            =   a == c && b == d 
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d

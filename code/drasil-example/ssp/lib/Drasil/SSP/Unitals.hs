@@ -471,7 +471,7 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
 -- horrible hack, but it's only used once, so...
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
   "generic minimization function or algorithm")
-  (const cUpsilon) (mkFunction (take 10 $ repeat Real) Real) Nothing
+  (const cUpsilon) (mkFunction (replicate 10 Real) Real) Nothing
 
 mobShrC = dqd' (dcc "Psi"
   (nounPhraseSP "second function for incorporating interslice forces into shear force")

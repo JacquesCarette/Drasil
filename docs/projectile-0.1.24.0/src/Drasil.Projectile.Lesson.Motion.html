@@ -173,11 +173,11 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-48"></span><span id="horMotion"><span class="annot"><span class="annottext">horMotion :: Section
 </span><a href="Drasil.Projectile.Lesson.Motion.html#horMotion"><span class="hs-identifier hs-var hs-var">horMotion</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><span class="hs-identifier hs-var">NB.hormotion</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
-</span><a href="#local-6989586621679094073"><span class="hs-identifier hs-var">intro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
-</span><a href="#local-6989586621679094072"><span class="hs-identifier hs-var">equations</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
-</span><a href="#local-6989586621679094071"><span class="hs-identifier hs-var">concl</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-49"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679094073"><span class="annot"><span class="annottext">intro :: Contents
-</span><a href="#local-6989586621679094073"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><a href="#local-6989586621679094071"><span class="hs-identifier hs-var">intro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
+</span><a href="#local-6989586621679094070"><span class="hs-identifier hs-var">equations</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
+</span><a href="#local-6989586621679094069"><span class="hs-identifier hs-var">concl</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679094071"><span class="annot"><span class="annottext">intro :: Contents
+</span><a href="#local-6989586621679094071"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-50"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;For&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
@@ -203,8 +203,8 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.Lesson.Motion.html#motionSent"><span class="hs-identifier hs-var">motionSent</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-53"></span><span>        </span><span id="local-6989586621679094072"><span class="annot"><span class="annottext">equations :: Contents
-</span><a href="#local-6989586621679094072"><span class="hs-identifier hs-var hs-var">equations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><span id="line-53"></span><span>        </span><span id="local-6989586621679094070"><span class="annot"><span class="annottext">equations :: Contents
+</span><a href="#local-6989586621679094070"><span class="hs-identifier hs-var hs-var">equations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Contents) -&gt; [Sentence] -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
@@ -215,8 +215,8 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.Projectile.Lesson.Motion.html#horMotionEqns"><span class="hs-identifier hs-var">horMotionEqns</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-54"></span><span>        </span><span id="local-6989586621679094071"><span class="annot"><span class="annottext">concl :: Contents
-</span><a href="#local-6989586621679094071"><span class="hs-identifier hs-var hs-var">concl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><span id="line-54"></span><span>        </span><span id="local-6989586621679094069"><span class="annot"><span class="annottext">concl :: Contents
+</span><a href="#local-6989586621679094069"><span class="hs-identifier hs-var hs-var">concl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-55"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Since the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -250,11 +250,11 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-60"></span><span id="verMotion"><span class="annot"><span class="annottext">verMotion :: Section
 </span><a href="Drasil.Projectile.Lesson.Motion.html#verMotion"><span class="hs-identifier hs-var hs-var">verMotion</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><span class="hs-identifier hs-var">NB.vermotion</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
-</span><a href="#local-6989586621679094065"><span class="hs-identifier hs-var">intro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
-</span><a href="#local-6989586621679094064"><span class="hs-identifier hs-var">equations</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
-</span><a href="#local-6989586621679094063"><span class="hs-identifier hs-var">concl</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-61"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679094065"><span class="annot"><span class="annottext">intro :: Contents
-</span><a href="#local-6989586621679094065"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><a href="#local-6989586621679094063"><span class="hs-identifier hs-var">intro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
+</span><a href="#local-6989586621679094062"><span class="hs-identifier hs-var">equations</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
+</span><a href="#local-6989586621679094061"><span class="hs-identifier hs-var">concl</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-61"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679094063"><span class="annot"><span class="annottext">intro :: Contents
+</span><a href="#local-6989586621679094063"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-62"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Since the positive&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -280,8 +280,8 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.gravitationalAccel</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.Lesson.Motion.html#motionSent"><span class="hs-identifier hs-var">motionSent</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-64"></span><span>        </span><span id="local-6989586621679094064"><span class="annot"><span class="annottext">equations :: Contents
-</span><a href="#local-6989586621679094064"><span class="hs-identifier hs-var hs-var">equations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><span id="line-64"></span><span>        </span><span id="local-6989586621679094062"><span class="annot"><span class="annottext">equations :: Contents
+</span><a href="#local-6989586621679094062"><span class="hs-identifier hs-var hs-var">equations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP_</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Contents) -&gt; [Sentence] -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
@@ -292,8 +292,8 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.Projectile.Derivations.html#verMotionDeriv"><span class="hs-identifier hs-var">verMotionDeriv</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-65"></span><span>        </span><span id="local-6989586621679094063"><span class="annot"><span class="annottext">concl :: Contents
-</span><a href="#local-6989586621679094063"><span class="hs-identifier hs-var hs-var">concl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><span id="line-65"></span><span>        </span><span id="local-6989586621679094061"><span class="annot"><span class="annottext">concl :: Contents
+</span><a href="#local-6989586621679094061"><span class="hs-identifier hs-var hs-var">concl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-66"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Recall that the last equation can be formulated on the basis of eliminating the&quot;</span></span><span class="hs-special">,</span><span>
@@ -313,9 +313,9 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-70"></span><span id="summary"><span class="annot"><span class="annottext">summary :: Section
 </span><a href="Drasil.Projectile.Lesson.Motion.html#summary"><span class="hs-identifier hs-var hs-var">summary</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><span class="hs-identifier hs-var">NB.summary</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
-</span><a href="#local-6989586621679094060"><span class="hs-identifier hs-var">smmryCon</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-71"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679094060"><span class="annot"><span class="annottext">smmryCon :: Contents
-</span><a href="#local-6989586621679094060"><span class="hs-identifier hs-var hs-var">smmryCon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><a href="#local-6989586621679094058"><span class="hs-identifier hs-var">smmryCon</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-71"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679094058"><span class="annot"><span class="annottext">smmryCon :: Contents
+</span><a href="#local-6989586621679094058"><span class="hs-identifier hs-var hs-var">smmryCon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-72"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;In addition to knowing that the horizontal component of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence

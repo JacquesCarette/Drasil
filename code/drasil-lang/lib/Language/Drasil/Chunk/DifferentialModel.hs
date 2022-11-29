@@ -28,7 +28,7 @@ import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
 import Data.List (find)
 import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
-import Language.Drasil.Space (Space (Boolean), HasSpace (..))
+import Language.Drasil.Space (Space, HasSpace (..))
 
 -- | Unknown is nth order of the dependent variable 
 type Unknown = Integer

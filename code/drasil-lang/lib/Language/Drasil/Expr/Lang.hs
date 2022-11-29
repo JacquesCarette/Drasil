@@ -348,14 +348,15 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (Operator aao (S.BoundedDD _ _ bot top) body) = let expTy = assocArithOperToTy aao
-    in case (infer cxt bot, infer cxt top, infer cxt body) of
-      (Left botTy, Left topTy, Left bodyTy) -> if expTy == botTy
-        then if expTy == topTy
+  infer cxt (Operator aao (S.BoundedDD _ _ bot top) body) = 
+    let expTy = assocArithOperToTy aao in
+    case (infer cxt bot, infer cxt top, infer cxt body) of
+      (Left botTy, Left topTy, Left bodyTy) -> if botTy == S.Integer
+        then if topTy == S.Integer
           then if expTy == bodyTy
             then Left expTy
-            else Right $ "'Big' operator range body not of expected type: " ++ show expTy ++ ", found: " ++ show bodyTy ++ "."
-          else Right $ "'Big' operator range top not of expected type: " ++ show expTy ++ ", found: " ++ show topTy ++ "."
+            else Right $ "'Big' operator range body not Integer, found: " ++ show bodyTy ++ "."
+          else Right $ "'Big' operator range top not Integer, found: " ++ show topTy ++ "."
         else Right $ "'Big' operator range bottom not of expected type: " ++ show expTy ++ ", found: " ++ show botTy ++ "."
       (_         , _         , Right x    ) -> Right x
       (_         , Right x   , _          ) -> Right x

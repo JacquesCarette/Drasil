@@ -376,9 +376,8 @@ intrSlcDerivationSentences :: [Sentence]
 intrSlcDerivEqns :: (ExprC r, LiteralC r) => [r]
 intrSlcDerivEqn :: PExpr
 crtSlpId :: InstanceModel
-crtSlpIdMK :: ModelKind Expr
-crtSlpIdQD :: SimpleQDef
-crtSlpIdExpr :: Expr
+crtSlpIdRC :: RelationConcept
+crtSlpIdRel :: Relation
 crtSlpIdDesc :: Sentence
 instModIntro :: [Sentence]
 instModIntro1 :: Sentence

@@ -528,7 +528,7 @@ rules explain our bidirectional type-checker's rules.
 
 \newTypeRule{Frac. Bin. Op}{fracBinOp}
       {\isNum{s} \\ \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
-      {\Gamma \vdash \frac{l}{r} \Rightarrow \bb{B}}
+      {\Gamma \vdash \frac{l}{r} \Rightarrow s}
 
 %   infer cxt (ArithBinaryOp Pow l r) = case (infer cxt l, infer cxt r) of
 %     (Left lt, Left rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))

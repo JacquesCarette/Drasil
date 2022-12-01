@@ -737,9 +737,9 @@ Eventually, it should be replaced with a whole ``breadcrumbs''-like system that
 elegantly displays a traversal over an expression, showing where type checking
 may have gone awry and why an expression is ill-typed.
 
-Now we may build out the bidirectional type checker for \Expr{}: \todo{insert
-code snippet for Typed instance for Expr \& Space}. All that's left is to
-actually use the type checker.
+Now we may build out the bidirectional type checker for \Expr{}:
+\refCurrentExprBidirTypeCheckingHaskell{}. All that's left is to actually use
+the type checker.
 
 While we would prefer to localize type-checking to the instant applicable chunks
 are created (and expressions too), we unfortunately aren't able to. As

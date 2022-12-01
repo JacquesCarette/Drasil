@@ -1,4 +1,4 @@
-\begin{haskell}{Current Expr Constructor Encoding (TTF)}{curExprTTF}{https://github.com/JacquesCarette/Drasil/blob/ab9e091dabd81685ddef86b0d218582c9f75cb20/code/drasil-lang/lib/Language/Drasil/Expr/Class.hs\#L58-L212}
+\begin{haskell}{Current Expr Constructor Encoding (TTF)}{curExprTTF}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/Expr/Class.hs\#L86-L209}
 class ExprC r where
   infixr 8 $^
   infixl 7 $/
@@ -7,7 +7,7 @@ class ExprC r where
   infixr 9 $||
   
   lit :: Literal -> r
-  
+
   -- * Binary Operators
   
   ($=), ($!=) :: r -> r -> r
@@ -105,9 +105,6 @@ class ExprC r where
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean :: [r] -> r
   
-  -   TODO:  sum' :: (Num a, Foldable t) => t a -> a
-  -   TODO:  sum' = foldr1 (+)
-    
   -- | Smart constructor to cross product two expressions.
   cross :: r -> r -> r
   
@@ -118,41 +115,12 @@ class ExprC r where
   incompleteCase :: [(r, r)] -> r
   
   -- | Create a matrix.
-  -- TODO: Re-work later.
   matrix :: [[r]] -> r
-  
-  
-  -- TODO: The 3 below smart constructors can be re-built above without needing to be inside of this typeclass definition.
-  
-  
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 :: r -> r -> r -> r -> r
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D :: r -> r -> r
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 :: r -> r -> r
-  
-  -- Some helper functions to do function application
-  
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
+
+
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 
-    -> [r] -> [(a, r)] -> r
-  
+   
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r

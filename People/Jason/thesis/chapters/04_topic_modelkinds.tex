@@ -263,10 +263,10 @@ where we normally write \RelationConcept{}s\footnote{Note: since the
     \RelationConcept{}s a ``view'' of \QDefinition{} by re-interpreting them while
     connecting the formula to the defined variable with an equality.}. For example,
 if we wanted to convert \inlineHs{landPosRC} into a \QDefinition, we might do it
-as \refOriginalLandPosRCtoQD{}, where \inlineHs{E.landPosExpr} is a variable
+as \refCurrentLandPosRCtoQD{}, where \inlineHs{E.landPosExpr} is a variable
 containing the expression (formula) defining the \inlineHs{landPos} symbol.
 
-\originalLandPosRCtoQD{}
+\currentLandPosRCtoQD{}
 
 However, merely replacing all \RelationConcept{}s with \QDefinition{}s is also
 limiting. We want to use more \textit{kinds} of theories too! Thus,
@@ -295,12 +295,12 @@ created:
 \end{enumerate}
 
 Now, with \EquationalModel{}, we may finally rebuild \inlineHs{landPosIM} using
-the improved structure (\refOriginalLandPosIMQD{}). At the moment, it does not
+the improved structure (\refCurrentLandPosIMQD{}). At the moment, it does not
 change the expected generated artifacts, however, if desired, one can change
 output types of theories in the \acs{srs} (or code) by adding new kinds of
 \QDefinition{} and \ModelKinds{} interpretations.
 
-\originalLandPosIMQD{}
+\currentLandPosIMQD{}
 
 Continuing, the \DEModel{}s still require a bit of manual circumvention, but
 bringing some of the information back into the core ``theories'' to use in the

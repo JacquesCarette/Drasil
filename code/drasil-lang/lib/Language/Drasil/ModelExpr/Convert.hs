@@ -74,6 +74,9 @@ vvvBinOp E.Cross = Cross
 vvnBinOp :: E.VVNBinOp -> VVNBinOp
 vvnBinOp E.Dot = Dot
 
+nvvBinOp :: E.NVVBinOp -> NVVBinOp
+nvvBinOp E.Scale = Scale
+
 expr :: E.Expr -> ModelExpr
 expr (E.Lit a)               = Lit a
 expr (E.AssocA ao es)        = AssocA (assocArithOper ao) $ map expr es
@@ -93,6 +96,7 @@ expr (E.LABinaryOp la l r)   = LABinaryOp (laBinOp la) (expr l) (expr r)
 expr (E.OrdBinaryOp o l r)   = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
 expr (E.VVVBinaryOp v l r)   = VVVBinaryOp (vvvBinOp v) (expr l) (expr r)
 expr (E.VVNBinaryOp v l r)   = VVNBinaryOp (vvnBinOp v) (expr l) (expr r)
+expr (E.NVVBinaryOp v l r)   = NVVBinaryOp (nvvBinOp v) (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)
 expr (E.RealI u ri)          = RealI u (realInterval ri)
 

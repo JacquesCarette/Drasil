@@ -42,6 +42,10 @@ data VVVBinOp = Cross
 data VVNBinOp = Dot
   deriving Eq
 
+-- | @Number x Vector -> Vector@ binary operations (scaling).
+data NVVBinOp = Scale
+  deriving Eq
+
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = AddI | AddRe | MulI | MulRe
   deriving Eq
@@ -134,6 +138,8 @@ data ModelExpr where
   VVVBinaryOp   :: VVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
   VVNBinaryOp   :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
+  NVVBinaryOp   :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.

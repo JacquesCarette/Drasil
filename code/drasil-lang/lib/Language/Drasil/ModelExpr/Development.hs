@@ -5,7 +5,7 @@ module Language.Drasil.ModelExpr.Development (
   -- ModelExpr
     ModelExpr(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..)
-  , SpaceBinOp(..), StatBinOp(..), VVVBinOp(..), VVNBinOp(..)
+  , SpaceBinOp(..), StatBinOp(..), VVVBinOp(..), VVNBinOp(..), NVVBinOp(..)
   , AssocArithOper(..), AssocBoolOper(..)
   , DerivType(..), Completeness(..)
   -- * Functions

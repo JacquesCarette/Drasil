@@ -54,6 +54,10 @@ data VVVBinOp = Cross
 data VVNBinOp = Dot
   deriving Eq
 
+-- | @Number x Vector -> Vector@ binary operations (scaling).
+data NVVBinOp = Scale
+  deriving Eq
+
 -- TODO: I suppose these can be merged to just Add and Mul?
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = AddI | AddRe | MulI | MulRe
@@ -129,6 +133,8 @@ data Expr where
   VVVBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
   VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
+  NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
@@ -156,6 +162,7 @@ instance Eq Expr where
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
+  NVVBinaryOp o a b   == NVVBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -345,6 +352,17 @@ instance Typed Expr Space where
       then Left lsp
       else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
     (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
+    (_, Right rx) -> Right rx
+    (Right lx, _) -> Right lx
+
+  infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left rsp
+      else if lt /= rsp then
+        Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
+      else
+        Right $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
+    (Left _, Left rsp) -> Right $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 

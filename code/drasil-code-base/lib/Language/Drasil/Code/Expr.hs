@@ -39,6 +39,10 @@ data VVVBinOp = Cross
 data VVNBinOp = Dot
   deriving Eq
 
+-- | @Number x Vector -> Vector@ binary operations (scaling).
+data NVVBinOp = Scale
+  deriving Eq
+
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = AddI | AddRe | MulI | MulRe
   deriving Eq
@@ -126,6 +130,8 @@ data CodeExpr where
   VVVBinaryOp   :: VVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
   VVNBinaryOp   :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
+  NVVBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
@@ -271,6 +277,8 @@ instance ExprC CodeExpr where
   
   -- | Smart constructor for negating vectors.
   negVec = UnaryOpVV NegV
+  -- | And more general scaling
+  vScale = NVVBinaryOp Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not

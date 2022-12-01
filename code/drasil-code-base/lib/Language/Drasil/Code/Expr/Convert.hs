@@ -41,6 +41,7 @@ expr (LD.LABinaryOp bo l r)    = LABinaryOp (laBinOp bo) (expr l) (expr r)
 expr (LD.OrdBinaryOp bo l r)   = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
 expr (LD.VVVBinaryOp bo l r)   = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
 expr (LD.VVNBinaryOp bo l r)   = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
+expr (LD.NVVBinaryOp bo l r)   = NVVBinaryOp (nvvBinOp bo) (expr l) (expr r)
 expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
 expr (LD.RealI u ri)           = RealI u (realInterval ri)
 
@@ -85,6 +86,9 @@ vvvBinOp LD.Cross = Cross
 
 vvnBinOp :: LD.VVNBinOp -> VVNBinOp
 vvnBinOp LD.Dot = Dot
+
+nvvBinOp :: LD.NVVBinOp -> NVVBinOp
+nvvBinOp LD.Scale = Scale
 
 assocArithOp :: LD.AssocArithOper -> AssocArithOper
 assocArithOp LD.AddI = AddI -- TODO: These L.'s should be exported through L.D.Development

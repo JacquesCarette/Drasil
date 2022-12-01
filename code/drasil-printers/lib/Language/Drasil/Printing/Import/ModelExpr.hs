@@ -174,6 +174,7 @@ modelExpr (OrdBinaryOp LEq a b)      sm = mkBOp sm P.LEq a b
 modelExpr (OrdBinaryOp GEq a b)      sm = mkBOp sm P.GEq a b
 modelExpr (VVNBinaryOp Dot a b)      sm = mkBOp sm P.Dot a b
 modelExpr (VVVBinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
+modelExpr (NVVBinaryOp Scale a b)    sm = mkBOp sm P.Scale a b
 modelExpr (Operator o d e)           sm = eop sm o d e
 modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri

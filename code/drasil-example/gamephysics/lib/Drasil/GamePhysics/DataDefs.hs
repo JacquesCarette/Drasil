@@ -289,7 +289,7 @@ kEnergy :: SimpleQDef
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
-kEnergyEqn = sy QPP.mass `mulRe` half (square (sy QP.velocity))
+kEnergyEqn = sy QPP.mass `mulRe` half (square (norm (sy QP.velocity)))
 
 kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [atStart QP.kEnergy `S.is` (QP.kEnergy ^. defn)]

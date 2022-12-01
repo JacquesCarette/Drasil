@@ -8,7 +8,7 @@ import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
-  VVNBinOp(..), VVVBinOp(..), eprec, precA, precB)
+  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), eprec, precA, precB)
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
@@ -157,8 +157,9 @@ expr (OrdBinaryOp Lt a b)     sm = mkBOp sm P.Lt a b
 expr (OrdBinaryOp Gt a b)     sm = mkBOp sm P.Gt a b
 expr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b
 expr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
-expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
+expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
+expr (NVVBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
 expr (Operator o d e)         sm = eop sm o d e
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri

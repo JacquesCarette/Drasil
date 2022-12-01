@@ -13,7 +13,7 @@ import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
 import Language.Drasil.Code.Expr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  VVNBinOp(..), VVVBinOp(..))
+  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
@@ -335,6 +335,7 @@ convExpr (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
 convExpr (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
 convExpr (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExpr a) (convExpr b)
 convExpr (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExpr a) (convExpr b)
+convExpr (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
@@ -456,6 +457,10 @@ vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
 -- Maps a 'VVNBinOp' to it's corresponding GOOL binary function.
 vecVecNumBfunc :: VVNBinOp -> (SValue r -> SValue r -> SValue r)
 vecVecNumBfunc Dot = error "convExpr DotProduct"
+
+-- Maps a 'NVVBinOp' to it's corresponding GOOL binary function.
+numVecVecBfunc :: NVVBinOp -> (SValue r -> SValue r -> SValue r)
+numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
 
 -- medium hacks --
 

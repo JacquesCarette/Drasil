@@ -43,6 +43,10 @@ prec2VVV _ = 190
 prec2VVN :: VVNBinOp -> Int
 prec2VVN _ = 190
 
+-- | prec2NVV - precedence for Num->Vec->Vec-related binary operations.
+prec2NVV :: NVVBinOp -> Int
+prec2NVV _ = 190
+
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
 precA MulI  = 190
@@ -99,5 +103,6 @@ mePrec (StatBinaryOp bo _ _)  = prec2Stat bo
 mePrec (OrdBinaryOp bo _ _)   = prec2Ord bo
 mePrec (VVVBinaryOp bo _ _)   = prec2VVV bo
 mePrec (VVNBinaryOp bo _ _)   = prec2VVN bo
+mePrec (NVVBinaryOp bo _ _)   = prec2NVV bo
 mePrec RealI{}                = 170
 mePrec ForAll{}               = 130

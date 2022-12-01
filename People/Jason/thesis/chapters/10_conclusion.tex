@@ -1,4 +1,93 @@
 \chapter{Conclusion}
 \label{chap:conclusion}
 
-\imptodo{Write a conclusion chapter.}
+In this thesis, we addressed 4 research questions, as stated in
+\Cref{chap:intro:sec:research-questions}:
+
+\begin{enumerate}
+
+    \item[\textbf{RQ1}] \textit{Drasil's current encoding of ``theories'' are
+          essentially black boxes. We would like to be able to use some
+          structural information present in the short list of the ``kinds'' of
+          theories that show up in scientific computing. How do we codify that?}
+
+\end{enumerate}
+
+In \Cref{chap:modelkinds}, we discussed how Drasil uses theories as part of an
+abstracted \acs{srs} template \cite{SmithAndLai2005}. By having users ``fill
+in'' the abstracted \acs{srs} templates information about scientific problems
+where software can be somehow used, Drasil is able to generate that usable
+software. However, when the depth of the scientific knowledge transcribed in the
+\acs{srs} is too shallow, Drasil's developers struggled to make adequate use of
+the knowledge transcribed. To mitigate these issues, we added structure (depth)
+to the scientific theories. In doing so, we had opened up further opportunities
+for domain-specific interpretation, such as analysis, flexible printing, and,
+most importantly, code generation. Dong's work \cite{Chen2022MEng} has
+anecdotally shown the success of this. Furthermore, in
+\Cref{chap:more-theory-kinds}, we began dissecting Drasil's currently encoded
+theories and replaced their encodings with structured variants, in hopes of
+further usage in code generation in the future.
+
+\begin{enumerate}
+    
+    \item[\textbf{RQ2}] \textit{Drasils theory encodings rely on a single
+          mathematical expression language, and doesn't expose information about
+          applicability to different contexts. In each context (e.g., code,
+          theories, and common arithmetic), certain terms of the expression
+          language should be treated differently, or are simply inapplicable.
+          How can we restrict term usage by context?}
+
+\end{enumerate}
+
+In \Cref{chap:lang-division}, we analyzed Drasil's single, universal
+mathematical expression language, divided it according to Drasil's current
+needs, and created a means of using the divided variants seamlessly through
+creating a \acs{ttf} encoding of it's smart constructors. In doing this, we were
+able to restrict the mathematical expressions admitted in concrete theories to
+only those with definite values, where we have confidence that we can generate
+code for.
+
+\begin{enumerate}
+
+    \item[\textbf{RQ3}] \textit{How can we ensure that our mathematical
+          expression language admits only valid expressions?}
+
+\end{enumerate}
+
+In \Cref{chap:typed-expr}, we had created a definition of what it means for
+expressions to be ``valid'' following common mathematical conventions by
+creating a system of type-rules that our expressions must obey. Additionally, we
+implemented a bidirectional type-checker to catch all expressions before they
+are used in code generation. The type-checker we built had exposed many small
+typing issues in Drasil, and trying to fix them quickly spiralled into exposing
+some deep-rooted problems in Drasil. However, we also built the type-checker in
+a very flexible way, so that we can later extend it to further needs, but also
+so that we can adjust the type rules as needed.
+
+\begin{enumerate}
+
+    \item[\textbf{RQ4}] \textit{Our current ``typed'' approach to collecting
+          different kinds of data is difficult to extend. How can we make it
+          easier to extend?}
+
+\end{enumerate}
+
+In \Cref{chap:storingChunks}, we discussed how ``knowledge'' (chunks) is encoded
+and stored in Drasil, and the essential requirements Drasil actually has of its
+chunks. By reducing chunks to those requirements, we were able to extend
+Drasil's chunk database to allowing for any chunk that fulfills said essential
+needs to be stored in Drasil.
+
+While there is a considerable amount of future work to be done
+(\Cref{chap:future-work}), I'm sure that leftover work will lead to more work by
+Drasil's very nature. Thus, with those leftover tasks in mind, I reflect.
+
+\subsection{What I Learned}
+\label{chap:conclusion:what-i-learned}
+
+The entirety of \Cref{chap:ideology} is one of the most important things I've
+learned by conducting this research. Another important thing I've learned is
+that \textit{actual} communication of knowledge from one to others is far more
+complicated than it seems, and that any piece of knowledge has considerable
+nuance to it. By codifying our understandings of things, we're able to test just
+how ``well-understood'' \cite{well-understood} they truly are to us.

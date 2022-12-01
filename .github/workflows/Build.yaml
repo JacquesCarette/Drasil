@@ -30,7 +30,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: "Update apt package list"
         run: |
-          sudo sed -i 's/azure\.//' /etc/apt/sources.list
           sudo apt-get update 
           sudo apt upgrade -y
       - name: "Install system requirements"

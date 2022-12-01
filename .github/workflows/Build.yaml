@@ -16,7 +16,7 @@ jobs:
       github.event_name == 'pull_request'
       || github.event_name == 'workflow_dispatch'
       || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || contains(github.event.head_commit.message, '[workflow-trigger]')))
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
@@ -25,9 +25,9 @@ jobs:
   build:
     needs: auto-cancel
     name: "Build & Deploy"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: "Update apt package list"
         run: |
           sudo apt-get update 

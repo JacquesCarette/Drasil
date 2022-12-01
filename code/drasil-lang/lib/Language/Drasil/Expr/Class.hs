@@ -192,6 +192,9 @@ class ExprC r where
   -- | Smart constructor to cross product two expressions.
   cross :: r -> r -> r
   
+  -- | Smart constructor for vector scaling
+  vScale :: r -> r -> r
+
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r
   
@@ -335,6 +338,8 @@ instance ExprC Expr where
   
   -- | Smart constructor for negating vectors.
   negVec = UnaryOpVV NegV
+  -- | And more general scaling
+  vScale = NVVBinaryOp Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not
@@ -502,6 +507,8 @@ instance ExprC M.ModelExpr where
 
   -- | Smart constructor for negating vectors.
   negVec = M.UnaryOpVV M.NegV
+  -- | More general scaling
+  vScale = M.NVVBinaryOp M.Scale
 
   -- | Smart constructor for applying logical negation to an expression.
   not_ = M.UnaryOpB M.Not

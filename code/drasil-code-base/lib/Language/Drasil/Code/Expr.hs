@@ -277,6 +277,8 @@ instance ExprC CodeExpr where
   
   -- | Smart constructor for negating vectors.
   negVec = UnaryOpVV NegV
+  -- | And more general scaling
+  vScale = NVVBinaryOp Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not

@@ -53,19 +53,16 @@ Java code is a bit more complicated. In some instances, conversion to usable
 to an approximation formula at least (both options should not be imposed on
 users by Drasil either!).
 
-\subsection{A Problem}
-\label{chap:lang-division:sec:a-mathematical-language:subsec:a-problem}
-
 In other words, the transformation of \Expr{}s to ``code''\footnote{Through
-\acs{gool}!} is not \textit{total} (i.e., not all possible expressions of the
-\Expr{} language can be converted into a representational \acs{gool}
-expression). Additionally, we lack static information about when instances of
-expressions are actually usable in code generation. As such, we're currently
-limited to relying on implicit information. Of course, in order to fix this
-problem, we need to make the information \textit{explicit} in Drasil, and use it
-appropriately. However, before we can make it explicit, we need to understand
-the contexts in which Drasil needs mathematical expressions and how they are
-used in those contexts.
+\acs{gool}!} is not \textit{total}, which is problematic. In other words, not
+all possible expressions of the \Expr{} language can be converted into a
+representational \acs{gool} expression. Additionally, we lack static information
+about when instances of expressions are actually usable in code generation. As
+such, we're currently limited to relying on implicit information. Of course, in
+order to fix this problem, we need to make the information \textit{explicit} in
+Drasil, and use it appropriately. However, before we can make it explicit, we
+need to understand the contexts in which Drasil needs mathematical expressions
+and how they are used in those contexts.
 
 Namely, there are 2 main use-cases of mathematical expressions in Drasil:
 describing theories as part of an \acs{srs} that should appear in ``code,'' or
@@ -161,3 +158,14 @@ continue uncovering the various \textit{kinds} of theories currently discussed
 in Drasils case studies.
 
 \pseudoPartialModelKindsUpgrade{}
+
+
+\imptodo{Figure out where to move these.}
+
+As previously discussed in \Cref{chap:modelkinds}, equational models define
+variables with some expression. \QDefinition{}s carry a basic set of information
+about the definition.
+
+\currentLandPosIMHaskell{}
+
+\currentQDefinitionHaskell{}

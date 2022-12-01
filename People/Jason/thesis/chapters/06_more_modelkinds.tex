@@ -8,49 +8,50 @@
 	\item What theories currently are used in Drasil?
 \end{writingdirectives}
 
-In this chapter, we return to examining the existing theories in Drasil, hoping
-to discover more \textit{kinds} of theories in them to create further
+In this chapter, we return to examining more of the existing theories in Drasil,
+and create alternative, structured versions of them to create further
 opportunities for domain-specific interpretation.
+
+\section{Remaining Theories}
+\label{chap:more-theory-kinds:sec:remaining-theories}
+
+As of writing, there are mainly two kinds of theories that are used in code
+generation: the equational model and the \acs{ode} models. However, they aren't
+the only kinds of theories encoded in Drasil. There are at least two other
+re-occuring kinds of theories. One of them is a kind of theory that shows
+multiple ways to define a quantity. For example, \refExampleEquationalRealmImg{}
+is an example from the \acs{swhs} case study. Meanwhile, the other kind of
+theory is one that imposes constraints on a system. For example,
+\refExampleEquationalConstraintsImg{} is an example from the \acs{ssp} case
+study.
+
+\refExampleEquationalRealmImg{} shows an abstract ``force'' variable,
+\(\mathbf{F}\), which be defined by at least two different expressions: \(m
+\mathbf{a}\) or \(-{\mathbf{T}_{1}}
+\sin\left({\theta_{1}}\right)+{\mathbf{T}_{2}} \sin\left({\theta_{2}}\right)\).
+This theory, in particular, is used abstractly, providing reasoning for building
+different ways to define \(\mathbf{F}\), but also creating opportunity for
+further specialization in other theories or systems. For example, this theory is
+used as part of the derivation of another theory
+(\refExampleEquationalRealmUsageImg{}).
+
+Meanwhile, \refExampleEquationalConstraintsImg{} shows a theory that explains
+that the conditions under which a body may be considered to be in static
+equilibrium. This theory was intended to be used as part of constricting other
+theories. For example, it was used as part of the development of another theory
+(\refExampleEquationalConstraintsUsageImg{}).
+
+\exampleEquationalRealmImg{}
+
+\exampleEquationalConstraintsImg{}
+
+Finally, with these theories in mind, we may start to add structured containers
+to replace the existing \RelationConcept{}s and \Relation{}s, currently used to
+build them, in hopes that we can eventually learn how we really want to use
+these theories.
 
 \section{\textquotedblleft{}Classify All The Theories\textquotedblright{}}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories}
-
-With \Cref{chap:lang-division}, we divided the \Expr{} language into 3 variants
-and use them to indicate usability of theories in code generation. Now, we may
-return to examining the existing encoded theories in Drasil, while also begin
-careful to ensure that all created theory kinds are expressible in the ``general
-mathematical language'' (i.e., \ModelExpr{}). We may do this by ensuring they
-all instantiate the \Express{} (\refCurrentExpressHaskell{}) typeclass. Starting
-at the end and working our way back, we end with
-\refCurrentModelKindsHaskell{}\footnote{In the \refCurrentModelKindsHaskell{}
-	definition, there are two (2) TO-DO notes that you may disregard. The first one
-	is merely a note for analyzing ``well-understood'' copies of our existing
-	\acsp{ode}, and the second one refers to models that haven't yet been fully
-	analyzed for how they will be used (other than for display).}.
-
-\currentModelKindsHaskell{}
-
-\subsection{Equational Models}
-\label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-models}
-
-As previously discussed, equational models define variables with some
-expression. \QDefinition{}s carry a basic set of information about the
-definition.
-
-\currentLandPosIMHaskell{}
-
-\currentQDefinitionHaskell{}
-
-\subsection{Equational Constraints}
-\label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-constraints}
-
-``Equational constraints'' are theories that assert certain properties over
-other theories. They use \ConstraintSet{}s under the hood
-(\refCurrentConstraintSetHaskell{}) to hold a list of relations for assertion.
-
-\currentExampleEquationalConstraintsHaskell{}
-
-\currentConstraintSetHaskell{}
 
 \subsection{Equational Realms}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms}
@@ -69,19 +70,30 @@ ways to define the horizontal force on an object:
 
 \currentDefiningExprHaskell{}
 
+\subsection{Equational Constraints}
+\label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-constraints}
+
+``Equational constraints'' are theories that assert certain properties over
+other theories. They use \ConstraintSet{}s under the hood
+(\refCurrentConstraintSetHaskell{}) to hold a list of relations for assertion.
+
+\currentExampleEquationalConstraintsHaskell{}
+
+\currentConstraintSetHaskell{}
+
 \subsection{Differential Equations}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:differential-equations}
 
 The capture of differential equations in Drasil is an active area of research.
-Dong Chen continued work here, creating \NewDEModel{} \cite{Chen2022MEng} to
-start capturing information about linear \acs{ode} systems. \DEModel{} is left
-as a temporary carriage for the remaining theories to be similarly analyzed and
-re-built with a deeper depth of knowledge capture, so that we can make better
-use of the information in them. Thanks to Dong's work, Drasil is now able to
-generate software for the \acs{dblpendulum} case study in Java, Python, C/C$++$,
-and C\# \cite{Chen2022MEng}. As such, this research already has some success in
-enabling more theories to be encoded in Drasil and appropriately used for
-various purposes.
+Dong Chen continued work here, creating \NewDEModel{} \cite{Chen2022MEng} (a new
+constructor in \ModelKinds{}) to start capturing information about linear
+\acs{ode} systems. \DEModel{} is left as a temporary carriage for the remaining
+theories to be similarly analyzed and re-built with a deeper depth of knowledge
+capture, so that we can make better use of the information in them. Thanks to
+Dong's work, Drasil is now able to generate software for the \acs{dblpendulum}
+case study in Java, Python, C/C$++$, and C\# \cite{Chen2022MEng}. As such, this
+research already has some success in enabling more theories to be encoded in
+Drasil and appropriately used for various purposes.
 
 \subsection{Theories Left Undiscussed}
 \label{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:theories-left-undiscussed}
@@ -93,6 +105,16 @@ necessary. Notably, \ModelKinds{} still contains \OthModel{}, meaning that there
 still exist theories in Drasil, which are used in justifications, of which we
 haven't yet decided how we want to use yet\footnote{This is ``future work'' for
 now.}.
+
+Finally, after \Cref{chap:lang-division} and this brief structuring of some
+existing theories, we end with \ModelKinds{} appearing as in
+\refCurrentModelKindsHaskell{}\footnote{In the \refCurrentModelKindsHaskell{}
+definition, there are two (2) TO-DO notes that you may disregard. The first one
+is merely a note for analyzing ``well-understood'' copies of our existing
+\acsp{ode}, and the second one refers to models that haven't yet been fully
+analyzed for how they will be used (other than for display).}.
+
+\currentModelKindsHaskell{}
 
 Finally, as a result of implementing \ModelKinds{} (\Cref{chap:modelkinds}) and
 the expression language division (\Cref{chap:lang-division}), we are now able

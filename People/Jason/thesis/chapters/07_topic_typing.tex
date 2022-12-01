@@ -34,23 +34,21 @@ theories as part of its input. There are two kinds of theories that the code
 generator uses from the abstracted \acs{srs} template: instance models and data
 definitions. Data definitions are, as the name suggests, concrete symbol
 definitions using expressions (similar to the \EquationalModel{} \ModelKind{}
-variant, discussed in
-\Cref{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-models}).
-On the other hand, instance models may contain data definitions or any of the
-other applicable \ModelKinds{} variants (discussed in
-\Cref{chap:more-theory-kinds}, albeit currently limited\footnote{For our
-purposes, it's enough to assume that they can expose any number of expressions
-usable in code generation.}). In order for the expressions they expose/form to
-be usable in code generation, the expressions must be representable in
-\acs{gool} somehow\footnote{Since all code generation for Drasil currently goes
-through \acs{gool}.}. Thanks to \Cref{chap:lang-division}, \Expr{} has become
-the expression language that currently limits mathematical expressions in both
-instance models and data definitions to ones with definite values that can be
-directly computed on pencil and paper, and in most modern programming languages.
-However, translatability to \acs{gool} does not necessarily mean that all the
-expressions are actually coherent and usable. At the moment, it is possible to
-give Drasils instance models and data definitions invalid \Expr{}s and have
-Drasil generate code.
+variant, discussed in \Cref{chap:modelkinds}). On the other hand, instance
+models may contain data definitions or any of the other applicable \ModelKinds{}
+variants (discussed in \Cref{chap:more-theory-kinds}, albeit currently
+limited\footnote{For our purposes, it's enough to assume that they can expose
+any number of expressions usable in code generation.}). In order for the
+expressions they expose/form to be usable in code generation, the expressions
+must be representable in \acs{gool} somehow\footnote{Since all code generation
+for Drasil currently goes through \acs{gool}.}. Thanks to
+\Cref{chap:lang-division}, \Expr{} has become the expression language that
+currently limits mathematical expressions in both instance models and data
+definitions to ones with definite values that can be directly computed on pencil
+and paper, and in most modern programming languages. However, translatability to
+\acs{gool} does not necessarily mean that all the expressions are actually
+coherent and usable. At the moment, it is possible to give Drasils instance
+models and data definitions invalid \Expr{}s and have Drasil generate code.
 
 \pseudoExampleLandPosQDBadTyping{}
 

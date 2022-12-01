@@ -13,18 +13,12 @@ In this thesis, we addressed 4 research questions, as stated in
 
 \end{enumerate}
 
-In \Cref{chap:modelkinds}, we discussed how Drasil uses theories as part of an
-abstracted \acs{srs} template \cite{SmithAndLai2005}. By having users ``fill
-in'' the abstracted \acs{srs} templates information about scientific problems
-where software can be somehow used, Drasil is able to generate that usable
-software. However, when the depth of the scientific knowledge transcribed in the
-\acs{srs} is too shallow, Drasil's developers struggled to make adequate use of
-the knowledge transcribed. To mitigate these issues, we added structure (depth)
-to the scientific theories. In doing so, we had opened up further opportunities
-for domain-specific interpretation, such as analysis, flexible printing, and,
-most importantly, code generation. Dong's work \cite{Chen2022MEng} has
-anecdotally shown the success of this. Furthermore, in
-\Cref{chap:more-theory-kinds}, we began dissecting Drasil's currently encoded
+In \Cref{chap:modelkinds}, we replaced the ``black boxes'' with structured
+versions of the same, meaningful, theories. In doing so, we opened up
+opportunities for more domain-specific interpretation of same theories, such as
+analysis, flexible printing, and, most importantly, code generation. Dong's work
+\cite{Chen2022MEng} has anecdotally shown the success of this work. Furthermore,
+in \Cref{chap:more-theory-kinds}, we began dissecting Drasil's currently encoded
 theories and replaced their encodings with structured variants, in hopes of
 further usage in code generation in the future.
 
@@ -39,13 +33,12 @@ further usage in code generation in the future.
 
 \end{enumerate}
 
-In \Cref{chap:lang-division}, we analyzed Drasil's single, universal
-mathematical expression language, divided it according to Drasil's current
-needs, and created a means of using the divided variants seamlessly through
-creating a \acs{ttf} encoding of it's smart constructors. In doing this, we were
-able to restrict the mathematical expressions admitted in concrete theories to
-only those with definite values, where we have confidence that we can generate
-code for.
+In \Cref{chap:lang-division}, we analyzed Drasil's single mathematical
+expression language, divided it according to Drasil's current needs, and created
+a means of using the divided variants seamlessly through creating a \acs{ttf}
+encoding of it's smart constructors. In doing this, we were able to restrict the
+mathematical expressions admitted in concrete theories to only those with
+definite values, where we have confidence that we can generate code for.
 
 \begin{enumerate}
 
@@ -54,15 +47,12 @@ code for.
 
 \end{enumerate}
 
-In \Cref{chap:typed-expr}, we had created a definition of what it means for
-expressions to be ``valid'' following common mathematical conventions by
-creating a system of type-rules that our expressions must obey. Additionally, we
-implemented a bidirectional type-checker to catch all expressions before they
-are used in code generation. The type-checker we built had exposed many small
-typing issues in Drasil, and trying to fix them quickly spiralled into exposing
-some deep-rooted problems in Drasil. However, we also built the type-checker in
-a very flexible way, so that we can later extend it to further needs, but also
-so that we can adjust the type rules as needed.
+In \Cref{chap:typed-expr}, we began creating a system of type-rules that our
+concrete mathematical expressions (\Expr{}) must obey. To enforce the type-rules
+in Drasil, we built a bidirectional type-checker that runs on a whole \acs{srs}
+and reports any errors it finds. We described the bidirectional type-checking
+rules under a typeclass, so that we can later also add typing rules and
+enforcement to the other expression languages.
 
 \begin{enumerate}
 
@@ -72,19 +62,15 @@ so that we can adjust the type rules as needed.
 
 \end{enumerate}
 
-In \Cref{chap:storingChunks}, we discussed how ``knowledge'' (chunks) is encoded
-and stored in Drasil, and the essential requirements Drasil actually has of its
-chunks. By reducing chunks to those requirements, we were able to extend
-Drasil's chunk database to allowing for any chunk that fulfills said essential
-needs to be stored in Drasil.
+In \Cref{chap:storingChunks}, we created a chunk database structure that is
+capable of collecting \textit{any} chunk that conforms to a basic set of
+requirements (e.g., has \acs{uid} and references to required chunks, by
+\acs{uid}).
 
 While there is a considerable amount of future work to be done
-(\Cref{chap:future-work}), I'm sure there will be an endless supply of more
+(\Cref{chap:future-work}), I'm certain there will be an endless supply of
 ``future work'' after those tasks. Thus, with those leftover tasks in mind, I
 pause for reflection.
-
-\section{What I Learned}
-\label{chap:conclusion:what-i-learned}
 
 The entirety of \Cref{chap:ideology} is one of the most important things I've
 learned by conducting this research. Another important thing I've learned is

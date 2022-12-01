@@ -217,6 +217,10 @@ data CodeExpr
 --   (dot product).
 [VVNBinaryOp] :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
+-- | Binary operator for <tt>Number x Vector -&gt; Vector</tt> operations
+--   (scaling).
+[NVVBinaryOp] :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
@@ -264,6 +268,10 @@ Cross :: VVVBinOp
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
 Dot :: VVNBinOp
+
+-- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
+data NVVBinOp
+Scale :: NVVBinOp
 
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
@@ -494,6 +502,9 @@ euclidean :: ExprC r => [r] -> r
 
 -- | Smart constructor to cross product two expressions.
 cross :: ExprC r => r -> r -> r
+
+-- | Smart constructor for vector scaling
+vScale :: ExprC r => r -> r -> r
 
 -- | Smart constructor for case statements with a complete set of cases.
 completeCase :: ExprC r => [(r, r)] -> r

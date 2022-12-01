@@ -314,6 +314,9 @@ digraph alltypes {
 		subgraph vvnbinop{
 		VVNBinOp	[shape=oval, color=darkviolet, label="VVNBinOp"];
 		}
+		subgraph nvvbinop{
+		NVVBinOp	[shape=oval, color=darkviolet, label="NVVBinOp"];
+		}
 		subgraph assocarithoper{
 		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
 		}
@@ -355,6 +358,7 @@ digraph alltypes {
 		Expr -> OrdBinOp;
 		Expr -> VVVBinOp;
 		Expr -> VVNBinOp;
+		Expr -> NVVBinOp;
 		Expr -> DiscreteDomainDesc;
 		Expr -> RealInterval;
 		}
@@ -423,6 +427,9 @@ digraph alltypes {
 		subgraph vvnbinop{
 		VVNBinOp	[shape=oval, color=darkviolet, label="VVNBinOp"];
 		}
+		subgraph nvvbinop{
+		NVVBinOp	[shape=oval, color=darkviolet, label="NVVBinOp"];
+		}
 		subgraph assocarithoper{
 		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
 		}
@@ -474,6 +481,7 @@ digraph alltypes {
 		ModelExpr -> StatBinOp;
 		ModelExpr -> VVVBinOp;
 		ModelExpr -> VVNBinOp;
+		ModelExpr -> NVVBinOp;
 		ModelExpr -> DomainDesc;
 		ModelExpr -> t;
 		ModelExpr -> RealInterval;

@@ -288,6 +288,7 @@ Exp :: Ops
 Neg :: Ops
 Cross :: Ops
 Dot :: Ops
+Scale :: Ops
 Eq :: Ops
 NEq :: Ops
 Lt :: Ops

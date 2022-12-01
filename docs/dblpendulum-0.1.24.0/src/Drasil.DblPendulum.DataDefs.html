@@ -370,13 +370,13 @@ PExpr
 </span><span id="line-120"></span><span>
 </span><span id="line-121"></span><span class="annot"><a href="Drasil.DblPendulum.DataDefs.html#forceGEqn"><span class="hs-identifier hs-type">forceGEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PExpr</span></span><span>
 </span><span id="line-122"></span><span id="forceGEqn"><span class="annot"><span class="annottext">forceGEqn :: r
-</span><a href="Drasil.DblPendulum.DataDefs.html#forceGEqn"><span class="hs-identifier hs-var hs-var">forceGEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">mass</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="Drasil.DblPendulum.DataDefs.html#forceGEqn"><span class="hs-identifier hs-var hs-var">forceGEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
+</span><span class="hs-identifier hs-var">vScale</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">acceleration</span></span><span>
+</span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">)</span><span>
 </span><span id="line-123"></span></pre></body></html>

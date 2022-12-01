@@ -17,6 +17,7 @@ CodeExpr -> LABinOp;
 CodeExpr -> OrdBinOp;
 CodeExpr -> VVVBinOp;
 CodeExpr -> VVNBinOp;
+CodeExpr -> NVVBinOp;
 CodeExpr -> DiscreteDomainDesc;
 CodeExpr -> RealInterval;
 }

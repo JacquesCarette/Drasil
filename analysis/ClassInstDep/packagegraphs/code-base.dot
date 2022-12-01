@@ -10,6 +10,7 @@ LABinOp	[shape=oval, color=turquoise4, label="LABinOp"];
 OrdBinOp	[shape=oval, color=turquoise4, label="OrdBinOp"];
 VVVBinOp	[shape=oval, color=turquoise4, label="VVVBinOp"];
 VVNBinOp	[shape=oval, color=turquoise4, label="VVNBinOp"];
+NVVBinOp	[shape=oval, color=turquoise4, label="NVVBinOp"];
 AssocArithOper	[shape=oval, color=turquoise4, label="AssocArithOper"];
 AssocBoolOper	[shape=oval, color=turquoise4, label="AssocBoolOper"];
 UFunc	[shape=oval, color=turquoise4, label="UFunc"];

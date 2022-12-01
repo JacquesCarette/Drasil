@@ -47,6 +47,9 @@ digraph alltypes {
 		subgraph vvnbinop{
 		VVNBinOp	[shape=oval, color=darkviolet, label="VVNBinOp"];
 		}
+		subgraph nvvbinop{
+		NVVBinOp	[shape=oval, color=darkviolet, label="NVVBinOp"];
+		}
 		subgraph assocarithoper{
 		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
 		}
@@ -84,6 +87,7 @@ digraph alltypes {
 		CodeExpr -> OrdBinOp;
 		CodeExpr -> VVVBinOp;
 		CodeExpr -> VVNBinOp;
+		CodeExpr -> NVVBinOp;
 		CodeExpr -> DiscreteDomainDesc;
 		CodeExpr -> RealInterval;
 		}

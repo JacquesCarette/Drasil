@@ -1393,6 +1393,10 @@ Cross :: VVVBinOp
 data VVNBinOp
 Dot :: VVNBinOp
 
+-- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
+data NVVBinOp
+Scale :: NVVBinOp
+
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
@@ -1506,6 +1510,10 @@ data Expr
 --   (dot product).
 [VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
 
+-- | Binary operator for <tt>Expr x Vector -&gt; Vector</tt> operations
+--   (scaling).
+[NVVBinaryOp] :: NVVBinOp -> Expr -> Expr -> Expr
+
 -- | Operators are generalized arithmetic operators over a
 --   <tt>DomainDesc</tt> of an <a>Expr</a>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
@@ -1523,6 +1531,7 @@ instance GHC.Show.Show Language.Drasil.Expr.Lang.UFunc
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.UFunc
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.AssocBoolOper
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.AssocArithOper
+instance GHC.Classes.Eq Language.Drasil.Expr.Lang.NVVBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.VVNBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.VVVBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.OrdBinOp
@@ -1575,6 +1584,10 @@ Cross :: VVVBinOp
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
 Dot :: VVNBinOp
+
+-- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
+data NVVBinOp
+Scale :: NVVBinOp
 
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
@@ -1713,6 +1726,10 @@ data ModelExpr
 --   (dot product).
 [VVNBinaryOp] :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
+-- | Binary operator for <tt>Number x Vector -&gt; Vector</tt> operations
+--   (scaling).
+[NVVBinaryOp] :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
@@ -1737,6 +1754,7 @@ instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.UFunc
 instance GHC.Show.Show Language.Drasil.ModelExpr.Lang.AssocBoolOper
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.AssocBoolOper
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.AssocArithOper
+instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.NVVBinOp
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.VVNBinOp
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.VVVBinOp
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.OrdBinOp
@@ -1775,6 +1793,10 @@ prec2VVV :: VVVBinOp -> Int
 -- | prec2VVN - precedence for Vec-&gt;Vec-&gt;Num-related binary
 --   operations.
 prec2VVN :: VVNBinOp -> Int
+
+-- | prec2NVV - precedence for Num-&gt;Vec-&gt;Vec-related binary
+--   operations.
+prec2NVV :: NVVBinOp -> Int
 
 -- | precA - precedence for arithmetic-related Binary-Associative
 --   (Commutative) operators.
@@ -1892,6 +1914,7 @@ laBinOp :: LABinOp -> LABinOp
 ordBinOp :: OrdBinOp -> OrdBinOp
 vvvBinOp :: VVVBinOp -> VVVBinOp
 vvnBinOp :: VVNBinOp -> VVNBinOp
+nvvBinOp :: NVVBinOp -> NVVBinOp
 expr :: Expr -> ModelExpr
 realInterval :: RealInterval Expr Expr -> RealInterval ModelExpr ModelExpr
 domainDesc :: DiscreteDomainDesc Expr Expr -> DiscreteDomainDesc ModelExpr ModelExpr
@@ -1977,6 +2000,10 @@ data ModelExpr
 -- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
 --   (dot product).
 [VVNBinaryOp] :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Binary operator for <tt>Number x Vector -&gt; Vector</tt> operations
+--   (scaling).
+[NVVBinaryOp] :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
@@ -2066,6 +2093,10 @@ Cross :: VVVBinOp
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
 Dot :: VVNBinOp
+
+-- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
+data NVVBinOp
+Scale :: NVVBinOp
 
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
@@ -3171,6 +3202,10 @@ prec2VVV :: VVVBinOp -> Int
 --   operations.
 prec2VVN :: VVNBinOp -> Int
 
+-- | prec2NVV - precedence for Num-&gt;Vec-&gt;Vec-related binary
+--   operations.
+prec2NVV :: NVVBinOp -> Int
+
 -- | precA - precedence for arithmetic-related Binary-Associative
 --   (Commutative) operators.
 precA :: AssocArithOper -> Int
@@ -3285,6 +3320,10 @@ data Expr
 --   (dot product).
 [VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
 
+-- | Binary operator for <tt>Expr x Vector -&gt; Vector</tt> operations
+--   (scaling).
+[NVVBinaryOp] :: NVVBinOp -> Expr -> Expr -> Expr
+
 -- | Operators are generalized arithmetic operators over a
 --   <tt>DomainDesc</tt> of an <a>Expr</a>. Could be called BigOp. ex:
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
@@ -3362,6 +3401,10 @@ Cross :: VVVBinOp
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
 Dot :: VVNBinOp
+
+-- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
+data NVVBinOp
+Scale :: NVVBinOp
 
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
@@ -3532,6 +3575,9 @@ euclidean :: ExprC r => [r] -> r
 
 -- | Smart constructor to cross product two expressions.
 cross :: ExprC r => r -> r -> r
+
+-- | Smart constructor for vector scaling
+vScale :: ExprC r => r -> r -> r
 
 -- | Smart constructor for case statements with a complete set of cases.
 completeCase :: ExprC r => [(r, r)] -> r
@@ -5549,6 +5595,9 @@ euclidean :: ExprC r => [r] -> r
 
 -- | Smart constructor to cross product two expressions.
 cross :: ExprC r => r -> r -> r
+
+-- | Smart constructor for vector scaling
+vScale :: ExprC r => r -> r -> r
 
 -- | Smart constructor for case statements with a complete set of cases.
 completeCase :: ExprC r => [(r, r)] -> r

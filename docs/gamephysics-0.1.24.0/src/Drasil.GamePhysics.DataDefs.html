@@ -760,10 +760,12 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">norm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.velocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">QP.velocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-293"></span><span>
 </span><span id="line-294"></span><span class="annot"><a href="Drasil.GamePhysics.DataDefs.html#kEnergyDesc"><span class="hs-identifier hs-type">kEnergyDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-295"></span><span id="kEnergyDesc"><span class="annot"><span class="annottext">kEnergyDesc :: Sentence
@@ -949,4 +951,5 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">twoD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="Drasil.GamePhysics.Assumptions.html#assumpOD"><span class="hs-identifier hs-var">assumpOD</span></a></span><span class="hs-special">]</span></pre></body></html>
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpOD"><span class="hs-identifier hs-var">assumpOD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-339"></span></pre></body></html>

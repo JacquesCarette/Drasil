@@ -1,8 +1,25 @@
 \chapter{Abstract}
 \label{chap:abstract}
 
-An abstract, with a maximum of 300 words. See
-\url{https://gs.mcmaster.ca/app/uploads/2019/10/Prep_Guide_Masters_and_Doctoral_Theses_August-2021.pdf}
-for an explanation of the requirements.
-
-\imptodo{abstract}
+Drasil~\cite{Drasil2021} is a software suite for generating software, with
+particular focus for generating \ACF{scs} following the requirements described
+in an abstract \ACF{srs} template. The template breaks up scientific knowledge
+into various categories, and the abstracted variant of the template makes it
+digestible for Drasil. A series of \acsp{dsl} are used to ``fill in'' the
+template, from which Drasil is able to interpret an instance of, and configure a
+generation procedure to generate usable software. The depth of knowledge
+contained in the template's theories is key to understanding to what end we can
+interpret and use the instantiated theories. To strengthen this depth, we create
+a system for extending Drasil's known theory kinds and clearly explaining which
+ones are usable in any specific context. Similarly, each theory kind contains a
+particular subset of mathematical language that is relevant to them, and we act
+on this information to restrict usable expression terms to their related
+contexts. To further enrich the admissibility of expressions, we also make one
+of the most critical subsets, that for concrete theory transcription,
+\textit{type-safe} by building a \textit{bidirectional} type-checker that
+catches all existing typing issues. In doing so, we were able to uncover many
+typing issues in both the case studies generating code and those not. Finally,
+as Drasil relies on a plethora of different \textit{types} of knowledge, it
+needs a place to store them. Thus, we create a system to store any instance of
+any type of knowledge in Drasils memory bank of knowledge, and enforce a basic
+set of requirements that each type of knowledge must satisfy.

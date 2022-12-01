@@ -702,9 +702,11 @@ traversing \Expr{}s is information about the types associated with \UID{}s
 such as for symbols and function applications). Since each \UID{} relates to a
 symbol with a unique type, we can build a map that carries everything for us.
 
-\begin{pseudohaskell}{Typing Context, \(\Gamma\)}{pseudoTypingContext}
+\begin{haskell}{Typing Context, \(\Gamma\)}{typingContext}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/WellTyped.hs\#L17-L19}
+-- | We can only type check 'UID's within a type context relating 'UID's to
+--   types since they don't carry any type information.
 type TypingContext t = M.Map UID t
-\end{pseudohaskell}
+\end{haskell}
 
 Now we may build our type checker. As we will want to implement type checking
 for any expression types (such as for \CodeExpr{} and \ModelExpr{} eventually)
@@ -717,7 +719,7 @@ instantiated as needed. Using a typeclass with 2 parameters (\(e\) and \(t\))
 allows us to build out a bidirectional type checker with respect to any
 language, \(e\), and type universe, \(t\).
 
-\begin{pseudohaskell}{Modelling Bidirectional Type Checking}{pseudoModellingBidirectionalTypeChecking}
+\begin{haskell}{Modelling Bidirectional Type Checking}{curModellingBidirectionalTypeChecking}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/WellTyped.hs\#L28-L38}
 -- | Build a bidirectional type checker for your expression language, e, with
 --   respect to a specific type universe, t.
 class (Eq t, Show t) => Typed e t where
@@ -726,10 +728,11 @@ class (Eq t, Show t) => Typed e t where
   --   what went awry.
   infer :: TypingContext t -> e -> Either t TypeError
 
+
   -- | Given a typing context, an expression, and an expected type, check if the
   --   expression can satisfy the expectation.
   check :: TypingContext t -> e -> t -> Either t TypeError
-\end{pseudohaskell}
+\end{haskell}
 
 At the moment, \inlineHs{TypeError} is merely a type alias for a
 \inlineHs{String}, for which we manually typeset in a reasonably okay fashion.
@@ -759,14 +762,14 @@ generation. With this information in mind, we need to be able to extract all
 expressions and expected types, and relations from our \InstanceModel{}s and
 \DataDefinition{}s.
 
-\begin{pseudohaskell}{Requiring Type-checking Constraint}{pseudoRequiringTypecheckingConstraint}
+\begin{haskell}{Requiring Type-checking Constraint}{curRequiringTypecheckingConstraint}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/WellTyped.hs\#L40-L45}
 -- | For all containers, c, which contain typed expressions, e, against a
---   specific type universe, t, expose all expressions and relations that need 
+--   specific type universe, t, expose all expressions and relations that need
 --   to be type-checked.
 class Typed e t => RequiresChecking c e t where
   -- | All things that need type checking.
   requiredChecks :: c -> [(e, t)]
-\end{pseudohaskell}
+\end{haskell}
 
 With \inlineHs{RequiresChecking}, we have a typeclass for any instance of a
 type, \(c\), which may contain any number of expressions of type \(e\) that are
@@ -786,7 +789,7 @@ theories, such as the new \acs{ode} model variant, \NewDEModel{}
 \cite{Chen2022MEng} that need to be type-checked. Moving on, we may finally plug
 in our type-checker!
 
-\begin{pseudohaskell}{Type-checking a System}{pseudoTypeCheckingASystem}
+\begin{haskell}{Type-checking a System}{typeCheckingASystem}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-gen/lib/Language/Drasil/TypeCheck.hs\#L14-L62}
 typeCheckSI :: SystemInformation -> IO ()
 typeCheckSI
   (SI _ _ _ _ _ _ ims dds _ _ _ _ _ _ chks _ _)
@@ -806,9 +809,14 @@ typeCheckSI
     -- grab all type-check-able expressions (w.r.t. Space) from DDs and IMs
     let toChk = exprSpaceTups ims ++ exprSpaceTups dds
 
+    -- split up theories by "ones that contain things to type check" vs "not",
+    -- but in reverse
     let (notChkd, chkd) = partition (\(_, exsps) -> null exsps) toChk
 
-    mapM_ (\(t, _) -> putStrLn $ "WARNING: `" ++ show t ++ "` does not expose any expressions to type check.") notChkd
+    -- note that some theories didn't expose anything to type-check
+    mapM_ 
+      (\(t, _) -> putStrLn $ "WARNING: `" ++ show t ++ "` does not expose any expressions to type check.")
+      notChkd
 
     -- type check them
     let chkdd = map (second (map (uncurry (check cxt)))) chkd
@@ -826,12 +834,12 @@ typeCheckSI
             (\(tMsg, tcs) -> do
               putStrLn tMsg
               mapM_ (\(Right s) -> do
-                putStr "  - ERROR: " -- TODO: we need to be able to dump the expression to the console so that we can identify which expression caused the issue
+                putStr "  - ERROR: "
                 putStrLn $ temporaryIndent "  " s) tcs
               )
       ) formattedChkd
-    putStrLn "[ Finished type checking ]"
-\end{pseudohaskell}
+    putStrLn "=====[ Finished type checking ]====="
+\end{haskell}
 
 By using this function anywhere before our code generation step, we are able to
 type-check all relations and expressions relevant to code generation. As of

@@ -356,9 +356,12 @@ instance Typed Expr Space where
     (Right lx, _) -> Right lx
 
   infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt
+    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left rsp
-      else Right $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
+      else if lt /= rsp then
+        Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
+      else
+        Right $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
     (Left _, Left rsp) -> Right $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx

@@ -27,7 +27,7 @@ jobs:
     name: "Build & Deploy"
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - name: "Update apt package list"
         run: |
           sudo sed -i 's/azure\.//' /etc/apt/sources.list

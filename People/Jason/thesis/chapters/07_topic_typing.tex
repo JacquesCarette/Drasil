@@ -347,23 +347,23 @@ on enriching it, not extending it for extra syntax. By applying these typing
 rules, we will catch any existing typing issues in the case studies. 
 
 Let \(\isNum{s} = s \in \set{\bb{Z}, \bb{Q}, \bb{R}, \bb{N}}\). The following
-rules explain our bidirectional type-checker's rules.
+inference rules make up our bidirectional type-checker's rules:
 
 \newcommand{\newTypeRule}[4]{%
-\begin{equation}%
-      \inferrule*[right=#1]{#3}{#4}%
-      \label{eq:tr:#2}%
-\end{equation}%
+\[%
+\begin{gathered}%
+      \inferrule*[right=\hypertarget{tr:#2}{#1}]{#3}{#4}\\%
+\end{gathered}%
+\]%
 }
 
 % instance Typed Expr Space where
 
-%   check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
-%   check = typeCheckByInfer
-
-\newTypeRule{Checked by Inference}{check}
-      {\Gamma \vdash e \Rightarrow s}
-      {\Gamma \vdash e \Leftarrow s}
+%   infer cxt (C uid) = inferFromContext cxt uid
+      
+\newTypeRule{Symbols}{symbols}
+      {v : s \in \Gamma{}}
+      {\Gamma \vdash v \Rightarrow s}
 
 %   infer :: TypingContext Space -> Expr -> Either Space TypeError
 %   infer cxt (Lit lit) = infer cxt lit
@@ -390,11 +390,6 @@ rules explain our bidirectional type-checker's rules.
        \Gamma \vdash e_1 \Rightarrow \bb{B} \\ \Gamma \vdash e_2 \Rightarrow \bb{B} \\ \ldots{} \\ \Gamma \vdash e_n \Rightarrow \bb{B}}
       {\Gamma \vdash (e_1 \oplus e_2 \oplus \ldots{} \oplus e_n) \Rightarrow \bb{B}}
 
-%   infer cxt (C uid) = inferFromContext cxt uid
-
-\newTypeRule{Symbols}{symbols}
-      {v : s \in \Gamma{}}
-      {\Gamma \vdash v \Rightarrow s}
 
 %   -- FIXME: It seems odd having named arguments here. Should we remove it? For
 %   -- now, I'm not type checking them.
@@ -575,18 +570,6 @@ rules explain our bidirectional type-checker's rules.
       {\oplus \in \set{=, \neq} \\ \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
       {\Gamma \vdash l \oplus r \Rightarrow \bb{B}}
 
-%   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
-%     (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
-%       then Left lt
-%       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
-%     (Left lt         , _      ) -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
-%     (_               , Right e) -> Right e
-%     (Right e         , _      ) -> Right e
-
-\newTypeRule{Vec. Proj.}{vecProjOp}
-      {\Gamma \vdash v \Rightarrow \texttt{Vector}(s) \\ \Gamma \vdash i \Rightarrow \bb{N}}
-      {\Gamma \vdash v\texttt{[}i\texttt{]} \Rightarrow s}
-
 %   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
 %     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
 %       then Left S.Boolean
@@ -598,6 +581,18 @@ rules explain our bidirectional type-checker's rules.
       {\oplus \in \set{>, \geq, <, \leq} \\ \isNum{s} \\\\%
        \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
       {\Gamma \vdash l \oplus r \Rightarrow \bb{B}}
+
+%   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
+%     (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+%       then Left lt
+%       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+%     (Left lt         , _      ) -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+%     (_               , Right e) -> Right e
+%     (Right e         , _      ) -> Right e
+
+\newTypeRule{Vec. Proj.}{vecProjOp}
+      {\Gamma \vdash v \Rightarrow \texttt{Vector}(s) \\ \Gamma \vdash i \Rightarrow \bb{N}}
+      {\Gamma \vdash v\texttt{[}i\texttt{]} \Rightarrow s}
 
 %   infer cxt (VVVBinaryOp Cross l r) = case (infer cxt l, infer cxt r) of
 %     (Left lTy, Left rTy) -> if lTy == rTy
@@ -675,12 +670,19 @@ rules explain our bidirectional type-checker's rules.
       {\Gamma \vdash x \in (b, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in (b, t] \Rightarrow \bb{B} \\\\%
       \Gamma \vdash x \in [b, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in [b, t] \Rightarrow \bb{B}}
 
+%   check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
+%   check = typeCheckByInfer
 
-Notably, the ``check'' rule is purely based on type inference because \Expr{} is
-a relatively straight-forward language, for which we can reasonably infer the
-type of any expression. However, for \ModelExpr{}, this will not be the case.
-Finally, after having built our type universe and typing rules, we may implement
-bidirectional type checking and inferencing for \Expr{} in Drasil.
+\newTypeRule{Checked by Inference}{check}
+      {\Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash e \Leftarrow s}
+
+Notably, the \hyperlink{tr:check}{``check'' rule} is purely based on type
+inference because \Expr{} is a relatively straight-forward language, for which
+we can reasonably infer the type of any expression. However, for \ModelExpr{},
+this will not be the case. Finally, after having built our type universe and
+typing rules, we may implement bidirectional type checking and inferencing for
+\Expr{} in Drasil.
 
 \subsection{Implementation}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:implementation}

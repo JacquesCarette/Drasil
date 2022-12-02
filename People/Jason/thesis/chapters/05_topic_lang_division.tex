@@ -32,101 +32,151 @@ obviously not a ``relation.''
 \section{A Mathematical Language}
 \label{chap:lang-division:sec:a-mathematical-language}
 
-\Expr{} (\refOriginalExprHaskell{}) is an \acs{adt}, representing the \ACF{ast}
-of a mathematical expression language. It was grown following the needs of
-encoding the case studies in Drasil. As such, it contains a wide range of
-mathematical terms, including variables, numerics, derivatives, common
-mathematical operations, and function applications. In addition to the example
-expression (a relation) from \refOriginalLandPosTheoryDefinition{}, if, for
-example, we wanted to transcribe \(3 e^{x + 2} = y\) in Drasil, we might write
-\refPseudoExampleExpression{}\footnote{Notably, \refPseudoExampleExpression{}
-uses smart constructors and infix functions to make the code readable. The smart
-constructors used are all specialized to \Expr{} and perform simplifications
-along the way (such as folding \(1 \cdot x\) into \(x\)).}.
+\Expr{} (\refOriginalExprHaskell{}) is an \acs{adt}\footnote{In \acs{gadt}
+syntax.}, representing the \ACF{ast} of a mathematical expression language. It
+was grown following the needs of encoding the case studies in Drasil. As such,
+it contains a wide range of mathematical terms, including variables, numerics,
+derivatives, common mathematical operations, and function applications. In
+addition to the example expression (a relation) from
+\refOriginalLandPosTheoryDefinition{}, if, for example, we wanted to transcribe
+\(3 \tan{}(x) = y\) in Drasil, we might write \refPseudoExampleExpression{}.
 
 \pseudoExampleExpression{}
 
+And, of course, this is great! We're able to transcribe any expression contained
+in the language of \Expr{}. \refPseudoExampleExpression{} is a great example,
+which we can confidently re-write as an equational model (as in
+\Cref{chap:modelkinds}):
 
+\begin{pseudohaskell}{Example Expression in a QDefinition}{pseudoExampleExpressionAsQDefinition}
+theQDef :: QDefinition
+theQDef = mkQuantDef y (dbl 3 $* tan (sy x))
+\end{pseudohaskell}
 
-% As already mentioned in \Cref{chap:modelkinds}, theories are a key component of
-% the code generation phase for any Drasil-encoded \acs{srs}
-% instance\footnote{Theories are where we get information about things to
-% generate!}. Taking \refCurrentLandPosIMQD{} as an example of a usable theory for
-% code generation, if we were to change the defining expression to some expression
-% involving definite description or a derivative, then converting the theory to
-% Java code is a bit more complicated. In some instances, conversion to usable
-% ``code'' can also be impossible without extra information, or commitment to an
-% approximation formula at least (both options should not be imposed on users by
-% Drasil either!).
+With \Cref{lst:pseudoExampleExpressionAsQDefinition}, we can create an instance
+model containing an equational model and it as part of the solution of some
+greater problem\footnote{Which we don't really care about here.}. One of the
+important requirements of instance models is that we expect them to be,
+relatively naively, directly translatable into a directly-computable algorithm
+(e.g., a program, or a general list of calculations to follow), up to the user's
+choices (such as choosing what representation of integers, reals, etc. to use in
+a potential translation into a program). This is where \Expr{} shows that it is
+a bit of a double-edged sword. For example, we can re-write the expression used
+in \Cref{lst:pseudoExampleExpressionAsQDefinition} using a trigonometric
+integral (e.g., $y = \int \frac{3}{\cos^2(x) dx}$,
+\Cref{lst:pseudoExampleExpressionAsQDefinitionBad}), but then transformation
+into a naive set of steps to follow isn't as simple.
 
-% In other words, the transformation of \Expr{}s to ``code''\footnote{Through
-% \acs{gool}!} is not \textit{total}, which is problematic. In other words, not
-% all possible expressions of the \Expr{} language can be converted into a
-% representational \acs{gool} expression. Additionally, we lack static information
-% about when instances of expressions are actually usable in code generation. As
-% such, we're currently limited to relying on implicit information. Of course, in
-% order to fix this problem, we need to make the information \textit{explicit} in
-% Drasil, and use it appropriately. However, before we can make it explicit, we
-% need to understand the contexts in which Drasil needs mathematical expressions
-% and how they are used in those contexts.
+\begin{pseudohaskell}{Example Bad Expression in a QDefinition}{pseudoExampleExpressionAsQDefinitionBad}
+theQDef :: QDefinition
+theQDef = mkQuantDef y (integAll (eqSymb x) (dbl 3 $/ (cos (x) $^ int 2)))
+\end{pseudohaskell}
 
-% Namely, there are two main use-cases of mathematical expressions in Drasil:
-% describing theories as part of an \acs{srs} that should appear in ``code,'' or
-% describing theories as part of an \acs{srs} that should appear in the generated
-% (textual) \acs{srs} artifacts. The ``code'' is expected to be a
-% computer-executable artifact. Thus, the code has clearly defined rules for a
-% usable program. Generated textual artifacts are checked for consistency by
-% readers and writers alike. However, the textual artifacts do have some amount of
-% ``automated'' consistency checking done on them. More specifically, the textual
-% artifacts are generated from the same chunks used to generate the software
-% artifacts, and, by extension, the instances of theories that ``go into the
-% code'' should all be concrete. Specifically, the instance models should all be
-% concrete theories that can be unambiguously re-written in the form of an
-% executable program. The language associated with the output \acs{oo} languages
-% slightly differs from our common mathematical language (e.g., they typically
-% don't have curried functions). Thus, we have approximately 3 use-cases for
-% mathematical expressions in Drasil: in software, in writing concrete theories,
-% and in general mathematical discussion. Finally, to solve this issue, we need to
-% restrict terms to their appropriate usage contexts.
+With \Cref{lst:pseudoExampleExpressionAsQDefinitionBad}, which solution to use
+isn't clear. Should Drasil generate something to solve the integral? Should
+Drasil re-write the integral using $\tan$? How would it recognize to convert it
+into $\tan$ without running into a similar problem as \relToQD{}
+(\Cref{chap:modelkinds})? Should we expect the target generated languages to
+have functionality for solving any integral we give it?
+
+\textit{We} shouldn't be the ones answering any of these questions\footnote{We
+should be imposing the least possible amount of things on users!}. Rather, we
+should be deferring these questions to users, giving them options for choosing
+answers to these questions. In other words, the transformation from \Expr{}s to
+``code'' is not naively \textit{total}, which is problematic. However, these
+questions are also still too complex to be external to the \acs{srs}, and, as
+such, we would need this theory to be a higher-level theory, which the user
+refines with information that would appear in the \acs{srs} for domain-experts
+to audit. In other words, we don't want integrals, like in this example, to
+appear in the concrete theories (instance models) that are used in code
+generation, at least without extra information about how to solve them embedded
+closely.
+
+Additionally, \Expr{} contains functionality for ``actors'' and ``messages,''
+concepts in the world of \acs{oo} programming. While these are helpful for the
+translation of mathematical expressions that might use some functionality from
+``actors,'' users building an \acs{srs} should be relatively removed from the
+actual programming. In other words, these terms are inappropriate for usage in
+the \acs{srs}.
+
+As such, we need to be able to restrict expression terms to their appropriate
+contexts. At the moment, we lack information about when instances of expressions
+are actually usable in code generation. As such, we're limited to relying on
+implicit assumptions about this, and causing Drasil-panics when the assumption
+is broken. In order to fix this problem, we need to make the information
+\textit{explicit} in Drasil, and use that explicit information appropriately.
+However, before we can make it explicit, we need to understand the contexts in
+which Drasil needs mathematical expressions and how they are used in those
+contexts.
+
+Namely, there are at least three focal areas of interest in Drasil where we use
+mathematical expressions:
+
+\begin{enumerate}
+
+    \item in the \acs{srs} for abstract theories, where we discuss abstract
+          concepts that are ultimately used in the derivations of concrete
+          theories,
+
+    \item in the \acs{srs} for concrete theories (such as instance models),
+          where we expect them to be \textit{concrete} in a sense that they are
+          trivially usable as part of a solution to an outlined problem,
+
+    \item and in generated artifacts, where we first need to convert the
+          concrete theories into an intermediate representation of the generated
+          artifacts and making any necessary specializations for the target
+          language, before finally outputting them.
+
+\end{enumerate}
 
 \section{Splitting}
 \label{chap:lang-division:sec:splitting}
 
-In order to appropriately restrict terms to their appropriate usage contexts, we
-need to gain structural information about the expressions. Specifically, we
-would like to do this using type information as it allows us to restrict usage
-by type easily.
+Now, in order to restrict terms to their appropriate contexts, we need to
+somehow know when users are using the ``wrong'' terms. Since Drasil is written
+in Haskell, we can use Haskell's type system to indicate this with relative
+ease. Namely, we can \textit{split} up \Expr{}. Thankfully, the three areas of
+interest share a subset of expressions: the mathematical expressions usable in
+concrete theories. As such, we would like to divide the language using this
+language as a base for the other two (\refLanguageDivision{}).
 
 \languageDivision{}
 
-As we've recognized 3 contexts in which mathematical expressions are used, we
-may split the mathematical language accordingly, re-building the languages for
-each context. We end up with 3 languages, as shown in \refLanguageDivision{}:
-\Expr{} (\refCurrentExprHaskell{}), \ModelExpr{}
-(\refCurrentModelExprHaskell{}), and \CodeExpr{} (\refCurrentCodeExprHaskell{}).
-\Expr{} has its indefinite valued terms split off into \ModelExpr{}
-(\refCurrentModelExprHaskell{})\footnote{Including, but not limited to,
-derivatives, integrals, quantification, types as values, definitions (e.g.,
-\(::=\)), and continuous ranges for summations and products.}, a deeply embedded
-universal mathematical language. As we desire for it to be equally usable as the
-\Expr{} used in instance models, it is essentially the original \Expr{} without
-the language terms related to code nor indefinite valued terms. \ModelExpr{} is
-approximately the ``old'' \Expr{} with nearly everything from the original
-\Expr{}, except without code-oriented terms (as they should not be discussed in
-the \acs{srs} documents at all!). Additionally, now, \ModelExpr{} becomes the
-preferred mathematical language for \acs{srs} documents. Finally, code-related
-terms are moved to a clone of the new \Expr{} language.
+After the work, we end up with three languages:
 
-Now we have 3 \acsp{gadt} available for different kinds of expression
-languages, with ``mathematics'' as a common tie. One issue with splitting is
-that we now force users of the languages to make a conscious choice about which
-language they are using and which language they need to import into their
-working files respectively. This can become quite frustrating given the amount
-of overlap. Thus, in order to alleviate the stress involved with writing out the
-same expression in different languages, we use a \ACF{ttf} encoding of the smart
-constructors to build expressions. Using \Expr{} has a ``base'' shared language
-between \ModelExpr{} and \CodeExpr{}, we can write \acs{ttf} encoding for them
-individually that extends on \Expr{}s functionality
+\begin{enumerate}
+
+    \item \Expr{}, which is the subset of the original \Expr{} where all terms
+          have definite values (e.g., literals, common unary and binary
+          operations, symbols, and first-order function applications), and
+          should be the language of the \QDefinition{}s usable in instance
+          models (\refCurrentExprHaskell{}),
+    
+    \item \CodeExpr{}, which is expected to be related to a \textit{total}
+          transformation function that re-writes terms in \CodeExpr{} into
+          \acs{gool} for final rendering in a final software artifact
+          (\refCurrentCodeExprHaskell{}),
+
+    \item and \ModelExpr{}, which is approximately the \Expr{} with nearly
+          everything from the original \Expr{}, except without code-oriented
+          terms\footnote{As they should not be discussed in the \acs{srs}
+          documents at all!} (\refCurrentModelExprHaskell{}). Notably,
+          \ModelExpr{} contains all indefinite valued terms that were cut out of
+          \Expr{}, such as derivatives, integrals, quantification, types as
+          values (spaces), and continuous ranges for summations and products.
+
+\end{enumerate}
+
+Now we have 3 \acsp{adt} available for different kinds of expression languages,
+with ``mathematics'' as a common tie. One issue with splitting is that we now
+force users of the languages to make a conscious choice about which language
+they are using and which language they need to import into their working files
+respectively. This can become quite frustrating given the amount of overlap.
+Thus, in order to alleviate the stress involved with writing out the same
+expression in different languages, we use a \ACF{ttf}~\cite{Carette2009}
+encoding of the smart constructors to build expressions. Using \Expr{} has a
+``base'' shared language between \ModelExpr{} and \CodeExpr{}, we can write
+\acs{ttf} encoding for them individually that extends on \Expr{}s functionality
 (\refCurrentExprTTFHaskell{}, \refCurrentModelExprTTFHaskell{},
 \refCurrentCodeExprTTFHaskell{}). The \acs{ttf} encoding allows us to seamlessly
 write expressions in any of the languages at the same time, allowing type

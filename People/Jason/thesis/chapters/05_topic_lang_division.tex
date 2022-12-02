@@ -21,7 +21,11 @@ them. However, we never discussed the relation encoding: \Relation{}.
 
 \originalRelation{}
 
-\Relation{}s are actually \Expr{}s, mathematical ``expressions.''
+\Relation{} (\refOriginalRelation{}) is actually a type alias for \Expr{}
+(\refOriginalExprHaskell{}), which captures general mathematical
+``expressions.'' As such, \Relation{}s aren't really ``relations.'' In fact,
+\Relation{}s can take on any mathematical expression, such as \(3x+2\), which is
+obviously not a ``relation.''
 
 \originalExprHaskell{}
 
@@ -35,53 +39,55 @@ encoding the case studies in Drasil. As such, it contains a wide range of
 mathematical operations, and function applications. In addition to the example
 expression (a relation) from \refOriginalLandPosTheoryDefinition{}, if, for
 example, we wanted to transcribe \(3 e^{x + 2} = y\) in Drasil, we might write
-\refPseudoExampleExpression{}. Notably, \refPseudoExampleExpression{} uses smart
-constructors\footnote{The smart constructors used are all specialized to \Expr{}
-and perform simplifications along the way (such as folding \(1 \cdot x\) into
-\(x\)).} and infix functions to make the code readable. 
+\refPseudoExampleExpression{}\footnote{Notably, \refPseudoExampleExpression{}
+uses smart constructors and infix functions to make the code readable. The smart
+constructors used are all specialized to \Expr{} and perform simplifications
+along the way (such as folding \(1 \cdot x\) into \(x\)).}. 
 
 \pseudoExampleExpression{}
 
-As already mentioned in \Cref{chap:modelkinds}, theories are a key component of
-the code generation phase for any Drasil-encoded \acs{srs}
-instance\footnote{Theories are where we get information about things to
-generate!}. Taking \refCurrentLandPosIMQD{} as an example of a usable theory for
-code generation, if we were to change the defining expression to some expression
-involving definite description or a derivative, then converting the theory to
-Java code is a bit more complicated. In some instances, conversion to usable
-``code'' can also be merely impossible without extra information, or commitment
-to an approximation formula at least (both options should not be imposed on
-users by Drasil either!).
 
-In other words, the transformation of \Expr{}s to ``code''\footnote{Through
-\acs{gool}!} is not \textit{total}, which is problematic. In other words, not
-all possible expressions of the \Expr{} language can be converted into a
-representational \acs{gool} expression. Additionally, we lack static information
-about when instances of expressions are actually usable in code generation. As
-such, we're currently limited to relying on implicit information. Of course, in
-order to fix this problem, we need to make the information \textit{explicit} in
-Drasil, and use it appropriately. However, before we can make it explicit, we
-need to understand the contexts in which Drasil needs mathematical expressions
-and how they are used in those contexts.
 
-Namely, there are 2 main use-cases of mathematical expressions in Drasil:
-describing theories as part of an \acs{srs} that should appear in ``code,'' or
-describing theories as part of an \acs{srs} that should appear in the generated
-(textual) \acs{srs} artifacts. The ``code'' is expected to be a
-computer-executable artifact. Thus, the code has clearly defined rules for a
-usable program. Generated textual artifacts are checked for consistency by
-readers and writers alike. However, the textual artifacts do have some amount of
-``automated'' consistency checking done on them. More specifically, the textual
-artifacts are generated from the same chunks used to generate the software
-artifacts, and, by extension, the instances of theories that ``go into the
-code'' should all be concrete. Specifically, the instance models should all be
-concrete theories that can be unambiguously re-written in the form of an
-executable program. The language associated with the output \acs{oo} languages
-slightly differs from our common mathematical language (e.g., they typically
-don't have curried functions). Thus, we have approximately 3 use-cases for
-mathematical expressions in Drasil: in software, in writing concrete theories,
-and in general mathematical discussion. Finally, to solve this issue, we need to
-restrict terms to their appropriate usage contexts.
+% As already mentioned in \Cref{chap:modelkinds}, theories are a key component of
+% the code generation phase for any Drasil-encoded \acs{srs}
+% instance\footnote{Theories are where we get information about things to
+% generate!}. Taking \refCurrentLandPosIMQD{} as an example of a usable theory for
+% code generation, if we were to change the defining expression to some expression
+% involving definite description or a derivative, then converting the theory to
+% Java code is a bit more complicated. In some instances, conversion to usable
+% ``code'' can also be impossible without extra information, or commitment to an
+% approximation formula at least (both options should not be imposed on users by
+% Drasil either!).
+
+% In other words, the transformation of \Expr{}s to ``code''\footnote{Through
+% \acs{gool}!} is not \textit{total}, which is problematic. In other words, not
+% all possible expressions of the \Expr{} language can be converted into a
+% representational \acs{gool} expression. Additionally, we lack static information
+% about when instances of expressions are actually usable in code generation. As
+% such, we're currently limited to relying on implicit information. Of course, in
+% order to fix this problem, we need to make the information \textit{explicit} in
+% Drasil, and use it appropriately. However, before we can make it explicit, we
+% need to understand the contexts in which Drasil needs mathematical expressions
+% and how they are used in those contexts.
+
+% Namely, there are two main use-cases of mathematical expressions in Drasil:
+% describing theories as part of an \acs{srs} that should appear in ``code,'' or
+% describing theories as part of an \acs{srs} that should appear in the generated
+% (textual) \acs{srs} artifacts. The ``code'' is expected to be a
+% computer-executable artifact. Thus, the code has clearly defined rules for a
+% usable program. Generated textual artifacts are checked for consistency by
+% readers and writers alike. However, the textual artifacts do have some amount of
+% ``automated'' consistency checking done on them. More specifically, the textual
+% artifacts are generated from the same chunks used to generate the software
+% artifacts, and, by extension, the instances of theories that ``go into the
+% code'' should all be concrete. Specifically, the instance models should all be
+% concrete theories that can be unambiguously re-written in the form of an
+% executable program. The language associated with the output \acs{oo} languages
+% slightly differs from our common mathematical language (e.g., they typically
+% don't have curried functions). Thus, we have approximately 3 use-cases for
+% mathematical expressions in Drasil: in software, in writing concrete theories,
+% and in general mathematical discussion. Finally, to solve this issue, we need to
+% restrict terms to their appropriate usage contexts.
 
 \section{Splitting}
 \label{chap:lang-division:sec:splitting}
@@ -111,7 +117,7 @@ the \acs{srs} documents at all!). Additionally, now, \ModelExpr{} becomes the
 preferred mathematical language for \acs{srs} documents. Finally, code-related
 terms are moved to a clone of the new \Expr{} language.
 
-Now, we have 3 \acsp{gadt} available for different kinds of expression
+Now we have 3 \acsp{gadt} available for different kinds of expression
 languages, with ``mathematics'' as a common tie. One issue with splitting is
 that we now force users of the languages to make a conscious choice about which
 language they are using and which language they need to import into their
@@ -143,29 +149,18 @@ interpreted as a \ModelExpr{}.
 Now that we've split up the expression languages, we may restrict their usage to
 appropriate theory contexts (in \ModelKinds{} as per \Cref{chap:modelkinds}).
 Approximately, we can ``upgrade'' \ModelKinds according to
-\refPseudoPartialModelKindsUpgrade{} \footnote{Note that we also need to
-slightly update \QDefinition{}s: \refCurrentQDefinitionHaskell{} to create a
-type parameter for the used expression type.}, creating a type argument in
+\refPseudoPartialModelKindsUpgrade{}\footnote{Note that we also need to slightly
+update \QDefinition{}s: \refCurrentQDefinitionHaskell{} to create a type
+parameter for the used expression type.}, creating a type argument in
 \ModelKinds{} so that instance models can restrict to carry ``\ModelKinds{}
 \Expr{}'' while the other theory types may carry ``\ModelKinds{}
 \ModelExpr{}''\footnote{However, using \Expr{} and \ModelExpr{} is not quite
 accurately representative of ``usable in code'' versus ``not,'' which we are
-attempting to fix \cite{DrasilIssue2853AlternativeModelKinds}}. This allows us
-to ensure that all expressions written in Drasil for instance models have an
+going to fix \cite{DrasilIssue2853AlternativeModelKinds}}. This allows us to
+ensure that all expressions written in Drasil for instance models have an
 semantic counterpart that they can be translated into for code generation in
 various \acs{oo} languages. Furthermore, now we may return to \ModelKinds{} and
 continue uncovering the various \textit{kinds} of theories currently discussed
 in Drasils case studies.
 
 \pseudoPartialModelKindsUpgrade{}
-
-
-\imptodo{Figure out where to move these.}
-
-As previously discussed in \Cref{chap:modelkinds}, equational models define
-variables with some expression. \QDefinition{}s carry a basic set of information
-about the definition.
-
-\currentLandPosIMHaskell{}
-
-\currentQDefinitionHaskell{}

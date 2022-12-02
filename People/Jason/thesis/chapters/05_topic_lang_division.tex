@@ -35,14 +35,14 @@ obviously not a ``relation.''
 \Expr{} (\refOriginalExprHaskell{}) is an \acs{adt}, representing the \ACF{ast}
 of a mathematical expression language. It was grown following the needs of
 encoding the case studies in Drasil. As such, it contains a wide range of
-``mathematical'' terms, including variables, numerics, derivatives, common
+mathematical terms, including variables, numerics, derivatives, common
 mathematical operations, and function applications. In addition to the example
 expression (a relation) from \refOriginalLandPosTheoryDefinition{}, if, for
 example, we wanted to transcribe \(3 e^{x + 2} = y\) in Drasil, we might write
 \refPseudoExampleExpression{}\footnote{Notably, \refPseudoExampleExpression{}
 uses smart constructors and infix functions to make the code readable. The smart
 constructors used are all specialized to \Expr{} and perform simplifications
-along the way (such as folding \(1 \cdot x\) into \(x\)).}. 
+along the way (such as folding \(1 \cdot x\) into \(x\)).}.
 
 \pseudoExampleExpression{}
 

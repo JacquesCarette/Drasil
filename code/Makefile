@@ -159,6 +159,10 @@ override stackArgs += --ghc-options="$(GHCFLAGS)"
 NOISY=no
 SUMMARIZE_TEX=no
 
+# Some commands now prefer to have TERM defined when things go awry
+# and since this is going to be run in batch, 'dumb' is best default.
+TERM=dumb
+
 ########################
 #--- Actual targets ---#
 ########################
@@ -310,7 +314,7 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX):
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SUFFIX)
-	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
+	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(TERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
 
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#

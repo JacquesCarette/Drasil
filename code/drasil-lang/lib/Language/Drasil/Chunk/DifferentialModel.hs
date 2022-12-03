@@ -22,14 +22,13 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($.), matrix,
-  columnVec, ($/), idx), neg)
+import Language.Drasil.Expr.Class (ExprC(..), columnVec)
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
 import Data.List (find)
 import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
-import Language.Drasil.Space (Space (Boolean))
+import Language.Drasil.Space (Space, HasSpace (..))
 
 -- | Unknown is nth order of the dependent variable 
 type Unknown = Integer
@@ -127,7 +126,7 @@ instance ConceptDomain DifferentialModel where cdom = cdom . view dmconc
 instance Express       DifferentialModel where express = formStdODE
 
 instance RequiresChecking DifferentialModel Expr Space where
-  requiredChecks dmo = map (, Boolean) $ formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
+  requiredChecks dmo = map (, dmo ^. (depVar . typ)) $ formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
     where dm = makeAODESolverFormat dmo
 
 -- | Set the expression be a system of linear ODE to Ax = b

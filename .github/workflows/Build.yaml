@@ -16,22 +16,23 @@ jobs:
       github.event_name == 'pull_request'
       || github.event_name == 'workflow_dispatch'
       || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || contains(github.event.head_commit.message, '[workflow-trigger]')))
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ github.token }}
   build:
     needs: auto-cancel
     name: "Build & Deploy"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: "Update apt package list"
-        run: sudo apt-get update
+        run: |
+          sudo apt-get update 
       - name: "Install system requirements"
-        run: sudo apt-get install -y libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
+        run: sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
       - name: "Install Stack"
         uses: haskell/actions/setup@v1
         with:

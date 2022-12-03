@@ -15,9 +15,9 @@ meNames (Deriv _ _ a b)       = b : meNames a
 meNames (C c)                 = [c]
 meNames Lit{}                 = []
 meNames Spc{}                 = []
-meNames (FCall f x ns)        = f : concatMap meNames x ++ map fst ns ++ 
-                              concatMap (meNames . snd) ns
-meNames (Case _ ls)           = concatMap (meNames . fst) ls ++ concatMap (meNames . snd) ls
+meNames (FCall f x)           = f : concatMap meNames x
+meNames (Case _ ls)           = concatMap (meNames . fst) ls ++
+                                concatMap (meNames . snd) ls
 meNames (UnaryOp _ u)         = meNames u
 meNames (UnaryOpB _ u)        = meNames u
 meNames (UnaryOpVV _ u)       = meNames u
@@ -31,6 +31,7 @@ meNames (StatBinaryOp _ a b)  = meNames a ++ meNames b
 meNames (OrdBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (VVVBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (VVNBinaryOp _ a b)   = meNames a ++ meNames b
+meNames (NVVBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (Operator _ _ e)      = meNames e
 meNames (Matrix a)            = concatMap (concatMap meNames) a
 meNames (RealI c b)           = c : meNamesRI b
@@ -52,10 +53,9 @@ meNames' (Deriv _ _ a b)       = b : meNames' a
 meNames' (C c)                 = [c]
 meNames' Lit{}                 = []
 meNames' Spc{}                 = []
-meNames' (FCall _ x ns)        = concatMap meNames' x ++ map fst ns ++ 
-                               concatMap (meNames .snd) ns
+meNames' (FCall _ x)           = concatMap meNames' x
 meNames' (Case _ ls)           = concatMap (meNames' . fst) ls ++ 
-                               concatMap (meNames' . snd) ls
+                                 concatMap (meNames' . snd) ls
 meNames' (UnaryOp _ u)         = meNames' u
 meNames' (UnaryOpB _ u)        = meNames' u
 meNames' (UnaryOpVV _ u)       = meNames' u
@@ -69,6 +69,7 @@ meNames' (SpaceBinaryOp _ a b) = meNames' a ++ meNames' b
 meNames' (StatBinaryOp _ a b)  = meNames' a ++ meNames' b
 meNames' (VVVBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (VVNBinaryOp _ a b)   = meNames' a ++ meNames' b
+meNames' (NVVBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (Operator _ _ e)      = meNames' e
 meNames' (Matrix a)            = concatMap (concatMap meNames') a
 meNames' (RealI c b)           = c : meNamesRI' b

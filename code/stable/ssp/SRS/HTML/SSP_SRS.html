@@ -252,13 +252,6 @@
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>F<sub>S</sub><sup>min</sup></em></td>
-                  <td>
-                    Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface.
-                  </td>
-                  <td>--</td>
-                </tr>
-                <tr>
                   <td><em>F<sub>t</sub></em></td>
                   <td>
                     Tangential Force: Component of a force in the tangential direction.
@@ -785,13 +778,6 @@
                   <td><em><b>τ</b></em></td>
                   <td>Torque: A twisting force that tends to cause rotation.</td>
                   <td><em>Nm</em></td>
-                </tr>
-                <tr>
-                  <td><em>Υ</em></td>
-                  <td>
-                    Minimization Function: Generic minimization function or algorithm.
-                  </td>
-                  <td>--</td>
                 </tr>
                 <tr>
                   <td><em><b>Φ</b></em></td>
@@ -4348,44 +4334,18 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        \[{{F_{\text{S}}}^{\text{min}}}=Υ\left({\symbf{x}_{\text{slope}}},{\symbf{y}_{\text{slope}}},{\symbf{x}_{\text{wt}}},{\symbf{y}_{\text{wt}}},c',φ',{γ_{\text{dry}}},{γ_{\text{sat}}},{γ_{w}},\mathit{const\_f}\right)\]
-                      </td>
+                      <td>\[{\symbf{x}_{\text{slope}}}={\symbf{y}_{\text{slope}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>F<sub>S</sub><sup>min</sup></em> is the minimum factor of safety (Unitless)
-                          </li>
-                          <li><em>Υ</em> is the minimization function (Unitless)</li>
-                          <li>
                             <em><b>x</b><sub>slope</sub></em> is the <em>x</em>-coordinates of the slope (<em>m</em>)
                           </li>
                           <li>
                             <em><b>y</b><sub>slope</sub></em> is the <em>y</em>-coordinates of the slope (<em>m</em>)
                           </li>
-                          <li>
-                            <em><b>x</b><sub>wt</sub></em> is the <em>x</em>-coordinates of the water table (<em>m</em>)
-                          </li>
-                          <li>
-                            <em><b>y</b><sub>wt</sub></em> is the <em>y</em>-coordinates of the water table (<em>m</em>)
-                          </li>
-                          <li><em>c&prime;</em> is the effective cohesion (<em>Pa</em>)</li>
-                          <li>
-                            <em>φ&prime;</em> is the effective angle of friction (<em>&deg;</em>)
-                          </li>
-                          <li>
-                            <em>γ<sub>dry</sub></em> is the soil dry unit weight (<em>\(\frac{\text{N}}{\text{m}^{3}}\)</em>)
-                          </li>
-                          <li>
-                            <em>γ<sub>sat</sub></em> is the soil saturated unit weight (<em>\(\frac{\text{N}}{\text{m}^{3}}\)</em>)
-                          </li>
-                          <li>
-                            <em>γ<sub>w</sub></em> is the unit weight of water (<em>\(\frac{\text{N}}{\text{m}^{3}}\)</em>)
-                          </li>
-                          <li><em>const_f</em> is the decision on f (Unitless)</li>
                         </ul>
                       </td>
                     </tr>

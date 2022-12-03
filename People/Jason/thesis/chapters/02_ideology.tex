@@ -6,17 +6,15 @@
 ``Generation'' is at the heart of this work. However, unlike GitHub and OpenAI's
 Copilot \cite{Copilot}, we don't delve into artificial intelligence. Copilot
 uses AI to autocomplete code using smaller snippets and comments, while we focus
-on capturing the meaning of specific subsets of natural language, and using
-phrases to generate software artifacts through description of their
-requirements. In other words, we focus on encoding the important bits of
-information that we use to discuss requirements of software, and how they relate
-to the software artifacts we would normally manually write. Through this, we
-attempt to generate the software artifacts through encoding a sufficient
-knowledge base. Succinctly, we focus on capturing knowledge through codifying
+on capturing the meaning of specific subsets of language to generate software
+artifacts through description of their requirements. In other words, we focus on
+encoding the important bits of information that we use to discuss requirements
+of software and how they relate to the software artifacts we would normally
+manually write. Succinctly, we focus on capturing knowledge through codifying
 well-understood fragments with \aclp{dsl}, which we use to improve
 \textit{reusability} and \textit{maintainability} of software by improving
-knowledge sharing and usability, and creating a more \textbf{harmonious}
-relationship between our \textit{knowledge} and \textit{software artifacts}.
+knowledge sharing and usability, and creating a more \textit{harmonious
+relationship} between our \textit{knowledge} and \textit{software artifacts}.
 
 \section{On Developing Software}
 \label{chap:ideology:sec:on_developing_software}
@@ -26,37 +24,36 @@ process \acs{csv} files tell a story of how data can be entered, adjusted, and
 output. Compilers tell a story of how human-readable programs can translate to
 various assembly languages. In these stories, we commonly use similar
 terminology and ideas. Thankfully, we avoid writing ``a lot of the same code''
-by sharing by abstracting over variables and sharing reusable code through
-libraries. With libraries, we're able to share our knowledge with our future
-selves and others. Once we've reasonably stabilized our libraries, it becomes a
-large gain in the reusability of our efforts \textemdash we don't need to worry
-about making the same bugs twice! However, a few issues arise: the code might
-become out-of-date (or out-of-sync), others might not understand what we wrote
-(and, thus, not trust/use it), or, we might need to use the same conceptual
-ideas but in a different programming language. If our understanding of key ideas
-changes, we might need to perform large, manual, refactoring of our code, and
-then update our documentation too. While we might write ``idiomatic'' code,
-reverse engineering code is tedious, and even then, we can only analyze the code
-we \textit{see}, and not what knowledge it took to write that code. Finally, we
-might be able to write an \ACF{ffi}, they're often brittle and demanding of our
-time, due to complex compatibility analysis, and repeating the same analysis for
-each library update. We might even be forced to use particular programming
-languages.
+by abstracting over variables and sharing reusable code through libraries. With
+libraries, we're able to share our knowledge with our future selves and others
+alike. Once we've reasonably stabilized our libraries, it becomes a large gain
+in the reusability of our efforts \textemdash we don't need to worry about
+making the same bugs twice! However, a few issues arise: the code might become
+out-of-date (or out-of-sync), others might not understand what we wrote (and,
+thus, not trust/use it), or, we might need to use the same conceptual ideas but
+in a different programming language. If our understanding of key ideas changes,
+we might need to perform large, manual, refactoring of our code, and then update
+our documentation too. While we might write ``idiomatic'' code, reverse
+engineering code is tedious, and even then, we can only analyze the code we
+\textit{see}, and not what knowledge it took to write that code. Finally, we
+might be able to write a \ACF{ffi}, but they're often brittle and demanding of
+our time, due to initial and repeated complex analysis for each library update.
+We might even be forced to use particular programming languages.
 
-Often, we look to use mature libraries and frameworks to underpin our projects,
-but often without guarantee that how we use and connect libraries is ``safe.''
-For example, the sinking of the Vasa ship \cite{wiki:Vasa_ship} was partially
-caused by different teams working together but using different ``feet'' units
-(the Swedish foot is 12'' while the Amsterdam foot is 11'') resulting in
-unbalanced weight distribution, contributing to its demise. Similarly, when the
-Mars Climate Orbiter travelled to Mars, it met an early demise due to a
-navigation issue \cite{Siddiqi2018}. Lockheed Martin built the orbiter ground
-controller software, but it didn't conform to \acsp{nasa} \ACF{sis}. The
-commands sent from Earth used English units (specifically, pound-seconds) while
-the orbiter assumed that it would receive commands using the metric system
-(Newton-seconds). As such, the orbiter missed it's intended orbit altitude,
-falling into the Martian atmosphere, and ultimately disintegrating due to
-atmospheric stress.
+Often, we look to using mature libraries and frameworks to underpin our
+projects, but often without guarantee that how we use and connect libraries is
+``safe.'' For example, the sinking of the Vasa ship \cite{wiki:Vasa_ship} was
+partially caused by different teams working together but using different
+``feet'' units (the Swedish foot is 12'' while the Amsterdam foot is 11'')
+resulting in unbalanced weight distribution, contributing to its demise.
+Similarly, when the Mars Climate Orbiter travelled to Mars, it met an early
+demise due to a navigation issue \cite{Siddiqi2018}. Lockheed Martin built the
+orbiter ground controller software, but it didn't conform to \acsp{nasa}
+\ACF{sis}. The commands sent from Earth used English units (specifically,
+pound-seconds) while the orbiter assumed that it would receive commands using
+the metric system (Newton-seconds). As such, the orbiter missed its intended
+target orbit altitude, falling into the Martian atmosphere, and ultimately
+disintegrating due to atmospheric stress.
 
 Experts had an in-depth understanding of the ``story'' of each project, with
 sound rationale for how things worked and should have worked, and yet, both
@@ -67,9 +64,10 @@ or a ship sinking, but, there is something that we can learn:
 vital for building reliable solutions.
 
 While we, as developers don't often build and connect physical things, we do
-connect pieces of code, and misunderstandings of tacit project knowledge occur
-as well. Thus, we believe we need to revisit our original sensation when we
-recognized code duplication and decided to make reusable components.
+connect pieces of code\footnote{Though robotics is a field too.}, but
+misunderstandings of tacit project knowledge occur too. Thus, we believe we need
+to revisit our original sensation when we recognized code duplication and
+decided to make reusable components.
 
 The reason is obvious\footnote{Ignoring the more obvious reasons, such as
 copy-pasting code, or mere awareness of textual similarities.}! We felt this
@@ -140,7 +138,7 @@ likelihoods. Hence, by focusing on using \textit{\aclp{dsl}}, we can build
 specialized interpreters for them. Furthermore, by connecting them in precise
 manners (with similar precise languages), we can form large meaningful
 \textit{networks of domains} \cite{Czarnecki2005} that form our well-understood
-problem spaces. From well-understood problem spaces, we can compose a series of
+problem spaces. For well-understood problem spaces, we can compose a series of
 domain-specific interpreters. With enough effort, we could take a whole
 ``problem description'' that draws in multiple fields, and generate a software
 that somehow ``solves'' it.

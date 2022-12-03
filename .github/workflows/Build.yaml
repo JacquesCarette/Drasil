@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ github.token }}
   build:
@@ -27,11 +27,12 @@ jobs:
     name: "Build & Deploy"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: "Update apt package list"
-        run: sudo apt-get update
+        run: |
+          sudo apt-get update 
       - name: "Install system requirements"
-        run: sudo apt-get install -y libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
+        run: sudo apt-get --no-install-recommends install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
       - name: "Install Stack"
         uses: haskell/actions/setup@v1
         with:

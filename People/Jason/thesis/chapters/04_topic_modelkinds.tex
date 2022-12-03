@@ -30,7 +30,7 @@ them.
 \subsection{An Example}
 \label{chap:modelkinds:sec:transforming-theories-to-code:subsec:an-example}
 
-For example, Drasils \porthref{\acs{projectile} case
+For example, Drasil's \porthref{\acs{projectile} case
 study}{https://jacquescarette.github.io/Drasil/examples/projectile/SRS/srs/Projectile_SRS.html}
 describes how to estimate if a launcher, aligned at a particular angle, will hit
 a target from a specific distance. The \acs{srs} requires users to fill in the:
@@ -103,14 +103,14 @@ Of course, to generate this method in \refOriginalJavaProjectilePLandMethod{},
 Drasil relies on a sufficient capture of its underlying knowledge, and a means
 of transforming said knowledge to ``code'' (e.g., sufficient information that
 answers: What do we want to define? How can it be converted to code?). This
-capture of theories is done using Drasils representation of an ``Instance
+capture of theories is done using Drasil's representation of an ``Instance
 Model.'' To build it, Drasil uses information gathered from what users fed in
 about it, via \refOriginalLandPosTheoryDefinition{}.
 
 \originalLandPosTheoryDefinition{}
 
 Now, let's unpack \refOriginalLandPosTheoryDefinition{}. \inlineHs{landPosIM} is
-an instance of an \InstanceModel{}\footnote{Drasils encoding of the ``Instance
+an instance of an \InstanceModel{}\footnote{Drasil's encoding of the ``Instance
     Models.''}, containing the equational definition component
 (\inlineHs{landPosRC}), and meta-level information about the theory, including
 constraint ranges, notes, and a derivation\footnote{Mostly omitted here for the
@@ -127,10 +127,10 @@ In order to transform \refOriginalLandPosTheoryDefinition{} into
 \refOriginalRelToQDHaskell{} shows the definition of \relToQD{}, a function that
 attempts to convert arbitrary relations into coherent ``quantity
 definitions''\footnote{Or, ``variable definitions.''} (\QDefinition{}), which
-Drasils ``\acs{srs} to code'' generator relies on. \inlineHs{landPosRC} is an
+Drasil's ``\acs{srs} to code'' generator relies on. \inlineHs{landPosRC} is an
 instance of a \RelationConcept{} (\refOriginalRelationConcept{}), a coupled
 mathematical relation (encoded using \Relation{}s\footnote{\Relation{} is
-    Drasils \acs{dsl} encoding arbitrary mathematical relations. We will talk more
+    Drasil's \acs{dsl} encoding arbitrary mathematical relations. We will talk more
     about this later. For now, this is enough.}), natural language description of
 the relation, and descriptive name.
 
@@ -151,7 +151,7 @@ the form \(x = f(a, b, c, \ldots{})\))!
 
 In the sense that we really want to be able to use \relToQD{} (or something like
 it) to transform arbitrary well-understood \textit{theories} into code fragments
-for Drasils code generator, it has at least 3 problems:
+for Drasil's code generator, it has at least 3 problems:
 \begin{enumerate}
     \item[\namedlabel{mk:issue:1}{P1}] it only handles one theory kind:
         variable definitions,
@@ -179,7 +179,7 @@ m(x_1 - x_2)\)), and so on. However, as a result of \ref{mk:issue:2}, we are
 forced to use the ``simple'' slope-intercept form, even though we are aware of
 other forms and may prefer to describe it in other forms.
 
-As a result of \ref{mk:issue:3}, when Drasils users are encoding theories in
+As a result of \ref{mk:issue:3}, when Drasil's users are encoding theories in
 Drasil, they might be misled to think that any of their encoded theories is
 fully-understood to Drasil and actually usable as part of the generated solution.
 
@@ -225,9 +225,9 @@ newly created, structured, theories.
 
 As a result of the inability to enter in complex theories not of the form \(x =
 f(a, b, c, \ldots{})\) and the desire to encode theories with
-\acsp{ode}\footnote{As Drasils examples are physics focused and \acsp{ode} are
+\acsp{ode}\footnote{As Drasil's examples are physics focused and \acsp{ode} are
     common in physics problems, the ability to generate software that can solve
-    \acsp{ode} is desired.}, Drasils existing \acsp{ode} has a bit of temporary code
+    \acsp{ode} is desired.}, Drasil's existing \acsp{ode} has a bit of temporary code
 to circumvent the ``1 Theory Kind'' restriction. However, we won't focus on
 \acsp{ode} in this work. Since we only have one kind of theory that is processed
 down the ``normal'' route (\relToQD{}) along the path of code generation, we

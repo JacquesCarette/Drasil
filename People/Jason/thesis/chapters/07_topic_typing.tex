@@ -15,11 +15,11 @@
       \item What errors did the type checker currently find?
 \end{writingdirectives}
 
-In \Cref{chap:lang-division}, we discussed Drasils single mathematical
+In \Cref{chap:lang-division}, we discussed Drasil's single mathematical
 expression language and split it into three variants, each specialized for their
 intended usage context. As a result, users don't need to worry about using terms
 inapplicable in various contexts. However, an issue remains with expressions:
-Drasils standard mathematical language (\Expr{}) remains untyped, and, thus
+Drasil's standard mathematical language (\Expr{}) remains untyped, and, thus
 Drasil does not detect malformed expressions, allowing users to make errors that
 affect both the problem descriptions in the \acs{srs} and the usability of
 generated software. In this chapter, we will focus on mitigating expression
@@ -47,7 +47,7 @@ currently limits mathematical expressions in both instance models and data
 definitions to ones with definite values that can be directly computed on pencil
 and paper, and in most modern programming languages. However, translatability to
 \acs{gool} does not necessarily mean that all the expressions are actually
-coherent and usable. At the moment, it is possible to give Drasils instance
+coherent and usable. At the moment, it is possible to give Drasil's instance
 models and data definitions invalid \Expr{}s and have Drasil generate code.
 
 \pseudoExampleLandPosQDBadTyping{}

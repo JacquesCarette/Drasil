@@ -158,13 +158,11 @@ reusability, focusing on sharing meanings and families of problems rather than
 solutions. Thus, by focusing on generating from meaningful descriptions, we
 obtain \textit{knowledge reusability} (as opposed to \textit{code} reusability),
 and increased software \textit{maintainability}, \textit{reliability}, and
-\textit{traceability}.
-
-Of course, ``generating everything'' appears grandiose, and, perhaps, reductive
-or ignorant of many difficulties in software development. Thus, we must discuss
-feasibility\footnote{You may skip the remainder of this chapter if you so wish,
-it is not strictly required to understand the rest of my work, but it doesn't
-hurt.}.
+\textit{traceability}. Of course, ``generating everything'' appears grandiose,
+and, perhaps, reductive or ignorant of many difficulties in software
+development. Thus, we must discuss feasibility\footnote{You may skip the
+remainder of this chapter if you so wish, it is not strictly required to
+understand the rest of my work, but it doesn't hurt.}.
 
 \subsection{Feasibility}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility}
@@ -173,7 +171,7 @@ In order for us to discuss feasibility of this idealized development paradigm,
 we must discuss the \textit{depth} and \textit{breadth} of knowledge we need to
 make this feasible\footnote{Note that ``knowledge'' is captured through
 codifying \acsp{dsl}.}. Depth of knowledge refers to the vertical knowledge
-understood about a specific fragment of knowledge, and it's preciseness. For
+understood about a specific fragment of knowledge, and its preciseness. For
 example, we may have a low-depth of knowledge and claim that English sentences
 are a sequence of characters. Alternatively, we might have a slightly ``deeper''
 depth/understanding  of sentences by describing them as a language that follows
@@ -231,9 +229,8 @@ features for highly specific, potentially niche, categories of
 problems\footnote{Think of this category as sharp tools, such as kitchen knives.
 We can generally get away with using basic kitchen knives, but specialty knives
 help us out for particular use-cases, such as serrated knives or filleting
-knives.}. These already exist, and are, similar to
-\autoref{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:low},
-highly practical. For example, \ACFP{aml} (such as HashedExpression
+knives.}. These already exist, and are, similar to the ``Bottom,'' highly
+practical. For example, \ACFP{aml} (such as HashedExpression
 \cite{HashedExpression}) allow you to describe complex mathematical algorithms
 and generate optimized software tools for solving them. Another example is
 parser generators (such as Happy \cite{Happy}). They capture complex information
@@ -244,42 +241,42 @@ programming languages for solving specific problems.
 \subsubsection{A Wide But Shallow Reaching Net: Low Depth \& Wide Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:modelling}
 
-Orthogonal to
-\autoref{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:specialization},
-a capture of low depth and wide breadth of knowledge is seemingly a jack of all
-trades, master of none. For example, most modern programming languages come with
-a standard library that provide many off-the-shelf solutions to well-understood
-problems, but sticking to very common generic problems. Most users typically
-pull in a library that provides extra specialization for certain problems
-because the standard library didn't go deep enough for their needs. Similar to
-the categories before, these are widely used and similarly practical.
+Orthogonal to the ``specialized tools,'' a capture of low depth and wide breadth
+of knowledge is seemingly a jack of all trades, master of none. For example,
+most modern programming languages come with a standard library that provide many
+off-the-shelf solutions to well-understood problems, but sticking to very common
+generic problems. Most users typically pull in a library that provides extra
+specialization for certain problems because the standard library didn't go deep
+enough for their needs. Similar to the categories before, these are widely used
+and similarly practical.
 
 \subsubsection{Utopia: Deep Depth \& Wide Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:utopia}
 
-Finally, we've reached the deep depth and wide breadth of knowledge capture.
-Here, we capture the meanings of many key ideas and concepts we need to build
-software, making as many conscious decisions explicit and visible as possible.
-Imagine using the specialized tools to develop every aspect of a software some
-software artifact, but for every facet of the artifact, from start to finish.
-This is an idealized method of developing software, where knowledge is strongly
-reusable and composable. Of course, this relies on heavy research on tooling. As
-long as developers have infinite patience and can invest infinite time into
-transcribing and researching to fill in gaps, anything is possible, and this
-ideology is very practical! Unfortunately, that situation is not quite
+Finally, we've reached the category of ``deep depth and wide breadth'' of
+knowledge capture. Here, we capture the meanings of key ideas and concepts we
+need to build software, making as many conscious decisions explicit and visible
+as possible. Imagine using the specialized tools to develop every aspect of a
+software some software artifact, but for every facet of the artifact, from start
+to finish. This is an idealized method of developing software, where knowledge
+is strongly reusable and composable. Of course, this relies on heavy research on
+tooling. As long as developers have infinite patience and can invest infinite
+time into transcribing and researching to fill in gaps, anything is possible,
+and this ideology is very practical! Unfortunately, that situation is not quite
 realistic. As such, we should restrict our scope of captured knowledge to only
 those ``well-understood'' \cite{well-understood}. For areas of
 ``well-understood'' knowledge, this should be more feasible, merely because the
 discussion of key ideas is already coherent and sufficiently codified.
 
-Here, you might use a series of \aclp{dsl} to create a coherent discussion, a
-``story.'' With it, you would have specialized interpreters built, which process
-it, and draw out meaningful byproducts you're interested in (such as usable
-software). This story can be relatively far removed from produced artifacts
-generating (containing potentially little to no discussion of the desired
-artifacts at all, or a precise description). Through creating a story as a
+Here, you might use a series of \aclp{dsl} to create a coherent discussion (a
+``story''). With it, you would have specialized interpreters built, which
+process it, and draw out meaningful byproducts you're interested in (such as
+usable software). This story can be relatively far removed from produced
+artifacts generating (containing potentially little to no discussion of the
+desired artifacts at all), or a precise description (where you might be manually
+writing out the final artifacts yourself). Through creating a story as a
 composition of many other smaller fragments of knowledge and stories, and
-defining interpreters as compositions of other, smaller interpreters, this is
+defining interpreters as compositions of other, smaller, interpreters, this is
 feasible. Hopefully, with enough effort, this should alleviate considerable
 stress associated with manual software development, by moving the focus to the
 important bits: the story the artifacts tell. The ``quality'' of the generated
@@ -332,7 +329,7 @@ they should encode information about the ways in which the knowledge can be
 transformed into other forms of knowledge (including that which is
 interdisciplinary). The knowledge they would be encoding should be as well-known
 and globally standardized as possible. As discussed in
-\autoref{chap:ideology:sec:thoughts_of_generation:subsec:reconciliation}, it is
+\Cref{chap:ideology:sec:thoughts_of_generation:subsec:reconciliation}, it is
 likely that the knowledge encoder will focus on writing a series of highly
 specific \aclp{dsl}, where the languages may be restricted to as specific as one
 term or a handful.

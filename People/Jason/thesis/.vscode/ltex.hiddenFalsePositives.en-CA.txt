@@ -4,3 +4,9 @@
 {"rule":"COMMA_PERIOD","sentence":"^\\QFinally, now that we've analyzed the currently discussed theories in Drasil, we may at least start to improve their capture in , .\\E$"}
 {"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QStarting at the end and working our way back, we end with .\\E$"}
 {"rule":"TOO_LONG_SENTENCE","sentence":"^\\QIf we were to change the defining expression to something incoherent (such as \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q), we end up with (a) an algorithm that doesn't exactly make sense, and (b) a generated software source code that does what we wanted it to do, but which isn't actually compilable software.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qencodes the variable with a \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q (“desiredFiringAngle”), a short name (“desired firing angle”), long name (“needed firing angle for a cannon to hit a target”), a symbol (\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q), and a unit (radians).\\E$"}
+{"rule":"TOO_LONG_PARAGRAPH","sentence":"^\\QAs a result, knowing how to and when you can transform captured theories into other forms (such as executable code) is a complex task (similar to the complexity associated with transpiling a general-purpose program into another an exercise in futility!).\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_CA","sentence":"^\\Q[rq:lang_division RQ2] Drasil's theory encodings rely on a single mathematical expression language, which doesn't expose information about applicability to different contexts.\\E$"}
+{"rule":"PASSIVE_VOICE","sentence":"^\\QUltimately, this means that more time is spent developing and debugging generated artifacts than we would like.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QIn Drasil, we might encode this as .\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_CA","sentence":"^\\Q[rq:chunkdb RQ4] Our current “typed” approach to collecting different kinds of data is difficult to extend.\\E$"}

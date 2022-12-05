@@ -122,3 +122,6 @@ READMEs
 evaluable
 booleans
 DifferentialModel
+desiredFiringAngle
+bytecode
+Agda

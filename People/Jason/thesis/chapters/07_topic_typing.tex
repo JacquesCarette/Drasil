@@ -57,7 +57,7 @@ Take \refCurrentLandPosIMQD{} for example. The defining expression of
 terms that can be naively translated to \acs{gool} without external knowledge.
 If we were to change the defining expression to something incoherent (such as
 \(1 + \texttt{``Drasil''}\)\footnote{The sum of the number 1 and string
-``Drasil''}, \refPseudoExampleLandPosQDBadTyping{}), we end up with (a) an
+``Drasil''.}, \refPseudoExampleLandPosQDBadTyping{}), we end up with (a) an
 algorithm that doesn't exactly make sense, and (b) a generated software source
 code that does what we wanted it to do
 (\refPseudoExampleLandPosQDBadTypingJavaCode{}), but which isn't actually
@@ -289,8 +289,8 @@ annotations might have ambiguous types should we try to infer one
 scenarios to occur with \Expr{}, we might if we also added type-checking to
 \ModelExpr{}, where we would like to have higher-order functions and function
 abstractions. Thus, we decided to build the type-checker with a modern,
-future-proof scheme that will scale against our expected
-needs\cite{CaretteDiscussion2022}: with \textit{bidirectional type-checking}.
+future-proof scheme that will scale against our expected needs
+\cite{CaretteDiscussion2022}: with \textit{bidirectional type-checking}.
 
 \subsection{Bidirectional Type Rules}
 \label{chap:typed-expr:sec:type-safe-expressions:subsec:bidirectional-type-rules}
@@ -737,30 +737,30 @@ class (Eq t, Show t) => Typed e t where
 At the moment, \inlineHs{TypeError} is merely a type alias for a
 \inlineHs{String}, for which we manually typeset in a reasonably okay fashion.
 Eventually, it should be replaced with a whole ``breadcrumbs''-like system that
-elegantly displays a traversal over an expression, showing where type checking
+elegantly displays a traversal over an expression, showing where type-checking
 may have gone awry and why an expression is ill-typed.
 
-Now we may build out the bidirectional type checker for \Expr{}:
-\refCurrentExprBidirTypeCheckingHaskell{}. All that's left is to actually use
-the type checker.
+Now we may build out the bidirectional type-checker for \Expr{}:
+\refCurrentExprBidirTypeCheckingHaskell{}. After which, all that's left is to
+actually use the type-checker.
 
 While we would prefer to localize type-checking to the instant applicable chunks
-are created (and expressions too), we unfortunately aren't able to. As
-expressions are formed and symbols are referenced, the whole symbol type context
-is missing. At the moment, Drasil gathers all chunks at once, registers them in
-memory, and then performs various ``checks'' and generation steps to produce
-software artifacts. In order to build the type context, we would need to build
-it manually, in a very tedious fashion, for each expression we build. However,
-this idea does not scale very well. In order to localize type-checking without
-the extra work, we would need to make our chunk registration gradual and add a
-feature for exposing assertions that needs to be asserted/proven before
-registration in memory\footnote{We will take steps towards this in
-\Cref{chap:storingChunks}, but this task will largely be left for future work.}.
-To make a compromise, we will settle for type-checking just before code and
-\acs{srs} generation, so that we can notify Drasil-users of any issues and stop
-generation. With this information in mind, we need to be able to extract all
-expressions and expected types, and relations from our \InstanceModel{}s and
-\DataDefinition{}s.
+are created (and expressions too), we unfortunately aren't able to\footnote{At
+least not without ease.}. As expressions are formed and symbols are referenced,
+the whole symbol type context is missing. At the moment, Drasil gathers all
+chunks at once, registers them in memory, and then performs various ``checks''
+and generation steps to produce software artifacts. In order to build the type
+context, we would need to build it manually, in a very tedious fashion, for each
+expression we build. However, this does not scale well. In order to localize
+type-checking without the extra work, we would need to make our chunk
+registration gradual and add a feature for exposing assertions that needs to be
+asserted/proven before registration in memory\footnote{We will take steps
+towards this in \Cref{chap:storingChunks}, but this task will largely be left
+for future work.}. To make a compromise, we will settle for type-checking just
+before code and \acs{srs} generation, so that we can notify Drasil-users of any
+issues and stop generation. With this information in mind, we need to be able to
+extract all expressions and expected types, and relations from our
+\InstanceModel{}s and \DataDefinition{}s.
 
 \begin{haskell}{Requiring Type-checking Constraint}{curRequiringTypecheckingConstraint}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/WellTyped.hs\#L40-L45}
 -- | For all containers, c, which contain typed expressions, e, against a
@@ -845,8 +845,8 @@ By using this function anywhere before our code generation step, we are able to
 type-check all relations and expressions relevant to code generation. As of
 writing, we found enough such that it's best to keep type-checking done en
 masse, as it is right now, because it has already uncovered many typing issues.
-Interestingly, we also found that we had used temporary operations when we meant
-other things (e.g., using absolute value in place where we intended to use
+Interestingly, we also found that we had used temporary operations used when we
+meant other things (e.g., using absolute value in place where we intended to use
 vector norm). We may enable a compiler panic for our case studies later, once
 we've cleared through the majority of the existing found type errors. Notably,
 by adding type-checking to Drasil, we also bring into question the coherence of

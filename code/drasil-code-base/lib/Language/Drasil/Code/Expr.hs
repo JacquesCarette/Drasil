@@ -31,8 +31,8 @@ data LABinOp = Index
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Vector x Vector -> Vector@ binary operations (cross product).
-data VVVBinOp = Cross
+-- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, vector sub).
+data VVVBinOp = Cross | VAdd | VSub
   deriving Eq
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).
@@ -304,6 +304,11 @@ instance ExprC CodeExpr where
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
   
+  -- | Adding vectors
+  vAdd  = VVVBinaryOp VAdd
+  -- | Subtracting vectors
+  vSub  = VVVBinaryOp VSub
+
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
   

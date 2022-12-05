@@ -195,6 +195,12 @@ class ExprC r where
   -- | Smart constructor for vector scaling
   vScale :: r -> r -> r
 
+  -- | Vector Addition
+  vAdd :: r -> r -> r
+
+  -- | Vector Subtraction
+  vSub :: r -> r -> r
+
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r
   
@@ -364,6 +370,10 @@ instance ExprC Expr where
   
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
+  -- | Adding vectors
+  vAdd  = VVVBinaryOp VAdd
+  -- | Subtracting vectors
+  vSub  = VVVBinaryOp VSub
   
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
@@ -534,6 +544,11 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor to cross product two expressions.
   cross = M.VVVBinaryOp M.Cross
 
+  -- | Adding vectors
+  vAdd  = M.VVVBinaryOp M.VAdd
+  -- | Subtracting vectors
+  vSub  = M.VVVBinaryOp M.VSub
+  
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete
 

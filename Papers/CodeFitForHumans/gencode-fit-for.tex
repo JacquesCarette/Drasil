@@ -82,7 +82,30 @@
 \section{Introduction}
 \label{sec:intro}
 
-Short. High-level of the problem.
+It is an instructive exercise to take a piece of well-written, well-documented
+piece of software and \emph{carefully explain} the provenance and the justification
+for all the parts -- not just the code, but also the documentation, the tests, the
+build scripts, the README, the requirements and design document, and so on.
+One of the striking things of such an explanation is how much repetition it contains.
+Post-facto, this isn't surprising: all these ``pieces'' belong to a single software
+package that accomplishes a particular task.
+
+What is more surprising is that if such an exercise is conducted multiple times
+on softare from different domains, how much of the ``skeleton'' of the explanation
+remains the same. Again, this is because some parts don't change: what artifacts
+are present and what ``knowledge'' is encoded by each is shared by all these different
+pieces of software. What changes are the domain-specific aspects.
+
+Another surprise is just how succinct the (careful!) explanation sometimes is, at
+least when this explanation is for people who are both domain experts and computing
+professionals. This reflects the idea that there is an accepted, concise, body of
+knowledge being re-used, and the explanation is largely how to weave and expand that
+knowledge from its human-encoded version to a version suitable for machine-oriented
+processing.
+
+Thus we thought: what if we pick a particularly well-understood component (such as
+well-documented code), can we turn this explanatory process into a description
+language for documented-code assembly, assuming we already had a 
 
 \section{The problem}
 \label{sec:problem}

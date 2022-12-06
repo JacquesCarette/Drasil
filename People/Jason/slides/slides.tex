@@ -1,0 +1,199 @@
+\documentclass[xcolor={dvipsnames}]{beamer}
+
+\usepackage[T1]{fontenc}
+
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{url}
+
+\usepackage{listings}
+
+\usepackage{mathtools}
+\usepackage{calc}
+\usepackage{lmodern}
+\usepackage{changepage}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\usetheme{Madrid}
+
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+\title{Adding Types and Theory Kinds to Drasil}
+\author[J. Balaci]{Jason Balaci\\\small{}Under the supervision of Dr. Jacques Carette}
+
+\institute[McMaster U.]{McMaster University}
+\date{Dec. $8^{\text{th}}$, 2022}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% Credit to Gabriel Devenyi for this bibliography cfg:
+% github.com/gdevenyi/mcmaster.latex
+\usepackage[
+  style=numeric-comp,
+  backend=biber,
+  sorting=none,
+  backref=true,
+  maxnames=99,
+  alldates=iso,
+  seconds=true
+]{biblatex} % bibliography
+\addbibresource{references.bib}
+
+\begin{document}
+
+%------------------------------------------------------------------------------
+% TITLE
+%------------------------------------------------------------------------------
+\frame{\titlepage}
+
+%------------------------------------------------------------------------------
+% TABLE OF CONTENTS
+%------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+%------------------------------------------------------------------------------
+% INTRODUCTION
+%------------------------------------------------------------------------------
+\section{Introduction}
+
+\begin{frame}
+  \frametitle{Outline}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Research Questions}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% BACKGROUND: DRASIL
+%------------------------------------------------------------------------------
+\section{Drasil}
+
+\begin{frame}
+  \frametitle{What is Drasil?}
+\end{frame}
+
+\begin{frame}
+  \frametitle{How does it work?}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example}
+  \framesubtitle{SRS to Code}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Problem Statement}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% THEORIES
+%------------------------------------------------------------------------------
+\section{Theories in Drasil}
+
+\begin{frame}
+  \frametitle{How are theories used?}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Classifying and structuring}
+
+  Topic \#1 solution
+\end{frame}
+
+%------------------------------------------------------------------------------
+% EXPRESSIONS
+%------------------------------------------------------------------------------
+\section{Expressions}
+
+\begin{frame}
+  \frametitle{What are they used for?}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Restricting terms by context}
+
+  Topic \#2 solution
+\end{frame}
+
+\begin{frame}
+  \frametitle{Continued problems: formation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Typing}
+
+  Topic \#3 solution
+\end{frame}
+
+%------------------------------------------------------------------------------
+% DATA (CHUNKS)
+%------------------------------------------------------------------------------
+\section{Data in Drasil (\textquotedblleft{}Chunks\textquotedblright{})}
+
+\begin{frame}
+  \frametitle{How is data stored in Drasil?}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Scaling against new \textit{kinds} of data}
+
+  Topic \#4 solution
+\end{frame}
+
+%------------------------------------------------------------------------------
+% FUTURE WORK
+%------------------------------------------------------------------------------
+\section{Future Work}
+
+\begin{frame}
+  \frametitle{Future Work}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% CONCLUSION
+%------------------------------------------------------------------------------
+\section{Conclusion}
+
+\begin{frame}
+  \frametitle{Concluding Remarks}
+\end{frame}
+
+
+%------------------------------------------------------------------------------
+% THE END / THANK YOU
+%------------------------------------------------------------------------------
+
+\begin{frame}
+    \center
+    \huge{Fin.}\\
+    \normalsize{Thank you!}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% REFERENCES
+%------------------------------------------------------------------------------
+
+\section{References}
+
+\begin{frame}[allowframebreaks]
+    \frametitle{References}
+
+    \printbibliography[heading=bibintoc]
+\end{frame}
+
+\end{document}

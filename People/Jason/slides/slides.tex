@@ -36,18 +36,32 @@
   \end{frame}
 }
 
-% Credit to Gabriel Devenyi for this bibliography cfg:
-% github.com/gdevenyi/mcmaster.latex
-\usepackage[
-  style=numeric-comp,
-  backend=biber,
-  sorting=none,
-  backref=true,
-  maxnames=99,
-  alldates=iso,
-  seconds=true
-]{biblatex} % bibliography
-\addbibresource{references.bib}
+% For code highlighting
+\usepackage[newfloat,outputdir=build]{minted}
+\usemintedstyle{colorful}
+
+% For loading images
+\usepackage{graphicx}
+\graphicspath{ {./assets/img/} }
+
+
+% For fancy pictures
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,cd}
+\usetikzlibrary{babel} % Make sure quiver/tikz uses babel
+\usetikzlibrary {arrows.meta,graphs,graphdrawing}
+\usegdlibrary {layered}
+
+\usepackage{todonotes}
+
+
+\newcommand{\inlineHs}[1]{\mintinline{haskell}|#1|}
+% Command based on: https://tex.stackexchange.com/questions/266811/define-a-new-command-with-parameters-inside-newcommand
+\newcommand{\codeName}[1]{\expandafter\newcommand\csname #1\endcsname{\inlineHs{#1}}}
+
+\codeName{CodeExpr}
+\codeName{Expr}
+\codeName{ModelExpr}
 
 \begin{document}
 
@@ -66,16 +80,24 @@
 \end{frame}
 
 %------------------------------------------------------------------------------
-% INTRODUCTION
+% OVERVIEW
 %------------------------------------------------------------------------------
-\section{Introduction}
+\section{Overview}
 
 \begin{frame}
-  \frametitle{Outline}
-\end{frame}
+  \frametitle{Overview}
 
-\begin{frame}
-  \frametitle{Research Questions}
+  \begin{enumerate}
+    \item Background: Drasil
+    \item 4 Research Areas:
+      \begin{enumerate}
+        \item Capturing and interpreting theories
+        \item Mathematical expressions in various contexts
+        \item Well-typedness of mathematical expressions
+        \item An extensible database for remembering everything
+      \end{enumerate}
+  \end{enumerate}
+
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -84,20 +106,48 @@
 \section{Drasil}
 
 \begin{frame}
-  \frametitle{What is Drasil?}
-\end{frame}
+  \frametitle{What is Drasil? How does it work?}
+  \framesubtitle{\textquotedblleft{}Generate All The Things!\textquotedblright{}}
 
-\begin{frame}
-  \frametitle{How does it work?}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+      \includegraphics[width=\textwidth]{drasil_logo.png}
+    \end{column}
+    \hfill
+    \begin{column}{0.45\textwidth}
+      \begin{enumerate}
+        \item Software generation suite for ``well-understood'' domains
+        \item De-duplicating and capturing knowledge across software artifacts
+        \item Uses a Software Requirements Specification (SRS) template to
+              decompose scientific problems and generate software
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Example}
   \framesubtitle{SRS to Code}
-\end{frame}
 
-\begin{frame}
-  \frametitle{Problem Statement}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+      Using SRS components:
+      \begin{enumerate}
+        \item Symbols (inputs, outputs, and everything in-between)
+        \item Problem description and goals
+        \item Assumptions
+        \item Abstract theories
+        \item Concrete theories
+        \item \(\ldots{}\)
+      \end{enumerate}
+    \end{column}
+    \hfill
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\textwidth]{roughNetworkOfDomains.png}
+    \end{column}
+  \end{columns}
+
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -107,12 +157,45 @@
 
 \begin{frame}
   \frametitle{How are theories used?}
+
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+      \missingfigure{Theory in Haskell}
+
+      \missingfigure{relToQD Snippet}
+    \end{column}
+    \hfill
+    \begin{column}{0.45\textwidth}
+      \missingfigure{Gen'd and rendered in SRS}
+
+      \missingfigure{Gen'd code}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Classifying and structuring}
+  \frametitle{Decompose, classify, and encode}
 
-  Topic \#1 solution
+  \missingfigure{ModelKinds Haskell}
+
+  \begin{itemize}
+    \item EquationalModel: \(x := f(x,y,z,\ldots{})\)
+    \item EquationalConstraints: \(a \land b \land c \land \ldots{}\)
+    \item EquationalRealm: \(x := f(x,y,z,\ldots{}) \lor x := g(x,y,z,\ldots{}) \lor \ldots{}\)
+    \item DEModel \& NewDEModel: \(dy = f(x, y, \ldots{})\)
+    \item OthModel: ?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ripple effects}
+
+  \begin{itemize}
+    \item Tangible categorization through type information
+    \item Simpler creation, interaction, and analysis
+    \item Flexible, more opportunity for (domain-specific) interpretation
+  \end{itemize}
+
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -122,22 +205,88 @@
 
 \begin{frame}
   \frametitle{What are they used for?}
+
+  In theories!
+
+  \begin{columns}
+    \begin{column}{0.3\textwidth}
+      \missingfigure{}
+      In code
+    \end{column}
+    \hfill
+    \begin{column}{0.3\textwidth}
+      \missingfigure{}
+      In concrete theories
+    \end{column}
+    \hfill
+    \begin{column}{0.3\textwidth}
+      \missingfigure{}
+      In abstract theories
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
   \frametitle{Restricting terms by context}
 
-  Topic \#2 solution
+  \begin{enumerate}
+    \item Split up the expression language by context
+    \item Use a ``Typed-Tagless'' encoding to make usage seamless and
+          interoperable
+  \end{enumerate}
+
+  \[\Expr{} \Rightarrow{} \Expr{} \cup{} \ModelExpr{} \cup{} \CodeExpr{}\]
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ripple effects}
+
+  \begin{enumerate}
+    \item Restricting terms by context
+    \item Stop users from entering in un-translatable expressions
+    \item Know when Equational Models are usable for code generation
+  \end{enumerate}
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Continued problems: formation}
+
+  \missingfigure{Examples of ill-typed expressions}
 \end{frame}
 
 \begin{frame}
   \frametitle{Typing}
 
-  Topic \#3 solution
+  \begin{enumerate}
+    \item Adding optional \emph{bidirectional} type-checking
+    \item Running type-checking post-facto to check all data en masse
+  \end{enumerate}
+
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+      \missingfigure{Typing rules}
+    \end{column}
+    \hfill
+    \begin{column}{0.45\textwidth}
+      \missingfigure{Typing rules}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ripple effects}
+
+  \begin{enumerate}
+    \item Found many typing issues and areas of code (e.g., vectors) that need
+          more work
+    \item First capture of implicit ``chunk'' constraints
+    \item Realized we can move more ``checks'' to be done post-facto or
+          on-demand
+  \end{enumerate}
+
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -147,12 +296,41 @@
 
 \begin{frame}
   \frametitle{How is data stored in Drasil?}
+
+  \missingfigure{Image of chunks funnelled into Drasil: chunk -> (Drasil) <- chunk}
+
+  \missingfigure{ChunkDB Haskell}
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Scaling against new \textit{kinds} of data}
 
-  Topic \#4 solution
+  \begin{center}
+    Mask the type information!
+  \end{center}
+
+  \missingfigure{``Chunk'' data type Haskell}
+
+  \missingfigure{Upgraded ChunkDB Haskell}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ripple effects}
+
+  \begin{enumerate}
+    \item Everything is in one place!
+    \item Chunk analysis capabilities:
+      \begin{enumerate}
+        \item (easier) type usage analytics
+        \item chunk dependency tree
+        \item find cyclic knowledge
+        \item dumping all chunks at once
+      \end{enumerate}
+    \item ChunkDB arithmetic?
+    \item (easier) Generalized chunk constraints!
+    \item Usable ``base'' across Drasil-like projects
+  \end{enumerate}
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -162,6 +340,8 @@
 
 \begin{frame}
   \frametitle{Future Work}
+
+  Point-form notes from my thesis.
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -170,30 +350,9 @@
 \section{Conclusion}
 
 \begin{frame}
-  \frametitle{Concluding Remarks}
-\end{frame}
+  \frametitle{Concluding Remarks \& Takeaways}
 
-
-%------------------------------------------------------------------------------
-% THE END / THANK YOU
-%------------------------------------------------------------------------------
-
-\begin{frame}
-    \center
-    \huge{Fin.}\\
-    \normalsize{Thank you!}
-\end{frame}
-
-%------------------------------------------------------------------------------
-% REFERENCES
-%------------------------------------------------------------------------------
-
-\section{References}
-
-\begin{frame}[allowframebreaks]
-    \frametitle{References}
-
-    \printbibliography[heading=bibintoc]
+  Re-stating 4 major bodies of work done and their key conclusions/takeaways
 \end{frame}
 
 \end{document}

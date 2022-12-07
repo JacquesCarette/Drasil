@@ -21,6 +21,7 @@ debug: # for finding hard issues, this is an interactive version of 'build'
 
 clean:
 	rm -rf build/
+	rm -rf svg-inkscape/
 
 open:
 	xdg-open build/slides.pdf

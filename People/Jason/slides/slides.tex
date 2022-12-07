@@ -54,6 +54,7 @@
 
 \usepackage{todonotes}
 
+\usepackage{svg}
 
 \newcommand{\inlineHs}[1]{\mintinline{haskell}|#1|}
 % Command based on: https://tex.stackexchange.com/questions/266811/define-a-new-command-with-parameters-inside-newcommand
@@ -173,10 +174,20 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{Decompose, classify, and encode}
 
-  \missingfigure{ModelKinds Haskell}
+\begin{minted}{haskell}
+data ModelKinds e where
+  NewDEModel            :: DifferentialModel -> ModelKinds e
+  DEModel               :: RelationConcept   -> ModelKinds e
+  EquationalConstraints :: ConstraintSet e   -> ModelKinds e
+  EquationalModel       :: QDefinition e     -> ModelKinds e
+  EquationalRealm       :: MultiDefn e       -> ModelKinds e
+  OthModel              :: RelationConcept   -> ModelKinds e
+\end{minted}
+
+  \vspace{0.2cm}
 
   \begin{itemize}
     \item EquationalModel: \(x := f(x,y,z,\ldots{})\)
@@ -205,8 +216,6 @@
 
 \begin{frame}
   \frametitle{What are they used for?}
-
-  In theories!
 
   \begin{columns}
     \begin{column}{0.3\textwidth}
@@ -297,22 +306,68 @@
 \begin{frame}
   \frametitle{How is data stored in Drasil?}
 
-  \missingfigure{Image of chunks funnelled into Drasil: chunk -> (Drasil) <- chunk}
-
-  \missingfigure{ChunkDB Haskell}
+  \centering
+  \includesvg[width=0.8\textwidth]{assets/img/chunksGoingIntoDrasil.svg}
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
+  \frametitle{How is data stored in Drasil?}
+
+\begin{minted}{haskell}
+data ChunkDB = CDB 
+  { symbolTable :: SymbolMap
+  , termTable :: TermMap 
+  , defTable  :: ConceptMap
+  , _unitTable :: UnitMap
+  , _traceTable :: TraceMap
+  , _refbyTable :: RefbyMap
+  , _dataDefnTable  :: DatadefnMap
+  , _insmodelTable   :: InsModelMap
+  , _gendefTable   :: GendefMap
+  , _theoryModelTable :: TheoryModelMap
+  , _conceptinsTable :: ConceptInstanceMap
+  , _sectionTable :: SectionMap
+  , _labelledcontentTable :: LabelledContentMap
+  } --TODO: Expand and add more databases
+\end{minted}
+
+\end{frame}
+
+\begin{frame}[fragile]
   \frametitle{Scaling against new \textit{kinds} of data}
 
   \begin{center}
     Mask the type information!
   \end{center}
 
-  \missingfigure{``Chunk'' data type Haskell}
+\begin{minted}{haskell}
+{-# LANGUAGE ExistentialQuantification, ConstraintKinds #-}
 
-  \missingfigure{Upgraded ChunkDB Haskell}
+type IsChunk a = (HasUID a, HasChunkRefs a, Typeable a)
+
+data Chunk = forall a. IsChunk a => Chunk a
+
+type ChunkDB = Map UID Chunk
+
+unChunk :: Typeable a => Chunk -> Maybe a
+unChunk (Chunk c) = cast c
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Scaling against new \textit{kinds} of data}
+  \framesubtitle{Extra machinery}
+
+\begin{minted}{haskell}
+type ReferredBy = [UID]
+
+type ChunkByUID = M.Map UID (Chunk, ReferredBy)
+
+type ChunksByTypeRep = M.Map TypeRep [Chunk]
+
+newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
+\end{minted}
 \end{frame}
 
 \begin{frame}

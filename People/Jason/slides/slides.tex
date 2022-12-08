@@ -263,10 +263,41 @@ data ModelKinds e where
 
 \end{frame}
 
-\begin{frame}
-  \frametitle{Continued problems: formation}
+\begin{frame}[fragile]
+  \frametitle{Validity of Expressions}
 
-  \missingfigure{Examples of ill-typed expressions}
+\begin{minted}[frame=single,framesep=5pt,rulecolor=lightgray]{haskell}
+data Expr where
+  Lit      :: Literal -> Expr
+  AssocA   :: AssocArithOper -> [Expr] -> Expr
+  AssocB   :: AssocBoolOper  -> [Expr] -> Expr
+  C        :: UID -> Expr
+  ...
+\end{minted}
+
+\begin{columns}
+  \begin{column}{0.575\textwidth}
+    \begin{minted}[frame=single,framesep=5pt,rulecolor=lightgray]{haskell}
+illTyped :: Expr
+illTyped = int 1 $+ str "Drasil"
+    \end{minted}
+    \vspace{0.5em}
+    \begin{minted}[frame=single,framesep=5pt,rulecolor=lightgray]{java}
+public static double func_ex() {
+    return 1 + "Drasil";
+}
+    \end{minted}
+  \end{column}
+  \hfill
+  \begin{column}{0.375\textwidth}
+    \begin{minted}[frame=single,framesep=5pt,rulecolor=lightgray,breaklines]{console}
+error: incompatible types: String cannot be converted to double
+  return 1 + "Drasil";
+           ^
+    \end{minted}
+  \end{column}
+\end{columns}
+
 \end{frame}
 
 \begin{frame}

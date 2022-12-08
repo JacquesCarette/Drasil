@@ -218,24 +218,42 @@ data ModelKinds e where
 %------------------------------------------------------------------------------
 \section{Expressions}
 
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{What are they used for?}
 
   In encoding\ldots{}
   \begin{columns}
     \begin{column}{0.3\textwidth}
       \begin{center}
-        Code
+        Code (OO)
+        
+        \vspace{4.3em}
+
+\begin{minted}[breaklines]{python}
+def theta(...):
+  return math.asin(d * g / (v ** 2)) / 2
+\end{minted}
       \end{center}
-      \missingfigure{}
     \end{column}
     \hfill
     \begin{column}{0.3\textwidth}
-      \missingfigure{}
+      \begin{center}
+        Concrete theories
+        
+        \vspace{1.4em}
+
+        \includegraphics[width=\textwidth]{concreteTheory.png}
+      \end{center}
     \end{column}
     \hfill
     \begin{column}{0.3\textwidth}
-      \missingfigure{}
+      \begin{center}
+        Abstract theories
+        
+        \vspace{1em}
+
+        \includegraphics[width=\textwidth]{abstractTheory.png}
+      \end{center}
     \end{column}
   \end{columns}
 \end{frame}

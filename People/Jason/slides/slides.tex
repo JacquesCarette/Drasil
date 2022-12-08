@@ -460,8 +460,8 @@ newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
   \frametitle{Bigger picture}
 
   \begin{enumerate}
-    \item Everything is in one place!
-    \item Simpler chunk analysis capabilities:
+    \item One place!
+    \item Simpler chunk analysis:
       \begin{enumerate}
         \item type usage analytics
         \item build chunk dependency tree
@@ -498,7 +498,6 @@ newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
         \item Adjust existing chunk schema to merge in new \inlineHs{ChunkDB}
               implementation.
         \item Add analysis capabilities.
-        \item Extend ``deferred type-checking'' to general chunk assertions.
       \end{enumerate}
   \end{enumerate}
 

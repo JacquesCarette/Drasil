@@ -396,7 +396,32 @@ newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
 \begin{frame}
   \frametitle{Future Work}
 
-  Point-form notes from my thesis.
+  Regarding\ldots{}
+  \begin{enumerate}
+    \item Theories:
+      \begin{enumerate}
+        \item Explore alternative \inlineHs{ModelKinds} design.
+        \item Explore remaining theories (e.g., structure \inlineHs{OthModel}s).
+      \end{enumerate}
+    \item Expressions:
+      \begin{enumerate}
+        \item Add (optional) typing to \inlineHs{ModelExpr}.
+        \item Add typing to \inlineHs{CodeExpr} and GOOL.
+        \item Add more operations for vectors.
+        \item For vectors and matrices in \inlineHs{Expr}, add length
+              information, where applicable, to type-checker.
+      \end{enumerate}
+    \item \inlineHs{ChunkDB}:
+      \begin{enumerate}
+        \item Adjust existing chunk schema to merge in new \inlineHs{ChunkDB}
+              implemented.
+        \item Add analysis capabilities (such as finding cyclic
+              dependencies/references, and generating chunk/knowledge graphs).
+        \item Extend ``deferred type-checking'' to general chunk
+              constraints/assertions.
+      \end{enumerate}
+  \end{enumerate}
+
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -407,7 +432,17 @@ newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
 \begin{frame}
   \frametitle{Concluding Remarks \& Takeaways}
 
-  Re-stating 4 major bodies of work done and their key conclusions/takeaways
+  To sum up, we\ldots{}
+  \begin{enumerate}
+    \item replaced theory encodings with structured variants of the same
+          information to find more domain-specific interpretation opportunities
+          (specifically, opportunities for code generation),
+    \item split up the expression language to restrict terms to specific contexts,
+    \item added type-checking to the ``concrete'' expression language to assure
+          all expressions are well-typed,
+    \item and built an alternative chunk database structure to scale against new
+          chunk types built.
+  \end{enumerate}
 \end{frame}
 
 \end{document}

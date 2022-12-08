@@ -269,20 +269,27 @@ data ModelKinds e where
   \frametitle{Typing}
 
   \begin{enumerate}
-    \item Adding optional \emph{bidirectional} type-checking
-    \item Running type-checking post-facto to check all data en masse
+    \item Adding \emph{bidirectional} type-checking
+    \item Running type-checking post-facto to check all expressions en masse
   \end{enumerate}
 
   \begin{columns}
-    \begin{column}{0.45\textwidth}
-      \missingfigure{Typing rules}
+    \begin{column}{0.475\textwidth}
+      \begin{center}
+        \includegraphics[width=\textwidth]{typeRulesLeft.png}
+        \includegraphics[width=0.55\textwidth]{typeRulesCheckByInfer.png}
+      \end{center}
     \end{column}
     \hfill
-    \begin{column}{0.45\textwidth}
-      \missingfigure{Typing rules}
+    \begin{column}{0.475\textwidth}
+      \begin{center}
+        \includegraphics[width=\textwidth]{typeRulesRight.png}
+      \end{center}
     \end{column}
   \end{columns}
 
+  \vfill
+  {\tiny \hfill \emph{Note: not all type rules shown here.}}
 \end{frame}
 
 \begin{frame}

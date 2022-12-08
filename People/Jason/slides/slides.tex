@@ -228,14 +228,14 @@ data ModelKinds e where
 \end{frame}
 
 \begin{frame}
-  \frametitle{Ripple effects}
+  \frametitle{Bigger picture}
 
   \begin{itemize}
-    \item Tangible categorization through type information.
+    \item Categorization through types/constructors.
     \item Structured creation, interaction, and analysis.
-    \item Flexible, more opportunity for (domain-specific) interpretation.
+    \item More opportunity for (domain-specific) interpretation.
       \begin{itemize}
-        \item Specifically, opening up more opportunities for code generation.
+        \item Code generation!
       \end{itemize}
   \end{itemize}
 
@@ -290,22 +290,23 @@ def theta(...):
   \frametitle{Restricting terms by context}
 
   \begin{enumerate}
-    \item Split up the expression language by context
-    \item Use a ``Typed-Tagless'' encoding to make usage seamless and
-          interoperable
+    \item Split up the expression language by context.
+    \item ``Typed-tagless'' encoding to make usage seamless and interoperable.
   \end{enumerate}
 
   \[\Expr{} \Rightarrow{} \Expr{} \cup{} \ModelExpr{} \cup{} \CodeExpr{}\]
 
+  \[\ModelExpr{} \supseteq \Expr{} \subseteq \CodeExpr{}\]
+
 \end{frame}
 
 \begin{frame}
-  \frametitle{Ripple effects}
+  \frametitle{Bigger picture}
 
   \begin{enumerate}
-    \item Restricting terms by context
-    \item Stop users from entering in un-translatable expressions
-    \item Know when Equational Models are usable for code generation
+    \item Restricting terms by context.
+    \item Stop users from entering in unexpected expressions.
+    \item Know when ``Equational Models'' are usable for (OO) code generation.
   \end{enumerate}
 
 \end{frame}
@@ -351,8 +352,7 @@ error: incompatible types: String cannot be converted to double
   \frametitle{Typing}
 
   \begin{enumerate}
-    \item Adding \emph{bidirectional} type-checking.
-    \item Type-checking and reporting en masse.
+    \item Adding \emph{bidirectional} type-checking, reporting en masse.
   \end{enumerate}
 
   \begin{columns}
@@ -375,14 +375,11 @@ error: incompatible types: String cannot be converted to double
 \end{frame}
 
 \begin{frame}
-  \frametitle{Ripple effects}
+  \frametitle{Bigger picture}
 
   \begin{enumerate}
-    \item Found many typing issues and areas of code (e.g., vectors) that need
-          more work
-    \item First capture of implicit ``chunk'' constraints
-    \item Realized we can move more ``checks'' to be done post-facto or
-          on-demand
+    \item Found many typing issues!
+    \item Realized we needed more \inlineHs{Expr} terms.
   \end{enumerate}
 
 \end{frame}
@@ -460,19 +457,17 @@ newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
 \end{frame}
 
 \begin{frame}
-  \frametitle{Ripple effects}
+  \frametitle{Bigger picture}
 
   \begin{enumerate}
     \item Everything is in one place!
-    \item Chunk analysis capabilities:
+    \item Simpler chunk analysis capabilities:
       \begin{enumerate}
-        \item (easier) type usage analytics
-        \item chunk dependency tree
+        \item type usage analytics
+        \item build chunk dependency tree
         \item find cyclic knowledge
-        \item dumping all chunks at once
       \end{enumerate}
-    \item ChunkDB arithmetic?
-    \item (easier) Generalized chunk constraints!
+    \item ChunkDB manipulation
     \item Usable ``base'' across Drasil-like projects
   \end{enumerate}
 \end{frame}
@@ -494,20 +489,16 @@ newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
       \end{enumerate}
     \item Expressions:
       \begin{enumerate}
-        \item Add (optional) typing to \inlineHs{ModelExpr}.
-        \item Add typing to \inlineHs{CodeExpr} and GOOL.
-        \item Add more operations for vectors.
+        \item Add typing to \inlineHs{ModelExpr}, \inlineHs{CodeExpr}, and GOOL.
         \item For vectors and matrices in \inlineHs{Expr}, add length
               information, where applicable, to type-checker.
       \end{enumerate}
     \item \inlineHs{ChunkDB}:
       \begin{enumerate}
         \item Adjust existing chunk schema to merge in new \inlineHs{ChunkDB}
-              implemented.
-        \item Add analysis capabilities (such as finding cyclic
-              dependencies/references, and generating chunk/knowledge graphs).
-        \item Extend ``deferred type-checking'' to general chunk
-              constraints/assertions.
+              implementation.
+        \item Add analysis capabilities.
+        \item Extend ``deferred type-checking'' to general chunk assertions.
       \end{enumerate}
   \end{enumerate}
 
@@ -523,14 +514,10 @@ newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
 
   To sum up, we\ldots{}
   \begin{enumerate}
-    \item replaced theory encodings with structured variants of the same
-          information to find more domain-specific interpretation opportunities
-          (specifically, opportunities for code generation),
-    \item split up the expression language to restrict terms to specific contexts,
-    \item added type-checking to the ``concrete'' expression language to assure
-          all expressions are well-typed,
-    \item and built an alternative chunk database structure to scale against new
-          chunk types built.
+    \item structured theories,
+    \item restricted expressions by context,
+    \item added type-checking to expressions,
+    \item and prototyped an extensible chunk database structure.
   \end{enumerate}
 \end{frame}
 

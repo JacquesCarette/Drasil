@@ -157,22 +157,50 @@
 %------------------------------------------------------------------------------
 \section{Theories in Drasil}
 
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{How are theories used?}
-
+  
   \begin{columns}
-    \begin{column}{0.45\textwidth}
-      \missingfigure{Theory in Haskell}
-
-      \missingfigure{relToQD Snippet}
+    \begin{column}{0.4\textwidth}
+      \begin{center}
+        \includegraphics[width=0.9\textwidth]{concreteTheory.png}
+      \end{center}
     \end{column}
     \hfill
-    \begin{column}{0.45\textwidth}
-      \includegraphics[width=\textwidth]{concreteTheory.png}
+    \begin{column}{0.575\textwidth}
+\begin{minted}[fontsize=\scriptsize,breaklines]{haskell}
+...
+landPosExpr :: Expr
+landPosExpr = sy landPos $= 2 * square (sy launSpeed) * sin (sy launAngle) * cos (sy launAngle) / sy gravitationalAccelConst
 
-      \missingfigure{Gen'd code}
+landPosRC :: RelationConcept
+landPosRC = makeRC "landPosRC" (nounPhraseSP "calculation of landing position") landPosConsNote landPosExpr
+...
+\end{minted}
     \end{column}
   \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{How are theories used?}
+
+\begin{minted}[breaklines,frame=single,framesep=5pt,rulecolor=lightgray,fontsize=\scriptsize]{haskell}
+relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
+relToQD sm r = convertRel sm (r ^. relat)
+
+convertRel :: ChunkDB -> Expr -> QDefinition
+convertRel d (BinaryOp Eq (C x) r) = ec (symbResolve d x) r
+convertRel _ _ = error "Conversion failed"
+\end{minted}
+
+\vspace{2em}
+
+\begin{minted}[breaklines,frame=single,framesep=5pt,rulecolor=lightgray,fontsize=\scriptsize]{java}
+public static double func_p_land(double v_launch, double theta, double g_vect) {
+  return 2 * Math.pow(v_launch, 2) * Math.sin(theta) * Math.cos(theta) / g_vect;
+}
+\end{minted}
+
 \end{frame}
 
 \begin{frame}[fragile]
@@ -226,10 +254,10 @@ data ModelKinds e where
     \begin{column}{0.3\textwidth}
       \begin{center}
         Code (OO)
-        
-        \vspace{4.3em}
 
-\begin{minted}[breaklines]{python}
+        \vspace{1em}
+
+\begin{minted}[breaklines,fontsize=\scriptsize]{python}
 def theta(...):
   return math.asin(d * g / (v ** 2)) / 2
 \end{minted}
@@ -323,8 +351,8 @@ error: incompatible types: String cannot be converted to double
   \frametitle{Typing}
 
   \begin{enumerate}
-    \item Adding \emph{bidirectional} type-checking
-    \item Running type-checking post-facto to check all expressions en masse
+    \item Adding \emph{bidirectional} type-checking.
+    \item Type-checking and reporting en masse.
   \end{enumerate}
 
   \begin{columns}

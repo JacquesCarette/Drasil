@@ -258,7 +258,7 @@ list of chunks is difficult for users. In other words, the current chunk
 database is not \textit{extensible} because of it's typed nature.
 
 \section{Problem Statement}
-\label{sec:intro:problemStatement}
+\label{chap:intro:sec:problem-statement}
 
 \begin{writingdirectives}
       \item Key problems:
@@ -278,10 +278,9 @@ about this too. Additionally, Drasil's lack of type information stops us from
 reliably generating usable software (in particular, there is no assurance of
 type checking). Together, these issues affect our ability to reliably and
 flexibly generate software. Finally, Drasil's chunk database is not extensible,
-limiting admissible chunk types to only those that exist in core Drasil.
+limiting admissible chunk types to only those that exist in core Drasil.\\
 
-\subsection{Research Questions}
-\label{chap:intro:sec:research-questions}
+\noindent\textbf{Research Questions}:
 
 \begin{enumerate}
 
@@ -325,7 +324,7 @@ My notable contributions include:
 
       \item Implementing \ModelKinds{} to expose theory structure knowledge,
             creating opportunity for new domain-specific interpretation of
-            theory knowledge (resolving \Cref{rq:modelkinds}). The solution
+            theory knowledge (resolving \ref{rq:modelkinds}). The solution
             builds on a prototype by Dr.\ Jacques Carette\footnote{Unfortunately,
             the code associated with the prototype had been deleted. However,
             \refOriginalNewModelKindsHaskell{} is, if memory serves me
@@ -334,14 +333,14 @@ My notable contributions include:
       \item Splitting the mathematical expression language into 3, each with
             their own intended area of usage, but using a \acs{ttf}
             \cite{Carette2009} to keep same user-friendliness in expression
-            transcription (resolving \Cref{rq:lang_division}).
+            transcription (resolving \ref{rq:lang_division}).
 
       \item Adding type checking and inference to mathematical expression
-            languages (resolving \Cref{rq:typing}).
+            languages (resolving \ref{rq:typing}).
 
       \item Creating an extensible chunk database prototype that can register
             chunks with types external to core Drasil and chunks with type
-            parameters (resolving \Cref{rq:chunkdb}).
+            parameters (resolving \ref{rq:chunkdb}).
 
 \end{itemize}
 

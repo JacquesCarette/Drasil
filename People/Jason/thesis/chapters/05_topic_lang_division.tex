@@ -103,11 +103,10 @@ As such, we need to be able to restrict expression terms to their appropriate
 contexts. At the moment, we lack information about when instances of expressions
 are actually usable in code generation. As such, we're limited to relying on
 implicit assumptions about this, and causing Drasil-panics when the assumption
-is broken. In order to fix this problem, we need to make the information
-\textit{explicit} in Drasil, and use that explicit information appropriately.
-However, before we can make it explicit, we need to understand the contexts in
-which Drasil needs mathematical expressions and how they are used in those
-contexts.
+is broken. To resolve this, we need to make the information \textit{explicit} in
+Drasil, and use that explicit information appropriately. However, before we can
+make it explicit, we need to understand the contexts in which Drasil needs
+mathematical expressions and how they are used in those contexts.
 
 Namely, there are at least three focal areas of interest in Drasil where we use
 mathematical expressions:
@@ -132,13 +131,13 @@ mathematical expressions:
 \section{Splitting}
 \label{chap:lang-division:sec:splitting}
 
-Now, in order to restrict terms to their appropriate contexts, we need to
-somehow know when users are using the ``wrong'' terms. Since Drasil is written
-in Haskell, we can use Haskell's type system to indicate this with relative
-ease. Namely, we can \textit{split} up \Expr{}. Thankfully, the three areas of
-interest share a subset of expressions: the mathematical expressions usable in
-concrete theories. As such, we would like to divide the language using this
-language as a base for the other two (\refLanguageDivision{}).
+To restrict terms to their appropriate contexts, we need to somehow know when
+users are using the ``wrong'' terms. Since Drasil is written in Haskell, we can
+use Haskell's type system to indicate this with relative ease. Namely, we can
+\textit{split} up \Expr{}. Thankfully, the three areas of interest share a
+subset of expressions: the mathematical expressions usable in concrete theories.
+As such, we would like to divide the language using this language as a base for
+the other two (\refLanguageDivision{}).
 
 \languageDivision{}
 
@@ -172,11 +171,11 @@ with ``mathematics'' as a common tie. One issue with splitting is that we now
 force users of the languages to make a conscious choice about which language
 they are using and which language they need to import into their working files
 respectively. This can become quite frustrating given the amount of overlap.
-Thus, in order to alleviate the stress involved with writing out the same
-expression in different languages, we use a \ACF{ttf}~\cite{Carette2009}
-encoding of the smart constructors to build expressions. Using \Expr{} has a
-``base'' shared language between \ModelExpr{} and \CodeExpr{}, we can write
-\acs{ttf} encoding for them individually that extends on \Expr{}s functionality
+Thus, to alleviate the stress involved with writing out the same expression in
+different languages, we use a \ACF{ttf}~\cite{Carette2009} encoding of the smart
+constructors to build expressions. Using \Expr{} has a ``base'' shared language
+between \ModelExpr{} and \CodeExpr{}, we can write \acs{ttf} encoding for them
+individually that extends on \Expr{}s functionality
 (\refCurrentExprTTFHaskell{}, \refCurrentModelExprTTFHaskell{},
 \refCurrentCodeExprTTFHaskell{}). The \acs{ttf} encoding allows us to seamlessly
 write expressions in any of the languages at the same time, allowing type

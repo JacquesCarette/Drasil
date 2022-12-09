@@ -38,17 +38,17 @@ variant, discussed in \Cref{chap:modelkinds}). On the other hand, instance
 models may contain data definitions or any of the other applicable \ModelKinds{}
 variants (discussed in \Cref{chap:more-theory-kinds}, albeit currently
 limited\footnote{For our purposes, it's enough to assume that they can expose
-any number of expressions usable in code generation.}). In order for the
-expressions they expose/form to be usable in code generation, the expressions
-must be representable in \acs{gool} somehow\footnote{Since all code generation
-for Drasil currently goes through \acs{gool}.}. Thanks to
-\Cref{chap:lang-division}, \Expr{} has become the expression language that
-currently limits mathematical expressions in both instance models and data
-definitions to ones with definite values that can be directly computed on pencil
-and paper, and in most modern programming languages. However, translatability to
-\acs{gool} does not necessarily mean that all the expressions are actually
-coherent and usable. At the moment, it is possible to give Drasil's instance
-models and data definitions invalid \Expr{}s and have Drasil generate code.
+any number of expressions usable in code generation.}). For the expressions they
+expose/form to be usable in code generation, the expressions must be
+representable in \acs{gool} somehow\footnote{Since all code generation for
+Drasil currently goes through \acs{gool}.}. Thanks to \Cref{chap:lang-division},
+\Expr{} has become the expression language that currently limits mathematical
+expressions in both instance models and data definitions to ones with definite
+values that can be directly computed on pencil and paper, and in most modern
+programming languages. However, translatability to \acs{gool} does not
+necessarily mean that all the expressions are actually coherent and usable. At
+the moment, it is possible to give Drasil's instance models and data definitions
+invalid \Expr{}s and have Drasil generate code.
 
 \pseudoExampleLandPosQDBadTyping{}
 
@@ -97,9 +97,9 @@ and type mismatches are possible. Thus, we must make \Expr{} type-safe.
 \section{Type-Safe Expressions}
 \label{chap:typed-expr:sec:type-safe-expressions}
 
-In order to make \Expr{} type-safe, we must build a type system for it so that
-we can obtain information about which \Expr{} terms are coherent/valid or not. A
-system of typing rules that dictate what well-typed expressions will allow us to
+To make \Expr{} type-safe, we must build a type system for it so that we can
+obtain information about which \Expr{} terms are coherent/valid or not. A system
+of typing rules that dictate what well-typed expressions will allow us to
 determine which expressions are well-typed.
 
 \subsection{Example: A \textquotedblleft{}Simple\textquotedblright{} Language}
@@ -749,9 +749,9 @@ are created (and expressions too), we unfortunately aren't able to\footnote{At
 least not without ease.}. As expressions are formed and symbols are referenced,
 the whole symbol type context is missing. At the moment, Drasil gathers all
 chunks at once, registers them in memory, and then performs various ``checks''
-and generation steps to produce software artifacts. In order to build the type
-context, we would need to build it manually, in a very tedious fashion, for each
-expression we build. However, this does not scale well. In order to localize
+and generation steps to produce software artifacts. To build the type context,
+we would need to build it manually, in a very tedious fashion, for each
+expression we build. However, this does not scale well. To localize
 type-checking without the extra work, we would need to make our chunk
 registration gradual and add a feature for exposing assertions that needs to be
 asserted/proven before registration in memory\footnote{We will take steps

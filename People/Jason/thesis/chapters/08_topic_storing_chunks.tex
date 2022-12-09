@@ -71,11 +71,11 @@ We call the global set of chunks (and \acsp{uid}) the ``chunk database.'' The
 chunk database (\ChunkDB{}, \refOriginalChunkDBHaskell{}) is built using a
 series of maps (\refOriginalChunkDBTypeMapsHaskell) that map \UID{} keys to
 chunk data. Each map is a map from a \UID{} to a specific data monomorphic data
-type. As such, in order to access a chunk by its \UID{}, the associated type of
-the chunk must be known, even if operations we intended to use on the chunk are
-generic, applicable to any similar category of chunks (such as those satisfying
-a particular typeclass constraint set) or all chunks. Additionally, since there
-is one map per chunk type, all chunk types must be known and coded in the
+type. As such, to access a chunk by its \UID{}, the associated type of the chunk
+must be known, even if operations we intended to use on the chunk are generic,
+applicable to any similar category of chunks (such as those satisfying a
+particular typeclass constraint set) or all chunks. Additionally, since there is
+one map per chunk type, all chunk types must be known and coded in the
 \ChunkDB{} beforehand. Of course, this means the set of types that Drasil can
 work with is fixed and difficult to extend. For example, if we have \(n\) types
 (with no type parameters), then there must be \(n\) maps in the \ChunkDB{} data
@@ -94,14 +94,13 @@ Fundamentally, the issue with the \ChunkDB{} is that it caters to each
 individual type by creating a map for each type, leading to tedious busy work to
 make up for inflexibility.
 
-In order to scale against new types, we need to make the database maps
-type-agnostic, merging them all together. It should contain no hard-coded
-references to any specific type, but describe what kinds of types are admissible
-(which should be any valid chunk). However, this isn't to say that we should
-erase all types. Rather, we should mask the type information for the purpose of
-storage and minimum viable usage, but ensure that the type information can be
-unmasked for retrieval and normal usage. Thus, the question arises: how can we
-achieve this?
+To scale against new types, we need to make the database maps type-agnostic,
+merging them all together. It should contain no hard-coded references to any
+specific type, but describe what kinds of types are admissible (which should be
+any valid chunk). However, this isn't to say that we should erase all types.
+Rather, we should mask the type information for the purpose of storage and
+minimum viable usage, but ensure that the type information can be unmasked for
+retrieval and normal usage. Thus, the question arises: how can we achieve this?
 
 To collapse the series of maps into a single one, we need to have a common
 ``box'' data type that can be used as the value, which carries the actual chunk
@@ -260,10 +259,9 @@ can re-create this for the new \ChunkDB{} as well by using
 
 However, this is an expensive operation because it tests every chunk registered
 in the chunk database. Since retrieval is a commonly performed task, it will
-slow down Drasil. So, in order to make the \ChunkDB{} more
-``industrial-strength,'' we can add an extra mechanism for caching (in various
-ways) to trade a bit of memory for a frequent and expensive search operation:
-\refProtoChunkDBHaskell{}.
+slow down Drasil. To make the \ChunkDB{} more ``industrial-strength,'' we can
+add an extra mechanism for caching (in various ways) to trade a bit of memory
+for a frequent and expensive search operation: \refProtoChunkDBHaskell{}.
 
 \protoChunkDBHaskell{}
 

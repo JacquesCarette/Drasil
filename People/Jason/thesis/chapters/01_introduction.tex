@@ -90,10 +90,9 @@ documentation, keeping every product owner\footnote{For our purposes, defining a
       ``product owner'' as all people that have any responsibility in the development
       of a software artifact.} ``in the loop.'' As knowledge and requirements change,
 software implementations trail behind the current needs and understandings,
-until developers manually update the code. Additionally, communication of
-information may be ambiguous at times, leading to logical issues. By applying
-generative techniques to software development, we may have some, or
-\textit{all}, of the manual updates performed for us.
+until developers manually update the code. By applying generative techniques to
+software development, we may have some, or \textit{all}, of the manual updates
+performed for us.
 
 Drasil \cite{Drasil2021} is an exploration of applying generative techniques to
 well-understood domains to create an alternative way of developing software.
@@ -107,7 +106,7 @@ Drasil).
 With a focus on scientific theories and mathematical expressions, in this
 thesis, we aim to make some improvements to how Drasil captures certain kinds of
 knowledge. However, we will also make improvements to how Drasil stores
-knowledge in general as well.
+knowledge in general.
 
 \section{Background: Drasil}
 \label{chap:introduction:sec:background}
@@ -118,13 +117,14 @@ for generating software from well-formed, principled ``stories.'' Focused on
 scientific problems using a precise \ACF{srs} format \cite{SmithAndLai2005}. By
 providing sufficient information in the ``blanks,'' Drasil is able to use the
 information to generate various software artifacts, including whole programs (in
-various target languages), build tools, and documentation. The ``blanks'' are
-holes for \textit{domain-specific knowledge} and are filled in using one of many
-\ACFP{dsl}. Each individual fragment of knowledge in Drasil is known as a
-``chunk,'' and we encode each useful idea necessary to discuss/build our desired
-software artifacts as chunks. For example, if we wanted to encode a variable,
-\(\theta{}_{c}\), representing the firing angle of a cannon\footnote{Running
-      example based on Drasil's \acs{projectile} case study.}, we might write:
+various supported languages, such as Java and C\#), build tools, and
+documentation. The ``blanks'' are holes for \textit{domain-specific knowledge}
+and are filled in using one of many \ACFP{dsl}. Each individual fragment of
+knowledge in Drasil is known as a ``chunk,'' and we encode each useful idea
+necessary to discuss/build our desired software artifacts as chunks. For
+example, if we wanted to encode a variable, \(\theta{}_{c}\), representing the
+firing angle of a cannon\footnote{Running example based on Drasil's
+\acs{projectile} case study.}, we might write:
 
 \exampleAngleVariableEncoding{}
 
@@ -153,7 +153,7 @@ complete capture of all scientific knowledge, of course. Rather, it is a
 the needs of a series of manually built case studies, using them as ``seedling''
 data to navigate development. As Drasil is ``taught'' more
 information\footnote{By providing it with a means of discussing relevant ideas
-through \acsp{dsl}.}, Drasil's span of producible artifacts widens.
+      through \acsp{dsl}.}, Drasil's span of producible artifacts widens.
 Unfortunately, at the moment, Drasil is not able to generate code for all of its
 case studies.
 
@@ -326,9 +326,9 @@ My notable contributions include:
             creating opportunity for new domain-specific interpretation of
             theory knowledge (resolving \ref{rq:modelkinds}). The solution
             builds on a prototype by Dr.\ Jacques Carette\footnote{Unfortunately,
-            the code associated with the prototype had been deleted. However,
-            \refOriginalNewModelKindsHaskell{} is, if memory serves me
-            correctly, nearly identical.}.
+                  the code associated with the prototype had been deleted. However,
+                  \refOriginalNewModelKindsHaskell{} is, if memory serves me
+                  correctly, nearly identical.}.
 
       \item Splitting the mathematical expression language into 3, each with
             their own intended area of usage, but using a \acs{ttf}

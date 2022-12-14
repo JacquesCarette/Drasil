@@ -146,23 +146,24 @@ that somehow ``solves'' it.
 By switching our focus of manual software development to manual problem
 description and relationships to ``solutions,'' we shift where we can make bugs,
 and how they propagate. Namely, logical bugs will occur more than once so as
-long as the same knowledge pulled from is drawn more than once. So, bugs should
-be more prevalent and easier to spot. Additionally, the generated software
-becomes directly \textit{traceable} to its logical foundations. Hopefully, with
-adequate dissection of related concepts, bugs should also be less intricate.
-Furthermore, generated artifacts are simpler to \textit{maintain} (i.e., kept in
-synchronization) with its related knowledge-base and story by
-\textit{regenerating} it. Finally, as opposed to sharing \textit{code}, in this
-paradigm, we \textit{communicate knowledge}, achieving language-agnostic
-reusability, focusing on sharing meanings and families of problems rather than
-solutions. Thus, by focusing on generating from meaningful descriptions, we
-obtain \textit{knowledge reusability} (as opposed to \textit{code} reusability),
-and increased software \textit{maintainability}, \textit{reliability}, and
-\textit{traceability}. Of course, ``generating everything'' appears grandiose,
-and, perhaps, reductive or ignorant of many difficulties in software
-development. Thus, we must discuss feasibility\footnote{You may skip the
-remainder of this chapter if you so wish, it is not strictly required to
-understand the rest of my work, but it doesn't hurt.}.
+long as the same knowledge pulled from is drawn more than once. Thus, each
+logical bug should be more visible and easier to spot. Additionally, the
+generated software becomes directly \textit{traceable} to its logical
+foundations. Hopefully, with adequate dissection of related concepts, bugs
+should also be less intricate. Furthermore, generated artifacts are simpler to
+\textit{maintain} (i.e., kept in synchronization) with its related
+knowledge-base and story by \textit{regenerating} it. Finally, as opposed to
+sharing \textit{code}, in this paradigm, we \textit{communicate knowledge},
+achieving language-agnostic reusability, focusing on sharing meanings and
+families of problems rather than solutions. Thus, by focusing on generating from
+meaningful descriptions, we obtain \textit{knowledge reusability} (as opposed to
+\textit{code} reusability), and increased software \textit{maintainability},
+\textit{reliability}, and \textit{traceability}. Of course, ``generating
+everything'' appears grandiose, and, perhaps, reductive or ignorant of many
+difficulties in software development. Thus, we must discuss
+feasibility\footnote{You may skip the remainder of this chapter if you so wish,
+it is not strictly required to understand the rest of my work, but it doesn't
+hurt.}.
 
 \subsection{Feasibility}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility}
@@ -256,15 +257,15 @@ and similarly practical.
 Finally, we've reached the category of ``deep depth and wide breadth'' of
 knowledge capture. Here, we capture the meanings of key ideas and concepts we
 need to build software, making as many conscious decisions explicit and visible
-as possible. Imagine using the specialized tools to develop every aspect of a
-software some software artifact, but for every facet of the artifact, from start
-to finish. This is an idealized method of developing software, where knowledge
-is strongly reusable and composable. Of course, this relies on heavy research on
-tooling. As long as developers have infinite patience and can invest infinite
-time into transcribing and researching to fill in gaps, anything is possible,
-and this ideology is very practical! Unfortunately, that situation is not quite
-realistic. As such, we should restrict our scope of captured knowledge to only
-those ``well-understood'' \cite{well-understood}. For areas of
+as possible. Imagine using the specialized tools to develop every aspect of some
+software artifact, but for every facet of the artifact, from start to finish.
+This is an idealized method of developing software, where knowledge is strongly
+reusable and composable. Of course, this relies on heavy research on tooling. As
+long as developers have infinite patience and can invest infinite time into
+transcribing and researching to fill in gaps, anything is possible, and this
+ideology is very practical! Unfortunately, that situation is not quite
+realistic. As such, we should restrict our scope of captured knowledge to
+``well-understood'' domains \cite{well-understood}. For areas of
 ``well-understood'' knowledge, this should be more feasible, merely because the
 discussion of key ideas is already coherent and sufficiently codified.
 
@@ -299,12 +300,12 @@ tasked merely with providing feedback that can improve the quality of the
 artifact(s). They are the ones that have an issue that can be resolved with some
 sort of software artifact. At the ``top,'' product owners designate a basic set
 of requirements of the artifacts using a coherent \textit{formal description}.
-Product designers/orchestrators will take the requirements and designate
-a/communicate it into a coherent \textit{story} for how the requirements may be
-translated into a final product. The story builds on well-understood knowledge
-of various domains encoded by domain experts. The product designer is tasked
-primarily with translation, while the domain developers and product owners are
-tasked with encoding knowledge and instances of knowledge, respectively.
+Product designers/orchestrators will take the requirements and convert them into
+a coherent \textit{story} for how the requirements may be translated into a
+final product. The story builds on well-understood knowledge of various domains
+encoded by domain experts. The product designer is tasked primarily with
+translation, while the domain developers and product owners are tasked with
+encoding knowledge and instances of knowledge, respectively.
 
 Through product owners describing their requirements coherently (e.g., via some
 formal language), completely non-technical product owners may, and will, still

@@ -204,7 +204,7 @@ importantly, we can also convert this theory to Python code as well:
 However, this example is reasonably simple. If we were handed an equation of
 this \(\nu{} = f(x,y,z)\) form, it's somewhat reasonable, but perhaps dubious,
 to assume that one way to define \(\nu{}\) is \(f(x,y,z)\). However, if we were
-handed an equivalent, scrambled version of it, then we can assume less
+handed an equivalent, implicit version of it, then we can assume less
 information about it. For example, if we re-wrote the equation for
 \refExampleAngleEquationEncoding{} as \(\mathit{targetDistanceFromCannon}
 \cdot{} g = v^2\sin{}(2\theta{}_c)\), then we've lost the critical
@@ -239,7 +239,7 @@ generation because Swift doesn't allow numeric addition if both operants are not
 of the same type, while Java uses implicit type coercion to mask these issues.
 Ultimately, this means that more time is spent developing and debugging
 generated artifacts than we would like. We would prefer that generated software
-come with an assurance of usability.
+come with an assurance of correctness.
 
 \subsection{Capturing (\& Remembering) Everything}
 \label{chap:intro:sec:drasil:subsec:capturing-and-remembering-everything}
@@ -363,5 +363,5 @@ discusses issues associated with the formation of mathematical expressions and
 what it means for expressions to be ``well-typed'' (\ref{rq:typing}).
 \Cref{chap:storingChunks} focuses on how Drasil stores information, and how it
 can scale against future development of Drasil and libraries (\ref{rq:chunkdb}).
-\Cref{chap:future-work} discusses some leftover work and future work. Finally,
-\Cref{chap:conclusion} sums up the achievements of this work.
+\Cref{chap:future-work} discusses future work. Finally, \Cref{chap:conclusion}
+sums up the achievements of this work.

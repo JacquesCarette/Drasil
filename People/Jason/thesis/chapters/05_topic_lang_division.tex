@@ -63,7 +63,7 @@ choices (such as choosing what representation of integers, reals, etc. to use in
 a potential translation into a program). This is where \Expr{} shows that it is
 a bit of a double-edged sword. For example, we can re-write the expression used
 in \Cref{lst:pseudoExampleExpressionAsQDefinition} using a trigonometric
-integral (e.g., $y = \int \frac{3}{\cos^2(x) dx}$,
+integral (e.g., $y = \int \frac{3}{\cos^2(x)}dx$,
 \Cref{lst:pseudoExampleExpressionAsQDefinitionBad}), but then transformation
 into a naive set of steps to follow isn't as simple.
 
@@ -197,7 +197,7 @@ interpreted as a \ModelExpr{}.
 
 Now that we've split up the expression languages, we may restrict their usage to
 appropriate theory contexts (in \ModelKinds{} as per \Cref{chap:modelkinds}).
-Approximately, we can ``upgrade'' \ModelKinds according to
+Approximately, we can ``upgrade'' \ModelKinds{} according to
 \refPseudoPartialModelKindsUpgrade{}\footnote{Note that we also need to slightly
 update \QDefinition{}s: \refCurrentQDefinitionHaskell{} to create a type
 parameter for the used expression type.}, creating a type argument in

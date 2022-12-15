@@ -75,7 +75,7 @@ meaningful error message: ``String cannot be converted to double.'' To fix this
 issue, we would need to change the string to something valid, a number at least
 because Java also performs a secret cast, interpreting the \(1\) as a double,
 despite our encoding having it be an integer. All code Drasil generates should
-be reliably compile-able and usable, and all errors should be noted as Drasil is
+be reliably compilable and usable, and all errors should be noted as Drasil is
 used. The issue here lies in that the initial expression was incoherent (and the
 Java code was \textit{ill-typed}). So, now, how can we avoid this situation
 altogether? We need all expressions to be \textit{well-typed}. However, Drasil

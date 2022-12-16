@@ -43,41 +43,41 @@ artifacts for \ACF{scs}, where it has been shown to improve software qualities,
 such as \textit{verifiability}, \textit{reliability}, and \textit{usability}
 \cite{Smith2018}.
 
-\roughNetworkOfDomains{}
+\caseStudiesTable{}
 
 Drasil's knowledge-capture approach to software development allows users to
 remove themselves from the discussion of ``code'' and focus on the important
 bits: the problem the code solves and how ``code'' ultimately relates to
 it\footnote{Drasil allows users to ``keep at a safe distance'' from software,
 but only so far as Drasil has encoded the terminology the users rely on for
-conveying their problem to Drasil.}. Drasil relies on the capture of a
-\textit{network of domains} \cite{Czarnecki2005} to generate artifacts. With
-Drasil's focus on building \acs{scs}, Drasil has users input scientific problems
-using a structured \ACF{srs} \cite{SmithAndLai2005} abstraction. The \acs{srs}
-decomposes scientific problems into smaller fragments of knowledge which can be
-used in specific parts of software development. By abstracting sufficient depth
-and breadth of the knowledge in an \acs{srs} (including the inputs, outputs, and
-calculation scheme), Drasil generates software artifacts that solve the precise
-problem descriptions (\refCaseStudiesCodeTable{})\footnote{It is helpful to
-think of the \acs{srs} as a sort of ``recipe'' that Drasil follows to navigate
-the generation.}. Roughly, the network of domains related to the code generated
-related to an abstracted \acs{srs} is as per
-\refRoughNetworkOfDomains{}\footnote{Note that this is not representative of all
-knowledge captured in Drasil, but only that which is relevant to generating code
-for a given \acs{srs} abstraction.}, where nodes are the major categories of
-domains\footnote{In other words, each node contains its own subdomain as well}
-and arrows are mappings between them. The current network is built according to
-the needs of a series of case studies (\refCaseStudiesTable{}) that Drasil
-builds and uses to navigate development. One notable success of the knowledge
-capture is the reusability of it to regenerate artifacts in different, but
-similarly applicable, languages. For example, the \acs{glassbr} case study had
-\porthref{software
+conveying their problem to Drasil.}. Drasil's development is navigated through a
+series of case studies: \refCaseStudiesTable{}. Each case study has users input
+scientific problems using \acsp{dsl} that build up an abstract \ACF{srs}
+\cite{SmithAndLai2005}. The \acs{srs} decomposes scientific problems into small
+structured fragments of knowledge that have direct relations to ``code'' and can
+be used flexibly as part of code generation. Through abstracting sufficient
+depth and breadth of the knowledge in an \acs{srs} (e.g., including the inputs,
+outputs, and calculation scheme), Drasil is able to generate software artifacts
+that satisfy the designated \acs{srs}\footnote{It is helpful to think of the
+\acs{srs} as a sort of ``recipe'' that Drasil follows to navigate the
+generation.} (\refCaseStudiesCodeTable{}). Drasil relies on the capture of a
+\textit{network of domains} \cite{Czarnecki2005} to generate artifacts. Roughly,
+the network of domains related to the code generated related to an abstracted
+\acs{srs} is as per \refRoughNetworkOfDomains{}\footnote{Note that this is not
+representative of all knowledge captured in Drasil, but only that which is
+relevant to generating code for a given \acs{srs} abstraction.}, where nodes are
+the major categories of domains\footnote{In other words, each node contains its
+own subdomain as well} and arrows are mappings between them. The current network
+is built according to the needs of Drasil's case studies. One notable success of
+the knowledge capture is the reusability of it to regenerate artifacts in
+different, but similarly applicable, languages. For example, the \acs{glassbr}
+case study had \porthref{software
 artifacts}{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}
 manually built. Once the knowledge was codified in Drasil, the same knowledge
 allows re-creation in \porthref{other
 languages}{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}.
 
-\caseStudiesTable{}
+\roughNetworkOfDomains{}
 
 Drasil is able to generate a host of \ACF{oo} programming language source codes
 through compiling to \ACF{gool} \cite{Carette2019,MacLachlan2020}, which
@@ -87,6 +87,8 @@ Swift\footnote{Note that Swift was not discussed in \cite{MacLachlan2020}, but
 printing \acs{html} files, Makefiles, basic Markdown (enough for ``READMEs''),
 GraphViz DOT \cite{Gansner1993} diagrams, and plaintext, \LaTeX{} documents.
 \acs{srs} abstractions are renderable in either \LaTeX{} or \acs{html}.
+
+\caseStudiesCodeTable{}
 
 \section{How does it work? How is it used?}
 \label{chap:drasil:sec:how-does-it-work-how-is-it-used}
@@ -159,5 +161,3 @@ this work. In this work, we will focus on a critical common denominator between
 all examples: capturing mathematical knowledge for reliable \acs{srs} artifact
 generation. In particular, we will focus on 2 primary aspects of mathematical
 knowledge: the \textit{theories} and the \textit{expressions}.
-
-\caseStudiesCodeTable{}

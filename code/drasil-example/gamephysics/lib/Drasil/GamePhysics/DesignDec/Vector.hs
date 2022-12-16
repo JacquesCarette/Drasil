@@ -32,7 +32,7 @@ vectEqual = funcDef "vectEqual" [vV1, vV2] Boolean
          )
   ]
 
-vectAdd = funcDef "vectAdd" [vV1, vV2] (Vect Rational)
+vectAdd = funcDef "vectAdd" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect) 
       [
@@ -42,7 +42,7 @@ vectAdd = funcDef "vectAdd" [vV1, vV2] (Vect Rational)
     )
   ]
   
-vectSub = funcDef "vectSub" [vV1, vV2] (Vect Rational)
+vectSub = funcDef "vectSub" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -52,7 +52,7 @@ vectSub = funcDef "vectSub" [vV1, vV2] (Vect Rational)
     )
   ]
   
-vectMult = funcDef "vectMult" [vV1, vV2] (Vect Rational)
+vectMult = funcDef "vectMult" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -62,7 +62,7 @@ vectMult = funcDef "vectMult" [vV1, vV2] (Vect Rational)
     )
   ]
 
-vectNeg = funcDef "vectNeg" [v_v] (Vect Rational)
+vectNeg = funcDef "vectNeg" [v_v] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       $ map Neg [
@@ -72,7 +72,7 @@ vectNeg = funcDef "vectNeg" [v_v] (Vect Rational)
     )
   ]
 
-vectDot = funcDef "vectDot" [vV1, vV2] Rational
+vectDot = funcDef "vectDot" [vV1, vV2] Real
   [
     FRet (
       FCall (funcUID getX) [vV1] *
@@ -82,7 +82,7 @@ vectDot = funcDef "vectDot" [vV1, vV2] Rational
     )
   ]
 
-vectCross = funcDef "vectCross" [vV1, vV2] Rational
+vectCross = funcDef "vectCross" [vV1, vV2] Real
   [
     FRet (
       (FCall (funcUID getX) [vV1] *
@@ -92,7 +92,7 @@ vectCross = funcDef "vectCross" [vV1, vV2] Rational
     )
   ]
   
-vectPerp = funcDef "vectPerp" [v_v] (Vect Rational)
+vectPerp = funcDef "vectPerp" [v_v] (Vect Real)
   [
     FRet (FCall (funcUID vect) 
       [
@@ -102,7 +102,7 @@ vectPerp = funcDef "vectPerp" [v_v] (Vect Rational)
     )
   ]
 
-vectRPerp = funcDef "vectRPerp" [v_v] (Vect Rational)
+vectRPerp = funcDef "vectRPerp" [v_v] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -112,7 +112,7 @@ vectRPerp = funcDef "vectRPerp" [v_v] (Vect Rational)
     )
   ]
    
-vectProject = funcDef "vectProject" [vV1, vV2] (Vect Rational)   
+vectProject = funcDef "vectProject" [vV1, vV2] (Vect Real)   
   [ 
     FRet (FCall (funcUID vectMult) 
       [
@@ -122,7 +122,7 @@ vectProject = funcDef "vectProject" [vV1, vV2] (Vect Rational)
     )
   ]
 
-vectForAngle = funcDef "vectForAngle" [rad] (Vect Rational)
+vectForAngle = funcDef "vectForAngle" [rad] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -132,9 +132,9 @@ vectForAngle = funcDef "vectForAngle" [rad] (Vect Rational)
     )
   ]
 
-vectToAngle = funcDef "vectToAngle" [v_v] Radians
+vectToAngle = funcDef "vectToAngle" [v_v] Real
   [
-    FRet (FCall (funcUID atan2) 
+    FRet (FCall (funcUID atan2)
       [
         FCall (funcUID getY) [v_v],
         FCall (funcUID getX) [v_v]
@@ -142,7 +142,7 @@ vectToAngle = funcDef "vectToAngle" [v_v] Radians
     )
   ]
 
-vectRotate = funcDef "vectRotate" [vV1, vV2] (Vect Rational)
+vectRotate = funcDef "vectRotate" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -154,7 +154,7 @@ vectRotate = funcDef "vectRotate" [vV1, vV2] (Vect Rational)
     )
   ]
   
-vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (Vect Rational)
+vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (Vect Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -166,17 +166,17 @@ vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (Vect Rational)
     )
   ]
   
-vectLengthSq = funcDef "vectLengthSq" [v_v] Rational
+vectLengthSq = funcDef "vectLengthSq" [v_v] Real
   [
     FRet (FCall (funcUID vectDot) [v_v, v_v])
   ]
   
-vectLength = funcDef "vectLength" [v_v] Rational
+vectLength = funcDef "vectLength" [v_v] Real
   [
     FRet (Sqrt (FCall (funcUID vectLengthSq) [v_v]))
   ]
   
-vectClamp = funcDef "vectClamp" [v_v, length] (Vect Rational)
+vectClamp = funcDef "vectClamp" [v_v, length] (Vect Real)
   [
     (FCond (FCall (funcUID vectLength) [v_v]) :< length) 
       [FRet v_v]
@@ -185,7 +185,7 @@ vectClamp = funcDef "vectClamp" [v_v, length] (Vect Rational)
       ]
   ]
 
-vectLerp = funcDef "vectLerp" [vV1, vV2, t] (Vect Rational)
+vectLerp = funcDef "vectLerp" [vV1, vV2, t] (Vect Real)
   [
     FRet (FCall (funcUID vectAdd)
       [
@@ -194,19 +194,19 @@ vectLerp = funcDef "vectLerp" [vV1, vV2, t] (Vect Rational)
       ])
   ]
 
-vectNormalize = funcDef "vectNormalize" [v_v] (Vect Rational)
+vectNormalize = funcDef "vectNormalize" [v_v] (Vect Real)
   [
     FRet (FCall (funcUID vectMult) 
       [v_v, 1.0 / FCall (funcUID vectLength) [v_v] + DBL_MIN]
     )
   ]
 
-vectDistSq = funcDef "vectDistSq" [vV1, vV2] Rational
+vectDistSq = funcDef "vectDistSq" [vV1, vV2] Real
   [
     FRet (FCall (funcUID vectLengthSq) [FCall (funcUID vectSub) [vV1, vV2]])
   ]
 
-vectDist = funcDef "vectDist" [vV1, vV2] Rational
+vectDist = funcDef "vectDist" [vV1, vV2] Real
   [
     FRet (Sqrt (FCall (funcUID vectDistSq) [vV1, vV2]))
   ]

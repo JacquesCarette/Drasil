@@ -1,4 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TupleSections #-}
 module Language.Drasil.Chunk.DifferentialModel (
   -- * Export Data Type
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..),
@@ -20,12 +22,13 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
-import Language.Drasil.Expr.Class (mulRe, addRe, sy, ExprC (($.), matrix,
-  columnVec, ($/), idx), neg)
+import Language.Drasil.Expr.Class (ExprC(..), columnVec)
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
 import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
 import Data.List (find)
+import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
+import Language.Drasil.Space (Space, HasSpace (..))
 
 -- | Unknown is nth order of the dependent variable 
 type Unknown = Integer
@@ -121,6 +124,10 @@ instance Definition    DifferentialModel where defn = dmconc . defn
 instance ConceptDomain DifferentialModel where cdom = cdom . view dmconc
 -- | Convert the 'DifferentialModel' into the model expression language.
 instance Express       DifferentialModel where express = formStdODE
+
+instance RequiresChecking DifferentialModel Expr Space where
+  requiredChecks dmo = map (, dmo ^. (depVar . typ)) $ formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
+    where dm = makeAODESolverFormat dmo
 
 -- | Set the expression be a system of linear ODE to Ax = b
 formStdODE :: DifferentialModel -> ModelExpr

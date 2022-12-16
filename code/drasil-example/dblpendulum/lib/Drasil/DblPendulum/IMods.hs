@@ -25,7 +25,7 @@ angularAccelDerivSents = [angularAccelDerivSent1, EmptyS, angularAccelDerivSent2
 angularAccelDerivSent1, angularAccelDerivSent2, angularAccelDerivSent3,
   angularAccelDerivSent4, angularAccelDerivSent5, angularAccelDerivSent6 :: Sentence
 angularAccelDerivSent1 = foldlSentCol [S "By solving equations" +:+ refS xForceGD_2 `S.and_` refS yForceGD_2 
-                        `S.for` eS forceDerivExpr1 `S.and_` eS forceDerivExpr2 `S.and_` S "then substituting into eqaution" +:+ 
+                        `S.for` eS forceDerivExpr1 `S.and_` eS forceDerivExpr2 `S.and_` S "then substituting into equation" +:+ 
                         refS xForceGD_1 `S.and_` refS yForceGD_1 +:+ S ", We can get equations 1 and 2"]
 angularAccelDerivSent2 = foldlSentCol [S "Multiply the equation 1 by" +:+ 
                        eS cosAngleExpr1 `S.and_` S "the equation 2 by" +:+ eS sinAngleExpr1 `S.and_`

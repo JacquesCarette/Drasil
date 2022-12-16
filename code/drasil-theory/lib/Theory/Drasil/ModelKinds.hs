@@ -1,4 +1,6 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators, GADTs  #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 -- | Defines types and functions for creating models.
 module Theory.Drasil.ModelKinds (
   -- * Types
@@ -18,7 +20,8 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
-  UID, DifferentialModel, mkUid)
+  UID, DifferentialModel, mkUid, RequiresChecking(..), Space, HasSpace(typ),
+  DefiningExpr(..))
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -33,13 +36,17 @@ import Theory.Drasil.MultiDefn (MultiDefn)
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds e where
   NewDEModel            :: DifferentialModel -> ModelKinds e
-  DEModel               :: RelationConcept   -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
+  -- TODO: Analyze all instances of DEModels, convert them to (new, where
+  -- applicable) variants of NewDEModel, and get rid of this.
+  DEModel               :: RelationConcept   -> ModelKinds e
   EquationalConstraints :: ConstraintSet e   -> ModelKinds e
   EquationalModel       :: QDefinition e     -> ModelKinds e
   EquationalRealm       :: MultiDefn e       -> ModelKinds e
-  OthModel              :: RelationConcept   -> ModelKinds e -- TODO: Remove (after having removed all instances of it).
+  -- TODO: Remove OthModel after having removed all instances of it.
+  OthModel              :: RelationConcept   -> ModelKinds e
 
--- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
+-- | 'ModelKinds' carrier, used to carry commonly overwritten information from
+-- the IMs/TMs/GDs.
 data ModelKind e = MK {
   _mk     :: ModelKinds e,
   _mkUID  :: UID,
@@ -125,6 +132,15 @@ instance ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKinds e) where
   express = elimMk (to express) (to express) (to express) (to express) (to express)
+-- | Expose all expressions that need to be type-checked for theories that need
+--   expose 'Expr's.
+instance RequiresChecking (ModelKinds Expr) Expr Space where
+  requiredChecks (NewDEModel dm)            = requiredChecks dm
+  requiredChecks (DEModel _)                = mempty
+  requiredChecks (EquationalConstraints cs) = requiredChecks cs
+  requiredChecks (EquationalModel qd)       = pure (qd ^. defnExpr, qd ^. typ)
+  requiredChecks (EquationalRealm md)       = requiredChecks md
+  requiredChecks (OthModel _)               = mempty
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
@@ -141,6 +157,10 @@ instance ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKind e) where
   express = express . (^. mk)
+-- | Expose all expressions that need to be type-checked for theories that need
+--   expose 'Expr's.
+instance RequiresChecking (ModelKind Expr) Expr Space where
+  requiredChecks = requiredChecks . (^. mk)
 
 -- | Retrieve internal data from ModelKinds
 elimMk :: Getter DifferentialModel a 

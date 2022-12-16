@@ -148,6 +148,7 @@ pOps Exp      = pure $ text "e"
 pOps Neg      = pure hyph
 pOps Cross    = texSym "times"
 pOps Dot      = commandD "cdot" empty
+pOps Scale    = pure $ text " "
 pOps Eq       = pure assign
 pOps NEq      = commandD "neq" empty
 -- Old way of doing less than and greater than

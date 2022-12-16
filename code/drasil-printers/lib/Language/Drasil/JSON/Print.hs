@@ -164,6 +164,7 @@ pOps Exp      = "e"
 pOps Neg      = "-"
 pOps Cross    = "&#10799;"
 pOps Dot      = "&sdot;"
+pOps Scale    = "" -- same as Mul
 pOps Eq       = " = " -- with spaces?
 pOps NEq      = "&ne;"
 pOps Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable

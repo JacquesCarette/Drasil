@@ -3,12 +3,12 @@
 -- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr (expr) where
 
-import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix)
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
-  VVNBinOp(..), VVVBinOp(..), eprec, precA, precB)
+  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), eprec, precA, precB)
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
@@ -71,11 +71,11 @@ indx sm (C c) i = f s
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
 -- | For printing expressions that call something.
-call :: PrintingInformation -> UID -> [Expr] -> [(UID,Expr)] -> P.Expr
-call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps ++
-  zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n,
-  P.MO P.Eq, expr a sm]) (map fst ns) (map snd ns)]
+call :: PrintingInformation -> UID -> [Expr] -> P.Expr
+call sm f ps = P.Row [
+    symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
+    parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps
+  ]
 
 -- | Helper function for addition 'EOperator's.
 eopAdds :: PrintingInformation -> DomainDesc t Expr Expr -> Expr -> P.Expr
@@ -118,9 +118,9 @@ expr (AssocA AddRe l)         sm = P.Row $ addExpr l AddRe sm
 expr (AssocA MulI l)          sm = P.Row $ mulExpr l MulI sm
 expr (AssocA MulRe l)         sm = P.Row $ mulExpr l MulRe sm
 expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-expr (FCall f [x] [])         sm =
+expr (FCall f [x])            sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
-expr (FCall f l ns)           sm = call sm f l ns
+expr (FCall f l)              sm = call sm f l
 expr (Case _ ps)              sm =
   if length ps < 2
     then error "Attempting to use multi-case expr incorrectly"
@@ -157,8 +157,9 @@ expr (OrdBinaryOp Lt a b)     sm = mkBOp sm P.Lt a b
 expr (OrdBinaryOp Gt a b)     sm = mkBOp sm P.Gt a b
 expr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b
 expr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
-expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
+expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
+expr (NVVBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
 expr (Operator o d e)         sm = eop sm o d e
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri

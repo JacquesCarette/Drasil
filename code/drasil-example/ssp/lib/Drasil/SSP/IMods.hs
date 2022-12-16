@@ -588,15 +588,25 @@ intrSlcDerivEqn = inxi intNormForce $=
 
 --------------------------------------------------------------------------
 crtSlpId :: InstanceModel
-crtSlpId = imNoDeriv crtSlpIdMK [qwUC slopeDist, qwUC slopeHght, qwUC waterDist,
+crtSlpId = imNoDeriv (othModel' crtSlpIdRC) [qwUC slopeDist, qwUC slopeHght, qwUC waterDist,
   qwUC waterHght, qwUC effCohesion, qwUC fricAngle, qwUC dryWeight, qwUC satWeight,
   qwUC waterWeight, qwUC constF] (qw fsMin) [] [dRef li2010] "crtSlpId"
   [crtSlpIdDesc]
 
-crtSlpIdMK :: ModelKind Expr
-crtSlpIdMK = equationalModel "crtSlpIdIM"
-  (nounPhraseSP "critical slip surface identification") crtSlpIdQD
+crtSlpIdRC :: RelationConcept
+crtSlpIdRC = makeRC "crtSlpIdIM" 
+  (nounPhraseSP "critical slip surface identification")
+  crtSlpIdDesc
+  crtSlpIdRel
 
+-- placeholder expression hack that's better than the horrible hack
+crtSlpIdRel :: Relation
+crtSlpIdRel = sy slopeDist $= sy slopeHght
+
+  {- equationalModel "crtSlpIdIM"
+  (nounPhraseSP "critical slip surface identification") crtSlpIdQD -}
+
+{-
 crtSlpIdQD :: SimpleQDef
 crtSlpIdQD = mkQuantDef fsMin crtSlpIdExpr
 
@@ -605,7 +615,8 @@ crtSlpIdQD = mkQuantDef fsMin crtSlpIdExpr
 crtSlpIdExpr :: Expr
 crtSlpIdExpr = apply minFunction [sy slopeDist,
   sy slopeHght, sy waterDist, sy waterHght, sy effCohesion, sy fricAngle,
-  sy dryWeight, sy satWeight, sy waterWeight, sy constF]
+  sy dryWeight, sy satWeight, sy waterWeight]
+-}
 
 -- FIXME: The constraints described here should be replaced with formal constraints on the input variables once that is possible
 crtSlpIdDesc :: Sentence

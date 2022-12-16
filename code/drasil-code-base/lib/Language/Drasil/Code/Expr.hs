@@ -2,7 +2,7 @@
 
 module Language.Drasil.Code.Expr where
 
-import Language.Drasil
+import Language.Drasil hiding (Matrix)
 import Language.Drasil.Literal.Development
 import Prelude hiding (sqrt)
 import Control.Lens
@@ -37,6 +37,10 @@ data VVVBinOp = Cross
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).
 data VVNBinOp = Dot
+  deriving Eq
+
+-- | @Number x Vector -> Vector@ binary operations (scaling).
+data NVVBinOp = Scale
   deriving Eq
 
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
@@ -126,6 +130,8 @@ data CodeExpr where
   VVVBinaryOp   :: VVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
   VVNBinaryOp   :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
+  NVVBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
@@ -271,6 +277,8 @@ instance ExprC CodeExpr where
   
   -- | Smart constructor for negating vectors.
   negVec = UnaryOpVV NegV
+  -- | And more general scaling
+  vScale = NVVBinaryOp Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not
@@ -304,43 +312,9 @@ instance ExprC CodeExpr where
   
   matrix = Matrix
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 a b c d = matrix [[a,b],[c,d]]
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = matrix [[a],[b]]
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (int 0) (int 0)
-  
-  -- | Create a row vector
-  rowVec a = matrix [a] 
-
-  -- | Create a column vector
-  columnVec a = matrix $ toColumn a
-
-  -- | Change row vector to column vector
-  toColumn [] = []
-  toColumn (x:xs) = [x]:toColumn xs
-
-  -- Some helper functions to do function application
-  
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
+  apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps []
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
   
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.

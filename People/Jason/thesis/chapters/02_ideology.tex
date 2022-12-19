@@ -30,10 +30,10 @@ future selves and others alike. Once we've reasonably stabilized our libraries,
 it becomes a large gain in the reusability of our efforts \textemdash we don't
 need to worry about making the same bugs twice! However, a few issues arise: the
 code might become out-of-date (or out-of-sync), others might not understand what
-we wrote (and, thus, not trust/use it), or, we might need to use the same
+we wrote (and thus not trust/use it), or we might need to use the same
 conceptual ideas but in a different programming language. If our understanding
-of key ideas changes, we might need to perform large, manual, refactoring of our
-code, and then update our documentation too. While we might write ``idiomatic''
+of key ideas changes, we might need to perform large, manual refactoring of our
+code, and also update our documentation too. While we might write ``idiomatic''
 code, reverse engineering code is tedious, and even then, we can only analyze
 the code we \textit{see}, and not what knowledge it took to write that code.
 Finally, we might be able to write a \ACF{ffi}, but they're often brittle and
@@ -56,15 +56,15 @@ target orbit altitude, falling into the Martian atmosphere, and ultimately
 disintegrating due to atmospheric stress.
 
 Experts had an in-depth understanding of the ``story'' of each project, with
-sound rationale for how things worked and should have worked, and yet, both
+sound rationale for how things worked and should have worked, and yet both
 ended in misfortune. Of course, most software is not critical, and issues in
 most software will not result in an orbiter disintegrating in Martian atmosphere
-or a ship sinking, but, there is something that we can learn:
+or a ship sinking, but there is something that we can learn:
 \textit{communication} and \textit{synchronization} of development efforts is
 vital for building reliable solutions.
 
-While we, as developers don't often build and connect physical things, we do
-connect pieces of code\footnote{Though robotics is a field too.}, but
+While we as developers don't often build and connect physical things, we do
+connect pieces of code\footnote{Though robotics is a field too.}, and
 misunderstandings of tacit project knowledge occur too. Thus, we believe we need
 to revisit our original sensation when we recognized code duplication and
 decided to make reusable components.
@@ -88,10 +88,10 @@ software needs. However, the communication and maintained synchronization of the
 software requirements into the final software product is still brittle (as
 evidenced by the Mars orbiter), as it remains heavily reliant on manual labour
 to translate it into software artifacts. In other words, the translation from
-our knowledge (the important part) is laborious and prone to error, and, hence,
+our knowledge (the important part) is laborious and prone to error, and hence,
 not simple enough. So, now we wonder: how can we simplify the process?
 
-Our end-goal should be ``assembly-line'' style engineering of the software
+Our end-goal should be ``assembly-line'' style engineering of software
 \cite{well-understood}, free of logical issues. To attain this, we need to have
 clear criteria for what it means for our software artifacts to be free of
 logical issues. However, to do this, we need to discuss relevant models. For
@@ -100,9 +100,9 @@ we discuss \textit{the user}, the relevant \textit{transactions}, and then a
 \textit{validation algorithm}. Realizing this example in code might have us
 retrieve a user's bank transactions, calculate the expected balance, and compare
 it with a cached balance. The code only contains one dimension of this
-discussion: the actions, it has no understanding of the substance, nor how it
+discussion: the actions. It has no understanding of the substance, nor how it
 can be similarly used in other scenarios. To audit the code, we analyze the code
-ourselves, potentially with extra testing tools to make things quicker, but, in
+ourselves, potentially with extra testing tools to make things quicker, but in
 general, it relies on us and our understanding. To remedy this, we look to
 describing software as we've done here: as a ``view'' of some story or
 discussion. In other words, we want to build software artifacts through
@@ -132,7 +132,7 @@ By focusing on capturing well-understood \cite{well-understood} knowledge, we
 can use (and re-use) knowledge across specialized generators to generate
 software for specific kinds of problems. For example, statisticians frequently
 use and discuss various kinds of distributions, such as ``Poisson,''
-``Uniform,'' and ``Normal,'' and, when they do, they're typically familiar with
+``Uniform,'' and ``Normal,'' and when they do, they're typically familiar with
 their parameters, expectations functions, and how to use them to estimate
 likelihoods. Hence, by focusing on using \textit{\acsp{dsl}}, we can build
 specialized interpreters for them. Furthermore, by connecting them in precise
@@ -185,8 +185,8 @@ knowledge we have in a wide variety of subjects and domains.
 
 In some sense, at the lowest depth and narrowest breadth of knowledge capture,
 we aren't really capturing any meaning. Rather, we are programming our software
-artifacts directly. Hence, this area is already very feasible, as evidenced by
-the usefulness of software today and the way it was made.
+artifacts directly. Hence, this area is already very feasible, evidenced by the
+usefulness of software today and the way it was made.
 
 \subsubsection{Shallow Waters: Low Depth \& Narrow Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:low}
@@ -217,7 +217,7 @@ specialized websites, such as technical blogs, eCommerce websites, online
 accounting software, online discussion forums, and more.
 
 The mechanized generation-related components of the ideology is also fairly
-shallow in this area, but, still, highly feasible. In some sense, almost any
+shallow in this area, but still, highly feasible. In some sense, almost any
 individual instance of ``generation'' is an area of low depth and breadth as
 well.
 
@@ -229,8 +229,8 @@ as \textit{specialized tools}. Tailored to specific needs, they come with extra
 features for highly specific, potentially niche, categories of
 problems\footnote{Think of this category as sharp tools, such as kitchen knives.
 We can generally get away with using basic kitchen knives, but specialty knives
-help us out for particular use-cases, such as serrated knives or filleting
-knives.}. These already exist, and are, similar to the ``Bottom,'' highly
+help us out for particular use-cases, such as serrated  or filleting
+knives.}. These already exist, and are similar to the ``Bottom,'' highly
 practical. For example, \ACFP{aml} (such as HashedExpression
 \cite{HashedExpression}) allow you to describe complex mathematical algorithms
 and generate optimized software tools for solving them. Another example is
@@ -277,7 +277,7 @@ artifacts generating (containing potentially little to no discussion of the
 desired artifacts at all), or a precise description (where you might be manually
 writing out the final artifacts yourself). Through creating a story as a
 composition of many other smaller fragments of knowledge and stories, and
-defining interpreters as compositions of other, smaller, interpreters, this is
+defining interpreters as compositions of other, smaller interpreters, this is
 feasible. Hopefully, with enough effort, this should alleviate considerable
 stress associated with manual software development, by moving the focus to the
 important bits: the story the artifacts tell. The ``quality'' of the generated

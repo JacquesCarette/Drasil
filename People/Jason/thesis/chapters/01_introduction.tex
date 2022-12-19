@@ -84,11 +84,11 @@
 \end{writingdirectives}
 
 Software developers pull on their understanding of problems to build software
-solutions. Working together, developers similarly pull their understanding from
-a shared pool of knowledge. Often, developers share their knowledge through
+solutions, and working together, developers similarly pull their understanding
+from a shared pool of knowledge. Often, developers share their knowledge through
 documentation, keeping every product owner\footnote{For our purposes, defining a
-      ``product owner'' as all people that have any responsibility in the development
-      of a software artifact.} ``in the loop.'' As knowledge and requirements change,
+``product owner'' as all people that have any responsibility in the development
+of a software artifact.} ``in the loop.'' As knowledge and requirements change,
 software implementations trail behind the current needs and understandings,
 until developers manually update the code. By applying generative techniques to
 software development, we may have some, or \textit{all}, of the manual updates
@@ -187,7 +187,7 @@ from the former to the latter). Each theory needs to be sufficiently understood
 to produce calculation steps that we can use. For example, if we wanted to
 define our firing angle variable (\refExampleAngleVariableEncoding{}) in terms
 of the distance of the target, gravity, and the initial
-velocity\footnote{Assuming no air drag or resistance}, we might write:
+velocity\footnote{Assuming no air drag or resistance.}, we might write:
 \(\arcsin{}(\mathit{targetDistanceFromCannon} \cdot{} g / v^2) / 2\). In Drasil,
 we might encode this as \refExampleAngleEquationEncoding{}.
 
@@ -203,7 +203,7 @@ importantly, we can also convert this theory to Python code as well:
 \exampleAngleEquationEncodingToPython{}
 
 However, this example is reasonably simple. If we were handed an equation of
-this \(\nu{} = f(x,y,z)\) form, it's somewhat reasonable, but perhaps dubious,
+this \(\nu{} = f(x,y,z)\) form, it's somewhat reasonable, but perhaps dubious
 to assume that one way to define \(\nu{}\) is \(f(x,y,z)\). However, if we were
 handed an equivalent, implicit version of it, then we can assume less
 information about it. For example, if we re-wrote the equation for
@@ -250,13 +250,13 @@ domain-specific interpretations that we're interested in, to ultimately generate
 software artifacts. \textit{Chunks} are unique instances of knowledge, tagged
 with a \acs{uid} for referencing them, and a \textit{type} for understanding
 their structure. The chunk is unique with respect to a global ``chunk database''
-that Drasil registers all chunk into. At the moment, Drasil's chunk database
+that Drasil registers all chunks into. At the moment, Drasil's chunk database
 uses a series of typed maps (\refOriginalChunkDBHaskell{}) with \acs{uid} keys
 and typed chunk values. This means that as we create new types of chunks in
 Drasil, the list of maps in the database will grow. Additionally, the list of
 types will have to be known before using Drasil, which means that extending the
 list of chunks is difficult for users. In other words, the current chunk
-database is not \textit{extensible} because of it's typed nature.
+database is not \textit{extensible} because of its typed nature.
 
 \section{Problem Statement}
 \label{chap:intro:sec:problem-statement}
@@ -311,7 +311,7 @@ limiting admissible chunk types to only those that exist in core Drasil.\\
 \label{chap:intro:sec:contributions}
 
 In listed code snippets with ``Original'' in their titles, I'm referring to code
-that existed, in full, before I started contributing to Drasil. As such, I claim
+that existed in full before I started contributing to Drasil. As such, I claim
 no authorship in those snippets. Unless otherwise stated, all other snippets,
 excluding excerpts from generated artifact snippets, includes some of my work,
 but might also include the work of others who were also contributing to the
@@ -349,14 +349,14 @@ My notable contributions include:
 \label{chap:intro:sec:thesis-outline}
 
 In \Cref{chap:ideology}, we discuss what we can learn from the source code of
-general software, and, specifically, how we can abstract over them to form
-similar software, varying over certain aspects of the software, to make the
+general software, and specifically, how we can abstract over them to form
+similar software, varying over certain aspects of the software to make the
 background knowledge reusable. \Cref{chap:drasil} discusses Drasil, a software
 suite for generating software from coherent descriptions of scientific problems.
 \Cref{chap:modelkinds} discusses how Drasil captures and uses theories to
 generate code, and how we improved theory capture to create more opportunity for
 domain-specific interpretation of the theories (\ref{rq:modelkinds})
-\Cref{chap:lang-division} discusses how Drasil encodes mathematical expressions,
+\Cref{chap:lang-division} discusses how Drasil encodes mathematical expressions
 and associated issues (\ref{rq:lang_division}). \Cref{chap:more-theory-kinds}
 revisits the existing captured theories in Drasil, rebuilding them with
 specialized encodings for others to use as needed. \Cref{chap:typed-expr}

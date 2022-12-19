@@ -219,9 +219,11 @@ assocArithOperToTy MulRe = S.Real
 -- helper function for typechecking to help reduce duplication
 vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError
 vvvInfer ctx op l r = case (infer ctx l, infer ctx r) of
-    (Left lt@(S.Vect lsp), Left (S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
-                                                      && lsp /= S.Natural
-      then Left lt
+    (Left lt@(S.Vect lsp), Left (S.Vect rsp)) -> 
+      if lsp == rsp && S.isBasicNumSpace lsp then
+        if op == VSub && (lsp == S.Natural || rsp == S.Natural) then
+          Right $ "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+        else Left lt
       else Right $ "Vector " ++ pretty op ++ " expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
     (Left lsp, Left rsp) -> Right $ "Vector operation " ++ pretty op ++ " expects vector operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
     (_       , Right re) -> Right re

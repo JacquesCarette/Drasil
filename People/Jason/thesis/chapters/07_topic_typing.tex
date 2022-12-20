@@ -481,7 +481,6 @@ inference rules make up our bidirectional type-checker's rules:
       {\Gamma \vdash e \Rightarrow \bb{B}}
       {\Gamma \vdash \lnot e \Rightarrow \bb{B}}
 
-%   -- TODO: What about "Vect Vect ... Vect X"?
 %   infer cxt (UnaryOpVV NegV e) = case infer cxt e of
 %     Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
 %       then Left $ S.Vect sp

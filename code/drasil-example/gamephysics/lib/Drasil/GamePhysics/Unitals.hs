@@ -252,10 +252,12 @@ forcej = ucs' (dccWDS "forcej" (compoundPhrase'
 
 velAP = ucs' (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body A")) 
-              (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyA, lPoint])) Real velU
+              (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyA, lPoint])) 
+              (Vect Real) velU
 velBP = ucs' (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body B")) 
-              (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyB, lPoint])) Real velU
+              (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyB, lPoint]))
+              (Vect Real) velU
 
 force_1    = forceParam "1" "first"  label1
 force_2    = forceParam "2" "second" label2

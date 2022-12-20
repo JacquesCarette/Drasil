@@ -10,3 +10,5 @@
 {"rule":"PASSIVE_VOICE","sentence":"^\\QUltimately, this means that more time is spent developing and debugging generated artifacts than we would like.\\E$"}
 {"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QIn Drasil, we might encode this as .\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_CA","sentence":"^\\Q[rq:chunkdb RQ4] Our current “typed” approach to collecting different kinds of data is difficult to extend.\\E$"}
+{"rule":"TOO_LONG_SENTENCE","sentence":"^\\QFor example, we can re-write the expression used in \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q using a trigonometric integral (e.g., using \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, we obtain \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q using \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q), but then the transformation into a naive set of steps to follow isn't as simple.\\E$"}
+{"rule":"SENTENCE_FRAGMENT","sentence":"^\\QWhich we don't really care about here.\\E$"}

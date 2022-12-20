@@ -54,17 +54,15 @@ theQDef = mkQuantDef y (dbl 3 $* tan (sy x))
 \end{pseudohaskell}
 
 With \Cref{lst:pseudoExampleExpressionAsQDefinition}, we can create an instance
-model containing an equational model and it \todo{and it???}as part of the
-solution of some greater problem\footnote{Which we don't really care about
-here.}. One of the important requirements of instance models is that we expect
-them to be unambiguously translatable into a directly-computable algorithm
-(e.g., a program, or a general list of calculations to follow), up to the user's
-choices (such as choosing what representation of integers, reals, etc. to use in
-a potential translation into a program). This is where \Expr{} shows that it is
-a bit of a double-edged sword. For example, we can re-write the expression used
-in \Cref{lst:pseudoExampleExpressionAsQDefinition} using a trigonometric
-integral (e.g., using \(\tan{}(x) + C = \int \frac{1}{\cos^2(x)}dx\)
-\cite{Math2Org}, we obtain \(y = \int \frac{3}{\cos^2(x)}dx\) using \(C = 0\),
+model containing an equational model as part of the solution of the greater
+problem. One of the important requirements of instance models is that we expect
+them to be unambiguously translatable into some component of the solution, up to
+user choices (such as choosing what ``code'' representation of integers and
+reals to use). This is where \Expr{} shows that it is a bit of a double-edged
+sword. For example, we can re-write the expression used in
+\Cref{lst:pseudoExampleExpressionAsQDefinition} using a trigonometric integral
+(e.g., using \(\tan{}(x) + C = \int \frac{1}{\cos^2(x)}dx\) \cite{Math2Org}, we
+obtain \(y = \int \frac{3}{\cos^2(x)}dx\) using \(C = 0\),
 \Cref{lst:pseudoExampleExpressionAsQDefinitionBad}), but then the transformation
 into a naive set of steps to follow isn't as simple.
 

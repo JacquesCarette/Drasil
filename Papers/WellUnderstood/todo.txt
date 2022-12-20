@@ -1,0 +1,84 @@
+Minor:
+------
+- Sec 1.5: Would be good to also mention other well-known examples of long-lived software e.g. financial systems, control systems.
+- Figure 1: Caption should explain what the colors indicate.
+- Figure 2: the comment "(compare bold box in Figure 1)" is missing an explanation
+- The "main" program fragment at the end of Section 2 does not seem very useful - why do we need to see this?
+Sec 3: Consider putting the idealized process in a figure and then use the text to explain it.
+
+- Missing comma in "What software architecture data-structures, algorithms" (should be one just after "architecture").
+- "software oriented decisions" -> "software-oriented decisions"
+- Too many uses of enumerations, the text of 1.3 could have been written as a single paragraph of text.
+- Definition 2: Hard to read: "...a coupling og a concepts ...1,2,3... of a concept" - too many concepts?
+- Sec 1.4: Why break the text here into two paragraphs? Also, why the very specific detail of "we use standards..." here? Seems out of context. 
+- Sec 2: "we have built infrastructure... It consists" - should it not be "an infrastructure"?
+- Sec 4: "Others [5] have...requirements." -> "Dines has...requirements [5]."
+"a lot of" -> "a significant amount of"
+- the abstract mentions “context”, but later it is called “forces”; I think the
+  latter is more accurate. 
+- abstract says “our encodings”, but they haven’t been introduced. 
+- I’d suggest to mention Drasil in the abstract. 
+- l. 67: refinements -> refinement
+
+Related Work:
+-------------
+- Neighbor’s Draco 
+- Baxter’s DMS.
+- Sec 1.4: How about related work e.g. literate programming? 
+- Novak's GLisp (and more by that author)
+  "Creation of Views for Reuse of Software with Different Data Representations"
+  "Representation of Models for Expert Problem Solving in Physics"
+  "Software Reuse by Specialization of Generic Procedures Through Views" 
+- Batory's work on program families has used very similar themes. 
+
+General Comments:
+-----------------
+
+make the text in Section 1 a bit
+smoother (it's very choppy, lots of enumerates, very little
+explanation/context). 
+
+provide some kind of general overview of Drasil at
+the beginning of Section 2.
+
+Sec 2: "A full description would take too much space." yes probably, but a
+high-level overview to guide the reader and make your paper understandable
+would not, so you should as a minimum provide that!  
+
+Sec 3: is the idealized process general or is it specific to your infrastructure? (This also begs the question: does your infrastructure have name? "Drasil"?)
+
+Sec 3: Related work to other generative frameworks that also define their own process?
+
+Indeed, it is an old vision to represent domain knowledge first-class, to avoid
+duplication, and offer variation points to make engineering trade-offs. Another
+lens to see this through (not mentioned in the paper), DSLs create
+opportunities for *design reuse*. 
+
+I am anxious to learn more details about this
+system, and if the ideas embedded in Drasil, could be transferred to an actual
+(external) DSL, built using a language workbench (like WebDSL), or, in any
+case, what motivated the authors to make a “library” in Haskell. 
+
+With respect to the example of Drasil, we only get to see client/instantiation code to configure a system. Could we also see an example of how DK is encoded? How a code generator is specified? Etc. 
+
+The link with Eelco’s WebDSL is appreciated. However, WebDSL is deemed to cover a domain that is *not* well-understood. One might conjecture, however, (and I think Eelco would agree), that the act of creating a DSL for a certain domain is way of making that domain well-understood. But of course, this might be a philosophical debate. 
+
+This is a fine paper. There are questions about its relationship to Eelco
+Visser's work but I don't think that we should be too concerned. Still, this is
+a part to bring out more clearly. Eelco Visser's work offered a lot of
+meta-programming/generative programming infrastructure, and, although this is
+not used concretely, it certainly connects to the themes of the research.
+Finding connections with publications should not be too hard.
+
+Reviewer 3 has some interesting concerns about the paper being a bit
+“old-fashioned” and how this could be addressed, for example, by fleshing out
+the "Create a coherent narrative" paragraph.
+research of several decades ago focused on the same themes: represent knowledge
+at a higher level and be able to generate code in multiple target languages and
+configure low-level specifics (such as whether to have logging and whether code
+i s to be inlined or supplied as functions). These are good themes, but hardly
+novel. What may be more interesting is the particular application in this
+specific domain, as well as the detailing of specifics, e.g., by fleshing out
+the "Create a coherent narrative" paragraph (l.175-180).
+
+=============================================================================

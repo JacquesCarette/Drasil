@@ -770,8 +770,9 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-361"></span><span>  </span><span>
-</span><span id="line-362"></span><span>  </span><span class="hs-comment">-- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.</span><span>
-</span><span id="line-363"></span><span>  </span><span id="local-6989586621679435257"><span class="annot"><span class="annottext">euclidean :: [Expr] -&gt; Expr
+</span><span id="line-362"></span><span>  </span><span class="hs-comment">-- TODO: Move euclidean to smart constructor</span><span>
+</span><span id="line-363"></span><span>  </span><span class="hs-comment">-- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.</span><span>
+</span><span id="line-364"></span><span>  </span><span id="local-6989586621679435257"><span class="annot"><span class="annottext">euclidean :: [Expr] -&gt; Expr
 </span><a href="#local-6989586621679435257"><span class="hs-identifier hs-var hs-var hs-var hs-var">euclidean</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#sqrt"><span class="hs-identifier hs-var">sqrt</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; ([Expr] -&gt; Expr) -&gt; [Expr] -&gt; Expr
@@ -787,37 +788,37 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#square"><span class="hs-identifier hs-var">square</span></a></span><span>
-</span><span id="line-364"></span><span>  </span><span>
-</span><span id="line-365"></span><span>  </span><span class="hs-comment">-- | Smart constructor to cross product two expressions.</span><span>
-</span><span id="line-366"></span><span>  </span><span id="local-6989586621679435254"><span class="annot"><span class="annottext">cross :: Expr -&gt; Expr -&gt; Expr
+</span><span id="line-365"></span><span>  </span><span>
+</span><span id="line-366"></span><span>  </span><span class="hs-comment">-- | Smart constructor to cross product two expressions.</span><span>
+</span><span id="line-367"></span><span>  </span><span id="local-6989586621679435254"><span class="annot"><span class="annottext">cross :: Expr -&gt; Expr -&gt; Expr
 </span><a href="#local-6989586621679435254"><span class="hs-identifier hs-var hs-var hs-var hs-var">cross</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VVVBinOp -&gt; Expr -&gt; Expr -&gt; Expr
 </span><a href="Language.Drasil.Expr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-var">VVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVVBinOp
 </span><a href="Language.Drasil.Expr.Lang.html#Cross"><span class="hs-identifier hs-var">Cross</span></a></span><span>
-</span><span id="line-367"></span><span>  </span><span>
-</span><span id="line-368"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with a complete set of cases.</span><span>
-</span><span id="line-369"></span><span>  </span><span id="local-6989586621679435251"><span class="annot"><span class="annottext">completeCase :: [(Expr, Expr)] -&gt; Expr
+</span><span id="line-368"></span><span>  </span><span>
+</span><span id="line-369"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with a complete set of cases.</span><span>
+</span><span id="line-370"></span><span>  </span><span id="local-6989586621679435251"><span class="annot"><span class="annottext">completeCase :: [(Expr, Expr)] -&gt; Expr
 </span><a href="#local-6989586621679435251"><span class="hs-identifier hs-var hs-var hs-var hs-var">completeCase</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Completeness -&gt; [(Expr, Expr)] -&gt; Expr
 </span><a href="Language.Drasil.Expr.Lang.html#Case"><span class="hs-identifier hs-var">Case</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness
 </span><a href="Language.Drasil.Expr.Lang.html#Complete"><span class="hs-identifier hs-var">Complete</span></a></span><span>
-</span><span id="line-370"></span><span>  </span><span>
-</span><span id="line-371"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with an incomplete set of cases.</span><span>
-</span><span id="line-372"></span><span>  </span><span id="local-6989586621679435248"><span class="annot"><span class="annottext">incompleteCase :: [(Expr, Expr)] -&gt; Expr
+</span><span id="line-371"></span><span>  </span><span>
+</span><span id="line-372"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with an incomplete set of cases.</span><span>
+</span><span id="line-373"></span><span>  </span><span id="local-6989586621679435248"><span class="annot"><span class="annottext">incompleteCase :: [(Expr, Expr)] -&gt; Expr
 </span><a href="#local-6989586621679435248"><span class="hs-identifier hs-var hs-var hs-var hs-var">incompleteCase</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Completeness -&gt; [(Expr, Expr)] -&gt; Expr
 </span><a href="Language.Drasil.Expr.Lang.html#Case"><span class="hs-identifier hs-var">Case</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness
 </span><a href="Language.Drasil.Expr.Lang.html#Incomplete"><span class="hs-identifier hs-var">Incomplete</span></a></span><span>
-</span><span id="line-373"></span><span>  </span><span>
-</span><span id="line-374"></span><span>  </span><span id="local-6989586621679435246"><span class="annot"><span class="annottext">matrix :: [[Expr]] -&gt; Expr
+</span><span id="line-374"></span><span>  </span><span>
+</span><span id="line-375"></span><span>  </span><span id="local-6989586621679435246"><span class="annot"><span class="annottext">matrix :: [[Expr]] -&gt; Expr
 </span><a href="#local-6989586621679435246"><span class="hs-identifier hs-var hs-var hs-var hs-var">matrix</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Expr]] -&gt; Expr
 </span><a href="Language.Drasil.Expr.Lang.html#Matrix"><span class="hs-identifier hs-var">Matrix</span></a></span><span>
-</span><span id="line-375"></span><span>
-</span><span id="line-376"></span><span>  </span><span class="hs-comment">-- | Applies a given function with a list of parameters.</span><span>
-</span><span id="line-377"></span><span>  </span><span id="local-6989586621679435244"><span class="annot"><span class="annottext">apply :: f -&gt; [Expr] -&gt; Expr
+</span><span id="line-376"></span><span>
+</span><span id="line-377"></span><span>  </span><span class="hs-comment">-- | Applies a given function with a list of parameters.</span><span>
+</span><span id="line-378"></span><span>  </span><span id="local-6989586621679435244"><span class="annot"><span class="annottext">apply :: f -&gt; [Expr] -&gt; Expr
 </span><a href="#local-6989586621679435244"><span class="hs-identifier hs-var hs-var hs-var hs-var">apply</span></a></span></span><span> </span><span id="local-6989586621679435243"><span class="annot"><span class="annottext">f :: f
 </span><a href="#local-6989586621679435243"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">f -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#sy"><span class="hs-identifier hs-var">sy</span></a></span><span> </span><span class="annot"><span class="annottext">f
 </span><a href="#local-6989586621679435243"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-378"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#apply"><span class="hs-identifier hs-var">apply</span></a></span><span> </span><span id="local-6989586621679435242"><span class="annot"><span class="annottext">f :: f
+</span><span id="line-379"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#apply"><span class="hs-identifier hs-var">apply</span></a></span><span> </span><span id="local-6989586621679435242"><span class="annot"><span class="annottext">f :: f
 </span><a href="#local-6989586621679435242"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679435241"><span class="annot"><span class="annottext">ps :: [Expr]
 </span><a href="#local-6989586621679435241"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; [Expr] -&gt; Expr
 </span><a href="Language.Drasil.Expr.Lang.html#FCall"><span class="hs-identifier hs-var">FCall</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">f
@@ -827,9 +828,9 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
 </span><a href="#local-6989586621679435241"><span class="hs-identifier hs-var">ps</span></a></span><span>
-</span><span id="line-379"></span><span>  </span><span>
-</span><span id="line-380"></span><span>  </span><span class="hs-comment">-- | Create an 'Expr' from a 'Symbol'ic Chunk.</span><span>
-</span><span id="line-381"></span><span>  </span><span id="local-6989586621679435239"><span class="annot"><span class="annottext">sy :: c -&gt; Expr
+</span><span id="line-380"></span><span>  </span><span>
+</span><span id="line-381"></span><span>  </span><span class="hs-comment">-- | Create an 'Expr' from a 'Symbol'ic Chunk.</span><span>
+</span><span id="line-382"></span><span>  </span><span id="local-6989586621679435239"><span class="annot"><span class="annottext">sy :: c -&gt; Expr
 </span><a href="#local-6989586621679435239"><span class="hs-identifier hs-var hs-var hs-var hs-var">sy</span></a></span></span><span> </span><span id="local-6989586621679435238"><span class="annot"><span class="annottext">x :: c
 </span><a href="#local-6989586621679435238"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Expr
 </span><a href="Language.Drasil.Expr.Lang.html#C"><span class="hs-identifier hs-var">C</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c
@@ -838,60 +839,60 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID c UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-382"></span><span>  </span><span>
-</span><span id="line-383"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#ExprC"><span class="hs-identifier hs-type">ExprC</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">M.ModelExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-384"></span><span>  </span><span id="local-6989586621679435185"><span class="annot"><span class="annottext">lit :: Literal -&gt; ModelExpr
+</span><span id="line-383"></span><span>  </span><span>
+</span><span id="line-384"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#ExprC"><span class="hs-identifier hs-type">ExprC</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">M.ModelExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-385"></span><span>  </span><span id="local-6989586621679435185"><span class="annot"><span class="annottext">lit :: Literal -&gt; ModelExpr
 </span><a href="#local-6989586621679435185"><span class="hs-identifier hs-var hs-var hs-var hs-var">lit</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-var">M.Lit</span></a></span><span>
-</span><span id="line-385"></span><span>
-</span><span id="line-386"></span><span>  </span><span class="hs-comment">-- | Smart constructor for equating two expressions.</span><span>
-</span><span id="line-387"></span><span>  </span><span id="local-6989586621679435183"><span class="annot"><span class="annottext">$= :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-386"></span><span>
+</span><span id="line-387"></span><span>  </span><span class="hs-comment">-- | Smart constructor for equating two expressions.</span><span>
+</span><span id="line-388"></span><span>  </span><span id="local-6989586621679435183"><span class="annot"><span class="annottext">$= :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435183"><span class="hs-operator hs-var hs-var hs-var hs-var">($=)</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">EqBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-var">M.EqBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">EqBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Eq"><span class="hs-identifier hs-var">M.Eq</span></a></span><span>
-</span><span id="line-388"></span><span>  </span><span class="hs-comment">-- | Smart constructor for showing that two expressions are not equal.</span><span>
-</span><span id="line-389"></span><span>  </span><span id="local-6989586621679435180"><span class="annot"><span class="annottext">$!= :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-389"></span><span>  </span><span class="hs-comment">-- | Smart constructor for showing that two expressions are not equal.</span><span>
+</span><span id="line-390"></span><span>  </span><span id="local-6989586621679435180"><span class="annot"><span class="annottext">$!= :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435180"><span class="hs-operator hs-var hs-var hs-var hs-var">($!=)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">EqBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-var">M.EqBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">EqBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#NEq"><span class="hs-identifier hs-var">M.NEq</span></a></span><span>
-</span><span id="line-390"></span><span>
-</span><span id="line-391"></span><span>  </span><span class="hs-comment">-- | Smart constructor for ordering two equations.</span><span>
-</span><span id="line-392"></span><span>  </span><span class="hs-comment">-- | Less than.</span><span>
-</span><span id="line-393"></span><span>  </span><span id="local-6989586621679435178"><span class="annot"><span class="annottext">$&lt; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-391"></span><span>
+</span><span id="line-392"></span><span>  </span><span class="hs-comment">-- | Smart constructor for ordering two equations.</span><span>
+</span><span id="line-393"></span><span>  </span><span class="hs-comment">-- | Less than.</span><span>
+</span><span id="line-394"></span><span>  </span><span id="local-6989586621679435178"><span class="annot"><span class="annottext">$&lt; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435178"><span class="hs-operator hs-var hs-var hs-var hs-var">($&lt;)</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">OrdBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-var">M.OrdBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Lt"><span class="hs-identifier hs-var">M.Lt</span></a></span><span>
-</span><span id="line-394"></span><span>  </span><span class="hs-comment">-- | Greater than.</span><span>
-</span><span id="line-395"></span><span>  </span><span id="local-6989586621679435175"><span class="annot"><span class="annottext">$&gt; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-395"></span><span>  </span><span class="hs-comment">-- | Greater than.</span><span>
+</span><span id="line-396"></span><span>  </span><span id="local-6989586621679435175"><span class="annot"><span class="annottext">$&gt; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435175"><span class="hs-operator hs-var hs-var hs-var hs-var">($&gt;)</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">OrdBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-var">M.OrdBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Gt"><span class="hs-identifier hs-var">M.Gt</span></a></span><span>
-</span><span id="line-396"></span><span>  </span><span class="hs-comment">-- | Less than or equal to.</span><span>
-</span><span id="line-397"></span><span>  </span><span id="local-6989586621679435173"><span class="annot"><span class="annottext">$&lt;= :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-397"></span><span>  </span><span class="hs-comment">-- | Less than or equal to.</span><span>
+</span><span id="line-398"></span><span>  </span><span id="local-6989586621679435173"><span class="annot"><span class="annottext">$&lt;= :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435173"><span class="hs-operator hs-var hs-var hs-var hs-var">($&lt;=)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">OrdBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-var">M.OrdBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#LEq"><span class="hs-identifier hs-var">M.LEq</span></a></span><span>
-</span><span id="line-398"></span><span>  </span><span class="hs-comment">-- | Greater than or equal to.</span><span>
-</span><span id="line-399"></span><span>  </span><span id="local-6989586621679435171"><span class="annot"><span class="annottext">$&gt;= :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-399"></span><span>  </span><span class="hs-comment">-- | Greater than or equal to.</span><span>
+</span><span id="line-400"></span><span>  </span><span id="local-6989586621679435171"><span class="annot"><span class="annottext">$&gt;= :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435171"><span class="hs-operator hs-var hs-var hs-var hs-var">($&gt;=)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">OrdBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-var">M.OrdBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#GEq"><span class="hs-identifier hs-var">M.GEq</span></a></span><span>
-</span><span id="line-400"></span><span>
-</span><span id="line-401"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the dot product of two equations.</span><span>
-</span><span id="line-402"></span><span>  </span><span id="local-6989586621679435169"><span class="annot"><span class="annottext">$. :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-401"></span><span>
+</span><span id="line-402"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the dot product of two equations.</span><span>
+</span><span id="line-403"></span><span>  </span><span id="local-6989586621679435169"><span class="annot"><span class="annottext">$. :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435169"><span class="hs-operator hs-var hs-var hs-var hs-var">($.)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VVNBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#VVNBinaryOp"><span class="hs-identifier hs-var">M.VVNBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVNBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Dot"><span class="hs-identifier hs-var">M.Dot</span></a></span><span>
-</span><span id="line-403"></span><span>
-</span><span id="line-404"></span><span>  </span><span class="hs-comment">-- | Add two expressions (Integers).</span><span>
-</span><span id="line-405"></span><span>  </span><span id="local-6989586621679435166"><span class="annot"><span class="annottext">addI :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-404"></span><span>
+</span><span id="line-405"></span><span>  </span><span class="hs-comment">-- | Add two expressions (Integers).</span><span>
+</span><span id="line-406"></span><span>  </span><span id="local-6989586621679435166"><span class="annot"><span class="annottext">addI :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435166"><span class="hs-identifier hs-var hs-var hs-var hs-var">addI</span></a></span></span><span> </span><span id="local-6989586621679435165"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435165"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435165"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-406"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435164"><span class="annot"><span class="annottext">r :: ModelExpr
+</span><span id="line-407"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435164"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435164"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435164"><span class="hs-identifier hs-var">r</span></a></span><span>
-</span><span id="line-407"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddI"><span class="hs-identifier hs-type">M.AddI</span></a></span><span> </span><span id="local-6989586621679435161"><span class="annot"><span class="annottext">l :: [ModelExpr]
+</span><span id="line-408"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddI"><span class="hs-identifier hs-type">M.AddI</span></a></span><span> </span><span id="local-6989586621679435161"><span class="annot"><span class="annottext">l :: [ModelExpr]
 </span><a href="#local-6989586621679435161"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddI"><span class="hs-identifier hs-type">M.AddI</span></a></span><span> </span><span id="local-6989586621679435160"><span class="annot"><span class="annottext">r :: [ModelExpr]
 </span><a href="#local-6989586621679435160"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -900,7 +901,7 @@ forall c. HasUID c =&gt; Lens' c UID
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435160"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-408"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddI"><span class="hs-identifier hs-type">M.AddI</span></a></span><span> </span><span id="local-6989586621679435159"><span class="annot"><span class="annottext">l :: [ModelExpr]
+</span><span id="line-409"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddI"><span class="hs-identifier hs-type">M.AddI</span></a></span><span> </span><span id="local-6989586621679435159"><span class="annot"><span class="annottext">l :: [ModelExpr]
 </span><a href="#local-6989586621679435159"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435158"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435158"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -909,7 +910,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435158"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-409"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span id="local-6989586621679435157"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-410"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span id="local-6989586621679435157"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435157"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddI"><span class="hs-identifier hs-type">M.AddI</span></a></span><span> </span><span id="local-6989586621679435156"><span class="annot"><span class="annottext">r :: [ModelExpr]
 </span><a href="#local-6989586621679435156"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -918,29 +919,29 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435156"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-410"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span id="local-6989586621679435155"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-411"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addI"><span class="hs-identifier hs-var">addI</span></a></span><span> </span><span id="local-6989586621679435155"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435155"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679435154"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435154"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AddI"><span class="hs-identifier hs-var">M.AddI</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435155"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435154"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-411"></span><span>
-</span><span id="line-412"></span><span>  </span><span class="hs-comment">-- | Add two expressions (Real numbers).</span><span>
-</span><span id="line-413"></span><span>  </span><span id="local-6989586621679435153"><span class="annot"><span class="annottext">addRe :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-412"></span><span>
+</span><span id="line-413"></span><span>  </span><span class="hs-comment">-- | Add two expressions (Real numbers).</span><span>
+</span><span id="line-414"></span><span>  </span><span id="local-6989586621679435153"><span class="annot"><span class="annottext">addRe :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435153"><span class="hs-identifier hs-var hs-var hs-var hs-var">addRe</span></a></span></span><span> </span><span id="local-6989586621679435152"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435152"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Dbl"><span class="hs-identifier hs-type">Dbl</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435152"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-414"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Dbl"><span class="hs-identifier hs-type">Dbl</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435151"><span class="annot"><span class="annottext">r :: ModelExpr
+</span><span id="line-415"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Dbl"><span class="hs-identifier hs-type">Dbl</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435151"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435151"><span class="hs-identifier hs-var">r</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435151"><span class="hs-identifier hs-var">r</span></a></span><span>
-</span><span id="line-415"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span id="local-6989586621679435150"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-416"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span id="local-6989586621679435150"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435150"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#ExactDbl"><span class="hs-identifier hs-type">ExactDbl</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435150"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-416"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#ExactDbl"><span class="hs-identifier hs-type">ExactDbl</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435149"><span class="annot"><span class="annottext">r :: ModelExpr
+</span><span id="line-417"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#ExactDbl"><span class="hs-identifier hs-type">ExactDbl</span></a></span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435149"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435149"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435149"><span class="hs-identifier hs-var">r</span></a></span><span>
-</span><span id="line-417"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddRe"><span class="hs-identifier hs-type">M.AddRe</span></a></span><span> </span><span id="local-6989586621679435147"><span class="annot"><span class="annottext">l :: [ModelExpr]
+</span><span id="line-418"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddRe"><span class="hs-identifier hs-type">M.AddRe</span></a></span><span> </span><span id="local-6989586621679435147"><span class="annot"><span class="annottext">l :: [ModelExpr]
 </span><a href="#local-6989586621679435147"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddRe"><span class="hs-identifier hs-type">M.AddRe</span></a></span><span> </span><span id="local-6989586621679435146"><span class="annot"><span class="annottext">r :: [ModelExpr]
 </span><a href="#local-6989586621679435146"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -949,7 +950,7 @@ forall a. a -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435146"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-418"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddRe"><span class="hs-identifier hs-type">M.AddRe</span></a></span><span> </span><span id="local-6989586621679435145"><span class="annot"><span class="annottext">l :: [ModelExpr]
+</span><span id="line-419"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddRe"><span class="hs-identifier hs-type">M.AddRe</span></a></span><span> </span><span id="local-6989586621679435145"><span class="annot"><span class="annottext">l :: [ModelExpr]
 </span><a href="#local-6989586621679435145"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435144"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435144"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -958,7 +959,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435144"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-419"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span id="local-6989586621679435143"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-420"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span id="local-6989586621679435143"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435143"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AddRe"><span class="hs-identifier hs-type">M.AddRe</span></a></span><span> </span><span id="local-6989586621679435142"><span class="annot"><span class="annottext">r :: [ModelExpr]
 </span><a href="#local-6989586621679435142"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -967,23 +968,23 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435142"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-420"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span id="local-6989586621679435141"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-421"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#addRe"><span class="hs-identifier hs-var">addRe</span></a></span><span> </span><span id="local-6989586621679435141"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435141"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679435140"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435140"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AddRe"><span class="hs-identifier hs-var">M.AddRe</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435141"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435140"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-421"></span><span>
-</span><span id="line-422"></span><span>  </span><span class="hs-comment">-- | Multiply two expressions (Integers).</span><span>
-</span><span id="line-423"></span><span>  </span><span id="local-6989586621679435139"><span class="annot"><span class="annottext">mulI :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-422"></span><span>
+</span><span id="line-423"></span><span>  </span><span class="hs-comment">-- | Multiply two expressions (Integers).</span><span>
+</span><span id="line-424"></span><span>  </span><span id="local-6989586621679435139"><span class="annot"><span class="annottext">mulI :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435139"><span class="hs-identifier hs-var hs-var hs-var hs-var">mulI</span></a></span></span><span> </span><span id="local-6989586621679435138"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435138"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435138"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-424"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435137"><span class="annot"><span class="annottext">r :: ModelExpr
+</span><span id="line-425"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435137"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435137"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435137"><span class="hs-identifier hs-var">r</span></a></span><span>
-</span><span id="line-425"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulI"><span class="hs-identifier hs-type">M.MulI</span></a></span><span> </span><span id="local-6989586621679435135"><span class="annot"><span class="annottext">l :: [ModelExpr]
+</span><span id="line-426"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulI"><span class="hs-identifier hs-type">M.MulI</span></a></span><span> </span><span id="local-6989586621679435135"><span class="annot"><span class="annottext">l :: [ModelExpr]
 </span><a href="#local-6989586621679435135"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulI"><span class="hs-identifier hs-type">M.MulI</span></a></span><span> </span><span id="local-6989586621679435134"><span class="annot"><span class="annottext">r :: [ModelExpr]
 </span><a href="#local-6989586621679435134"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -992,7 +993,7 @@ forall a. a -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435134"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-426"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulI"><span class="hs-identifier hs-type">M.MulI</span></a></span><span> </span><span id="local-6989586621679435133"><span class="annot"><span class="annottext">l :: [ModelExpr]
+</span><span id="line-427"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulI"><span class="hs-identifier hs-type">M.MulI</span></a></span><span> </span><span id="local-6989586621679435133"><span class="annot"><span class="annottext">l :: [ModelExpr]
 </span><a href="#local-6989586621679435133"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435132"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435132"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -1001,7 +1002,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435132"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-427"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span id="local-6989586621679435131"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-428"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span id="local-6989586621679435131"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435131"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulI"><span class="hs-identifier hs-type">M.MulI</span></a></span><span> </span><span id="local-6989586621679435130"><span class="annot"><span class="annottext">r :: [ModelExpr]
 </span><a href="#local-6989586621679435130"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -1010,29 +1011,29 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435130"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-428"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span id="local-6989586621679435129"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-429"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulI"><span class="hs-identifier hs-var">mulI</span></a></span><span> </span><span id="local-6989586621679435129"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435129"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679435128"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435128"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
 </span><a href="Language.Drasil.ModelExpr.Lang.html#MulI"><span class="hs-identifier hs-var">M.MulI</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435129"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435128"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-429"></span><span>
-</span><span id="line-430"></span><span>  </span><span class="hs-comment">-- | Multiply two expressions (Real numbers).</span><span>
-</span><span id="line-431"></span><span>  </span><span id="local-6989586621679435127"><span class="annot"><span class="annottext">mulRe :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-430"></span><span>
+</span><span id="line-431"></span><span>  </span><span class="hs-comment">-- | Multiply two expressions (Real numbers).</span><span>
+</span><span id="line-432"></span><span>  </span><span id="local-6989586621679435127"><span class="annot"><span class="annottext">mulRe :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435127"><span class="hs-identifier hs-var hs-var hs-var hs-var">mulRe</span></a></span></span><span> </span><span id="local-6989586621679435126"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435126"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Dbl"><span class="hs-identifier hs-type">Dbl</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435126"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-432"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Dbl"><span class="hs-identifier hs-type">Dbl</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435125"><span class="annot"><span class="annottext">r :: ModelExpr
+</span><span id="line-433"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#Dbl"><span class="hs-identifier hs-type">Dbl</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435125"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435125"><span class="hs-identifier hs-var">r</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435125"><span class="hs-identifier hs-var">r</span></a></span><span>
-</span><span id="line-433"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span id="local-6989586621679435124"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-434"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span id="local-6989586621679435124"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435124"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#ExactDbl"><span class="hs-identifier hs-type">ExactDbl</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435124"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-434"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#ExactDbl"><span class="hs-identifier hs-type">ExactDbl</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435123"><span class="annot"><span class="annottext">r :: ModelExpr
+</span><span id="line-435"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">M.Lit</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Literal.Lang.html#ExactDbl"><span class="hs-identifier hs-type">ExactDbl</span></a></span><span> </span><span class="hs-number">1</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435123"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435123"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435123"><span class="hs-identifier hs-var">r</span></a></span><span>
-</span><span id="line-435"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulRe"><span class="hs-identifier hs-type">M.MulRe</span></a></span><span> </span><span id="local-6989586621679435121"><span class="annot"><span class="annottext">l :: [ModelExpr]
+</span><span id="line-436"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulRe"><span class="hs-identifier hs-type">M.MulRe</span></a></span><span> </span><span id="local-6989586621679435121"><span class="annot"><span class="annottext">l :: [ModelExpr]
 </span><a href="#local-6989586621679435121"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulRe"><span class="hs-identifier hs-type">M.MulRe</span></a></span><span> </span><span id="local-6989586621679435120"><span class="annot"><span class="annottext">r :: [ModelExpr]
 </span><a href="#local-6989586621679435120"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -1041,7 +1042,7 @@ forall a. a -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435120"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-436"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulRe"><span class="hs-identifier hs-type">M.MulRe</span></a></span><span> </span><span id="local-6989586621679435119"><span class="annot"><span class="annottext">l :: [ModelExpr]
+</span><span id="line-437"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulRe"><span class="hs-identifier hs-type">M.MulRe</span></a></span><span> </span><span id="local-6989586621679435119"><span class="annot"><span class="annottext">l :: [ModelExpr]
 </span><a href="#local-6989586621679435119"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679435118"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435118"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -1050,7 +1051,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435118"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-437"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span id="local-6989586621679435117"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-438"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span id="local-6989586621679435117"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435117"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">M.AssocA</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#MulRe"><span class="hs-identifier hs-type">M.MulRe</span></a></span><span> </span><span id="local-6989586621679435116"><span class="annot"><span class="annottext">r :: [ModelExpr]
 </span><a href="#local-6989586621679435116"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
@@ -1059,43 +1060,43 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435116"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-438"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span id="local-6989586621679435115"><span class="annot"><span class="annottext">l :: ModelExpr
+</span><span id="line-439"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#mulRe"><span class="hs-identifier hs-var">mulRe</span></a></span><span> </span><span id="local-6989586621679435115"><span class="annot"><span class="annottext">l :: ModelExpr
 </span><a href="#local-6989586621679435115"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679435114"><span class="annot"><span class="annottext">r :: ModelExpr
 </span><a href="#local-6989586621679435114"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-var">M.AssocA</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
 </span><a href="Language.Drasil.ModelExpr.Lang.html#MulRe"><span class="hs-identifier hs-var">M.MulRe</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435115"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435114"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-439"></span><span>
-</span><span id="line-440"></span><span>  </span><span class="hs-comment">-- | Smart constructor for subtracting two expressions.</span><span>
-</span><span id="line-441"></span><span>  </span><span id="local-6989586621679435113"><span class="annot"><span class="annottext">$- :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-440"></span><span>
+</span><span id="line-441"></span><span>  </span><span class="hs-comment">-- | Smart constructor for subtracting two expressions.</span><span>
+</span><span id="line-442"></span><span>  </span><span id="local-6989586621679435113"><span class="annot"><span class="annottext">$- :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435113"><span class="hs-operator hs-var hs-var hs-var hs-var">($-)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ArithBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-var">M.ArithBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ArithBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Subt"><span class="hs-identifier hs-var">M.Subt</span></a></span><span>
-</span><span id="line-442"></span><span>  </span><span class="hs-comment">-- | Smart constructor for dividing two expressions.</span><span>
-</span><span id="line-443"></span><span>  </span><span id="local-6989586621679435110"><span class="annot"><span class="annottext">$/ :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-443"></span><span>  </span><span class="hs-comment">-- | Smart constructor for dividing two expressions.</span><span>
+</span><span id="line-444"></span><span>  </span><span id="local-6989586621679435110"><span class="annot"><span class="annottext">$/ :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435110"><span class="hs-operator hs-var hs-var hs-var hs-var">($/)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ArithBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-var">M.ArithBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ArithBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Frac"><span class="hs-identifier hs-var">M.Frac</span></a></span><span>
-</span><span id="line-444"></span><span>  </span><span class="hs-comment">-- | Smart constructor for rasing the first expression to the power of the second.</span><span>
-</span><span id="line-445"></span><span>  </span><span id="local-6989586621679435108"><span class="annot"><span class="annottext">$^ :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-445"></span><span>  </span><span class="hs-comment">-- | Smart constructor for rasing the first expression to the power of the second.</span><span>
+</span><span id="line-446"></span><span>  </span><span id="local-6989586621679435108"><span class="annot"><span class="annottext">$^ :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435108"><span class="hs-operator hs-var hs-var hs-var hs-var">($^)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ArithBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-var">M.ArithBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">ArithBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Pow"><span class="hs-identifier hs-var">M.Pow</span></a></span><span>
-</span><span id="line-446"></span><span>
-</span><span id="line-447"></span><span>  </span><span class="hs-comment">-- | Smart constructor to show that one expression implies the other (conditional operator).</span><span>
-</span><span id="line-448"></span><span>  </span><span id="local-6989586621679435106"><span class="annot"><span class="annottext">$=&gt; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-447"></span><span>
+</span><span id="line-448"></span><span>  </span><span class="hs-comment">-- | Smart constructor to show that one expression implies the other (conditional operator).</span><span>
+</span><span id="line-449"></span><span>  </span><span id="local-6989586621679435106"><span class="annot"><span class="annottext">$=&gt; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435106"><span class="hs-operator hs-var hs-var hs-var hs-var">($=&gt;)</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BoolBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#BoolBinaryOp"><span class="hs-identifier hs-var">M.BoolBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">BoolBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Impl"><span class="hs-identifier hs-var">M.Impl</span></a></span><span>
-</span><span id="line-449"></span><span>  </span><span class="hs-comment">-- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).</span><span>
-</span><span id="line-450"></span><span>  </span><span id="local-6989586621679435103"><span class="annot"><span class="annottext">$&lt;=&gt; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-450"></span><span>  </span><span class="hs-comment">-- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).</span><span>
+</span><span id="line-451"></span><span>  </span><span id="local-6989586621679435103"><span class="annot"><span class="annottext">$&lt;=&gt; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435103"><span class="hs-operator hs-var hs-var hs-var hs-var">($&lt;=&gt;)</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BoolBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#BoolBinaryOp"><span class="hs-identifier hs-var">M.BoolBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">BoolBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Iff"><span class="hs-identifier hs-var">M.Iff</span></a></span><span>
-</span><span id="line-451"></span><span>
-</span><span id="line-452"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the boolean /and/ operator.</span><span>
-</span><span id="line-453"></span><span>  </span><span id="local-6989586621679435101"><span class="annot"><span class="annottext">a :: ModelExpr
+</span><span id="line-452"></span><span>
+</span><span id="line-453"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the boolean /and/ operator.</span><span>
+</span><span id="line-454"></span><span>  </span><span id="local-6989586621679435101"><span class="annot"><span class="annottext">a :: ModelExpr
 </span><a href="#local-6989586621679435101"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679435100"><span class="annot"><span class="annottext">$&amp;&amp; :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435100"><span class="hs-operator hs-var hs-var hs-var hs-var">$&amp;&amp;</span></a></span></span><span> </span><span id="local-6989586621679435099"><span class="annot"><span class="annottext">b :: ModelExpr
 </span><a href="#local-6989586621679435099"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocBoolOper -&gt; [ModelExpr] -&gt; ModelExpr
@@ -1103,8 +1104,8 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="Language.Drasil.ModelExpr.Lang.html#And"><span class="hs-identifier hs-var">M.And</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435101"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435099"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-454"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the boolean /or/ operator.</span><span>
-</span><span id="line-455"></span><span>  </span><span id="local-6989586621679435096"><span class="annot"><span class="annottext">a :: ModelExpr
+</span><span id="line-455"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the boolean /or/ operator.</span><span>
+</span><span id="line-456"></span><span>  </span><span id="local-6989586621679435096"><span class="annot"><span class="annottext">a :: ModelExpr
 </span><a href="#local-6989586621679435096"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679435095"><span class="annot"><span class="annottext">$|| :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435095"><span class="hs-operator hs-var hs-var hs-var hs-var">$||</span></a></span></span><span> </span><span id="local-6989586621679435094"><span class="annot"><span class="annottext">b :: ModelExpr
 </span><a href="#local-6989586621679435094"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AssocBoolOper -&gt; [ModelExpr] -&gt; ModelExpr
@@ -1112,134 +1113,134 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Or"><span class="hs-identifier hs-var">M.Or</span></a></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435096"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435094"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-456"></span><span>
-</span><span id="line-457"></span><span>  </span><span class="hs-comment">-- | Smart constructor for taking the absolute value of an expression.</span><span>
-</span><span id="line-458"></span><span>  </span><span id="local-6989586621679435092"><span class="annot"><span class="annottext">abs_ :: ModelExpr -&gt; ModelExpr
+</span><span id="line-457"></span><span>
+</span><span id="line-458"></span><span>  </span><span class="hs-comment">-- | Smart constructor for taking the absolute value of an expression.</span><span>
+</span><span id="line-459"></span><span>  </span><span id="local-6989586621679435092"><span class="annot"><span class="annottext">abs_ :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435092"><span class="hs-identifier hs-var hs-var hs-var hs-var">abs_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Abs"><span class="hs-identifier hs-var">M.Abs</span></a></span><span>
-</span><span id="line-459"></span><span>
-</span><span id="line-460"></span><span>  </span><span class="hs-comment">-- | Smart constructor for negating an expression.</span><span>
-</span><span id="line-461"></span><span>  </span><span id="local-6989586621679435089"><span class="annot"><span class="annottext">neg :: ModelExpr -&gt; ModelExpr
+</span><span id="line-460"></span><span>
+</span><span id="line-461"></span><span>  </span><span class="hs-comment">-- | Smart constructor for negating an expression.</span><span>
+</span><span id="line-462"></span><span>  </span><span id="local-6989586621679435089"><span class="annot"><span class="annottext">neg :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435089"><span class="hs-identifier hs-var hs-var hs-var hs-var">neg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Neg"><span class="hs-identifier hs-var">M.Neg</span></a></span><span>
-</span><span id="line-462"></span><span>
-</span><span id="line-463"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the log of an expression.</span><span>
-</span><span id="line-464"></span><span>  </span><span id="local-6989586621679435087"><span class="annot"><span class="annottext">log :: ModelExpr -&gt; ModelExpr
+</span><span id="line-463"></span><span>
+</span><span id="line-464"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the log of an expression.</span><span>
+</span><span id="line-465"></span><span>  </span><span id="local-6989586621679435087"><span class="annot"><span class="annottext">log :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435087"><span class="hs-identifier hs-var hs-var hs-var hs-var">log</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Log"><span class="hs-identifier hs-var">M.Log</span></a></span><span>
-</span><span id="line-465"></span><span>
-</span><span id="line-466"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the ln of an expression.</span><span>
-</span><span id="line-467"></span><span>  </span><span id="local-6989586621679435085"><span class="annot"><span class="annottext">ln :: ModelExpr -&gt; ModelExpr
+</span><span id="line-466"></span><span>
+</span><span id="line-467"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the ln of an expression.</span><span>
+</span><span id="line-468"></span><span>  </span><span id="local-6989586621679435085"><span class="annot"><span class="annottext">ln :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435085"><span class="hs-identifier hs-var hs-var hs-var hs-var">ln</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Ln"><span class="hs-identifier hs-var">M.Ln</span></a></span><span>
-</span><span id="line-468"></span><span>
-</span><span id="line-469"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the square root of an expression.</span><span>
-</span><span id="line-470"></span><span>  </span><span id="local-6989586621679435083"><span class="annot"><span class="annottext">sqrt :: ModelExpr -&gt; ModelExpr
+</span><span id="line-469"></span><span>
+</span><span id="line-470"></span><span>  </span><span class="hs-comment">-- | Smart constructor to take the square root of an expression.</span><span>
+</span><span id="line-471"></span><span>  </span><span id="local-6989586621679435083"><span class="annot"><span class="annottext">sqrt :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435083"><span class="hs-identifier hs-var hs-var hs-var hs-var">sqrt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Sqrt"><span class="hs-identifier hs-var">M.Sqrt</span></a></span><span>
-</span><span id="line-471"></span><span>
-</span><span id="line-472"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply sin to an expression.</span><span>
-</span><span id="line-473"></span><span>  </span><span id="local-6989586621679435081"><span class="annot"><span class="annottext">sin :: ModelExpr -&gt; ModelExpr
+</span><span id="line-472"></span><span>
+</span><span id="line-473"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply sin to an expression.</span><span>
+</span><span id="line-474"></span><span>  </span><span id="local-6989586621679435081"><span class="annot"><span class="annottext">sin :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435081"><span class="hs-identifier hs-var hs-var hs-var hs-var">sin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Sin"><span class="hs-identifier hs-var">M.Sin</span></a></span><span>
-</span><span id="line-474"></span><span>
-</span><span id="line-475"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply cos to an expression.</span><span>
-</span><span id="line-476"></span><span>  </span><span id="local-6989586621679435079"><span class="annot"><span class="annottext">cos :: ModelExpr -&gt; ModelExpr
+</span><span id="line-475"></span><span>
+</span><span id="line-476"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply cos to an expression.</span><span>
+</span><span id="line-477"></span><span>  </span><span id="local-6989586621679435079"><span class="annot"><span class="annottext">cos :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435079"><span class="hs-identifier hs-var hs-var hs-var hs-var">cos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Cos"><span class="hs-identifier hs-var">M.Cos</span></a></span><span>
-</span><span id="line-477"></span><span>
-</span><span id="line-478"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply tan to an expression.</span><span>
-</span><span id="line-479"></span><span>  </span><span id="local-6989586621679435077"><span class="annot"><span class="annottext">tan :: ModelExpr -&gt; ModelExpr
+</span><span id="line-478"></span><span>
+</span><span id="line-479"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply tan to an expression.</span><span>
+</span><span id="line-480"></span><span>  </span><span id="local-6989586621679435077"><span class="annot"><span class="annottext">tan :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435077"><span class="hs-identifier hs-var hs-var hs-var hs-var">tan</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Tan"><span class="hs-identifier hs-var">M.Tan</span></a></span><span>
-</span><span id="line-480"></span><span>
-</span><span id="line-481"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply sec to an expression.</span><span>
-</span><span id="line-482"></span><span>  </span><span id="local-6989586621679435075"><span class="annot"><span class="annottext">sec :: ModelExpr -&gt; ModelExpr
+</span><span id="line-481"></span><span>
+</span><span id="line-482"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply sec to an expression.</span><span>
+</span><span id="line-483"></span><span>  </span><span id="local-6989586621679435075"><span class="annot"><span class="annottext">sec :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435075"><span class="hs-identifier hs-var hs-var hs-var hs-var">sec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Sec"><span class="hs-identifier hs-var">M.Sec</span></a></span><span>
-</span><span id="line-483"></span><span>
-</span><span id="line-484"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply csc to an expression.</span><span>
-</span><span id="line-485"></span><span>  </span><span id="local-6989586621679435073"><span class="annot"><span class="annottext">csc :: ModelExpr -&gt; ModelExpr
+</span><span id="line-484"></span><span>
+</span><span id="line-485"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply csc to an expression.</span><span>
+</span><span id="line-486"></span><span>  </span><span id="local-6989586621679435073"><span class="annot"><span class="annottext">csc :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435073"><span class="hs-identifier hs-var hs-var hs-var hs-var">csc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Csc"><span class="hs-identifier hs-var">M.Csc</span></a></span><span>
-</span><span id="line-486"></span><span>
-</span><span id="line-487"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply cot to an expression.</span><span>
-</span><span id="line-488"></span><span>  </span><span id="local-6989586621679435071"><span class="annot"><span class="annottext">cot :: ModelExpr -&gt; ModelExpr
+</span><span id="line-487"></span><span>
+</span><span id="line-488"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply cot to an expression.</span><span>
+</span><span id="line-489"></span><span>  </span><span id="local-6989586621679435071"><span class="annot"><span class="annottext">cot :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435071"><span class="hs-identifier hs-var hs-var hs-var hs-var">cot</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Cot"><span class="hs-identifier hs-var">M.Cot</span></a></span><span>
-</span><span id="line-489"></span><span>
-</span><span id="line-490"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arcsin to an expression.</span><span>
-</span><span id="line-491"></span><span>  </span><span id="local-6989586621679435069"><span class="annot"><span class="annottext">arcsin :: ModelExpr -&gt; ModelExpr
+</span><span id="line-490"></span><span>
+</span><span id="line-491"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arcsin to an expression.</span><span>
+</span><span id="line-492"></span><span>  </span><span id="local-6989586621679435069"><span class="annot"><span class="annottext">arcsin :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435069"><span class="hs-identifier hs-var hs-var hs-var hs-var">arcsin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Arcsin"><span class="hs-identifier hs-var">M.Arcsin</span></a></span><span>
-</span><span id="line-492"></span><span>
-</span><span id="line-493"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arccos to an expression.</span><span>
-</span><span id="line-494"></span><span>  </span><span id="local-6989586621679435067"><span class="annot"><span class="annottext">arccos :: ModelExpr -&gt; ModelExpr
+</span><span id="line-493"></span><span>
+</span><span id="line-494"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arccos to an expression.</span><span>
+</span><span id="line-495"></span><span>  </span><span id="local-6989586621679435067"><span class="annot"><span class="annottext">arccos :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435067"><span class="hs-identifier hs-var hs-var hs-var hs-var">arccos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Arccos"><span class="hs-identifier hs-var">M.Arccos</span></a></span><span>
-</span><span id="line-495"></span><span>
-</span><span id="line-496"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arctan to an expression.</span><span>
-</span><span id="line-497"></span><span>  </span><span id="local-6989586621679435065"><span class="annot"><span class="annottext">arctan :: ModelExpr -&gt; ModelExpr
+</span><span id="line-496"></span><span>
+</span><span id="line-497"></span><span>  </span><span class="hs-comment">-- | Smart constructor to apply arctan to an expression.</span><span>
+</span><span id="line-498"></span><span>  </span><span id="local-6989586621679435065"><span class="annot"><span class="annottext">arctan :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435065"><span class="hs-identifier hs-var hs-var hs-var hs-var">arctan</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Arctan"><span class="hs-identifier hs-var">M.Arctan</span></a></span><span>
-</span><span id="line-498"></span><span>
-</span><span id="line-499"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the exponential (base e) function.</span><span>
-</span><span id="line-500"></span><span>  </span><span id="local-6989586621679435063"><span class="annot"><span class="annottext">exp :: ModelExpr -&gt; ModelExpr
+</span><span id="line-499"></span><span>
+</span><span id="line-500"></span><span>  </span><span class="hs-comment">-- | Smart constructor for the exponential (base e) function.</span><span>
+</span><span id="line-501"></span><span>  </span><span id="local-6989586621679435063"><span class="annot"><span class="annottext">exp :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435063"><span class="hs-identifier hs-var hs-var hs-var hs-var">exp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-var">M.UnaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Exp"><span class="hs-identifier hs-var">M.Exp</span></a></span><span>
-</span><span id="line-501"></span><span>
-</span><span id="line-502"></span><span>  </span><span class="hs-comment">-- | Smart constructor for calculating the dimension of a vector.</span><span>
-</span><span id="line-503"></span><span>  </span><span id="local-6989586621679435061"><span class="annot"><span class="annottext">dim :: ModelExpr -&gt; ModelExpr
+</span><span id="line-502"></span><span>
+</span><span id="line-503"></span><span>  </span><span class="hs-comment">-- | Smart constructor for calculating the dimension of a vector.</span><span>
+</span><span id="line-504"></span><span>  </span><span id="local-6989586621679435061"><span class="annot"><span class="annottext">dim :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435061"><span class="hs-identifier hs-var hs-var hs-var hs-var">dim</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFuncVN -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-var">M.UnaryOpVN</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVN
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Dim"><span class="hs-identifier hs-var">M.Dim</span></a></span><span>
-</span><span id="line-504"></span><span>
-</span><span id="line-505"></span><span>  </span><span class="hs-comment">-- | Smart constructor for calculating the normal form of a vector.</span><span>
-</span><span id="line-506"></span><span>  </span><span id="local-6989586621679435058"><span class="annot"><span class="annottext">norm :: ModelExpr -&gt; ModelExpr
+</span><span id="line-505"></span><span>
+</span><span id="line-506"></span><span>  </span><span class="hs-comment">-- | Smart constructor for calculating the normal form of a vector.</span><span>
+</span><span id="line-507"></span><span>  </span><span id="local-6989586621679435058"><span class="annot"><span class="annottext">norm :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435058"><span class="hs-identifier hs-var hs-var hs-var hs-var">norm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFuncVN -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-var">M.UnaryOpVN</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVN
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Norm"><span class="hs-identifier hs-var">M.Norm</span></a></span><span>
-</span><span id="line-507"></span><span>
-</span><span id="line-508"></span><span>  </span><span class="hs-comment">-- | Smart constructor for negating vectors.</span><span>
-</span><span id="line-509"></span><span>  </span><span id="local-6989586621679435056"><span class="annot"><span class="annottext">negVec :: ModelExpr -&gt; ModelExpr
+</span><span id="line-508"></span><span>
+</span><span id="line-509"></span><span>  </span><span class="hs-comment">-- | Smart constructor for negating vectors.</span><span>
+</span><span id="line-510"></span><span>  </span><span id="local-6989586621679435056"><span class="annot"><span class="annottext">negVec :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435056"><span class="hs-identifier hs-var hs-var hs-var hs-var">negVec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFuncVV -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVV"><span class="hs-identifier hs-var">M.UnaryOpVV</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVV
 </span><a href="Language.Drasil.ModelExpr.Lang.html#NegV"><span class="hs-identifier hs-var">M.NegV</span></a></span><span>
-</span><span id="line-510"></span><span>  </span><span class="hs-comment">-- | More general scaling</span><span>
-</span><span id="line-511"></span><span>  </span><span id="local-6989586621679435053"><span class="annot"><span class="annottext">vScale :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-511"></span><span>  </span><span class="hs-comment">-- | More general scaling</span><span>
+</span><span id="line-512"></span><span>  </span><span id="local-6989586621679435053"><span class="annot"><span class="annottext">vScale :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435053"><span class="hs-identifier hs-var hs-var hs-var hs-var">vScale</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NVVBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#NVVBinaryOp"><span class="hs-identifier hs-var">M.NVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">NVVBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Scale"><span class="hs-identifier hs-var">M.Scale</span></a></span><span>
-</span><span id="line-512"></span><span>
-</span><span id="line-513"></span><span>  </span><span class="hs-comment">-- | Smart constructor for applying logical negation to an expression.</span><span>
-</span><span id="line-514"></span><span>  </span><span id="local-6989586621679435050"><span class="annot"><span class="annottext">not_ :: ModelExpr -&gt; ModelExpr
+</span><span id="line-513"></span><span>
+</span><span id="line-514"></span><span>  </span><span class="hs-comment">-- | Smart constructor for applying logical negation to an expression.</span><span>
+</span><span id="line-515"></span><span>  </span><span id="local-6989586621679435050"><span class="annot"><span class="annottext">not_ :: ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435050"><span class="hs-identifier hs-var hs-var hs-var hs-var">not_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UFuncB -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpB"><span class="hs-identifier hs-var">M.UnaryOpB</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncB
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Not"><span class="hs-identifier hs-var">M.Not</span></a></span><span>
-</span><span id="line-515"></span><span>
-</span><span id="line-516"></span><span>  </span><span class="hs-comment">-- | Smart constructor for indexing.</span><span>
-</span><span id="line-517"></span><span>  </span><span id="local-6989586621679435047"><span class="annot"><span class="annottext">idx :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-516"></span><span>
+</span><span id="line-517"></span><span>  </span><span class="hs-comment">-- | Smart constructor for indexing.</span><span>
+</span><span id="line-518"></span><span>  </span><span id="local-6989586621679435047"><span class="annot"><span class="annottext">idx :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435047"><span class="hs-identifier hs-var hs-var hs-var hs-var">idx</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LABinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-var">M.LABinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">LABinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Index"><span class="hs-identifier hs-var">M.Index</span></a></span><span>
-</span><span id="line-518"></span><span>
-</span><span id="line-519"></span><span>  </span><span class="hs-comment">-- | Integrate over some expression with bounds (&#8747;).</span><span>
-</span><span id="line-520"></span><span>  </span><span id="local-6989586621679435044"><span class="annot"><span class="annottext">defint :: Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-519"></span><span>
+</span><span id="line-520"></span><span>  </span><span class="hs-comment">-- | Integrate over some expression with bounds (&#8747;).</span><span>
+</span><span id="line-521"></span><span>  </span><span id="local-6989586621679435044"><span class="annot"><span class="annottext">defint :: Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435044"><span class="hs-identifier hs-var hs-var hs-var hs-var">defint</span></a></span></span><span> </span><span id="local-6989586621679435043"><span class="annot"><span class="annottext">v :: Symbol
 </span><a href="#local-6989586621679435043"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span id="local-6989586621679435042"><span class="annot"><span class="annottext">low :: ModelExpr
 </span><a href="#local-6989586621679435042"><span class="hs-identifier hs-var">low</span></a></span></span><span> </span><span id="local-6989586621679435041"><span class="annot"><span class="annottext">high :: ModelExpr
@@ -1263,9 +1264,9 @@ Symbol -&gt; RTopology -&gt; a -&gt; b -&gt; DomainDesc 'Discrete a b
 </span><a href="Language.Drasil.Space.html#Continuous"><span class="hs-identifier hs-var">Continuous</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435042"><span class="hs-identifier hs-var">low</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435041"><span class="hs-identifier hs-var">high</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-521"></span><span>
-</span><span id="line-522"></span><span>  </span><span class="hs-comment">-- | Sum over some expression with bounds (&#8721;).</span><span>
-</span><span id="line-523"></span><span>  </span><span id="local-6989586621679435039"><span class="annot"><span class="annottext">defsum :: Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-522"></span><span>
+</span><span id="line-523"></span><span>  </span><span class="hs-comment">-- | Sum over some expression with bounds (&#8721;).</span><span>
+</span><span id="line-524"></span><span>  </span><span id="local-6989586621679435039"><span class="annot"><span class="annottext">defsum :: Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435039"><span class="hs-identifier hs-var hs-var hs-var hs-var">defsum</span></a></span></span><span> </span><span id="local-6989586621679435038"><span class="annot"><span class="annottext">v :: Symbol
 </span><a href="#local-6989586621679435038"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span id="local-6989586621679435037"><span class="annot"><span class="annottext">low :: ModelExpr
 </span><a href="#local-6989586621679435037"><span class="hs-identifier hs-var">low</span></a></span></span><span> </span><span id="local-6989586621679435036"><span class="annot"><span class="annottext">high :: ModelExpr
@@ -1289,9 +1290,9 @@ Symbol -&gt; RTopology -&gt; a -&gt; b -&gt; DomainDesc 'Discrete a b
 </span><a href="Language.Drasil.Space.html#Discrete"><span class="hs-identifier hs-var">Discrete</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435037"><span class="hs-identifier hs-var">low</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435036"><span class="hs-identifier hs-var">high</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-524"></span><span>
-</span><span id="line-525"></span><span>  </span><span class="hs-comment">-- | Product over some expression with bounds (&#8719;).</span><span>
-</span><span id="line-526"></span><span>  </span><span id="local-6989586621679435035"><span class="annot"><span class="annottext">defprod :: Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-525"></span><span>
+</span><span id="line-526"></span><span>  </span><span class="hs-comment">-- | Product over some expression with bounds (&#8719;).</span><span>
+</span><span id="line-527"></span><span>  </span><span id="local-6989586621679435035"><span class="annot"><span class="annottext">defprod :: Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435035"><span class="hs-identifier hs-var hs-var hs-var hs-var">defprod</span></a></span></span><span> </span><span id="local-6989586621679435034"><span class="annot"><span class="annottext">v :: Symbol
 </span><a href="#local-6989586621679435034"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span id="local-6989586621679435033"><span class="annot"><span class="annottext">low :: ModelExpr
 </span><a href="#local-6989586621679435033"><span class="hs-identifier hs-var">low</span></a></span></span><span> </span><span id="local-6989586621679435032"><span class="annot"><span class="annottext">high :: ModelExpr
@@ -1315,9 +1316,9 @@ Symbol -&gt; RTopology -&gt; a -&gt; b -&gt; DomainDesc 'Discrete a b
 </span><a href="Language.Drasil.Space.html#Discrete"><span class="hs-identifier hs-var">Discrete</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435033"><span class="hs-identifier hs-var">low</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="#local-6989586621679435032"><span class="hs-identifier hs-var">high</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-527"></span><span>
-</span><span id="line-528"></span><span>  </span><span class="hs-comment">-- | Smart constructor for 'real interval' membership.</span><span>
-</span><span id="line-529"></span><span>  </span><span id="local-6989586621679435031"><span class="annot"><span class="annottext">realInterval :: c -&gt; RealInterval ModelExpr ModelExpr -&gt; ModelExpr
+</span><span id="line-528"></span><span>
+</span><span id="line-529"></span><span>  </span><span class="hs-comment">-- | Smart constructor for 'real interval' membership.</span><span>
+</span><span id="line-530"></span><span>  </span><span id="local-6989586621679435031"><span class="annot"><span class="annottext">realInterval :: c -&gt; RealInterval ModelExpr ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435031"><span class="hs-identifier hs-var hs-var hs-var hs-var">realInterval</span></a></span></span><span> </span><span id="local-6989586621679435030"><span class="annot"><span class="annottext">c :: c
 </span><a href="#local-6989586621679435030"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; RealInterval ModelExpr ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#RealI"><span class="hs-identifier hs-var">M.RealI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c
@@ -1326,9 +1327,9 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID c UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-530"></span><span>
-</span><span id="line-531"></span><span>  </span><span class="hs-comment">-- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.</span><span>
-</span><span id="line-532"></span><span>  </span><span id="local-6989586621679435028"><span class="annot"><span class="annottext">euclidean :: [ModelExpr] -&gt; ModelExpr
+</span><span id="line-531"></span><span>
+</span><span id="line-532"></span><span>  </span><span class="hs-comment">-- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.</span><span>
+</span><span id="line-533"></span><span>  </span><span id="local-6989586621679435028"><span class="annot"><span class="annottext">euclidean :: [ModelExpr] -&gt; ModelExpr
 </span><a href="#local-6989586621679435028"><span class="hs-identifier hs-var hs-var hs-var hs-var">euclidean</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#sqrt"><span class="hs-identifier hs-var">sqrt</span></a></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; ModelExpr)
@@ -1346,37 +1347,37 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#square"><span class="hs-identifier hs-var">square</span></a></span><span>
-</span><span id="line-533"></span><span>
-</span><span id="line-534"></span><span>  </span><span class="hs-comment">-- | Smart constructor to cross product two expressions.</span><span>
-</span><span id="line-535"></span><span>  </span><span id="local-6989586621679435027"><span class="annot"><span class="annottext">cross :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-534"></span><span>
+</span><span id="line-535"></span><span>  </span><span class="hs-comment">-- | Smart constructor to cross product two expressions.</span><span>
+</span><span id="line-536"></span><span>  </span><span id="local-6989586621679435027"><span class="annot"><span class="annottext">cross :: ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="#local-6989586621679435027"><span class="hs-identifier hs-var hs-var hs-var hs-var">cross</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VVVBinOp -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-var">M.VVVBinaryOp</span></a></span><span> </span><span class="annot"><span class="annottext">VVVBinOp
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Cross"><span class="hs-identifier hs-var">M.Cross</span></a></span><span>
-</span><span id="line-536"></span><span>
-</span><span id="line-537"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with a complete set of cases.</span><span>
-</span><span id="line-538"></span><span>  </span><span id="local-6989586621679435024"><span class="annot"><span class="annottext">completeCase :: [(ModelExpr, ModelExpr)] -&gt; ModelExpr
+</span><span id="line-537"></span><span>
+</span><span id="line-538"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with a complete set of cases.</span><span>
+</span><span id="line-539"></span><span>  </span><span id="local-6989586621679435024"><span class="annot"><span class="annottext">completeCase :: [(ModelExpr, ModelExpr)] -&gt; ModelExpr
 </span><a href="#local-6989586621679435024"><span class="hs-identifier hs-var hs-var hs-var hs-var">completeCase</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Completeness -&gt; [(ModelExpr, ModelExpr)] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Case"><span class="hs-identifier hs-var">M.Case</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness
 </span><a href="Language.Drasil.Expr.Lang.html#Complete"><span class="hs-identifier hs-var">Complete</span></a></span><span>
-</span><span id="line-539"></span><span>
-</span><span id="line-540"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with an incomplete set of cases.</span><span>
-</span><span id="line-541"></span><span>  </span><span id="local-6989586621679435022"><span class="annot"><span class="annottext">incompleteCase :: [(ModelExpr, ModelExpr)] -&gt; ModelExpr
+</span><span id="line-540"></span><span>
+</span><span id="line-541"></span><span>  </span><span class="hs-comment">-- | Smart constructor for case statements with an incomplete set of cases.</span><span>
+</span><span id="line-542"></span><span>  </span><span id="local-6989586621679435022"><span class="annot"><span class="annottext">incompleteCase :: [(ModelExpr, ModelExpr)] -&gt; ModelExpr
 </span><a href="#local-6989586621679435022"><span class="hs-identifier hs-var hs-var hs-var hs-var">incompleteCase</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Completeness -&gt; [(ModelExpr, ModelExpr)] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Case"><span class="hs-identifier hs-var">M.Case</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness
 </span><a href="Language.Drasil.Expr.Lang.html#Incomplete"><span class="hs-identifier hs-var">Incomplete</span></a></span><span>
-</span><span id="line-542"></span><span>
-</span><span id="line-543"></span><span>  </span><span id="local-6989586621679435021"><span class="annot"><span class="annottext">matrix :: [[ModelExpr]] -&gt; ModelExpr
+</span><span id="line-543"></span><span>
+</span><span id="line-544"></span><span>  </span><span id="local-6989586621679435021"><span class="annot"><span class="annottext">matrix :: [[ModelExpr]] -&gt; ModelExpr
 </span><a href="#local-6989586621679435021"><span class="hs-identifier hs-var hs-var hs-var hs-var">matrix</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[ModelExpr]] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Matrix"><span class="hs-identifier hs-var">M.Matrix</span></a></span><span>
-</span><span id="line-544"></span><span>
-</span><span id="line-545"></span><span>  </span><span class="hs-comment">-- | Applies a given function with a list of parameters.</span><span>
-</span><span id="line-546"></span><span>  </span><span id="local-6989586621679435019"><span class="annot"><span class="annottext">apply :: f -&gt; [ModelExpr] -&gt; ModelExpr
+</span><span id="line-545"></span><span>
+</span><span id="line-546"></span><span>  </span><span class="hs-comment">-- | Applies a given function with a list of parameters.</span><span>
+</span><span id="line-547"></span><span>  </span><span id="local-6989586621679435019"><span class="annot"><span class="annottext">apply :: f -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="#local-6989586621679435019"><span class="hs-identifier hs-var hs-var hs-var hs-var">apply</span></a></span></span><span> </span><span id="local-6989586621679435018"><span class="annot"><span class="annottext">f :: f
 </span><a href="#local-6989586621679435018"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">f -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Language.Drasil.Expr.Class.html#sy"><span class="hs-identifier hs-var">sy</span></a></span><span> </span><span class="annot"><span class="annottext">f
 </span><a href="#local-6989586621679435018"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-547"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#apply"><span class="hs-identifier hs-var">apply</span></a></span><span> </span><span id="local-6989586621679435017"><span class="annot"><span class="annottext">f :: f
+</span><span id="line-548"></span><span>  </span><span class="annot"><a href="Language.Drasil.Expr.Class.html#apply"><span class="hs-identifier hs-var">apply</span></a></span><span> </span><span id="local-6989586621679435017"><span class="annot"><span class="annottext">f :: f
 </span><a href="#local-6989586621679435017"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679435016"><span class="annot"><span class="annottext">ps :: [ModelExpr]
 </span><a href="#local-6989586621679435016"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; [ModelExpr] -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#FCall"><span class="hs-identifier hs-var">M.FCall</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">f
@@ -1386,10 +1387,10 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="#local-6989586621679435016"><span class="hs-identifier hs-var">ps</span></a></span><span>
-</span><span id="line-548"></span><span>
-</span><span id="line-549"></span><span>  </span><span class="hs-comment">-- Note how |sy| 'enforces' having a symbol</span><span>
-</span><span id="line-550"></span><span>  </span><span class="hs-comment">-- | Create an 'Expr' from a 'Symbol'ic Chunk.</span><span>
-</span><span id="line-551"></span><span>  </span><span id="local-6989586621679435014"><span class="annot"><span class="annottext">sy :: c -&gt; ModelExpr
+</span><span id="line-549"></span><span>
+</span><span id="line-550"></span><span>  </span><span class="hs-comment">-- Note how |sy| 'enforces' having a symbol</span><span>
+</span><span id="line-551"></span><span>  </span><span class="hs-comment">-- | Create an 'Expr' from a 'Symbol'ic Chunk.</span><span>
+</span><span id="line-552"></span><span>  </span><span id="local-6989586621679435014"><span class="annot"><span class="annottext">sy :: c -&gt; ModelExpr
 </span><a href="#local-6989586621679435014"><span class="hs-identifier hs-var hs-var hs-var hs-var">sy</span></a></span></span><span> </span><span id="local-6989586621679435013"><span class="annot"><span class="annottext">x :: c
 </span><a href="#local-6989586621679435013"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#C"><span class="hs-identifier hs-var">M.C</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c
@@ -1398,4 +1399,4 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID c UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-552"></span></pre></body></html>
+</span><span id="line-553"></span></pre></body></html>

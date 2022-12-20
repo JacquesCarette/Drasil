@@ -7,19 +7,18 @@ generating \ACF{scs} following the requirements described in an abstract
 categories, and the abstracted variant of the template makes it digestible for
 Drasil. A series of \acsp{dsl} are used to ``fill in'' the template, from which
 Drasil is able to interpret an instance of, and configure a generation procedure
-to generate software. The depth of knowledge contained in the template's
-theories is key to understanding to what end we can interpret and use the
-instantiated theories. To begin strengthening this depth, we create a structure
-that concretely outlines Drasil's currently encoded theory kinds, allowing us to
-create more domain-specific interpretation opportunities for them. Similarly,
-each theory kind contains a particular subset of mathematical language that is
-relevant to them, and we act on this information to restrict usable expression
-terms to their related contexts. To further enrich the admissibility of
-expressions, we also make one of the most critical subsets, that for concrete
-theory transcription, type-safe by building a bidirectional type-checker. The
-type-checker shows considerable success, highlighting expressions violating a
-defined set of type rules. Finally, as Drasil relies on a plethora of different
-types of knowledge, it needs a place to store them. Thus, we create a system to
-store any instance of any type of knowledge in Drasil's memory bank of
-knowledge, and enforce a basic set of requirements that each type of knowledge
-must satisfy.
+to generate software. The template's theory encodings contain a shallow depth of
+knowledge, limiting how many ways we can interpret them. To begin strengthening
+this depth, we create a structure that concretely outlines Drasil's currently
+encoded theory kinds, allowing us to create more domain-specific interpretation
+opportunities for them. Similarly, each theory kind contains a particular subset
+of mathematical language that is relevant to them, and we act on this
+information to restrict usable expression terms to their related contexts. To
+further enrich the admissibility of expressions, we also make one of the most
+critical subsets, that for concrete theory transcription, type-safe by building
+a bidirectional type-checker and system of type rules. The type-checker shows
+considerable success highlighting previously undiscovered instances of ill-typed
+expressions in Drasil's case studies. Finally, as Drasil relies on a plethora of
+different types of knowledge, it needs a place to store them. Thus, we create a
+system to store any instance of any type of knowledge in Drasil's memory bank of
+knowledge by creating a universal type carrier.

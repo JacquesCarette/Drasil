@@ -1,15 +1,16 @@
 \chapter{Lay Abstract}
 \label{chap:lay_abstract}
 
-Drasil is a program for breaking up your ideas into small, reusable, pieces, and
-explaining how your ideas relate to each other and can ultimately be used to
-systematically produce other programs, similar to an assembly line. Focusing on
-building \ACF{scs}, Drasil uses a well-understood dissection of \acs{scs} using
-a \ACF{srs} template to provide users with a means of explaining their
-scientific problems using a common, shared language that Drasil programmers have
-already built. In this work, we contribute to Drasil, focusing on 4 areas: (1)
-allowing users of Drasil to encode more kinds of theories in Drasil and the
-\acs{srs} templates, (2) dividing up the mathematical expression language for
-usage in different contexts, (3) creating a system of rules that explain which
-mathematical expressions are valid and understandable, and (4) unlock Drasil's
-ability to store more kinds of idea in Drasil and easily add more kinds.
+Drasil is a framework for generating software artifacts, such as code and
+documentation, that has great potential for improving software quality. Drasil
+focuses on generating \ACF{scs} from a \ACF{srs} template where it has been
+shown to improve software traceability, verifiability, and reproducibility, and
+knowledge reusability. However, Drasil faces issues with using inputted
+scientific theories for code generation, handling invalid mathematical
+expressions, and carrying all the different types of data we want to input into
+it. This work focuses on 4 areas in Drasil to help it realize its full
+potential: (1) making theories more usable for code generation by defining their
+structure, (2) splitting up the expression language so that we can restrict
+terms to specific contexts (such as code, computation, and general discussion),
+(3) create a system of type rules and automatically check certain expressions
+against them, and (4) unlock Drasil's database to store all kinds of data.

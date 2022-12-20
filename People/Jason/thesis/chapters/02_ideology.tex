@@ -1,6 +1,6 @@
 \chapter[Ideology]{Ideology\footnotemark}
 \footnotetext{Or, at least, my understanding of a software development ideology
-    I believe to be relevant to this work.}
+    I believe to be relevant to this work and Drasil.}
 \label{chap:ideology}
 
 ``Generation'' is at the heart of this work. However, unlike GitHub and OpenAI's
@@ -10,11 +10,11 @@ on capturing the meaning of specific subsets of language to generate software
 artifacts through description of their requirements. In other words, we focus on
 encoding the important bits of information that we use to discuss requirements
 of software and how they relate to the software artifacts we would normally
-manually write. Succinctly, we focus on capturing knowledge through codifying
-well-understood fragments with \acsp{dsl}, which we use to improve
-\textit{reusability} and \textit{maintainability} of software by improving
-knowledge sharing and usability, and creating a more \textit{harmonious
-relationship} between our \textit{knowledge} and \textit{software artifacts}.
+manually write. We focus on capturing knowledge through codifying
+well-understood fragments with \acsp{dsl} to capture the \textit{harmonious
+relationship} between \textit{knowledge} and \textit{software artifacts} to
+improve software \textit{maintainability} and knowledge \textit{communication}
+and \textit{reusability}.
 
 \section{On Developing Software}
 \label{chap:ideology:sec:on_developing_software}
@@ -158,9 +158,9 @@ achieving language-agnostic reusability, focusing on sharing meanings and
 families of problems rather than solutions. Thus, by focusing on generating from
 meaningful descriptions, we obtain \textit{knowledge reusability} (as opposed to
 \textit{code} reusability), and increased software \textit{maintainability},
-\textit{reliability}, and \textit{traceability}. Of course, ``generating
-everything'' appears grandiose, and, perhaps, reductive or ignorant of many
-difficulties in software development. Thus, we must discuss
+\textit{reliability}, and \textit{traceability}. Of course, generating all
+software artifacts appears grandiose, and, perhaps, reductive or ignorant of
+many difficulties in software development. Thus, we must discuss
 feasibility\footnote{You may skip the remainder of this chapter if you so wish,
 it is not strictly required to understand the rest of my work, but it doesn't
 hurt.}.
@@ -186,16 +186,16 @@ knowledge we have in a wide variety of subjects and domains.
 In some sense, at the lowest depth and narrowest breadth of knowledge capture,
 we aren't really capturing any meaning. Rather, we are programming our software
 artifacts directly. Hence, this area is already very feasible, evidenced by the
-usefulness of software today and the way it was made.
+usefulness of software in usage today, and the way said software was made.
 
-\subsubsection{Shallow Waters: Low Depth \& Narrow Breadth}
+\subsubsection{Low Depth \& Narrow Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:low}
 
-At a shallow depth and relatively narrow breadth of knowledge capture, this
-paradigm is very practical, and already heavily used. Widely used \ACFP{cms},
-such as WordPress \cite{WordPress} and Drupal \cite{Drupal}, and web frameworks,
-such as Django \cite{Django} and Laravel \cite{Laravel}, are arguably also
-following similar ideals as this ideology. Notably, they \textit{deeply embed}
+At a shallow depth and narrow breadth of knowledge capture, this paradigm is
+very practical, and already heavily used. Widely used \ACFP{cms}, such as
+WordPress \cite{WordPress} and Drupal \cite{Drupal}, and web frameworks, such as
+Django \cite{Django} and Laravel \cite{Laravel}, are arguably also following
+similar ideals as this ideology. Notably, they \textit{deeply embed}
 \cite{Carette2009} knowledge in their frameworks and libraries using their host
 programming languages basic features. They all typically provide a basic
 understanding of ``user's'' of a hosted website, facilities to write \acs{html}
@@ -221,7 +221,7 @@ shallow in this area, but still, highly feasible. In some sense, almost any
 individual instance of ``generation'' is an area of low depth and breadth as
 well.
 
-\subsubsection{Specialization: Deep Depth \& Narrow Breadth}
+\subsubsection{Specialized Tools: Deep Depth \& Narrow Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:specialization}
 
 We might think of software that captures deep knowledge about a specific topic
@@ -239,7 +239,7 @@ about grammars and allow users to generate specialized parsers for them. When
 needed, specialty tools provide greater functionality than general-purpose
 programming languages for solving specific problems.
 
-\subsubsection{A Wide But Shallow Reaching Net: Low Depth \& Wide Breadth}
+\subsubsection{Off-the-shelf Solutions: Low Depth \& Wide Breadth}
 \label{chap:ideology:sec:thoughts_of_generation:subsec:feasibility:subsubsec:modelling}
 
 Orthogonal to the ``specialized tools,'' a capture of low depth and wide breadth

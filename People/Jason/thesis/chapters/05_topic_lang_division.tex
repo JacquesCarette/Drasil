@@ -63,7 +63,8 @@ choices (such as choosing what representation of integers, reals, etc. to use in
 a potential translation into a program). This is where \Expr{} shows that it is
 a bit of a double-edged sword. For example, we can re-write the expression used
 in \Cref{lst:pseudoExampleExpressionAsQDefinition} using a trigonometric
-integral (e.g., $y = \int \frac{3}{\cos^2(x)}dx$,
+integral (e.g., using \(\tan{}(x) + C = \int \frac{1}{\cos^2(x)}dx\)
+\cite{Math2Org}, we obtain \(y = \int \frac{3}{\cos^2(x)}dx\) using \(C = 0\),
 \Cref{lst:pseudoExampleExpressionAsQDefinitionBad}), but then the transformation
 into a naive set of steps to follow isn't as simple.
 
@@ -74,8 +75,8 @@ theQDef = mkQuantDef y (integAll (eqSymb x) (dbl 3 $/ (cos (x) $^ int 2)))
 
 With \Cref{lst:pseudoExampleExpressionAsQDefinitionBad}, which solution to use
 isn't clear. Should Drasil generate something to solve the integral? Should
-Drasil re-write the integral using $\tan$? How would it recognize to convert it
-into $\tan$ without running into a similar problem as \relToQD{}
+Drasil replace the integral with the original $\tan$? How would it recognize to
+convert it into $\tan$ without running into a similar problem as \relToQD{}
 (\Cref{chap:modelkinds})? Should we expect the target generated languages to
 have functionality for solving any integral we give it?
 

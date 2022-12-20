@@ -115,7 +115,11 @@ chunks are used to fill in the ``gaps'' of the \acs{srs} template. For example,
 if we wanted to encode a variable, \(\hat{q}_{\text{tol}}\), representing a real
 number, ``Tolerable load,'' we might write it as
 \refOriginalQuantityDictExampleHaskell{}, where it is of type \QuantityDict{}
-(\refOriginalQuantityDictHaskell{}), the type of variable encodings.
+(\refOriginalQuantityDictHaskell{}\footnote{Note that \IdeaDict{}, \Space{},
+\Symbol{} (for all \Stage{}s), and \UnitDefn{} are coupled together to create
+the quantity. The components respectively define the term, type, symbol
+(dependent on the usage context [equational or software implementation]), and
+unit of the quantity.}), the type of variable encodings.
 
 \originalQuantityDictExampleHaskell{}
 

@@ -310,6 +310,8 @@ Perc :: Ops
 LArrow :: Ops
 RArrow :: Ops
 ForAll :: Ops
+VAdd :: Ops
+VSub :: Ops
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence

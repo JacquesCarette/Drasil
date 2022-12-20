@@ -722,9 +722,11 @@ data StatBinOp
 Defines :: StatBinOp
 
 -- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
+--   product, vector addition, subtraction).
 data VVVBinOp
 Cross :: VVVBinOp
+VAdd :: VVVBinOp
+VSub :: VVVBinOp
 
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
@@ -942,9 +944,11 @@ LEq :: OrdBinOp
 GEq :: OrdBinOp
 
 -- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
+--   product, addition, subtraction).
 data VVVBinOp
 Cross :: VVVBinOp
+VAdd :: VVVBinOp
+VSub :: VVVBinOp
 
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
@@ -1583,6 +1587,12 @@ cross :: ExprC r => r -> r -> r
 
 -- | Smart constructor for vector scaling
 vScale :: ExprC r => r -> r -> r
+
+-- | Vector Addition
+vAdd :: ExprC r => r -> r -> r
+
+-- | Vector Subtraction
+vSub :: ExprC r => r -> r -> r
 
 -- | Smart constructor for case statements with a complete set of cases.
 completeCase :: ExprC r => [(r, r)] -> r

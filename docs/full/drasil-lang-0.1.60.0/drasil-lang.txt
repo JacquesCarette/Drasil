@@ -1385,9 +1385,11 @@ LEq :: OrdBinOp
 GEq :: OrdBinOp
 
 -- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
+--   product, addition, subtraction).
 data VVVBinOp
 Cross :: VVVBinOp
+VAdd :: VVVBinOp
+VSub :: VVVBinOp
 
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
@@ -1522,7 +1524,10 @@ data Expr
 -- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
 --   interval.
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
+class Pretty p
+pretty :: Pretty p => p -> String
 assocArithOperToTy :: AssocArithOper -> Space
+vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.Completeness
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.UFuncVN
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.UFuncVV
@@ -1539,6 +1544,7 @@ instance GHC.Classes.Eq Language.Drasil.Expr.Lang.LABinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.BoolBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.EqBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.ArithBinOp
+instance Language.Drasil.Expr.Lang.Pretty Language.Drasil.Expr.Lang.VVVBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.Expr
 instance Language.Drasil.Literal.Class.LiteralC Language.Drasil.Expr.Lang.Expr
 instance Language.Drasil.WellTyped.Typed Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
@@ -1577,9 +1583,11 @@ LEq :: OrdBinOp
 GEq :: OrdBinOp
 
 -- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
+--   product, vector addition, subtraction).
 data VVVBinOp
 Cross :: VVVBinOp
+VAdd :: VVVBinOp
+VSub :: VVVBinOp
 
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
@@ -2086,9 +2094,11 @@ data StatBinOp
 Defines :: StatBinOp
 
 -- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
+--   product, vector addition, subtraction).
 data VVVBinOp
 Cross :: VVVBinOp
+VAdd :: VVVBinOp
+VSub :: VVVBinOp
 
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
@@ -3394,9 +3404,11 @@ LEq :: OrdBinOp
 GEq :: OrdBinOp
 
 -- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
+--   product, addition, subtraction).
 data VVVBinOp
 Cross :: VVVBinOp
+VAdd :: VVVBinOp
+VSub :: VVVBinOp
 
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
@@ -3578,6 +3590,12 @@ cross :: ExprC r => r -> r -> r
 
 -- | Smart constructor for vector scaling
 vScale :: ExprC r => r -> r -> r
+
+-- | Vector Addition
+vAdd :: ExprC r => r -> r -> r
+
+-- | Vector Subtraction
+vSub :: ExprC r => r -> r -> r
 
 -- | Smart constructor for case statements with a complete set of cases.
 completeCase :: ExprC r => [(r, r)] -> r
@@ -5598,6 +5616,12 @@ cross :: ExprC r => r -> r -> r
 
 -- | Smart constructor for vector scaling
 vScale :: ExprC r => r -> r -> r
+
+-- | Vector Addition
+vAdd :: ExprC r => r -> r -> r
+
+-- | Vector Subtraction
+vSub :: ExprC r => r -> r -> r
 
 -- | Smart constructor for case statements with a complete set of cases.
 completeCase :: ExprC r => [(r, r)] -> r

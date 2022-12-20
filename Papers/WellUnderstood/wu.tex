@@ -1,4 +1,3 @@
-
 \documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate]{oasics-v2021}
 %This is a template for producing OASIcs articles. 
 %See oasics-v2021-authors-guidelines.pdf for further information.
@@ -12,7 +11,7 @@
 %for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
 %for producing a PDF according the PDF/A standard, add "pdfa"
 
-%\pdfoutput=1 %uncomment to ensure pdflatex processing (mandatatory e.g. to submit to arXiv)
+\pdfoutput=1 %uncomment to ensure pdflatex processing (mandatatory e.g. to submit to arXiv)
 %\hideOASIcs %uncomment to remove references to OASIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
 
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
@@ -75,7 +74,7 @@
 
 %\acknowledgements{I want to thank \dots}%optional
 
-%\nolinenumbers %uncomment to disable line numbering
+\nolinenumbers %uncomment to disable line numbering
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \EventEditors{John Q. Open and Joan R. Access}
@@ -178,19 +177,6 @@ characteristic of such software is the \emph{expected turnover} of key staff.
 This means that all tacit knowledge about the software will be lost over time if
 it is not captured.
 
-%\subsection{Productivity?}
-%\label{subsec:productivity}
-%
-%We adapt the standard definition of productivity \cite{Boehm1987}, where inputs
-%are labour, but adjust the outputs to be knowledge and user satisfaction, where
-%user satisfaction acts as a proxy for effective quality.
-%(see~\cite{SmithAndCarette2020arXiv} for more)
-%
-%This explicit emphasis on all knowledge produced, rather than just the
-%operationalizable knowledge (aka code) implies that human-reusable knowledge,
-%i.e.\ documentation, is crucial. This is why the \emph{long-lived} context is
-%important.
-
 \subsection{Documentation}
 \label{subsec:documentation}
 
@@ -243,8 +229,8 @@ running various simulations is entirely new, the underlying models and how to
 simulate them are indeed well known. One particularly long-lived example is
 embedded software for space probes (like Pioneer 10). Another would be ocean
 models, such as NEMO~\cite{madec_gurvan_2022_6334656} which can trace its
-origins to OPA 8~\cite{Madec1998}. In fact, most sub-domains of science and engineering
-harbour their own niche long-lived software.
+origins to OPA 8~\cite{Madec1998}. In fact, most sub-domains of science and
+engineering harbour their own niche long-lived software.
 
 \section{An Example}
 \label{sec:example}

@@ -72,13 +72,14 @@ a target from a specific distance. The \acs{srs} requires users to fill in the:
 
 From these 3 key bodies of information along with some supporting background
 knowledge (such as assumptions, constants, etc.), Drasil forms a calculation
-path, deriving the output variables from the input variables using the instance
-models\footnote{And, less importantly, data definitions.}. Here, Drasil
-approximately recognizes that to calculate the outputs, it approximately needs
-to follow a path along the lines of the order of presented theories. With it,
-Drasil is able to generate representational code. For example, \acsp{projectile}
-generates \refOriginalJavaProjectileMain{} for one of the Java-flavoured
-artifacts. In \refOriginalJavaProjectileMain{}, it uses a
+path, deriving the output variables from the input variables using the concrete
+theories\footnote{The ``concrete theories'' are the ``instanced model'' and
+``data definitions'' \cite{SmithAndLai2005} encodings (respectively,
+\InstanceModel{}s and \DataDefinition{}s) which are somehow usable in the
+solution of a scientific problem.}. Together, the theories form a calculation
+algorithm which Drasil generates representational code of. For example,
+\acsp{projectile} generates \refOriginalJavaProjectileMain{} for one of the
+Java-flavoured artifacts. In \refOriginalJavaProjectileMain{}, it uses a
 \inlineCode{java}{write_output} method to output the calculated output variables
 after calculating them using the relevant theories\footnote{Note:
 \(t_\text{flight}\) is seemingly unused in the generated code, but it is used in

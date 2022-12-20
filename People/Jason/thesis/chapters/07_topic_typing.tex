@@ -841,31 +841,38 @@ typeCheckSI
     putStrLn "=====[ Finished type checking ]====="
 \end{haskell}
 
-By using this function anywhere before our code generation step, we are able to
+By using this function before our code generation step, we are able to
 type-check all relations and expressions relevant to code generation. As of
-writing, we found enough such that it's best to keep type-checking done en
-masse, as it is right now, because it has already uncovered many typing issues.
-Interestingly, we also found that we had used temporary operations used when we
-meant other things (e.g., using absolute value in place where we intended to use
-vector norm). We may enable a compiler panic for our case studies later, once
-we've cleared through the majority of the existing found type errors. Notably,
-by adding type-checking to Drasil, we also bring into question the coherence of
-our \acs{srs} documents. By forcing the \acs{srs} abstraction to provide
-sufficiently coherent information to generate code, we also have an equal
-assurance that the \acs{srs} is sufficiently \emph{coherent} for developers to
-manually build similar software artifacts.
+writing, we found enough (approximately
+\porthref{30}{https://github.com/JacquesCarette/Drasil/issues?q=is\%3Aissue+author\%3Abalacij+Type+checking+error+is\%3Aclosed})
+typing issues such that we decided it is best to keep type-checking done en
+masse, until we've cleared through them. Interestingly, we also found that we
+had temporary operations used in places where we needed similar variants which
+didn't exist yet. For example, using ``absolute value'' in a place where we
+needed vector norm, or using addition/multiplication when we needed vector
+addition/scaling. We may enable a compiler panic for our case studies later,
+once we've cleared through the majority of the existing found type errors.
+Notably, by adding type-checking to Drasil, we also bring into question the
+coherence of our \acs{srs} documents. By forcing the \acs{srs} abstraction to
+provide sufficiently coherent information to generate code, we also have an
+equal assurance that the \acs{srs} is sufficiently \emph{coherent} for
+developers to manually build similar software artifacts.
 
 To sum up, at this point, we have:
 
 \begin{itemize}
+
       \item bidirectional type-checking done for our concrete mathematical
             langauge with respect to a specific type universe, but creating a
             reusable interface to create similar type-checkers for other
             languages with respect to any type universe,
+
       \item type-checking performed after all chunks are gathered and registered
             in memory, and
-      \item we've found several existing typing issues in the current case
+
+      \item we uncovered several existing typing issues in the current case
             studies.
+
 \end{itemize}
 
 Once the existing typing issues are resolved, we can enable program panics to

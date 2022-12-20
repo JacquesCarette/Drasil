@@ -1,0 +1,23 @@
+\begin{codeSnippet}{console}{Retriever Error}{chunkRetrieverError}{https://github.com/balacij/ProtoChunkDB/tree/badChunkDB}
+    • Couldn't match type ‘a’ with ‘QuantityDict’
+      Expected: Maybe QuantityDict
+        Actual: Maybe a
+      ‘a’ is a rigid type variable bound by
+        a pattern with constructor: Chunk :: forall a. a -> Chunk,
+        in a pattern binding in
+             a 'do' block
+        at app/Main.hs:21:4-19
+    • In a stmt of a 'do' block: pure expectedQd
+      In the expression:
+        do (Chunk expectedQd) <- lookup u cdb
+           pure expectedQd
+      In an equation for ‘retrieveQD’:
+          retrieveQD u cdb
+            = do (Chunk expectedQd) <- lookup u cdb
+                 pure expectedQd
+    • Relevant bindings include
+        expectedQd :: a (bound at app/Main.hs:21:10)
+   |
+22 |   pure expectedQd
+   |   ^^^^^^^^^^^^^^^
+\end{codeSnippet}

@@ -1,0 +1,81 @@
+\chapter{Conclusion}
+\label{chap:conclusion}
+
+In this thesis, we addressed four (4) research questions, as stated in
+\Cref{chap:intro:sec:problem-statement}:
+
+\begin{enumerate}
+
+    \item[\textbf{RQ1}] \textit{Drasil's current encoding of ``theories'' are
+          essentially black boxes. We would like to use structural information
+          present in the short list of the ``kinds'' of theories that show up in
+          scientific computing. How do we codify that?}
+
+\end{enumerate}
+
+In \Cref{chap:modelkinds}, we replaced the ``black boxes'' with structured
+versions of the same meaningful theories. In doing so, we opened up
+opportunities for more domain-specific interpretation of same theories, such as
+analysis, flexible printing, and most importantly, code generation. Chen's work
+\cite{Chen2022MEng} has anecdotally shown the success of this work. Furthermore
+in \Cref{chap:more-theory-kinds}, we began dissecting Drasil's currently encoded
+theories, and replaced their encodings with structured variants in hopes of
+further usage in code generation in the future.
+
+\begin{enumerate}
+    
+    \item[\textbf{RQ2}] \textit{Drasil's theory encodings rely on a single
+          mathematical expression language, and does not expose information
+          about applicability to different contexts. In each context (e.g.,
+          code, theories, and common arithmetic), certain terms of the
+          expression language should be treated differently, or are simply
+          inapplicable. How can we restrict term usage by context?}
+
+\end{enumerate}
+
+In \Cref{chap:lang-division}, we analyzed Drasil's single mathematical
+expression language, divided it according to Drasil's current needs, and created
+a means of using the divided variants seamlessly through creating a \acs{ttf}
+encoding of its smart constructors. In doing this, we were able to restrict the
+mathematical expressions admitted in concrete theories to only those with
+definite values, which we can unambiguously convert into code fragments.
+
+\begin{enumerate}
+
+    \item[\textbf{RQ3}] \textit{How can we ensure that our mathematical
+          expression language admits only valid expressions?}
+
+\end{enumerate}
+
+In \Cref{chap:typed-expr}, we began creating a system of type-rules that our
+concrete mathematical expressions (\Expr{}) must obey. To enforce the type-rules
+in Drasil, we built a bidirectional type-checker that runs on a whole \acs{srs}
+and reports any errors it finds. We described the bidirectional type-checking
+rules under a typeclass, so that we can later also add typing rules and
+enforcement to the other expression languages.
+
+\begin{enumerate}
+
+    \item[\textbf{RQ4}] \textit{Our current ``typed'' approach to collecting
+          different kinds of data is difficult to extend. How can we make it
+          easier to extend?}
+
+\end{enumerate}
+
+In \Cref{chap:storingChunks}, we created a chunk database structure that is
+capable of collecting \textit{any} chunk that conforms to a basic set of
+requirements (e.g., has \acs{uid} and references to required chunks, by
+\acs{uid}).
+
+While there is a considerable amount of future work to be done
+(\Cref{chap:future-work}), I am certain there will be an endless supply of
+``future work'' after those tasks. Thus, with those leftover tasks in mind, I
+pause for reflection.
+
+The entirety of \Cref{chap:ideology} is one of the most important things I've
+learned by conducting this research. Another important thing I've learned is
+that \textit{actual} communication of knowledge from one to others is far more
+complicated than it seems, and that any piece of knowledge has considerable
+nuance to it. Finally, by attempting to codify, and act on, our understandings
+of things, we're able to test just how ``well-understood''
+\cite{well-understood} they truly are to us.

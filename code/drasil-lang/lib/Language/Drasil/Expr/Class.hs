@@ -359,6 +359,7 @@ instance ExprC Expr where
   -- | Smart constructor for 'real interval' membership.
   realInterval c = RealI (c ^. uid)
   
+  -- TODO: Move euclidean to smart constructor
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean = sqrt . foldr1 addRe . map square
   

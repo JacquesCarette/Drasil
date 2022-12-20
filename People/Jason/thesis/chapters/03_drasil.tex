@@ -1,0 +1,167 @@
+\chapter{Drasil}
+\label{chap:drasil}
+
+\begin{writingdirectives}
+
+      \item What is Drasil?
+      \begin{enumerate}
+            \item What does it do?
+            \item Where can we find information about it?
+            \item What are its successes?
+      \end{enumerate}
+
+      \item How does Drasil work?
+      \begin{enumerate}
+            \item SRS? Generation?
+            \item Specifically, what are its current problems?
+      \end{enumerate}
+
+\end{writingdirectives}
+
+In this chapter, we will discuss the project this work contributes to, Drasil.
+Specifically, we will discuss at a high-level what Drasil is capable of, and how
+it works.
+
+\drasilLogoImg{}
+
+\section{What is it? What can it do?}
+\label{chap:drasil:sec:what-is-it-what-can-it-do}
+
+Principally investigated by \porthref{Dr.\ Jacques
+      Carette}{https://www.cas.mcmaster.ca/~carette/} and \porthref{Dr.\ Spencer
+      Smith}{https://www.cas.mcmaster.ca/~smiths/},
+\porthref{Drasil}{https://jacquescarette.github.io/Drasil/} is a software suite
+for generating software for well-understood problems through a knowledge-first
+approach \cite{Drasil2021}. Drasil captures the background knowledge involved
+with software development to make it \textit{reusable}, improve
+\textit{maintainability} of software, and strengthen \textit{traceability}
+between desired ``software artifacts''\footnote{``Software artifacts'' being any
+      file with a well-defined structure, such as plaintext files, Python code,
+      \LaTeX{} code, \acs{html}, or \acs{json}.} and the background knowledge
+\cite{SzymczakEtAl2016}. Currently, Drasil focuses on generating software
+artifacts for \ACF{scs}, where it has been shown to improve software qualities,
+such as \textit{verifiability}, \textit{reliability}, and \textit{usability}
+\cite{Smith2018}.
+
+\caseStudiesTable{}
+
+Drasil's knowledge-capture approach to software development allows users to
+remove themselves from the discussion of ``code'' and focus on the important
+bits: the problem the code solves and how ``code'' ultimately relates to
+it\footnote{Drasil allows users to ``keep at a safe distance'' from software,
+but only so far as Drasil has encoded the terminology the users rely on for
+conveying their problem to Drasil.}. Drasil's development is navigated through a
+series of case studies: \refCaseStudiesTable{}. Each case study has users input
+scientific problems using \acsp{dsl} that build up an abstract \ACF{srs}
+\cite{SmithAndLai2005}. The \acs{srs} decomposes scientific problems into small
+structured fragments of knowledge that have direct relations to ``code'' and can
+be used flexibly as part of code generation. Through abstracting sufficient
+depth and breadth of the knowledge in an \acs{srs} (e.g., including the inputs,
+outputs, and calculation scheme), Drasil is able to generate software artifacts
+that satisfy the designated \acs{srs}\footnote{It is helpful to think of the
+\acs{srs} as a sort of ``recipe'' that Drasil follows to navigate the
+generation.} (\refCaseStudiesCodeTable{}). Drasil relies on the capture of a
+\textit{network of domains} \cite{Czarnecki2005} to generate artifacts. Roughly,
+the network of domains related to the code generated related to an abstracted
+\acs{srs} is as per \refRoughNetworkOfDomains{}\footnote{Note that this is not
+representative of all knowledge captured in Drasil, but only that which is
+relevant to generating code for a given \acs{srs} abstraction.}, where nodes are
+the major categories of domains\footnote{In other words, each node contains its
+own subdomain as well} and arrows are mappings between them. The current network
+is built according to the needs of Drasil's case studies. One notable success of
+the knowledge capture is the reusability of it to regenerate artifacts in
+different, but similarly applicable, languages. For example, the \acs{glassbr}
+case study had \porthref{software
+artifacts}{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}
+manually built. Once the knowledge was codified in Drasil, the same knowledge
+allows re-creation in \porthref{other
+languages}{https://github.com/JacquesCarette/Drasil/tree/master/code/stable/glassbr}.
+
+\roughNetworkOfDomains{}
+
+Drasil is able to generate a host of \ACF{oo} programming language source codes
+through compiling to \ACF{gool} \cite{Carette2019,MacLachlan2020}, which
+compiles to several \acs{oo} languages (such as Java, Python, C/C$++$, C\#, and
+Swift\footnote{Note that Swift was not discussed in \cite{MacLachlan2020}, but
+      the renderer was built by Brooks as well.}). Drasil also contains renderers for
+printing \acs{html} files, Makefiles, basic Markdown (enough for ``READMEs''),
+GraphViz DOT \cite{Gansner1993} diagrams, and plaintext, \LaTeX{} documents.
+\acs{srs} abstractions are renderable in either \LaTeX{} or \acs{html}.
+
+\caseStudiesCodeTable{}
+
+\section{How does it work? How is it used?}
+\label{chap:drasil:sec:how-does-it-work-how-is-it-used}
+
+As mentioned in \Cref{chap:drasil:sec:what-is-it-what-can-it-do}, Drasil relies
+on building a tree of knowledge that contains sufficient information such that
+software artifacts can be ``grown'' from them. The individual pieces of
+knowledge are known as \textit{chunks} and are encoded as either \ACFP{adt} or
+\ACFP{gadt}. Drasil, and all knowledge captured in Drasil, is deeply embedded in
+Haskell \cite{Haskell2010} \porthref{source
+      code}{https://github.com/JacquesCarette/Drasil/}\footnote{The source code
+      compiles against \acs{ghc} 8.8.4 \cite{GHC884} and uses \acs{ghc} language
+      extensions.}. Each chunk has a \textit{type} which defines its structural
+information. Chunks contain information encoded with various \ACFP{dsl}. The
+network of domains (roughly, \refRoughNetworkOfDomains{}) is made up of a series
+of chunks connecting and discussing one another, similar to how we might discuss
+abstract concepts.
+
+The ``coherent \acs{srs} abstraction'' of \refRoughNetworkOfDomains{} is
+modelled after the \textit{Smith et al.} formal \acs{srs} template
+\cite{SmithAndLai2005}, while the ``scientific knowledge'' higher up is a set of
+interconnected chunks (and, hence, \acsp{dsl}). The ``scientific knowledge''
+chunks are used to fill in the ``gaps'' of the \acs{srs} template. For example,
+if we wanted to encode a variable, \(\hat{q}_{\text{tol}}\), representing a real
+number, ``Tolerable load,'' we might write it as
+\refOriginalQuantityDictExampleHaskell{}, where it is of type \QuantityDict{}
+(\refOriginalQuantityDictHaskell{}\footnote{Note that \IdeaDict{}, \Space{},
+\Symbol{} (for all \Stage{}s), and \UnitDefn{} are coupled together to create
+the quantity. The components respectively define the term, type, symbol
+(dependent on the usage context [equational or software implementation]), and
+unit of the quantity.}), the type of variable encodings.
+
+\originalQuantityDictExampleHaskell{}
+
+\originalQuantityDictHaskell{}
+
+Notably, in \refOriginalQuantityDictExampleHaskell{}, the symbol,
+\(\hat{q}_{\text{tol}}\), is built using a \Symbol{} \acs{dsl}. The capture of
+domain-specific knowledge is what sets \acsp{dsl} apart from general-purpose
+programming languages. Domain-specific abstractions create opportunities for
+domain-specific \textit{interpretation and transformation} (e.g., optimization,
+analysis, error checking, tool support, etc.) \cite{Czarnecki2005}. For example,
+with the symbol for ``tolerable load,'' we have information about the structure
+of the symbol itself: that ``q'' has a ``hat'' and a subscript ``tol.'' From
+this, we can output the same information in alternative flavours if we desired,
+such as plain text, or with Java-compatible naming convention (e.g.,
+``qHatTol'').
+
+Drasil's \acs{srs} template contains more ``holes''\footnote{Or ``blanks'' if you
+      think of the template as a ``fill-in-the-blanks'' puzzle.} for other
+information necessary to creating a whole ``story'' about how
+\textit{output variables} can be calculated according to a set of
+\textit{input variables} and algorithm derived through a series of
+\textit{theories}. With sufficient knowledge \textit{depth}\footnote{Note
+      that the \acs{srs} template provides the \textit{breadth} needed by
+      design!} for each relevant fragment, Drasil is able to automatically
+``check'' it for consistency and coherence, and generate representational
+code\footnote{``Representational code'' meaning software that solves the
+      problem the related \acs{srs} abstraction describes, using the algorithm
+      outlined.}.
+
+Unfortunately, not all of Drasil's case studies are capable of generating
+representational code (\refCaseStudiesCodeTable{}). Some case studies
+(\acs{gamephysics}, \acs{hghc}, and \acs{ssp}) are still actively being
+developed, but are left incomplete at the time of writing. \acs{nopcm} is usable
+in all languages supported by \acs{gool} except for Swift due to the lack of a
+Drasil-supported \acs{ode} solving library for the Swift \acs{gool} renderer.
+\acs{pdcontroller} was built \cite{DrasilPR2289Naveen} outside the normal means
+of Drasil's case study development. Code generation for \acs{pdcontroller} is
+not impossible (it's done for Python), it just requires more investigation by a
+domain expert for the needs of compiling to more languages. However, both the
+issues related to \acs{nopcm} and \acs{pdcontroller} are outside the scope of
+this work. In this work, we will focus on a critical common denominator between
+all examples: capturing mathematical knowledge for reliable \acs{srs} artifact
+generation. In particular, we will focus on 2 primary aspects of mathematical
+knowledge: the \textit{theories} and the \textit{expressions}.

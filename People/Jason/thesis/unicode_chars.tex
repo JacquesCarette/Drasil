@@ -1,0 +1,18 @@
+% At times, if you use raw unicode characters, you'll come across the following error:
+% Missing character: There is no • (U+2022) in font ec-lmtt12!
+
+% More, generally,
+% Missing character: There is no `X` (U+`Y`) in font `Z`!
+
+% To solve this  issue, we may manually replace instances of them with re-built
+% copies of them. They may look a bit out of place because they don't follow the
+% same font, but you can make them look decent if you replace them with simpler
+% variants within the font. Try your best!
+
+% For example, to resolve the above issue, we may use:
+% \newunicodechar{•}{\(\cdot{}\)}
+
+\newunicodechar{•}{\(\cdot{}\)}
+\newunicodechar{‘}{\textquoteleft{}}
+\newunicodechar{’}{\textquoteright{}}
+\newunicodechar{≠}{\(\neq\)}

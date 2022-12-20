@@ -1,0 +1,24 @@
+\begin{haskell}{ModelExpr Constructor Encoding (TTF)}{curModelExprTTF}{https://github.com/JacquesCarette/Drasil/blob/ab9e091dabd81685ddef86b0d218582c9f75cb20/code/drasil-lang/lib/Language/Drasil/ModelExpr/Class.hs\#L30-L51}
+class ModelExprC r where
+  -- This also wants a symbol constraint.
+  -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
+  deriv, pderiv :: (HasUID c, HasSymbol c) => r -> c -> r
+  
+  -- | Gets the nthderivative of an 'ModelExpr' with respect to a 'Symbol'.
+  nthderiv, nthpderiv :: (HasUID c, HasSymbol c) => Integer -> r -> c -> r
+  
+  -- | One expression is "defined" by another.
+  defines :: r -> r -> r
+  
+  -- | Space literals.
+  space :: Space -> r
+  
+  -- | Check if a value belongs to a Space.
+  isIn :: r -> Space -> r
+  
+  -- | Binary associative "Equivalence".
+  equiv :: [r] -> r
+  
+  -- | Smart constructor for the summation, product, and integral functions over all Real numbers.
+  intAll, sumAll, prodAll :: Symbol -> r -> r
+\end{haskell}

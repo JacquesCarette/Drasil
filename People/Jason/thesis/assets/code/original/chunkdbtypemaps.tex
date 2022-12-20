@@ -1,0 +1,32 @@
+\begin{haskell}{Original ChunkDB Type Maps}{origConceptDBTypeMaps}{https://github.com/JacquesCarette/Drasil/blob/9c26b43d3e30c3f618e534a3f176a5152729af74/code/drasil-database/Database/Drasil/ChunkDB.hs\#L18-L47}
+-- The misnomers below are not actually a bad thing, we want to ensure data can't
+-- be added to a map if it's not coming from a chunk, and there's no point confusing
+-- what the map is for. One is for symbols + their units, and the others are for
+-- what they state.
+type UMap a = Map.Map UID (a, Int)
+
+-- | A bit of a misnomer as it's really a map of all quantities, for retrieving
+-- symbols and their units.
+type SymbolMap  = UMap QuantityDict
+
+-- | A map of all concepts, normally used for retrieving definitions.
+type ConceptMap = UMap ConceptChunk
+
+-- | A map of all the units used. Should be restricted to base units/synonyms.
+type UnitMap = UMap UnitDefn
+
+-- | Again a bit of a misnomer as it's really a map of all NamedIdeas.
+-- Until these are built through automated means, there will
+-- likely be some 'manual' duplication of terms as this map will contain all
+-- quantities, concepts, etc.
+type TermMap = UMap IdeaDict
+type TraceMap = Map.Map UID [UID]
+type RefbyMap = Map.Map UID [UID]
+type DatadefnMap = UMap DataDefinition
+type InsModelMap = UMap InstanceModel
+type GendefMap = UMap GenDefn
+type TheoryModelMap = UMap TheoryModel
+type ConceptInstanceMap = UMap ConceptInstance
+type SectionMap = UMap Section
+type LabelledContentMap = UMap LabelledContent
+\end{haskell}

@@ -19,7 +19,7 @@ In \Cref{chap:lang-division}, we discussed Drasil's single mathematical
 expression language and split it into three variants, each specialized for their
 intended usage context. As a result, users don't need to worry about using terms
 inapplicable in various contexts. However, an issue remains with expressions:
-Drasil's standard mathematical language (\Expr{}) remains untyped, and, thus
+Drasil's standard mathematical language (\Expr{}) remains untyped, and thus
 Drasil does not detect malformed expressions, allowing users to make errors that
 affect both the problem descriptions in the \acs{srs} and the usability of
 generated software. In this chapter, we will focus on mitigating expression
@@ -278,9 +278,9 @@ with the rest of Drasil. Adding it relied on us adding type parameters to
 variables in the declarations of quantities. It also required us to use the
 ``data kinds'' Haskell extension \cite{GHC2020DataKinds} leading to difficulties
 with handling and flexibility of types. Additionally, we weren't able to
-adequately analyze and work with the types of expressions as we needed. Thus, we
+adequately analyze and work with the types of expressions as needed. Thus, we
 decided rolling our own type system would be beneficial, and that we would
-manually check expressions as we needed.
+manually check expressions as needed.
 
 Now the question arises: how should we build it? One of the issues with the
 traditional declaration-style is that expressions made without explicit type
@@ -300,21 +300,22 @@ typing judgments: a \textit{check} judgment and an \textit{inference} judgment
 \cite{Christiansen2013}. The checking judgment, \(\Gamma{} \vdash{} e \Leftarrow
 \tau{}\), says that the expression \(e\) can be \textit{checked} to be of the
 type \(\tau\) within the context \(\Gamma\). The inference judgment, \(\Gamma{}
-\vdash{} e \Rightarrow \tau{}\), says that, within the context \(\Gamma\), we
-can \textit{infer} the type of expression \(e\), \(\tau\). Checking and
-inferencing may be mutually recursive \textemdash{} this is helpful for type
-checking in cases where expressions are ambiguous and may take on many shapes
-(i.e., may be polymorphic) \cite{nlab:bidirectional_typechecking}.
+\vdash{} e \Rightarrow \tau{}\), says that within the context \(\Gamma\), we can
+\textit{infer} the type of expression \(e\), \(\tau\). Checking and inferencing
+may be mutually recursive \textemdash{} this is helpful for type checking in
+cases where expressions are ambiguous and may take on many shapes (i.e., may be
+polymorphic) \cite{nlab:bidirectional_typechecking}.
 
 \section{Typing the Expression Language}
 \label{chap:typed-expr:sec:typing-the-expression-language}
 
-With our goal in mind and our tools in hand, we need to capture two things about
-\Expr{}:
-\begin{itemize}
-      \item the type universe its term belong to,
-      \item and the bidirectional typing rules and algorithm.
-\end{itemize}
+With our goal in mind and our tools in hand, to add type-checking to \Expr{}, we
+need to:
+\begin{inparaenum}[(i)]
+      \item capture the type universe its terms belong to, and
+      \item build a system of bidirectional typing rules, and a corresponding
+            type-checker.
+\end{inparaenum}
 
 \subsection{Type Universe}
 \label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-universe}
@@ -773,14 +774,15 @@ class Typed e t => RequiresChecking c e t where
 
 With \inlineHs{RequiresChecking}, we have a typeclass for any instance of a
 type, \(c\), which may contain any number of expressions of type \(e\) that are
-expected to be type-checked w.r.t. a specific type from a type universe \(t\).
-By instantiating this typeclass for \DataDefinition{}s, we expose a single
-relation to be type-checked: that a specific \QDefinition{} is well-formed.
-Interestingly, by instantiating this typeclass for \InstanceModel{}s, we
-potentially expose more than one expression, depending on the \ModelKind{}
-variant. Recall from \Cref{chap:modelkinds} that any of our theories (including
-\InstanceModel{}s) may take on any of our theory kinds (\ModelKinds{}), and that
-some of them may work with and expose expressions (such as equational realms,
+expected to be type-checked with respect to a specific type from a type universe
+\(t\). By instantiating this typeclass for \DataDefinition{}s, we expose a
+single relation to be type-checked: that a specific \QDefinition{} is
+well-formed. Interestingly, by instantiating this typeclass for
+\InstanceModel{}s, we potentially expose more than one expression, depending on
+the \ModelKind{} variant. Recall from \Cref{chap:modelkinds} that any of our
+theories (including \InstanceModel{}s) may take on any of our theory kinds
+(\ModelKinds{}), and that some of them may work with and expose expressions
+(such as equational realms,
 \Cref{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms})
 in various ways for use. Thus, we allow them to expose the expressions and
 relations individually, and we will type-check them similarly. For other
@@ -858,20 +860,19 @@ provide sufficiently coherent information to generate code, we also have an
 equal assurance that the \acs{srs} is sufficiently \emph{coherent} for
 developers to manually build similar software artifacts.
 
-To sum up, at this point, we have:
+To sum up, at this point, we:
 
 \begin{itemize}
 
-      \item bidirectional type-checking done for our concrete mathematical
-            langauge with respect to a specific type universe, but creating a
+      \item have bidirectional type-checking done for our concrete mathematical
+            language with respect to a specific type universe, but creating a
             reusable interface to create similar type-checkers for other
             languages with respect to any type universe,
 
-      \item type-checking performed after all chunks are gathered and registered
-            in memory, and
+      \item have type-checking performed after all chunks are gathered and
+            registered in memory, and
 
-      \item we uncovered several existing typing issues in the current case
-            studies.
+      \item uncovered many existing typing issues in Drasil's case studies.
 
 \end{itemize}
 

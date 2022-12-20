@@ -48,7 +48,7 @@
 \end{writingdirectives}
 
 In Drasil vernacular, as discussed in \Cref{chap:drasil}, we call encoded
-fragments of knowledge, ``chunks.'' In practice, users encode chunks using
+fragments of knowledge ``chunks.'' In practice, users encode chunks using
 Haskells basic \inlineHs{data} types (example later), tagging it with a
 \ACF{uid}. \acsp{uid} are represented by the \UID{} data type (a string of text,
 \refOriginalUidHaskell{}). For example, \refOriginalQuantityDictExampleHaskell{}
@@ -59,7 +59,7 @@ For example, \refOriginalQuantityDictExampleHaskell{} is a \QuantityDict{}
 (\refOriginalQuantityDictHaskell{}). Drasil leverages Haskells type system to
 create a system of reasoning about chunks. As such, when we create instances of
 chunks, they are ``typed'' with a single fully monomorphic type signature. There
-is no hard criteria yet for knowing what \inlineHs{data} types are chunks or
+is no hard criteria yet for knowing whether \inlineHs{data} types are chunks or
 not, but we do have basic requirements: they must have a \acs{uid}, they must
 expose, in some way, what chunks they depend on, and they must be usable in some
 way. Commonly, we create chunks to discuss relations between other chunks. To
@@ -127,7 +127,7 @@ Thankfully, \acs{ghc} provides us with the ``Existential Quantification''
 language feature \cite{GHC2020ExistentialQuantification}\footnote{We can enable
 it by placing a small compiler option at the top of our Haskell files (e.g.,
 \mintinline{haskell}{{-# LANGUAGE ExistentialQuantification #-}}), or, in our
-\texttt{package.yaml} files}. ``Existential Quantification'' allows us to
+\texttt{package.yaml} files.}. ``Existential Quantification'' allows us to
 quantify over the type parameter in the \Chunk{} constructor while retaining the
 context (the type information). In  particular, this is useful for heterogeneous
 lists with elements, sub-typed against a set of constraints, in Haskell (which

@@ -164,7 +164,8 @@ on those which \textit{we} understand how to manually produce code for.
 Specifically, we will largely focus on a common denominator: strengthening
 mathematical knowledge capture, but we will also spend time learning how to
 scale Drasil's knowledge (chunk) database against expansion in further chunk
-type creation.
+type creation. Additionally, we will primarily pull examples from the
+\acs{projectile}, \acs{glassbr}, and \acs{dblpendulum} case studies.
 
 \subsection{Theories and Expressions}
 \label{chap:intro:sec:drasil:subsec:theories-and-expressions}
@@ -189,7 +190,11 @@ define our firing angle variable (\refExampleAngleVariableEncoding{}) in terms
 of the distance of the target, gravity, and the initial
 velocity\footnote{Assuming no air drag or resistance.}, we might write:
 \(\arcsin{}(\mathit{targetDistanceFromCannon} \cdot{} g / v^2) / 2\). In Drasil,
-we might encode this as \refExampleAngleEquationEncoding{}.
+we might encode this as \refExampleAngleEquationEncoding{}, where an
+\InstanceModel{}\footnote{An instance of a concrete theory usable in the
+solution to a scientific problem, modelled after ``instanced models''
+\cite{SmithAndLai2005}.} carries information about the theory (e.g., a
+derivation, a defined quantity, and a defining relation of the quantity).
 
 \exampleAngleEquationEncoding{}
 
@@ -198,7 +203,9 @@ pleasing description box for the \acs{srs} \LaTeX{} and \acs{html} documents
 (\refExampleAngleEquationEncodingToTeX{}). Converting to typesetting languages
 is reasonably unproblematic because they only use the theory knowledge in a
 shallow light (displaying) and we can create any glyph we might need. More
-importantly, we can also convert this theory to Python code as well:
+importantly (and relevant to this thesis), we can also convert this theory to
+Python code as well, using the encoded defining relation of the firing angle in
+\refExampleAngleEquationEncoding{}:
 
 \exampleAngleEquationEncodingToPython{}
 

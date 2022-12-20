@@ -60,7 +60,6 @@ If you need to cite this work, please cite using the following BibTeX:
   author = {Balaci, Jason},
   school = {McMaster University},
   title  = {Adding Types and Theory Kinds to Drasil},
-  year   = {2022},
-  url    = 
+  year   = {2022}
 }
 ```

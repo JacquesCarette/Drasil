@@ -31,7 +31,7 @@ them.
 \label{chap:modelkinds:sec:transforming-theories-to-code:subsec:an-example}
 
 For example, Drasil's \porthref{\acs{projectile} case
-study}{https://jacquescarette.github.io/Drasil/examples/projectile/SRS/srs/Projectile_SRS.html}
+    study}{https://jacquescarette.github.io/Drasil/examples/projectile/SRS/srs/Projectile_SRS.html}
 describes how to estimate if a launcher, aligned at a particular angle, will hit
 a target from a specific distance. The \acs{srs} requires users to fill in the:
 \begin{enumerate}
@@ -61,7 +61,7 @@ a target from a specific distance. The \acs{srs} requires users to fill in the:
               \item \({d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}\),
                     calculation of distance between the targets position and the
                     expected landing position of the projectile,
-              \item and \(s=\begin{cases} \text{``The target was hit.''}, &
+              \item and \(s=\begin{cases} \text{``The target was hit.''},        &
               |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}| < \varepsilon{}
               \\
               \text{``The projectile fell short.''}, & {d_{\text{offset}}} < 0 \\
@@ -74,17 +74,17 @@ From these 3 key bodies of information along with some supporting background
 knowledge (such as assumptions, constants, etc.), Drasil forms a calculation
 path, deriving the output variables from the input variables using the concrete
 theories\footnote{The ``concrete theories'' are the ``instanced model'' and
-``data definitions'' \cite{SmithAndLai2005} encodings (respectively,
-\InstanceModel{}s and \DataDefinition{}s) which are somehow usable in the
-solution of a scientific problem.}. Together, the theories form a calculation
+    ``data definitions'' \cite{SmithAndLai2005} encodings (respectively,
+    \InstanceModel{}s and \DataDefinition{}s) which are somehow usable in the
+    solution of a scientific problem.}. Together, the theories form a calculation
 algorithm which Drasil generates representational code of. For example,
 \acsp{projectile} generates \refOriginalJavaProjectileMain{} for one of the
 Java-flavoured artifacts. In \refOriginalJavaProjectileMain{}, it uses a
 \inlineCode{java}{write_output} method to output the calculated output variables
 after calculating them using the relevant theories\footnote{Note:
-\(t_\text{flight}\) is seemingly unused in the generated code, but it is used in
-the derivation of \(p_\text{land}\). However, it being ``unused'' is irrelevant
-to this work.}.
+    \(t_\text{flight}\) is seemingly unused in the generated code, but it is used in
+    the derivation of \(p_\text{land}\). However, it being ``unused'' is irrelevant
+    to this work.}.
 
 \originalJavaProjectileMain{}
 
@@ -217,7 +217,7 @@ This also means \RelationConcept{}s and \Relation{}s are insufficient couriers
 of ``theory knowledge.'' In particular, we should be careful to ensure that the
 abstractions are capable of reproducing the original knowledge we abstracted
 them out of\footnote{This also should typically create opportunity for more
-kinds of interpretation of the abstracted knowledge too.}. In other words, we
+    kinds of interpretation of the abstracted knowledge too.}. In other words, we
 should ensure that we can re-create the original \RelationConcept{}s from the
 newly created, structured, theories.
 
@@ -275,18 +275,23 @@ limiting. We want to use more \textit{kinds} of theories too! Thus,
     Carette. Shortly after implementing it, the Drasil Research Team discussed
     changing the name of ``models'' to ``theories,'' to which, we did, but have not
     propagated through the Drasil codebase, pending analysis on how it might affect
-    the \acs{srs} template \cite{DrasilIssue2599RenamingModels}.}
-(\refOriginalNewModelKindsHaskell{}) is created and propagated through the
-various \acsp{im}, \acsp{gd}, and \acsp{tm}, to replace \RelationConcept{}s (and
-\Relation{}s).
+    the \acs{srs} template \cite{DrasilIssue2599RenamingModels}. Thus,
+    ``\ModelKinds{}'' might change to ``\TheoryKinds{}'' or the singular
+    ``\TheoryKind{}.''} (\refOriginalNewModelKindsHaskell{}) is created and
+propagated through the various theory encodings to replace \RelationConcept{}s
+(and \Relation{}s).
 
 \originalNewModelKindsHaskell{}
 
 \ModelKinds{} is an \ACF{adt}, enumerating over all currently
 known\footnote{Criteria for ``currently known'' being ``ones this work has
-    discussed up until this point.''} \textit{kinds} of theories in Drasil. In
-\ModelKinds{}, there are 3 \textit{kinds} of ``models'' (theories) that can be
-created:
+discussed up until this point.''} \textit{kinds} of theories in Drasil. The
+constructors of \ModelKinds{} are intended to carry structured encodings of
+theory knowledge. By switching to \ModelKinds{}, theories can be created using
+the structural information of theories, and the theories using structured
+encodings are easier to refine and interpret\footnote{Such as for code
+generation!} than the unstructured copies. At the moment, \ModelKinds{} has 3
+kinds of ``models'' (theories) that can be created:
 
 \begin{enumerate}
     \item \EquationalModel{}s, for theories that define a variable with some
@@ -295,11 +300,12 @@ created:
     \item and \OthModel{}s, for everything else.
 \end{enumerate}
 
-Now, with \EquationalModel{}, we may finally rebuild \inlineHs{landPosIM} using
-the improved structure (\refCurrentLandPosIMQD{}). At the moment, it does not
-change the expected generated artifacts, however, if desired, one can change
-output types of theories in the \acs{srs} (or code) by adding new kinds of
-\QDefinition{} and \ModelKinds{} interpretations.
+Now, with \EquationalModel{}, we may finally rebuild \inlineHs{landPosIM}
+(\refOriginalLandPosTheoryDefinition{}) using the improved structure
+(\refCurrentLandPosIMQD{}). At the moment, it does not change the expected
+generated artifacts, however, if desired, one can change output types of
+theories in the \acs{srs} (or code) by adding new kinds of \QDefinition{} and
+\ModelKinds{} interpretations.
 
 \currentLandPosIMQD{}
 

@@ -1,0 +1,23 @@
+\begin{haskell}{Original \(p_\text{land}\) Theory Definition}{originalLandPosTheoryDefinition}{https://github.com/JacquesCarette/Drasil/blob/9c26b43d3e30c3f618e534a3f176a5152729af74/code/drasil-example/Drasil/Projectile/IMods.hs\#L78-L98}
+landPosIM :: InstanceModel
+landPosIM = imNoRefs landPosRC 
+  [qwC launSpeed $ UpFrom (Exc, 0), 
+   qwC launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2)]
+  (qw landPos) [UpFrom (Exc, 0)]
+  (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
+
+landPosExpr :: Expr
+landPosExpr = sy landPos $= 2 * square (sy launSpeed) * sin (sy launAngle) *
+                                cos (sy launAngle) / sy gravitationalAccelConst
+
+landPosRC :: RelationConcept
+landPosRC = makeRC "landPosRC" (nounPhraseSP "calculation of landing position")
+  landPosConsNote landPosExpr
+
+landPosDeriv :: Derivation
+landPosDeriv = mkDerivName (phrase landPos) (weave [landPosDerivSents, map E landPosDerivEqns])
+
+landPosDerivSents :: [Sentence]
+landPosDerivSents = [landPosDerivSent1, landPosDerivSent2,
+                      landPosDerivSent3, landPosDerivSent4]
+\end{haskell}

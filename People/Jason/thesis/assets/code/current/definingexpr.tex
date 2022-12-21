@@ -1,0 +1,11 @@
+\begin{haskell}{Definition Possibility}{curDefiningExpr}{https://github.com/JacquesCarette/Drasil/blob/dc3674274edb00b1ae0d63e04ba03729e1dbc6f9/code/drasil-theory/lib/Theory/Drasil/MultiDefn.hs\#L19-L27}
+-- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
+--   the description, the defining (rhs) expression and the context domain(s).
+--   These are meant to be 'alternate' but equivalent definitions for a single concept.
+data DefiningExpr e = DefiningExpr {
+  _deUid  :: UID,      -- ^ UID
+  _cd     :: [UID],    -- ^ Concept domain
+  _rvDesc :: Sentence, -- ^ Defining description/statement
+  _expr   :: e         -- ^ Defining expression
+}
+\end{haskell}

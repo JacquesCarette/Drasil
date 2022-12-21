@@ -1,0 +1,74 @@
+\begin{haskell}{ModelExpr Language}{curModelExpr}{https://github.com/JacquesCarette/Drasil/blob/ab9e091dabd81685ddef86b0d218582c9f75cb20/code/drasil-lang/lib/Language/Drasil/ModelExpr/Lang.hs\#L82-L151}
+-- | Expression language where all terms are supposed to have a meaning, but
+--   that meaning may not be that of a definite value. For example,
+--   specification expressions, especially with quantifiers, belong here.
+data ModelExpr where
+  -- | Brings a literal into the expression language.
+  Lit       :: Literal -> ModelExpr
+  
+  -- | Introduce Space values into the expression language.
+  Spc       :: Space -> ModelExpr
+  
+  -- | Takes an associative arithmetic operator with a list of expressions.
+  AssocA    :: AssocArithOper -> [ModelExpr] -> ModelExpr
+  -- | Takes an associative boolean operator with a list of expressions.
+  AssocB    :: AssocBoolOper  -> [ModelExpr] -> ModelExpr
+  -- | Derivative syntax is:
+  --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
+  --   For example: Deriv Part y x1 would be (dy/dx1).
+  Deriv     :: Integer -> DerivType -> ModelExpr -> UID -> ModelExpr
+  -- | C stands for "Chunk", for referring to a chunk in an expression.
+  --   Implicitly assumes that the chunk has a symbol.
+  C         :: UID -> ModelExpr
+  -- | A function call accepts a list of parameters and a list of named parameters.
+  --   For example
+  --
+  --   * F(x) is (FCall F [x] []).
+  --   * F(x,y) would be (FCall F [x,y]).
+  --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
+  FCall     :: UID -> [ModelExpr] -> [(UID, ModelExpr)] -> ModelExpr
+  -- | For multi-case expressions, each pair represents one case.
+  Case      :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
+  -- | Represents a matrix of expressions.
+  Matrix    :: [[ModelExpr]] -> ModelExpr
+  
+  -- | Unary operation for most functions (eg. sin, cos, log, etc.).
+  UnaryOp       :: UFunc -> ModelExpr -> ModelExpr
+  -- | Unary operation for @Bool -> Bool@ operations.
+  UnaryOpB      :: UFuncB -> ModelExpr -> ModelExpr
+  -- | Unary operation for @Vector -> Vector@ operations.
+  UnaryOpVV     :: UFuncVV -> ModelExpr -> ModelExpr
+  -- | Unary operation for @Vector -> Number@ operations.
+  UnaryOpVN     :: UFuncVN -> ModelExpr -> ModelExpr
+  
+  
+  -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
+  ArithBinaryOp :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for boolean operators (implies, iff).
+  BoolBinaryOp  :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for equality between expressions.
+  EqBinaryOp    :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for indexing two expressions.
+  LABinaryOp    :: LABinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for ordering expressions (less than, greater than, etc.).
+  OrdBinaryOp   :: OrdBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Space-related binary operations.
+  SpaceBinaryOp :: SpaceBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Statement-related binary operations.
+  StatBinaryOp  :: StatBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
+  VVVBinaryOp   :: VVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
+  VVNBinaryOp   :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  
+  
+  -- | Operators are generalized arithmetic operators over a 'DomainDesc'
+  --   of an 'Expr'.  Could be called BigOp.
+  --   ex: Summation is represented via 'Add' over a discrete domain.
+  Operator :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
+  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
+  RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
+  
+  -- | Universal quantification
+  ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
+\end{haskell}

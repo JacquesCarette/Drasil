@@ -1,116 +1,43 @@
-\documentclass[sigconf,review,anonymous=true]{acmart}
 
-%% Copyright information
-\setcopyright{acmcopyright}
-\copyrightyear{2022}
-\acmYear{2022}
-% \acmDOI{10.1145/1122445.1122456} % TODO: DOI (if/when paper is accepted)
+\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate]{oasics-v2021}
+%This is a template for producing OASIcs articles. 
+%See oasics-v2021-authors-guidelines.pdf for further information.
+%for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
+%for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
+%for section-numbered lemmas etc., use "numberwithinsect"
+%for enabling cleveref support, use "cleveref"
+%for enabling autoref support, use "autoref"
+%for anonymousing the authors (e.g. for double-blind review), add "anonymous"
+%for enabling thm-restate support, use "thm-restate"
+%for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
+%for producing a PDF according the PDF/A standard, add "pdfa"
 
-%% These commands are for a PROCEEDINGS abstract or paper.
-\acmConference[Pittsburgh '22]{Pittsburgh '22: NIER - New Ideas and Emerging
-Results (ICSE 2022)}{May 21--29, 2022}{Pittsburgh, PA, USA}
-\acmBooktitle{Pittsburgh '22: NIER - New Ideas and Emerging Results (ICSE 2022),
-May 21--29, 2022, Pittsburgh, PA, USA}
-% \acmISBN{978-1-4503-XXXX-X/18/06} % TODO: ISBN (if/when paper is accepted)
+%\pdfoutput=1 %uncomment to ensure pdflatex processing (mandatatory e.g. to submit to arXiv)
+%\hideOASIcs %uncomment to remove references to OASIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
 
-%% Packages
+%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
 
-% \usepackage[paperwidth=8.50in, paperheight=11in]{geometry} %% option clash
-\usepackage[T1]{fontenc}
-%\usepackage[latin1]{inputenc}
+\bibliographystyle{plainurl}% the mandatory bibstyle
 
+\title{Generating Software for Well-Understood Domains}
 
-% \usepackage[protrusion=true,expansion=true]{microtype} %% option clash
+%\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
 
-% for inline lists, and label computation
-\usepackage{calc}
-\usepackage[inline,shortlabels]{enumitem}
-% for nice internal links
-\usepackage{hyperref}
+\author{Jacques Carette}{Department of Computing and Software, McMaster University, 1280 Main Street West, Hamilton, Ontario, L8S 4L8, Canada \and \url{https://www.cas.mcmaster.ca/~carette/} }{carette@mcmaster.ca}{https://orcid.org/0000-0001-8993-9804}{}
+\author{Spencer W. Smith}{Department of Computing and Software, McMaster University, 1280 Main Street West, Hamilton, Ontario, L8S 4L8, Canada \and \url{https://www.cas.mcmaster.ca/~smiths/} }{smiths@mcmaster.ca}{https://orcid.org/0000-0002-0760-0987}{}
+\author{Jason Balaci}{Department of Computing and Software, McMaster University, 1280 Main Street West, Hamilton, Ontario, L8S 4L8, Canada}{balacij@mcmaster.ca}{}{}
 
-\usepackage{listings}
-\usepackage[framemethod=TikZ]{mdframed}
+% \author{Jane {Open Access}}{Dummy University Computing Laboratory, [optional: Address], Country \and My second affiliation, Country \and \url{http://www.myhomepage.edu} }{johnqpublic@dummyuni.org}{https://orcid.org/0000-0002-1825-0097}{(Optional) author-specific funding acknowledgements}%TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional. Use additional curly braces to indicate the correct name splitting when the last name consists of multiple name parts.
 
-\mdfdefinestyle{MyFrame}{%
-  linecolor=blue,
-  outerlinewidth=2pt,
-  roundcorner=10pt,
-  innertopmargin=\baselineskip,
-  innerbottommargin=\baselineskip,
-  innerrightmargin=10pt,
-  innerleftmargin=10pt
-}
+% \author{Joan R. Public\footnote{Optional footnote, e.g. to mark corresponding author}}{Department of Informatics, Dummy College, [optional: Address], Country}{joanrpublic@dummycollege.org}{[orcid]}{[funding]}
 
-\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\small\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\small\bf +}}
+\authorrunning{J. Carette, S.\,W. Smith, and J. Balaci} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
 
-\makeatletter
-\newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
-\makeatother
+\Copyright{Jacques Carette, Spencer W. Smith, and Jason Balaci} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
 
-\newcommand{\heading}[1]{\noindent{\large {\textbf{#1}\ }}}
-\begin{document}
-
-\lstset{language=haskell, basicstyle=\scriptsize, breaklines=true,
-  showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
-  escapeinside={\%*}{*)}}
-
-\title{When Capturing Knowledge Improves Productivity}
-
-\author{Jacques Carette}
-\orcid{0000-0001-8993-9804}
-\affiliation{
-  \department{Computing and Software}
-  \streetaddress{1280 Main Street West}
-  \institution{McMaster University}
-  \city{Hamilton}
-  \state{Ontario}
-  \postcode{L8S 4L8}
-  \country{Canada}}
-\email{carette@mcmaster.ca}
-
-\author{Spencer Smith}
-\orcid{0000-0002-0760-0987}
-\affiliation{
-  \department{Computing and Software}
-  \streetaddress{1280 Main Street West}
-  \institution{McMaster University}
-  \city{Hamilton}
-  \state{Ontario}
-  \postcode{L8S 4L8}
-  \country{Canada}}
-\email{smiths@mcmaster.ca}
-
-\author{Jason Balaci}
-%\orcid{0000-0002-0760-0987}
-\affiliation{
-  \department{Computing and Software}
-  \streetaddress{1280 Main Street West}
-  \institution{McMaster University}
-  \city{Hamilton}
-  \state{Ontario}
-  \postcode{L8S 4L8}
-  \country{Canada}}
-\email{balacij@mcmaster.ca}
-
-\begin{abstract}
-  Current software development is often quite code-centric and aimed at
-  short-term deliverables, due to various contextual forces. We're interested in
-  contexts where different forces are at play.  \textbf{Well understood domains}
-  and \textbf{long-lived software} provide such an opportunity. By
-  applying generative techniques, aggressive knowledge capture has the real
-  potential to greatly increase long-term productivity.
-
-  Key is to recognize that currently hand-written software artifacts contain
-  considerable knowledge duplication. With proper tooling and appropriate
-  codification of domain knowledge, greatly increasing productivity is
-  feasible. We present an example of what this looks like, and just some of
-  the benefits (reuse, traceability, change management) thus gained.
-\end{abstract}
-
-
+% \ccsdesc[100]{\textcolor{red}{Replace ccsdesc macro with valid one}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
 % Generator:   http://dl.acm.org/ccs.cfm
-% TODO: This is a temporary CCSXML and \ccsdesc list
 \begin{CCSXML}
 <ccs2012>
    <concept>
@@ -142,36 +69,105 @@ May 21--29, 2022, Pittsburgh, PA, USA}
 \ccsdesc[500]{Software and its engineering~Automatic programming}
 %% End of generated code
 
+% \keywords{Dummy keyword} %TODO mandatory; please add comma-separated list of keywords
+
 \keywords{code generation, document generation, knowledge capture,
   software engineering}
 
-% set up math environment
-\newtheorem{defn}{Definition}
+\category{} %optional, e.g. invited paper
+
+\relatedversion{} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
+%\relatedversiondetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93]{Classification (e.g. Full Version, Extended Version, Previous Version}{URL to related version} %linktext and cite are optional
+
+%\supplement{}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
+%\supplementdetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93, subcategory={Description, Subcategory}, swhid={Software Heritage Identifier}]{General Classification (e.g. Software, Dataset, Model, ...)}{URL to related version} %linktext, cite, and subcategory are optional
+
+%\funding{(Optional) general funding statement \dots}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
+
+% \acknowledgements{I want to thank \dots}%optional
+
+%\nolinenumbers %uncomment to disable line numbering
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{John Q. Open and Joan R. Access}
+\EventNoEds{2}
+\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
+\EventShortTitle{CVIT 2016}
+\EventAcronym{CVIT}
+\EventYear{2016}
+\EventDate{December 24--27, 2016}
+\EventLocation{Little Whinging, United Kingdom}
+\EventLogo{}
+\SeriesVolume{42}
+\ArticleNo{23}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\small\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\small\bf +}}
+
+\lstset{language=haskell, basicstyle=\scriptsize, breaklines=true,
+  showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
+  escapeinside={\%*}{*)}}
+
+\usepackage{dashbox}
+
+%%%%%%%
+%%% GUIDELINES
+% https://submission.dagstuhl.de/styles/instructions/72
+%%%%
+
+\begin{document}
 
 \maketitle
 
-\section{The Context}
-\subsection{``Well understood'' software?}\label{ch:wellUnderstood}
+\begin{abstract}
+    Current software development is often quite code-centric and aimed at
+    short-term deliverables, due to various contextual forces (such as the
+    need for new revenue streams from many individual buyers). We're interested
+    in software where different forces drive the development. \textbf{Well
+    understood domains} and \textbf{long-lived software} provide one such
+    context.
 
-\begin{defn}
-A software domain is \emph{well understood} if
+    A crucial observation is that software artifacts that are currently
+    handwritten contain considerable duplication.  By using domain-specific
+    languages and generative techniques, we can capture the contents of many of
+    the artifacts of such software.  Assuming an appropriate codification of
+    domain knowledge, we find that the resulting de-duplicated sources are
+    shorter and closer to the domain.  Our encodings also seem to do well with
+    respect to increasing traceability and change management. We're hopeful
+    that this could lead to long-term productivity improvements for software
+    that fit this context.
+\end{abstract}
+
+\section{The Context}
+\label{sec:the-context}
+
+Not all software is the same. In fact, there is enough variation in the
+context in which developers create various software products to warrant exploring and
+using different processes, depending on the forces~\cite{alexander1977pattern}
+at play. Here we explore two such forces: ``well understood'' and ``long
+lived''.
+
+\subsection{``Well-understood'' software?}
+\label{subsec:well-understood}
+
+\begin{definition}
+\label{defn:well-understood}
+A software domain is \textbf{well understood} if
 \begin{enumerate}
-\item its Domain Knowledge (DK)~\cite{bjorner2021domaineng} is codified,
-\item the computational interpretation of the DK is clear, and
-\item writing code to perform said computations is well understood.
+    \item its Domain Knowledge (DK)~\cite{bjorner2021domaineng} is codified,
+    \item the computational interpretation of the DK is clear, and
+    \item writing code to perform said computations is well understood.
 \end{enumerate}
-\end{defn}
+\end{definition}
 
 By \emph{codified}, we mean that the knowledge exists in standard form in a
-variety of textbooks. For example, many engineering domains use
-ordinary differential equations as models, the quantities of
-interest are known, given standard names and standard units. In other words,
-standard vocabulary has been established over time and the body of knowledge is
-uncontroversial.
+variety of textbooks. For example, many engineering domains use ordinary
+differential equations as models, the quantities of interest are known, given
+standard names and standard units. In other words, standard vocabulary has been
+established over time and the body of knowledge is uncontroversial.
 
-We can refine these high level ideas, using the same numbering,
-although the refinement should be
-understood more holistically.
+We can refine these high level ideas, using the same numbering, although the
+refinement should be understood more holistically.
 \begin{enumerate}
 \item Models in the DK \emph{can be} written formally.
 \item Models in the DK \emph{can be} turned into functional relations by
@@ -179,223 +175,170 @@ understood more holistically.
 \item Turning these functional relations into code is an understood
  transformation.
 \end{enumerate}
-Most importantly, the last two parts
-deeply involve \emph{choices}: What quantities are considered inputs, outputs
-and parameters to make the model functional? What programming language?  What
-software architecture data-structures, algorithms, etc.?
+Most importantly, the last two parts deeply involve \emph{choices}: What
+quantities are considered inputs, outputs and parameters to make the model
+functional? What programming language?  What software architecture
+data-structures, algorithms, etc.?
 
-In other words,
-\emph{well understood} does not imply \emph{choice free}.  Writing a small 
-script to move files could just as easily be done in Bash, Python or Haskell.
-In all cases, assuming fluency, the author's job is straightforward because
-the domain is well understood.
+In other words, \emph{well understood} does not imply \emph{choice free}.
+Writing a small script to move files could just as easily be done in Bash,
+Python or Haskell. In all cases, assuming fluency, the author's job is
+straightforward because the domain is well understood.
 
 \subsection{Long-lived software?}
-For us, long-lived software ~\cite{SPL-long-lived}
-is software that is expected to be in continuous
-use and evolution for $20$ or more years. The main characteristic of
-such software is the \emph{expected turnover} of key staff. This means that
-all tacit knowledge about the software will be lost over time if it is not
-captured.
+\label{subsec:long-lived-software}
 
-\subsection{Productivity?}
-We adapt the standard definition of productivity \cite{Boehm1987}, where inputs are labour,
-but adjust the outputs to be knowledge and user satisfaction, where user
-satisfaction acts as a proxy for effective quality.
+For us, long-lived software~\cite{SPL-long-lived} is software that is expected
+to be in continuous use and evolution for \(20\) or more years. The main
+characteristic of such software is the \emph{expected turnover} of key staff.
+This means that all tacit knowledge about the software will be lost over time if
+it is not captured.
+
+%\subsection{Productivity?}
+%\label{subsec:productivity}
+%
+%We adapt the standard definition of productivity \cite{Boehm1987}, where inputs
+%are labour, but adjust the outputs to be knowledge and user satisfaction, where
+%user satisfaction acts as a proxy for effective quality.
 %(see~\cite{SmithAndCarette2020arXiv} for more)
-
-This explicit emphasis on all knowledge produced, rather than just the
-operationalizable knowledge (aka code) 
-implies that human-reusable knowledge, i.e.\ documentation, is crucial.
-This is why the \emph{long-lived} context is important.
+%
+%This explicit emphasis on all knowledge produced, rather than just the
+%operationalizable knowledge (aka code) implies that human-reusable knowledge,
+%i.e.\ documentation, is crucial. This is why the \emph{long-lived} context is
+%important.
 
 \subsection{Documentation}
-Our definition of well understood also applies to \textbf{documentation} aimed
-at humans~\cite{parnas2011precise}.  Explicitly:
+\label{subsec:documentation}
+
+Well understood also applies to \textbf{documentation} aimed
+at humans~\cite{parnas2011precise}. Explicitly:
 \begin{enumerate}
-\item The meaning of the models is understood at a human-pedagogical
-level, i.e.\ it is explainable.
-\item Combining models is explainable. Thus \emph{transformers}
-simultaneously operate on mathematical representations
-and on explanations. This requires that English descriptions also be
-captured in the same manner as the formal-mathematical knowledge.
-\item Similarly, the \emph{transformers} that arise from making software
+\item The meaning of the models is understood at a human-pedagogical level,
+i.e.\ it is explainable.
+\item Combining models is explainable. Thus, the act of combining models
+must simultaneously
+operate on mathematical representations and on explanations. This requires that
+English descriptions also be captured in the same manner as the
+formal-mathematical knowledge.
+\item Similarly, the refinements steps that are performed due to making software
 oriented decisions should be captured with a similar mechanism, and also include
 English explanations.
 \end{enumerate}
 
-We dub these \emph{triform theories}, as a nod to \emph{biform
-theories}~\cite{Farmer2007}. We couple 
-\begin{enumerate*}
-\item an axiomatic description,
-\item a computational description, and
-\item an English description
-\end{enumerate*}
+\begin{definition}
+\label{defn:triform-theories}
+We dub these \textbf{triform theories}, as a nod to \emph{biform
+theories}~\cite{Farmer2007}. They are a coupling of a concepts
+\begin{enumerate}
+  \item an axiomatic description,
+  \item a computational description, and
+  \item an English description
+\end{enumerate}
 of a concept.
-
-%\subsection{Choices}
-%
-%Different kinds of choices are embedded in the different kinds of knowledge.
-%They can show up simply as \emph{parameters}, for example the acceleration due
-%to the gravity constant associated with a planet. They can also shows up as
-%different transformers, for example turning $F - m\cdot a = 0$ into $F\left(m,
-%a\right) = m\cdot a$, i.e. from a conservation law into a computation.
-%For motion computation that same conservation law is often rewritten as
-%$a\left(m,F\right) = F/m$ as part of solving $a = \ddot{x}$ to obtain a position
-%($x$) as a function of time ($t$). We also get choices of phrasing, which are
-%equivalent but may be more adequate in a given context.
+\end{definition}
 
 \subsection{Software artifacts}
+\label{subsec:software-artifacts}
 
 Software currently consists of a whole host of artifacts: requirements,
-specifications, user manual, unit tests, system tests, usability tests,
-build scripts, READMEs, license documents, process documents, as well as
-code.
+specifications, user manual, unit tests, system tests, usability tests, build
+scripts, READMEs, license documents, process documents, as well as code.
 
-Whenever appropriate, we use standards and templates for each of the
-generated artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
+Whenever appropriate, we use standards and templates for each of the generated
+artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
 %~\cite{SmithAndLai2005,
-of the IEEE~\cite{IEEE1998}
-and Volere templates~\cite{RobertsonAndRobertson1999Vol}.
+of the IEEE~\cite{IEEE1998} and Volere
+templates~\cite{RobertsonAndRobertson1999Vol}.
 
-\subsection{Examples of context}
+\subsection{Instances of our context}
+\label{subsec:examples-of-context}
 
-When are these conditions fulfilled? One example is
-\emph{research software} in science and engineering. While the results of
-running various simulations is entirely new, the underlying models and
-how to simulate them are indeed well-known. One particularly long-lived
-example is embedded software for space probes (like Pioneer 10).
+When are these well understood and long lived conditions fulfilled? One example
+is \emph{research software} in science and engineering. While the results of
+running various simulations is entirely new, the underlying models and how to
+simulate them are indeed well known. One particularly long-lived example is
+embedded software for space probes (like Pioneer 10). Another would be ocean
+models, such as NEMO~\cite{madec_gurvan_2022_6334656} which can trace its
+origins to OPA 8~\cite{Madec1998}. In fact, most sub-domains of science and engineering
+harbour their own niche long-lived software.
 
-\section{A New Development Process}\label{ch:process}
-
-Given appropriate infrastructure, what would be an \emph{idealized process}
-(akin to Parnas' ideas of faking a rational design process \cite{Parnas1986})?
-
-\begin{enumerate}
-\item\label{it:problem} Have a task to achieve where
-\emph{software} can play a central part in the solution.
-\item\label{it:understood} The underlying problem domain
-is \emph{well understood}.
-\item\label{it:probdesc} Describe the problem:
-  \begin{enumerate}
-  \item Find the base knowledge (theory) in the pre-existing library
-    or, failing that, write it if it does not yet exist,
-    for instance the naturally occurring known quantities and
-    associated constraints.
-  \item Assemble the ingredients into a coherent narrative,
-  \item Describe the characteristics of a good solution,
-  \item Come up with basic examples (to test correctness, intuitions, etc).
-  \end{enumerate}
-\item\label{it:refine} Describe, by successive refinement transformations, how
-the above can be turned into a
-deterministic\footnote{A current meta-design choice.}
-input-output process.
-  \begin{enumerate}
-  \item Some refinements will involve \emph{specialization}
-    (eg. from $n$-dimensional to $2$-dimensional, assuming no
-    friction, etc).  These \emph{choices} and their \emph{rationale} need to be
-    documented, as a a crucial part of the solution.  Whether these choices
-    are (un)likely to change in the future should be recorded.
-  \item Choices tend to be dependent, and thus (partially) ordered.
-   \emph{Decisions} frequently enable or reveal downstream choices.
-  \end{enumerate}
-\item\label{it:tocode} Describe how the process from step
-\ref{it:refine} can be turned into code. The same kinds of choice
-can occur here.
-\item\label{it:recipe} Turn the steps (i.e.\ from items~\ref{it:refine} and
-\ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together all the
-information into a variety of artifacts (documentation, code, build scripts,
-test cases, etc). These can be read, or executed, or \ldots\, as appropriate.
-\end{enumerate}
-
-While this last step might appear somewhat magical, it isn't. The whole point of
-defining \emph{well understood} is to enable it! A \emph{suitable}
-knowledge encoding is key. This is usually tacit knowledge that
-entirely resides in developers' heads.
-
-What is missing is an explicit \emph{information architecture} of each of
-the necessary artifact. In other words, what information is necessary to
-enable the mechanized generation of each artifact? It turns out that many
-of them are quite straightforward.
-
-Often steps~\ref{it:problem} and~\ref{it:probdesc} are skipped; this is
-part of the \textbf{tacit knowledge} of a lot
-of software.  Our process requires that this knowledge be made explicit,
-a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
-
-% TODO: insert graphical illustration of the funnel from information to
-% artifacts.
-
-\section{An Example}\label{ch:example}
-
-We have built the needed infrastructure. It consists of 60KLoc of Haskell
-implementing a series of interacting Domain Specific Languages (DSLs) for
-knowledge encodings, mathematical expressions, theories, English fragments,
-code generation and document generation.\footnote{We will provide a link
-if the paper is accepted.} A full description would take too much space.
-%because of the double blind review process, we can't really cite Drasil here
-Instead, we provide an illustrative example.
-
-We will focus on information capture and the artifacts we can generate. For
-concreteness, we'll use a single example from our suite: GlassBR, used to
-assess the risk for glass facades subject to blast loading.
-The requirements are based on an American Standard Test Method (ASTM) standard
-\cite{BeasonEtAl1998, ASTM2009, ASTM2015}. GlassBR was originally a Visual
-Basic code/spreadsheet created by colleagues in a civil engineering research
-lab.  We added their domain knowledge to our framework, along with recipes to
-generate relevant artifacts.  Not only can we generate code for the necessary
-calculations (in \CC, C\#, Java, Python and Swift), we added documentation that
-was absent in the original (Software Requirements Specification, doxygen, README.md
-and a Makefile). Moreover, our implementation is actually a family of
-implementations, since some design decisions are explicitly exposed as
-changeable variabilities, as described below.
+\section{An Example}
+\label{sec:example}
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-11ptFont-squished-blind-v1-300dpi.png}
-  \caption{Colors and shapes mapping from captured knowledge to generated
-  artifacts.}
-  \Description{Colors and shapes mapping from captured knowledge to generated
+  \caption{Colors and shapes mapping from captured domain knowledge to generated
   artifacts.}
   \label{Fig_DrasilAndChange}
 \end{figure*}
 
-The transformation of captured knowledge is illustrated in
-Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper
-right box. Each piece of information in this figure has its own
-shape and colour (orange-cloud, pink lozenge, etc). It should be immediately clear
-that all pieces of information reappear in multiple places in the generated
-artifacts. For example, the name of the software (GlassBR) ends up
-appearing more than 80 times in the generated artifacts (in the folder
-structure, requirements, README, Makefile and source code). Changing this
-name would traditionally be extremely difficult; we can achieve this by
-modifying a single place, and regenerating.
+We have built infrastructure%
+\footnote{\url{https://github.com/JacquesCarette/Drasil}} 
+to carry out these ideas. It consists of 60KLoc of Haskell
+implementing a series of interacting Domain Specific Languages (DSLs) for
+knowledge encodings, mathematical expressions, theories, English fragments,
+code generation and document generation.  A full description would take too
+much space.  Instead, we provide an illustrative example.
 
-The first box shows the directory structure of the currently generated artifacts; continuing clockwise, we see examples of Makefiles for
-the Java and Python versions, parts of the fully documented, 
-generated code for the main computation in those languages, user
-instructions for running the code, and the processed \LaTeX{} for the
-requirements.
+\subsection{GlassBR}
+We will focus on information capture and the artifacts we can generate. For
+concreteness, we'll use a single example from our suite: GlassBR, used to assess
+the risk for glass facades subject to blast loading. The requirements are based
+on an American Standard Test Method (ASTM) standard \cite{ASTM2009, ASTM2015,
+BeasonEtAl1998}. GlassBR was originally a Visual Basic code/spreadsheet
+created by colleagues in a civil engineering research lab.  We added their
+domain knowledge to our framework, along with recipes to generate relevant
+artifacts.  Not only can we generate code for the necessary calculations (in
+\CC, C\#, Java, Python and Swift), we also generated documentation that was absent in the
+original (Software Requirements Specification, doxygen, README.md and a
+Makefile). Moreover, our implementation is actually a family of implementations,
+since some design decisions are explicitly exposed as changeable variabilities,
+as described below.
+
+The transformation of captured domain knowledge is illustrated in
+Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper right
+box. Each piece of information in this figure has its own shape and colour
+(orange cloud, pink lozenge, etc). It should be immediately clear that all
+pieces of information reappear in multiple places in the generated artifacts.
+For example, the name of the software (GlassBR) ends up appearing more than 80
+times in the generated artifacts (in the folder structure, requirements, README,
+Makefile and source code). Changing this name would traditionally be extremely
+difficult; we can achieve this by modifying a single place, and regenerating.
+
+The first box shows the directory structure of the currently generated
+artifacts; continuing clockwise, we see examples of Makefiles for the Java and
+Python versions, parts of the fully documented, generated code for the main
+computation in those languages, user instructions for running the code, and the
+processed \LaTeX{} for the requirements.
 
 The name GlassBR is probably the simplest example of what we mean by
-\emph{knowledge}: here, the concept ``program name'' is internally defined, and
-its \emph{value} is used throughout. A more complex example is the assumption that the ``Load Distribution Factor'' (LDF) is constant
-(pink lozenge). If this needs to be modified to instead be an input, the generated software
-will now have LDF as an input variable.  We also capture design decisions,
-such as whether to log all calculations, whether to in-line constants rather
-than show them symbolically, etc. The knowledge for GlassBR can also be reused
+\emph{duplication}: here, the concept ``program name'' is internally defined, and
+its \emph{value} is used throughout. 
+
+In general, we capture more complex knowledge. An example is the assumption
+that the ``Load Distribution Factor'' (LDF) is constant (pink lozenge). If this
+needs to be modified to instead be an input, the generated software will now
+have LDF as an input variable.  
+
+We also capture design decisions, such as
+whether to log all calculations, whether to inline constants rather than show
+them symbolically, etc. These different pieces of knowledge can also be reused
 in different projects.
 
-We now give example conceptual encodings corresponding to steps of the process.
+\subsection{The Steps}
+We describe an ``idealized process'' that we could have used to produce GlassBR,
+following Parnas' idea of faking a rational design process \cite{Parnas1986}.
 
-\heading{Step 1: Task} Compute the probability that a particular pane of
-(special) glass will break if an explosive is detonated at a given distance.
-This could be in the context of the glass facade for a building.
+\subparagraph*{Understand the Program's Task} Compute the probability that a
+particular pane of (special) glass will break if an explosive is detonated at a
+given distance.  This could be in the context of the glass facade for a
+building.
 
-\heading{Step 2: Understood}
-The details are extensively documented in~\cite{BeasonEtAl1998, ASTM2009, ASTM2015}.
+\subparagraph*{Is it well understood?} The details are extensively documented
+in~\cite{ASTM2009, ASTM2015, BeasonEtAl1998}.
 
-\heading{Step 3a: Base Knowledge}
+\subparagraph*{Record Base Domain Knowledge}
 A recurring idea is the different types of \texttt{Glass}:
 \begin{center}
   \begin{tabular}{|l|l|l|l|}
@@ -409,96 +352,107 @@ A recurring idea is the different types of \texttt{Glass}:
   \end{tabular}
 \end{center}
 
-\noindent The ``Risk of Failure'' is definable, using the following template for a
-\textit{data definition}:
+\noindent The ``Risk of Failure'' is definable:
 \begin{center}
   \begin{tabular}{|l|l|}
     \hline
     \textbf{Label} & Risk of Failure \\ \hline
-%    \textbf{Symbol} & $B$ \\ \hline
-%    \textbf{Units} & Unitless \\ \hline
-    \textbf{Equation} & $B = \frac{k}{(ab)^{m-1}}(Eh^2)^m\mathit{LDF}e^J$ \\ \hline
+    \textbf{Symbol} & $B$ \\ \hline
+    \textbf{Units} & Unitless \\ \hline
+    \textbf{Equation} & \(B = \frac{k}{(ab)^{m-1}}(Eh^2)^m\mathit{LDF}e^J\) \\ \hline
     \textbf{Description} & \vbox{
-      \hbox{\strut $B$ is the Risk of Failure (Unitless)}
-      \hbox{\strut $k$ is the surface flaw parameter ($\frac{m^{12}}{N^7}$)}
-      \hbox{\strut $a$ \& $b$ are the plate length \& width (\textit{m})}
-      \hbox{\strut $...$}
-% Do we want to have all of the variables listed? - No - there isn't room
-%      \hbox{\strut $m$ is the surface flaw parameter ($\frac{m^{12}}{N^7}$)}
-%      \hbox{\strut $E$ is the modulus of elasticity of glass (\textit{Pa})}
-%      \hbox{\strut $h$ is the minimum thickness (\textit{m})}
-%      \hbox{\strut $LDF$ is the load duration factor (Unitless)}
-%      \hbox{\strut $J$ is the stress distribution factor (Unitless)}
+      \hbox{\strut \(B\) is the Risk of Failure (Unitless)}
+      \hbox{\strut \(k\) is the surface flaw parameter (\(\frac{m^{12}}{N^7}\))}
+      \hbox{\strut \(a\) \& \(b\) are the plate length \& width (\textit{m})}
+      \hbox{\strut $m$ is the surface flaw parameter ($\frac{m^{12}}{N^7}$)}
+      \hbox{\strut $E$ is the modulus of elasticity of glass (\textit{Pa})}
+      \hbox{\strut $h$ is the minimum thickness (\textit{m})}
+      \hbox{\strut $LDF$ is the load duration factor (Unitless)}
+      \hbox{\strut $J$ is the stress distribution factor (Unitless)}
     } \\ \hline
     \textbf{Source} & \cite{ASTM2009}, \cite{BeasonEtAl1998} \\ \hline 
 % The Campidelli reference was removed because we cannot really cite personal
 % communication and not reveal our identities
   \end{tabular}
 \end{center}
+Some concepts, such as those of \emph{explosion}, \emph{glass slab}, and
+\emph{degree} do not need to be defined mathematically -- an Enlish description
+is sufficient.
 
-% explosion - concept chunk
-% glass slag - named chunk
-% degree - concept chunk
-% user input - named chunk
-\heading{Step 3b: Coherent narrative}
-The descriptions in GlassBR are produced using an experimental language 
-using specialized markup
-for describing relations between knowledge. For example, the goal of GlassBR 
-(``Predict-Glass-Withstands-Explosion'') is to ``Analyze and predict whether 
-the \textit{glass slab} under consideration will be able to withstand the 
-\textbf{explosion} of a certain \textbf{degree} which is calculated based on
-\textit{user input}.'', where italicized names are ``named ideas'', 
-and bold-faced names are ``concept chunks'' (named ideas with a domain of
-related ideas). We call this goal a ``concept instance'' (a concept chunk
-applied in some way). This language lets us
-perform various static analyses on our artifacts.
+The descriptions in GlassBR are produced using an experimental language using
+specialized markup for describing relations between knowledge. For example, the
+goal of GlassBR (``Predict-Glass-Withstands-Explosion'') is to ``Analyze and
+predict whether the \textit{glass slab} under consideration will be able to
+withstand the \textbf{explosion} of a certain \textbf{degree} which is
+calculated based on \textit{user input}.'', where italicized names are ``named
+ideas'', and bold faced names are ``concept chunks'' (named ideas with a domain
+of related ideas). We call this goal a ``concept instance'' (a concept chunk
+applied in some way). This language lets us perform various static analyses on
+our artifacts.
 
-\heading{Step 3c: Characteristics of a good solution}
-One of our outputs is a probability, which should be checked to be between $0$ and
-$1$ (code not shown).
+This doesn't build a complete ontology of concepts, as we have not found that
+to be necessary to generate our artifacts. In other words, we define a
+\emph{good enough} fraction of the domain ontology.
 
-\heading{Step 4: Specialization of theories}
-In the GlassBR example, the main specialization is that the thickness parameter
+The most important results of this phase are descriptions of \emph{theories}
+that link all the important concepts together. For example, the description
+of all the elements that comprise Newton's Law $F = m a$,
+i.e. what is a force, a mass, acceleration (and how is it related to
+velocity, position and time), what are the units involved, etc.
+
+\subparagraph*{Define the characteristics of a good solution}
+For example, one of our outputs is a probability, which means that the output
+should be checked to be between \(0\) and \(1\). This can result
+in assertion code in the end program, or tests, or both. We do not yet
+support full \emph{properties}~\cite{claessen2000quickcheck}, but that is
+indeed the logical next step.
+
+\subparagraph*{Record basic examples}
+For the purposes of testing, it is always good to have very simple examples,
+especially ones where the correct answer is known a priori, even though the simple
+examples are considered ``toy problems''. They provide a useful extra check
+that the narrative is coherent with our expectations.
+
+\subparagraph*{Specialization of theories}
+In general, the theories involved will be much more general than what is
+needed in any given example. For example, Newton's Laws are encoded in their
+vector form in $n$ dimensions, and thus specialization is necessary.
+
+In the GlassBR example, the thickness parameter
 is not free to vary, but must take one of a specific set of values. The
 rationale for this specialization is that manufacturers have standardized the
-glass thickness they will provide.
+glass thickness they will provide. (This rationale is also something we capture.)
 
-The phenomenological nature of the GlassBR example is atypical in this way; most research software examples involve more significant
-specialization, such as partial differential equations to ordinary,
-elimination of variables, use of closed-forms instead of implicit equations,
-and so on.
+Most research software examples involve significant specialization, such as
+converting partial differential equations to ordinary, elimination of
+variables, use of closed forms instead of implicit equations, and so on.
+Often specialization, driven by underlying assumptions, enable further
+specializations, so that this step is really one of \emph{iterative refinement}.
 
-%% Commenting this out, as it didn't really represent 4b
-%
-%\heading{Step 4b: Choices}
-%
-%We create a closed harmonic system containing all related knowledge (in
-%particular, the grounded theories), which is as simple as collecting them into a
-%single system.
-%
-%\begin{lstlisting}
-%iMods :: [InstanceModel]
-%iMods = [pbIsSafe, lrIsSafe]
-%
-%si :: SystemInformation
-%si = SI {
-%_sys = glassBR, _kind = Doc.srs, _authors = [nikitha],
-%_purpose = purpDoc glassBR Verbose, _quants = symbolsForTable,
-%_concepts = [] :: [DefinedQuantityDict], _instModels = iMods,
-%_datadefs = GB.dataDefs, _configFiles = configFp,
-%_inputs = inputs, _outputs = outputs,
-%_defSequence = qDefns, _constraints = constrained,
-%_constants = constants, _sysinfodb = symbMap,
-%_usedinfodb = usedDB, refdb = refDB
-%}
-%\end{lstlisting}
+\subparagraph*{Create a coherent narrative}
+Given the outputs we wish to produce, such as the probability that a glass
+slab will withstand an explosion, we need to ensure that we can go from all
+the given inputs to the desired output, by stringing together various
+definitions given in a computational manner. In other words, we need to
+ensure that there exists a deterministic path from the inputs we are given,
+through the equations we have, to all of the outputs we've declared we are
+interested in.
 
-\heading{Step 5: Code-level choices}
-We can choose the output programming language, how ``modular'' the generated code
-is, whether we want programs or libraries, the level of logging and comments,
-etc. Here we show the actual code we use for this, as it is reasonably
-direct.
+For this example, the computations are all quite simple, but in general this
+might involve solving ordinary differential equations, computing a solution to
+an optimization problem, etc.
 
+\subparagraph*{Make code level choices}
+From a \emph{deterministic model of the solution}, it should be
+possible to output code in a programming language. To get there, we still need
+to make a series of choices.
+
+Drasil lets you choose output programming language(s) (see
+\Cref{fig:CodeChoices}), but also how ``modular'' the generated code is, whether
+we want programs or libraries, the level of logging and comments, etc. Here we
+show the actual code we use for this, as it is reasonably direct.
+
+\begin{figure}[htb]
 \begin{lstlisting}
 code :: CodeSpec
 code = codeSpec fullSI choices allMods
@@ -517,22 +471,23 @@ choices = defaultChoices {
  constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
+  \caption{Code level choices for GlassBR (compare bold box in \Cref{Fig_DrasilAndChange}).}
+  \label{fig:CodeChoices}
+\end{figure}
 
-\heading{Step 6: Recipe to generate artifacts}
+\subparagraph*{Create recipes to generate artifacts}
+The information collected in the previous steps form the core of the various
+software artifacts normally written. To perform this assembly, we write
+programs that we dub \emph{recipes}. We have DSLs for creating specifications,
+code~\cite{GOOLPEPM}, dependency diagrams, Makefiles, READMEs and a log of all choices
+used.
 
-The various pieces of knowledge specified in the previous steps are
-assembled into \emph{recipes} for generating the artifacts, for example
-specification, code, dependency diagrams and log of all choices used.  Each one
-of these has its own DSL that encodes the parts of a specification, the
-requirements for code\footnote{which has been already published
-and will be cited later}, etc.
+While we currently generate \texttt{Makefile}s, a good example of a DSL for
+specifying build scripts, our ideas are more properly compared with
+the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
 
-The venerable \texttt{Makefile} language is a good example of a DSL for
-specifying build scripts, but where our ideas are more properly compared
-with the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
-
-And finally, we can put all of these things together, and generate
-\textbf{everything}:
+Finally, we can put the contents created via the previous steps together and
+\textbf{generate everything}:
 \begin{lstlisting}
 main :: IO()
 main = do
@@ -543,95 +498,141 @@ main = do
   genLog fullSI printSetting
 \end{lstlisting}
 
-\section{Concluding Remarks} \label{ch:concluding_remarks}
+\section{An Idealized Process}
+\label{sec:idealized-process}
 
-% To summarize:
-% \\
+It is useful to summarize the \emph{idealized process} we used above.
 
-\begin{mdframed}[style=MyFrame]
-\begin{itemize}[leftmargin=\widthof{[\textbf{Opportunity}]}]
-\item[\textbf{Opportunity}]: well-understood + long-lived
-\item[\textbf{Tools}]: knowledge capture + DSLs + generators
-\item[\textbf{Result}]: \emph{long-term productivity gain}
-\end{itemize}
-\end{mdframed}
+\begin{enumerate}
+\item\label{it:problem} Have a task to achieve where \emph{software} can
+play a central part in the solution.
+\item\label{it:understood} Verify that the underlying problem domain is \emph{well
+understood}.
+\item\label{it:probdesc} Describe the problem:
+  \begin{enumerate}
+  \item Find the base knowledge (theories) in the pre-existing library or,
+    failing that, write it if it does not yet exist, for instance the
+    naturally occurring known quantities and associated constraints.
+  \item Describe the characteristics of a good solution.
+  \item Come up with basic examples (to test correctness, intuitions, etc).
+  \end{enumerate}
+\item\label{it:refine} Describe, by successive refinement transformations,
+how the problem description can be turned into a deterministic\footnote{A current
+meta-design choice.} input-output process.
+  \begin{enumerate}
+  \item Some refinements will involve \emph{specialization} (e.g. from
+    \(n\)-dimensional to \(2\)-dimensional, assuming no friction, etc).  These
+    \emph{choices} and their \emph{rationale} need to be documented, as a
+    crucial part of the solution.  Whether these choices are (un)likely to
+    change in the future should also be recorded.
+  \item Choices tend to be dependent, and thus (partially) ordered.
+   \emph{Decisions} frequently enable or reveal downstream choices.
+  \end{enumerate}
+\item\label{it:narrative} Assemble the ingredients into a coherent narrative.
+\item\label{it:tocode} Describe how the process from step \ref{it:narrative}
+can be turned into code. Many choices can occur here as well.
+\item\label{it:recipe} Turn the steps (i.e.,\ from items~\ref{it:refine} and
+\ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together all
+the information into a variety of artifacts (documentation, code, build
+scripts, test cases, etc). These can be read, or executed, or \ldots\, as
+appropriate.
+\end{enumerate}
 
-We get productivity gains because there is in fact an
-incredible amount of \emph{knowledge duplication} present in software,
-especially in well understood domains. For these domains building software really
-should be a matter of assembly-line style engineering. Furthermore,
-there is also inherent knowledge duplication between the artifacts of
-a project because \emph{they are about the same topic}.
+The fundamental reason for focusing on \emph{well-understood} software is to
+make the various steps in this process feasible. Another enabler is a
+\emph{suitable} knowledge encoding. Rather than define this a priori, we have
+used a \emph{bottom up} process to capture ``good enough'' ontologies to get the
+job done.
 
-This means that if we spend some up-front time capturing the fundamental
-knowledge of specific domains (such as mechanics of rigid body motion,
-dynamics of soil, trains, etc), most later development time can be
-spent on the \emph{specifics} of the given requirements.
+What is missing in the above description is an explicit \emph{information
+architecture} of each of the necessary artifact. In other words, what
+information is necessary to enable the mechanized generation of each artifact?
+It turns out that many of them are quite straightforward.
 
-As a side-effect, we obtain traceability and consistency, by construction.
-Traceability is illustrated by Figure~\ref{Fig_DrasilAndChange}, which shows we
-can track where each of the concepts is used.  An example of consistency is
-found in the table of symbols that appears in our generated documentation.  The
-list of symbols is not entered by the user; it is automatically constructed from
-the base knowledge (Step 3a).
+Note that in many software projects, steps~\ref{it:problem}
+and~\ref{it:probdesc} are skipped; this is part of the \textbf{tacit knowledge}
+of a lot of software.  Our process requires that this knowledge be made
+explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
+
+% TODO: insert graphical illustration of the funnel from information to
+% artifacts.
+
+\section{Concluding Remarks}
+\label{sec:concluding-remarks}
+
+
+%\begin{figure}
+%  \centering
+%  \fbox{
+%    \begin{minipage}[c]{0.65\textwidth}
+%      \centering
+%      \begin{tabular}{rcl}
+%        \textbf{Opportunity} & : & well-understood + long-lived \\
+%        \textbf{Tools}       & : & knowledge capture + DSLs + generators \\
+%        \textbf{Result}      & : & \emph{long-term productivity gain}
+%      \end{tabular}
+%   \end{minipage}
+% }
+% \caption{Summary}
+% \label{fig:summary}
+%\end{figure}
+
+% TODO
+% - link with Eelco's work
+
+Others~\cite{bjorner2021domaineng} have already remarked that for most software,
+the \emph{domain knowledge} is the slowest moving part of the requirements.
+We add to this the ideas that for certain kinds of software, there is a lot of
+\emph{knowledge duplication} amongst the artifacts, much of which is traceable
+to domain knowledge. Thus, in well-understood domains, it should be feasible to
+record the domain knowledge ``once'', and then write recipes to generate
+instances based on refinements. For long-lived software, this kind of up-front
+investment should be worthwhile.
+
+In other words, if we capture the fundamental domain knowledge of specific
+domains (such as mechanics of rigid body motion, dynamics of soil, trains,
+etc), most later development time can be spent on the \emph{specifics} of the
+requirements of a specialized application that may well contain novel ideas at
+the refinement or recipe level.
+
+In Drasil, as a side effect of organizing things as we have, we obtain
+traceability and consistency, by construction.  Tracking where we use each
+concept, i.e. traceability, is illustrated in Figure~\ref{Fig_DrasilAndChange}.
+We obtain consistency in our documentation by generating items such as the
+table of symbols from those symbols actually used in the document, and whose
+definition is automatically extracted from the base knowledge.
 
 There are further ideas that co-exist smoothly with our framework, most notably
-software families and correctness.  Our process will remove human errors from
-generating and maintaining documentation, code, test cases and build
-environments, since these mundane details are handled by the generator.
-Furthermore, our work makes it easy to experiment with ``what if'' scenarios,
-which make it easy to explicitly track the
-ramifications proposed changes.  
+software families and correctness, particularly correctness of documentation.  
+As we generate the documentation in tandem with, and using the same information as,
+the source code, these will necessarily be synchronized. Errors will co-occur in both.
+This is a feature, as they are more likely to be caught that way.
 
-With the right up-front investment, we can have sustainable software
-development because stable knowledge is separated from 
-local context, which is where most of the rapidly changing assumptions
-and requirements reside.
+We've also noticed that we can more easily experiment with ``what if'' scenarios,
+which make it easy to understand the ramifications of proposed changes.  
 
-\newpage
+We expect to use formal ontologies as we implement
+more coherence checks on the domain knowledge itself. For example, it should not
+be possible to associate a \textit{weight} attribute to the concept
+\textit{program name}, but only to concepts that are somehow ``physical''. 
+Perhaps a large ontology in the style of Cyc~\cite{lenat1995cyc} would help.
+
+That work of this scale is possible has strongly been influenced by Eelco
+Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
+made it clear that many different artifacts can be generated. He was braver than
+us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
+indeed expected to be long lived, but certainly was not created for a
+well-understood domain! The domain analysis of web applications is a non-trivial
+contribution of WebDSL. Whether it is product lines or program families, weaving
+them from DSLs is also something he preached~\cite{voelter2011product}.
+We never got a chance to present Drasil to Eelco, but we hope that it would
+have resonated with him.
+%%
 %% Bibliography
-\bibliographystyle{ACM-Reference-Format}
+%%
+
+%% Please use bibtex, 
+
 \bibliography{References}
 
 \end{document}
-
-% Good quotes:
-% \begin{itemize}
-% \item metaprograms are just programs
-% \item models outside an integrated toolchain are insufficiently useful
-% \end{itemize}
-
-%% Was in 4a
-To illustrate the specialization of theories, we will look outside of the
-GlassBR example because, due to its phenomenological nature, GlassBR only has
-trivial specializations.  To illustrate this step we will turn to another
-example: a solar water heating system incorporating phase change material
-\cite{DouviEtAl2021} (based on original FORTRAN code from colleagues in
-mechanical engineering).  Since this is a heat transfer problem, the initial
-theory is the general form of the conservation of thermal energy. This general
-form is a partial differential equation in 3D space and
-time~\cite{BirdEtAl2002}.  To specialize the theory to the solar water heating
-tank, we introduced the following assumptions:
-
-\begin{itemize}
-
-\item The water in the tank is fully mixed.
-
-\item The density of water has no spatial variation.
-
-\item The specific heat capacity of water has no spatial variation.
-
-\end{itemize}
-
-The refined theory is an ordinary differential equation that depends only on
-time.  This new theory is parameterized by material properties and the area and
-thermal flux between two adjacent bodies. This theory in turn is specialized
-into two more theories: one where the adjacent bodies are the tank and the
-heating coil, and one where the bodies are the water and a phase change
-material.
-
-By systematically refining the theory, and generating documentation, human
-beings can validate the assumptions and the mathematical model. By capturing the
-knowledge, changes can be made to realize a family of mathematical models.
-Moreover, the knowledge can be reused for other heat transfer problems.
-

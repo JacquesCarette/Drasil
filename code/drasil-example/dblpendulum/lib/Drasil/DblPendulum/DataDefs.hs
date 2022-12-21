@@ -119,4 +119,4 @@ forceGQD :: SimpleQDef
 forceGQD = mkQuantDef force forceGEqn
 
 forceGEqn :: PExpr
-forceGEqn = sy mass `mulRe` sy acceleration
+forceGEqn = vScale (sy mass) (sy acceleration)

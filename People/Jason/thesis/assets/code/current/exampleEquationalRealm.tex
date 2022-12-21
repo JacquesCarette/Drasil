@@ -1,0 +1,21 @@
+\begin{haskell}{Example of Equational Realm: Horizontal Force}{exampleEquationalRealm}{https://github.com/JacquesCarette/Drasil/blob/dc3674274edb00b1ae0d63e04ba03729e1dbc6f9/code/drasil-example/dblpendulum/lib/Drasil/DblPendulum/GenDefs.hs\#L212-L230}
+-------------------------------------------------
+-- Horizontal force acting on the first object --
+-------------------------------------------------
+xForceGD_1 :: GenDefn
+xForceGD_1 = gdNoRefs (equationalRealmU "xForce1" xForceMD_1)
+        (getUnit force) (Just xForceDeriv_1) "xForce1" []
+
+xForceMD_1 :: MultiDefn ModelExpr
+xForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
+    where quant = mkQuant' "force" (horizontalForce `onThe` firstObject)
+                    Nothing Real (symbol force) (getUnit force)
+          defns = NE.fromList [
+                    mkDefiningExpr "xForceWithMass1"
+                      [] EmptyS $ express $ forceGQD ^. defnExpr,
+                    mkDefiningExpr "xForceWithAngle1"
+                      [] EmptyS E.xForceWithAngle_1]
+
+xForceDeriv_1 :: Derivation
+xForceDeriv_1 = mkDerivName (phraseNP (force `onThe` firstObject)) [eS' xForceMD_1]
+\end{haskell}

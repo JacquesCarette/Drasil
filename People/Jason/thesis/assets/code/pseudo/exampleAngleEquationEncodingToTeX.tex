@@ -1,0 +1,48 @@
+\begin{pseudocode}{tex}{Example Angle Equation SRS Conversion}{exampleAngleEquationEncodingToTeX}
+\begin{minipage}{\textwidth}
+\begin{tabular}{...}
+\toprule \textbf{Refname} & \textbf{IM:firingAngleFormula}
+\phantomsection 
+\label{IM:firingAngleFormula}
+\\ \midrule \\
+Label & Firing angle formula
+
+\\ \midrule \\
+Input & $\textit{targetDistanceFromCannon}$, $v$
+
+\\ \midrule \\
+Output & $\theta{}_c$
+         
+\\ \midrule \\
+Input Constraints & --
+
+\\ \midrule \\
+Output Constraints & \begin{displaymath}
+                     {\theta{}_c}\gt{}0
+                     \end{displaymath}
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\theta{}_c} = \frac{\arcsin{} (\frac{\textit{targetDistanceFromCannon} \cdot{} \mathbf{g}}{v^{2}})}{2}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\theta{}_c}$ is the firing angle (${\text{rad}}$)}
+              \item{${v}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$targetDistanceFromCannon$ is the distance between the cannon and target (${\text{m}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & --
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & ...
+
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of landing position:}
+...
+\end{pseudocode}

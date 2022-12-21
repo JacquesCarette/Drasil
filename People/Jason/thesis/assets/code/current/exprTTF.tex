@@ -1,0 +1,127 @@
+\begin{haskell}{Expr Constructor Encoding (TTF)}{curExprTTF}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/Expr/Class.hs\#L86-L209}
+class ExprC r where
+  infixr 8 $^
+  infixl 7 $/
+  infixr 4 $=
+  infixr 9 $&&
+  infixr 9 $||
+  
+  lit :: Literal -> r
+
+  -- * Binary Operators
+  
+  ($=), ($!=) :: r -> r -> r
+  
+  -- | Smart constructor for ordering two equations.
+  ($<), ($>), ($<=), ($>=) :: r -> r -> r
+  
+  -- | Smart constructor for the dot product of two equations.
+  ($.) :: r -> r -> r
+  
+  -- | Add two expressions (Integers).
+  addI :: r -> r -> r
+  
+  -- | Add two expressions (Real numbers).
+  addRe :: r -> r -> r
+  
+  -- | Multiply two expressions (Integers).
+  mulI :: r -> r -> r
+  
+  -- | Multiply two expressions (Real numbers).
+  mulRe :: r -> r -> r
+  
+  ($-), ($/), ($^) :: r -> r -> r
+  
+  ($=>), ($<=>) :: r -> r -> r
+  
+  ($&&), ($||) :: r -> r -> r
+  
+  -- | Smart constructor for taking the absolute value of an expression.
+  abs_ :: r -> r
+  
+  -- | Smart constructor for negating an expression.
+  neg :: r -> r 
+  
+  -- | Smart constructor to take the log of an expression.
+  log :: r -> r
+  
+  -- | Smart constructor to take the ln of an expression.
+  ln :: r -> r
+  
+  -- | Smart constructor to take the square root of an expression.
+  sqrt :: r -> r
+  
+  -- | Smart constructor to apply sin to an expression.
+  sin :: r -> r
+  
+  -- | Smart constructor to apply cos to an expression.
+  cos :: r -> r 
+  
+  -- | Smart constructor to apply tan to an expression.
+  tan :: r -> r
+  
+  -- | Smart constructor to apply sec to an expression.
+  sec :: r -> r 
+  
+  -- | Smart constructor to apply csc to an expression.
+  csc :: r -> r
+  
+  -- | Smart constructor to apply cot to an expression.
+  cot :: r -> r 
+  
+  -- | Smart constructor to apply arcsin to an expression.
+  arcsin :: r -> r 
+  
+  -- | Smart constructor to apply arccos to an expression.
+  arccos :: r -> r 
+  
+  -- | Smart constructor to apply arctan to an expression.
+  arctan :: r -> r 
+  
+  -- | Smart constructor for the exponential (base e) function.
+  exp :: r -> r
+  
+  -- | Smart constructor for calculating the dimension of a vector.
+  dim :: r -> r
+  
+  -- | Smart constructor for calculating the normal form of a vector.
+  norm :: r -> r
+  
+  -- | Smart constructor for negating vectors.
+  negVec :: r -> r
+  
+  -- | Smart constructor for applying logical negation to an expression.
+  not_ :: r -> r
+  
+  -- | Smart constructor for indexing.
+  idx :: r -> r -> r
+  
+  -- | Smart constructor for the summation, product, and integral functions over an interval.
+  defint, defsum, defprod :: Symbol -> r -> r -> r -> r
+  
+  -- | Smart constructor for 'real interval' membership.
+  realInterval :: HasUID c => c -> RealInterval r r -> r
+  
+  -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
+  euclidean :: [r] -> r
+  
+  -- | Smart constructor to cross product two expressions.
+  cross :: r -> r -> r
+  
+  -- | Smart constructor for case statements with a complete set of cases.
+  completeCase :: [(r, r)] -> r
+  
+  -- | Smart constructor for case statements with an incomplete set of cases.
+  incompleteCase :: [(r, r)] -> r
+  
+  -- | Create a matrix.
+  matrix :: [[r]] -> r
+
+
+  -- | Applies a given function with a list of parameters.
+  apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
+   
+  -- Note how |sy| 'enforces' having a symbol
+  -- | Create an 'Expr' from a 'Symbol'ic Chunk.
+  sy :: (HasUID c, HasSymbol c) => c -> r
+\end{haskell}

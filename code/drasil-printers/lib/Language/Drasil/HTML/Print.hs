@@ -209,7 +209,10 @@ pOps Dim      = "dim"
 pOps Exp      = "e"
 pOps Neg      = "&minus;"
 pOps Cross    = "&#10799;"
+pOps VAdd     = "&plus;"
+pOps VSub     = "&minus;"
 pOps Dot      = "&sdot;"
+pOps Scale    = "&#8239;" -- same as Mul
 pOps Eq       = " = " -- with spaces?
 pOps NEq      = "&ne;"
 pOps Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable

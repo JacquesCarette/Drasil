@@ -39,4 +39,4 @@ message = vc "message" (nounPhraseSent (S "output message as a string")) lS Stri
 
 ---
 tol :: ConstQDef
-tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Rational) (perc 2 2)
+tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)

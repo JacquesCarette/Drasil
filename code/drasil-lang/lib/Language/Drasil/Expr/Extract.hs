@@ -13,9 +13,9 @@ eNames (AssocA _ l)          = concatMap eNames l
 eNames (AssocB _ l)          = concatMap eNames l
 eNames (C c)                 = [c]
 eNames Lit{}                 = []
-eNames (FCall f x ns)        = f : concatMap eNames x ++ map fst ns ++ 
-                              concatMap (eNames . snd) ns
-eNames (Case _ ls)           = concatMap (eNames . fst) ls ++ concatMap (eNames . snd) ls
+eNames (FCall f x)           = f : concatMap eNames x
+eNames (Case _ ls)           = concatMap (eNames . fst) ls ++
+                               concatMap (eNames . snd) ls
 eNames (UnaryOp _ u)         = eNames u
 eNames (UnaryOpB _ u)        = eNames u
 eNames (UnaryOpVV _ u)       = eNames u
@@ -27,6 +27,7 @@ eNames (LABinaryOp _ a b)    = eNames a ++ eNames b
 eNames (OrdBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (VVVBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (VVNBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (NVVBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (Operator _ _ e)      = eNames e
 eNames (Matrix a)            = concatMap (concatMap eNames) a
 eNames (RealI c b)           = c : eNamesRI b
@@ -45,10 +46,9 @@ eNames' (AssocA _ l)          = concatMap eNames' l
 eNames' (AssocB _ l)          = concatMap eNames' l
 eNames' (C c)                 = [c]
 eNames' Lit{}                 = []
-eNames' (FCall _ x ns)        = concatMap eNames' x ++ map fst ns ++ 
-                               concatMap (eNames .snd) ns
+eNames' (FCall _ x)           = concatMap eNames' x
 eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++ 
-                               concatMap (eNames' . snd) ls
+                                concatMap (eNames' . snd) ls
 eNames' (UnaryOp _ u)         = eNames' u
 eNames' (UnaryOpB _ u)        = eNames' u
 eNames' (UnaryOpVV _ u)       = eNames' u
@@ -60,6 +60,7 @@ eNames' (LABinaryOp _ a b)    = eNames' a ++ eNames' b
 eNames' (OrdBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (VVVBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (VVNBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (NVVBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (Operator _ _ e)      = eNames' e
 eNames' (Matrix a)            = concatMap (concatMap eNames') a
 eNames' (RealI c b)           = c : eNamesRI' b

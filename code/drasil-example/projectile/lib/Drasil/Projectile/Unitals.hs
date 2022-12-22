@@ -29,7 +29,7 @@ flightDur = constrainedNRV' (ucs'  C.flightDur (subStr lT "flight") Real second)
 landPos   = constrainedNRV' (ucs'  C.landPos   (subStr lP "land"  ) Real metre)   [gtZeroConstr]
 launAngle = constrained'    (dqd' C.launAngle (autoStage lTheta)   Real (Just radian)) [physc $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)
 launSpeed = constrained'    (ucs'  C.launSpeed (subStr lV "launch") Real velU)    [gtZeroConstr] (exactDbl 100)
-offset    = constrainedNRV' (ucs'  C.offset    (subStr lD "offset") Real metre)   [physc $ UpFrom (Exc, neg $ sy landPos) ]
+offset    = constrainedNRV' (ucs'  C.offset    (subStr lD "offset") Real metre)   [physc $ UpFrom (Exc, neg $ sy targPos) ]
 targPos   = constrained'    (ucs' C.targPos   (subStr lP "target") Real metre)   [gtZeroConstr] (exactDbl 1000)
 
 ---

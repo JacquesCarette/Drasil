@@ -1,17 +1,29 @@
 module Drasil.WebsiteLayout.Concepts where
 
 import Language.Drasil
---import Language.Drasil.Chunk.Concept.NamedCombinators
---import qualified Language.Drasil.Sentence.Combinators as S
 
---import Data.Drasil.Concepts.Documentation (constant)
 
 idwebsitelayout :: IdeaDict
 idwebsitelayout      = mkIdea  "websitelayout"          (cn' "Website Layout")                 Nothing
 
+idwebsite :: IdeaDict
+idwebsite      = mkIdea  "website"          (cn' "Website")                 Nothing
+
+iddrasil :: IdeaDict
+iddrasil      = mkIdea  "drasil"          (cn' "Drasil")                 Nothing
+
 acronyms :: [CI]
-acronyms = [websitelayout]
+acronyms = [websitelayout, progName, theWebsite, drasil]
+
+drasil :: CI
+drasil  = commonIdeaWithDict "drasil" (pn "Drasil") "Drasil" [iddrasil]
+
+theWebsite :: CI
+theWebsite  = commonIdeaWithDict "thewebsite" (pn "the website") "the website" [idwebsite]
 
 websitelayout :: CI
-websitelayout  = commonIdeaWithDict "websitelayout" (pn "website layout library") "Websitelayout" [idwebsitelayout]
+websitelayout  = commonIdeaWithDict "websitelayout" (pn "website layout") "Websitelayout" [idwebsitelayout]
+
+progName :: CI
+progName = commonIdeaWithDict "website" (pn "Website") "Website" [idwebsite]
 

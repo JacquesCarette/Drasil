@@ -21,8 +21,9 @@ makeReadMe ReadMeInfo {
         extLibFP = extLibfp,
         contributors = auths, 
         configFP = configFPs,
-        caseName = name} = 
-    makeMd [introInfo name auths,
+        caseName = name,
+        exampleDescr = descr} = 
+    makeMd [introInfo name auths descr,
     makeInstr imptype configFPs,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,

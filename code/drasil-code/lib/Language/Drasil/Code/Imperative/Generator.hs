@@ -142,7 +142,8 @@ genPackage unRepr = do
         extLibFP = libPaths g,
         contributors = as,
         configFP = cfp,
-        caseName = ""}
+        caseName = "",
+        exampleDescr = "PLACEHOLDER"}
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.

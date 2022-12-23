@@ -17,9 +17,9 @@ type Seperator = Doc
 makeMd :: [Doc] -> Doc
 makeMd = vcat . punctuate secSep . filtEmp
 
--- | Example title and purpose section.
-introInfo :: String -> [String] -> Doc
-introInfo name auths = introSec (text name) (listToDoc auths) $ length auths
+-- | Example title, authors, and purpose section.
+introInfo :: String -> [String] -> String -> Doc
+introInfo name auths descr = introSec (text name) (listToDoc auths) (length auths) (text descr)
 
 -- | Instruction section, contains 3 paragraphs, Running, Building and Config Files.
 -- The Config file section is only displayed if there are configuration files.
@@ -117,8 +117,9 @@ bkQuote3 = text "```"
 -- FIXME as explained in #2224 we still need to add in the purpose section, 
 -- this could be done by adding a third parameter to introSec
 -- | Constructs introduction section from header and message.
-introSec ::  Doc -> Doc -> Int -> Doc
-introSec hd ms1 l = text "#" <+> hd <+> contSep <> (if l == 1 then text "> Author:" else text "> Authors: ") <+> ms1 
+introSec ::  Doc -> Doc -> Int -> Doc -> Doc
+introSec hd ms1 l descr = text "#" <+> hd <+> contSep <> (if l == 1 then text "> Author:" else text "> Authors: ") 
+  <+> ms1 <> doubleSep <> text "> Purpose:" <+> descr
 
 -- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc

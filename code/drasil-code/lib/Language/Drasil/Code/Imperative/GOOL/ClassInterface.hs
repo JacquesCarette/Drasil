@@ -48,6 +48,8 @@ type LangAbbrev = String
 type LangVers = String
 -- | Case name.
 type CaseName = String
+-- | Description of example
+type ExampleDescr = String
 -- | File contributors
 type Contributor = String
 -- | Holds all information needed to create a README file.
@@ -60,5 +62,6 @@ data ReadMeInfo = ReadMeInfo {
   extLibFP :: [FilePath],
   contributors :: [Contributor], 
   configFP :: [FilePath],
-  caseName :: CaseName
+  caseName :: CaseName,
+  exampleDescr :: ExampleDescr
 }

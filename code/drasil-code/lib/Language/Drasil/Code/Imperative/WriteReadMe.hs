@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.WriteReadMe (
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS, 
-    extLibSec, instDoc, endNote)
+    extLibSec, instDoc, endNote, whatInfo)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..))
 
 import Prelude hiding ((<>))
@@ -24,6 +24,7 @@ makeReadMe ReadMeInfo {
         caseName = name,
         exampleDescr = descr} = 
     makeMd [introInfo name auths descr,
+    whatInfo descr,
     makeInstr imptype configFPs,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,

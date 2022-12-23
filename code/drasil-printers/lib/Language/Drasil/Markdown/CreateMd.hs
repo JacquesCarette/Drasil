@@ -3,7 +3,7 @@ module Language.Drasil.Markdown.CreateMd (
     -- * Main Function
     makeMd,
     -- * Section Creators
-    introInfo, verInfo, unsupOS, extLibSec, regularSec, instDoc, endNote) 
+    introInfo, whatInfo, verInfo, unsupOS, extLibSec, regularSec, instDoc, endNote) 
     where
 
 import Prelude hiding ((<>))
@@ -26,6 +26,10 @@ introInfo name auths descr = introSec (text name) (listToDoc auths) (length auth
 instDoc :: [String] -> Doc
 instDoc cfp = regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> configSec cfp 
+
+-- | What section.
+whatInfo :: String -> Doc
+whatInfo descr = regularSec (text "What") (text descr)
 
 -- | Helper for giving instructions on the command line.
 commandLine :: Doc

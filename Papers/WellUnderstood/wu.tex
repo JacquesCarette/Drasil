@@ -115,8 +115,8 @@
     languages and generative techniques, we can capture the contents of many of
     the artifacts of such software.  Assuming an appropriate codification of
     domain knowledge, we find that the resulting de-duplicated sources are
-    shorter and closer to the domain.  Our encodings also seem to do well with
-    respect to increasing traceability and change management. We're hopeful
+    shorter and closer to the domain.  Our prototype, Drasil, indicates
+    improvements to traceability and change management. We're also hopeful
     that this could lead to long-term productivity improvements for software
     that fit this context.
 \end{abstract}
@@ -160,7 +160,7 @@ refinement should be understood more holistically.
 \end{enumerate}
 Most importantly, the last two parts deeply involve \emph{choices}: What
 quantities are considered inputs, outputs and parameters to make the model
-functional? What programming language?  What software architecture
+functional? What programming language?  What software architecture,
 data-structures, algorithms, etc.?
 
 In other words, \emph{well understood} does not imply \emph{choice free}.
@@ -190,21 +190,20 @@ must simultaneously
 operate on mathematical representations and on explanations. This requires that
 English descriptions also be captured in the same manner as the
 formal-mathematical knowledge.
-\item Similarly, the refinements steps that are performed due to making software
-oriented decisions should be captured with a similar mechanism, and also include
-English explanations.
+\item Similarly, the refinement steps that are performed due to making
+software-oriented decisions should be captured with a similar mechanism, and
+also include English explanations.
 \end{enumerate}
 
 \begin{definition}
 \label{defn:triform-theories}
 We dub these \textbf{triform theories}, as a nod to \emph{biform
-theories}~\cite{Farmer2007}. They are a coupling of a concepts
+theories}~\cite{Farmer2007}. They are a coupling of three concepts:
 \begin{enumerate}
   \item an axiomatic description,
   \item a computational description, and
-  \item an English description
+  \item an English description.
 \end{enumerate}
-of a concept.
 \end{definition}
 
 \subsection{Software artifacts}
@@ -550,9 +549,9 @@ explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 % TODO
 % - link with Eelco's work
 
-Others~\cite{bjorner2021domaineng} have already remarked that for most software,
+Dines~\cite{bjorner2021domaineng} has already remarked that for most software,
 the \emph{domain knowledge} is the slowest moving part of the requirements.
-We add to this the ideas that for certain kinds of software, there is a lot of
+We add to this the ideas that for certain kinds of software, there is significant
 \emph{knowledge duplication} amongst the artifacts, much of which is traceable
 to domain knowledge. Thus, in well-understood domains, it should be feasible to
 record the domain knowledge ``once'', and then write recipes to generate

@@ -5,20 +5,10 @@ Minor:
 - Figure 2: the comment "(compare bold box in Figure 1)" is missing an explanation
 - The "main" program fragment at the end of Section 2 does not seem very useful - why do we need to see this?
 Sec 3: Consider putting the idealized process in a figure and then use the text to explain it.
-
-- Missing comma in "What software architecture data-structures, algorithms" (should be one just after "architecture").
-- "software oriented decisions" -> "software-oriented decisions"
 - Too many uses of enumerations, the text of 1.3 could have been written as a single paragraph of text.
-- Definition 2: Hard to read: "...a coupling og a concepts ...1,2,3... of a concept" - too many concepts?
 - Sec 1.4: Why break the text here into two paragraphs? Also, why the very specific detail of "we use standards..." here? Seems out of context. 
-- Sec 2: "we have built infrastructure... It consists" - should it not be "an infrastructure"?
-- Sec 4: "Others [5] have...requirements." -> "Dines has...requirements [5]."
-"a lot of" -> "a significant amount of"
 - the abstract mentions “context”, but later it is called “forces”; I think the
   latter is more accurate. 
-- abstract says “our encodings”, but they haven’t been introduced. 
-- I’d suggest to mention Drasil in the abstract. 
-- l. 67: refinements -> refinement
 
 Related Work:
 -------------
@@ -82,3 +72,15 @@ specific domain, as well as the detailing of specifics, e.g., by fleshing out
 the "Create a coherent narrative" paragraph (l.175-180).
 
 =============================================================================
+typos:
+------
+- Missing comma in "What software architecture data-structures, algorithms" (should be one just after "architecture").
+- "software oriented decisions" -> "software-oriented decisions"
+- Definition 2: Hard to read: "...a coupling og a concepts ...1,2,3... of a concept" - too many concepts?
+- [No, this one is correct.] Sec 2: "we have built infrastructure... It consists" - should it not be "an infrastructure"?
+- Sec 4: "Others [5] have...requirements." -> "Dines has...requirements [5]."
+"a lot of" -> "a significant amount of"
+- abstract says “our encodings”, but they haven’t been introduced. 
+  I’d suggest to mention Drasil in the abstract. 
+- l. 67: refinements -> refinement
+

@@ -22,8 +22,9 @@ makeReadMe ReadMeInfo {
         contributors = auths, 
         configFP = configFPs,
         caseName = name,
+        examplePurpose = purp,
         exampleDescr = descr} = 
-    makeMd [introInfo name auths descr,
+    makeMd [introInfo name auths purp,
     whatInfo descr,
     makeInstr imptype configFPs,
     verInfo progLang progLangVers,

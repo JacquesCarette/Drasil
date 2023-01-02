@@ -48,6 +48,8 @@ type LangAbbrev = String
 type LangVers = String
 -- | Case name.
 type CaseName = String
+-- | Purpose of example
+type ExamplePurpose = String
 -- | Description of example
 type ExampleDescr = String
 -- | File contributors
@@ -63,5 +65,6 @@ data ReadMeInfo = ReadMeInfo {
   contributors :: [Contributor], 
   configFP :: [FilePath],
   caseName :: CaseName,
+  examplePurpose :: ExamplePurpose,
   exampleDescr :: ExampleDescr
 }

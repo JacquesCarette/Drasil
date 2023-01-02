@@ -143,6 +143,7 @@ genPackage unRepr = do
         contributors = as,
         configFP = cfp,
         caseName = "",
+        examplePurpose = "Purpose PLACEHOLDER",
         exampleDescr = "PLACEHOLDER"}
   return $ package pd (m:catMaybes [i,rm,d])
 

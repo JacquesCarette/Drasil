@@ -7,7 +7,7 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocDecl (SRSDecl, mkDocDesc)
+import Drasil.NestedDocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..), TableOfContents(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), 
   IntroSec(..), IPurposeSub(..), IScopeSub(..), ICharSub(..), IOrgSub(..),

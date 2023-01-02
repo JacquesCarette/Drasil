@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 -- | Document declaration types and functions for generating Software Requirement Specifications.
-module Drasil.DocDecl where
+module Drasil.FlatDocDecl where
 
 import Drasil.DocumentLanguage.Core (DocDesc)
 import Drasil.DocumentLanguage.Definitions (Fields)

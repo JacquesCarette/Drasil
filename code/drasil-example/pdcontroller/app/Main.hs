@@ -10,7 +10,7 @@ main :: IO ()
 main = do
   setLocaleEncoding utf8
   typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "PDController_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "PDController_SRS") srs printSetting
   genCode codeChoices codeSpecs
   genDot fullSI
   genLog fullSI printSetting

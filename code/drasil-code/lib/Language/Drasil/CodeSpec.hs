@@ -27,6 +27,8 @@ import Data.Maybe (mapMaybe)
 
 import Prelude hiding (const)
 
+-- | Example purpose.
+type Purpose = [Sentence]
 -- | Program input.
 type Input = CodeVarChunk
 -- | Program output.
@@ -45,6 +47,8 @@ data CodeSpec where
   pName :: Name,
   -- | Authors.
   authors :: [a],
+  -- | Purpose.
+  purpose :: Purpose,
   -- | All inputs.
   inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -94,6 +98,7 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys         = sys
            , _authors     = as
+           , _purpose     = ps
            , _instModels  = ims
            , _datadefs    = ddefs
            , _configFiles = cfp
@@ -117,6 +122,7 @@ codeSpec SI {_sys         = sys
   in  CodeSpec {
         pName = n,
         authors = as,
+        purpose = ps,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,

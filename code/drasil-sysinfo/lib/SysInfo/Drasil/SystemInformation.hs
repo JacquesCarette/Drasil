@@ -41,7 +41,7 @@ data SystemInformation where
   { _sys         :: a
   , _kind        :: b
   , _authors     :: [c]
-  , _purpose     :: d
+  , _purpose     :: [Sentence]
   , _quants      :: [e]
   , _concepts    :: [f]
   , _instModels  :: [InstanceModel]

@@ -27,7 +27,7 @@ instDoc :: [String] -> Doc
 instDoc cfp = regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> configSec cfp 
 
--- | What section.
+-- | 'What' section in generated README file.
 whatInfo :: String -> Doc
 whatInfo descr = regularSec (text "What") (text descr)
 

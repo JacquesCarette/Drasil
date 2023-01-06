@@ -131,6 +131,8 @@ genPackage unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
       as = case codeSpec g of CodeSpec {authors = a} -> map name a
       cfp = configFiles $ codeSpec g
+      prps = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation Linear 
+        (foldlSent $ purpose $ codeSpec g)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -143,7 +145,7 @@ genPackage unRepr = do
         contributors = as,
         configFP = cfp,
         caseName = "",
-        examplePurpose = "Purpose PLACEHOLDER",
+        examplePurpose = prps,
         exampleDescr = "PLACEHOLDER"}
   return $ package pd (m:catMaybes [i,rm,d])
 

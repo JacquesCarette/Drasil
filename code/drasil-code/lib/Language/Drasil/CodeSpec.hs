@@ -27,8 +27,6 @@ import Data.Maybe (mapMaybe)
 
 import Prelude hiding (const)
 
--- | Example purpose.
-type Purpose = [Sentence]
 -- | Program input.
 type Input = CodeVarChunk
 -- | Program output.

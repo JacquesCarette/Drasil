@@ -11,7 +11,7 @@ module SysInfo.Drasil.SystemInformation (
   citeDB, citationsFromBibMap,
   -- * Reference Database
   -- ** Types
-  ReferenceDB, RefMap,
+  ReferenceDB, RefMap, Purpose,
   -- ** Constructors
   rdb, simpleMap,
   -- ** Lenses
@@ -27,6 +27,7 @@ import Data.Function (on)
 import Data.List (find, groupBy, sortBy)
 import qualified Data.Map as Map
 
+
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
 data SystemInformation where
@@ -41,7 +42,7 @@ data SystemInformation where
   { _sys         :: a
   , _kind        :: b
   , _authors     :: [c]
-  , _purpose     :: [Sentence]
+  , _purpose     :: Purpose
   , _quants      :: [e]
   , _concepts    :: [f]
   , _instModels  :: [InstanceModel]
@@ -56,6 +57,10 @@ data SystemInformation where
   , _usedinfodb  :: ChunkDB
   , refdb        :: ReferenceDB
   } -> SystemInformation
+
+
+-- | Project Example purpose.
+type Purpose = [Sentence]
 
 -- | for listing 'QDefinition's in 'SystemInformation'.
 data Block a = Coupled a a [a] | Parallel a [a]

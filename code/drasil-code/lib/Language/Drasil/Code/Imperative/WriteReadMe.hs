@@ -25,7 +25,7 @@ makeReadMe ReadMeInfo {
         examplePurpose = purp,
         exampleDescr = descr} = 
     makeMd [introInfo name auths purp,
-    whatInfo (fieldEmptySTR descr),
+    whatInfo $ fieldEmptySTR descr,
     makeInstr imptype configFPs,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,

@@ -17,15 +17,19 @@ type Seperator = Doc
 makeMd :: [Doc] -> Doc
 makeMd = vcat . punctuate secSep . filtEmp
 
--- | Example title, authors, and purpose section.
-introInfo :: String -> [String] -> String -> Doc
-introInfo name auths descr = introSec (text name) (listToDoc auths) (length auths) (text descr)
+-- | Example title, authors, and maybe purpose section.
+introInfo :: String -> [String] -> Maybe String -> Doc
+introInfo name auths descr = introSec (text name) (listToDoc auths) (length auths) (maybePurpDoc descr)
 
 -- | Instruction section, contains 3 paragraphs, Running, Building and Config Files.
 -- The Config file section is only displayed if there are configuration files.
 instDoc :: [String] -> Doc
 instDoc cfp = regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> configSec cfp 
+
+-- | Helper for creating optional Purpose subsection as Doc
+maybePurpDoc :: Maybe String -> Doc
+maybePurpDoc = maybe empty (\descr-> text "> Purpose:" <+> text descr)
 
 -- | 'What' section in generated README file, does not display if empty
 whatInfo :: Maybe String -> Doc
@@ -123,7 +127,7 @@ bkQuote3 = text "```"
 -- | Constructs introduction section from header and message.
 introSec ::  Doc -> Doc -> Int -> Doc -> Doc
 introSec hd ms1 l descr = text "#" <+> hd <+> contSep <> (if l == 1 then text "> Author:" else text "> Authors: ") 
-  <+> ms1 <> doubleSep <> text "> Purpose:" <+> descr
+  <+> ms1 <> doubleSep <> descr
 
 -- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc

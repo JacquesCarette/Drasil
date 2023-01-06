@@ -10,6 +10,7 @@ import Language.Drasil
 type NBDesc = [DocSection]
 
 data DocSection = IntrodSec IntrodSec
+                | LearnObj LearnObj
                 | BodySec BodySec
                 | SmmrySec SmmrySec
                 | BibSec
@@ -25,6 +26,9 @@ data IntrodSec = IntrodProg [Contents] [IntrodSub]
 -- | Introduction subsections
 data IntrodSub where
   InPurpose :: [Sentence] -> IntrodSub -- TODO: maybe change to [Contents]  
+
+-- ** Learning Objectives
+newtype LearnObj = LrnObjProg [Contents]
 
 -- ** Body Section
 
@@ -50,6 +54,7 @@ data DLPlate f = DLPlate {
   docSec :: DocSection -> f DocSection,
   introdSec :: IntrodSec -> f IntrodSec,
   introdSub :: IntrodSub -> f IntrodSub,
+  learnObj :: LearnObj -> f LearnObj,
   bodySec :: BodySec -> f BodySec,
   bodySub :: BodySub -> f BodySub,
   smmrySec ::SmmrySec -> f SmmrySec,
@@ -57,8 +62,9 @@ data DLPlate f = DLPlate {
 }
 
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds intro intro' body body' smry aps where
+  multiplate p = DLPlate ds intro intro' lrnObj body body' smry aps where
     ds (IntrodSec x) = IntrodSec <$> introdSec p x
+    ds (LearnObj x) = LearnObj <$> learnObj p x
     ds (BodySec x) = BodySec <$> bodySec p x
     ds (SmmrySec x) = SmmrySec <$> smmrySec p x
     ds (ApndxSec x) = ApndxSec <$> apendSec p x
@@ -67,6 +73,7 @@ instance Multiplate DLPlate where
     intro (IntrodProg c progs) = IntrodProg c <$>
       traverse (introdSub p) progs
     intro' (InPurpose s) = pure $ InPurpose s
+    lrnObj (LrnObjProg con) = pure $ LrnObjProg con 
     body (BodyProg progs) = BodyProg <$> traverse (bodySub p) progs
     body' (Review c) = pure $ Review c
     body' (MainIdea c s) = pure $ MainIdea c s
@@ -74,5 +81,5 @@ instance Multiplate DLPlate where
     body' (Example c s) = pure $ Example c s
     smry (SmmryProg con) = pure $ SmmryProg con 
     aps (ApndxProg con) = pure $ ApndxProg con
-  mkPlate b = DLPlate (b docSec) (b introdSec) (b introdSub) (b bodySec)
-    (b bodySub) (b smmrySec) (b apendSec)
+  mkPlate b = DLPlate (b docSec) (b introdSec) (b introdSub) (b learnObj)
+    (b bodySec) (b bodySub) (b smmrySec) (b apendSec)

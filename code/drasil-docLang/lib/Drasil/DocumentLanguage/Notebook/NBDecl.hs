@@ -2,7 +2,7 @@
 module Drasil.DocumentLanguage.Notebook.NBDecl where
 
 import qualified Drasil.DocumentLanguage.Notebook.Core as NB (ApndxSec(..), NBDesc, DocSection(..), 
-  IntrodSec(..), BodySec(..), SmmrySec(..))
+  IntrodSec(..), LearnObj(..), BodySec(..), SmmrySec(..))
 
 import SysInfo.Drasil (SystemInformation)
 
@@ -13,6 +13,7 @@ type NBDecl  = [NbSection]
 
 -- | Contains all the different sections needed for a notebook lesson plan ('NBDecl').
 data NbSection = IntrodSec NB.IntrodSec
+                | LearnObj NB.LearnObj
                 | BodySec NB.BodySec
                 | SmmrySec NB.SmmrySec
                 | BibSec
@@ -25,6 +26,7 @@ mkNBDesc :: SystemInformation -> NBDecl -> NB.NBDesc
 mkNBDesc _ = map sec where
   sec :: NbSection -> NB.DocSection
   sec (IntrodSec i) = NB.IntrodSec i
+  sec (LearnObj lo) = NB.LearnObj lo
   sec (BodySec bs)  = NB.BodySec bs  
   sec (SmmrySec ss) = NB.SmmrySec ss
   sec BibSec        = NB.BibSec

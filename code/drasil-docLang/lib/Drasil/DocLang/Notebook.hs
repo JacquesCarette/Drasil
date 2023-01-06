@@ -2,8 +2,8 @@ module Drasil.DocLang.Notebook where
 
 import Language.Drasil
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, prpsOfDoc, 
-  review, body, mainIdea, procForAnls, summary, methAndAnls, coordinateSystem, 
+import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, learnObj, 
+  prpsOfDoc, review, body, mainIdea, procForAnls, summary, methAndAnls, coordinateSystem, 
   example, appendix, reference)
 import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, verticalMotion, kinematics)
 
@@ -15,10 +15,11 @@ import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, ve
 -- * Section Constructors
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
-intro, prpsOfDoc, body, review, mainIdea, motion, hormotion, vermotion, methAndAnls,
+-- should be fixed once we have a more concrete idea of the notebook structure
+intro, learnObj, prpsOfDoc, body, review, mainIdea, motion, hormotion, vermotion, methAndAnls,
   coorSyst, kinematic, procForAnls, summary, appendix, reference, example :: [Contents] -> [Section] -> Section
-  
 intro       cs ss = section (titleize Doc.introduction)      cs ss introLabel
+learnObj    cs ss = section (titleize' Doc.learnObj)          cs ss learnObjLabel
 prpsOfDoc   cs ss = section (titleize Doc.prpsOfDoc)         cs ss docPurposeLabel
 
 body        cs ss = section (titleize Doc.body)              cs ss bodyLabel
@@ -44,17 +45,18 @@ example     cs ss = section (titleize Doc.example)           cs ss exampleLabel
 
 --Labels--
 sectionReferences :: [Reference]
-sectionReferences = [introLabel, docPurposeLabel, methsAndanlsLabel, referenceLabel,
+sectionReferences = [introLabel, learnObjLabel, docPurposeLabel, methsAndanlsLabel, referenceLabel,
   bodyLabel, reviewLabel, mainIdeaLabel, motionLabel, hormotionLabel, vermotionLabel, 
   appendixLabel, coorSystLabel, kinematicLabel, summaryLabel, anlsProcLabel, exampleLabel]
 
 -- * Section References
 
 -- | Individual section reference labels. Used in creating example sections for the notebook.
-introLabel, docPurposeLabel, methsAndanlsLabel, referenceLabel, bodyLabel,
-  reviewLabel, mainIdeaLabel, motionLabel, hormotionLabel, vermotionLabel, 
+introLabel, learnObjLabel, docPurposeLabel, methsAndanlsLabel, referenceLabel, 
+  bodyLabel, reviewLabel, mainIdeaLabel, motionLabel, hormotionLabel, vermotionLabel, 
   appendixLabel, coorSystLabel, kinematicLabel, summaryLabel, anlsProcLabel, exampleLabel :: Reference
 introLabel          = makeSecRef "Intro"            $ titleize Doc.introduction
+learnObjLabel       = makeSecRef "LearnObj"         $ titleize' Doc.learnObj
 docPurposeLabel     = makeSecRef "DocPurpose"       $ titleize Doc.prpsOfDoc
 methsAndanlsLabel   = makeSecRef "MethsAndAnls"     $ titleize' Doc.methAndAnls
 referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference

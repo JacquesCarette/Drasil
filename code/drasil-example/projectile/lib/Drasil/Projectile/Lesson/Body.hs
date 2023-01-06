@@ -8,8 +8,8 @@ import SysInfo.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- TODO: Add export parameters in a module
-import Drasil.DocLang (mkNb, NBDecl, NbSection(BibSec, IntrodSec, BodySec), 
-  IntrodSec(..), BodySec(..), BodySub(..))
+import Drasil.DocLang (mkNb, NBDecl, NbSection(BibSec, LearnObj, BodySec), 
+  LearnObj(..), BodySec(..), BodySub(..))
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
@@ -22,7 +22,7 @@ import Data.Drasil.People (spencerSmith)
 import Drasil.Projectile.Concepts (concepts, projMotion)
 import Drasil.Projectile.Expressions (eqnRefs)
 
-import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
+import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
 import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
   motionContextP2, horMotion, verMotion, summary)
@@ -36,8 +36,7 @@ printSetting = PI symbMap Equational defaultConfiguration
 
 mkNB :: NBDecl
 mkNB = [
-  IntrodSec $
-    IntrodProg [introContext, reasonList, overviewParagraph] [],
+  LearnObj $ LrnObjProg [learnObjContext],
   BodySec $
        BodyProg
          [Review reviewContent,
@@ -81,7 +80,7 @@ refDB :: ReferenceDB
 refDB = rdb [] []
 
 projectileMotion :: CI
-projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion") "Projectile Motion" []
+projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion Lesson") "Projectile Motion" []
 
 mAndaintro :: Contents
 mAndaintro = foldlSP 

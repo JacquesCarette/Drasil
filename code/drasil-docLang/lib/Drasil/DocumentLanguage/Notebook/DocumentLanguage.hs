@@ -3,13 +3,13 @@ module Drasil.DocumentLanguage.Notebook.DocumentLanguage(mkNb) where
 
 import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, mkNBDesc)
 import Drasil.DocumentLanguage.Notebook.Core (ApndxSec(..), NBDesc, DocSection(..), 
-  IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..))
+  IntrodSec(..), IntrodSub(..), LearnObj(..), BodySec(..), BodySub(..), SmmrySec(..))
 
 import Language.Drasil
 
 import SysInfo.Drasil (SystemInformation(SI), _authors, _kind, _sys, citeDB)
 
-import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summary)
+import qualified Drasil.DocLang.Notebook as NB (learnObj, appendix, body, reference, summary)
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)
 import qualified Drasil.NBSections.Body as Body (reviewSec, mainIdeaSec, mthdAndanls, exampleSec)
 
@@ -27,6 +27,7 @@ mkSections si = map doit
   where
     doit :: DocSection -> Section
     doit (IntrodSec is)      = mkIntroSec si is
+    doit (LearnObj lo)       = mkLearnObj lo
     doit (BodySec bs)        = mkBodySec bs
     doit (SmmrySec ss)       = mkSmmrySec ss
     doit BibSec              = mkBib (citeDB si)
@@ -40,6 +41,10 @@ mkIntroSec si (IntrodProg probIntro l) =
   where
     mkSubIntro :: SystemInformation -> IntrodSub -> Section
     mkSubIntro _ (InPurpose intro) = Intro.purposeOfDoc intro
+  
+-- | Helper for making the 'Learning Objectives' section.
+mkLearnObj :: LearnObj -> Section
+mkLearnObj (LrnObjProg cs) = NB.learnObj cs []
 
 -- | Helper for making the 'Body' section.
 mkBodySec :: BodySec -> Section

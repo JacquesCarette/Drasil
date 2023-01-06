@@ -27,9 +27,9 @@ instDoc :: [String] -> Doc
 instDoc cfp = regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> configSec cfp 
 
--- | 'What' section in generated README file.
-whatInfo :: String -> Doc
-whatInfo descr = regularSec (text "What") (text descr)
+-- | 'What' section in generated README file, does not display if empty
+whatInfo :: Maybe String -> Doc
+whatInfo = maybe empty (\descr-> regularSec (text "What") (text descr))
 
 -- | Helper for giving instructions on the command line.
 commandLine :: Doc

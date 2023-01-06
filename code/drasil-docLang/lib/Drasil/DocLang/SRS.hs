@@ -1,4 +1,9 @@
 -- | Holds all section constructors and labels for creating SRS documents.
+
+-- Changes to SRS sections should be reflected in the 'Creating Your Project 
+-- in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
+
 module Drasil.DocLang.SRS (
   -- * Section Constructors
   -- | For use in an SRS document. Ordered by appearance in a SRS.

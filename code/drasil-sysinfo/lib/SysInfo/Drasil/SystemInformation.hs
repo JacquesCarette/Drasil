@@ -1,5 +1,10 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
 -- | Define types and functions related to creating a system information database.
+
+-- Changes to SystemInformation should be reflected in the 'Creating Your Project 
+-- in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
+
 module SysInfo.Drasil.SystemInformation (
   -- * System Information
   -- ** Types

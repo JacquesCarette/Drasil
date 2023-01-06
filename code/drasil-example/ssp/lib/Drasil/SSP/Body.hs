@@ -74,6 +74,7 @@ si = SI {
   _kind        = Doc.srs, 
   _authors     = [henryFrankis, brooks],
   _purpose     = purpDoc ssp Verbose,
+  _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = SSP.iMods,

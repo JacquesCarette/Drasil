@@ -107,6 +107,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [olu],
   _purpose     = purpDoc progName Verbose,
+  _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,

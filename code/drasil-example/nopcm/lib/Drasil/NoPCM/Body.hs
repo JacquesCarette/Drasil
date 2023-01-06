@@ -175,6 +175,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [thulasi],
   _purpose     = purpDoc progName Verbose,
+  _background  = [],
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.

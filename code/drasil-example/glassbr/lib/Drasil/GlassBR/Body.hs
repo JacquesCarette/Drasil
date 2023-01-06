@@ -66,6 +66,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
   _purpose     = purpDoc glassBR Verbose,
+  _background  = [],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,

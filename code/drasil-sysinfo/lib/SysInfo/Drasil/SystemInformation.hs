@@ -11,7 +11,7 @@ module SysInfo.Drasil.SystemInformation (
   citeDB, citationsFromBibMap,
   -- * Reference Database
   -- ** Types
-  ReferenceDB, RefMap, Purpose,
+  ReferenceDB, RefMap, Purpose, Background,
   -- ** Constructors
   rdb, simpleMap,
   -- ** Lenses
@@ -43,6 +43,7 @@ data SystemInformation where
   , _kind        :: b
   , _authors     :: [c]
   , _purpose     :: Purpose
+  , _background  :: Background
   , _quants      :: [e]
   , _concepts    :: [f]
   , _instModels  :: [InstanceModel]
@@ -61,6 +62,8 @@ data SystemInformation where
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
+-- | Project Example background information, used in the 'What' section of README.
+type Background = [Sentence]
 
 -- | for listing 'QDefinition's in 'SystemInformation'.
 data Block a = Coupled a a [a] | Parallel a [a]

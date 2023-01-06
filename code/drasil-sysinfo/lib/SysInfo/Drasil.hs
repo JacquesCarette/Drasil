@@ -2,7 +2,7 @@ module SysInfo.Drasil (
  -- * System Information
    SystemInformation(..), Block(Parallel), sysinfodb
  -- * Reference Database
- , ReferenceDB, RefMap, Purpose, citeDB, rdb, simpleMap
+ , ReferenceDB, RefMap, Purpose, Background, citeDB, rdb, simpleMap
  , citationDB, conceptDB
 
   -- ** Utility Helper Functions

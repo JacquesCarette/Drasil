@@ -33,7 +33,7 @@ maybePurpDoc = maybe empty (\descr-> text "> Purpose:" <+> text descr)
 
 -- | 'What' section in generated README file, does not display if empty
 whatInfo :: Maybe String -> Doc
-whatInfo = maybe empty (\descr-> regularSec (text "What") (text descr))
+whatInfo = maybe empty (regularSec (text "What") . text)
 
 -- | Helper for giving instructions on the command line.
 commandLine :: Doc

@@ -5,7 +5,7 @@ module SysInfo.Drasil.SystemInformation (
   -- ** Types
   SystemInformation(..), Block(..),
   -- ** Lenses
-  instModels, datadefs, configFiles, inputs,
+  instModels, datadefs, configFiles, inputs, purpose, background,
   defSequence, constraints, constants, sysinfodb, usedinfodb,
   -- ** Lookup Functions
   citeDB, citationsFromBibMap,

@@ -9,7 +9,7 @@ main :: IO ()
 main = do
   setLocaleEncoding utf8
   typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "HGHC_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "HGHC_SRS") srs printSetting
   genLog fullSI printSetting
   -- When ready to generate code, uncomment this file and Choices.hs
   --genCode thisChoices thisCode

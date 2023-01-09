@@ -10,6 +10,6 @@ main :: IO()
 main = do
   setLocaleEncoding utf8
   typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "SglPendulum_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "SglPendulum_SRS") srs printSetting
   genDot fullSI
   genLog fullSI printSetting

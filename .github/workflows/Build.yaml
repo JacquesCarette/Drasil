@@ -40,7 +40,7 @@ jobs:
           stack-no-global: true
           stack-version: 'latest'
       - name: "Cache dependencies"
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: |
             ~/.stack
@@ -94,7 +94,7 @@ jobs:
             bash scripts/deploy_wrapper.bash
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@4.4.1
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           git-config-name: ${{ secrets.BOT_NAME }}
           git-config-email: ${{ secrets.BOT_EMAIL }}

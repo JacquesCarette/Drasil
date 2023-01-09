@@ -102,7 +102,7 @@ si = SI {
   _sys         = gamePhysics,
   _kind        = Doc.srs,
   _authors     = [alex, luthfi, olu],
-  _purpose     = purpDoc gamePhysics Verbose,
+  _purpose     = [],
   _background  = [],
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably

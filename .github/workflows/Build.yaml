@@ -94,7 +94,7 @@ jobs:
             bash scripts/deploy_wrapper.bash
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@4.1.3
+        uses: JamesIves/github-pages-deploy-action@4.4.1
         with:
           git-config-name: ${{ secrets.BOT_NAME }}
           git-config-email: ${{ secrets.BOT_EMAIL }}

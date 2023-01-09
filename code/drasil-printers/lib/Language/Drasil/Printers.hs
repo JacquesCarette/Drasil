@@ -1,6 +1,6 @@
 module Language.Drasil.Printers (
   -- * Formats
-  Format(TeX, HTML, JSON)
+  DocType(SRS, Website, Jupyter), Format(TeX, HTML, JSON)
   -- * DOT
   -- ** Types
   , GraphInfo(..), NodeFamily(..)
@@ -36,7 +36,7 @@ module Language.Drasil.Printers (
   )
   where
 
-import Language.Drasil.Format (Format(TeX, HTML,JSON))
+import Language.Drasil.Format (DocType(SRS, Website, Jupyter), Format(TeX, HTML,JSON))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJSON)

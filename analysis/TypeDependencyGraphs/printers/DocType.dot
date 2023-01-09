@@ -1,0 +1,3 @@
+digraph doctype{
+DocType	[shape=oval, color=darkviolet, label="DocType"];
+}

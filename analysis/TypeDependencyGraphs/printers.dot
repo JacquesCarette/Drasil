@@ -277,6 +277,9 @@ digraph alltypes {
 		}
 	}
 	subgraph format {
+		subgraph doctype{
+		DocType	[shape=oval, color=darkviolet, label="DocType"];
+		}
 		subgraph format{
 		Format	[shape=oval, color=darkviolet, label="Format"];
 		}

@@ -1,5 +1,0 @@
-digraph doctype{
-DocType	[shape=oval, color=cyan3, label="DocType"];
-DocType -> DocType;
-DocType -> Format;
-}

@@ -45,6 +45,7 @@ DocSpec :: DocChoices -> Filename -> DocSpec
 data Format
 TeX :: Format
 HTML :: Format
+JSON :: Format
 
 -- | Document choices include the type of document as well as the file
 --   formats we want to generate as.

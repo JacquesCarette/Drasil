@@ -17,15 +17,6 @@ module Language.Drasil.Output.Formats
 --   generated output (specified <i>without</i> a file extension).
 type Filename = String
 
--- | Document types include Software Requirements Specification and
---   Website. Choosing SRS will generate both TeX and HTML files, while
---   Website generates only as HTML. This also determines what folders the
---   generated files will be placed into.
-data DocType
-SRS :: DocType
-Website :: DocType
-Jupyter :: DocType
-
 -- | Document choices include the type of document as well as the file
 --   formats we want to generate as.
 data DocChoices
@@ -50,7 +41,6 @@ UsePackages :: [String] -> UsePackages
 data ExDoc
 ExDoc :: Maybe String -> String -> ExDoc
 instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Output.Formats.DocSpec
-instance GHC.Show.Show Language.Drasil.Output.Formats.DocType
 
 module Language.Drasil.TypeCheck
 typeCheckSI :: SystemInformation -> IO ()
@@ -91,6 +81,7 @@ DocSpec :: DocChoices -> Filename -> DocSpec
 data Format
 TeX :: Format
 HTML :: Format
+JSON :: Format
 
 -- | Document choices include the type of document as well as the file
 --   formats we want to generate as.

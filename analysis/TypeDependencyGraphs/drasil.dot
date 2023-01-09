@@ -1833,10 +1833,10 @@ digraph alltypes {
 	subgraph body {
 	}
 	subgraph formats {
-		subgraph doctype{
-		DocType	[shape=oval, color=cyan3, label="DocType"];
-		DocType -> DocType;
-		DocType -> Format;
+		subgraph docchoices{
+		DocChoices	[shape=oval, color=cyan3, label="DocChoices"];
+		DocChoices -> DocType;
+		DocChoices -> Format;
 		}
 		subgraph docspec{
 		DocSpec	[shape=oval, color=darkviolet, label="DocSpec"];
@@ -4012,6 +4012,9 @@ digraph alltypes {
 		}
 	}
 	subgraph format {
+		subgraph doctype{
+		DocType	[shape=oval, color=darkviolet, label="DocType"];
+		}
 		subgraph format{
 		Format	[shape=oval, color=darkviolet, label="Format"];
 		}

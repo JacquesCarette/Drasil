@@ -186,12 +186,22 @@ filterInvalidChars :: String -> String
 -- | Possible formats for printer output.
 module Language.Drasil.Format
 
+-- | Document types include Software Requirements Specification and
+--   Website. Choosing SRS will generate both TeX and HTML files, while
+--   Website generates only as HTML. This also determines what folders the
+--   generated files will be placed into.
+data DocType
+SRS :: DocType
+Website :: DocType
+Jupyter :: DocType
+
 -- | Possible formats for printer output.
 data Format
 TeX :: Format
 Plain :: Format
 HTML :: Format
 JSON :: Format
+instance GHC.Show.Show Language.Drasil.Format.DocType
 
 
 -- | Defines functions to create accompanying .css files for HTML
@@ -1658,10 +1668,21 @@ fence :: OpenClose -> Fence -> String
 --   files</a>.
 module Language.Drasil.JSON.Print
 
--- | Generate a python notebook document (using json).
-genJSON :: PrintingInformation -> Document -> Doc
+-- | Generate a python notebook document (using json). build : build the
+--   general Jupyter Notbook document build': build the SRS example in JSON
+--   format
+genJSON :: PrintingInformation -> DocType -> Document -> Doc
 
 module Language.Drasil.Printers
+
+-- | Document types include Software Requirements Specification and
+--   Website. Choosing SRS will generate both TeX and HTML files, while
+--   Website generates only as HTML. This also determines what folders the
+--   generated files will be placed into.
+data DocType
+SRS :: DocType
+Website :: DocType
+Jupyter :: DocType
 
 -- | Possible formats for printer output.
 data Format
@@ -1805,8 +1826,10 @@ showHasSymbImpl :: HasSymbol x => x -> String
 -- | Generates a LaTeX document.
 genTeX :: Document -> PrintingInformation -> Doc
 
--- | Generate a python notebook document (using json).
-genJSON :: PrintingInformation -> Document -> Doc
+-- | Generate a python notebook document (using json). build : build the
+--   general Jupyter Notbook document build': build the SRS example in JSON
+--   format
+genJSON :: PrintingInformation -> DocType -> Document -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.

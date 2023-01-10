@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions to create a chunk database within Drasil.
+
+-- Changes to ChunkDB should be reflected in the 'Creating Your Project 
+-- in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
+
 module Database.Drasil.ChunkDB (
   -- * Types
   -- ** 'ChunkDB'

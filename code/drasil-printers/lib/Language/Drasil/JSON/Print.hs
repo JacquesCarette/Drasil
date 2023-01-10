@@ -7,6 +7,8 @@ import Numeric (showEFloat)
 
 import qualified Language.Drasil as L
 
+import Language.Drasil.Format (DocType(Jupyter))
+
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
@@ -29,9 +31,9 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
 -- | Generate a python notebook document (using json).
 -- build : build the general Jupyter Notbook document
 -- build': build the SRS example in JSON format
-genJSON :: PrintingInformation -> String -> L.Document -> Doc
-genJSON sm "Jupyter" doc = build (makeDocument sm doc)
-genJSON sm    _      doc = build' (makeDocument sm doc)
+genJSON :: PrintingInformation -> DocType -> L.Document -> Doc
+genJSON sm Jupyter doc = build (makeDocument sm doc)
+genJSON sm _       doc = build' (makeDocument sm doc)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc

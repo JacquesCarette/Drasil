@@ -34,13 +34,13 @@ jobs:
       - name: "Install system requirements"
         run: sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
       - name: "Install Stack"
-        uses: haskell/actions/setup@v1
+        uses: haskell/actions/setup@v2
         with:
           enable-stack: true
           stack-no-global: true
           stack-version: 'latest'
       - name: "Cache dependencies"
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.3
         with:
           path: |
             ~/.stack
@@ -94,7 +94,7 @@ jobs:
             bash scripts/deploy_wrapper.bash
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@4.1.3
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           git-config-name: ${{ secrets.BOT_NAME }}
           git-config-email: ${{ secrets.BOT_EMAIL }}

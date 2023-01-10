@@ -36,7 +36,6 @@ instance Applicative CppProject where
   (CPPP f) <*> (CPPP x) = CPPP (f x)
 
 instance Monad CppProject where
-  return = CPPP
   CPPP x >>= f = f x
 
 instance PackageSym CppProject where
@@ -53,12 +52,12 @@ instance AuxiliarySym CppProject where
         langVersion = cppVersion}
   sampleInput = G.sampleInput
 
-  optimizeDox = return no
+  optimizeDox = pure no
   
   makefile fs it cms = G.makefile (cppBuildConfig fs it) (G.noRunIfLib it cppRunnable) (G.docIfEnabled cms G.doxDocConfig)
   
   auxHelperDoc = unCPPP
-  auxFromData fp d = return $ ad fp d
+  auxFromData fp d = pure $ ad fp d
 
 -- helpers
 -- | Create a build configuration for C++ files. Takes in 'FilePath's and the type of implementation.

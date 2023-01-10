@@ -84,12 +84,12 @@ instance Semigroup (PrintLaTeX TP.Doc) where
 -- | D is a monad.
 instance Monoid (PrintLaTeX TP.Doc) where
   mempty = pure TP.empty
-  (PL s1) `mappend` (PL s2) = PL $ \ctx -> s1 ctx $$ s2 ctx
+  -- (PL s1) `mappend` (PL s2) = PL $ \ctx -> s1 ctx $$ s2 ctx
 
 -- may revisit later
 -- | Since Text.PrettyPrint steals <>, use %% instead for mappend.
 (%%) :: D -> D -> D
-(%%) = mappend
+(%%) = liftA2 ($$)
 
 -- | Lifts Text.PrettyPrint's $+$. Above, with no overlapping. Associative.
 ($+$) :: D -> D -> D

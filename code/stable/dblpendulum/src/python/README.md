@@ -1,8 +1,6 @@
 # DblPendulum 
 > Author: Dong Chen
 
-> Purpose: this purpose.
-
 ------------------------------------------------------------
 ## Making Examples 
  How to Run the Program:

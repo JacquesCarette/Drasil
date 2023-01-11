@@ -1,8 +1,6 @@
 # NoPCM 
 > Author: Thulasi Jegatheesan
 
-
-
 ------------------------------------------------------------
 ## Making Examples 
  How to Run the Program:

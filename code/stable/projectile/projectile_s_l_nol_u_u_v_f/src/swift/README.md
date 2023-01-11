@@ -1,8 +1,6 @@
 # Projectile 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
-
-
 ------------------------------------------------------------
 ## Version 
  `Swift 5.2.4`

@@ -1,8 +1,6 @@
 # GlassBR 
 > Authors:  Nikitha Krithnan, W. Spencer Smith
 
-
-
 ------------------------------------------------------------
 ## Making Examples 
  How to Run the Program:

@@ -1,8 +1,6 @@
 # Projectile 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
-
-
 ------------------------------------------------------------
 ## Version 
  `C# 6.0`

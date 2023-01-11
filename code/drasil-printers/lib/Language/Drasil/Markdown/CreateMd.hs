@@ -29,7 +29,7 @@ instDoc cfp = regularSec (text "Making Examples")
 
 -- | Helper for creating optional Purpose subsection as Doc
 maybePurpDoc :: Maybe String -> Doc
-maybePurpDoc = maybe empty (\descr-> text "> Purpose:" <+> text descr)
+maybePurpDoc = maybe empty (\descr-> doubleSep <> text "> Purpose:" <+> text descr)
 
 -- | 'What' section in generated README file, does not display if empty
 whatInfo :: Maybe String -> Doc
@@ -127,7 +127,7 @@ bkQuote3 = text "```"
 -- | Constructs introduction section from header and message.
 introSec ::  Doc -> Doc -> Int -> Doc -> Doc
 introSec hd ms1 l descr = text "#" <+> hd <+> contSep <> (if l == 1 then text "> Author:" else text "> Authors: ") 
-  <+> ms1 <> doubleSep <> descr
+  <+> ms1 <> descr
 
 -- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc

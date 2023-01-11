@@ -247,7 +247,7 @@ makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
 
 -- | Creates the rows for a table.
 makeRows :: [[Spec]] -> D
-makeRows = foldr (%%) mempty . map (\c -> makeColumns c %% pure dbs)
+makeRows = foldr ((%%) . (\c -> makeColumns c %% pure dbs)) mempty
 
 -- | Creates the columns for a table.
 makeColumns :: [Spec] -> D
@@ -460,7 +460,7 @@ makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bi
 
 -- | Renders a bibliographical reference.
 mkBibRef :: PrintingInformation -> BibRef -> D
-mkBibRef sm = foldr (%%) mempty . map (renderF sm)
+mkBibRef sm = foldr ((%%) . renderF sm) mempty
 
 -- | Helper that renders a citation.
 renderF :: PrintingInformation -> Citation -> D

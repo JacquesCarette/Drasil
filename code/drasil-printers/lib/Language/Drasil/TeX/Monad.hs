@@ -79,8 +79,7 @@ getCtx = PL id
 instance Semigroup (PrintLaTeX TP.Doc) where
   (PL s1) <> (PL s2) = PL $ \ctx -> s1 ctx TP.<> s2 ctx
 
--- very convenient lifting of $$
--- | D is a monad.
+-- | D is a monoid.
 instance Monoid (PrintLaTeX TP.Doc) where
   mempty = pure TP.empty
 

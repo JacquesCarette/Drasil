@@ -9,6 +9,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..))
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty)
+import Data.List.NonEmpty (nonEmpty, toList)
 
 -- | Generates a README file.
 makeReadMe :: ReadMeInfo -> Doc 
@@ -24,8 +25,8 @@ makeReadMe ReadMeInfo {
         caseName = name,
         examplePurpose = purp,
         exampleDescr = descr} = 
-    makeMd [introInfo name auths $ fieldEmptySTR purp,
-    whatInfo $ fieldEmptySTR descr,
+    makeMd [introInfo name auths $ (fmap toList . nonEmpty) purp,
+    whatInfo $ (fmap toList . nonEmpty) descr,
     makeInstr imptype configFPs,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,
@@ -36,9 +37,3 @@ makeReadMe ReadMeInfo {
 makeInstr :: ImplementationType -> [FilePath]-> Doc
 makeInstr Library _ = empty
 makeInstr Program cfp = instDoc cfp
-
--- |Helper that checks if the field is empty; hels with allowing optional content 
--- rendering in a README file
-fieldEmptySTR :: String -> Maybe String
-fieldEmptySTR [] = Nothing
-fieldEmptySTR x = Just x

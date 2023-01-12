@@ -168,7 +168,7 @@ rOB    = uc' "rOB"
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.displacement) (Concat [lOrigin, lBodyB])) Real metre
   
-posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
+posCM = uc' "p_CM" (nounPhraseSP "Center of Mass")
  --"mass-weighted average position of a rigid " ++
  -- "body's particles") 
   "FIXME: Define this or remove the need for definitions" 

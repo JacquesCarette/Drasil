@@ -227,7 +227,7 @@ intNormForce = ucsWS "G_i" (cn "interslice normal forces")
    S "exerted between each pair of adjacent slices")
   (vec cG) (Vect Real) forcePerMeterU
 
-slipHght = ucs "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip surface")
+slipHght = uc' "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip surface")
   "heights of the slip surface"
   (sub (vec lY) lSlip) (Vect Real) metre
 
@@ -324,15 +324,15 @@ surfLoad = ucsWS "Q_i" (cn "external forces")
    S "acting into the surface from the midpoint of each slice")
   (vec cQ) (Vect Real) forcePerMeterU
 
-baseAngle = ucs "alpha_i" (cn "base angles")
+baseAngle = uc' "alpha_i" (cn "base angles")
   "the angles between the base of each slice and the horizontal"
   (vec lAlpha) (Vect Real) degree
 
-surfAngle = ucs "beta_i" (cn "surface angles")
+surfAngle = uc' "beta_i" (cn "surface angles")
   "the angles between the surface of each slice and the horizontal"
   (vec lBeta) (Vect Real) degree
 
-impLoadAngle = ucs "omega_i" (cn "imposed load angles")
+impLoadAngle = uc' "omega_i" (cn "imposed load angles")
   "the angles between the external force acting into the surface of each slice and the vertical"
   (vec lOmega) (Vect Real) degree
 
@@ -340,11 +340,11 @@ baseWthX = ucsWS "b_i" (cn "base width of slices")
   (S "the width of each slice" `S.inThe` phrase xDir)
   (vec lB) (Vect Real) metre
 
-baseLngth = ucs "l_b,i" (cn "total base lengths of slices") 
+baseLngth = uc' "l_b,i" (cn "total base lengths of slices") 
   "the lengths of each slice in the direction parallel to the slope of the base"
   (sub (vec cL) lB) (Vect Real) metre
 
-surfLngth = ucs "l_s,i" (cn "surface lengths of slices")
+surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
   "the lengths of each slice in the direction parallel to the slope of the surface"
   (sub (vec cL) lS) (Vect Real) metre
 
@@ -367,12 +367,12 @@ sliceHghtW = makeUCWDS "h_z,w,i" (cn "heights of the water table")
   (S "the heights" `S.inThe` phrase yDir +:+ S "from the base of each slice to the water table")
   (sub (vec lH) lHeights) Real metre
 
-nrmShearNum = ucs "C_num,i" (cn "proportionality constant numerator")
+nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
   ("values for each slice that sum together to form the numerator of the " ++
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lNum) (Vect Real) newton
   
-nrmShearDen = ucs "C_den,i" (cn "proportionality constant denominator")
+nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   ("values for each slice that sum together to form the denominator of the " ++
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lDen) (Vect Real) newton
@@ -397,11 +397,11 @@ watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces")
   "the sums of the normal water forces acting on each pair of adjacent interslice boundaries"
   (sup (subX (vec cF)) lNormWat) Real newton
 
-sliceHghtRight = ucs "h^R" (cn "heights of the right side of slices") 
+sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices") 
   "the heights of the right side of each slice, assuming slice surfaces have negative slope"
   (sup (vec lH) lRight) (Vect Real) metre
 
-sliceHghtLeft = ucs "h^L" (cn "heights of the left side of slices") 
+sliceHghtLeft = uc' "h^L" (cn "heights of the left side of slices") 
   "the heights of the left side of each slice, assuming slice surfaces have negative slope"
   (sup (vec lH) lLeft) (Vect Real) metre
 

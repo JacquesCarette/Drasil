@@ -166,7 +166,7 @@ sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
 rOB    = uc' "rOB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.displacement) (Concat [lOrigin, lBodyB])) metre
+  (sub (eqSymb QP.displacement) (Concat [lOrigin, lBodyB])) Real metre
   
 posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
  --"mass-weighted average position of a rigid " ++

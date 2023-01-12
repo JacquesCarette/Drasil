@@ -41,17 +41,17 @@ lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
 lenRod = makeUCWDS "l_rod" (cn "length of the rod")
         (phraseNP (len `the_ofThe` rod))
-        (sub cL lRod) metre
+        (sub cL lRod) Real metre
 
 -- pendDisplacementAngle = ucsWS "pendDisplacementAngle" (cn "displacement angle of the pendulum")
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of the pendulum")
         (phraseNP (angle `the_ofThe` pendulum))
-        (sub lTheta lP) radian
+        (sub lTheta lP) Real radian
         -- (sub lTheta lP) (mkFunction [Real] Real) radian
 
 initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
         (phraseNP (NP.the (CM.iAngle `of_` pendulum)))
-        (sub lTheta lI) radian
+        (sub lTheta lI) Real radian
 
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
@@ -67,7 +67,7 @@ inConstraints = map (`uq` defaultUncrt) [lenRodCons, initialPendAngleCons]
 outConstraints :: [UncertQ]
 outConstraints = map (`uq` defaultUncrt) [angAccelOutCons, pendDisplacementAngleOutCons]
 
-lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
-initialPendAngleCons  = constrained' initialPendAngle    [gtZeroConstr] (dbl 2.1)
-pendDisplacementAngleOutCons  = constrained' pendDisplacementAngle    [gtZeroConstr] (dbl 2.1)
-angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (exactDbl 0)
+lenRodCons                   = constrained' lenRod                [gtZeroConstr] (dbl 44.2)
+initialPendAngleCons         = constrained' initialPendAngle      [gtZeroConstr] (dbl 2.1)
+pendDisplacementAngleOutCons = constrained' pendDisplacementAngle [gtZeroConstr] (dbl 2.1)
+angAccelOutCons              = constrained' QP.angularAccel       [gtZeroConstr] (exactDbl 0)

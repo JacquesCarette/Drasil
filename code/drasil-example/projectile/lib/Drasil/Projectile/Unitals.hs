@@ -14,7 +14,7 @@ import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
   flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed)
 
 projSpeed :: UnitalChunk
-projSpeed  = uc C.projSpeed (Concat [vec lV, label "(", lT, label ")"]) velU
+projSpeed  = uc C.projSpeed (Concat [vec lV, label "(", lT, label ")"]) Real velU
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ

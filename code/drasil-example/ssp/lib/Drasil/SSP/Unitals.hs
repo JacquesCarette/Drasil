@@ -118,32 +118,32 @@ waterHght = uqc "y_wt,i" (nounPhraseSent $ plural yCoord `S.of_` S "the water ta
 xMaxExtSlip = uq (constrained' (makeUCWDS "x_slip^maxExt"
   (nounPhraseSent $ S "maximum exit" +:+ phrase xCoord)
   (S "the maximum potential" +:+ phrase xCoord +:+ S "for the exit point of a slip surface")
-  (sup (sub lX lSlip) lMaxExt) metre) [] (exactDbl 100)) defaultUncrt
+  (sup (sub lX lSlip) lMaxExt) Real metre) [] (exactDbl 100)) defaultUncrt
 
 xMaxEtrSlip = uq (constrained' (makeUCWDS "x_slip^maxEtr" 
   (nounPhraseSent $ S "maximum entry" +:+ phrase xCoord)
   (S "the maximum potential" +:+ phrase xCoord +:+ S "for the entry point of a slip surface")
-  (sup (sub lX lSlip) lMaxEtr) metre) [] (exactDbl 20)) defaultUncrt
+  (sup (sub lX lSlip) lMaxEtr) Real metre) [] (exactDbl 20)) defaultUncrt
   
 xMinExtSlip = uq (constrained' (makeUCWDS "x_slip^minExt"
   (nounPhraseSent $ S "minimum exit" +:+ phrase xCoord)
   (S "the minimum potential" +:+ phrase xCoord +:+ S "for the exit point of a slip surface")
-  (sup (sub lX lSlip) lMinExt) metre) [] (exactDbl 50)) defaultUncrt
+  (sup (sub lX lSlip) lMinExt) Real metre) [] (exactDbl 50)) defaultUncrt
 
 xMinEtrSlip = uq (constrained' (makeUCWDS "x_slip^minEtr"
   (nounPhraseSent $ S "minimum entry" +:+ phrase xCoord)
   (S "the minimum potential" +:+ phrase xCoord +:+ S "for the entry point of a slip surface")
-  (sup (sub lX lSlip) lMinEtr) metre) [] (exactDbl 0)) defaultUncrt
+  (sup (sub lX lSlip) lMinEtr) Real metre) [] (exactDbl 0)) defaultUncrt
 
 yMaxSlip = uq (constrained' (makeUCWDS "y_slip^max"
   (nounPhraseSent $ S "maximum" +:+ phrase yCoord)
   (S "the maximum potential" +:+ phrase yCoord `S.of_` S "a point on a slip surface")
-  (supMax (sub lY lSlip)) metre) [] (exactDbl 30)) defaultUncrt
+  (supMax (sub lY lSlip)) Real metre) [] (exactDbl 30)) defaultUncrt
 
 yMinSlip = uq (constrained' (makeUCWDS "y_slip^min"
   (nounPhraseSent $ S "minimum" +:+ phrase yCoord)
   (S "the minimum potential" +:+ phrase yCoord `S.of_` S "a point on a slip surface")
-  (supMin (sub lY lSlip)) metre) [] (exactDbl 0)) defaultUncrt
+  (supMin (sub lY lSlip)) Real metre) [] (exactDbl 0)) defaultUncrt
 
 effCohesion = uqc "c'" (cn "effective cohesion")
   "the internal pressure that sticks particles of soil together"
@@ -176,7 +176,7 @@ constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
   " or half-sine if false")) (const (variable "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs, coords  :: ConstrConcept
+fs, coords :: ConstrConcept
 fs = constrained' (dqd' fsConcept (const $ sub cF lSafety) Real Nothing)
   [gtZeroConstr] (exactDbl 1)
 
@@ -190,7 +190,7 @@ fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety")
 coords = constrainedNRV' (makeUCWDS "(x,y)" (cn "cartesian position coordinates")
   (P lY +:+ S "is considered parallel to the direction of the force of" +:+
    phrase gravity `S.and_` P lX +:+ S "is considered perpendicular to" +:+ P lY)
-  lCoords metre) []
+  lCoords Real metre) []
 
 ---------------------------
 -- START OF UNITALCHUNKS --
@@ -235,34 +235,34 @@ slipDist = ucsWS "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the slip s
   (plural xCoord `S.of_` S "points on the slip surface")
   (sub (vec lX) lSlip) (Vect Real) metre
 
-xi     = makeUCWDS "x_i" (nounPhraseSent $ phrase xCoord)
-  (phraseNP (NP.the (xCoord `inThe` cartesian))) lX metre
+xi = makeUCWDS "x_i" (nounPhraseSent $ phrase xCoord)
+  (phraseNP (NP.the (xCoord `inThe` cartesian))) lX Real metre
 
-yi     = makeUCWDS "y_i" (nounPhraseSent $ phrase yCoord)
-  (phraseNP (NP.the (yCoord `inThe` cartesian))) lY metre
+yi = makeUCWDS "y_i" (nounPhraseSent $ phrase yCoord)
+  (phraseNP (NP.the (yCoord `inThe` cartesian))) lY Real metre
 
 zcoord = makeUCWDS "z"   (nounPhraseSent $ phrase zCoord)
-  (phraseNP (NP.the (zCoord `inThe` cartesian))) lZ metre
+  (phraseNP (NP.the (zCoord `inThe` cartesian))) lZ Real metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
 -- They have been removed now, but we need a reasonable notation.
 critCoords = makeUCWDS "(xcs,ycs)" (cn "critical slip surface coordinates")
   (S "the set" `S.of_` pluralNP (xCoord `and_PP` yCoord) +:+
    S "that describe the vertices of the critical slip surface")
-  (Concat [sub (vec lX) lCSlip, label ",", sub (vec lY) lCSlip]) metre
+  (Concat [sub (vec lX) lCSlip, label ",", sub (vec lY) lCSlip]) Real metre
 
 mobilizedShear = uc' "mobilizedShear" (cn' "mobilized shear force")
-  "the shear force in the direction of potential motion" cS newton
+  "the shear force in the direction of potential motion" cS Real newton
 
 resistiveShear = makeUCWDS "resistiveShear" (cn' "resistive shear force")
   (S "the Mohr Coulomb frictional force that describes the limit" `S.of_`
     phrase mobilizedShear +:+ S "that can be withstood before failure")
-  cP newton
+  cP Real newton
 
 mobShrI = makeUCWDS "mobShrFs" (cn' "mobilized shear force")
   (phraseNP (the mobilizedShear) +:+ S "per meter" `S.inThe` phrase zDir +:+
    S "for each slice")
-  (vec cS) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
+  (vec cS) Real forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
@@ -271,7 +271,7 @@ shrResI = makeUCWDS "shrRes" (cn "resistive shear forces")
   (S "the Mohr Coulomb frictional forces per meter" `S.inThe` phrase zDir +:+
    S "for each slice that describe the limit" `S.of_` phrase mobilizedShear +:+
    S "the slice can withstand before failure")
-  (vec cP) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
+  (vec cP) Real forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
@@ -354,18 +354,18 @@ midpntHght = ucsWS "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights of slices"
   (vec lH) (Vect Real) metre
 
 porePressure = uc' "u" (cn "pore pressure")
-  "the pressure that comes from water within the soil" lU pascal
+  "the pressure that comes from water within the soil" lU Real pascal
   
 shrStress = uc' "tau_i" (cn "shear strength")
-  "the strength of a material against shear failure" (sup lTau (label "f")) pascal
+  "the strength of a material against shear failure" (sup lTau (label "f")) Real pascal
 
 sliceHght = makeUCWDS "h_z,i" (cn "heights of interslice normal forces")
   (pluralNP (height `inThePS` yDir) `S.the_ofThe` S "interslice normal forces on each slice")
-  (subZ (vec lH)) metre
+  (subZ (vec lH)) Real metre
 
 sliceHghtW = makeUCWDS "h_z,w,i" (cn "heights of the water table")
   (S "the heights" `S.inThe` phrase yDir +:+ S "from the base of each slice to the water table")
-  (sub (vec lH) lHeights) metre
+  (sub (vec lH) lHeights) Real metre
 
 nrmShearNum = ucs "C_num,i" (cn "proportionality constant numerator")
   ("values for each slice that sum together to form the numerator of the " ++
@@ -378,24 +378,24 @@ nrmShearDen = ucs "C_den,i" (cn "proportionality constant denominator")
   (sub (vec cC) lDen) (Vect Real) newton
 
 fx = makeUCWDS "fx" (nounPhraseSent $ phrase xCoord +:+ S "of the force")
-  (S "the force acting" `S.inThe` phrase xDir) (subX cF) newton
+  (S "the force acting" `S.inThe` phrase xDir) (subX cF) Real newton
 
 fy = makeUCWDS "fy" (nounPhraseSent $ phrase yCoord +:+ S "of the force")
-  (S "the force acting" `S.inThe` phrase yDir) (subY cF) newton
+  (S "the force acting" `S.inThe` phrase yDir) (subY cF) Real newton
 
 fn = uc' "F_n" (cn "total normal force") "component of a force in the normal direction"
-  (sub cF (label "n")) newton
+  (sub cF (label "n")) Real newton
 
 ft = uc' "F_t" (cn "tangential force") "component of a force in the tangential direction"
-  (sub cF (label "t")) newton
+  (sub cF (label "t")) Real newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
   "the sums of the normal forces acting on each pair of adjacent interslice boundaries"
-  (sup (subX (vec cF)) lNorm) newton
+  (sup (subX (vec cF)) lNorm) Real newton
 
 watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces") 
   "the sums of the normal water forces acting on each pair of adjacent interslice boundaries"
-  (sup (subX (vec cF)) lNormWat) newton
+  (sup (subX (vec cF)) lNormWat) Real newton
 
 sliceHghtRight = ucs "h^R" (cn "heights of the right side of slices") 
   "the heights of the right side of each slice, assuming slice surfaces have negative slope"
@@ -406,36 +406,36 @@ sliceHghtLeft = ucs "h^L" (cn "heights of the left side of slices")
   (sup (vec lH) lLeft) (Vect Real) metre
 
 totNormStress = uc' "sigma" (cn' "total normal stress")
-  "the total force per area acting on the soil mass" lSigma pascal
+  "the total force per area acting on the soil mass" lSigma Real pascal
 
 tangStress = uc' "tau" (cn' "tangential stress")
-  "the shear force per unit area" lTau pascal
+  "the shear force per unit area" lTau Real pascal
 
 effectiveStress = uc' "sigma'" (cn' "effective stress")
   ("the stress in a soil mass that is effective in causing volume changes " ++
    "and mobilizes the shear strength arising from friction; represents the " ++
    "average stress carried by the soil skeleton")
-  (prime lSigma) pascal
+  (prime lSigma) Real pascal
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
   ("the normal stress in a soil mass that is effective in causing volume " ++
    "changes; represents the average normal stress carried by the soil skeleton")
-  (prime $ sub lSigma cN) pascal
+  (prime $ sub lSigma cN) Real pascal
 
 dryVol = uc' "V_dry" (cn "volumes of dry soil")
   "the amount of space occupied by dry soil for each slice"
-  (sub (vec cV) lDry) m_3
+  (sub (vec cV) lDry) Real m_3
 
 satVol = uc' "V_sat" (cn "volumes of saturated soil")
   "the amount of space occupied by saturated soil for each slice"
-  (sub (vec cV) lSat) m_3
+  (sub (vec cV) lSat) Real m_3
 
 rotForce = uc' "F_rot" (cn "force causing rotation") 
-  "a force in the direction of rotation" (sub cF lRot) newton
+  "a force in the direction of rotation" (sub cF lRot) Real newton
   
 momntArm = uc' "r" (cn' "length of the moment arm") 
   "the distance between a force causing rotation and the axis of rotation"
-  lR metre
+  lR Real metre
 
 ----------------------
 -- Unitless Symbols --

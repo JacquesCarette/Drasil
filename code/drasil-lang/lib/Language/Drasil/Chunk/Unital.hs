@@ -62,9 +62,8 @@ instance Express       UnitalChunk where express = sy
 --{BEGIN HELPER FUNCTIONS}--
 
 -- | Used to create a 'UnitalChunk' from a 'Concept', 'Symbol', and 'Unit'.
--- Assumes the 'Space' is Real.
-uc :: (Concept c, IsUnit u) => c -> Symbol -> u -> UnitalChunk
-uc a b = ucs' a b Real
+uc :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
+uc a b = ucs' a b
 
 -- | Similar to 'uc' but does not assume the 'Space'.
 ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
@@ -73,19 +72,18 @@ ucs' a sym space c = UC (dqd (cw a) sym space un) un
 
 -- | Similar to 'uc', except it builds the 'Concept' portion of the 'UnitalChunk'
 -- from a given 'UID', term, and definition (which are the first three arguments).
-uc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
-uc' i t d s u = UC (dqd (dcc i t d) s Real un) un
+uc' :: (IsUnit u) => String -> NP -> String -> Symbol -> Space -> u -> UnitalChunk
+uc' i t d sym space u = UC (dqd (dcc i t d) sym space un) un
  where un = unitWrapper u
 
 -- | Similar to 'uc'', but 'Symbol' is dependent on the 'Stage'.
-ucStaged :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> u -> 
+ucStaged :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> Space -> u -> 
   UnitalChunk
-ucStaged i t d s u = UC (dqd' (dcc i t d) s Real (Just un)) un
+ucStaged i t d sym space u = UC (dqd' (dcc i t d) sym space (Just un)) un
  where un = unitWrapper u
 
 -- | Similar to 'uc'', but does not assume the 'Space'.
-ucs :: (IsUnit u) => String -> NP ->
-  String -> Symbol -> Space -> u -> UnitalChunk
+ucs :: (IsUnit u) => String -> NP -> String -> Symbol -> Space -> u -> UnitalChunk
 ucs nam trm desc sym space un = UC (dqd (dcc nam trm desc) sym space uu) uu
   where uu = unitWrapper un
 
@@ -99,8 +97,8 @@ ucsWS nam trm desc sym space un = UC (dqd (dccWDS nam trm desc) sym space uu) uu
 -- | Creates a 'UnitalChunk' in the same way as 'uc'', but with a 'Sentence' for
 -- the definition instead of a 'String'.
 makeUCWDS :: (IsUnit u) => String -> NP -> Sentence -> Symbol ->
-  u -> UnitalChunk
-makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
+  Space -> u -> UnitalChunk
+makeUCWDS nam trm desc sym space un = UC (dqd (dccWDS nam trm desc) sym space uu) uu
   where uu = unitWrapper un
 
 -- | Attach units to a chunk that has a symbol and definition.

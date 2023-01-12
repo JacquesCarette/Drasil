@@ -41,4 +41,4 @@ makeInstr Program cfp = instDoc cfp
 -- |Helper that checks if the field is empty; allowing optional content 
 -- rendering in a README file
 fieldEmptySTR :: String -> Maybe String
-fieldEmptySTR fld = (fmap toList . nonEmpty) fld
+fieldEmptySTR = fmap toList . nonEmpty

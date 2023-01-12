@@ -110,7 +110,7 @@ module Language.Drasil (
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
   -- Language.Drasil.Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucStaged, ucs, ucs', ucsWS, ucuc, ucw
+  , uc, uc', ucStaged, ucs, ucsWS, ucuc, ucw
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
@@ -354,7 +354,7 @@ import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverF
   makeASingleDE, formEquations)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc',
-  ucStaged, ucs, ucs', ucsWS, ucuc, ucw)
+  ucStaged, ucs, ucsWS, ucuc, ucw)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)

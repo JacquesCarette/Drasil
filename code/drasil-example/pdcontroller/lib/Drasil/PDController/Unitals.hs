@@ -91,14 +91,14 @@ qdSetPointTD = qw ipSetPt
 
 --FIXME: the original timeStep is 0.01, this will trigger an error in Java ODE solver
 --change it from 0.01 to 0.001 is a temporary fix to make ODE solver working
-ipStepTime = constrained' (ucs' stepTime symTStep Real second)
+ipStepTime = constrained' (uc stepTime symTStep Real second)
   [physc $ Bounded (Inc, frac 1 1000) (Exc, sy ipSimTime)]
   (dbl 0.001)
 ipStepTimeUnc = uq ipStepTime defaultUncrt
 qdStepTime = qw ipStepTime
 
 ipSimTime
-  = constrained' (ucs' simulationTime symTSim Real second)
+  = constrained' (uc simulationTime symTSim Real second)
       [physc $ Bounded (Inc, exactDbl 1) (Inc, exactDbl 60)]
       (exactDbl 10)
 ipSimTimeUnc = uq ipSimTime defaultUncrt

@@ -44,7 +44,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
   period, frequency, chgMomentum :: UnitalChunk
 
-acceleration         = ucs' CP.acceleration (vec lA) (Vect Real) accelU
+acceleration         = uc CP.acceleration (vec lA) (Vect Real) accelU
 angularAccel         = uc CP.angAccel lAlpha Real angAccelU
 angularDisplacement  = uc CP.angDisp lTheta Real radian
 angularFrequency     = uc CP.angFreq cOmega Real second
@@ -82,7 +82,7 @@ scalarPos            = uc CP.scalarPos lP Real metre
 tension              = uc CP.tension (vec cT) Real newton
 time                 = uc CP.time lT Real second
 torque               = uc CP.torque (vec lTau) Real torqueU
-velocity             = ucs' CP.velocity (vec lV) (Vect Real) velU
+velocity             = uc CP.velocity (vec lV) (Vect Real) velU
 weight               = uc CP.weight cW Real newton
 fOfGravity           = uc CP.fOfGravity (sub (vec cF) (vec lG)) Real newton
 

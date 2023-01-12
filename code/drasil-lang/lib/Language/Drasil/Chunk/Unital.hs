@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
   UnitalChunk(..),
   -- * Constructors
-  makeUCWDS , uc , uc' , ucStaged, ucs , ucs', ucsWS, ucuc, ucw) where
+  makeUCWDS, uc, uc', ucStaged, ucs, ucsWS, ucuc, ucw) where
 
 import Control.Lens (makeLenses, view, (^.))
 
@@ -63,11 +63,7 @@ instance Express       UnitalChunk where express = sy
 
 -- | Used to create a 'UnitalChunk' from a 'Concept', 'Symbol', and 'Unit'.
 uc :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
-uc a b = ucs' a b
-
--- | Similar to 'uc' but does not assume the 'Space'.
-ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
-ucs' a sym space c = UC (dqd (cw a) sym space un) un
+uc a sym space c = UC (dqd (cw a) sym space un) un
  where un = unitWrapper c
 
 -- | Similar to 'uc', except it builds the 'Concept' portion of the 'UnitalChunk'

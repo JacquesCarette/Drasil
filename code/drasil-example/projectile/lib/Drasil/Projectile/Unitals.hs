@@ -25,12 +25,12 @@ offsetUnc    = uq offset    defaultUncrt
 targPosUnc   = uq targPos   defaultUncrt
 
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
-flightDur = constrainedNRV' (ucs'  C.flightDur (subStr lT "flight") Real second)  [gtZeroConstr]
-landPos   = constrainedNRV' (ucs'  C.landPos   (subStr lP "land"  ) Real metre)   [gtZeroConstr]
+flightDur = constrainedNRV' (uc  C.flightDur (subStr lT "flight") Real second)  [gtZeroConstr]
+landPos   = constrainedNRV' (uc  C.landPos   (subStr lP "land"  ) Real metre)   [gtZeroConstr]
 launAngle = constrained'    (dqd' C.launAngle (autoStage lTheta)   Real (Just radian)) [physc $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)
-launSpeed = constrained'    (ucs'  C.launSpeed (subStr lV "launch") Real velU)    [gtZeroConstr] (exactDbl 100)
-offset    = constrainedNRV' (ucs'  C.offset    (subStr lD "offset") Real metre)   [physc $ UpFrom (Exc, neg $ sy targPos) ]
-targPos   = constrained'    (ucs' C.targPos   (subStr lP "target") Real metre)   [gtZeroConstr] (exactDbl 1000)
+launSpeed = constrained'    (uc  C.launSpeed (subStr lV "launch") Real velU)    [gtZeroConstr] (exactDbl 100)
+offset    = constrainedNRV' (uc  C.offset    (subStr lD "offset") Real metre)   [physc $ UpFrom (Exc, neg $ sy targPos) ]
+targPos   = constrained'    (uc C.targPos   (subStr lP "target") Real metre)   [gtZeroConstr] (exactDbl 1000)
 
 ---
 -- The output contains a message, as a string, so it needs to be a quantity

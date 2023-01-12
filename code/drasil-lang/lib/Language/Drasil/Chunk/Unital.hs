@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
   UnitalChunk(..),
   -- * Constructors
-  makeUCWDS, uc, uc', ucStaged, ucsWS, ucuc, ucw) where
+  makeUCWDS, uc, uc', ucStaged, ucStaged', ucsWS, ucuc, ucw) where
 
 import Control.Lens (makeLenses, view, (^.))
 
@@ -72,10 +72,14 @@ uc' :: (IsUnit u) => String -> NP -> String -> Symbol -> Space -> u -> UnitalChu
 uc' i t d sym space u = UC (dqd (dcc i t d) sym space un) un
  where un = unitWrapper u
 
+-- | Similar to 'uc', but 'Symbol' is dependent on the 'Stage'.
+ucStaged :: (Concept c, IsUnit u) => c ->  (Stage -> Symbol) -> Space -> u -> UnitalChunk
+ucStaged a sym space u = UC (dqd' (cw a) sym space (Just un)) un
+ where un = unitWrapper u
+
 -- | Similar to 'uc'', but 'Symbol' is dependent on the 'Stage'.
-ucStaged :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> Space -> u -> 
-  UnitalChunk
-ucStaged i t d sym space u = UC (dqd' (dcc i t d) sym space (Just un)) un
+ucStaged' :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> Space -> u -> UnitalChunk
+ucStaged' i t d sym space u = UC (dqd' (dcc i t d) sym space (Just un)) un
  where un = unitWrapper u
 
 -- | Similar to 'ucs', but uses a 'Sentence' for description.

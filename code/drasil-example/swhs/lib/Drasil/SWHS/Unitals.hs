@@ -169,21 +169,21 @@ deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
   "change in the average kinetic energy of a given material"
   (Atop Delta $ eqSymb temp) Real centigrade
 
-tau = ucStaged "tau" (nounPhraseSP "dummy variable for integration over time")
+tau = ucStaged' "tau" (nounPhraseSP "dummy variable for integration over time")
   "binary value representing the presence or absence of integration over time"
   (autoStage lTau) Real second
 --Not sure how to define anything after this point
 
-tauLP = ucStaged "tauLP" (nounPhraseSP "ODE parameter for liquid PCM")
+tauLP = ucStaged' "tauLP" (nounPhraseSP "ODE parameter for liquid PCM")
   ("derived through melting of phase change material, which " ++
   "changes ODE parameter for solid PCM into parameter for liquid")
   (autoStage $ sup (sub lTau lPCM) lLiquid) Real second
 
-tauSP = ucStaged "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
+tauSP = ucStaged' "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
   "derived parameter based on rate of change of temperature of phase change material"
   (autoStage $ sup (sub lTau lPCM) lSolid) Real second
 
-tauW = ucStaged "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
+tauW = ucStaged' "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
   "derived parameter based on rate of change of temperature of water"
   (autoStage $ sub lTau lWater) Real second
 

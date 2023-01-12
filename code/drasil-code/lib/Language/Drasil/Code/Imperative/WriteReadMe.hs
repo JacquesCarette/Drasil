@@ -25,8 +25,8 @@ makeReadMe ReadMeInfo {
         caseName = name,
         examplePurpose = purp,
         exampleDescr = descr} = 
-    makeMd [introInfo name auths $ (fmap toList . nonEmpty) purp,
-    whatInfo $ (fmap toList . nonEmpty) descr,
+    makeMd [introInfo name auths $ fieldEmptySTR purp,
+    whatInfo $ fieldEmptySTR descr,
     makeInstr imptype configFPs,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,
@@ -37,3 +37,8 @@ makeReadMe ReadMeInfo {
 makeInstr :: ImplementationType -> [FilePath]-> Doc
 makeInstr Library _ = empty
 makeInstr Program cfp = instDoc cfp
+
+-- |Helper that checks if the field is empty; allowing optional content 
+-- rendering in a README file
+fieldEmptySTR :: String -> Maybe String
+fieldEmptySTR fld = (fmap toList . nonEmpty) fld

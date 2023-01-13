@@ -45,6 +45,10 @@ data CodeSpec where
   pName :: Name,
   -- | Authors.
   authors :: [a],
+  -- | Purpose.
+  purpose :: Purpose,
+  -- | Example Background.
+  background :: Background,
   -- | All inputs.
   inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -94,6 +98,8 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys         = sys
            , _authors     = as
+           , _purpose     = ps
+           , _background  = bk
            , _instModels  = ims
            , _datadefs    = ddefs
            , _configFiles = cfp
@@ -117,6 +123,8 @@ codeSpec SI {_sys         = sys
   in  CodeSpec {
         pName = n,
         authors = as,
+        purpose = ps,
+        background = bk,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,

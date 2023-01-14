@@ -228,7 +228,7 @@ intNormForce = ucsWS "G_i" (cn "interslice normal forces")
   (vec cG) (Vect Real) forcePerMeterU
 
 slipHght = uc' "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip surface")
-  "heights of the slip surface"
+  (S "heights of the slip surface")
   (sub (vec lY) lSlip) (Vect Real) metre
 
 slipDist = ucsWS "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the slip surface")
@@ -252,7 +252,7 @@ critCoords = makeUCWDS "(xcs,ycs)" (cn "critical slip surface coordinates")
   (Concat [sub (vec lX) lCSlip, label ",", sub (vec lY) lCSlip]) Real metre
 
 mobilizedShear = uc' "mobilizedShear" (cn' "mobilized shear force")
-  "the shear force in the direction of potential motion" cS Real newton
+  (S "the shear force in the direction of potential motion") cS Real newton
 
 resistiveShear = makeUCWDS "resistiveShear" (cn' "resistive shear force")
   (S "the Mohr Coulomb frictional force that describes the limit" `S.of_`
@@ -325,15 +325,15 @@ surfLoad = ucsWS "Q_i" (cn "external forces")
   (vec cQ) (Vect Real) forcePerMeterU
 
 baseAngle = uc' "alpha_i" (cn "base angles")
-  "the angles between the base of each slice and the horizontal"
+  (S "the angles between the base of each slice and the horizontal")
   (vec lAlpha) (Vect Real) degree
 
 surfAngle = uc' "beta_i" (cn "surface angles")
-  "the angles between the surface of each slice and the horizontal"
+  (S "the angles between the surface of each slice and the horizontal")
   (vec lBeta) (Vect Real) degree
 
 impLoadAngle = uc' "omega_i" (cn "imposed load angles")
-  "the angles between the external force acting into the surface of each slice and the vertical"
+  (S "the angles between the external force acting into the surface of each slice and the vertical")
   (vec lOmega) (Vect Real) degree
 
 baseWthX = ucsWS "b_i" (cn "base width of slices")
@@ -341,11 +341,11 @@ baseWthX = ucsWS "b_i" (cn "base width of slices")
   (vec lB) (Vect Real) metre
 
 baseLngth = uc' "l_b,i" (cn "total base lengths of slices") 
-  "the lengths of each slice in the direction parallel to the slope of the base"
+  (S "the lengths of each slice in the direction parallel to the slope of the base")
   (sub (vec cL) lB) (Vect Real) metre
 
 surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
-  "the lengths of each slice in the direction parallel to the slope of the surface"
+  (S "the lengths of each slice in the direction parallel to the slope of the surface")
   (sub (vec cL) lS) (Vect Real) metre
 
 midpntHght = ucsWS "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights of slices")
@@ -354,10 +354,10 @@ midpntHght = ucsWS "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights of slices"
   (vec lH) (Vect Real) metre
 
 porePressure = uc' "u" (cn "pore pressure")
-  "the pressure that comes from water within the soil" lU Real pascal
+  (S "the pressure that comes from water within the soil") lU Real pascal
   
 shrStress = uc' "tau_i" (cn "shear strength")
-  "the strength of a material against shear failure" (sup lTau (label "f")) Real pascal
+  (S "the strength of a material against shear failure") (sup lTau (label "f")) Real pascal
 
 sliceHght = makeUCWDS "h_z,i" (cn "heights of interslice normal forces")
   (pluralNP (height `inThePS` yDir) `S.the_ofThe` S "interslice normal forces on each slice")
@@ -368,12 +368,12 @@ sliceHghtW = makeUCWDS "h_z,w,i" (cn "heights of the water table")
   (sub (vec lH) lHeights) Real metre
 
 nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
-  ("values for each slice that sum together to form the numerator of the " ++
+  (S $ "values for each slice that sum together to form the numerator of the " ++
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lNum) (Vect Real) newton
   
 nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
-  ("values for each slice that sum together to form the denominator of the " ++
+  (S $ "values for each slice that sum together to form the denominator of the " ++
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lDen) (Vect Real) newton
 
@@ -383,58 +383,58 @@ fx = makeUCWDS "fx" (nounPhraseSent $ phrase xCoord +:+ S "of the force")
 fy = makeUCWDS "fy" (nounPhraseSent $ phrase yCoord +:+ S "of the force")
   (S "the force acting" `S.inThe` phrase yDir) (subY cF) Real newton
 
-fn = uc' "F_n" (cn "total normal force") "component of a force in the normal direction"
+fn = uc' "F_n" (cn "total normal force") (S "component of a force in the normal direction")
   (sub cF (label "n")) Real newton
 
-ft = uc' "F_t" (cn "tangential force") "component of a force in the tangential direction"
+ft = uc' "F_t" (cn "tangential force") (S "component of a force in the tangential direction")
   (sub cF (label "t")) Real newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
-  "the sums of the normal forces acting on each pair of adjacent interslice boundaries"
+  (S "the sums of the normal forces acting on each pair of adjacent interslice boundaries")
   (sup (subX (vec cF)) lNorm) Real newton
 
 watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces") 
-  "the sums of the normal water forces acting on each pair of adjacent interslice boundaries"
+  (S "the sums of the normal water forces acting on each pair of adjacent interslice boundaries")
   (sup (subX (vec cF)) lNormWat) Real newton
 
 sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices") 
-  "the heights of the right side of each slice, assuming slice surfaces have negative slope"
+  (S "the heights of the right side of each slice, assuming slice surfaces have negative slope")
   (sup (vec lH) lRight) (Vect Real) metre
 
 sliceHghtLeft = uc' "h^L" (cn "heights of the left side of slices") 
-  "the heights of the left side of each slice, assuming slice surfaces have negative slope"
+  (S "the heights of the left side of each slice, assuming slice surfaces have negative slope")
   (sup (vec lH) lLeft) (Vect Real) metre
 
 totNormStress = uc' "sigma" (cn' "total normal stress")
-  "the total force per area acting on the soil mass" lSigma Real pascal
+  (S "the total force per area acting on the soil mass") lSigma Real pascal
 
 tangStress = uc' "tau" (cn' "tangential stress")
-  "the shear force per unit area" lTau Real pascal
+  (S "the shear force per unit area") lTau Real pascal
 
 effectiveStress = uc' "sigma'" (cn' "effective stress")
-  ("the stress in a soil mass that is effective in causing volume changes " ++
+  (S $ "the stress in a soil mass that is effective in causing volume changes " ++
    "and mobilizes the shear strength arising from friction; represents the " ++
    "average stress carried by the soil skeleton")
   (prime lSigma) Real pascal
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
-  ("the normal stress in a soil mass that is effective in causing volume " ++
+  (S $ "the normal stress in a soil mass that is effective in causing volume " ++
    "changes; represents the average normal stress carried by the soil skeleton")
   (prime $ sub lSigma cN) Real pascal
 
 dryVol = uc' "V_dry" (cn "volumes of dry soil")
-  "the amount of space occupied by dry soil for each slice"
+  (S "the amount of space occupied by dry soil for each slice")
   (sub (vec cV) lDry) Real m_3
 
 satVol = uc' "V_sat" (cn "volumes of saturated soil")
-  "the amount of space occupied by saturated soil for each slice"
+  (S "the amount of space occupied by saturated soil for each slice")
   (sub (vec cV) lSat) Real m_3
 
 rotForce = uc' "F_rot" (cn "force causing rotation") 
-  "a force in the direction of rotation" (sub cF lRot) Real newton
+  (S "a force in the direction of rotation") (sub cF lRot) Real newton
   
 momntArm = uc' "r" (cn' "length of the moment arm") 
-  "the distance between a force causing rotation and the axis of rotation"
+  (S "the distance between a force causing rotation and the axis of rotation")
   lR Real metre
 
 ----------------------

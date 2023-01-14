@@ -184,6 +184,6 @@ outConstraints = map (`uq` defaultUncrt) [pendDisAngleCon_1, pendDisAngleCon_2]
 pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
-  "Column vector of displacement of rods with its derivatives" 
+  "Column vector of displacement of rods with its derivatives"
   lTheta' radian (Vect Real)
   [physc $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

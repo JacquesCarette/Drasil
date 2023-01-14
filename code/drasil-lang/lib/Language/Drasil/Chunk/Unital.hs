@@ -67,19 +67,21 @@ uc a sym space c = UC (dqd (cw a) sym space un) un
  where un = unitWrapper c
 
 -- | Similar to 'uc', except it builds the 'Concept' portion of the 'UnitalChunk'
--- from a given 'UID', term, and definition (which are the first three arguments).
-uc' :: (IsUnit u) => String -> NP -> String -> Symbol -> Space -> u -> UnitalChunk
-uc' i t d sym space u = UC (dqd (dcc i t d) sym space un) un
+-- from a given 'UID', term, and definition (as a 'Sentence') which are its first three arguments.
+uc' :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
+uc' i t d sym space u = UC (dqd (dccWDS i t d) sym space un) un
  where un = unitWrapper u
 
 -- | Similar to 'uc', but 'Symbol' is dependent on the 'Stage'.
-ucStaged :: (Concept c, IsUnit u) => c ->  (Stage -> Symbol) -> Space -> u -> UnitalChunk
+ucStaged :: (Concept c, IsUnit u) => c ->  (Stage -> Symbol) ->
+  Space -> u -> UnitalChunk
 ucStaged a sym space u = UC (dqd' (cw a) sym space (Just un)) un
  where un = unitWrapper u
 
 -- | Similar to 'uc'', but 'Symbol' is dependent on the 'Stage'.
-ucStaged' :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> Space -> u -> UnitalChunk
-ucStaged' i t d sym space u = UC (dqd' (dcc i t d) sym space (Just un)) un
+ucStaged' :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) ->
+  Space -> u -> UnitalChunk
+ucStaged' i t d sym space u = UC (dqd' (dccWDS i t d) sym space (Just un)) un
  where un = unitWrapper u
 
 -- | Similar to 'ucs', but uses a 'Sentence' for description.

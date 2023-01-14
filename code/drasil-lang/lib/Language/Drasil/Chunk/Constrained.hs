@@ -24,6 +24,7 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (HasUID(..))
@@ -126,7 +127,7 @@ constrainedNRV' q cs = ConstrConcept (dqdWr q) cs Nothing
 cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
             -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
-  ConstrConcept (dqd (cw (uc' nam trm desc sym space un)) sym space uu) cs (Just rv)
+  ConstrConcept (dqd (cw (uc' nam trm (S desc) sym space un)) sym space uu) cs (Just rv)
   where uu = unitWrapper un
 
 -- | Similar to 'cuc'', but 'Symbol' is dependent on 'Stage'.

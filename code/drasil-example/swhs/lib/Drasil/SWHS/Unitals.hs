@@ -99,7 +99,7 @@ pcmInitMltE = uc' "pcmInitMltE" (nounPhraseSP
 
 volHtGen = uc' "volHtGen"
   (nounPhraseSP "volumetric heat generation per unit volume")
-  (S "Amount of thermal energy generated per unit volume") lG Real UT.volHtGenU
+  (S "amount of thermal energy generated per unit volume") lG Real UT.volHtGenU
 
 htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")

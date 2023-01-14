@@ -77,7 +77,7 @@ outSA = uc' "outSA" (nounPhraseSP
 
 htCapL = uc' "htCapL" (nounPhraseSP "specific heat capacity of a liquid")
   (S $ "the amount of energy required to raise the temperature of a given " ++
-  ("unit mass of a given liquid by a given amount"))
+  "unit mass of a given liquid by a given amount")
   (sup (eqSymb heatCapSpec) lLiquid) Real UT.heatCapSpec
 
 htCapS = uc' "htCapS"

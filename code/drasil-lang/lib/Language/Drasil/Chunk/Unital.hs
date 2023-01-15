@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Unital (
 
 import Control.Lens (makeLenses, view, (^.))
 
-import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
+import Language.Drasil.Chunk.Concept (dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', tempdqdWr')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Symbol

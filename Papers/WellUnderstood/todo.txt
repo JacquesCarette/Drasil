@@ -1,6 +1,5 @@
 Minor:
 ------
-- Sec 1.5: Would be good to also mention other well-known examples of long-lived software e.g. financial systems, control systems.
 - Figure 1: Caption should explain what the colors indicate.
 - Figure 2: the comment "(compare bold box in Figure 1)" is missing an explanation
 - The "main" program fragment at the end of Section 2 does not seem very useful - why do we need to see this?
@@ -84,3 +83,6 @@ typos:
   I’d suggest to mention Drasil in the abstract. 
 - l. 67: refinements -> refinement
 
+Minor:
+------
+- Sec 1.5: Would be good to also mention other well-known examples of long-lived software e.g. financial systems, control systems.

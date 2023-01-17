@@ -97,6 +97,7 @@
   escapeinside={\%*}{*)}}
 
 \usepackage{dashbox}
+\usepackage[inline]{enumitem}
 
 \begin{document}
 
@@ -181,8 +182,10 @@ it is not captured.
 \label{subsec:documentation}
 
 Well understood also applies to \textbf{documentation} aimed
-at humans~\cite{parnas2011precise}. Explicitly:
-\begin{enumerate}
+at humans~\cite{parnas2011precise}. The same three items of
+\ref{defn:well-understood} can be retargetted to apply to
+documentation as follows:
+\begin{enumerate*}
 \item The meaning of the models is understood at a human-pedagogical level,
 i.e.\ it is explainable.
 \item Combining models is explainable. Thus, the act of combining models
@@ -193,7 +196,7 @@ formal-mathematical knowledge.
 \item Similarly, the refinement steps that are performed due to making
 software-oriented decisions should be captured with a similar mechanism, and
 also include English explanations.
-\end{enumerate}
+\end{enumerate*}
 
 \begin{definition}
 \label{defn:triform-theories}
@@ -212,12 +215,6 @@ theories}~\cite{Farmer2007}. They are a coupling of three concepts:
 Software currently consists of a whole host of artifacts: requirements,
 specifications, user manual, unit tests, system tests, usability tests, build
 scripts, READMEs, license documents, process documents, as well as code.
-
-Whenever appropriate, we use standards and templates for each of the generated
-artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
-%~\cite{SmithAndLai2005,
-of the IEEE~\cite{IEEE1998} and Volere
-templates~\cite{RobertsonAndRobertson1999Vol}.
 
 \subsection{Instances of our context}
 \label{subsec:examples-of-context}
@@ -460,7 +457,8 @@ choices = defaultChoices {
 \subparagraph*{Create recipes to generate artifacts}
 The information collected in the previous steps form the core of the various
 software artifacts normally written. To perform this assembly, we write
-programs that we dub \emph{recipes}. We have DSLs for creating specifications,
+programs that we dub \emph{recipes}. We have DSLs for creating 
+requirements specifications~\cite{SmithEtAl2007},
 code~\cite{GOOLPEPM}, dependency diagrams, Makefiles, READMEs and a log of all choices
 used.
 
@@ -469,16 +467,8 @@ specifying build scripts, our ideas are more properly compared with
 the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
 
 Finally, we can put the contents created via the previous steps together and
-\textbf{generate everything}:
-\begin{lstlisting}
-main :: IO()
-main = do
-  setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
-  genCode choices code
-  genDot fullSI
-  genLog fullSI printSetting
-\end{lstlisting}
+\textbf{generate everything}, here the SRS, the code, traceability graphs and
+a log of the design choices.
 
 \section{An Idealized Process}
 \label{sec:idealized-process}

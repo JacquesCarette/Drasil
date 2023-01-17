@@ -1,9 +1,6 @@
 Minor:
 ------
-- The "main" program fragment at the end of Section 2 does not seem very useful - why do we need to see this?
-Sec 3: Consider putting the idealized process in a figure and then use the text to explain it.
-- Too many uses of enumerations, the text of 1.3 could have been written as a single paragraph of text.
-- Sec 1.4: Why break the text here into two paragraphs? Also, why the very specific detail of "we use standards..." here? Seems out of context. 
+- Sec 3: Consider putting the idealized process in a figure and then use the text to explain it.
 - the abstract mentions “context”, but later it is called “forces”; I think the
   latter is more accurate. 
 
@@ -89,3 +86,10 @@ Minor:
 * done.
 - Figure 2: the comment "(compare bold box in Figure 1)" is missing an explanation
 * done.
+- The "main" program fragment at the end of Section 2 does not seem very useful - why do we need to see this?
+* Agreed - replaced by an English description.
+- Too many uses of enumerations, the text of 1.3 could have been written as a single paragraph of text.
+* The enumeration was quite purposefull, as it exactly mirrors the enumeration of definition 1.
+  This is now explained in the text itself, and the enumeration is formatted as a paragrah.
+- Sec 1.4: Why break the text here into two paragraphs? Also, why the very specific detail of "we use standards..." here? Seems out of context. 
+* Second paragraph information shortened and moved to a more appropriate place.

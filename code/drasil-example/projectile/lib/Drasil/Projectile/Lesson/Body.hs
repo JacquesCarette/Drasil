@@ -19,14 +19,14 @@ import Data.Drasil.Concepts.Physics (physicCon)
 
 import Data.Drasil.People (spencerSmith)
 
-import Drasil.Projectile.Concepts (concepts, projMotion)
+import Drasil.Projectile.Concepts (concepts)
 import Drasil.Projectile.Expressions (eqnRefs)
 
 import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
 import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
   motionContextP2, horMotion, verMotion, summary)
-import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq, horMotionAna, verMotionAna)
+import Drasil.Projectile.Lesson.Analysis (procforAnlsCont, coorSyst, kinematicEq, horMotionAna, verMotionAna)
 
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
@@ -41,7 +41,7 @@ mkNB = [
        BodyProg
          [Review reviewContent,
           MainIdea [motionContextP1, LlC figCSandA, motionContextP2] [horMotion, verMotion, summary],
-          MethsAndAnls [mAndaintro] [coorSyst, kinematicEq, horMotionAna, verMotionAna]],
+          MethsAndAnls procforAnlsCont [coorSyst, kinematicEq, horMotionAna, verMotionAna]],
   BibSec
   ]
 
@@ -82,9 +82,6 @@ refDB = rdb [] []
 projectileMotion :: CI
 projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion Lesson") "Projectile Motion" []
 
-mAndaintro :: Contents
-mAndaintro = foldlSP 
-  [S "Free-flight", phrase projMotion, S "problems can be solved using the following procedure"]
 
 allRefs :: [Reference]
 allRefs = nub (figRefs ++ eqnRefs) 

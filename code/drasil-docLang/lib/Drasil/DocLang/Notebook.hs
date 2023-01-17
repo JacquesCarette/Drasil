@@ -19,7 +19,7 @@ import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, ve
 intro, learnObj, prpsOfDoc, body, review, mainIdea, motion, hormotion, vermotion, methAndAnls,
   coorSyst, kinematic, procForAnls, summary, appendix, reference, example :: [Contents] -> [Section] -> Section
 intro       cs ss = section (titleize Doc.introduction)      cs ss introLabel
-learnObj    cs ss = section (titleize' Doc.learnObj)          cs ss learnObjLabel
+learnObj    cs ss = section (titleize' Doc.learnObj)         cs ss learnObjLabel
 prpsOfDoc   cs ss = section (titleize Doc.prpsOfDoc)         cs ss docPurposeLabel
 
 body        cs ss = section (titleize Doc.body)              cs ss bodyLabel

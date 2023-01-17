@@ -9,7 +9,6 @@ import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time
 import Data.Drasil.Units.Physics (accelU)
 import Data.Drasil.Concepts.Math (xDir, yAxis)
 import Drasil.Projectile.Concepts (projectile, projMotion)
-import Drasil.Projectile.Derivations
 import Drasil.Projectile.Expressions
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, ixSpeed, iySpeed, speed,
   constAccel, gravitationalAccel, xAccel, yAccel, time, xVel, yVel)
@@ -61,7 +60,7 @@ verMotion = NB.vermotion [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "Since the positive", phrase yAxis, S "is directed upward, the", phrase acceleration,
                   S "in the vertical direction is" +:+. eS (sy QP.yAccel $= neg (sy QP.gravitationalAccel)), motionSent]
-        equations = foldlSP_ $ weave [equationsSents, map eS verMotionDeriv]
+        equations = foldlSP_ $ weave [equationsSents, map eS verMotionEqns]
         concl = foldlSP [
                   S "Recall that the last equation can be formulated on the basis of eliminating the",
                   phrase time +:+ eS (sy QP.time), S "between the first two equations, and therefore only ",
@@ -91,7 +90,10 @@ equationsSents = [S "From Equation" +: refS lcrectVel,
                   S "From Equation" +: refS lcrectNoTime]
                 
 horMotionEqns :: [ModelExpr]
-horMotionEqns = [horMotionEqn1, horMotionEqn2, horMotionEqn1]
+horMotionEqns = [horizVel, horizPos, horizVel]
+
+verMotionEqns :: [ModelExpr]
+verMotionEqns = [vertVel, vertPos, vertNoTime]
 
 motionSent :: Sentence
 motionSent = S "This value can be substituted in the equations for" +:+ phrase constAccel +:

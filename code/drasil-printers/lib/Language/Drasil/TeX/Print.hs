@@ -245,7 +245,7 @@ dontCount = "\\/[]{}()_^$:"
 makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
 
--- | Creates the rows for a table.
+-- | Create rows for a table with a single line break between them.
 makeRows :: [[Spec]] -> D
 makeRows = foldr ((%%) . (\c -> makeColumns c %% pure dbs)) mempty
 
@@ -458,7 +458,8 @@ makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bi
   command "nocite" "*" %% command "bibstyle" bibStyleT %%
   command0 "printbibliography" <> sq (pure $ text "heading=none")
 
--- | Renders a bibliographical reference.
+-- | Renders a bibliographical reference with a single line break between
+-- entries.
 mkBibRef :: PrintingInformation -> BibRef -> D
 mkBibRef sm = foldr ((%%) . renderF sm) mempty
 

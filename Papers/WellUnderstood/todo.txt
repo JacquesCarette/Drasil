@@ -1,7 +1,5 @@
 Minor:
 ------
-- Figure 1: Caption should explain what the colors indicate.
-- Figure 2: the comment "(compare bold box in Figure 1)" is missing an explanation
 - The "main" program fragment at the end of Section 2 does not seem very useful - why do we need to see this?
 Sec 3: Consider putting the idealized process in a figure and then use the text to explain it.
 - Too many uses of enumerations, the text of 1.3 could have been written as a single paragraph of text.
@@ -71,7 +69,7 @@ specific domain, as well as the detailing of specifics, e.g., by fleshing out
 the "Create a coherent narrative" paragraph (l.175-180).
 
 =============================================================================
-typos:
+typos: (all fixed)
 ------
 - Missing comma in "What software architecture data-structures, algorithms" (should be one just after "architecture").
 - "software oriented decisions" -> "software-oriented decisions"
@@ -86,3 +84,8 @@ typos:
 Minor:
 ------
 - Sec 1.5: Would be good to also mention other well-known examples of long-lived software e.g. financial systems, control systems.
+* mentioned control systems as 'good' examples that fit, financial systems as non-examples
+- Figure 1: Caption should explain what the colors indicate.
+* done.
+- Figure 2: the comment "(compare bold box in Figure 1)" is missing an explanation
+* done.

@@ -238,16 +238,21 @@ are not \emph{well understood}. This is why most large rewrites of financial
 systems fail as the functionality actually implemented in the source system is
 not documented.
 
-\section{An Example}
-\label{sec:example}
-
-\begin{figure*}[t]
+\begin{figure*}[t!]
   \centering
   \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-11ptFont-squished-blind-v1-300dpi.png}
   \caption{Colors and shapes mapping from captured domain knowledge to generated
-  artifacts.}
+  artifacts. Red oval: program name; green rectangle: author name; blue circle:
+  symbols for real-valued variables; pink lozenge: assumptions used (load 
+  distribution factor is contant);
+  orange cloud: mathematical definition of $B$; gray arrow: option to turn on
+  logging; light brown rounded-corners rectangle: how inputs should be ``bundled'';
+  purple wavy rectangle: how constants are handled (here: inlined).}
   \label{Fig_DrasilAndChange}
 \end{figure*}
+
+\section{An Example}
+\label{sec:example}
 
 We have built infrastructure%
 \footnote{\url{https://github.com/JacquesCarette/Drasil}} 
@@ -447,7 +452,8 @@ choices = defaultChoices {
  constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
-  \caption{Code level choices for GlassBR (compare bold box in \Cref{Fig_DrasilAndChange}).}
+  \caption{Code level choices for GlassBR (corresponds to much of the material
+  in the bold box in top right of \Cref{Fig_DrasilAndChange}).}
   \label{fig:CodeChoices}
 \end{figure}
 

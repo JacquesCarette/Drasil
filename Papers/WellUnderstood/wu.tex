@@ -282,13 +282,30 @@ not documented.
 \section{An Example}
 \label{sec:example}
 
-We have built infrastructure%
+We have built infrastructure, which we also call Drasil%
 \footnote{\url{https://github.com/JacquesCarette/Drasil}} 
 to carry out these ideas. It consists of 60KLoc of Haskell
 implementing a series of interacting Domain Specific Languages (DSLs) for
 knowledge encodings, mathematical expressions, theories, English fragments,
-code generation and document generation.  A full description would take too
-much space.  Instead, we provide an illustrative example.
+code generation and document generation.  
+
+Drasil consists of a ``database'' of information about certain domains of
+interest (parts of physics, some mathematics, software engineering,
+documentation and computing), encoded in a home-grown ontology somewhat
+resembling the work of Novak~\cite{kook1991representation,novak1994generating}.
+It has also a number of internal DSLs for representing the contents of
+various kinds of documents (specifications, programs, simple build scripts,
+readmes), coupled with DSLs for rendering in various formats (\LaTeX, HTML
+and plain text, used for specifications, and GOOL~\cite{GOOLPEPM} for
+representing Object-Oriented programs that can be rendered in six different
+languages). There are also DSLs for triform theories, mathematical expressions,
+English fragments, citations, authors, some software choices, and so on. Lastly
+another DSL weaves together all the previous information to render the
+artifacts that together make a piece of software. A longer article describing
+all of these in detail is being written.
+
+We provide a bit of the overall flavour of Drasil through what we hope to be
+an illustrative example.
 
 \subsection{GlassBR}
 We will focus on information capture and the artifacts we can generate. For
@@ -504,7 +521,12 @@ a log of the design choices.
 \section{An Idealized Process}
 \label{sec:idealized-process}
 
-It is useful to summarize the \emph{idealized process} we used above.
+The above used what we refer to as an \emph{idealized process} for
+the development of software which is both well-understood and
+long-lived. Drasil is meant to facilitate this process. In other words,
+as we ourselves better understand this idealized process, we modify Drasil
+to follow suit, rather than the other way around. We can summarize the
+process as follows.
 
 \begin{enumerate}
 \item\label{it:problem} Have a task to achieve where \emph{software} can

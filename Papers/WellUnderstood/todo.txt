@@ -1,25 +1,5 @@
-Related Work:
--------------
-- Neighbor’s Draco 
-- Baxter’s DMS.
-- Sec 1.4: How about related work e.g. literate programming? 
-- Novak's GLisp (and more by that author)
-  "Creation of Views for Reuse of Software with Different Data Representations"
-  "Representation of Models for Expert Problem Solving in Physics"
-  "Software Reuse by Specialization of Generic Procedures Through Views" 
-- Batory's work on program families has used very similar themes. 
-
 General Comments:
 -----------------
-
-provide some kind of general overview of Drasil at
-the beginning of Section 2.
-
-Sec 2: "A full description would take too much space." yes probably, but a
-high-level overview to guide the reader and make your paper understandable
-would not, so you should as a minimum provide that!  
-
-Sec 3: is the idealized process general or is it specific to your infrastructure? (This also begs the question: does your infrastructure have name? "Drasil"?)
 
 Sec 3: Related work to other generative frameworks that also define their own process?
 
@@ -54,6 +34,17 @@ i s to be inlined or supplied as functions). These are good themes, but hardly
 novel. What may be more interesting is the particular application in this
 specific domain, as well as the detailing of specifics, e.g., by fleshing out
 the "Create a coherent narrative" paragraph (l.175-180).
+
+Related Work:
+-------------
+- Neighbor’s Draco 
+- Baxter’s DMS.
+- Sec 1.4: How about related work e.g. literate programming? 
+- Novak's GLisp (and more by that author)
+  "Creation of Views for Reuse of Software with Different Data Representations"
+  "Representation of Models for Expert Problem Solving in Physics"
+  "Software Reuse by Specialization of Generic Procedures Through Views" 
+- Batory's work on program families has used very similar themes. 
 
 =============================================================================
 Minor:
@@ -102,4 +93,14 @@ General Comments:
   which has now been added. Some context (both goals and historical setting) has been added
   as well. Additional text has been added throughout section 1 to make things smoother and
   tie it together.
+
+- Sec 2: "A full description would take too much space." yes probably, but a
+  high-level overview to guide the reader and make your paper understandable
+  would not, so you should as a minimum provide that!  
+* Done.
+
+- Sec 3: is the idealized process general or is it specific to your infrastructure? (This also begs the question: does your infrastructure have name? "Drasil"?)
+* It is meant to be general for well-understood and long-lived software, and
+  our infrastructure (also called Drasil) is meant to support that. These points have all
+  been clarified at the start of section 3.
 

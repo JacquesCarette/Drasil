@@ -609,22 +609,39 @@ its ideas have percolated through the literature on DSLs and product
 lines (see the wonderful textbook~\cite{apel2016feature} for a modern
 exposition), and we used them without a proper appreciation for their
 source. While DMS~\cite{baxter1992design,baxter2002dms}, and
-GLisp~\cite{novak1983glisp,novak1994generating} are different in their
+GLisp~\cite{novak1983glisp,DBLP:journals/tse/Novak95a} are different in their
 aims, they also contain some of the same ideas (knowledge capture,
-using various ontologies, refinement and reuse).
+using various ontologies, refinement and reuse). The examples that
+drove GLisp (see~\cite{novak1994generating,kook1991representation})
+are very close to many of ours, namely applications of physics.
 SpecWare~\cite{srinivas95specware,smith1999mechanizing} goes much
 further along the formality spectrum, incorporating correctness proofs
 as part of its refinement process, as well as being based on a solid
 theoretical framework.
 
-% all project above
-% SPL
-% WebDSL
-% lit-proj
-% org-mode, babel
-% notebooks
+Unfortunately a lot of the above work was very code-centric. None of
+the systems generate all software artifacts, especially not documentation.
+Furthermore, quite a lot of the work uses fairly coarse-grained
+chunks of information (``components'') which, in our experience, reduces the
+potential for reuse. Many of the projects were extremely ambitious regarding
+what aspects of software production they aimed to automate. We do not
+aim to automate any activity that can reasonably be called \emph{design}.
 
-That work of this scale is possible has strongly been influenced by Eelco
+We have borrowed ideas from product families~\cite{parnas1976families}
+and software product lines~\cite{apel2016feature}.  We have also
+borrowed ideas from literate programming~\cite{Knuth1984}, namely the
+idea of \emph{chunks} of knowledge that can be written in a different
+order than what the underlying programming language may want, as well as
+the idea of tightly coupling explanation with its language encoding.
+The weaving of multiple languages together, as available via
+org-mode's babel-mode~\cite{schulte2012multi} to achieve ``reproducible
+research'' is a more modern take on literate software development.
+Jupyter notebooks~\cite{kluyver2016jupyter} is a GUI-driven approach
+that is more beginner-friendly but has scaling drawbacks. We have
+explicitly decided that it is too early to provide this kind of GUI
+for Drasil.
+
+Thinking of doing large scale work has been strongly incluenced by Eelco
 Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
 made it clear that many different artifacts can be generated. He was braver than
 us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
@@ -680,6 +697,8 @@ We also hope to develop a language of design to embody patterns of choices.
 Many projects already mentioned have such a language that we are eager to
 borrow from.
 
+More people should resurrect older ideas that were too ambitious for their
+time, and apply modern understanding and tooling to them.
 %%
 %% Bibliography
 %%

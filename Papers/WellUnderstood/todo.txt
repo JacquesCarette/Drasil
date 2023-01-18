@@ -97,3 +97,13 @@ Minor:
 * In fact, the abstract mentions "contextual forces" first, before talking about both forces
   and context. In places where it made sense, things have been rewritten to prefer "forces"
   over "context".
+General Comments:
+-----------------
+
+- make the text in Section 1 a bit smoother (it's very choppy, lots of enumerates, very little
+  explanation/context). 
+* Section 1 was sorely missing some explanation as to why each subsection was there,
+  which has now been added. Some context (both goals and historical setting) has been added
+  as well. Additional text has been added throughout section 1 to make things smoother and
+  tie it together.
+

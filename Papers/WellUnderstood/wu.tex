@@ -131,6 +131,23 @@ using different processes, depending on the forces~\cite{alexander1977pattern}
 at play. Here we explore two such forces: ``well understood'' and ``long
 lived''.
 
+We need to be precise about what we mean by ``well understood'' and ``long lived'',
+and thus will start by defining these terms. The definition of ``well understood''
+has three components, which will be successively refined throughout this paper.
+As the codification of what is understood tends to be reliably communicated via
+\emph{documentation}, we review that as well, before discussing which aspects of
+software products, aka software artifacts, we are considering. Then we give
+concrete examples of software domains where these ideas come together.
+
+This work can be seen as resurrecting many of the goals of projects like
+Draco~\cite{}, DMS~\cite{}, GLisp~\cite{} and SpecWare~\cite{}. All are
+variants on \emph{automatic programming}. Unlike many of these projects, our
+primary aim is not automation, but rather a combination of raising the level
+of abstraction and knowledge capture. And indeed \emph{domain engineering},
+as coined by Draco's creator James Neighbor, is core to our work. Where we
+differ is our emphasis on all software artifacts and being able to leverage
+several decades of theoretical and technological advances.
+
 \subsection{``Well-understood'' software?}
 \label{subsec:well-understood}
 
@@ -176,7 +193,9 @@ For us, long-lived software~\cite{SPL-long-lived} is software that is expected
 to be in continuous use and evolution for \(20\) or more years. The main
 characteristic of such software is the \emph{expected turnover} of key staff.
 This means that all tacit knowledge about the software will be lost over time if
-it is not captured.
+it is not captured. Relying on oral tradition and word-of-mouth becomes untenable
+for the viability of long-lived projects, and documentation becomes a core asset of
+value comparable, if not greater than, the actual code.
 
 \subsection{Documentation}
 \label{subsec:documentation}
@@ -198,16 +217,19 @@ software-oriented decisions should be captured with a similar mechanism, and
 also include English explanations.
 \end{enumerate*}
 
+Coupling together well-understood domains and its documentation, we
+obtain what we call triform theories.
 \begin{definition}
 \label{defn:triform-theories}
-We dub these \textbf{triform theories}, as a nod to \emph{biform
-theories}~\cite{Farmer2007}. They are a coupling of three concepts:
+\textbf{Triform theories}, as a nod to \emph{biform
+theories}~\cite{Farmer2007}, are the coupling of three concepts:
 \begin{enumerate}
   \item an axiomatic description,
   \item a computational description, and
   \item an English description.
 \end{enumerate}
 \end{definition}
+\noindent These will form the heart of our approach to domain engineering.
 
 \subsection{Software artifacts}
 \label{subsec:software-artifacts}
@@ -215,8 +237,12 @@ theories}~\cite{Farmer2007}. They are a coupling of three concepts:
 Software currently consists of a whole host of artifacts: requirements,
 specifications, user manual, unit tests, system tests, usability tests, build
 scripts, READMEs, license documents, process documents, as well as code.
+Our aim is to understand the ``information content'' of each artifact
+sufficiently to construct a Domain Specific Language (DSL) that describes how
+to weave information gleaned from triform theories with instance specific
+choices which is sufficient to enable the generation of each artifact.
 
-\subsection{Instances of well understood and long lived}
+\subsection{Instances}
 \label{subsec:examples-of-context}
 
 When are these well understood and long lived conditions fulfilled? One example

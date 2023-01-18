@@ -12,10 +12,6 @@ Related Work:
 General Comments:
 -----------------
 
-make the text in Section 1 a bit
-smoother (it's very choppy, lots of enumerates, very little
-explanation/context). 
-
 provide some kind of general overview of Drasil at
 the beginning of Section 2.
 

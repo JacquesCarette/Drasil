@@ -464,9 +464,23 @@ ensure that there exists a deterministic path from the inputs we are given,
 through the equations we have, to all of the outputs we've declared we are
 interested in.
 
-For this example, the computations are all quite simple, but in general this
-might involve solving ordinary differential equations, computing a solution to
-an optimization problem, etc.
+For this example, the computations are all quite simple. The reasons why
+GlassBR's few lines of code are correct is what is interesting, and that
+description, which is part of the specification, spans a few pages. That
+information is generic about the properties of glass and the effects of
+explosions, and could be reused in other applications.
+In general, research software tends to involve
+solving ordinary differential equations, computing a solution to
+an optimization problem, etc. Again the reason why a particular differential
+equation is an adequate model of the problem at hand is part of the
+important information we want to capture.
+
+In other words, the main narrative of a piece of software is its high level
+design. What are the techniques used to derive the outputs from the inputs,
+obtained in a reasoned manner by successive refinements of the underlying
+theory into an actual program. While the code itself is akin to the actual
+words used to tell a story, the narrative is the story, its themes
+and topics, and so on.
 
 \subparagraph*{Make code level choices}
 From a \emph{deterministic model of the solution}, it should be
@@ -584,7 +598,24 @@ explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 
 \section{Related Work}\label{sec:relwork}
 
-% say more about the related work. still not in depth, but 'enough'.
+As one referee put it, our work is ``old fashioned'', in that its goals
+indeed repeat that of work from decades ago. What we see, however, is
+that only a small slice of those goals has made it into today's
+practices. Thus we think it is worthwhile to revisit these goals.
+
+Draco~\cite{neighbors1984draco,neighbors1989draco}, one of the oldest
+such projects, is also one of the closest to Drasil, goal-wise. Many of
+its ideas have percolated through the literature on DSLs and product
+lines (see the wonderful textbook~\cite{apel2016feature} for a modern
+exposition), and we used them without a proper appreciation for their
+source. While DMS~\cite{baxter1992design,baxter2002dms}, and
+GLisp~\cite{novak1983glisp,novak1994generating} are different in their
+aims, they also contain some of the same ideas (knowledge capture,
+using various ontologies, refinement and reuse).
+SpecWare~\cite{srinivas95specware,smith1999mechanizing} goes much
+further along the formality spectrum, incorporating correctness proofs
+as part of its refinement process, as well as being based on a solid
+theoretical framework.
 
 % all project above
 % SPL
@@ -593,28 +624,20 @@ explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 % org-mode, babel
 % notebooks
 
+That work of this scale is possible has strongly been influenced by Eelco
+Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
+made it clear that many different artifacts can be generated. He was braver than
+us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
+indeed expected to be long lived, but certainly was not created for a
+well-understood domain! The domain analysis of web applications is a non-trivial
+contribution of WebDSL, and may well have moved that domain into the ``well understood''
+column. Whether it is product lines or program families, weaving
+them from DSLs is also something he preached~\cite{voelter2011product}.
+We never got a chance to present Drasil to Eelco, but we hope that it would
+have resonated with him.
+
 \section{Concluding Remarks}
 \label{sec:concluding-remarks}
-
-
-%\begin{figure}
-%  \centering
-%  \fbox{
-%    \begin{minipage}[c]{0.65\textwidth}
-%      \centering
-%      \begin{tabular}{rcl}
-%        \textbf{Opportunity} & : & well-understood + long-lived \\
-%        \textbf{Tools}       & : & knowledge capture + DSLs + generators \\
-%        \textbf{Result}      & : & \emph{long-term productivity gain}
-%      \end{tabular}
-%   \end{minipage}
-% }
-% \caption{Summary}
-% \label{fig:summary}
-%\end{figure}
-
-% TODO
-% - link with Eelco's work
 
 Dines~\cite{bjorner2021domaineng} has already remarked that for most software,
 the \emph{domain knowledge} is the slowest moving part of the requirements.
@@ -639,10 +662,11 @@ table of symbols from those symbols actually used in the document, and whose
 definition is automatically extracted from the base knowledge.
 
 There are further ideas that co-exist smoothly with our framework, most notably
-software families and correctness, particularly correctness of documentation.  
-As we generate the documentation in tandem with, and using the same information as,
-the source code, these will necessarily be synchronized. Errors will co-occur in both.
-This is a feature, as they are more likely to be caught that way.
+software families, software product lines and correctness, particularly
+correctness of documentation.  As we generate the documentation in tandem with,
+and using the same information as, the source code, these will necessarily be
+synchronized. Errors will co-occur in both.  This is a feature, as they are
+more likely to be caught that way.
 
 We've also noticed that we can more easily experiment with ``what if'' scenarios,
 which make it easy to understand the ramifications of proposed changes.  
@@ -652,17 +676,10 @@ more coherence checks on the domain knowledge itself. For example, it should not
 be possible to associate a \textit{weight} attribute to the concept
 \textit{program name}, but only to concepts that are somehow ``physical''. 
 Perhaps a large ontology in the style of Cyc~\cite{lenat1995cyc} would help.
+We also hope to develop a language of design to embody patterns of choices.
+Many projects already mentioned have such a language that we are eager to
+borrow from.
 
-That work of this scale is possible has strongly been influenced by Eelco
-Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
-made it clear that many different artifacts can be generated. He was braver than
-us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
-indeed expected to be long lived, but certainly was not created for a
-well-understood domain! The domain analysis of web applications is a non-trivial
-contribution of WebDSL. Whether it is product lines or program families, weaving
-them from DSLs is also something he preached~\cite{voelter2011product}.
-We never got a chance to present Drasil to Eelco, but we hope that it would
-have resonated with him.
 %%
 %% Bibliography
 %%

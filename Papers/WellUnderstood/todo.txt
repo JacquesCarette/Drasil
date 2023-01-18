@@ -1,40 +1,3 @@
-General Comments:
------------------
-
-Sec 3: Related work to other generative frameworks that also define their own process?
-
-Indeed, it is an old vision to represent domain knowledge first-class, to avoid
-duplication, and offer variation points to make engineering trade-offs. Another
-lens to see this through (not mentioned in the paper), DSLs create
-opportunities for *design reuse*. 
-
-I am anxious to learn more details about this
-system, and if the ideas embedded in Drasil, could be transferred to an actual
-(external) DSL, built using a language workbench (like WebDSL), or, in any
-case, what motivated the authors to make a “library” in Haskell. 
-
-With respect to the example of Drasil, we only get to see client/instantiation code to configure a system. Could we also see an example of how DK is encoded? How a code generator is specified? Etc. 
-
-The link with Eelco’s WebDSL is appreciated. However, WebDSL is deemed to cover a domain that is *not* well-understood. One might conjecture, however, (and I think Eelco would agree), that the act of creating a DSL for a certain domain is way of making that domain well-understood. But of course, this might be a philosophical debate. 
-
-This is a fine paper. There are questions about its relationship to Eelco
-Visser's work but I don't think that we should be too concerned. Still, this is
-a part to bring out more clearly. Eelco Visser's work offered a lot of
-meta-programming/generative programming infrastructure, and, although this is
-not used concretely, it certainly connects to the themes of the research.
-Finding connections with publications should not be too hard.
-
-Reviewer 3 has some interesting concerns about the paper being a bit
-“old-fashioned” and how this could be addressed, for example, by fleshing out
-the "Create a coherent narrative" paragraph.
-research of several decades ago focused on the same themes: represent knowledge
-at a higher level and be able to generate code in multiple target languages and
-configure low-level specifics (such as whether to have logging and whether code
-i s to be inlined or supplied as functions). These are good themes, but hardly
-novel. What may be more interesting is the particular application in this
-specific domain, as well as the detailing of specifics, e.g., by fleshing out
-the "Create a coherent narrative" paragraph (l.175-180).
-
 Related Work:
 -------------
 - Neighbor’s Draco 
@@ -103,4 +66,83 @@ General Comments:
 * It is meant to be general for well-understood and long-lived software, and
   our infrastructure (also called Drasil) is meant to support that. These points have all
   been clarified at the start of section 3.
+
+- Indeed, it is an old vision to represent domain knowledge first-class, to avoid
+  duplication, and offer variation points to make engineering trade-offs. Another
+  lens to see this through (not mentioned in the paper), DSLs create
+  opportunities for *design reuse*. 
+* That this is an old vision is now up-front in the introduction. The conclusion also
+  quickly mentions design reuse: we're eager to get there, but Drasil does not offer
+  enough yet on that front.
+
+- I am anxious to learn more details about this
+  system, and if the ideas embedded in Drasil, could be transferred to an actual
+  (external) DSL, built using a language workbench (like WebDSL), or, in any
+  case, what motivated the authors to make a “library” in Haskell. 
+* (This comment has not resulted in any changes to the paper itself). The choice of
+  Haskell is driven by the author's firm belief that it is a fantastic prototyping
+  language for "language processors". It is sufficiently typed to allow easy refactoring,
+  but also very succinct when its features are used properly. Most language workbenches
+  are, to our taste, ridiculously verbose. They are aimed at a (very large!) class of
+  programmers who are not assumed to know as much theory as we do...
+
+- The link with Eelco’s WebDSL is appreciated. However, WebDSL is deemed to
+  cover a domain that is *not* well-understood. One might conjecture, however,
+  (and I think Eelco would agree), that the act of creating a DSL for a certain
+  domain is way of making that domain well-understood. But of course, this might
+  be a philosophical debate. 
+* I thought it was already clear that we agree that it was not well-understood when
+  it started. The paragraph has been modified to make this even clearer.
+
+- This is a fine paper. There are questions about its relationship to Eelco
+  Visser's work but I don't think that we should be too concerned. Still, this is
+  a part to bring out more clearly. Eelco Visser's work offered a lot of
+  meta-programming/generative programming infrastructure, and, although this is
+  not used concretely, it certainly connects to the themes of the research.
+  Finding connections with publications should not be too hard.
+* 4 of Eelco's papers are already cited. We shared a lot high-level ideas as well
+  as a number of tools (DSLs, program generation) but at a technical level, we
+  tended to differ significantly. Same goals, but using widely different parts of
+  the design space to get there. While we hugely respect Eelco's work, it is hard to
+  find technical papers to cite, as we fairly systematically chose different routes.
+  This is why more of his papers are not cited. It would take many pages to do
+  justice to the reasoning behind the difference in choices; and it is also just that,
+  differences in choices due to personal views of what part of the design space to
+  explore.
+
+- Reviewer 3 has some interesting concerns about the paper being a bit
+  “old-fashioned” and how this could be addressed, for example, by fleshing out
+  the "Create a coherent narrative" paragraph.
+  research of several decades ago focused on the same themes: represent knowledge
+  at a higher level and be able to generate code in multiple target languages and
+  configure low-level specifics (such as whether to have logging and whether code
+  i s to be inlined or supplied as functions). These are good themes, but hardly
+  novel. What may be more interesting is the particular application in this
+  specific domain, as well as the detailing of specifics, e.g., by fleshing out
+  the "Create a coherent narrative" paragraph (l.175-180).
+* We rather take that as a compliment... there should be no fashions in research,
+  in an ideal world. These decades-old themes have not had, in our opinion,
+  sufficient influence on today's development practice. Again, in our opinion, it is
+  because the pioneers were over-reaching and tried to apply their ideas everywhere,
+  i.e. not taking into account what we now call "forces".  Furthermore, the
+  technology available then was not yet up to the task. So we feel like it is time 
+  for another try.
+
+  A paragraph has been added to fleshing out some of "Create a coherent narrative"
+  at the conceptual level. For the GlassBR application, the details are unfortunately
+  uninteresting - it boils down to some straight-line code that is not very long.
+  Nevertheless, some comments about that have been inserted.
+  What is interesting about GlassBR is why those are the correct lines of code, and
+  that relies on a few pages worth of Science & Engineering.
+
+- With respect to the example of Drasil, we only get to see
+  client/instantiation code to configure a system. Could we also see an example
+  of how DK is encoded? How a code generator is specified? Etc. 
+* Here we have made the tough decision to go with: 'no'. A short example of how the
+  DK is encoded would be deeply unsatisfying for the reader, wanting even more details,
+  while a properly illustrative example would add more than a page. Given how much
+  longer than the initial limit the paper is, it just seems too much. (The resulting
+  exposition might also qualify as needing re-review).
+  As for the details of the code generator, that is contained in the GOOL paper
+  already cited.
 

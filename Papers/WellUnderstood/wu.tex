@@ -128,9 +128,9 @@
 Not all software is the same. In fact, there is enough variation in the
 context in which developers create various software products to warrant exploring and
 using different processes, depending on the forces~\cite{alexander1977pattern}
-at play. Here we explore two such forces: ``well understood'' and ``long-lived''.
+at play. Here we explore two such forces: ``well understood'' and ``long lived''.
 
-We need to be precise about what we mean by ``well understood'' and ``long-lived'',
+We need to be precise about what we mean by ``well understood'' and ``long lived'',
 and thus will start by defining these terms. The definition of ``well understood''
 has three components, which will be successively refined throughout this paper.
 As the codification of what is understood tends to be reliably communicated via
@@ -249,7 +249,7 @@ choices that are sufficient to enable the generation of each artifact.
 \subsection{Instances}
 \label{subsec:examples-of-context}
 
-When are these well understood and long-lived conditions fulfilled? One example
+When are these well understood and long lived conditions fulfilled? One example
 is \emph{research software} in science and engineering. While the results of
 running various simulations is entirely new, the underlying models and how to
 simulate them are indeed well known. One particularly long-lived example is
@@ -523,9 +523,11 @@ requirements specifications~\cite{SmithEtAl2007},
 code~\cite{GOOLPEPM}, dependency diagrams, Makefiles, READMEs and a log of all choices
 used.
 
-While we currently generate \texttt{Makefile}s, a good example of a DSL for
-specifying build scripts, our ideas are more properly compared with
-the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
+%   JC: (Pointed out by SS) Should be explicit about the ideas of Rattle rather 
+%   than have the reader puzzle it out.
+%While we currently generate \texttt{Makefile}s, a good example of a DSL for
+%specifying build scripts, our ideas are more properly compared with
+%the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
 
 Finally, we can put the contents created via the previous steps together and
 \textbf{generate everything}, here the SRS, the code, traceability graphs and
@@ -597,7 +599,7 @@ explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 
 \section{Related Work}\label{sec:relwork}
 
-As one referee put it, our work is ``old-fashioned'', in that its goals
+As one referee put it, our work is ``old fashioned'', in that its goals
 indeed repeat that of work from decades ago. What we see, however, is
 that only a small slice of those goals has made it into today's
 practices. Thus, we think it is worthwhile to revisit these goals.
@@ -644,7 +646,7 @@ Thinking of doing large scale work has been strongly influenced by Eelco
 Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
 made it clear that many different artifacts can be generated. He was braver than
 us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
-indeed expected to be long-lived, but certainly was not created for a
+indeed expected to be long lived, but certainly was not created for a
 well-understood domain! The domain analysis of web applications is a non-trivial
 contribution of WebDSL, and may well have moved that domain into the ``well understood''
 column. Whether it is product lines or program families, weaving

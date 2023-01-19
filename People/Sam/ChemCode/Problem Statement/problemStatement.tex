@@ -101,23 +101,30 @@ with the smallest whole number coefficients possible
 \cite{carette_jacquescarettedrasil_2021}, ``a framework for generating
 high-quality documentation and code for Scientific Computing Software''
 \cite[p. iii]{maclachlan_design_2020} by encapsulating scientific knowledge as
-``chunks'' to be reused among projects \cite{maclachlan_design_2020}. The
-implementation in Drasil places some constraints on this project.
+``chunks'' to be reused among projects \cite{maclachlan_design_2020}. By 
+building this project in Drasil, relevant concepts about chemistry and systems
+of linear equations must first be added, along with the capability to solve
+these systems. Therefore, a byproduct of this project is that other programs
+that use chemistry and/or systems of linear equations can be made using
+Drasil. The implementation in Drasil places some constraints on this project.
 
 Since Drasil is built on the idea of reusability, external libraries will be
 used to solve these systems of linear equations. This was previously done with
 ordinary differential equation (ODE) solvers, since ``creating a complete ODE
 solver in Drasil would take considerable time, and there are already many
-reliable external libraries have been tested by long use''
+reliable external libraries \dots tested by long use''
 \cite[p. 24]{chen_solving_2022}.
 
 Additionally, Drasil can currently generate code in Python, C++, C\#, Java, and
 Swift \cite{chen_solving_2022}, so these will be the languages that will be
 focused on for the \progname~project. While using external ODE solvers in
 Drasil, the developers ``did not find a suitable
-library for Swift'' \cite[p.24]{chen_solving_2022}, so a similar problem may
-arise when using external system of linear equations solvers; this means that
+library for Swift'' \cite[p.24]{chen_solving_2022}; a similar problem may
+arise when using external system of linear equations solvers, meaning that
 \progname~may not be generated in all five languages.
+
+Since both \progname~and Drasil are purely software systems, the only
+hardware involved is the user's computer used to run \progname.
 
 \subsection{Stakeholders}
 The main stakeholder of this project is Dr.~Spencer Smith, the instructor for

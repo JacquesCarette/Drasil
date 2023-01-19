@@ -1,0 +1,18 @@
+%% Comments
+
+\usepackage{color}
+
+\newif\ifcomments\commentstrue %displays comments
+%\newif\ifcomments\commentsfalse %so that comments do not display
+
+\ifcomments
+\newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornote}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornote{blue}{SS}{#1}} 
+\newcommand{\plt}[1]{\authornote{magenta}{TPLT}{#1}} %For explanation of the template
+\newcommand{\sjc}[1]{\authornote{cyan}{SC}{#1}}

@@ -1,0 +1,110 @@
+\documentclass{article}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+
+\title{Problem Statement and Goals\\\progname}
+
+\author{\authname}
+
+\date{January 20, 2023}
+
+\input{../Comments}
+\input{../Common}
+
+\begin{document}
+
+\maketitle
+
+\begin{table}[hp]
+\caption{Revision History} \label{TblRevisionHistory}
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
+\midrule
+Jan. 18, 2023 & Sam & Create document and fill in Problem, Stakeholders, and
+Goals sections\\
+Jan. 19, 2023 & Sam & Format for Drasil upload\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Problem Statement}
+
+\wss{You should check your problem statement with the
+\href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/ProbState-Checklist.pdf}
+{problem statement checklist}.}
+\wss{You can change the section headings, as long as you include the required
+information.}
+
+\subsection{Problem}
+
+Chemistry is a broad field that studies matter and its interactions
+\cite[pp.~8-9]{gordon_chm101_2023}, primarily through chemical reactions. During
+a chemical reaction, bonds between some substances break and new ones are formed
+to create new substances; these reactions are often written as chemical
+equations \cite{lund_introduction_2023}. Despite new chemicals being created,
+all atoms from the initial substances, or ``reactants", must be present in the
+final substances, or ``products" because of the Law of Conservation of Matter
+\cite{lund_introduction_2023}. This means that for a chemical equation to be
+useful, it must be balanced by changing the coefficients of the substances
+involved in the reaction \cite{lund_introduction_2023}. Additionally, since
+molecules only exist in whole numbers (since dividing a molecule changes its
+composition into new types of molecules), these coefficients must be whole
+numbers, and by convention should be as small as possible
+\cite{lund_introduction_2023}.
+
+While these equations can be balanced by hand through the process of ``balancing
+by inspection" \cite{lund_introduction_2023}, this can be time-consuming, prone
+to error, and inefficient, especially for more complicated chemical reactions.
+For each element present in the reaction, an equality can be written for the
+number of elements in each substance, with the reactants on one side and the
+products on the other, using the coefficients of each substance as the variables
+\cite{hamid_balancing_2019}. These equalities then form a system of linear
+equations that can be solved through various methods to yield a relation between
+each coefficient, which can then be manipulated to find the require whole
+numbers \cite{lund_introduction_2023, hamid_balancing_2019}. This method can
+also identify reactions that are ``infeasible" and balance reactions involving
+fractional oxidation states \cite{hamid_balancing_2019}, which ``are used to
+describe the distribution of electrons in a molecule"
+\cite{unacademy_fractional_2023}.
+
+\subsection{Inputs and Outputs}
+
+\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
+Use abstraction so that you can avoid details.}
+
+\subsection{Stakeholders}
+The main stakeholder of this project is Dr.~Spencer Smith, the instructor for
+the CAS 741 Development of Scientific Computing Software course for which this
+project is being completed. Dr.~Smith and Dr.~Jacques Carette are in charge of
+the Drasil project that ChemCode seeks to extend, so the implementation and
+process of getting there are of significance to them. Likewise, any future
+developers of Drasil, including myself \sjc{Can I use the first person?}, are
+potential stakeholders of this project, since they may use features added to
+Drasil, such as ideas about chemistry or systems of linear equations. Jason
+Balaci, another CAS 741 and Drasil contributor, is of particular mention, since
+there may be some overlap between our project, so we may be collaborating
+throughout this project.
+
+More generally, anyone in the field of chemistry in at least a high-school level
+may be a stakeholder of this project, as they may use this tool in their work.
+
+\subsection{Environment}
+
+\wss{Hardware and software}
+
+\section{Goals}
+
+The goals of this project are to develop a program that:
+
+\begin{itemize}
+    \item Can balance chemical equations using systems of linear equations.
+\end{itemize}
+
+\section{Stretch Goals}
+
+\bibliographystyle{ieeetr}
+\bibliography{sources}
+
+\end{document}

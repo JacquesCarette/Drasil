@@ -24,7 +24,8 @@
 \midrule
 Jan. 18, 2023 & Sam & Create document and fill in Problem, Stakeholders, and
 Goals sections\\
-Jan. 19, 2023 & Sam & Format for Drasil upload\\
+Jan. 19, 2023 & Sam & Format for Drasil upload and fill in Inputs and Outputs
+Section\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -40,9 +41,9 @@ information.}
 \subsection{Problem}
 
 Chemistry is a broad field that studies matter and its interactions
-\cite[pp.~8-9]{gordon_chm101_2023}, primarily through chemical reactions. During
-a chemical reaction, bonds between some substances break and new ones are formed
-to create new substances; these reactions are often written as chemical
+\cite[pp.~8-9]{gordon_chm101_2023}, primarily through chemical reactions.
+During a chemical reaction, bonds between some substances break and new ones are
+formed to create new substances; these reactions are often written as chemical
 equations \cite{lund_introduction_2023}. Despite new chemicals being created,
 all atoms from the initial substances, or ``reactants", must be present in the
 final substances, or ``products" because of the Law of Conservation of Matter
@@ -54,15 +55,17 @@ composition into new types of molecules), these coefficients must be whole
 numbers, and by convention should be as small as possible
 \cite{lund_introduction_2023}.
 
-While these equations can be balanced by hand through the process of ``balancing
-by inspection" \cite{lund_introduction_2023}, this can be time-consuming, prone
+While these equations can be balanced by hand through the process of
+``balancing by inspection" \cite{lund_introduction_2023}, this can be
+time-consuming, prone
 to error, and inefficient, especially for more complicated chemical reactions.
 For each element present in the reaction, an equality can be written for the
 number of elements in each substance, with the reactants on one side and the
-products on the other, using the coefficients of each substance as the variables
-\cite{hamid_balancing_2019}. These equalities then form a system of linear
-equations that can be solved through various methods to yield a relation between
-each coefficient, which can then be manipulated to find the require whole
+products on the other, using the coefficients of each substance as the
+variables \cite{hamid_balancing_2019}. These equalities then form a system of
+linear
+equations that can be solved through various methods to yield a relation
+between each coefficient, which can then be manipulated to find the require whole
 numbers \cite{lund_introduction_2023, hamid_balancing_2019}. This method can
 also identify reactions that are ``infeasible" and balance reactions involving
 fractional oxidation states \cite{hamid_balancing_2019}, which ``are used to
@@ -71,8 +74,21 @@ describe the distribution of electrons in a molecule"
 
 \subsection{Inputs and Outputs}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
+\wss{Characterize the problem in terms of ``high level'' inputs and outputs.
 Use abstraction so that you can avoid details.}
+
+Input:
+
+\begin{itemize}
+	\item A representation of a chemical equation
+\end{itemize}
+
+\noindent Output:
+
+\begin{itemize}
+\item A representation of the inputted chemical equation in its balanced form
+with the smallest whole number coefficients possible
+\end{itemize}
 
 \subsection{Stakeholders}
 The main stakeholder of this project is Dr.~Spencer Smith, the instructor for

@@ -10,13 +10,13 @@ module SysInfo.Drasil.SystemInformation (
   -- ** Types
   SystemInformation(..), Block(..),
   -- ** Lenses
-  instModels, datadefs, configFiles, inputs,
+  instModels, datadefs, configFiles, inputs, purpose, background,
   defSequence, constraints, constants, sysinfodb, usedinfodb,
   -- ** Lookup Functions
   citeDB, citationsFromBibMap,
   -- * Reference Database
   -- ** Types
-  ReferenceDB, RefMap,
+  ReferenceDB, RefMap, Purpose, Background,
   -- ** Constructors
   rdb, simpleMap,
   -- ** Lenses
@@ -32,6 +32,7 @@ import Data.Function (on)
 import Data.List (find, groupBy, sortBy)
 import qualified Data.Map as Map
 
+
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
 data SystemInformation where
@@ -46,7 +47,8 @@ data SystemInformation where
   { _sys         :: a
   , _kind        :: b
   , _authors     :: [c]
-  , _purpose     :: d
+  , _purpose     :: Purpose
+  , _background  :: Background
   , _quants      :: [e]
   , _concepts    :: [f]
   , _instModels  :: [InstanceModel]
@@ -61,6 +63,12 @@ data SystemInformation where
   , _usedinfodb  :: ChunkDB
   , refdb        :: ReferenceDB
   } -> SystemInformation
+
+
+-- | Project Example purpose.
+type Purpose = [Sentence]
+-- | Project Example background information, used in the 'What' section of README.
+type Background = [Sentence]
 
 -- | for listing 'QDefinition's in 'SystemInformation'.
 data Block a = Coupled a a [a] | Parallel a [a]

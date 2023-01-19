@@ -64,6 +64,7 @@ si fl = SI {
     _authors     = [] :: [Person],
     _quants      = [] :: [QuantityDict],
     _purpose     = [],
+    _background  = [],
     _concepts    = [] :: [UnitalChunk],
     _instModels  = [],
     _datadefs    = [],

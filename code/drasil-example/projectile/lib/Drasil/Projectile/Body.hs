@@ -107,6 +107,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
   _purpose     = [],
+  _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,

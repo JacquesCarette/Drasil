@@ -25,7 +25,8 @@
 Jan. 18, 2023 & Sam & Create document and fill in Problem, Stakeholders, and
 Goals sections\\
 Jan. 19, 2023 & Sam & Format for Drasil upload, fill in Inputs and Outputs
-section, and update Stakeholders section\\
+and Environment sections, update Stakeholders section, and move Environment
+section\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -91,6 +92,33 @@ Use abstraction so that you can avoid details.}
 with the smallest whole number coefficients possible
 \end{itemize}
 
+\subsection{Environment}
+
+\wss{Hardware and software}
+\null\newline
+\null\newline
+\noindent\progname~will be developed using Drasil
+\cite{carette_jacquescarettedrasil_2021}, ``a framework for generating
+high-quality documentation and code for Scientific Computing Software''
+\cite[p. iii]{maclachlan_design_2020} by encapsulating scientific knowledge as
+``chunks'' to be reused among projects \cite{maclachlan_design_2020}. The
+implementation in Drasil places some constraints on this project.
+
+Since Drasil is built on the idea of reusability, external libraries will be
+used to solve these systems of linear equations. This was previously done with
+ordinary differential equation (ODE) solvers, since ``creating a complete ODE
+solver in Drasil would take considerable time, and there are already many
+reliable external libraries have been tested by long use''
+\cite[p. 24]{chen_solving_2022}.
+
+Additionally, Drasil can currently generate code in Python, C++, C\#, Java, and
+Swift \cite{chen_solving_2022}, so these will be the languages that will be
+focused on for the \progname~project. While using external ODE solvers in
+Drasil, the developers ``did not find a suitable
+library for Swift'' \cite[p.24]{chen_solving_2022}, so a similar problem may
+arise when using external system of linear equations solvers; this means that
+\progname~may not be generated in all five languages.
+
 \subsection{Stakeholders}
 The main stakeholder of this project is Dr.~Spencer Smith, the instructor for
 the CAS 741 Development of Scientific Computing Software course for which this
@@ -108,10 +136,6 @@ developer.
 
 More generally, anyone in the field of chemistry in at least a high-school level
 may be a stakeholder of this project, as they may use this tool in their work.
-
-\subsection{Environment}
-
-\wss{Hardware and software}
 
 \section{Goals}
 

@@ -398,236 +398,238 @@
 <a name="line-389"></a>            <span class='hs-conid'>CatchOnce</span>     <span class='hs-varid'>action</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>setHandler</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>const</span> <span class='hs-varid'>action</span><span class='hs-layout'>,</span><span class='hs-varid'>dyn</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
 <a name="line-390"></a>            <span class='hs-conid'>CatchInfo</span>     <span class='hs-varid'>action</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>setHandler</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>getinfo</span> <span class='hs-varid'>action</span><span class='hs-layout'>,</span><span class='hs-varid'>dyn</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
 <a name="line-391"></a>            <span class='hs-conid'>CatchInfoOnce</span> <span class='hs-varid'>action</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>setHandler</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>getinfo</span> <span class='hs-varid'>action</span><span class='hs-layout'>,</span><span class='hs-varid'>dyn</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a name="line-392"></a>            <span class='hs-keyword'>_</span>                    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>error</span> <span class='hs-str'>"installHandler"</span>
-<a name="line-393"></a>
-<a name="line-394"></a>        <span class='hs-keyword'>let</span> <span class='hs-varid'>action</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>handler</span> <span class='hs-keyword'>of</span>
-<a name="line-395"></a>                <span class='hs-conid'>Catch</span> <span class='hs-keyword'>_</span>         <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>STG_SIG_HAN</span>
-<a name="line-396"></a>                <span class='hs-conid'>CatchOnce</span> <span class='hs-keyword'>_</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>STG_SIG_RST</span>
-<a name="line-397"></a>                <span class='hs-conid'>CatchInfo</span> <span class='hs-keyword'>_</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>STG_SIG_HAN</span>
-<a name="line-398"></a>                <span class='hs-conid'>CatchInfoOnce</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>STG_SIG_RST</span>
-<a name="line-399"></a>                <span class='hs-keyword'>_</span>               <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>error</span> <span class='hs-str'>"installHandler"</span>
+<a name="line-392"></a>
+<a name="line-393"></a><span class='hs-comment'>{-# LINE 389 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-394"></a>
+<a name="line-395"></a>        <span class='hs-keyword'>let</span> <span class='hs-varid'>action</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>handler</span> <span class='hs-keyword'>of</span>
+<a name="line-396"></a>                <span class='hs-conid'>Catch</span> <span class='hs-keyword'>_</span>         <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>STG_SIG_HAN</span>
+<a name="line-397"></a>                <span class='hs-conid'>CatchOnce</span> <span class='hs-keyword'>_</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>STG_SIG_RST</span>
+<a name="line-398"></a>                <span class='hs-conid'>CatchInfo</span> <span class='hs-keyword'>_</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>STG_SIG_HAN</span>
+<a name="line-399"></a>                <span class='hs-conid'>CatchInfoOnce</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>STG_SIG_RST</span>
 <a name="line-400"></a>
-<a name="line-401"></a>        <span class='hs-varid'>old_action</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>stg_sig_install</span> <span class='hs-varid'>sig</span> <span class='hs-varid'>action</span> <span class='hs-varid'>nullPtr</span>
-<a name="line-402"></a>                   <span class='hs-comment'>-- mask is pointless, so leave it NULL</span>
-<a name="line-403"></a>
-<a name="line-404"></a>        <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>old_action</span><span class='hs-layout'>,</span> <span class='hs-varid'>old_handler</span><span class='hs-layout'>)</span>
+<a name="line-401"></a><span class='hs-comment'>{-# LINE 398 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-402"></a>
+<a name="line-403"></a>        <span class='hs-varid'>old_action</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>stg_sig_install</span> <span class='hs-varid'>sig</span> <span class='hs-varid'>action</span> <span class='hs-varid'>nullPtr</span>
+<a name="line-404"></a>                   <span class='hs-comment'>-- mask is pointless, so leave it NULL</span>
 <a name="line-405"></a>
-<a name="line-406"></a>  <span class='hs-keyword'>case</span> <span class='hs-layout'>(</span><span class='hs-varid'>old_handler</span><span class='hs-layout'>,</span><span class='hs-varid'>old_action</span><span class='hs-layout'>)</span> <span class='hs-keyword'>of</span>
-<a name="line-407"></a>    <span class='hs-layout'>(</span><span class='hs-keyword'>_</span><span class='hs-layout'>,</span>       <span class='hs-conid'>STG_SIG_DFL</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Default</span>
-<a name="line-408"></a>    <span class='hs-layout'>(</span><span class='hs-keyword'>_</span><span class='hs-layout'>,</span>       <span class='hs-conid'>STG_SIG_IGN</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Ignore</span>
-<a name="line-409"></a>    <span class='hs-layout'>(</span><span class='hs-conid'>Nothing</span><span class='hs-layout'>,</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>           <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Ignore</span>
-<a name="line-410"></a>    <span class='hs-layout'>(</span><span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-keyword'>_</span><span class='hs-layout'>,</span><span class='hs-varid'>dyn</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>  <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>
-<a name="line-411"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Just</span> <span class='hs-varid'>h</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>fromDynamic</span> <span class='hs-varid'>dyn</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varid'>h</span>
-<a name="line-412"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Just</span> <span class='hs-varid'>io</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>fromDynamic</span> <span class='hs-varid'>dyn</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>Catch</span> <span class='hs-varid'>io</span><span class='hs-layout'>)</span>
-<a name="line-413"></a>        <span class='hs-comment'>-- handlers put there by the base package have type IO ()</span>
-<a name="line-414"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>                  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-conid'>Default</span>
-<a name="line-415"></a>
-<a name="line-416"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-keyword'>unsafe</span>
-<a name="line-417"></a>  <span class='hs-varid'>stg_sig_install</span>
-<a name="line-418"></a>        <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span>                         <span class='hs-comment'>-- sig no.</span>
-<a name="line-419"></a>        <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>CInt</span>                         <span class='hs-comment'>-- action code (STG_SIG_HAN etc.)</span>
-<a name="line-420"></a>        <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span>                  <span class='hs-comment'>-- (in, out) blocked</span>
-<a name="line-421"></a>        <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>                      <span class='hs-comment'>-- (ret) old action code</span>
-<a name="line-422"></a>
-<a name="line-423"></a><a name="getinfo"></a><span class='hs-definition'>getinfo</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalInfo</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>ForeignPtr</span> <span class='hs-conid'>Word8</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a name="line-424"></a><span class='hs-definition'>getinfo</span> <span class='hs-varid'>handler</span> <span class='hs-varid'>fp_info</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-425"></a>  <span class='hs-varid'>si</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>unmarshalSigInfo</span> <span class='hs-varid'>fp_info</span>
-<a name="line-426"></a>  <span class='hs-varid'>handler</span> <span class='hs-varid'>si</span>
-<a name="line-427"></a>
-<a name="line-428"></a><a name="unmarshalSigInfo"></a><span class='hs-definition'>unmarshalSigInfo</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>ForeignPtr</span> <span class='hs-conid'>Word8</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>SignalInfo</span>
-<a name="line-429"></a><span class='hs-definition'>unmarshalSigInfo</span> <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-430"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
-<a name="line-431"></a>    <span class='hs-varid'>sig</span>   <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
-<a name="line-432"></a><span class='hs-comment'>{-# LINE 426 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
-<a name="line-433"></a>    <span class='hs-varid'>errno</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>4</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
-<a name="line-434"></a><span class='hs-comment'>{-# LINE 427 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
-<a name="line-435"></a>    <span class='hs-varid'>extra</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>sig</span> <span class='hs-keyword'>of</span>
-<a name="line-436"></a>                <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>sig</span> <span class='hs-varop'>==</span> <span class='hs-varid'>sigCHLD</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
-<a name="line-437"></a>                    <span class='hs-varid'>pid</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>16</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
-<a name="line-438"></a><span class='hs-comment'>{-# LINE 430 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
-<a name="line-439"></a>                    <span class='hs-varid'>uid</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>20</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
-<a name="line-440"></a><span class='hs-comment'>{-# LINE 431 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
-<a name="line-441"></a>                    <span class='hs-varid'>wstat</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>24</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
-<a name="line-442"></a><span class='hs-comment'>{-# LINE 432 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
-<a name="line-443"></a>                    <span class='hs-varid'>pstat</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>decipherWaitStatus</span> <span class='hs-varid'>wstat</span>
-<a name="line-444"></a>                    <span class='hs-varid'>return</span> <span class='hs-conid'>SigChldInfo</span> <span class='hs-layout'>{</span> <span class='hs-varid'>siginfoPid</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>pid</span><span class='hs-layout'>,</span>
-<a name="line-445"></a>                                         <span class='hs-varid'>siginfoUid</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>uid</span><span class='hs-layout'>,</span>
-<a name="line-446"></a>                                         <span class='hs-varid'>siginfoStatus</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>pstat</span> <span class='hs-layout'>}</span>
-<a name="line-447"></a>                <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span> <span class='hs-keyglyph'>-&gt;</span>
-<a name="line-448"></a>                    <span class='hs-varid'>return</span> <span class='hs-conid'>NoSignalSpecificInfo</span>
-<a name="line-449"></a>    <span class='hs-varid'>return</span>
-<a name="line-450"></a>      <span class='hs-conid'>SignalInfo</span> <span class='hs-layout'>{</span>
-<a name="line-451"></a>        <span class='hs-varid'>siginfoSignal</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sig</span><span class='hs-layout'>,</span>
-<a name="line-452"></a>        <span class='hs-varid'>siginfoError</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Errno</span> <span class='hs-varid'>errno</span><span class='hs-layout'>,</span>
-<a name="line-453"></a>        <span class='hs-varid'>siginfoSpecific</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>extra</span> <span class='hs-layout'>}</span>
-<a name="line-454"></a>
-<a name="line-455"></a>
-<a name="line-456"></a><span class='hs-comment'>{-# LINE 445 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-406"></a>        <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>old_action</span><span class='hs-layout'>,</span> <span class='hs-varid'>old_handler</span><span class='hs-layout'>)</span>
+<a name="line-407"></a>
+<a name="line-408"></a>  <span class='hs-keyword'>case</span> <span class='hs-layout'>(</span><span class='hs-varid'>old_handler</span><span class='hs-layout'>,</span><span class='hs-varid'>old_action</span><span class='hs-layout'>)</span> <span class='hs-keyword'>of</span>
+<a name="line-409"></a>    <span class='hs-layout'>(</span><span class='hs-keyword'>_</span><span class='hs-layout'>,</span>       <span class='hs-conid'>STG_SIG_DFL</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Default</span>
+<a name="line-410"></a>    <span class='hs-layout'>(</span><span class='hs-keyword'>_</span><span class='hs-layout'>,</span>       <span class='hs-conid'>STG_SIG_IGN</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Ignore</span>
+<a name="line-411"></a>    <span class='hs-layout'>(</span><span class='hs-conid'>Nothing</span><span class='hs-layout'>,</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>           <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Ignore</span>
+<a name="line-412"></a>    <span class='hs-layout'>(</span><span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-keyword'>_</span><span class='hs-layout'>,</span><span class='hs-varid'>dyn</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>  <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>
+<a name="line-413"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Just</span> <span class='hs-varid'>h</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>fromDynamic</span> <span class='hs-varid'>dyn</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varid'>h</span>
+<a name="line-414"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Just</span> <span class='hs-varid'>io</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>fromDynamic</span> <span class='hs-varid'>dyn</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>Catch</span> <span class='hs-varid'>io</span><span class='hs-layout'>)</span>
+<a name="line-415"></a>        <span class='hs-comment'>-- handlers put there by the base package have type IO ()</span>
+<a name="line-416"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>                  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-conid'>Default</span>
+<a name="line-417"></a>
+<a name="line-418"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-keyword'>unsafe</span>
+<a name="line-419"></a>  <span class='hs-varid'>stg_sig_install</span>
+<a name="line-420"></a>        <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span>                         <span class='hs-comment'>-- sig no.</span>
+<a name="line-421"></a>        <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>CInt</span>                         <span class='hs-comment'>-- action code (STG_SIG_HAN etc.)</span>
+<a name="line-422"></a>        <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span>                  <span class='hs-comment'>-- (in, out) blocked</span>
+<a name="line-423"></a>        <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>                      <span class='hs-comment'>-- (ret) old action code</span>
+<a name="line-424"></a>
+<a name="line-425"></a><a name="getinfo"></a><span class='hs-definition'>getinfo</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalInfo</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>ForeignPtr</span> <span class='hs-conid'>Word8</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a name="line-426"></a><span class='hs-definition'>getinfo</span> <span class='hs-varid'>handler</span> <span class='hs-varid'>fp_info</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-427"></a>  <span class='hs-varid'>si</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>unmarshalSigInfo</span> <span class='hs-varid'>fp_info</span>
+<a name="line-428"></a>  <span class='hs-varid'>handler</span> <span class='hs-varid'>si</span>
+<a name="line-429"></a>
+<a name="line-430"></a><a name="unmarshalSigInfo"></a><span class='hs-definition'>unmarshalSigInfo</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>ForeignPtr</span> <span class='hs-conid'>Word8</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>SignalInfo</span>
+<a name="line-431"></a><span class='hs-definition'>unmarshalSigInfo</span> <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-432"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
+<a name="line-433"></a>    <span class='hs-varid'>sig</span>   <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
+<a name="line-434"></a><span class='hs-comment'>{-# LINE 430 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-435"></a>    <span class='hs-varid'>errno</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>4</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
+<a name="line-436"></a><span class='hs-comment'>{-# LINE 431 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-437"></a>    <span class='hs-varid'>extra</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>sig</span> <span class='hs-keyword'>of</span>
+<a name="line-438"></a>                <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>sig</span> <span class='hs-varop'>==</span> <span class='hs-varid'>sigCHLD</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
+<a name="line-439"></a>                    <span class='hs-varid'>pid</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>16</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
+<a name="line-440"></a><span class='hs-comment'>{-# LINE 434 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-441"></a>                    <span class='hs-varid'>uid</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>20</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
+<a name="line-442"></a><span class='hs-comment'>{-# LINE 435 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-443"></a>                    <span class='hs-varid'>wstat</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-keyglyph'>\</span><span class='hs-varid'>hsc_ptr</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>peekByteOff</span> <span class='hs-varid'>hsc_ptr</span> <span class='hs-num'>24</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varid'>p</span>
+<a name="line-444"></a><span class='hs-comment'>{-# LINE 436 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-445"></a>                    <span class='hs-varid'>pstat</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>decipherWaitStatus</span> <span class='hs-varid'>wstat</span>
+<a name="line-446"></a>                    <span class='hs-varid'>return</span> <span class='hs-conid'>SigChldInfo</span> <span class='hs-layout'>{</span> <span class='hs-varid'>siginfoPid</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>pid</span><span class='hs-layout'>,</span>
+<a name="line-447"></a>                                         <span class='hs-varid'>siginfoUid</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>uid</span><span class='hs-layout'>,</span>
+<a name="line-448"></a>                                         <span class='hs-varid'>siginfoStatus</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>pstat</span> <span class='hs-layout'>}</span>
+<a name="line-449"></a>                <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span> <span class='hs-keyglyph'>-&gt;</span>
+<a name="line-450"></a>                    <span class='hs-varid'>return</span> <span class='hs-conid'>NoSignalSpecificInfo</span>
+<a name="line-451"></a>    <span class='hs-varid'>return</span>
+<a name="line-452"></a>      <span class='hs-conid'>SignalInfo</span> <span class='hs-layout'>{</span>
+<a name="line-453"></a>        <span class='hs-varid'>siginfoSignal</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sig</span><span class='hs-layout'>,</span>
+<a name="line-454"></a>        <span class='hs-varid'>siginfoError</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Errno</span> <span class='hs-varid'>errno</span><span class='hs-layout'>,</span>
+<a name="line-455"></a>        <span class='hs-varid'>siginfoSpecific</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>extra</span> <span class='hs-layout'>}</span>
+<a name="line-456"></a>
 <a name="line-457"></a>
-<a name="line-458"></a><span class='hs-comment'>-- -----------------------------------------------------------------------------</span>
-<a name="line-459"></a><span class='hs-comment'>-- Alarms</span>
-<a name="line-460"></a>
-<a name="line-461"></a><a name="scheduleAlarm"></a><span class='hs-comment'>-- | @scheduleAlarm i@ calls @alarm@ to schedule a real time</span>
-<a name="line-462"></a><span class='hs-comment'>--   alarm at least @i@ seconds in the future.</span>
-<a name="line-463"></a><span class='hs-definition'>scheduleAlarm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>Int</span>
-<a name="line-464"></a><span class='hs-definition'>scheduleAlarm</span> <span class='hs-varid'>secs</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-465"></a>   <span class='hs-varid'>r</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>c_alarm</span> <span class='hs-layout'>(</span><span class='hs-varid'>fromIntegral</span> <span class='hs-varid'>secs</span><span class='hs-layout'>)</span>
-<a name="line-466"></a>   <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>fromIntegral</span> <span class='hs-varid'>r</span><span class='hs-layout'>)</span>
-<a name="line-467"></a>
-<a name="line-468"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"alarm"</span>
-<a name="line-469"></a>  <span class='hs-varid'>c_alarm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CUInt</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CUInt</span>
-<a name="line-470"></a>
-<a name="line-471"></a><span class='hs-comment'>-- -----------------------------------------------------------------------------</span>
-<a name="line-472"></a><span class='hs-comment'>-- The NOCLDSTOP flag</span>
-<a name="line-473"></a>
-<a name="line-474"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-str'>"&amp;nocldstop"</span> <span class='hs-varid'>nocldstop</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>Int</span>
+<a name="line-458"></a><span class='hs-comment'>{-# LINE 449 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-459"></a>
+<a name="line-460"></a><span class='hs-comment'>-- -----------------------------------------------------------------------------</span>
+<a name="line-461"></a><span class='hs-comment'>-- Alarms</span>
+<a name="line-462"></a>
+<a name="line-463"></a><a name="scheduleAlarm"></a><span class='hs-comment'>-- | @scheduleAlarm i@ calls @alarm@ to schedule a real time</span>
+<a name="line-464"></a><span class='hs-comment'>--   alarm at least @i@ seconds in the future.</span>
+<a name="line-465"></a><span class='hs-definition'>scheduleAlarm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>Int</span>
+<a name="line-466"></a><span class='hs-definition'>scheduleAlarm</span> <span class='hs-varid'>secs</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-467"></a>   <span class='hs-varid'>r</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>c_alarm</span> <span class='hs-layout'>(</span><span class='hs-varid'>fromIntegral</span> <span class='hs-varid'>secs</span><span class='hs-layout'>)</span>
+<a name="line-468"></a>   <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>fromIntegral</span> <span class='hs-varid'>r</span><span class='hs-layout'>)</span>
+<a name="line-469"></a>
+<a name="line-470"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"alarm"</span>
+<a name="line-471"></a>  <span class='hs-varid'>c_alarm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CUInt</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CUInt</span>
+<a name="line-472"></a>
+<a name="line-473"></a><span class='hs-comment'>-- -----------------------------------------------------------------------------</span>
+<a name="line-474"></a><span class='hs-comment'>-- The NOCLDSTOP flag</span>
 <a name="line-475"></a>
-<a name="line-476"></a><a name="setStoppedChildFlag"></a><span class='hs-comment'>-- | Tells the system whether or not to set the @SA_NOCLDSTOP@ flag when</span>
-<a name="line-477"></a><span class='hs-comment'>-- installing new signal handlers.</span>
-<a name="line-478"></a><span class='hs-definition'>setStoppedChildFlag</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Bool</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>Bool</span>
-<a name="line-479"></a><span class='hs-definition'>setStoppedChildFlag</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-480"></a>    <span class='hs-varid'>rc</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>peek</span> <span class='hs-varid'>nocldstop</span>
-<a name="line-481"></a>    <span class='hs-varid'>poke</span> <span class='hs-varid'>nocldstop</span> <span class='hs-varop'>$</span> <span class='hs-varid'>fromEnum</span> <span class='hs-layout'>(</span><span class='hs-varid'>not</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
-<a name="line-482"></a>    <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>rc</span> <span class='hs-varop'>==</span> <span class='hs-layout'>(</span><span class='hs-num'>0</span><span class='hs-keyglyph'>::</span><span class='hs-conid'>Int</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a name="line-483"></a>
-<a name="line-484"></a><a name="queryStoppedChildFlag"></a><span class='hs-comment'>-- | Queries the current state of the stopped child flag.</span>
-<a name="line-485"></a><span class='hs-definition'>queryStoppedChildFlag</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>Bool</span>
-<a name="line-486"></a><span class='hs-definition'>queryStoppedChildFlag</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-487"></a>    <span class='hs-varid'>rc</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>peek</span> <span class='hs-varid'>nocldstop</span>
-<a name="line-488"></a>    <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>rc</span> <span class='hs-varop'>==</span> <span class='hs-layout'>(</span><span class='hs-num'>0</span><span class='hs-keyglyph'>::</span><span class='hs-conid'>Int</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a name="line-489"></a>
-<a name="line-490"></a><span class='hs-comment'>-- -----------------------------------------------------------------------------</span>
-<a name="line-491"></a><span class='hs-comment'>-- Manipulating signal sets</span>
-<a name="line-492"></a>
-<a name="line-493"></a><a name="SignalSet"></a><span class='hs-keyword'>newtype</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>SignalSet</span> <span class='hs-layout'>(</span><span class='hs-conid'>ForeignPtr</span> <span class='hs-conid'>CSigset</span><span class='hs-layout'>)</span>
+<a name="line-476"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-str'>"&amp;nocldstop"</span> <span class='hs-varid'>nocldstop</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>Int</span>
+<a name="line-477"></a>
+<a name="line-478"></a><a name="setStoppedChildFlag"></a><span class='hs-comment'>-- | Tells the system whether or not to set the @SA_NOCLDSTOP@ flag when</span>
+<a name="line-479"></a><span class='hs-comment'>-- installing new signal handlers.</span>
+<a name="line-480"></a><span class='hs-definition'>setStoppedChildFlag</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Bool</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>Bool</span>
+<a name="line-481"></a><span class='hs-definition'>setStoppedChildFlag</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-482"></a>    <span class='hs-varid'>rc</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>peek</span> <span class='hs-varid'>nocldstop</span>
+<a name="line-483"></a>    <span class='hs-varid'>poke</span> <span class='hs-varid'>nocldstop</span> <span class='hs-varop'>$</span> <span class='hs-varid'>fromEnum</span> <span class='hs-layout'>(</span><span class='hs-varid'>not</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
+<a name="line-484"></a>    <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>rc</span> <span class='hs-varop'>==</span> <span class='hs-layout'>(</span><span class='hs-num'>0</span><span class='hs-keyglyph'>::</span><span class='hs-conid'>Int</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a name="line-485"></a>
+<a name="line-486"></a><a name="queryStoppedChildFlag"></a><span class='hs-comment'>-- | Queries the current state of the stopped child flag.</span>
+<a name="line-487"></a><span class='hs-definition'>queryStoppedChildFlag</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>Bool</span>
+<a name="line-488"></a><span class='hs-definition'>queryStoppedChildFlag</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-489"></a>    <span class='hs-varid'>rc</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>peek</span> <span class='hs-varid'>nocldstop</span>
+<a name="line-490"></a>    <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>rc</span> <span class='hs-varop'>==</span> <span class='hs-layout'>(</span><span class='hs-num'>0</span><span class='hs-keyglyph'>::</span><span class='hs-conid'>Int</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a name="line-491"></a>
+<a name="line-492"></a><span class='hs-comment'>-- -----------------------------------------------------------------------------</span>
+<a name="line-493"></a><span class='hs-comment'>-- Manipulating signal sets</span>
 <a name="line-494"></a>
-<a name="line-495"></a><a name="emptySignalSet"></a><span class='hs-definition'>emptySignalSet</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span>
-<a name="line-496"></a><span class='hs-definition'>emptySignalSet</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
-<a name="line-497"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
-<a name="line-498"></a>  <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"emptySignalSet"</span> <span class='hs-layout'>(</span><span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-varid'>c_sigemptyset</span><span class='hs-layout'>)</span>
-<a name="line-499"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span>
-<a name="line-500"></a>
-<a name="line-501"></a><a name="fullSignalSet"></a><span class='hs-definition'>fullSignalSet</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span>
-<a name="line-502"></a><span class='hs-definition'>fullSignalSet</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
-<a name="line-503"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
-<a name="line-504"></a>  <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"fullSignalSet"</span> <span class='hs-layout'>(</span><span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-varid'>c_sigfillset</span><span class='hs-layout'>)</span>
-<a name="line-505"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span>
-<a name="line-506"></a>
-<a name="line-507"></a><a name="reservedSignals"></a><span class='hs-comment'>-- | A set of signals reserved for use by the implementation.  In GHC, this will normally</span>
-<a name="line-508"></a><span class='hs-comment'>-- include either `sigVTALRM` or `sigALRM`.</span>
-<a name="line-509"></a><span class='hs-definition'>reservedSignals</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span>
-<a name="line-510"></a><span class='hs-definition'>reservedSignals</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>addSignal</span> <span class='hs-varid'>rtsTimerSignal</span> <span class='hs-varid'>emptySignalSet</span>
-<a name="line-511"></a>
-<a name="line-512"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-varid'>rtsTimerSignal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span>
+<a name="line-495"></a><a name="SignalSet"></a><span class='hs-keyword'>newtype</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>SignalSet</span> <span class='hs-layout'>(</span><span class='hs-conid'>ForeignPtr</span> <span class='hs-conid'>CSigset</span><span class='hs-layout'>)</span>
+<a name="line-496"></a>
+<a name="line-497"></a><a name="emptySignalSet"></a><span class='hs-definition'>emptySignalSet</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span>
+<a name="line-498"></a><span class='hs-definition'>emptySignalSet</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
+<a name="line-499"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
+<a name="line-500"></a>  <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"emptySignalSet"</span> <span class='hs-layout'>(</span><span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-varid'>c_sigemptyset</span><span class='hs-layout'>)</span>
+<a name="line-501"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span>
+<a name="line-502"></a>
+<a name="line-503"></a><a name="fullSignalSet"></a><span class='hs-definition'>fullSignalSet</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span>
+<a name="line-504"></a><span class='hs-definition'>fullSignalSet</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
+<a name="line-505"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
+<a name="line-506"></a>  <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"fullSignalSet"</span> <span class='hs-layout'>(</span><span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-varid'>c_sigfillset</span><span class='hs-layout'>)</span>
+<a name="line-507"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span>
+<a name="line-508"></a>
+<a name="line-509"></a><a name="reservedSignals"></a><span class='hs-comment'>-- | A set of signals reserved for use by the implementation.  In GHC, this will normally</span>
+<a name="line-510"></a><span class='hs-comment'>-- include either `sigVTALRM` or `sigALRM`.</span>
+<a name="line-511"></a><span class='hs-definition'>reservedSignals</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span>
+<a name="line-512"></a><span class='hs-definition'>reservedSignals</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>addSignal</span> <span class='hs-varid'>rtsTimerSignal</span> <span class='hs-varid'>emptySignalSet</span>
 <a name="line-513"></a>
-<a name="line-514"></a><span class='hs-keyword'>infixr</span> <span class='hs-varop'>`addSignal`</span><span class='hs-layout'>,</span> <span class='hs-varop'>`deleteSignal`</span>
-<a name="line-515"></a><a name="addSignal"></a><span class='hs-definition'>addSignal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Signal</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span>
-<a name="line-516"></a><span class='hs-definition'>addSignal</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
-<a name="line-517"></a>  <span class='hs-varid'>fp2</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
-<a name="line-518"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp1</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p1</span> <span class='hs-keyglyph'>-&gt;</span>
-<a name="line-519"></a>    <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp2</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p2</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
-<a name="line-520"></a>      <span class='hs-varid'>copyBytes</span> <span class='hs-varid'>p2</span> <span class='hs-varid'>p1</span> <span class='hs-varid'>sizeof_sigset_t</span>
-<a name="line-521"></a>      <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"addSignal"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigaddset</span> <span class='hs-varid'>p2</span> <span class='hs-varid'>sig</span><span class='hs-layout'>)</span>
-<a name="line-522"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp2</span><span class='hs-layout'>)</span>
-<a name="line-523"></a>
-<a name="line-524"></a><a name="deleteSignal"></a><span class='hs-definition'>deleteSignal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Signal</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span>
-<a name="line-525"></a><span class='hs-definition'>deleteSignal</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
-<a name="line-526"></a>  <span class='hs-varid'>fp2</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
-<a name="line-527"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp1</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p1</span> <span class='hs-keyglyph'>-&gt;</span>
-<a name="line-528"></a>    <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp2</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p2</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
-<a name="line-529"></a>      <span class='hs-varid'>copyBytes</span> <span class='hs-varid'>p2</span> <span class='hs-varid'>p1</span> <span class='hs-varid'>sizeof_sigset_t</span>
-<a name="line-530"></a>      <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"deleteSignal"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigdelset</span> <span class='hs-varid'>p2</span> <span class='hs-varid'>sig</span><span class='hs-layout'>)</span>
-<a name="line-531"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp2</span><span class='hs-layout'>)</span>
-<a name="line-532"></a>
-<a name="line-533"></a><a name="inSignalSet"></a><span class='hs-definition'>inSignalSet</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Signal</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a name="line-534"></a><span class='hs-definition'>inSignalSet</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span>
-<a name="line-535"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
-<a name="line-536"></a>    <span class='hs-varid'>r</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>throwErrnoIfMinus1</span> <span class='hs-str'>"inSignalSet"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigismember</span> <span class='hs-varid'>p</span> <span class='hs-varid'>sig</span><span class='hs-layout'>)</span>
-<a name="line-537"></a>    <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>r</span> <span class='hs-varop'>/=</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span>
-<a name="line-538"></a>
-<a name="line-539"></a><a name="getSignalMask"></a><span class='hs-comment'>-- | @getSignalMask@ calls @sigprocmask@ to determine the</span>
-<a name="line-540"></a><span class='hs-comment'>--   set of interrupts which are currently being blocked.</span>
-<a name="line-541"></a><span class='hs-definition'>getSignalMask</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>SignalSet</span>
-<a name="line-542"></a><span class='hs-definition'>getSignalMask</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-543"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
-<a name="line-544"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span>
-<a name="line-545"></a>    <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"getSignalMask"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigprocmask</span> <span class='hs-num'>0</span> <span class='hs-varid'>nullPtr</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>
-<a name="line-546"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span>
-<a name="line-547"></a>
-<a name="line-548"></a><a name="sigProcMask"></a><span class='hs-definition'>sigProcMask</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>CInt</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a name="line-549"></a><span class='hs-definition'>sigProcMask</span> <span class='hs-varid'>fn</span> <span class='hs-varid'>how</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>set</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
-<a name="line-550"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>set</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p_set</span> <span class='hs-keyglyph'>-&gt;</span>
-<a name="line-551"></a>    <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-varid'>fn</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigprocmask</span> <span class='hs-varid'>how</span> <span class='hs-varid'>p_set</span> <span class='hs-varid'>nullPtr</span><span class='hs-layout'>)</span>
-<a name="line-552"></a>
-<a name="line-553"></a><a name="setSignalMask"></a><span class='hs-comment'>-- | @setSignalMask mask@ calls @sigprocmask@ with</span>
-<a name="line-554"></a><span class='hs-comment'>--   @SIG_SETMASK@ to block all interrupts in @mask@.</span>
-<a name="line-555"></a><span class='hs-definition'>setSignalMask</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a name="line-556"></a><span class='hs-definition'>setSignalMask</span> <span class='hs-varid'>set</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sigProcMask</span> <span class='hs-str'>"setSignalMask"</span> <span class='hs-layout'>(</span><span class='hs-conid'>CONST_SIG_SETMASK</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span><span class='hs-layout'>)</span> <span class='hs-varid'>set</span>
-<a name="line-557"></a>
-<a name="line-558"></a><a name="blockSignals"></a><span class='hs-comment'>-- | @blockSignals mask@ calls @sigprocmask@ with</span>
-<a name="line-559"></a><span class='hs-comment'>--   @SIG_BLOCK@ to add all interrupts in @mask@ to the</span>
-<a name="line-560"></a><span class='hs-comment'>--  set of blocked interrupts.</span>
-<a name="line-561"></a><span class='hs-definition'>blockSignals</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a name="line-562"></a><span class='hs-definition'>blockSignals</span> <span class='hs-varid'>set</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sigProcMask</span> <span class='hs-str'>"blockSignals"</span> <span class='hs-layout'>(</span><span class='hs-conid'>CONST_SIG_BLOCK</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span><span class='hs-layout'>)</span> <span class='hs-varid'>set</span>
-<a name="line-563"></a>
-<a name="line-564"></a><a name="unblockSignals"></a><span class='hs-comment'>-- | @unblockSignals mask@ calls @sigprocmask@ with</span>
-<a name="line-565"></a><span class='hs-comment'>--   @SIG_UNBLOCK@ to remove all interrupts in @mask@ from the</span>
-<a name="line-566"></a><span class='hs-comment'>--   set of blocked interrupts.</span>
-<a name="line-567"></a><span class='hs-definition'>unblockSignals</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a name="line-568"></a><span class='hs-definition'>unblockSignals</span> <span class='hs-varid'>set</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sigProcMask</span> <span class='hs-str'>"unblockSignals"</span> <span class='hs-layout'>(</span><span class='hs-conid'>CONST_SIG_UNBLOCK</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span><span class='hs-layout'>)</span> <span class='hs-varid'>set</span>
-<a name="line-569"></a>
-<a name="line-570"></a><a name="getPendingSignals"></a><span class='hs-comment'>-- | @getPendingSignals@ calls @sigpending@ to obtain</span>
-<a name="line-571"></a><span class='hs-comment'>--   the set of interrupts which have been received but are currently blocked.</span>
-<a name="line-572"></a><span class='hs-definition'>getPendingSignals</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>SignalSet</span>
-<a name="line-573"></a><span class='hs-definition'>getPendingSignals</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-574"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
-<a name="line-575"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span>
-<a name="line-576"></a>   <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"getPendingSignals"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigpending</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>
-<a name="line-577"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span>
-<a name="line-578"></a>
-<a name="line-579"></a><a name="awaitSignal"></a><span class='hs-comment'>-- | @awaitSignal iset@ suspends execution until an interrupt is received.</span>
-<a name="line-580"></a><span class='hs-comment'>-- If @iset@ is @Just s@, @awaitSignal@ calls @sigsuspend@, installing</span>
-<a name="line-581"></a><span class='hs-comment'>-- @s@ as the new signal mask before suspending execution; otherwise, it</span>
-<a name="line-582"></a><span class='hs-comment'>-- calls @sigsuspend@ with current signal mask. Note that RTS</span>
-<a name="line-583"></a><span class='hs-comment'>-- scheduler signal (either 'virtualTimerExpired' or 'realTimeAlarm')</span>
-<a name="line-584"></a><span class='hs-comment'>-- could cause premature termination of this call. It might be necessary to block that</span>
-<a name="line-585"></a><span class='hs-comment'>-- signal before invocation of @awaitSignal@ with 'blockSignals' 'reservedSignals'.</span>
-<a name="line-586"></a><span class='hs-comment'>--</span>
-<a name="line-587"></a><span class='hs-comment'>-- @awaitSignal@ returns when signal was received and processed by a</span>
-<a name="line-588"></a><span class='hs-comment'>-- signal handler, or if the signal could not be caught. If you have</span>
-<a name="line-589"></a><span class='hs-comment'>-- installed any signal handlers with @installHandler@, it may be wise</span>
-<a name="line-590"></a><span class='hs-comment'>-- to call @yield@ directly after @awaitSignal@ to ensure that the</span>
-<a name="line-591"></a><span class='hs-comment'>-- signal handler runs as promptly as possible.</span>
-<a name="line-592"></a><span class='hs-definition'>awaitSignal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Maybe</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
-<a name="line-593"></a><span class='hs-definition'>awaitSignal</span> <span class='hs-varid'>maybe_sigset</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-594"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>maybe_sigset</span> <span class='hs-keyword'>of</span>
-<a name="line-595"></a>          <span class='hs-conid'>Nothing</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span> <span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>getSignalMask</span><span class='hs-layout'>;</span> <span class='hs-varid'>return</span> <span class='hs-varid'>fp</span>
-<a name="line-596"></a>          <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varid'>fp</span>
-<a name="line-597"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
-<a name="line-598"></a>  <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>c_sigsuspend</span> <span class='hs-varid'>p</span>
-<a name="line-599"></a>  <span class='hs-varid'>return</span> <span class='hs-conid'>()</span>
-<a name="line-600"></a>  <span class='hs-comment'>-- ignore the return value; according to the docs it can only ever be</span>
-<a name="line-601"></a>  <span class='hs-comment'>-- (-1) with errno set to EINTR.</span>
-<a name="line-602"></a>  <span class='hs-comment'>-- XXX My manpage says it can also return EFAULT. And why is ignoring</span>
-<a name="line-603"></a>  <span class='hs-comment'>-- EINTR the right thing to do?</span>
-<a name="line-604"></a>
-<a name="line-605"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"sigsuspend"</span>
-<a name="line-606"></a>  <span class='hs-varid'>c_sigsuspend</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
-<a name="line-607"></a>
-<a name="line-608"></a>
-<a name="line-609"></a><span class='hs-comment'>{-# LINE 608 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
-<a name="line-610"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-varid'>capi</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"signal.h sigdelset"</span>
-<a name="line-611"></a>  <span class='hs-varid'>c_sigdelset</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>CInt</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
-<a name="line-612"></a>
-<a name="line-613"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-varid'>capi</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"signal.h sigfillset"</span>
-<a name="line-614"></a>  <span class='hs-varid'>c_sigfillset</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
-<a name="line-615"></a>
-<a name="line-616"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-varid'>capi</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"signal.h sigismember"</span>
-<a name="line-617"></a>  <span class='hs-varid'>c_sigismember</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>CInt</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
-<a name="line-618"></a>
-<a name="line-619"></a><span class='hs-comment'>{-# LINE 617 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-514"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-varid'>rtsTimerSignal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span>
+<a name="line-515"></a>
+<a name="line-516"></a><span class='hs-keyword'>infixr</span> <span class='hs-varop'>`addSignal`</span><span class='hs-layout'>,</span> <span class='hs-varop'>`deleteSignal`</span>
+<a name="line-517"></a><a name="addSignal"></a><span class='hs-definition'>addSignal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Signal</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span>
+<a name="line-518"></a><span class='hs-definition'>addSignal</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
+<a name="line-519"></a>  <span class='hs-varid'>fp2</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
+<a name="line-520"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp1</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p1</span> <span class='hs-keyglyph'>-&gt;</span>
+<a name="line-521"></a>    <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp2</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p2</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
+<a name="line-522"></a>      <span class='hs-varid'>copyBytes</span> <span class='hs-varid'>p2</span> <span class='hs-varid'>p1</span> <span class='hs-varid'>sizeof_sigset_t</span>
+<a name="line-523"></a>      <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"addSignal"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigaddset</span> <span class='hs-varid'>p2</span> <span class='hs-varid'>sig</span><span class='hs-layout'>)</span>
+<a name="line-524"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp2</span><span class='hs-layout'>)</span>
+<a name="line-525"></a>
+<a name="line-526"></a><a name="deleteSignal"></a><span class='hs-definition'>deleteSignal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Signal</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span>
+<a name="line-527"></a><span class='hs-definition'>deleteSignal</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
+<a name="line-528"></a>  <span class='hs-varid'>fp2</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
+<a name="line-529"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp1</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p1</span> <span class='hs-keyglyph'>-&gt;</span>
+<a name="line-530"></a>    <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp2</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p2</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
+<a name="line-531"></a>      <span class='hs-varid'>copyBytes</span> <span class='hs-varid'>p2</span> <span class='hs-varid'>p1</span> <span class='hs-varid'>sizeof_sigset_t</span>
+<a name="line-532"></a>      <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"deleteSignal"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigdelset</span> <span class='hs-varid'>p2</span> <span class='hs-varid'>sig</span><span class='hs-layout'>)</span>
+<a name="line-533"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp2</span><span class='hs-layout'>)</span>
+<a name="line-534"></a>
+<a name="line-535"></a><a name="inSignalSet"></a><span class='hs-definition'>inSignalSet</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Signal</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-536"></a><span class='hs-definition'>inSignalSet</span> <span class='hs-varid'>sig</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unsafePerformIO</span> <span class='hs-varop'>$</span>
+<a name="line-537"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
+<a name="line-538"></a>    <span class='hs-varid'>r</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>throwErrnoIfMinus1</span> <span class='hs-str'>"inSignalSet"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigismember</span> <span class='hs-varid'>p</span> <span class='hs-varid'>sig</span><span class='hs-layout'>)</span>
+<a name="line-539"></a>    <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>r</span> <span class='hs-varop'>/=</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span>
+<a name="line-540"></a>
+<a name="line-541"></a><a name="getSignalMask"></a><span class='hs-comment'>-- | @getSignalMask@ calls @sigprocmask@ to determine the</span>
+<a name="line-542"></a><span class='hs-comment'>--   set of interrupts which are currently being blocked.</span>
+<a name="line-543"></a><span class='hs-definition'>getSignalMask</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>SignalSet</span>
+<a name="line-544"></a><span class='hs-definition'>getSignalMask</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-545"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
+<a name="line-546"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span>
+<a name="line-547"></a>    <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"getSignalMask"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigprocmask</span> <span class='hs-num'>0</span> <span class='hs-varid'>nullPtr</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>
+<a name="line-548"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span>
+<a name="line-549"></a>
+<a name="line-550"></a><a name="sigProcMask"></a><span class='hs-definition'>sigProcMask</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>CInt</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a name="line-551"></a><span class='hs-definition'>sigProcMask</span> <span class='hs-varid'>fn</span> <span class='hs-varid'>how</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>set</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-552"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>set</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p_set</span> <span class='hs-keyglyph'>-&gt;</span>
+<a name="line-553"></a>    <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-varid'>fn</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigprocmask</span> <span class='hs-varid'>how</span> <span class='hs-varid'>p_set</span> <span class='hs-varid'>nullPtr</span><span class='hs-layout'>)</span>
+<a name="line-554"></a>
+<a name="line-555"></a><a name="setSignalMask"></a><span class='hs-comment'>-- | @setSignalMask mask@ calls @sigprocmask@ with</span>
+<a name="line-556"></a><span class='hs-comment'>--   @SIG_SETMASK@ to block all interrupts in @mask@.</span>
+<a name="line-557"></a><span class='hs-definition'>setSignalMask</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a name="line-558"></a><span class='hs-definition'>setSignalMask</span> <span class='hs-varid'>set</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sigProcMask</span> <span class='hs-str'>"setSignalMask"</span> <span class='hs-layout'>(</span><span class='hs-conid'>CONST_SIG_SETMASK</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span><span class='hs-layout'>)</span> <span class='hs-varid'>set</span>
+<a name="line-559"></a>
+<a name="line-560"></a><a name="blockSignals"></a><span class='hs-comment'>-- | @blockSignals mask@ calls @sigprocmask@ with</span>
+<a name="line-561"></a><span class='hs-comment'>--   @SIG_BLOCK@ to add all interrupts in @mask@ to the</span>
+<a name="line-562"></a><span class='hs-comment'>--  set of blocked interrupts.</span>
+<a name="line-563"></a><span class='hs-definition'>blockSignals</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a name="line-564"></a><span class='hs-definition'>blockSignals</span> <span class='hs-varid'>set</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sigProcMask</span> <span class='hs-str'>"blockSignals"</span> <span class='hs-layout'>(</span><span class='hs-conid'>CONST_SIG_BLOCK</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span><span class='hs-layout'>)</span> <span class='hs-varid'>set</span>
+<a name="line-565"></a>
+<a name="line-566"></a><a name="unblockSignals"></a><span class='hs-comment'>-- | @unblockSignals mask@ calls @sigprocmask@ with</span>
+<a name="line-567"></a><span class='hs-comment'>--   @SIG_UNBLOCK@ to remove all interrupts in @mask@ from the</span>
+<a name="line-568"></a><span class='hs-comment'>--   set of blocked interrupts.</span>
+<a name="line-569"></a><span class='hs-definition'>unblockSignals</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a name="line-570"></a><span class='hs-definition'>unblockSignals</span> <span class='hs-varid'>set</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sigProcMask</span> <span class='hs-str'>"unblockSignals"</span> <span class='hs-layout'>(</span><span class='hs-conid'>CONST_SIG_UNBLOCK</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CInt</span><span class='hs-layout'>)</span> <span class='hs-varid'>set</span>
+<a name="line-571"></a>
+<a name="line-572"></a><a name="getPendingSignals"></a><span class='hs-comment'>-- | @getPendingSignals@ calls @sigpending@ to obtain</span>
+<a name="line-573"></a><span class='hs-comment'>--   the set of interrupts which have been received but are currently blocked.</span>
+<a name="line-574"></a><span class='hs-definition'>getPendingSignals</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>SignalSet</span>
+<a name="line-575"></a><span class='hs-definition'>getPendingSignals</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-576"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mallocForeignPtrBytes</span> <span class='hs-varid'>sizeof_sigset_t</span>
+<a name="line-577"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span>
+<a name="line-578"></a>   <span class='hs-varid'>throwErrnoIfMinus1_</span> <span class='hs-str'>"getPendingSignals"</span> <span class='hs-layout'>(</span><span class='hs-varid'>c_sigpending</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>
+<a name="line-579"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span>
+<a name="line-580"></a>
+<a name="line-581"></a><a name="awaitSignal"></a><span class='hs-comment'>-- | @awaitSignal iset@ suspends execution until an interrupt is received.</span>
+<a name="line-582"></a><span class='hs-comment'>-- If @iset@ is @Just s@, @awaitSignal@ calls @sigsuspend@, installing</span>
+<a name="line-583"></a><span class='hs-comment'>-- @s@ as the new signal mask before suspending execution; otherwise, it</span>
+<a name="line-584"></a><span class='hs-comment'>-- calls @sigsuspend@ with current signal mask. Note that RTS</span>
+<a name="line-585"></a><span class='hs-comment'>-- scheduler signal (either 'virtualTimerExpired' or 'realTimeAlarm')</span>
+<a name="line-586"></a><span class='hs-comment'>-- could cause premature termination of this call. It might be necessary to block that</span>
+<a name="line-587"></a><span class='hs-comment'>-- signal before invocation of @awaitSignal@ with 'blockSignals' 'reservedSignals'.</span>
+<a name="line-588"></a><span class='hs-comment'>--</span>
+<a name="line-589"></a><span class='hs-comment'>-- @awaitSignal@ returns when signal was received and processed by a</span>
+<a name="line-590"></a><span class='hs-comment'>-- signal handler, or if the signal could not be caught. If you have</span>
+<a name="line-591"></a><span class='hs-comment'>-- installed any signal handlers with @installHandler@, it may be wise</span>
+<a name="line-592"></a><span class='hs-comment'>-- to call @yield@ directly after @awaitSignal@ to ensure that the</span>
+<a name="line-593"></a><span class='hs-comment'>-- signal handler runs as promptly as possible.</span>
+<a name="line-594"></a><span class='hs-definition'>awaitSignal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Maybe</span> <span class='hs-conid'>SignalSet</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span>
+<a name="line-595"></a><span class='hs-definition'>awaitSignal</span> <span class='hs-varid'>maybe_sigset</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-596"></a>  <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>maybe_sigset</span> <span class='hs-keyword'>of</span>
+<a name="line-597"></a>          <span class='hs-conid'>Nothing</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span> <span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>getSignalMask</span><span class='hs-layout'>;</span> <span class='hs-varid'>return</span> <span class='hs-varid'>fp</span>
+<a name="line-598"></a>          <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-conid'>SignalSet</span> <span class='hs-varid'>fp</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>return</span> <span class='hs-varid'>fp</span>
+<a name="line-599"></a>  <span class='hs-varid'>withForeignPtr</span> <span class='hs-varid'>fp</span> <span class='hs-varop'>$</span> <span class='hs-keyglyph'>\</span><span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span>
+<a name="line-600"></a>  <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>c_sigsuspend</span> <span class='hs-varid'>p</span>
+<a name="line-601"></a>  <span class='hs-varid'>return</span> <span class='hs-conid'>()</span>
+<a name="line-602"></a>  <span class='hs-comment'>-- ignore the return value; according to the docs it can only ever be</span>
+<a name="line-603"></a>  <span class='hs-comment'>-- (-1) with errno set to EINTR.</span>
+<a name="line-604"></a>  <span class='hs-comment'>-- XXX My manpage says it can also return EFAULT. And why is ignoring</span>
+<a name="line-605"></a>  <span class='hs-comment'>-- EINTR the right thing to do?</span>
+<a name="line-606"></a>
+<a name="line-607"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"sigsuspend"</span>
+<a name="line-608"></a>  <span class='hs-varid'>c_sigsuspend</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
+<a name="line-609"></a>
+<a name="line-610"></a>
+<a name="line-611"></a><span class='hs-comment'>{-# LINE 612 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-612"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-varid'>capi</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"signal.h sigdelset"</span>
+<a name="line-613"></a>  <span class='hs-varid'>c_sigdelset</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>CInt</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
+<a name="line-614"></a>
+<a name="line-615"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-varid'>capi</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"signal.h sigfillset"</span>
+<a name="line-616"></a>  <span class='hs-varid'>c_sigfillset</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
+<a name="line-617"></a>
+<a name="line-618"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-varid'>capi</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"signal.h sigismember"</span>
+<a name="line-619"></a>  <span class='hs-varid'>c_sigismember</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>CInt</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
 <a name="line-620"></a>
-<a name="line-621"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"sigpending"</span>
-<a name="line-622"></a>  <span class='hs-varid'>c_sigpending</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
+<a name="line-621"></a><span class='hs-comment'>{-# LINE 621 "libraries/unix/System/Posix/Signals.hsc" #-}</span>
+<a name="line-622"></a>
+<a name="line-623"></a><span class='hs-keyword'>foreign</span> <span class='hs-keyword'>import</span> <span class='hs-keyword'>ccall</span> <span class='hs-keyword'>unsafe</span> <span class='hs-str'>"sigpending"</span>
+<a name="line-624"></a>  <span class='hs-varid'>c_sigpending</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ptr</span> <span class='hs-conid'>CSigset</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>CInt</span>
 </pre></body>
 </html>

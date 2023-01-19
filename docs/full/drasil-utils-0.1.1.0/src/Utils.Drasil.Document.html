@@ -7,36 +7,35 @@
 </span><span id="line-7"></span><span class="annot"><a href="Utils.Drasil.Document.html#blank"><span class="hs-identifier hs-type">blank</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-8"></span><span id="blank"><span class="annot"><span class="annottext">blank :: Doc
 </span><a href="Utils.Drasil.Document.html#blank"><span class="hs-identifier hs-var hs-var">blank</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;&quot;</span></span><span>
 </span><span id="line-9"></span><span>
 </span><span id="line-10"></span><span class="hs-comment">-- | Indents a document (by 4 spaces).</span><span>
 </span><span id="line-11"></span><span class="annot"><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier hs-type">indent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-12"></span><span id="indent"><span class="annot"><span class="annottext">indent :: Doc -&gt; Doc
 </span><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier hs-var hs-var">indent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Doc -&gt; Doc
-</span><span class="hs-identifier hs-var">nest</span></span><span> </span><span class="annot"><span class="hs-number">4</span></span><span>
+</span><span class="hs-identifier hs-var">nest</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">4</span></span><span>
 </span><span id="line-13"></span><span>
 </span><span id="line-14"></span><span class="hs-comment">-- | Helper which concatenates two Docs and appends a period.</span><span>
 </span><span id="line-15"></span><span class="annot"><a href="Utils.Drasil.Document.html#%2B%3A%2B."><span class="hs-operator hs-type">(+:+.)</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-16"></span><span id="local-6989586621679031600"><span class="annot"><span class="annottext">a :: Doc
-</span><a href="#local-6989586621679031600"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%3A%2B."><span class="annot"><span class="annottext">+:+. :: Doc -&gt; Doc -&gt; Doc
-</span><a href="Utils.Drasil.Document.html#%2B%3A%2B."><span class="hs-operator hs-var hs-var">+:+.</span></a></span></span><span> </span><span id="local-6989586621679031599"><span class="annot"><span class="annottext">b :: Doc
-</span><a href="#local-6989586621679031599"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679031600"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span id="line-16"></span><span id="local-6989586621679022913"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679022913"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%3A%2B."><span class="annot"><span class="annottext">+:+. :: Doc -&gt; Doc -&gt; Doc
+</span><a href="Utils.Drasil.Document.html#%2B%3A%2B."><span class="hs-operator hs-var hs-var">+:+.</span></a></span></span><span> </span><span id="local-6989586621679022912"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679022912"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679022913"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679031599"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679022912"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.&quot;</span></span><span>
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;.&quot;</span></span><span>
 </span><span id="line-17"></span><span>
 </span><span id="line-18"></span><span class="hs-comment">-- | Indents a list of Docs and combines into one Doc.</span><span>
 </span><span id="line-19"></span><span class="annot"><a href="Utils.Drasil.Document.html#indentList"><span class="hs-identifier hs-type">indentList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-20"></span><span id="indentList"><span class="annot"><span class="annottext">indentList :: [Doc] -&gt; Doc
 </span><a href="Utils.Drasil.Document.html#indentList"><span class="hs-identifier hs-var hs-var">indentList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
-</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; ([Doc] -&gt; [Doc]) -&gt; [Doc] -&gt; Doc
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; [Doc] -&gt; [Doc]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier hs-var">indent</span></a></span><span>  </span><span class="hs-comment">-- TODO: Isn't this just `indent . vcat`? This would be a bit more efficient too</span><span>
 </span><span id="line-21"></span></pre></body></html>

@@ -114,8 +114,8 @@ mkCheckedCommand :: MakeString -> Command
 
 -- | Creates a command which executes and ignores the return code.
 mkCommand :: MakeString -> Command
-instance GHC.Classes.Eq Build.Drasil.Make.AST.Type
 instance GHC.Classes.Eq Build.Drasil.Make.AST.CommandOpts
+instance GHC.Classes.Eq Build.Drasil.Make.AST.Type
 
 
 -- | Defines classes and constructors for Makefile generators.

@@ -32,15 +32,15 @@
 -&gt; SystemInformation
 -&gt; LabelledContent
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#generateTraceTableView"><span class="hs-identifier hs-var">generateTraceTableView</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; UID
-</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Tracey&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Tracey&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">item</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of Different&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;of Different&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvEverything"><span class="hs-identifier hs-var">tvEverything</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
@@ -49,90 +49,72 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-30"></span><span class="hs-comment">-- | Traceabiliy viewing everything. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-31"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvEverything"><span class="hs-identifier hs-type">tvEverything</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-32"></span><span id="tvEverything"><span class="annot"><span class="annottext">tvEverything :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvEverything"><span class="hs-identifier hs-var hs-var">tvEverything</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [UID] -&gt; [UID]) -&gt; TraceViewCat
-forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
-</span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [UID] -&gt; [UID]
-forall a b. a -&gt; b -&gt; a
-</span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]
-forall a. a -&gt; a
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvEverything"><span class="hs-identifier hs-var hs-var">tvEverything</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. a -&gt; b -&gt; a
+</span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; a
 </span><span class="hs-identifier hs-var">id</span></span><span class="hs-special">)</span><span>
 </span><span id="line-33"></span><span>
 </span><span id="line-34"></span><span class="hs-comment">-- | Traceabiliy viewing assumptions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-35"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-type">tvAssumps</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-36"></span><span id="tvAssumps"><span class="annot"><span class="annottext">tvAssumps :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var hs-var">tvAssumps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; TraceViewCat
-forall c. Concept c =&gt; c -&gt; TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var hs-var">tvAssumps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. Concept c =&gt; c -&gt; TraceViewCat
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceViewCC"><span class="hs-identifier hs-var">traceViewCC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">assumpDom</span></span><span>
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="hs-comment">-- | Traceabiliy viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-39"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-type">tvDataDefns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-40"></span><span id="tvDataDefns"><span class="annot"><span class="annottext">tvDataDefns :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var hs-var">tvDataDefns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getting (UMap DataDefinition) ChunkDB (UMap DataDefinition)
--&gt; TraceViewCat
-forall a.
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var hs-var">tvDataDefns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a.
 HasUID a =&gt;
 Getting (UMap a) ChunkDB (UMap a) -&gt; TraceViewCat
-</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceView"><span class="hs-identifier hs-var">traceView</span></a></span><span> </span><span class="annot"><span class="annottext">Getting (UMap DataDefinition) ChunkDB (UMap DataDefinition)
-Lens' ChunkDB (UMap DataDefinition)
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceView"><span class="hs-identifier hs-var">traceView</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' ChunkDB (UMap DataDefinition)
 </span><span class="hs-identifier hs-var">dataDefnTable</span></span><span>
 </span><span id="line-41"></span><span>
 </span><span id="line-42"></span><span class="hs-comment">-- | Traceabiliy viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-43"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-type">tvGenDefns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-44"></span><span id="tvGenDefns"><span class="annot"><span class="annottext">tvGenDefns :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var hs-var">tvGenDefns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getting (UMap GenDefn) ChunkDB (UMap GenDefn) -&gt; TraceViewCat
-forall a.
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var hs-var">tvGenDefns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a.
 HasUID a =&gt;
 Getting (UMap a) ChunkDB (UMap a) -&gt; TraceViewCat
-</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceView"><span class="hs-identifier hs-var">traceView</span></a></span><span> </span><span class="annot"><span class="annottext">Getting (UMap GenDefn) ChunkDB (UMap GenDefn)
-Lens' ChunkDB (UMap GenDefn)
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceView"><span class="hs-identifier hs-var">traceView</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' ChunkDB (UMap GenDefn)
 </span><span class="hs-identifier hs-var">gendefTable</span></span><span>
 </span><span id="line-45"></span><span>
 </span><span id="line-46"></span><span class="hs-comment">-- | Traceabiliy viewing theory models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-47"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-type">tvTheoryModels</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-48"></span><span id="tvTheoryModels"><span class="annot"><span class="annottext">tvTheoryModels :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var hs-var">tvTheoryModels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getting (UMap TheoryModel) ChunkDB (UMap TheoryModel)
--&gt; TraceViewCat
-forall a.
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var hs-var">tvTheoryModels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a.
 HasUID a =&gt;
 Getting (UMap a) ChunkDB (UMap a) -&gt; TraceViewCat
-</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceView"><span class="hs-identifier hs-var">traceView</span></a></span><span> </span><span class="annot"><span class="annottext">Getting (UMap TheoryModel) ChunkDB (UMap TheoryModel)
-Lens' ChunkDB (UMap TheoryModel)
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceView"><span class="hs-identifier hs-var">traceView</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' ChunkDB (UMap TheoryModel)
 </span><span class="hs-identifier hs-var">theoryModelTable</span></span><span>
 </span><span id="line-49"></span><span>
 </span><span id="line-50"></span><span class="hs-comment">-- | Traceabiliy viewing instance models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-51"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-type">tvInsModels</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-52"></span><span id="tvInsModels"><span class="annot"><span class="annottext">tvInsModels :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var hs-var">tvInsModels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getting (UMap InstanceModel) ChunkDB (UMap InstanceModel)
--&gt; TraceViewCat
-forall a.
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var hs-var">tvInsModels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a.
 HasUID a =&gt;
 Getting (UMap a) ChunkDB (UMap a) -&gt; TraceViewCat
-</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceView"><span class="hs-identifier hs-var">traceView</span></a></span><span> </span><span class="annot"><span class="annottext">Getting (UMap InstanceModel) ChunkDB (UMap InstanceModel)
-Lens' ChunkDB (UMap InstanceModel)
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceView"><span class="hs-identifier hs-var">traceView</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' ChunkDB (UMap InstanceModel)
 </span><span class="hs-identifier hs-var">insmodelTable</span></span><span>
 </span><span id="line-53"></span><span>
 </span><span id="line-54"></span><span class="hs-comment">-- | Traceabiliy viewing goals. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-55"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-type">tvGoals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-56"></span><span id="tvGoals"><span class="annot"><span class="annottext">tvGoals :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var hs-var">tvGoals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; TraceViewCat
-forall c. Concept c =&gt; c -&gt; TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var hs-var">tvGoals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. Concept c =&gt; c -&gt; TraceViewCat
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceViewCC"><span class="hs-identifier hs-var">traceViewCC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">goalStmtDom</span></span><span>
 </span><span id="line-57"></span><span>
 </span><span id="line-58"></span><span class="hs-comment">-- | Traceabiliy viewing requirements. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-59"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-type">tvReqs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-60"></span><span id="tvReqs"><span class="annot"><span class="annottext">tvReqs :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var hs-var">tvReqs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; TraceViewCat
-forall c. Concept c =&gt; c -&gt; TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var hs-var">tvReqs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. Concept c =&gt; c -&gt; TraceViewCat
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceViewCC"><span class="hs-identifier hs-var">traceViewCC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">reqDom</span></span><span>
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="hs-comment">-- | Traceabiliy viewing changes. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.</span><span>
 </span><span id="line-63"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-type">tvChanges</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span>
 </span><span id="line-64"></span><span id="tvChanges"><span class="annot"><span class="annottext">tvChanges :: TraceViewCat
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var hs-var">tvChanges</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; TraceViewCat
-forall c. Concept c =&gt; c -&gt; TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var hs-var">tvChanges</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. Concept c =&gt; c -&gt; TraceViewCat
 </span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceViewCC"><span class="hs-identifier hs-var">traceViewCC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">chgProbDom</span></span><span>
 </span><span id="line-65"></span><span>
@@ -146,22 +128,20 @@ forall c. Concept c =&gt; c -&gt; TraceViewCat
 -&gt; [TraceViewCat]
 -&gt; TraceConfig
 </span><a href="Drasil.DocumentLanguage.Core.html#TraceConfig"><span class="hs-identifier hs-var">TraceConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; UID
-</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TraceMatAvsA&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;TraceMatAvsA&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span>
-</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; CI -&gt; NP
-forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThePP`</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-70"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;and Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
@@ -177,41 +157,33 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 -&gt; [TraceViewCat]
 -&gt; TraceConfig
 </span><a href="Drasil.DocumentLanguage.Core.html#TraceConfig"><span class="hs-identifier hs-var">TraceConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; UID
-</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TraceMatAvsAll&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;TraceMatAvsAll&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.dataDefn</span></span><span class="hs-special">,</span><span>
-</span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">requirement</span></span><span class="hs-special">,</span><span>
-</span><span id="line-76"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span id="line-76"></span><span>  </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">likelyChg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">likelyChg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">unlikelyChg</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; CI -&gt; NP
-forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">unlikelyChg</span></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThePP`</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-77"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span id="line-77"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;and Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">item</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">]</span><span>
@@ -233,30 +205,27 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 -&gt; [TraceViewCat]
 -&gt; TraceConfig
 </span><a href="Drasil.DocumentLanguage.Core.html#TraceConfig"><span class="hs-identifier hs-var">TraceConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; UID
-</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TraceMatRefvsRef&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;TraceMatRefvsRef&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.dataDefn</span></span><span class="hs-special">,</span><span>
-</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.inModel</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;with each other&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;with each other&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">item</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;and Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">)</span><span>
 </span><span id="line-85"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
@@ -273,42 +242,38 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-88"></span><span class="hs-comment">-- | Records other requirements. Converts the 'SystemInformation' into a 'TraceConfig'.</span><span>
 </span><span id="line-89"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatOtherReq"><span class="hs-identifier hs-type">traceMatOtherReq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TraceConfig"><span class="hs-identifier hs-type">TraceConfig</span></a></span><span>
 </span><span id="line-90"></span><span id="traceMatOtherReq"><span class="annot"><span class="annottext">traceMatOtherReq :: SystemInformation -&gt; TraceConfig
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatOtherReq"><span class="hs-identifier hs-var hs-var">traceMatOtherReq</span></a></span></span><span> </span><span id="local-6989586621679128801"><span class="annot"><span class="annottext">si :: SystemInformation
-</span><a href="#local-6989586621679128801"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatOtherReq"><span class="hs-identifier hs-var hs-var">traceMatOtherReq</span></a></span></span><span> </span><span id="local-6989586621679093728"><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679093728"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
 -&gt; [Sentence]
 -&gt; Sentence
 -&gt; [TraceViewCat]
 -&gt; [TraceViewCat]
 -&gt; TraceConfig
 </span><a href="Drasil.DocumentLanguage.Core.html#TraceConfig"><span class="hs-identifier hs-var">TraceConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; UID
-</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TraceMatAllvsR&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(CI -&gt; Sentence) -&gt; Sentence
-</span><a href="#local-6989586621679128800"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">mkUid</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;TraceMatAllvsR&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(CI -&gt; Sentence) -&gt; Sentence
+</span><a href="#local-6989586621679093727"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;on the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;on the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.inModel</span></span><span class="hs-special">]</span><span>
 </span><span id="line-92"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(CI -&gt; Sentence) -&gt; Sentence
-</span><a href="#local-6989586621679128800"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="#local-6989586621679093727"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;and Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">item</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
@@ -319,77 +284,66 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-94"></span><span>    </span><span id="local-6989586621679128800"><span class="annot"><span class="annottext">x :: (CI -&gt; Sentence) -&gt; Sentence
-</span><a href="#local-6989586621679128800"><span class="hs-identifier hs-var hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679128799"><span class="annot"><span class="annottext">g :: CI -&gt; Sentence
-</span><a href="#local-6989586621679128799"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; (TraceViewCat, CI) -&gt; Sentence)
--&gt; Sentence -&gt; [(TraceViewCat, CI)] -&gt; Sentence
-forall (t :: * -&gt; *) b a.
+</span><span id="line-94"></span><span>    </span><span id="local-6989586621679093727"><span class="annot"><span class="annottext">x :: (CI -&gt; Sentence) -&gt; Sentence
+</span><a href="#local-6989586621679093727"><span class="hs-identifier hs-var hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679093721"><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><a href="#local-6989586621679093721"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) b a.
 Foldable t =&gt;
 (b -&gt; a -&gt; b) -&gt; b -&gt; t a -&gt; b
-</span><span class="hs-identifier hs-var">foldl</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679128797"><span class="annot"><span class="annottext">a :: Sentence
-</span><a href="#local-6989586621679128797"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679128796"><span class="annot"><span class="annottext">f :: TraceViewCat
-</span><a href="#local-6989586621679128796"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679128795"><span class="annot"><span class="annottext">t :: CI
-</span><a href="#local-6989586621679128795"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679128797"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><a href="#local-6989586621679128794"><span class="hs-operator hs-var">`sC'`</span></a></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
-</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferrers"><span class="hs-identifier hs-var">traceMReferrers</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TraceViewCat -&gt; ChunkDB -&gt; [UID] -&gt; [UID]
-forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">foldl</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679093719"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093719"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679093718"><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="#local-6989586621679093718"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">,</span><span id="local-6989586621679093717"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679093717"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093719"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679093716"><span class="hs-operator hs-var">`sC'`</span></a></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferrers"><span class="hs-identifier hs-var">traceMReferrers</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
-</span><a href="#local-6989586621679128796"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [UID] -&gt; [UID]
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679093718"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
-</span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128801"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679093728"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-95"></span><span>      </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
-</span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128801"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-96"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
-forall a. Monoid a =&gt; a
+</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679093728"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-96"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a. Monoid a =&gt; a
 </span><span class="hs-identifier hs-var">mempty</span></span><span>
-</span><span id="line-97"></span><span>      </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-</span><a href="#local-6989586621679128799"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679128795"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
-forall a. Monoid a =&gt; a
+</span><span id="line-97"></span><span>      </span><span class="annot"><span class="annottext">[UID]
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><a href="#local-6989586621679093721"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679093717"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Monoid a =&gt; a
 </span><span class="hs-identifier hs-var">mempty</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">requirement</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">goalStmt</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-98"></span><span>    </span><span id="local-6989586621679128794"><span class="annot"><span class="annottext">sC' :: Sentence -&gt; Sentence -&gt; Sentence
-</span><a href="#local-6989586621679128794"><span class="hs-identifier hs-var hs-var">sC'</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">EmptyS</span></span><span> </span><span id="local-6989586621679128791"><span class="annot"><span class="annottext">b :: Sentence
-</span><a href="#local-6989586621679128791"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679128791"><span class="hs-identifier hs-var">b</span></a></span><span>
-</span><span id="line-99"></span><span>    </span><span class="annot"><a href="#local-6989586621679128794"><span class="hs-identifier hs-var">sC'</span></a></span><span> </span><span id="local-6989586621679128790"><span class="annot"><span class="annottext">a :: Sentence
-</span><a href="#local-6989586621679128790"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">EmptyS</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679128790"><span class="hs-identifier hs-var">a</span></a></span><span>
-</span><span id="line-100"></span><span>    </span><span class="annot"><a href="#local-6989586621679128794"><span class="hs-identifier hs-var">sC'</span></a></span><span> </span><span id="local-6989586621679128789"><span class="annot"><span class="annottext">a :: Sentence
-</span><a href="#local-6989586621679128789"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679128788"><span class="annot"><span class="annottext">b :: Sentence
-</span><a href="#local-6989586621679128788"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-98"></span><span>    </span><span id="local-6989586621679093716"><span class="annot"><span class="annottext">sC' :: Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679093716"><span class="hs-identifier hs-var hs-var">sC'</span></a></span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span id="local-6989586621679093713"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093713"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093713"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-99"></span><span>    </span><span class="annot"><a href="#local-6989586621679093716"><span class="hs-identifier hs-var">sC'</span></a></span><span> </span><span id="local-6989586621679093712"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093712"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093712"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><span id="line-100"></span><span>    </span><span class="annot"><a href="#local-6989586621679093716"><span class="hs-identifier hs-var">sC'</span></a></span><span> </span><span id="local-6989586621679093711"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093711"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679093710"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093710"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sC</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679128789"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679128788"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679093711"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679093710"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-101"></span><span>
 </span><span id="line-102"></span><span class="hs-comment">-- | Contains traceability matrix assumptions, other assumptions, refinement, and other requirements.</span><span>
 </span><span id="line-103"></span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatStandard"><span class="hs-identifier hs-type">traceMatStandard</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TraceConfig"><span class="hs-identifier hs-type">TraceConfig</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-104"></span><span id="traceMatStandard"><span class="annot"><span class="annottext">traceMatStandard :: SystemInformation -&gt; [TraceConfig]
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatStandard"><span class="hs-identifier hs-var hs-var">traceMatStandard</span></a></span></span><span> </span><span id="local-6989586621679128786"><span class="annot"><span class="annottext">s :: SystemInformation
-</span><a href="#local-6989586621679128786"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((SystemInformation -&gt; TraceConfig) -&gt; TraceConfig)
--&gt; [SystemInformation -&gt; TraceConfig] -&gt; [TraceConfig]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(SystemInformation -&gt; TraceConfig)
--&gt; SystemInformation -&gt; TraceConfig
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatStandard"><span class="hs-identifier hs-var hs-var">traceMatStandard</span></a></span></span><span> </span><span id="local-6989586621679093708"><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679093708"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679128786"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceConfig -&gt; SystemInformation -&gt; TraceConfig
-forall a b. a -&gt; b -&gt; a
+</span><a href="#local-6989586621679093708"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">TraceConfig
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatAssumpAssump"><span class="hs-identifier hs-var">traceMatAssumpAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceConfig -&gt; SystemInformation -&gt; TraceConfig
-forall a b. a -&gt; b -&gt; a
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatAssumpAssump"><span class="hs-identifier hs-var">traceMatAssumpAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">TraceConfig
-</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatAssumpOther"><span class="hs-identifier hs-var">traceMatAssumpOther</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceConfig -&gt; SystemInformation -&gt; TraceConfig
-forall a b. a -&gt; b -&gt; a
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatAssumpOther"><span class="hs-identifier hs-var">traceMatAssumpOther</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">TraceConfig
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatRefinement"><span class="hs-identifier hs-var">traceMatRefinement</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">SystemInformation -&gt; TraceConfig

@@ -1,0 +1,4 @@
+digraph purpose{
+Purpose	[shape=oval, color=red2, label="Purpose"];
+Purpose -> Sentence;
+}

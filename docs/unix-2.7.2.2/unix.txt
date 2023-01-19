@@ -132,9 +132,9 @@ Null :: DL
 Next :: DL
 Default :: DL
 DLHandle :: Ptr () -> DL
-instance GHC.Show.Show System.Posix.DynamicLinker.Prim.DL
 instance GHC.Read.Read System.Posix.DynamicLinker.Prim.RTLDFlags
 instance GHC.Show.Show System.Posix.DynamicLinker.Prim.RTLDFlags
+instance GHC.Show.Show System.Posix.DynamicLinker.Prim.DL
 
 
 -- | Dynamic linker support through dlopen()
@@ -1762,9 +1762,9 @@ ResourceStackSize :: Resource
 ResourceTotalMemory :: Resource
 getResourceLimit :: Resource -> IO ResourceLimits
 setResourceLimit :: Resource -> ResourceLimits -> IO ()
-instance GHC.Classes.Eq System.Posix.Resource.ResourceLimits
-instance GHC.Classes.Eq System.Posix.Resource.ResourceLimit
 instance GHC.Classes.Eq System.Posix.Resource.Resource
+instance GHC.Classes.Eq System.Posix.Resource.ResourceLimit
+instance GHC.Classes.Eq System.Posix.Resource.ResourceLimits
 
 
 -- | POSIX named semaphore support.
@@ -2625,12 +2625,12 @@ setEffectiveGroupID :: GroupID -> IO ()
 -- | <tt>setGroups</tt> calls <tt>setgroups</tt> to set the list of
 --   supplementary <tt>GroupID</tt>s associated with the current process.
 setGroups :: [GroupID] -> IO ()
-instance GHC.Classes.Eq System.Posix.User.UserEntry
-instance GHC.Read.Read System.Posix.User.UserEntry
-instance GHC.Show.Show System.Posix.User.UserEntry
 instance GHC.Classes.Eq System.Posix.User.GroupEntry
 instance GHC.Read.Read System.Posix.User.GroupEntry
 instance GHC.Show.Show System.Posix.User.GroupEntry
+instance GHC.Classes.Eq System.Posix.User.UserEntry
+instance GHC.Read.Read System.Posix.User.UserEntry
+instance GHC.Show.Show System.Posix.User.UserEntry
 
 
 -- | <a>POSIX.1-2008</a> support with <tt>ByteString</tt> file paths and
@@ -2650,6 +2650,26 @@ module System.Posix.ByteString
 
 -- | A literal POSIX file path
 type RawFilePath = ByteString
+c_dlclose :: Ptr () -> IO CInt
+c_dlerror :: IO CString
+c_dlopen :: CString -> CInt -> IO (Ptr ())
+c_dlsym :: Ptr () -> CString -> IO (FunPtr a)
+
+-- | <i>Deprecated: defaults to True</i>
+haveRtldLocal :: Bool
+
+-- | On some hosts (e.g. SuSe and Ubuntu Linux) <tt>RTLD_NEXT</tt> (and
+--   <tt>RTLD_DEFAULT</tt>) are not visible without setting the macro
+--   <tt>_GNU_SOURCE</tt>. Since we don't want to define this macro, you
+--   can use the function <a>haveRtldNext</a> to check wether the flag
+--   <a>Next</a> is available. Ideally, this will be optimized by the
+--   compiler so that it should be as efficient as an <tt>#ifdef</tt>.
+--   
+--   If you fail to test the flag and use it although it is undefined,
+--   <a>packDL</a> will throw an error.
+haveRtldNext :: Bool
+packDL :: DL -> Ptr ()
+packRTLDFlags :: [RTLDFlags] -> CInt
 
 -- | Flags for <a>dlsym</a>. Notice that <a>Next</a> might not be available
 --   on your particular platform! Use <a>haveRtldNext</a>.
@@ -2667,26 +2687,6 @@ RTLD_LAZY :: RTLDFlags
 RTLD_NOW :: RTLDFlags
 RTLD_GLOBAL :: RTLDFlags
 RTLD_LOCAL :: RTLDFlags
-c_dlclose :: Ptr () -> IO CInt
-c_dlerror :: IO CString
-c_dlsym :: Ptr () -> CString -> IO (FunPtr a)
-c_dlopen :: CString -> CInt -> IO (Ptr ())
-
--- | On some hosts (e.g. SuSe and Ubuntu Linux) <tt>RTLD_NEXT</tt> (and
---   <tt>RTLD_DEFAULT</tt>) are not visible without setting the macro
---   <tt>_GNU_SOURCE</tt>. Since we don't want to define this macro, you
---   can use the function <a>haveRtldNext</a> to check wether the flag
---   <a>Next</a> is available. Ideally, this will be optimized by the
---   compiler so that it should be as efficient as an <tt>#ifdef</tt>.
---   
---   If you fail to test the flag and use it although it is undefined,
---   <a>packDL</a> will throw an error.
-haveRtldNext :: Bool
-
--- | <i>Deprecated: defaults to True</i>
-haveRtldLocal :: Bool
-packRTLDFlags :: [RTLDFlags] -> CInt
-packDL :: DL -> Ptr ()
 dlclose :: DL -> IO ()
 dlerror :: IO String
 
@@ -2705,6 +2705,26 @@ withDL_ :: RawFilePath -> [RTLDFlags] -> (DL -> IO a) -> IO ()
 
 -- | <a>POSIX.1-2008</a> support
 module System.Posix
+c_dlclose :: Ptr () -> IO CInt
+c_dlerror :: IO CString
+c_dlopen :: CString -> CInt -> IO (Ptr ())
+c_dlsym :: Ptr () -> CString -> IO (FunPtr a)
+
+-- | <i>Deprecated: defaults to True</i>
+haveRtldLocal :: Bool
+
+-- | On some hosts (e.g. SuSe and Ubuntu Linux) <tt>RTLD_NEXT</tt> (and
+--   <tt>RTLD_DEFAULT</tt>) are not visible without setting the macro
+--   <tt>_GNU_SOURCE</tt>. Since we don't want to define this macro, you
+--   can use the function <a>haveRtldNext</a> to check wether the flag
+--   <a>Next</a> is available. Ideally, this will be optimized by the
+--   compiler so that it should be as efficient as an <tt>#ifdef</tt>.
+--   
+--   If you fail to test the flag and use it although it is undefined,
+--   <a>packDL</a> will throw an error.
+haveRtldNext :: Bool
+packDL :: DL -> Ptr ()
+packRTLDFlags :: [RTLDFlags] -> CInt
 
 -- | Flags for <a>dlsym</a>. Notice that <a>Next</a> might not be available
 --   on your particular platform! Use <a>haveRtldNext</a>.
@@ -2722,26 +2742,6 @@ RTLD_LAZY :: RTLDFlags
 RTLD_NOW :: RTLDFlags
 RTLD_GLOBAL :: RTLDFlags
 RTLD_LOCAL :: RTLDFlags
-c_dlclose :: Ptr () -> IO CInt
-c_dlerror :: IO CString
-c_dlsym :: Ptr () -> CString -> IO (FunPtr a)
-c_dlopen :: CString -> CInt -> IO (Ptr ())
-
--- | On some hosts (e.g. SuSe and Ubuntu Linux) <tt>RTLD_NEXT</tt> (and
---   <tt>RTLD_DEFAULT</tt>) are not visible without setting the macro
---   <tt>_GNU_SOURCE</tt>. Since we don't want to define this macro, you
---   can use the function <a>haveRtldNext</a> to check wether the flag
---   <a>Next</a> is available. Ideally, this will be optimized by the
---   compiler so that it should be as efficient as an <tt>#ifdef</tt>.
---   
---   If you fail to test the flag and use it although it is undefined,
---   <a>packDL</a> will throw an error.
-haveRtldNext :: Bool
-
--- | <i>Deprecated: defaults to True</i>
-haveRtldLocal :: Bool
-packRTLDFlags :: [RTLDFlags] -> CInt
-packDL :: DL -> Ptr ()
 dlclose :: DL -> IO ()
 dlerror :: IO String
 

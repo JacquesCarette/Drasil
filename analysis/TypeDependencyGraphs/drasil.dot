@@ -265,6 +265,8 @@ digraph alltypes {
 		ReadMeInfo -> FilePath;
 		ReadMeInfo -> Contributor;
 		ReadMeInfo -> CaseName;
+		ReadMeInfo -> ExamplePurpose;
+		ReadMeInfo -> ExampleDescr;
 		}
 		subgraph langabbrev{
 		LangAbbrev	[shape=oval, color=red2, label="LangAbbrev"];
@@ -277,6 +279,14 @@ digraph alltypes {
 		subgraph casename{
 		CaseName	[shape=oval, color=red2, label="CaseName"];
 		CaseName -> String;
+		}
+		subgraph examplepurpose{
+		ExamplePurpose	[shape=oval, color=red2, label="ExamplePurpose"];
+		ExamplePurpose -> String;
+		}
+		subgraph exampledescr{
+		ExampleDescr	[shape=oval, color=red2, label="ExampleDescr"];
+		ExampleDescr -> String;
 		}
 		subgraph contributor{
 		Contributor	[shape=oval, color=red2, label="Contributor"];
@@ -760,6 +770,8 @@ digraph alltypes {
 		CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
 		CodeSpec -> Name;
 		CodeSpec -> a;
+		CodeSpec -> Purpose;
+		CodeSpec -> Background;
 		CodeSpec -> Input;
 		CodeSpec -> Derived;
 		CodeSpec -> Output;
@@ -4042,6 +4054,14 @@ digraph alltypes {
 		Blocka -> a;
 		Blocka -> SystemInformation;
 		Blocka -> BibRef;
+		}
+		subgraph purpose{
+		Purpose	[shape=oval, color=red2, label="Purpose"];
+		Purpose -> Sentence;
+		}
+		subgraph background{
+		Background	[shape=oval, color=red2, label="Background"];
+		Background -> Sentence;
 		}
 		subgraph refmapa{
 		RefMapa	[shape=oval, color=red2, label="RefMapa"];

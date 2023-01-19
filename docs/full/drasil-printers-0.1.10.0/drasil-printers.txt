@@ -232,8 +232,12 @@ module Language.Drasil.Markdown.CreateMd
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc
 
--- | Example title and purpose section.
-introInfo :: String -> [String] -> Doc
+-- | Example title, authors, and maybe purpose section.
+introInfo :: String -> [String] -> Maybe String -> Doc
+
+-- | <tt>What</tt> section in generated README file, does not display if
+--   empty
+whatInfo :: Maybe String -> Doc
 
 -- | Language version section.
 verInfo :: String -> String -> Doc
@@ -343,7 +347,7 @@ Emph :: Fonts
 data Spacing
 Thin :: Spacing
 
--- | A Label is just a <a>Spec</a> (sentence).
+-- | A Label is just a <a>Expr</a> (sentence).
 type Label = Spec
 
 -- | Redefine the <a>Expr</a> type from Language.Drasil to be more suitable
@@ -416,7 +420,7 @@ EmptyS :: Spec
 -- | Quotes are different in different languages.
 Quote :: Spec -> Spec
 
--- | Newline. | A title is just a sentence (<a>Spec</a>).
+-- | Newline. | A title is just a sentence (<a>Expr</a>).
 HARDNL :: Spec
 infixr 5 :+:
 type Title = Spec
@@ -523,7 +527,7 @@ wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
 --   
 --   <ul>
 --   <li>The first argument is tag name.</li>
---   <li>The <a>String</a> in the pair is the attribute name,</li>
+--   <li>The <a>Space</a> in the pair is the attribute name,</li>
 --   <li>The <a>Doc</a> is the value for different attributes.</li>
 --   </ul>
 wrapInside :: String -> [(String, Doc)] -> Doc
@@ -1340,7 +1344,7 @@ toText :: D -> D
 -- | MonadReader calls this <tt>ask</tt>.
 getCtx :: PrintLaTeX MathContext
 
--- | Since Text.PrettyPrint steals &lt;&gt;, use %% instead for mappend.
+-- | Since Text.PrettyPrint steals &lt;&gt;, use %% instead for $$.
 (%%) :: D -> D -> D
 
 -- | Lifts Text.PrettyPrint's $+$. Above, with no overlapping. Associative.
@@ -1360,7 +1364,7 @@ hpunctuate :: Doc -> [D] -> D
 -- | MathContext operations.
 lub :: MathContext -> MathContext -> MathContext
 
--- | Latex type. Holds <a>String</a>s.
+-- | Latex type. Holds <a>Space</a>s.
 newtype Latex
 L :: String -> Latex
 [unPL] :: Latex -> String
@@ -1621,8 +1625,8 @@ module Language.Drasil.TeX.Preamble
 
 -- | Generates LaTeX document preamble.
 genPreamble :: [LayoutObj] -> D
-instance GHC.Classes.Eq Language.Drasil.TeX.Preamble.Def
 instance GHC.Classes.Eq Language.Drasil.TeX.Preamble.Package
+instance GHC.Classes.Eq Language.Drasil.TeX.Preamble.Def
 
 
 -- | Defines main LaTeX printer functions. For more information on each of
@@ -1638,7 +1642,7 @@ pExpr :: Expr -> D
 -- | Prints units.
 pUnit :: USymb -> D
 
--- | Prints all <a>Spec</a>s.
+-- | Prints all <a>Expr</a>s.
 spec :: Spec -> D
 
 
@@ -1771,8 +1775,8 @@ makeCSS :: Document -> Doc
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc
 
--- | Example title and purpose section.
-introInfo :: String -> [String] -> Doc
+-- | Example title, authors, and maybe purpose section.
+introInfo :: String -> [String] -> Maybe String -> Doc
 
 -- | Language version section.
 verInfo :: String -> String -> Doc
@@ -1796,6 +1800,10 @@ extLibSec :: [(String, String)] -> [String] -> Doc
 
 -- | End section.
 endNote :: [String] -> Doc
+
+-- | <tt>What</tt> section in generated README file, does not display if
+--   empty
+whatInfo :: Maybe String -> Doc
 
 -- | Data is either linear or not.
 data Linearity

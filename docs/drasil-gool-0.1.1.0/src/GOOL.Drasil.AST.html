@@ -20,9 +20,7 @@
 </span><span id="line-20"></span><span class="hs-comment">-- Used for state variables and methods</span><span>
 </span><span id="line-21"></span><span class="hs-comment">-- Eq is needed for organizing methods and state variables into public and </span><span>
 </span><span id="line-22"></span><span class="hs-comment">-- private groups for C++ class rendering</span><span>
-</span><span id="line-23"></span><span class="hs-keyword">data</span><span> </span><span id="ScopeTag"><span class="annot"><a href="GOOL.Drasil.AST.html#ScopeTag"><span class="hs-identifier hs-var">ScopeTag</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Pub"><span class="annot"><a href="GOOL.Drasil.AST.html#Pub"><span class="hs-identifier hs-var">Pub</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Priv"><span class="annot"><a href="GOOL.Drasil.AST.html#Priv"><span class="hs-identifier hs-var">Priv</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679387097"><span id="local-6989586621679387099"><span class="annot"><span class="annottext">ScopeTag -&gt; ScopeTag -&gt; Bool
-(ScopeTag -&gt; ScopeTag -&gt; Bool)
--&gt; (ScopeTag -&gt; ScopeTag -&gt; Bool) -&gt; Eq ScopeTag
+</span><span id="line-23"></span><span class="hs-keyword">data</span><span> </span><span id="ScopeTag"><span class="annot"><a href="GOOL.Drasil.AST.html#ScopeTag"><span class="hs-identifier hs-var">ScopeTag</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Pub"><span class="annot"><a href="GOOL.Drasil.AST.html#Pub"><span class="hs-identifier hs-var">Pub</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Priv"><span class="annot"><a href="GOOL.Drasil.AST.html#Priv"><span class="hs-identifier hs-var">Priv</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679311900"><span id="local-6989586621679311902"><span class="annot"><span class="annottext">ScopeTag -&gt; ScopeTag -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: ScopeTag -&gt; ScopeTag -&gt; Bool
 $c/= :: ScopeTag -&gt; ScopeTag -&gt; Bool
@@ -33,30 +31,19 @@ $c== :: ScopeTag -&gt; ScopeTag -&gt; Bool
 </span><span id="line-25"></span><span class="hs-comment">-- Used in method exception map and call map. </span><span>
 </span><span id="line-26"></span><span class="hs-comment">-- Qualification first, name second</span><span>
 </span><span id="line-27"></span><span class="hs-comment">-- Eq and Ord needed for map lookups</span><span>
-</span><span id="line-28"></span><span class="hs-keyword">data</span><span> </span><span id="QualifiedName"><span class="annot"><a href="GOOL.Drasil.AST.html#QualifiedName"><span class="hs-identifier hs-var">QualifiedName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="QN"><span class="annot"><a href="GOOL.Drasil.AST.html#QN"><span class="hs-identifier hs-var">QN</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679387091"><span id="local-6989586621679387093"><span class="annot"><span class="annottext">QualifiedName -&gt; QualifiedName -&gt; Bool
-(QualifiedName -&gt; QualifiedName -&gt; Bool)
--&gt; (QualifiedName -&gt; QualifiedName -&gt; Bool) -&gt; Eq QualifiedName
+</span><span id="line-28"></span><span class="hs-keyword">data</span><span> </span><span id="QualifiedName"><span class="annot"><a href="GOOL.Drasil.AST.html#QualifiedName"><span class="hs-identifier hs-var">QualifiedName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="QN"><span class="annot"><a href="GOOL.Drasil.AST.html#QN"><span class="hs-identifier hs-var">QN</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679311890"><span id="local-6989586621679311896"><span class="annot"><span class="annottext">QualifiedName -&gt; QualifiedName -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: QualifiedName -&gt; QualifiedName -&gt; Bool
 $c/= :: QualifiedName -&gt; QualifiedName -&gt; Bool
 == :: QualifiedName -&gt; QualifiedName -&gt; Bool
 $c== :: QualifiedName -&gt; QualifiedName -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679387076"><span id="local-6989586621679387078"><span id="local-6989586621679387080"><span id="local-6989586621679387082"><span id="local-6989586621679387084"><span id="local-6989586621679387086"><span id="local-6989586621679387088"><span class="annot"><span class="annottext">Eq QualifiedName
-Eq QualifiedName =&gt;
-(QualifiedName -&gt; QualifiedName -&gt; Ordering)
--&gt; (QualifiedName -&gt; QualifiedName -&gt; Bool)
--&gt; (QualifiedName -&gt; QualifiedName -&gt; Bool)
--&gt; (QualifiedName -&gt; QualifiedName -&gt; Bool)
--&gt; (QualifiedName -&gt; QualifiedName -&gt; Bool)
--&gt; (QualifiedName -&gt; QualifiedName -&gt; QualifiedName)
--&gt; (QualifiedName -&gt; QualifiedName -&gt; QualifiedName)
--&gt; Ord QualifiedName
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679311863"><span id="local-6989586621679311865"><span id="local-6989586621679311868"><span id="local-6989586621679311871"><span id="local-6989586621679311874"><span id="local-6989586621679311879"><span id="local-6989586621679311885"><span class="annot"><span class="annottext">Eq QualifiedName
 QualifiedName -&gt; QualifiedName -&gt; Bool
 QualifiedName -&gt; QualifiedName -&gt; Ordering
 QualifiedName -&gt; QualifiedName -&gt; QualifiedName
 forall a.
-Eq a =&gt;
-(a -&gt; a -&gt; Ordering)
+Eq a
+-&gt; (a -&gt; a -&gt; Ordering)
 -&gt; (a -&gt; a -&gt; Bool)
 -&gt; (a -&gt; a -&gt; Bool)
 -&gt; (a -&gt; a -&gt; Bool)
@@ -78,7 +65,6 @@ $c&lt;= :: QualifiedName -&gt; QualifiedName -&gt; Bool
 $c&lt; :: QualifiedName -&gt; QualifiedName -&gt; Bool
 compare :: QualifiedName -&gt; QualifiedName -&gt; Ordering
 $ccompare :: QualifiedName -&gt; QualifiedName -&gt; Ordering
-$cp1Ord :: Eq QualifiedName
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-29"></span><span>
 </span><span id="line-30"></span><span class="annot"><a href="GOOL.Drasil.AST.html#qualName"><span class="hs-identifier hs-type">qualName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#QualifiedName"><span class="hs-identifier hs-type">QualifiedName</span></a></span><span>
@@ -92,23 +78,29 @@ $cp1Ord :: Eq QualifiedName
 </span><span id="line-36"></span><span>
 </span><span id="line-37"></span><span class="annot"><a href="GOOL.Drasil.AST.html#isSource"><span class="hs-identifier hs-type">isSource</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#FileType"><span class="hs-identifier hs-type">FileType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
 </span><span id="line-38"></span><span id="isSource"><span class="annot"><span class="annottext">isSource :: FileType -&gt; Bool
-</span><a href="GOOL.Drasil.AST.html#isSource"><span class="hs-identifier hs-var hs-var">isSource</span></a></span></span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#Header"><span class="hs-identifier hs-type">Header</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="GOOL.Drasil.AST.html#isSource"><span class="hs-identifier hs-var hs-var">isSource</span></a></span></span><span> </span><span class="annot"><span class="annottext">FileType
+</span><a href="GOOL.Drasil.AST.html#Header"><span class="hs-identifier hs-var">Header</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span>
-</span><span id="line-39"></span><span class="annot"><a href="GOOL.Drasil.AST.html#isSource"><span class="hs-identifier hs-var">isSource</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-39"></span><span class="annot"><a href="GOOL.Drasil.AST.html#isSource"><span class="hs-identifier hs-var">isSource</span></a></span><span> </span><span class="annot"><span class="annottext">FileType
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
 </span><span id="line-40"></span><span>
 </span><span id="line-41"></span><span class="hs-comment">-- Static means bound at compile-time, Dynamic at run-time, used in BindData </span><span>
 </span><span id="line-42"></span><span class="hs-comment">-- and VarData</span><span>
 </span><span id="line-43"></span><span class="hs-keyword">data</span><span> </span><span id="Binding"><span class="annot"><a href="GOOL.Drasil.AST.html#Binding"><span class="hs-identifier hs-var">Binding</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Static"><span class="annot"><a href="GOOL.Drasil.AST.html#Static"><span class="hs-identifier hs-var">Static</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Dynamic"><span class="annot"><a href="GOOL.Drasil.AST.html#Dynamic"><span class="hs-identifier hs-var">Dynamic</span></a></span></span><span>
 </span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span id="local-6989586621679387069"><span class="annot"><a href="GOOL.Drasil.AST.html#onBinding"><span class="hs-identifier hs-type">onBinding</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#Binding"><span class="hs-identifier hs-type">Binding</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679387069"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679387069"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679387069"><span class="hs-identifier hs-type">a</span></a></span></span><span>
-</span><span id="line-46"></span><span id="onBinding"><span class="annot"><span class="annottext">onBinding :: Binding -&gt; a -&gt; a -&gt; a
-</span><a href="GOOL.Drasil.AST.html#onBinding"><span class="hs-identifier hs-var hs-var">onBinding</span></a></span></span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#Static"><span class="hs-identifier hs-type">Static</span></a></span><span> </span><span id="local-6989586621679387068"><span class="annot"><span class="annottext">s :: a
-</span><a href="#local-6989586621679387068"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679387068"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-47"></span><span class="annot"><a href="GOOL.Drasil.AST.html#onBinding"><span class="hs-identifier hs-var">onBinding</span></a></span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#Dynamic"><span class="hs-identifier hs-type">Dynamic</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679387067"><span class="annot"><span class="annottext">d :: a
-</span><a href="#local-6989586621679387067"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679387067"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-45"></span><span id="local-6989586621679311990"><span class="annot"><a href="GOOL.Drasil.AST.html#onBinding"><span class="hs-identifier hs-type">onBinding</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#Binding"><span class="hs-identifier hs-type">Binding</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679311990"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679311990"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679311990"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-46"></span><span id="onBinding"><span class="annot"><span class="annottext">onBinding :: forall a. Binding -&gt; a -&gt; a -&gt; a
+</span><a href="GOOL.Drasil.AST.html#onBinding"><span class="hs-identifier hs-var hs-var">onBinding</span></a></span></span><span> </span><span class="annot"><span class="annottext">Binding
+</span><a href="GOOL.Drasil.AST.html#Static"><span class="hs-identifier hs-var">Static</span></a></span><span> </span><span id="local-6989586621679311855"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679311855"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679311855"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-47"></span><span class="annot"><a href="GOOL.Drasil.AST.html#onBinding"><span class="hs-identifier hs-var">onBinding</span></a></span><span> </span><span class="annot"><span class="annottext">Binding
+</span><a href="GOOL.Drasil.AST.html#Dynamic"><span class="hs-identifier hs-var">Dynamic</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679311854"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679311854"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679311854"><span class="hs-identifier hs-var">d</span></a></span><span>
 </span><span id="line-48"></span><span>
 </span><span id="line-49"></span><span class="hs-comment">-- Used as the underlying data type for Permanence in the C++ renderer</span><span>
 </span><span id="line-50"></span><span class="hs-keyword">data</span><span> </span><span id="BindData"><span class="annot"><a href="GOOL.Drasil.AST.html#BindData"><span class="hs-identifier hs-var">BindData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="BD"><span class="annot"><a href="GOOL.Drasil.AST.html#BD"><span class="hs-identifier hs-var">BD</span></a></span></span><span> </span><span class="hs-special">{</span><span id="bind"><span class="annot"><span class="annottext">BindData -&gt; Binding
@@ -133,13 +125,13 @@ $cp1Ord :: Eq QualifiedName
 </span><span id="line-61"></span><span class="hs-comment">-- Replace a FileData's ModData with a new ModData</span><span>
 </span><span id="line-62"></span><span class="annot"><a href="GOOL.Drasil.AST.html#updateFileMod"><span class="hs-identifier hs-type">updateFileMod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ModData"><span class="hs-identifier hs-type">ModData</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#FileData"><span class="hs-identifier hs-type">FileData</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#FileData"><span class="hs-identifier hs-type">FileData</span></a></span><span>
 </span><span id="line-63"></span><span id="updateFileMod"><span class="annot"><span class="annottext">updateFileMod :: ModData -&gt; FileData -&gt; FileData
-</span><a href="GOOL.Drasil.AST.html#updateFileMod"><span class="hs-identifier hs-var hs-var">updateFileMod</span></a></span></span><span> </span><span id="local-6989586621679387063"><span class="annot"><span class="annottext">m :: ModData
-</span><a href="#local-6989586621679387063"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679387062"><span class="annot"><span class="annottext">f :: FileData
-</span><a href="#local-6989586621679387062"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; ModData -&gt; FileData
+</span><a href="GOOL.Drasil.AST.html#updateFileMod"><span class="hs-identifier hs-var hs-var">updateFileMod</span></a></span></span><span> </span><span id="local-6989586621679311850"><span class="annot"><span class="annottext">ModData
+</span><a href="#local-6989586621679311850"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679311849"><span class="annot"><span class="annottext">FileData
+</span><a href="#local-6989586621679311849"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; ModData -&gt; FileData
 </span><a href="GOOL.Drasil.AST.html#fileD"><span class="hs-identifier hs-var">fileD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FileData -&gt; String
-</span><a href="GOOL.Drasil.AST.html#filePath"><span class="hs-identifier hs-var hs-var">filePath</span></a></span><span> </span><span class="annot"><span class="annottext">FileData
-</span><a href="#local-6989586621679387062"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModData
-</span><a href="#local-6989586621679387063"><span class="hs-identifier hs-var">m</span></a></span><span>
+</span><a href="GOOL.Drasil.AST.html#filePath"><span class="hs-identifier hs-var">filePath</span></a></span><span> </span><span class="annot"><span class="annottext">FileData
+</span><a href="#local-6989586621679311849"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModData
+</span><a href="#local-6989586621679311850"><span class="hs-identifier hs-var">m</span></a></span><span>
 </span><span id="line-64"></span><span>
 </span><span id="line-65"></span><span class="hs-comment">-- Used as the underlying data type for Functions in all renderers</span><span>
 </span><span id="line-66"></span><span class="hs-keyword">data</span><span> </span><span id="FuncData"><span class="annot"><a href="GOOL.Drasil.AST.html#FuncData"><span class="hs-identifier hs-var">FuncData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="FD"><span class="annot"><a href="GOOL.Drasil.AST.html#FD"><span class="hs-identifier hs-var">FD</span></a></span></span><span> </span><span class="hs-special">{</span><span id="fType"><span class="annot"><span class="annottext">FuncData -&gt; TypeData
@@ -163,17 +155,16 @@ $cp1Ord :: Eq QualifiedName
 </span><span id="line-76"></span><span>
 </span><span id="line-77"></span><span class="annot"><a href="GOOL.Drasil.AST.html#updateMod"><span class="hs-identifier hs-type">updateMod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ModData"><span class="hs-identifier hs-type">ModData</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ModData"><span class="hs-identifier hs-type">ModData</span></a></span><span>
 </span><span id="line-78"></span><span id="updateMod"><span class="annot"><span class="annottext">updateMod :: (Doc -&gt; Doc) -&gt; ModData -&gt; ModData
-</span><a href="GOOL.Drasil.AST.html#updateMod"><span class="hs-identifier hs-var hs-var">updateMod</span></a></span></span><span> </span><span id="local-6989586621679387059"><span class="annot"><span class="annottext">f :: Doc -&gt; Doc
-</span><a href="#local-6989586621679387059"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679387058"><span class="annot"><span class="annottext">m :: ModData
-</span><a href="#local-6989586621679387058"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc -&gt; ModData
+</span><a href="GOOL.Drasil.AST.html#updateMod"><span class="hs-identifier hs-var hs-var">updateMod</span></a></span></span><span> </span><span id="local-6989586621679311846"><span class="annot"><span class="annottext">Doc -&gt; Doc
+</span><a href="#local-6989586621679311846"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679311845"><span class="annot"><span class="annottext">ModData
+</span><a href="#local-6989586621679311845"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc -&gt; ModData
 </span><a href="GOOL.Drasil.AST.html#md"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModData -&gt; String
-</span><a href="GOOL.Drasil.AST.html#name"><span class="hs-identifier hs-var hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">ModData
-</span><a href="#local-6989586621679387058"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
-</span><a href="#local-6989586621679387059"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="GOOL.Drasil.AST.html#name"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">ModData
+</span><a href="#local-6989586621679311845"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
+</span><a href="#local-6989586621679311846"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ModData -&gt; Doc
-</span><a href="GOOL.Drasil.AST.html#modDoc"><span class="hs-identifier hs-var hs-var">modDoc</span></a></span><span> </span><span class="annot"><span class="annottext">ModData
-</span><a href="#local-6989586621679387058"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
+</span><a href="GOOL.Drasil.AST.html#modDoc"><span class="hs-identifier hs-var">modDoc</span></a></span><span> </span><span class="annot"><span class="annottext">ModData
+</span><a href="#local-6989586621679311845"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-79"></span><span>
 </span><span id="line-80"></span><span class="hs-comment">-- Used as the underlying data type for Methods in all renderers except C++</span><span>
 </span><span id="line-81"></span><span class="hs-keyword">newtype</span><span> </span><span id="MethodData"><span class="annot"><a href="GOOL.Drasil.AST.html#MethodData"><span class="hs-identifier hs-var">MethodData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="MthD"><span class="annot"><a href="GOOL.Drasil.AST.html#MthD"><span class="hs-identifier hs-var">MthD</span></a></span></span><span> </span><span class="hs-special">{</span><span id="mthdDoc"><span class="annot"><span class="annottext">MethodData -&gt; Doc
@@ -186,15 +177,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-85"></span><span>
 </span><span id="line-86"></span><span class="annot"><a href="GOOL.Drasil.AST.html#updateMthd"><span class="hs-identifier hs-type">updateMthd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#MethodData"><span class="hs-identifier hs-type">MethodData</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#MethodData"><span class="hs-identifier hs-type">MethodData</span></a></span><span>
 </span><span id="line-87"></span><span id="updateMthd"><span class="annot"><span class="annottext">updateMthd :: MethodData -&gt; (Doc -&gt; Doc) -&gt; MethodData
-</span><a href="GOOL.Drasil.AST.html#updateMthd"><span class="hs-identifier hs-var hs-var">updateMthd</span></a></span></span><span> </span><span id="local-6989586621679387056"><span class="annot"><span class="annottext">m :: MethodData
-</span><a href="#local-6989586621679387056"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679387055"><span class="annot"><span class="annottext">f :: Doc -&gt; Doc
-</span><a href="#local-6989586621679387055"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; MethodData
+</span><a href="GOOL.Drasil.AST.html#updateMthd"><span class="hs-identifier hs-var hs-var">updateMthd</span></a></span></span><span> </span><span id="local-6989586621679311843"><span class="annot"><span class="annottext">MethodData
+</span><a href="#local-6989586621679311843"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679311842"><span class="annot"><span class="annottext">Doc -&gt; Doc
+</span><a href="#local-6989586621679311842"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; MethodData
 </span><a href="GOOL.Drasil.AST.html#mthd"><span class="hs-identifier hs-var">mthd</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
-</span><a href="#local-6989586621679387055"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; (MethodData -&gt; Doc) -&gt; MethodData -&gt; Doc
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="#local-6989586621679311842"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">MethodData -&gt; Doc
-</span><a href="GOOL.Drasil.AST.html#mthdDoc"><span class="hs-identifier hs-var hs-var">mthdDoc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MethodData
-</span><a href="#local-6989586621679387056"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
+</span><a href="GOOL.Drasil.AST.html#mthdDoc"><span class="hs-identifier hs-var">mthdDoc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MethodData
+</span><a href="#local-6989586621679311843"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-88"></span><span>
 </span><span id="line-89"></span><span class="hs-comment">-- Used as the underlying data type for UnaryOp and BinaryOp in all renderers</span><span>
 </span><span id="line-90"></span><span class="hs-keyword">data</span><span> </span><span id="OpData"><span class="annot"><a href="GOOL.Drasil.AST.html#OpData"><span class="hs-identifier hs-var">OpData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="OD"><span class="annot"><a href="GOOL.Drasil.AST.html#OD"><span class="hs-identifier hs-var">OD</span></a></span></span><span> </span><span class="hs-special">{</span><span id="opPrec"><span class="annot"><span class="annottext">OpData -&gt; Int
@@ -219,25 +209,22 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-101"></span><span class="annot"><a href="GOOL.Drasil.AST.html#paramName"><span class="hs-identifier hs-type">paramName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ParamData"><span class="hs-identifier hs-type">ParamData</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-102"></span><span id="paramName"><span class="annot"><span class="annottext">paramName :: ParamData -&gt; String
 </span><a href="GOOL.Drasil.AST.html#paramName"><span class="hs-identifier hs-var hs-var">paramName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VarData -&gt; String
-</span><a href="GOOL.Drasil.AST.html#varName"><span class="hs-identifier hs-var hs-var">varName</span></a></span><span> </span><span class="annot"><span class="annottext">(VarData -&gt; String)
--&gt; (ParamData -&gt; VarData) -&gt; ParamData -&gt; String
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="GOOL.Drasil.AST.html#varName"><span class="hs-identifier hs-var">varName</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ParamData -&gt; VarData
-</span><a href="GOOL.Drasil.AST.html#paramVar"><span class="hs-identifier hs-var hs-var">paramVar</span></a></span><span>
+</span><a href="GOOL.Drasil.AST.html#paramVar"><span class="hs-identifier hs-var">paramVar</span></a></span><span>
 </span><span id="line-103"></span><span>
 </span><span id="line-104"></span><span class="annot"><a href="GOOL.Drasil.AST.html#updateParam"><span class="hs-identifier hs-type">updateParam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ParamData"><span class="hs-identifier hs-type">ParamData</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ParamData"><span class="hs-identifier hs-type">ParamData</span></a></span><span>
 </span><span id="line-105"></span><span id="updateParam"><span class="annot"><span class="annottext">updateParam :: (Doc -&gt; Doc) -&gt; ParamData -&gt; ParamData
-</span><a href="GOOL.Drasil.AST.html#updateParam"><span class="hs-identifier hs-var hs-var">updateParam</span></a></span></span><span> </span><span id="local-6989586621679387051"><span class="annot"><span class="annottext">f :: Doc -&gt; Doc
-</span><a href="#local-6989586621679387051"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679387050"><span class="annot"><span class="annottext">v :: ParamData
-</span><a href="#local-6989586621679387050"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VarData -&gt; Doc -&gt; ParamData
+</span><a href="GOOL.Drasil.AST.html#updateParam"><span class="hs-identifier hs-var hs-var">updateParam</span></a></span></span><span> </span><span id="local-6989586621679311838"><span class="annot"><span class="annottext">Doc -&gt; Doc
+</span><a href="#local-6989586621679311838"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679311837"><span class="annot"><span class="annottext">ParamData
+</span><a href="#local-6989586621679311837"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">VarData -&gt; Doc -&gt; ParamData
 </span><a href="GOOL.Drasil.AST.html#pd"><span class="hs-identifier hs-var">pd</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ParamData -&gt; VarData
-</span><a href="GOOL.Drasil.AST.html#paramVar"><span class="hs-identifier hs-var hs-var">paramVar</span></a></span><span> </span><span class="annot"><span class="annottext">ParamData
-</span><a href="#local-6989586621679387050"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
-</span><a href="#local-6989586621679387051"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; (ParamData -&gt; Doc) -&gt; ParamData -&gt; Doc
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="GOOL.Drasil.AST.html#paramVar"><span class="hs-identifier hs-var">paramVar</span></a></span><span> </span><span class="annot"><span class="annottext">ParamData
+</span><a href="#local-6989586621679311837"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
+</span><a href="#local-6989586621679311838"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ParamData -&gt; Doc
-</span><a href="GOOL.Drasil.AST.html#paramDoc"><span class="hs-identifier hs-var hs-var">paramDoc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ParamData
-</span><a href="#local-6989586621679387050"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
+</span><a href="GOOL.Drasil.AST.html#paramDoc"><span class="hs-identifier hs-var">paramDoc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ParamData
+</span><a href="#local-6989586621679311837"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-106"></span><span>
 </span><span id="line-107"></span><span class="hs-comment">-- Used as the underlying data type for Programs in all renderers</span><span>
 </span><span id="line-108"></span><span class="hs-keyword">data</span><span> </span><span id="ProgData"><span class="annot"><a href="GOOL.Drasil.AST.html#ProgData"><span class="hs-identifier hs-var">ProgData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ProgD"><span class="annot"><a href="GOOL.Drasil.AST.html#ProgD"><span class="hs-identifier hs-var">ProgD</span></a></span></span><span> </span><span class="hs-special">{</span><span id="progName"><span class="annot"><span class="annottext">ProgData -&gt; String
@@ -246,29 +233,26 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-109"></span><span>
 </span><span id="line-110"></span><span class="annot"><a href="GOOL.Drasil.AST.html#progD"><span class="hs-identifier hs-type">progD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GOOL.Drasil.AST.html#FileData"><span class="hs-identifier hs-type">FileData</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ProgData"><span class="hs-identifier hs-type">ProgData</span></a></span><span>
 </span><span id="line-111"></span><span id="progD"><span class="annot"><span class="annottext">progD :: String -&gt; [FileData] -&gt; ProgData
-</span><a href="GOOL.Drasil.AST.html#progD"><span class="hs-identifier hs-var hs-var">progD</span></a></span></span><span> </span><span id="local-6989586621679387048"><span class="annot"><span class="annottext">n :: String
-</span><a href="#local-6989586621679387048"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679387047"><span class="annot"><span class="annottext">fs :: [FileData]
-</span><a href="#local-6989586621679387047"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [FileData] -&gt; ProgData
+</span><a href="GOOL.Drasil.AST.html#progD"><span class="hs-identifier hs-var hs-var">progD</span></a></span></span><span> </span><span id="local-6989586621679311835"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679311835"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679311834"><span class="annot"><span class="annottext">[FileData]
+</span><a href="#local-6989586621679311834"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [FileData] -&gt; ProgData
 </span><a href="GOOL.Drasil.AST.html#ProgD"><span class="hs-identifier hs-var">ProgD</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679387048"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(FileData -&gt; Bool) -&gt; [FileData] -&gt; [FileData]
-forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679311835"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
-</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; (FileData -&gt; Bool) -&gt; FileData -&gt; Bool
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Bool
-</span><span class="hs-identifier hs-var">isEmpty</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Bool) -&gt; (FileData -&gt; Doc) -&gt; FileData -&gt; Bool
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">isEmpty</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ModData -&gt; Doc
-</span><a href="GOOL.Drasil.AST.html#modDoc"><span class="hs-identifier hs-var hs-var">modDoc</span></a></span><span> </span><span class="annot"><span class="annottext">(ModData -&gt; Doc) -&gt; (FileData -&gt; ModData) -&gt; FileData -&gt; Doc
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="GOOL.Drasil.AST.html#modDoc"><span class="hs-identifier hs-var">modDoc</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">FileData -&gt; ModData
-</span><a href="GOOL.Drasil.AST.html#fileMod"><span class="hs-identifier hs-var hs-var">fileMod</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FileData]
-</span><a href="#local-6989586621679387047"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="GOOL.Drasil.AST.html#fileMod"><span class="hs-identifier hs-var">fileMod</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FileData]
+</span><a href="#local-6989586621679311834"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-112"></span><span>
 </span><span id="line-113"></span><span class="annot"><a href="GOOL.Drasil.AST.html#emptyProg"><span class="hs-identifier hs-type">emptyProg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ProgData"><span class="hs-identifier hs-type">ProgData</span></a></span><span>
 </span><span id="line-114"></span><span id="emptyProg"><span class="annot"><span class="annottext">emptyProg :: ProgData
 </span><a href="GOOL.Drasil.AST.html#emptyProg"><span class="hs-identifier hs-var hs-var">emptyProg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [FileData] -&gt; ProgData
-</span><a href="GOOL.Drasil.AST.html#progD"><span class="hs-identifier hs-var">progD</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a href="GOOL.Drasil.AST.html#progD"><span class="hs-identifier hs-var">progD</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-115"></span><span>
 </span><span id="line-116"></span><span class="hs-comment">-- Used as the underlying data type for StateVars in the C++ renderer</span><span>
 </span><span id="line-117"></span><span class="hs-keyword">data</span><span> </span><span id="StateVarData"><span class="annot"><a href="GOOL.Drasil.AST.html#StateVarData"><span class="hs-identifier hs-var">StateVarData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SVD"><span class="annot"><a href="GOOL.Drasil.AST.html#SVD"><span class="hs-identifier hs-var">SVD</span></a></span></span><span> </span><span class="hs-special">{</span><span id="getStVarScp"><span class="annot"><span class="annottext">StateVarData -&gt; ScopeTag
@@ -306,19 +290,18 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-134"></span><span>
 </span><span id="line-135"></span><span class="annot"><a href="GOOL.Drasil.AST.html#updateValDoc"><span class="hs-identifier hs-type">updateValDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ValData"><span class="hs-identifier hs-type">ValData</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GOOL.Drasil.AST.html#ValData"><span class="hs-identifier hs-type">ValData</span></a></span><span>
 </span><span id="line-136"></span><span id="updateValDoc"><span class="annot"><span class="annottext">updateValDoc :: (Doc -&gt; Doc) -&gt; ValData -&gt; ValData
-</span><a href="GOOL.Drasil.AST.html#updateValDoc"><span class="hs-identifier hs-var hs-var">updateValDoc</span></a></span></span><span> </span><span id="local-6989586621679387042"><span class="annot"><span class="annottext">f :: Doc -&gt; Doc
-</span><a href="#local-6989586621679387042"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679387041"><span class="annot"><span class="annottext">v :: ValData
-</span><a href="#local-6989586621679387041"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; TypeData -&gt; Doc -&gt; ValData
+</span><a href="GOOL.Drasil.AST.html#updateValDoc"><span class="hs-identifier hs-var hs-var">updateValDoc</span></a></span></span><span> </span><span id="local-6989586621679311829"><span class="annot"><span class="annottext">Doc -&gt; Doc
+</span><a href="#local-6989586621679311829"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679311828"><span class="annot"><span class="annottext">ValData
+</span><a href="#local-6989586621679311828"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; TypeData -&gt; Doc -&gt; ValData
 </span><a href="GOOL.Drasil.AST.html#vd"><span class="hs-identifier hs-var">vd</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ValData -&gt; Maybe Int
-</span><a href="GOOL.Drasil.AST.html#valPrec"><span class="hs-identifier hs-var hs-var">valPrec</span></a></span><span> </span><span class="annot"><span class="annottext">ValData
-</span><a href="#local-6989586621679387041"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ValData -&gt; TypeData
-</span><a href="GOOL.Drasil.AST.html#valType"><span class="hs-identifier hs-var hs-var">valType</span></a></span><span> </span><span class="annot"><span class="annottext">ValData
-</span><a href="#local-6989586621679387041"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
-</span><a href="#local-6989586621679387042"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; (ValData -&gt; Doc) -&gt; ValData -&gt; Doc
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="GOOL.Drasil.AST.html#valPrec"><span class="hs-identifier hs-var">valPrec</span></a></span><span> </span><span class="annot"><span class="annottext">ValData
+</span><a href="#local-6989586621679311828"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ValData -&gt; TypeData
+</span><a href="GOOL.Drasil.AST.html#valType"><span class="hs-identifier hs-var">valType</span></a></span><span> </span><span class="annot"><span class="annottext">ValData
+</span><a href="#local-6989586621679311828"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
+</span><a href="#local-6989586621679311829"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ValData -&gt; Doc
-</span><a href="GOOL.Drasil.AST.html#val"><span class="hs-identifier hs-var hs-var">val</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ValData
-</span><a href="#local-6989586621679387041"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
+</span><a href="GOOL.Drasil.AST.html#val"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ValData
+</span><a href="#local-6989586621679311828"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-137"></span><span>
 </span><span id="line-138"></span><span class="hs-comment">-- Used as the underlying data type for Variables in all renderers</span><span>
 </span><span id="line-139"></span><span class="hs-keyword">data</span><span> </span><span id="VarData"><span class="annot"><a href="GOOL.Drasil.AST.html#VarData"><span class="hs-identifier hs-var">VarData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="VarD"><span class="annot"><a href="GOOL.Drasil.AST.html#VarD"><span class="hs-identifier hs-var">VarD</span></a></span></span><span> </span><span class="hs-special">{</span><span id="varBind"><span class="annot"><span class="annottext">VarData -&gt; Binding

@@ -8,4 +8,6 @@ ReadMeInfo -> Name;
 ReadMeInfo -> FilePath;
 ReadMeInfo -> Contributor;
 ReadMeInfo -> CaseName;
+ReadMeInfo -> ExamplePurpose;
+ReadMeInfo -> ExampleDescr;
 }

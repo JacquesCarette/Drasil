@@ -1,0 +1,4 @@
+digraph exampledescr{
+ExampleDescr	[shape=oval, color=red2, label="ExampleDescr"];
+ExampleDescr -> String;
+}

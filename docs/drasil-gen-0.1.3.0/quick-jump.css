@@ -15,7 +15,6 @@
   left: calc(50% - 22em);
   width: 44em;
   z-index: 1000;
-  pointer-events: none;
   overflow-y: auto;
 }
 
@@ -53,6 +52,8 @@
   box-sizing: border-box;
   border: 0.05em solid #b2d5fb;
   background: #e8f3ff;
+  max-height: 80%;
+  overflow: scroll;
 }
 
 #search-form input + #search-results {

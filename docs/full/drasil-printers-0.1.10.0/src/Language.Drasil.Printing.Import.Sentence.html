@@ -22,393 +22,376 @@
 </span><span id="line-22"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-type">spec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.AST.html#Spec"><span class="hs-identifier hs-type">P.Spec</span></a></span><span>
 </span><span id="line-23"></span><span>  </span><span class="hs-comment">-- make sure these optimizations are clear</span><span>
 </span><span id="line-24"></span><span id="spec"><span class="annot"><span class="annottext">spec :: PrintingInformation -&gt; Sentence -&gt; Spec
-</span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var hs-var">spec</span></a></span></span><span> </span><span id="local-6989586621679142360"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142360"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">EmptyS</span></span><span> </span><span class="annot"><span class="hs-operator hs-type">:+:</span></span><span> </span><span id="local-6989586621679142357"><span class="annot"><span class="annottext">b :: Sentence
-</span><a href="#local-6989586621679142357"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var hs-var">spec</span></a></span></span><span> </span><span id="local-6989586621679096757"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096757"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="hs-operator hs-type">:+:</span></span><span> </span><span id="local-6989586621679096754"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096754"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142360"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679142357"><span class="hs-identifier hs-var">b</span></a></span><span>
-</span><span id="line-25"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142356"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142356"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679142355"><span class="annot"><span class="annottext">a :: Sentence
-</span><a href="#local-6989586621679142355"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-type">:+:</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">EmptyS</span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096757"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096754"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-25"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096753"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096753"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679096752"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096752"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-type">:+:</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142356"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679142355"><span class="hs-identifier hs-var">a</span></a></span><span>
-</span><span id="line-26"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142354"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142354"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679142353"><span class="annot"><span class="annottext">a :: Sentence
-</span><a href="#local-6989586621679142353"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-type">:+:</span></span><span> </span><span id="local-6989586621679142352"><span class="annot"><span class="annottext">b :: Sentence
-</span><a href="#local-6989586621679142352"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096753"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096752"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096751"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096751"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679096750"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096750"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-type">:+:</span></span><span> </span><span id="local-6989586621679096749"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096749"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142354"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679142353"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Spec -&gt; Spec -&gt; Spec
+</span><a href="#local-6989586621679096751"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096750"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Spec -&gt; Spec -&gt; Spec
 </span><a href="Language.Drasil.Printing.AST.html#%3A%2B%3A"><span class="hs-operator hs-var">P.:+:</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142354"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679142352"><span class="hs-identifier hs-var">b</span></a></span><span>
-</span><span id="line-27"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">S</span></span><span> </span><span id="local-6989586621679142349"><span class="annot"><span class="annottext">s :: String
-</span><a href="#local-6989586621679142349"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Spec)
--&gt; (String -&gt; Spec) -&gt; Either String String -&gt; Spec
-forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
-</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Spec
-forall a. HasCallStack =&gt; String -&gt; a
+</span><a href="#local-6989586621679096751"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096749"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">S</span></span><span> </span><span id="local-6989586621679096746"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096746"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
+</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Spec
-</span><a href="Language.Drasil.Printing.AST.html#S"><span class="hs-identifier hs-var">P.S</span></a></span><span> </span><span class="annot"><span class="annottext">(Either String String -&gt; Spec) -&gt; Either String String -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Language.Drasil.Printing.AST.html#S"><span class="hs-identifier hs-var">P.S</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Either String String
 </span><span class="hs-identifier hs-var">checkValidStr</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142349"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142344"><span class="hs-identifier hs-var">invalidChars</span></a></span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679142344"><span class="annot"><span class="annottext">invalidChars :: String
-</span><a href="#local-6989586621679142344"><span class="hs-identifier hs-var hs-var">invalidChars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-char">'&lt;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'&gt;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'\&quot;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'&amp;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'#'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'$'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'%'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'&amp;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'~'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'^'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'\\'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'{'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-char">'}'</span></span><span class="hs-special">]</span><span>
-</span><span id="line-29"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Sy</span></span><span> </span><span id="local-6989586621679142342"><span class="annot"><span class="annottext">s :: USymb
-</span><a href="#local-6989586621679142342"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
-</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Spec) -&gt; Expr -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096746"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096741"><span class="hs-identifier hs-var">invalidChars</span></a></span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679096741"><span class="annot"><span class="annottext">invalidChars :: String
+</span><a href="#local-6989586621679096741"><span class="hs-identifier hs-var hs-var">invalidChars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&lt;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&gt;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'\&quot;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&amp;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'#'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'$'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'%'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&amp;'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'~'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'^'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'\\'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'{'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'}'</span></span><span class="hs-special">]</span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Sy</span></span><span> </span><span id="local-6989586621679096739"><span class="annot"><span class="annottext">USymb
+</span><a href="#local-6989586621679096739"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
+</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">USymb -&gt; Expr
 </span><a href="Language.Drasil.Printing.Import.Symbol.html#pUnit"><span class="hs-identifier hs-var">pUnit</span></a></span><span> </span><span class="annot"><span class="annottext">USymb
-</span><a href="#local-6989586621679142342"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-30"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Percent</span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
-</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Spec) -&gt; Expr -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096739"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">Percent</span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
+</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
 </span><a href="Language.Drasil.Printing.AST.html#Perc"><span class="hs-identifier hs-var">P.Perc</span></a></span><span>
-</span><span id="line-31"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">P</span></span><span> </span><span id="local-6989586621679142336"><span class="annot"><span class="annottext">s :: Symbol
-</span><a href="#local-6989586621679142336"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
-</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Spec) -&gt; Expr -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-31"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">P</span></span><span> </span><span id="local-6989586621679096733"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679096733"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
+</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Expr
 </span><a href="Language.Drasil.Printing.Import.Symbol.html#symbol"><span class="hs-identifier hs-var">symbol</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679142336"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-32"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142335"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142335"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">SyCh</span></span><span> </span><span id="local-6989586621679142333"><span class="annot"><span class="annottext">s :: UID
-</span><a href="#local-6989586621679142333"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
-</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Spec) -&gt; Expr -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096733"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096732"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096732"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">SyCh</span></span><span> </span><span id="local-6989586621679096730"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679096730"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>                </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
+</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Expr
-</span><a href="Language.Drasil.Printing.Import.Symbol.html#symbol"><span class="hs-identifier hs-var">symbol</span></a></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Expr) -&gt; Symbol -&gt; Expr
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Language.Drasil.Printing.Import.Symbol.html#symbol"><span class="hs-identifier hs-var">symbol</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Stage -&gt; ChunkDB -&gt; UID -&gt; Symbol
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupC"><span class="hs-identifier hs-var">lookupC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142335"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
--&gt; Getting Stage PrintingInformation Stage -&gt; Stage
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Stage PrintingInformation Stage
-Lens' PrintingInformation Stage
+</span><a href="#local-6989586621679096732"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation Stage
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142335"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
--&gt; Getting ChunkDB PrintingInformation ChunkDB -&gt; ChunkDB
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB PrintingInformation ChunkDB
-Lens' PrintingInformation ChunkDB
+</span><a href="#local-6989586621679096732"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679142333"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-33"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142332"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142332"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ch</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">TermStyle</span></span><span> </span><span id="local-6989586621679142329"><span class="annot"><span class="annottext">caps :: TermCapitalization
-</span><a href="#local-6989586621679142329"><span class="hs-identifier hs-var">caps</span></a></span></span><span> </span><span id="local-6989586621679142328"><span class="annot"><span class="annottext">s :: UID
-</span><a href="#local-6989586621679142328"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096730"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-33"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096729"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096729"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ch</span></span><span> </span><span class="annot"><span class="annottext">SentenceStyle
+</span><span class="hs-identifier hs-var">TermStyle</span></span><span> </span><span id="local-6989586621679096726"><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679096726"><span class="hs-identifier hs-var">caps</span></a></span></span><span> </span><span id="local-6989586621679096725"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679096725"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142332"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Spec) -&gt; Sentence -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096729"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; TermCapitalization -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupT"><span class="hs-identifier hs-var">lookupT</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142332"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
--&gt; Getting ChunkDB PrintingInformation ChunkDB -&gt; ChunkDB
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB PrintingInformation ChunkDB
-Lens' PrintingInformation ChunkDB
+</span><a href="#local-6989586621679096729"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679142328"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679142329"><span class="hs-identifier hs-var">caps</span></a></span><span>
-</span><span id="line-34"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142327"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142327"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ch</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ShortStyle</span></span><span> </span><span id="local-6989586621679142325"><span class="annot"><span class="annottext">caps :: TermCapitalization
-</span><a href="#local-6989586621679142325"><span class="hs-identifier hs-var">caps</span></a></span></span><span> </span><span id="local-6989586621679142324"><span class="annot"><span class="annottext">s :: UID
-</span><a href="#local-6989586621679142324"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096725"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679096726"><span class="hs-identifier hs-var">caps</span></a></span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096724"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096724"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ch</span></span><span> </span><span class="annot"><span class="annottext">SentenceStyle
+</span><span class="hs-identifier hs-var">ShortStyle</span></span><span> </span><span id="local-6989586621679096722"><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679096722"><span class="hs-identifier hs-var">caps</span></a></span></span><span> </span><span id="local-6989586621679096721"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679096721"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142327"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Spec) -&gt; Sentence -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096724"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; TermCapitalization -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupS"><span class="hs-identifier hs-var">lookupS</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142327"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
--&gt; Getting ChunkDB PrintingInformation ChunkDB -&gt; ChunkDB
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB PrintingInformation ChunkDB
-Lens' PrintingInformation ChunkDB
+</span><a href="#local-6989586621679096724"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679142324"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679142325"><span class="hs-identifier hs-var">caps</span></a></span><span>
-</span><span id="line-35"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142323"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142323"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ch</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">PluralTerm</span></span><span> </span><span id="local-6989586621679142321"><span class="annot"><span class="annottext">caps :: TermCapitalization
-</span><a href="#local-6989586621679142321"><span class="hs-identifier hs-var">caps</span></a></span></span><span> </span><span id="local-6989586621679142320"><span class="annot"><span class="annottext">s :: UID
-</span><a href="#local-6989586621679142320"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096721"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679096722"><span class="hs-identifier hs-var">caps</span></a></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096720"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096720"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ch</span></span><span> </span><span class="annot"><span class="annottext">SentenceStyle
+</span><span class="hs-identifier hs-var">PluralTerm</span></span><span> </span><span id="local-6989586621679096718"><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679096718"><span class="hs-identifier hs-var">caps</span></a></span></span><span> </span><span id="local-6989586621679096717"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679096717"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142323"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Spec) -&gt; Sentence -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096720"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; TermCapitalization -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupP"><span class="hs-identifier hs-var">lookupP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142323"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
--&gt; Getting ChunkDB PrintingInformation ChunkDB -&gt; ChunkDB
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB PrintingInformation ChunkDB
-Lens' PrintingInformation ChunkDB
+</span><a href="#local-6989586621679096720"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679142320"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679142321"><span class="hs-identifier hs-var">caps</span></a></span><span>
-</span><span id="line-36"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142319"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142319"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ref</span></span><span> </span><span id="local-6989586621679142317"><span class="annot"><span class="annottext">u :: UID
-</span><a href="#local-6989586621679142317"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">EmptyS</span></span><span> </span><span id="local-6989586621679142316"><span class="annot"><span class="annottext">notes :: RefInfo
-</span><a href="#local-6989586621679142316"><span class="hs-identifier hs-var">notes</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-37"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679142315"><span class="annot"><span class="annottext">reff :: Reference
-</span><a href="#local-6989586621679142315"><span class="hs-identifier hs-var hs-var">reff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; ReferenceMap -&gt; Reference
+</span><a href="#local-6989586621679096717"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679096718"><span class="hs-identifier hs-var">caps</span></a></span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096716"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096716"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ref</span></span><span> </span><span id="local-6989586621679096714"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679096714"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span id="local-6989586621679096713"><span class="annot"><span class="annottext">RefInfo
+</span><a href="#local-6989586621679096713"><span class="hs-identifier hs-var">notes</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-37"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679096710"><span class="annot"><span class="annottext">reff :: Reference
+</span><a href="#local-6989586621679096710"><span class="hs-identifier hs-var hs-var">reff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; ReferenceMap -&gt; Reference
 </span><span class="hs-identifier hs-var">refResolve</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679142317"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142319"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
--&gt; Getting ReferenceMap PrintingInformation ReferenceMap
--&gt; ReferenceMap
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; Const ReferenceMap ChunkDB)
--&gt; PrintingInformation -&gt; Const ReferenceMap PrintingInformation
-Lens' PrintingInformation ChunkDB
-</span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span> </span><span class="annot"><span class="annottext">((ChunkDB -&gt; Const ReferenceMap ChunkDB)
- -&gt; PrintingInformation -&gt; Const ReferenceMap PrintingInformation)
--&gt; ((ReferenceMap -&gt; Const ReferenceMap ReferenceMap)
-    -&gt; ChunkDB -&gt; Const ReferenceMap ChunkDB)
--&gt; Getting ReferenceMap PrintingInformation ReferenceMap
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(ReferenceMap -&gt; Const ReferenceMap ReferenceMap)
--&gt; ChunkDB -&gt; Const ReferenceMap ChunkDB
-Lens' ChunkDB ReferenceMap
+</span><a href="#local-6989586621679096714"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096716"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
+</span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Lens' ChunkDB ReferenceMap
 </span><span class="hs-identifier hs-var">refTable</span></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">in</span><span>
 </span><span id="line-38"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679142315"><span class="hs-identifier hs-var">reff</span></a></span><span> </span><span class="hs-keyword">of</span><span> </span><span>
-</span><span id="line-39"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RP</span></span><span> </span><span id="local-6989586621679142311"><span class="annot"><span class="annottext">rp :: IRefProg
-</span><a href="#local-6989586621679142311"><span class="hs-identifier hs-var">rp</span></a></span></span><span> </span><span id="local-6989586621679142310"><span class="annot"><span class="annottext">ra :: String
-</span><a href="#local-6989586621679142310"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679142309"><span class="annot"><span class="annottext">sn :: ShortName
-</span><a href="#local-6989586621679142309"><span class="hs-identifier hs-var">sn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="#local-6989586621679096710"><span class="hs-identifier hs-var">reff</span></a></span><span> </span><span class="hs-keyword">of</span><span> </span><span>
+</span><span id="line-39"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RP</span></span><span> </span><span id="local-6989586621679096706"><span class="annot"><span class="annottext">IRefProg
+</span><a href="#local-6989586621679096706"><span class="hs-identifier hs-var">rp</span></a></span></span><span> </span><span id="local-6989586621679096705"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096705"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679096704"><span class="annot"><span class="annottext">ShortName
+</span><a href="#local-6989586621679096704"><span class="hs-identifier hs-var">sn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-40"></span><span>      </span><span class="annot"><span class="annottext">LinkType -&gt; String -&gt; Spec -&gt; Spec
 </span><a href="Language.Drasil.Printing.AST.html#Ref"><span class="hs-identifier hs-var">P.Ref</span></a></span><span> </span><span class="annot"><span class="annottext">LinkType
 </span><a href="Language.Drasil.Printing.AST.html#Internal"><span class="hs-identifier hs-var">P.Internal</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142310"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096705"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142319"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Spec) -&gt; Sentence -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096716"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; IRefProg -&gt; ShortName -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142319"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
--&gt; Getting ChunkDB PrintingInformation ChunkDB -&gt; ChunkDB
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB PrintingInformation ChunkDB
-Lens' PrintingInformation ChunkDB
+</span><a href="#local-6989586621679096716"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IRefProg
-</span><a href="#local-6989586621679142311"><span class="hs-identifier hs-var">rp</span></a></span><span> </span><span class="annot"><span class="annottext">ShortName
-</span><a href="#local-6989586621679142309"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-41"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span> </span><span id="local-6989586621679142304"><span class="annot"><span class="annottext">ra :: String
-</span><a href="#local-6989586621679142304"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="#local-6989586621679096706"><span class="hs-identifier hs-var">rp</span></a></span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><a href="#local-6989586621679096704"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-41"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span> </span><span id="local-6989586621679096699"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096699"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-42"></span><span>      </span><span class="annot"><span class="annottext">LinkType -&gt; String -&gt; Spec -&gt; Spec
 </span><a href="Language.Drasil.Printing.AST.html#Ref"><span class="hs-identifier hs-var">P.Ref</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Spec -&gt; LinkType
 </span><a href="Language.Drasil.Printing.AST.html#Cite2"><span class="hs-identifier hs-var">P.Cite2</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142319"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RefInfo -&gt; Sentence
+</span><a href="#local-6989586621679096716"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RefInfo -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="annot"><span class="annottext">RefInfo
-</span><a href="#local-6989586621679142316"><span class="hs-identifier hs-var">notes</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142304"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096713"><span class="hs-identifier hs-var">notes</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096699"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142319"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Spec) -&gt; Sentence -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096716"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142304"><span class="hs-identifier hs-var">ra</span></a></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-43"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">URI</span></span><span> </span><span id="local-6989586621679142300"><span class="annot"><span class="annottext">ra :: String
-</span><a href="#local-6989586621679142300"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679142299"><span class="annot"><span class="annottext">sn :: ShortName
-</span><a href="#local-6989586621679142299"><span class="hs-identifier hs-var">sn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="#local-6989586621679096699"><span class="hs-identifier hs-var">ra</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-43"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">URI</span></span><span> </span><span id="local-6989586621679096695"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096695"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679096694"><span class="annot"><span class="annottext">ShortName
+</span><a href="#local-6989586621679096694"><span class="hs-identifier hs-var">sn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-44"></span><span>      </span><span class="annot"><span class="annottext">LinkType -&gt; String -&gt; Spec -&gt; Spec
 </span><a href="Language.Drasil.Printing.AST.html#Ref"><span class="hs-identifier hs-var">P.Ref</span></a></span><span> </span><span class="annot"><span class="annottext">LinkType
 </span><a href="Language.Drasil.Printing.AST.html#External"><span class="hs-identifier hs-var">P.External</span></a></span><span>    </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142300"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096695"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142319"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Spec) -&gt; Sentence -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; ShortName -&gt; Sentence
-forall ctx. ctx -&gt; ShortName -&gt; Sentence
+</span><a href="#local-6989586621679096716"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall ctx. ctx -&gt; ShortName -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#renderURI"><span class="hs-identifier hs-var">renderURI</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142319"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">ShortName
-</span><a href="#local-6989586621679142299"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142296"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142296"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ref</span></span><span> </span><span id="local-6989586621679142295"><span class="annot"><span class="annottext">u :: UID
-</span><a href="#local-6989586621679142295"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679142294"><span class="annot"><span class="annottext">dName :: Sentence
-</span><a href="#local-6989586621679142294"><span class="hs-identifier hs-var">dName</span></a></span></span><span> </span><span id="local-6989586621679142293"><span class="annot"><span class="annottext">notes :: RefInfo
-</span><a href="#local-6989586621679142293"><span class="hs-identifier hs-var">notes</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-46"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679142292"><span class="annot"><span class="annottext">reff :: Reference
-</span><a href="#local-6989586621679142292"><span class="hs-identifier hs-var hs-var">reff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; ReferenceMap -&gt; Reference
+</span><a href="#local-6989586621679096716"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><a href="#local-6989586621679096694"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096691"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096691"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Ref</span></span><span> </span><span id="local-6989586621679096690"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679096690"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679096689"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096689"><span class="hs-identifier hs-var">dName</span></a></span></span><span> </span><span id="local-6989586621679096688"><span class="annot"><span class="annottext">RefInfo
+</span><a href="#local-6989586621679096688"><span class="hs-identifier hs-var">notes</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-46"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679096685"><span class="annot"><span class="annottext">reff :: Reference
+</span><a href="#local-6989586621679096685"><span class="hs-identifier hs-var hs-var">reff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; ReferenceMap -&gt; Reference
 </span><span class="hs-identifier hs-var">refResolve</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679142295"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142296"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
--&gt; Getting ReferenceMap PrintingInformation ReferenceMap
--&gt; ReferenceMap
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; Const ReferenceMap ChunkDB)
--&gt; PrintingInformation -&gt; Const ReferenceMap PrintingInformation
-Lens' PrintingInformation ChunkDB
-</span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span> </span><span class="annot"><span class="annottext">((ChunkDB -&gt; Const ReferenceMap ChunkDB)
- -&gt; PrintingInformation -&gt; Const ReferenceMap PrintingInformation)
--&gt; ((ReferenceMap -&gt; Const ReferenceMap ReferenceMap)
-    -&gt; ChunkDB -&gt; Const ReferenceMap ChunkDB)
--&gt; Getting ReferenceMap PrintingInformation ReferenceMap
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(ReferenceMap -&gt; Const ReferenceMap ReferenceMap)
--&gt; ChunkDB -&gt; Const ReferenceMap ChunkDB
-Lens' ChunkDB ReferenceMap
+</span><a href="#local-6989586621679096690"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096691"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
+</span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Lens' ChunkDB ReferenceMap
 </span><span class="hs-identifier hs-var">refTable</span></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">in</span><span>
 </span><span id="line-47"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679142292"><span class="hs-identifier hs-var">reff</span></a></span><span> </span><span class="hs-keyword">of</span><span> </span><span>
-</span><span id="line-48"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RP</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679142291"><span class="annot"><span class="annottext">ra :: String
-</span><a href="#local-6989586621679142291"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="#local-6989586621679096685"><span class="hs-identifier hs-var">reff</span></a></span><span> </span><span class="hs-keyword">of</span><span> </span><span>
+</span><span id="line-48"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RP</span></span><span> </span><span class="annot"><span class="annottext">IRefProg
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679096684"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096684"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-49"></span><span>      </span><span class="annot"><span class="annottext">LinkType -&gt; String -&gt; Spec -&gt; Spec
 </span><a href="Language.Drasil.Printing.AST.html#Ref"><span class="hs-identifier hs-var">P.Ref</span></a></span><span> </span><span class="annot"><span class="annottext">LinkType
 </span><a href="Language.Drasil.Printing.AST.html#Internal"><span class="hs-identifier hs-var">P.Internal</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142291"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096684"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142296"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679142294"><span class="hs-identifier hs-var">dName</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-50"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span> </span><span id="local-6989586621679142290"><span class="annot"><span class="annottext">ra :: String
-</span><a href="#local-6989586621679142290"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="#local-6989586621679096691"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096689"><span class="hs-identifier hs-var">dName</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-50"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span> </span><span id="local-6989586621679096683"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096683"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-51"></span><span>      </span><span class="annot"><span class="annottext">LinkType -&gt; String -&gt; Spec -&gt; Spec
 </span><a href="Language.Drasil.Printing.AST.html#Ref"><span class="hs-identifier hs-var">P.Ref</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Spec -&gt; LinkType
 </span><a href="Language.Drasil.Printing.AST.html#Cite2"><span class="hs-identifier hs-var">P.Cite2</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142296"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RefInfo -&gt; Sentence
+</span><a href="#local-6989586621679096691"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RefInfo -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="annot"><span class="annottext">RefInfo
-</span><a href="#local-6989586621679142293"><span class="hs-identifier hs-var">notes</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>   </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142290"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096688"><span class="hs-identifier hs-var">notes</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>   </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096683"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142296"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679142294"><span class="hs-identifier hs-var">dName</span></a></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-52"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">URI</span></span><span> </span><span id="local-6989586621679142289"><span class="annot"><span class="annottext">ra :: String
-</span><a href="#local-6989586621679142289"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="#local-6989586621679096691"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096689"><span class="hs-identifier hs-var">dName</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-52"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">URI</span></span><span> </span><span id="local-6989586621679096682"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096682"><span class="hs-identifier hs-var">ra</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-53"></span><span>      </span><span class="annot"><span class="annottext">LinkType -&gt; String -&gt; Spec -&gt; Spec
 </span><a href="Language.Drasil.Printing.AST.html#Ref"><span class="hs-identifier hs-var">P.Ref</span></a></span><span> </span><span class="annot"><span class="annottext">LinkType
 </span><a href="Language.Drasil.Printing.AST.html#External"><span class="hs-identifier hs-var">P.External</span></a></span><span>    </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142289"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
+</span><a href="#local-6989586621679096682"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142296"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679142294"><span class="hs-identifier hs-var">dName</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-54"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142288"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142288"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quote</span></span><span> </span><span id="local-6989586621679142286"><span class="annot"><span class="annottext">q :: Sentence
-</span><a href="#local-6989586621679142286"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Spec -&gt; Spec
-</span><a href="Language.Drasil.Printing.AST.html#Quote"><span class="hs-identifier hs-var">P.Quote</span></a></span><span> </span><span class="annot"><span class="annottext">(Spec -&gt; Spec) -&gt; Spec -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679096691"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096689"><span class="hs-identifier hs-var">dName</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-54"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096681"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096681"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quote</span></span><span> </span><span id="local-6989586621679096679"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096679"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Spec -&gt; Spec
+</span><a href="Language.Drasil.Printing.AST.html#Quote"><span class="hs-identifier hs-var">P.Quote</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Sentence -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142288"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679142286"><span class="hs-identifier hs-var">q</span></a></span><span>
-</span><span id="line-55"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="annot"><span class="hs-identifier hs-type">EmptyS</span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Spec
+</span><a href="#local-6989586621679096681"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679096679"><span class="hs-identifier hs-var">q</span></a></span><span>
+</span><span id="line-55"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Spec
 </span><a href="Language.Drasil.Printing.AST.html#EmptyS"><span class="hs-identifier hs-var">P.EmptyS</span></a></span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679142283"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679142283"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">E</span></span><span> </span><span id="local-6989586621679142281"><span class="annot"><span class="annottext">e :: ModelExpr
-</span><a href="#local-6989586621679142281"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
-</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Spec) -&gt; Expr -&gt; Spec
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-56"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span id="local-6989586621679096676"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096676"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">E</span></span><span> </span><span id="local-6989586621679096674"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679096674"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Spec
+</span><a href="Language.Drasil.Printing.AST.html#E"><span class="hs-identifier hs-var">P.E</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; PrintingInformation -&gt; Expr
 </span><a href="Language.Drasil.Printing.Import.ModelExpr.html#modelExpr"><span class="hs-identifier hs-var">modelExpr</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679142281"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679142283"><span class="hs-identifier hs-var">sm</span></a></span><span>
+</span><a href="#local-6989586621679096674"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679096676"><span class="hs-identifier hs-var">sm</span></a></span><span>
 </span><span id="line-57"></span><span>
 </span><span id="line-58"></span><span class="hs-comment">-- * Helpers</span><span>
 </span><span id="line-59"></span><span>
 </span><span id="line-60"></span><span class="hs-comment">-- | Renders the shortname of a reference/domain.</span><span>
 </span><span id="line-61"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-type">renderShortName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IRefProg</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ShortName</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-62"></span><span id="renderShortName"><span class="annot"><span class="annottext">renderShortName :: ChunkDB -&gt; IRefProg -&gt; ShortName -&gt; Sentence
-</span><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var hs-var">renderShortName</span></a></span></span><span> </span><span id="local-6989586621679142280"><span class="annot"><span class="annottext">ctx :: ChunkDB
-</span><a href="#local-6989586621679142280"><span class="hs-identifier hs-var">ctx</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Deferred</span></span><span> </span><span id="local-6989586621679142278"><span class="annot"><span class="annottext">u :: UID
-</span><a href="#local-6989586621679142278"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Sentence) -&gt; String -&gt; Sentence
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Maybe String -&gt; String
-forall a. a -&gt; Maybe a -&gt; a
-</span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String
-forall a. HasCallStack =&gt; String -&gt; a
-</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Domain has no abbreviation.&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Maybe String -&gt; String) -&gt; Maybe String -&gt; String
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var hs-var">renderShortName</span></a></span></span><span> </span><span id="local-6989586621679096673"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096673"><span class="hs-identifier hs-var">ctx</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Deferred</span></span><span> </span><span id="local-6989586621679096671"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679096671"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a -&gt; a
+</span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Domain has no abbreviation.&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Maybe String
-forall c. Idea c =&gt; c -&gt; Maybe String
-</span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Maybe String) -&gt; ConceptChunk -&gt; Maybe String
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; Maybe String
+</span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">defResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679142280"><span class="hs-identifier hs-var">ctx</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679142278"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-comment">--Need defResolve instead of refResolve since only ConceptInstance</span><span>
+</span><a href="#local-6989586621679096673"><span class="hs-identifier hs-var">ctx</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679096671"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-comment">--Need defResolve instead of refResolve since only ConceptInstance</span><span>
 </span><span id="line-64"></span><span>  </span><span class="hs-comment">-- uses this case for domains and we want the short name from there. </span><span>
 </span><span id="line-65"></span><span>  </span><span class="hs-comment">-- Used to be: S $ getRefAdd $ refResolve u (ctx ^. refTable)</span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span id="local-6989586621679142276"><span class="annot"><span class="annottext">ctx :: ChunkDB
-</span><a href="#local-6989586621679142276"><span class="hs-identifier hs-var">ctx</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RConcat</span></span><span> </span><span id="local-6989586621679142274"><span class="annot"><span class="annottext">a :: IRefProg
-</span><a href="#local-6989586621679142274"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679142273"><span class="annot"><span class="annottext">b :: IRefProg
-</span><a href="#local-6989586621679142273"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679142272"><span class="annot"><span class="annottext">sn :: ShortName
-</span><a href="#local-6989586621679142272"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; IRefProg -&gt; ShortName -&gt; Sentence
+</span><span id="line-66"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span id="local-6989586621679096669"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679096669"><span class="hs-identifier hs-var">ctx</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RConcat</span></span><span> </span><span id="local-6989586621679096667"><span class="annot"><span class="annottext">IRefProg
+</span><a href="#local-6989586621679096667"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096666"><span class="annot"><span class="annottext">IRefProg
+</span><a href="#local-6989586621679096666"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679096665"><span class="annot"><span class="annottext">ShortName
+</span><a href="#local-6989586621679096665"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; IRefProg -&gt; ShortName -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679142276"><span class="hs-identifier hs-var">ctx</span></a></span><span> </span><span class="annot"><span class="annottext">IRefProg
-</span><a href="#local-6989586621679142274"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ShortName
-</span><a href="#local-6989586621679142272"><span class="hs-identifier hs-var">sn</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679096669"><span class="hs-identifier hs-var">ctx</span></a></span><span> </span><span class="annot"><span class="annottext">IRefProg
+</span><a href="#local-6989586621679096667"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><a href="#local-6989586621679096665"><span class="hs-identifier hs-var">sn</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">:+:</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; IRefProg -&gt; ShortName -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679142276"><span class="hs-identifier hs-var">ctx</span></a></span><span> </span><span class="annot"><span class="annottext">IRefProg
-</span><a href="#local-6989586621679142273"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ShortName
-</span><a href="#local-6989586621679142272"><span class="hs-identifier hs-var">sn</span></a></span><span>
-</span><span id="line-67"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RS</span></span><span> </span><span id="local-6989586621679142270"><span class="annot"><span class="annottext">s :: String
-</span><a href="#local-6989586621679142270"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679096669"><span class="hs-identifier hs-var">ctx</span></a></span><span> </span><span class="annot"><span class="annottext">IRefProg
+</span><a href="#local-6989586621679096666"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><a href="#local-6989586621679096665"><span class="hs-identifier hs-var">sn</span></a></span><span>
+</span><span id="line-67"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RS</span></span><span> </span><span id="local-6989586621679096663"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096663"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ShortName
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142270"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Name</span></span><span> </span><span id="local-6989586621679142268"><span class="annot"><span class="annottext">sn :: ShortName
-</span><a href="#local-6989586621679142268"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ShortName -&gt; Sentence
+</span><a href="#local-6989586621679096663"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderShortName"><span class="hs-identifier hs-var">renderShortName</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">IRefProg
+</span><span class="hs-identifier hs-var">Name</span></span><span> </span><span id="local-6989586621679096661"><span class="annot"><span class="annottext">ShortName
+</span><a href="#local-6989586621679096661"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ShortName -&gt; Sentence
 </span><span class="hs-identifier hs-var">getSentSN</span></span><span> </span><span class="annot"><span class="annottext">ShortName
-</span><a href="#local-6989586621679142268"><span class="hs-identifier hs-var">sn</span></a></span><span>
+</span><a href="#local-6989586621679096661"><span class="hs-identifier hs-var">sn</span></a></span><span>
 </span><span id="line-69"></span><span>
 </span><span id="line-70"></span><span class="hs-comment">-- | Render a uniform resource locator as a 'Sentence'.</span><span>
-</span><span id="line-71"></span><span id="local-6989586621679142387"><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderURI"><span class="hs-identifier hs-type">renderURI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679142387"><span class="hs-identifier hs-type">ctx</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ShortName</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
-</span><span id="line-72"></span><span id="renderURI"><span class="annot"><span class="annottext">renderURI :: ctx -&gt; ShortName -&gt; Sentence
-</span><a href="Language.Drasil.Printing.Import.Sentence.html#renderURI"><span class="hs-identifier hs-var hs-var">renderURI</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ShortName -&gt; Sentence
+</span><span id="line-71"></span><span id="local-6989586621679096798"><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderURI"><span class="hs-identifier hs-type">renderURI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679096798"><span class="hs-identifier hs-type">ctx</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ShortName</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
+</span><span id="line-72"></span><span id="renderURI"><span class="annot"><span class="annottext">renderURI :: forall ctx. ctx -&gt; ShortName -&gt; Sentence
+</span><a href="Language.Drasil.Printing.Import.Sentence.html#renderURI"><span class="hs-identifier hs-var hs-var">renderURI</span></a></span></span><span> </span><span class="annot"><span class="annottext">ctx
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ShortName -&gt; Sentence
 </span><span class="hs-identifier hs-var">getSentSN</span></span><span>
 </span><span id="line-73"></span><span>
 </span><span id="line-74"></span><span class="hs-comment">-- | Renders citation information.</span><span>
 </span><span id="line-75"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-type">renderCitInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RefInfo</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-76"></span><span id="renderCitInfo"><span class="annot"><span class="annottext">renderCitInfo :: RefInfo -&gt; Sentence
-</span><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var hs-var">renderCitInfo</span></a></span></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">None</span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var hs-var">renderCitInfo</span></a></span></span><span>  </span><span class="annot"><span class="annottext">RefInfo
+</span><span class="hs-identifier hs-var">None</span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-77"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RefNote</span></span><span>   </span><span id="local-6989586621679142264"><span class="annot"><span class="annottext">rn :: String
-</span><a href="#local-6989586621679142264"><span class="hs-identifier hs-var">rn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-77"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">RefNote</span></span><span>   </span><span id="local-6989586621679096657"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679096657"><span class="hs-identifier hs-var">rn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679142264"><span class="hs-identifier hs-var">rn</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-78"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Equation</span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679142261"><span class="annot"><span class="annottext">x :: Int
-</span><a href="#local-6989586621679142261"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679096657"><span class="hs-identifier hs-var">rn</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-78"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Equation</span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679096654"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679096654"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Eq.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Eq.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; String
-forall a. Show a =&gt; a -&gt; String
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679142261"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-79"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Equation</span></span><span>  </span><span id="local-6989586621679142258"><span class="annot"><span class="annottext">i :: [Int]
-</span><a href="#local-6989586621679142258"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679096654"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-79"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Equation</span></span><span>  </span><span id="local-6989586621679096651"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679096651"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Eqs.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Eqs.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; [Int] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldNums</span></span><span> </span><span class="annot"><span class="hs-string">&quot;-&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679142258"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-80"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Page</span></span><span>     </span><span class="hs-special">[</span><span id="local-6989586621679142255"><span class="annot"><span class="annottext">x :: Int
-</span><a href="#local-6989586621679142255"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldNums</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;-&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679096651"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Page</span></span><span>     </span><span class="hs-special">[</span><span id="local-6989586621679096648"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679096648"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pg.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;pg.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; String
-forall a. Show a =&gt; a -&gt; String
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679142255"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-81"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Page</span></span><span>      </span><span id="local-6989586621679142254"><span class="annot"><span class="annottext">i :: [Int]
-</span><a href="#local-6989586621679142254"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679096648"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-81"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#renderCitInfo"><span class="hs-identifier hs-var">renderCitInfo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Page</span></span><span>      </span><span id="local-6989586621679096647"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679096647"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pp.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;pp.&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; [Int] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldNums</span></span><span> </span><span class="annot"><span class="hs-string">&quot;-&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679142254"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">foldNums</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;-&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679096647"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-82"></span></pre></body></html>

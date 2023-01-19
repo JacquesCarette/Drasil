@@ -71,7 +71,7 @@ funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 varResolve :: ChunkDB -> UID -> CodeVarChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
 
--- | Convert the program name to an abbreviated <a>String</a> without any
+-- | Convert the program name to an abbreviated <a>Space</a> without any
 --   special characters.
 programName :: CommonIdea c => c -> String
 
@@ -231,7 +231,7 @@ interwovenLists :: [DataItem'] -> Integer -> Delimiter -> Data'
 -- | Constructor for data that should be skipped.
 junk :: Data'
 
--- | Older version of <a>DataDesc'</a>. Holds a list of <a>Data</a>.
+-- | Older version of <a>DataDesc'</a>. Holds a list of <a>Data'</a>.
 type DataDesc = [Data]
 
 -- | Older version of <a>Delimiter</a>. Holds a <a>Char</a>.
@@ -282,19 +282,19 @@ straight :: [DataItem] -> LinePattern
 -- | Constructor for data with a repeated pattern.
 repeated :: [DataItem] -> LinePattern
 
--- | Checks if a piece of <a>Data</a> is <a>JunkData</a>.
+-- | Checks if a piece of <a>Data'</a> is <a>JunkData</a>.
 isJunk :: Data -> Bool
 
--- | Checks if a piece of <a>Data</a> is only a single line.
+-- | Checks if a piece of <a>Data'</a> is only a single line.
 isLine :: Data -> Bool
 
--- | Checks if a piece of <a>Data</a> is multi-line.
+-- | Checks if a piece of <a>Data'</a> is multi-line.
 isLines :: Data -> Bool
 
 -- | Gets the data inputs from a <a>DataDesc</a>.
 getInputs :: DataDesc -> [DataItem]
 
--- | Helper that gets data inputs from <a>Data</a>.
+-- | Helper that gets data inputs from <a>Data'</a>.
 getDataInputs :: Data -> [DataItem]
 
 -- | Helper that gets the data inputs from single-line or multi-line data.
@@ -1498,10 +1498,10 @@ defaultChoices :: Choices
 -- | Renders <a>Choices</a> as <a>Sentence</a>s.
 choicesSent :: Choices -> [Sentence]
 showChs :: RenderChoices a => a -> Sentence
-instance GHC.Classes.Eq Language.Drasil.Choices.AuxFile
-instance GHC.Classes.Eq Language.Drasil.Choices.Logging
-instance GHC.Classes.Eq Language.Drasil.Choices.Comments
 instance GHC.Classes.Eq Language.Drasil.Choices.CodeConcept
+instance GHC.Classes.Eq Language.Drasil.Choices.Comments
+instance GHC.Classes.Eq Language.Drasil.Choices.Logging
+instance GHC.Classes.Eq Language.Drasil.Choices.AuxFile
 instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.ConstraintBehaviour
 instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.AuxFile
 instance Language.Drasil.Choices.RenderChoices Language.Drasil.Choices.Logging
@@ -1536,7 +1536,7 @@ type Def = CodeDefinition
 
 -- | Code specifications. Holds information needed to generate code.
 data CodeSpec
-[CodeSpec] :: HasName a => {pName :: Name " Program name.", authors :: [a] " Authors.", inputs :: [Input] " All inputs.", extInputs :: [Input] " Explicit inputs (values to be supplied by a file).", derivedInputs :: [Derived] " Derived inputs (each calculated from explicit inputs in a single step).", outputs :: [Output] " All outputs.", configFiles :: [FilePath] " List of files that must be in same directory for running the executable.", execOrder :: [Def] " Mathematical definitions, ordered so that they form a path from inputs to  outputs.", cMap :: ConstraintCEMap " Map from 'UID's to constraints for all constrained chunks used in the problem.", constants :: [Const] " List of all constants used in the problem.", constMap :: ConstantMap " Map containing all constants used in the problem.", mods :: [Mod] " Additional modules required in the generated code, which Drasil cannot yet  automatically define.", sysinfodb :: ChunkDB " The database of all chunks used in the problem."} -> CodeSpec
+[CodeSpec] :: HasName a => Name -> [a] -> Purpose -> Background -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> CodeSpec
 
 -- | Maps constants to their respective <a>CodeDefinition</a>.
 type ConstantMap = Map UID CodeDefinition
@@ -1591,7 +1591,7 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface
 
 -- | Holds all information needed to create a README file.
 data ReadMeInfo
-ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ReadMeInfo
+ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ExamplePurpose -> ExampleDescr -> ReadMeInfo
 [langName] :: ReadMeInfo -> LangAbbrev
 [langVersion] :: ReadMeInfo -> LangVers
 [invalidOS] :: ReadMeInfo -> Maybe String
@@ -1601,12 +1601,14 @@ ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(
 [contributors] :: ReadMeInfo -> [Contributor]
 [configFP] :: ReadMeInfo -> [FilePath]
 [caseName] :: ReadMeInfo -> CaseName
+[examplePurpose] :: ReadMeInfo -> ExamplePurpose
+[exampleDescr] :: ReadMeInfo -> ExampleDescr
 
 -- | Members of this class must have all the information necessary for the
 --   <a>AuxiliarySym</a> in addition to information necessary to create a
 --   package.
 class (AuxiliarySym r) => PackageSym r where {
-    type family Package r;
+    type Package r;
 }
 package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
 
@@ -1615,8 +1617,8 @@ package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
 --   makefile, auxiliary helper documents, and auxiliary from data
 --   documents.
 class AuxiliarySym r where {
-    type family Auxiliary r;
-    type family AuxHelper r;
+    type Auxiliary r;
+    type AuxHelper r;
 }
 doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
 readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
@@ -2242,9 +2244,9 @@ instance GHC.Classes.Eq Language.Drasil.Code.Imperative.Modules.CalcType
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator
 
--- | Initializes the generator's <a>DrasilState</a>. <a>String</a>
---   parameter is a string representing the date. &lt;math&gt; parameter is
---   the sample input values provided by the user.
+-- | Initializes the generator's <a>DrasilState</a>. <a>Space</a> parameter
+--   is a string representing the date. &lt;math&gt; parameter is the
+--   sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
@@ -2265,9 +2267,9 @@ makeCode :: [FileData] -> [AuxData] -> Code
 -- | Creates the requested <a>Code</a> by producing files.
 createCodeFiles :: Code -> IO ()
 
--- | Initializes the generator's <a>DrasilState</a>. <a>String</a>
---   parameter is a string representing the date. &lt;math&gt; parameter is
---   the sample input values provided by the user.
+-- | Initializes the generator's <a>DrasilState</a>. <a>Space</a> parameter
+--   is a string representing the date. &lt;math&gt; parameter is the
+--   sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
@@ -2536,7 +2538,7 @@ defaultChoices :: Choices
 
 -- | Code specifications. Holds information needed to generate code.
 data CodeSpec
-[CodeSpec] :: HasName a => {pName :: Name " Program name.", authors :: [a] " Authors.", inputs :: [Input] " All inputs.", extInputs :: [Input] " Explicit inputs (values to be supplied by a file).", derivedInputs :: [Derived] " Derived inputs (each calculated from explicit inputs in a single step).", outputs :: [Output] " All outputs.", configFiles :: [FilePath] " List of files that must be in same directory for running the executable.", execOrder :: [Def] " Mathematical definitions, ordered so that they form a path from inputs to  outputs.", cMap :: ConstraintCEMap " Map from 'UID's to constraints for all constrained chunks used in the problem.", constants :: [Const] " List of all constants used in the problem.", constMap :: ConstantMap " Map containing all constants used in the problem.", mods :: [Mod] " Additional modules required in the generated code, which Drasil cannot yet  automatically define.", sysinfodb :: ChunkDB " The database of all chunks used in the problem."} -> CodeSpec
+[CodeSpec] :: HasName a => Name -> [a] -> Purpose -> Background -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> CodeSpec
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -2977,7 +2979,7 @@ Swift :: Lang
 --   <a>AuxiliarySym</a> in addition to information necessary to create a
 --   package.
 class (AuxiliarySym r) => PackageSym r where {
-    type family Package r;
+    type Package r;
 }
 package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
 
@@ -2986,8 +2988,8 @@ package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
 --   makefile, auxiliary helper documents, and auxiliary from data
 --   documents.
 class AuxiliarySym r where {
-    type family Auxiliary r;
-    type family AuxHelper r;
+    type Auxiliary r;
+    type AuxHelper r;
 }
 doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
 readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)

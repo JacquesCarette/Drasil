@@ -11,7 +11,8 @@
 </span><span id="line-11"></span><span class="hs-comment">-- | TeX font size.</span><span>
 </span><span id="line-12"></span><span class="annot"><a href="Language.Drasil.Config.html#fontSize"><span class="hs-identifier hs-type">fontSize</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-13"></span><span id="fontSize"><span class="annot"><span class="annottext">fontSize :: Int
-</span><a href="Language.Drasil.Config.html#fontSize"><span class="hs-identifier hs-var hs-var">fontSize</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">12</span></span><span>
+</span><a href="Language.Drasil.Config.html#fontSize"><span class="hs-identifier hs-var hs-var">fontSize</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">12</span></span><span>
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="hs-comment">-- | (Currently Unused) Print verbose data definition descriptions?</span><span>
 </span><span id="line-16"></span><span class="annot"><a href="Language.Drasil.Config.html#verboseDDDescription"><span class="hs-identifier hs-type">verboseDDDescription</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
@@ -49,30 +50,33 @@
 </span><span id="line-40"></span><span class="hs-comment">-- (fraction of LaTeX textwidth).</span><span>
 </span><span id="line-41"></span><span class="annot"><a href="Language.Drasil.Config.html#colAwidth"><span class="hs-identifier hs-type">colAwidth</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Config.html#colBwidth"><span class="hs-identifier hs-type">colBwidth</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
 </span><span id="line-42"></span><span id="colAwidth"><span class="annot"><span class="annottext">colAwidth :: Double
-</span><a href="Language.Drasil.Config.html#colAwidth"><span class="hs-identifier hs-var hs-var">colAwidth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">0.13</span></span><span>
+</span><a href="Language.Drasil.Config.html#colAwidth"><span class="hs-identifier hs-var hs-var">colAwidth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double
+</span><span class="hs-number">0.13</span></span><span>
 </span><span id="line-43"></span><span id="colBwidth"><span class="annot"><span class="annottext">colBwidth :: Double
-</span><a href="Language.Drasil.Config.html#colBwidth"><span class="hs-identifier hs-var hs-var">colBwidth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">0.82</span></span><span>
+</span><a href="Language.Drasil.Config.html#colBwidth"><span class="hs-identifier hs-var hs-var">colBwidth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double
+</span><span class="hs-number">0.82</span></span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="hs-comment">-- | TeX Only - Settings for hyperref.</span><span>
 </span><span id="line-46"></span><span class="annot"><a href="Language.Drasil.Config.html#hyperSettings"><span class="hs-identifier hs-type">hyperSettings</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-47"></span><span id="hyperSettings"><span class="annot"><span class="annottext">hyperSettings :: String
 </span><a href="Language.Drasil.Config.html#hyperSettings"><span class="hs-identifier hs-var hs-var">hyperSettings</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-48"></span><span>     </span><span class="annot"><span class="hs-string">&quot;bookmarks=true,&quot;</span></span><span>     </span><span class="hs-comment">-- show bookmarks bar?</span><span>
-</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;colorlinks=true,&quot;</span></span><span>    </span><span class="hs-comment">-- false: boxed links; true: colored links</span><span>
-</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;linkcolor=red,&quot;</span></span><span>      </span><span class="hs-comment">-- color of internal links</span><span>
-</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;citecolor=blue,&quot;</span></span><span>     </span><span class="hs-comment">-- color of links to bibliography</span><span>
-</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;filecolor=magenta,&quot;</span></span><span>  </span><span class="hs-comment">-- color of file links</span><span>
-</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;urlcolor=cyan&quot;</span></span><span>       </span><span class="hs-comment">-- color of external links</span><span>
+</span><span id="line-48"></span><span>     </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;bookmarks=true,&quot;</span></span><span>     </span><span class="hs-comment">-- show bookmarks bar?</span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;colorlinks=true,&quot;</span></span><span>    </span><span class="hs-comment">-- false: boxed links; true: colored links</span><span>
+</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;linkcolor=red,&quot;</span></span><span>      </span><span class="hs-comment">-- color of internal links</span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;citecolor=blue,&quot;</span></span><span>     </span><span class="hs-comment">-- color of links to bibliography</span><span>
+</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;filecolor=magenta,&quot;</span></span><span>  </span><span class="hs-comment">-- color of file links</span><span>
+</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;urlcolor=cyan&quot;</span></span><span>       </span><span class="hs-comment">-- color of external links</span><span>
 </span><span id="line-54"></span><span>
 </span><span id="line-55"></span><span class="hs-comment">-- | The bibliography format.</span><span>
 </span><span id="line-56"></span><span class="hs-keyword">data</span><span> </span><span id="StyleGuide"><span class="annot"><a href="Language.Drasil.Config.html#StyleGuide"><span class="hs-identifier hs-var">StyleGuide</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="MLA"><span class="annot"><a href="Language.Drasil.Config.html#MLA"><span class="hs-identifier hs-var">MLA</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="APA"><span class="annot"><a href="Language.Drasil.Config.html#APA"><span class="hs-identifier hs-var">APA</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Chicago"><span class="annot"><a href="Language.Drasil.Config.html#Chicago"><span class="hs-identifier hs-var">Chicago</span></a></span></span><span>
@@ -80,9 +84,15 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-58"></span><span class="hs-comment">-- | Converts bibliography style guide.</span><span>
 </span><span id="line-59"></span><span class="annot"><a href="Language.Drasil.Config.html#useStyleTeX"><span class="hs-identifier hs-type">useStyleTeX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Config.html#StyleGuide"><span class="hs-identifier hs-type">StyleGuide</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-60"></span><span id="useStyleTeX"><span class="annot"><span class="annottext">useStyleTeX :: StyleGuide -&gt; String
-</span><a href="Language.Drasil.Config.html#useStyleTeX"><span class="hs-identifier hs-var hs-var">useStyleTeX</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Config.html#MLA"><span class="hs-identifier hs-type">MLA</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;ieeetr&quot;</span></span><span>
-</span><span id="line-61"></span><span class="annot"><a href="Language.Drasil.Config.html#useStyleTeX"><span class="hs-identifier hs-var">useStyleTeX</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Config.html#APA"><span class="hs-identifier hs-type">APA</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;apalike&quot;</span></span><span>
-</span><span id="line-62"></span><span class="annot"><a href="Language.Drasil.Config.html#useStyleTeX"><span class="hs-identifier hs-var">useStyleTeX</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Config.html#Chicago"><span class="hs-identifier hs-type">Chicago</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;plain&quot;</span></span><span>
+</span><a href="Language.Drasil.Config.html#useStyleTeX"><span class="hs-identifier hs-var hs-var">useStyleTeX</span></a></span></span><span> </span><span class="annot"><span class="annottext">StyleGuide
+</span><a href="Language.Drasil.Config.html#MLA"><span class="hs-identifier hs-var">MLA</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;ieeetr&quot;</span></span><span>
+</span><span id="line-61"></span><span class="annot"><a href="Language.Drasil.Config.html#useStyleTeX"><span class="hs-identifier hs-var">useStyleTeX</span></a></span><span> </span><span class="annot"><span class="annottext">StyleGuide
+</span><a href="Language.Drasil.Config.html#APA"><span class="hs-identifier hs-var">APA</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;apalike&quot;</span></span><span>
+</span><span id="line-62"></span><span class="annot"><a href="Language.Drasil.Config.html#useStyleTeX"><span class="hs-identifier hs-var">useStyleTeX</span></a></span><span> </span><span class="annot"><span class="annottext">StyleGuide
+</span><a href="Language.Drasil.Config.html#Chicago"><span class="hs-identifier hs-var">Chicago</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;plain&quot;</span></span><span>
 </span><span id="line-63"></span><span>
 </span><span id="line-64"></span><span class="hs-comment">-- | MLA for bibliography style as a 'String'.</span><span>
 </span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Config.html#bibStyleT"><span class="hs-identifier hs-type">bibStyleT</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
@@ -106,5 +116,6 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-76"></span><span class="hs-comment">-- | Used to name the BibTeX file</span><span>
 </span><span id="line-77"></span><span class="annot"><a href="Language.Drasil.Config.html#bibFname"><span class="hs-identifier hs-type">bibFname</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-78"></span><span id="bibFname"><span class="annot"><span class="annottext">bibFname :: String
-</span><a href="Language.Drasil.Config.html#bibFname"><span class="hs-identifier hs-var hs-var">bibFname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;bibfile&quot;</span></span><span> </span><span class="hs-comment">--needed in TeX/Print and TeX/Preamble</span><span>
+</span><a href="Language.Drasil.Config.html#bibFname"><span class="hs-identifier hs-var hs-var">bibFname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;bibfile&quot;</span></span><span> </span><span class="hs-comment">--needed in TeX/Print and TeX/Preamble</span><span>
 </span><span id="line-79"></span></pre></body></html>

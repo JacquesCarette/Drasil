@@ -14,8 +14,7 @@
 </span><span id="line-14"></span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#elastMod"><span class="hs-identifier hs-type">elastMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#mobShear"><span class="hs-identifier hs-type">mobShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-type">nrmStrss</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#shearRes"><span class="hs-identifier hs-type">shearRes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#stffness"><span class="hs-identifier hs-type">stffness</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span id="elastMod"><span class="annot"><span class="annottext">elastMod :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#elastMod"><span class="hs-identifier hs-var hs-var">elastMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
-forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#elastMod"><span class="hs-identifier hs-var hs-var">elastMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -23,8 +22,7 @@ c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">cE</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-var">pascal</span></a></span><span> </span><span>
 </span><span id="line-17"></span><span id="mobShear"><span class="annot"><span class="annottext">mobShear :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#mobShear"><span class="hs-identifier hs-var hs-var">mobShear</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
-forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#mobShear"><span class="hs-identifier hs-var hs-var">mobShear</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -32,8 +30,7 @@ c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">cS</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span>
 </span><span id="line-18"></span><span id="shearRes"><span class="annot"><span class="annottext">shearRes :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#shearRes"><span class="hs-identifier hs-var hs-var">shearRes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
-forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#shearRes"><span class="hs-identifier hs-var hs-var">shearRes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -41,8 +38,7 @@ c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">cP</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span>
 </span><span id="line-19"></span><span id="stffness"><span class="annot"><span class="annottext">stffness :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#stffness"><span class="hs-identifier hs-var hs-var">stffness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
-forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#stffness"><span class="hs-identifier hs-var hs-var">stffness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -50,8 +46,7 @@ c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">cK</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.SolidMechanics.html#stiffnessU"><span class="hs-identifier hs-var">stiffnessU</span></a></span><span> </span><span>
 </span><span id="line-20"></span><span id="nrmStrss"><span class="annot"><span class="annottext">nrmStrss :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-var hs-var">nrmStrss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; UnitDefn -&gt; UnitalChunk
-forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-var hs-var">nrmStrss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk

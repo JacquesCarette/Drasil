@@ -478,7 +478,7 @@ Magnitude :: Decoration
 --   value that can vary)</li>
 --   <li><tt><a>Label</a></tt> (strings such as "max" or "target" that
 --   represent a single idea)</li>
---   <li><tt><a>Special</a></tt> characters (ex. unicode)</li>
+--   <li><tt><a>Symbol</a></tt> characters (ex. unicode)</li>
 --   <li><tt>Decorated</tt> symbols using <a>Atop</a></li>
 --   <li><tt>Concatenations</tt> of symbols, including subscripts and
 --   superscripts</li>
@@ -499,7 +499,7 @@ Label :: String -> Symbol
 Integ :: Int -> Symbol
 
 -- | For now, special characters are the degree and partial differentiation
---   symbols. These should eventually move elsewhere and the <a>Special</a>
+--   symbols. These should eventually move elsewhere and the <a>Symbol</a>
 --   type removed.
 Special :: Special -> Symbol
 
@@ -2178,7 +2178,7 @@ vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
 data QDefinition e
 
--- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>String</a>),
+-- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>Space</a>),
 --   term (<a>NP</a>), definition (<a>Sentence</a>), <a>Symbol</a>,
 --   <a>Space</a>, unit, and defining expression.
 fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
@@ -2192,7 +2192,7 @@ fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage and has no units.
 fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 
--- | Same as <a>fromEqnSt'</a>, but takes a <a>String</a> instead of a
+-- | Same as <a>fromEqnSt'</a>, but takes a <a>Space</a> instead of a
 --   <a>UID</a>.
 fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 
@@ -2292,7 +2292,7 @@ UC :: DefinedQuantityDict -> UnitDefn -> UnitalChunk
 [_uni] :: UnitalChunk -> UnitDefn
 
 -- | Creates a <a>UnitalChunk</a> in the same way as <a>uc'</a>, but with a
---   <a>Sentence</a> for the definition instead of a <a>String</a>.
+--   <a>Sentence</a> for the definition instead of a <a>Space</a>.
 makeUCWDS :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
 
 -- | Used to create a <a>UnitalChunk</a> from a <a>Concept</a>,
@@ -3893,7 +3893,7 @@ DiscreteS :: [String] -> Space
 Function :: NonEmpty Primitive -> Primitive -> Space
 Void :: Space
 
--- | A RealInterval is a subset of <a>Real</a> (as a <a>Space</a>). These
+-- | A RealInterval is a subset of <a>Space</a> (as a <a>Space</a>). These
 --   come in different flavours. For now, we embed <tt>Expr</tt> for the
 --   bounds, but that will change as well.
 data RealInterval a b
@@ -3942,7 +3942,7 @@ data Decoration
 --   value that can vary)</li>
 --   <li><tt><a>Label</a></tt> (strings such as "max" or "target" that
 --   represent a single idea)</li>
---   <li><tt><a>Special</a></tt> characters (ex. unicode)</li>
+--   <li><tt><a>Symbol</a></tt> characters (ex. unicode)</li>
 --   <li><tt>Decorated</tt> symbols using <a>Atop</a></li>
 --   <li><tt>Concatenations</tt> of symbols, including subscripts and
 --   superscripts</li>

@@ -107,8 +107,8 @@ makeCSS :: Document -> Doc
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc
 
--- | Example title and purpose section.
-introInfo :: String -> [String] -> Doc
+-- | Example title, authors, and maybe purpose section.
+introInfo :: String -> [String] -> Maybe String -> Doc
 
 -- | Language version section.
 verInfo :: String -> String -> Doc
@@ -132,6 +132,10 @@ extLibSec :: [(String, String)] -> [String] -> Doc
 
 -- | End section.
 endNote :: [String] -> Doc
+
+-- | <tt>What</tt> section in generated README file, does not display if
+--   empty
+whatInfo :: Maybe String -> Doc
 
 -- | Data is either linear or not.
 data Linearity

@@ -44,7 +44,7 @@ codeChunk :: CodeIdea c => c -> CodeChunk
 class CodeIdea c => DefiningCodeExpr c
 codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
 
--- | Convert the program name to an abbreviated <a>String</a> without any
+-- | Convert the program name to an abbreviated <a>Space</a> without any
 --   special characters.
 programName :: CommonIdea c => c -> String
 

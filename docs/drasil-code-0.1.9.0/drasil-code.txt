@@ -22,9 +22,9 @@ makeCode :: [FileData] -> [AuxData] -> Code
 -- | Creates the requested <a>Code</a> by producing files.
 createCodeFiles :: Code -> IO ()
 
--- | Initializes the generator's <a>DrasilState</a>. <a>String</a>
---   parameter is a string representing the date. &lt;math&gt; parameter is
---   the sample input values provided by the user.
+-- | Initializes the generator's <a>DrasilState</a>. <a>Space</a> parameter
+--   is a string representing the date. &lt;math&gt; parameter is the
+--   sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 
 -- | Generates a package with the given <a>DrasilState</a>. The passed
@@ -293,7 +293,7 @@ defaultChoices :: Choices
 
 -- | Code specifications. Holds information needed to generate code.
 data CodeSpec
-[CodeSpec] :: HasName a => {pName :: Name " Program name.", authors :: [a] " Authors.", inputs :: [Input] " All inputs.", extInputs :: [Input] " Explicit inputs (values to be supplied by a file).", derivedInputs :: [Derived] " Derived inputs (each calculated from explicit inputs in a single step).", outputs :: [Output] " All outputs.", configFiles :: [FilePath] " List of files that must be in same directory for running the executable.", execOrder :: [Def] " Mathematical definitions, ordered so that they form a path from inputs to  outputs.", cMap :: ConstraintCEMap " Map from 'UID's to constraints for all constrained chunks used in the problem.", constants :: [Const] " List of all constants used in the problem.", constMap :: ConstantMap " Map containing all constants used in the problem.", mods :: [Mod] " Additional modules required in the generated code, which Drasil cannot yet  automatically define.", sysinfodb :: ChunkDB " The database of all chunks used in the problem."} -> CodeSpec
+[CodeSpec] :: HasName a => Name -> [a] -> Purpose -> Background -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> CodeSpec
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -734,7 +734,7 @@ Swift :: Lang
 --   <a>AuxiliarySym</a> in addition to information necessary to create a
 --   package.
 class (AuxiliarySym r) => PackageSym r where {
-    type family Package r;
+    type Package r;
 }
 package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
 
@@ -743,8 +743,8 @@ package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
 --   makefile, auxiliary helper documents, and auxiliary from data
 --   documents.
 class AuxiliarySym r where {
-    type family Auxiliary r;
-    type family AuxHelper r;
+    type Auxiliary r;
+    type AuxHelper r;
 }
 doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
 readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)

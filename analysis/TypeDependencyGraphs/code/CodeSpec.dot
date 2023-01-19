@@ -2,6 +2,8 @@ digraph codespec{
 CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
 CodeSpec -> Name;
 CodeSpec -> a;
+CodeSpec -> Purpose;
+CodeSpec -> Background;
 CodeSpec -> Input;
 CodeSpec -> Derived;
 CodeSpec -> Output;

@@ -1,0 +1,4 @@
+digraph examplepurpose{
+ExamplePurpose	[shape=oval, color=red2, label="ExamplePurpose"];
+ExamplePurpose -> String;
+}

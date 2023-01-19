@@ -29,100 +29,66 @@
 </span><span id="line-24"></span><span>
 </span><span id="line-25"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#timeDerivEqn1"><span class="hs-identifier hs-type">timeDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#timeDerivEqn2"><span class="hs-identifier hs-type">timeDerivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#timeDerivEqn3"><span class="hs-identifier hs-type">timeDerivEqn3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#timeDerivEqn4"><span class="hs-identifier hs-type">timeDerivEqn4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-26"></span><span id="timeDerivEqn1"><span class="annot"><span class="annottext">timeDerivEqn1 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#timeDerivEqn1"><span class="hs-identifier hs-var hs-var">timeDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#timeDerivEqn1"><span class="hs-identifier hs-var hs-var">timeDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">yPos</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">yPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstQDef -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
-</span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-27"></span><span id="timeDerivEqn2"><span class="annot"><span class="annottext">timeDerivEqn2 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#timeDerivEqn2"><span class="hs-identifier hs-var hs-var">timeDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#timeDerivEqn2"><span class="hs-identifier hs-var hs-var">timeDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstQDef -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
-</span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
+</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">0</span></span><span>
 </span><span id="line-28"></span><span id="timeDerivEqn3"><span class="annot"><span class="annottext">timeDerivEqn3 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#timeDerivEqn3"><span class="hs-identifier hs-var hs-var">timeDerivEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#timeDerivEqn3"><span class="hs-identifier hs-var hs-var">timeDerivEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstQDef -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
-</span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span>
+</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">0</span></span><span>
 </span><span id="line-29"></span><span id="timeDerivEqn4"><span class="annot"><span class="annottext">timeDerivEqn4 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#timeDerivEqn4"><span class="hs-identifier hs-var hs-var">timeDerivEqn4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#timeDerivEqn4"><span class="hs-identifier hs-var hs-var">timeDerivEqn4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span>
 </span><span id="line-30"></span><span>
@@ -136,87 +102,57 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-34"></span><span>
 </span><span id="line-35"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn1"><span class="hs-identifier hs-type">landPosDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn2"><span class="hs-identifier hs-type">landPosDerivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn3"><span class="hs-identifier hs-type">landPosDerivEqn3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-36"></span><span id="landPosDerivEqn1"><span class="annot"><span class="annottext">landPosDerivEqn1 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn1"><span class="hs-identifier hs-var hs-var">landPosDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn1"><span class="hs-identifier hs-var hs-var">landPosDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">xPos</span></span><span>    </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">xPos</span></span><span>    </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">ixVel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">ixVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span>
 </span><span id="line-37"></span><span id="landPosDerivEqn2"><span class="annot"><span class="annottext">landPosDerivEqn2 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn2"><span class="hs-identifier hs-var hs-var">landPosDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn2"><span class="hs-identifier hs-var hs-var">landPosDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">ixVel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">ixVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span>
 </span><span id="line-38"></span><span id="landPosDerivEqn3"><span class="annot"><span class="annottext">landPosDerivEqn3 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn3"><span class="hs-identifier hs-var hs-var">landPosDerivEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#landPosDerivEqn3"><span class="hs-identifier hs-var hs-var">landPosDerivEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span>
 </span><span id="line-39"></span><span>
@@ -230,47 +166,34 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn1"><span class="hs-identifier hs-type">rectVelDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn2"><span class="hs-identifier hs-type">rectVelDerivEqn2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-46"></span><span id="rectVelDerivEqn1"><span class="annot"><span class="annottext">rectVelDerivEqn1 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn1"><span class="hs-identifier hs-var hs-var">rectVelDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn1"><span class="hs-identifier hs-var hs-var">rectVelDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.constAccel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
-forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">QP.constAccel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span>
 </span><span id="line-47"></span><span id="rectVelDerivEqn2"><span class="annot"><span class="annottext">rectVelDerivEqn2 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn2"><span class="hs-identifier hs-var hs-var">rectVelDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
-forall q. HasSymbol q =&gt; q -&gt; Symbol
+</span><a href="Drasil.Projectile.Derivations.html#rectVelDerivEqn2"><span class="hs-identifier hs-var hs-var">rectVelDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.iSpeed</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">QP.iSpeed</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
-</span><span id="line-48"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
-forall q. HasSymbol q =&gt; q -&gt; Symbol
+</span><span id="line-48"></span><span>                   </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.constAccel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-49"></span><span>
@@ -284,88 +207,62 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-53"></span><span>
 </span><span id="line-54"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn1"><span class="hs-identifier hs-type">rectPosDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn2"><span class="hs-identifier hs-type">rectPosDerivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn3"><span class="hs-identifier hs-type">rectPosDerivEqn3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-55"></span><span id="rectPosDerivEqn1"><span class="annot"><span class="annottext">rectPosDerivEqn1 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn1"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn1"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">speed</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
-forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">speed</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span>
 </span><span id="line-56"></span><span id="rectPosDerivEqn2"><span class="annot"><span class="annottext">rectPosDerivEqn2 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn2"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
-forall q. HasSymbol q =&gt; q -&gt; Symbol
+</span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn2"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
-</span><span id="line-57"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
-forall q. HasSymbol q =&gt; q -&gt; Symbol
+</span><span id="line-57"></span><span>                   </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span>
 </span><span id="line-58"></span><span id="rectPosDerivEqn3"><span class="annot"><span class="annottext">rectPosDerivEqn3 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn3"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
-forall q. HasSymbol q =&gt; q -&gt; Symbol
+</span><a href="Drasil.Projectile.Derivations.html#rectPosDerivEqn3"><span class="hs-identifier hs-var hs-var">rectPosDerivEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">scalarPos</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
-</span><span id="line-59"></span><span>                   </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
-forall q. HasSymbol q =&gt; q -&gt; Symbol
+</span><span id="line-59"></span><span>                   </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">defint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.iSpeed</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">QP.iSpeed</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.constAccel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">QP.constAccel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-60"></span><span>
@@ -378,33 +275,23 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-64"></span><span>
 </span><span id="line-65"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#horMotionEqn1"><span class="hs-identifier hs-type">horMotionEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#horMotionEqn2"><span class="hs-identifier hs-type">horMotionEqn2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-66"></span><span id="horMotionEqn1"><span class="annot"><span class="annottext">horMotionEqn1 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#horMotionEqn1"><span class="hs-identifier hs-var hs-var">horMotionEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#horMotionEqn1"><span class="hs-identifier hs-var hs-var">horMotionEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">xVel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">xVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">ixSpeed</span></span><span>
 </span><span id="line-67"></span><span id="horMotionEqn2"><span class="annot"><span class="annottext">horMotionEqn2 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#horMotionEqn2"><span class="hs-identifier hs-var hs-var">horMotionEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#horMotionEqn2"><span class="hs-identifier hs-var hs-var">horMotionEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">xPos</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">xPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.ixPos</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">QP.ixPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">ixSpeed</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">ixSpeed</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
 </span><span id="line-68"></span><span>
@@ -418,92 +305,60 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-72"></span><span>
 </span><span id="line-73"></span><span class="annot"><a href="Drasil.Projectile.Derivations.html#verMotionEqn1"><span class="hs-identifier hs-type">verMotionEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#verMotionEqn2"><span class="hs-identifier hs-type">verMotionEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Derivations.html#verMotionEqn3"><span class="hs-identifier hs-type">verMotionEqn3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-74"></span><span id="verMotionEqn1"><span class="annot"><span class="annottext">verMotionEqn1 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#verMotionEqn1"><span class="hs-identifier hs-var hs-var">verMotionEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#verMotionEqn1"><span class="hs-identifier hs-var hs-var">verMotionEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">yVel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">yVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iySpeed</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iySpeed</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
 </span><span id="line-75"></span><span id="verMotionEqn2"><span class="annot"><span class="annottext">verMotionEqn2 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#verMotionEqn2"><span class="hs-identifier hs-var hs-var">verMotionEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#verMotionEqn2"><span class="hs-identifier hs-var hs-var">verMotionEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">yPos</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">yPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QP.iyPos</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">QP.iyPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iySpeed</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iySpeed</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">2</span></span><span class="hs-special">)</span><span>
 </span><span id="line-76"></span><span id="verMotionEqn3"><span class="annot"><span class="annottext">verMotionEqn3 :: ModelExpr
-</span><a href="Drasil.Projectile.Derivations.html#verMotionEqn3"><span class="hs-identifier hs-var hs-var">verMotionEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.Projectile.Derivations.html#verMotionEqn3"><span class="hs-identifier hs-var hs-var">verMotionEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">yVel</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
-forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">yVel</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">iySpeed</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
-forall r. LiteralC r =&gt; Integer -&gt; r
-</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">iySpeed</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">yPos</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
-forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
-forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">yPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.iyPos</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-77"></span></pre></body></html>

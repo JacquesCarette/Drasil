@@ -201,20 +201,20 @@ data CodeExpr
 --   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
 --   element of an interval.
 [RealI] :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.UFuncVN
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.UFuncVV
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.UFuncB
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.UFunc
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.AssocBoolOper
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.AssocArithOper
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.NVVBinOp
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.VVNBinOp
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.VVVBinOp
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.OrdBinOp
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.LABinOp
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.BoolBinOp
-instance GHC.Classes.Eq Language.Drasil.Code.Expr.EqBinOp
 instance GHC.Classes.Eq Language.Drasil.Code.Expr.ArithBinOp
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.EqBinOp
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.BoolBinOp
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.LABinOp
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.OrdBinOp
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.VVVBinOp
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.VVNBinOp
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.NVVBinOp
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.AssocArithOper
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.AssocBoolOper
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.UFunc
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.UFuncB
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.UFuncVV
+instance GHC.Classes.Eq Language.Drasil.Code.Expr.UFuncVN
 instance Language.Drasil.Literal.Class.LiteralC Language.Drasil.Code.Expr.CodeExpr
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Code.Expr.CodeExpr
 
@@ -269,7 +269,7 @@ codeChunk :: CodeIdea c => c -> CodeChunk
 class CodeIdea c => DefiningCodeExpr c
 codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
 
--- | Convert the program name to an abbreviated <a>String</a> without any
+-- | Convert the program name to an abbreviated <a>Space</a> without any
 --   special characters.
 programName :: CommonIdea c => c -> String
 

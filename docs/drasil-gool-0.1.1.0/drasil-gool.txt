@@ -31,32 +31,32 @@ type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
-    type family Program r;
+    type Program r;
 }
 prog :: ProgramSym r => Label -> [SFile r] -> GSProgram r
 class (ModuleSym r) => FileSym r where {
-    type family File r;
+    type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
 docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
 class PermanenceSym r where {
-    type family Permanence r;
+    type Permanence r;
 }
 static :: PermanenceSym r => r (Permanence r)
 dynamic :: PermanenceSym r => r (Permanence r)
 class (BlockSym r) => BodySym r where {
-    type family Body r;
+    type Body r;
 }
 body :: BodySym r => [MSBlock r] -> MSBody r
 addComments :: BodySym r => Label -> MSBody r -> MSBody r
 bodyStatements :: BodySym r => [MSStatement r] -> MSBody r
 oneLiner :: BodySym r => MSStatement r -> MSBody r
 class (StatementSym r) => BlockSym r where {
-    type family Block r;
+    type Block r;
 }
 block :: BlockSym r => [MSStatement r] -> MSBlock r
 class TypeSym r where {
-    type family Type r;
+    type Type r;
 }
 bool :: TypeSym r => VSType r
 int :: TypeSym r => VSType r
@@ -76,7 +76,7 @@ class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
 class (ValueSym r) => StatementSym r where {
-    type family Statement r;
+    type Statement r;
 }
 valStmt :: StatementSym r => SValue r -> MSStatement r
 multi :: StatementSym r => [MSStatement r] -> MSStatement r
@@ -157,7 +157,7 @@ tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 class (TypeSym r) => VariableSym r where {
-    type family Variable r;
+    type Variable r;
 }
 var :: VariableSym r => Label -> VSType r -> SVariable r
 staticVar :: VariableSym r => Label -> VSType r -> SVariable r
@@ -177,7 +177,7 @@ infixl 9 $->
 listOf :: VariableSym r => Label -> VSType r -> SVariable r
 listVar :: VariableSym r => Label -> VSType r -> SVariable r
 class (TypeSym r) => ValueSym r where {
-    type family Value r;
+    type Value r;
 }
 valueType :: ValueSym r => r (Value r) -> r (Type r)
 class (ValueSym r) => Argument r
@@ -275,7 +275,7 @@ libNewObj :: ValueExpression r => Library -> PosCtorCall r
 exists :: ValueExpression r => SValue r -> SValue r
 objMethodCallMixedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> NamedArgs r -> SValue r
 class (ValueSym r) => FunctionSym r where {
-    type family Function r;
+    type Function r;
 }
 func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
 objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
@@ -302,17 +302,17 @@ notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> MSStatement 
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
 class ScopeSym r where {
-    type family Scope r;
+    type Scope r;
 }
 private :: ScopeSym r => r (Scope r)
 public :: ScopeSym r => r (Scope r)
 class (VariableSym r) => ParameterSym r where {
-    type family Parameter r;
+    type Parameter r;
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
 class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r where {
-    type family Method r;
+    type Method r;
 }
 method :: MethodSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 getMethod :: MethodSym r => SVariable r -> SMethod r
@@ -331,7 +331,7 @@ pubMethod :: MethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> 
 initializer :: MethodSym r => [MSParameter r] -> Initializers r -> SMethod r
 nonInitConstructor :: MethodSym r => [MSParameter r] -> MSBody r -> SMethod r
 class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
-    type family StateVar r;
+    type StateVar r;
 }
 stateVar :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
 stateVarDef :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
@@ -340,14 +340,14 @@ privDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
 class (MethodSym r, StateVarSym r) => ClassSym r where {
-    type family Class r;
+    type Class r;
 }
 buildClass :: ClassSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
 extraClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
 implementingClass :: ClassSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> SClass r
 docClass :: ClassSym r => String -> SClass r -> SClass r
 class (ClassSym r) => ModuleSym r where {
-    type family Module r;
+    type Module r;
 }
 buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 convType :: TypeSym r => CodeType -> VSType r

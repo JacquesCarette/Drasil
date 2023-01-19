@@ -20,6 +20,14 @@
 		Blocka -> SystemInformation;
 		Blocka -> BibRef;
 		}
+		subgraph purpose{
+		Purpose	[shape=oval, color=red2, label="Purpose"];
+		Purpose -> Sentence;
+		}
+		subgraph background{
+		Background	[shape=oval, color=red2, label="Background"];
+		Background -> Sentence;
+		}
 		subgraph refmapa{
 		RefMapa	[shape=oval, color=red2, label="RefMapa"];
 		RefMapa -> MapUIDaInt;

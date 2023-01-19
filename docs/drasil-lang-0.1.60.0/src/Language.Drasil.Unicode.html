@@ -1,33 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="%24con2tag_KAH58JkmciNCX6l48UxIVU"></span><span class="hs-comment">-- | Special type for unicode characters.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Special type for unicode characters.</span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Unicode</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier">Special</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Unicode.html#Partial"><span class="hs-identifier">Partial</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Unicode.html#Circle"><span class="hs-identifier">Circle</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Unicode.html#RenderSpecial"><span class="hs-identifier">RenderSpecial</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Unicode.html#special"><span class="hs-identifier">special</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-comment">-- | Special characters include partial derivatives and the degree circle.</span><span>
 </span><span id="line-5"></span><span class="hs-keyword">data</span><span> </span><span id="Special"><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier hs-var">Special</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Partial"><span class="annot"><a href="Language.Drasil.Unicode.html#Partial"><span class="hs-identifier hs-var">Partial</span></a></span></span><span> </span><span class="hs-comment">-- remove by having Partial exist in the drasil-printer only</span><span>
 </span><span id="line-6"></span><span>             </span><span class="hs-glyph">|</span><span> </span><span id="Circle"><span class="annot"><a href="Language.Drasil.Unicode.html#Circle"><span class="hs-identifier hs-var">Circle</span></a></span></span><span>  </span><span class="hs-comment">-- remove by refactoring how units are done </span><span>
-</span><span id="line-7"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679433742"><span id="local-6989586621679433744"><span class="annot"><span class="annottext">Special -&gt; Special -&gt; Bool
-(Special -&gt; Special -&gt; Bool)
--&gt; (Special -&gt; Special -&gt; Bool) -&gt; Eq Special
+</span><span id="line-7"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679346715"><span id="local-6989586621679346717"><span class="annot"><span class="annottext">Special -&gt; Special -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: Special -&gt; Special -&gt; Bool
 $c/= :: Special -&gt; Special -&gt; Bool
 == :: Special -&gt; Special -&gt; Bool
 $c== :: Special -&gt; Special -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679433726"><span id="local-6989586621679433728"><span id="local-6989586621679433730"><span id="local-6989586621679433732"><span id="local-6989586621679433734"><span id="local-6989586621679433736"><span id="local-6989586621679433738"><span class="annot"><span class="annottext">Eq Special
-Eq Special =&gt;
-(Special -&gt; Special -&gt; Ordering)
--&gt; (Special -&gt; Special -&gt; Bool)
--&gt; (Special -&gt; Special -&gt; Bool)
--&gt; (Special -&gt; Special -&gt; Bool)
--&gt; (Special -&gt; Special -&gt; Bool)
--&gt; (Special -&gt; Special -&gt; Special)
--&gt; (Special -&gt; Special -&gt; Special)
--&gt; Ord Special
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679346695"><span id="local-6989586621679346697"><span id="local-6989586621679346700"><span id="local-6989586621679346703"><span id="local-6989586621679346706"><span id="local-6989586621679346708"><span id="local-6989586621679346710"><span class="annot"><span class="annottext">Eq Special
 Special -&gt; Special -&gt; Bool
 Special -&gt; Special -&gt; Ordering
 Special -&gt; Special -&gt; Special
 forall a.
-Eq a =&gt;
-(a -&gt; a -&gt; Ordering)
+Eq a
+-&gt; (a -&gt; a -&gt; Ordering)
 -&gt; (a -&gt; a -&gt; Bool)
 -&gt; (a -&gt; a -&gt; Bool)
 -&gt; (a -&gt; a -&gt; Bool)
@@ -49,10 +38,9 @@ $c&lt;= :: Special -&gt; Special -&gt; Bool
 $c&lt; :: Special -&gt; Special -&gt; Bool
 compare :: Special -&gt; Special -&gt; Ordering
 $ccompare :: Special -&gt; Special -&gt; Ordering
-$cp1Ord :: Eq Special
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span>
 </span><span id="line-9"></span><span class="hs-comment">-- | Class for rendering special characters.</span><span>
-</span><span id="line-10"></span><span class="hs-keyword">class</span><span> </span><span id="RenderSpecial"><span class="annot"><a href="Language.Drasil.Unicode.html#RenderSpecial"><span class="hs-identifier hs-var">RenderSpecial</span></a></span></span><span> </span><span id="local-6989586621679433724"><span class="annot"><a href="#local-6989586621679433724"><span class="hs-identifier hs-type">r</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-11"></span><span>  </span><span id="special"><span class="annot"><a href="Language.Drasil.Unicode.html#special"><span class="hs-identifier hs-type">special</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679433724"><span class="hs-identifier hs-type">r</span></a></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">class</span><span> </span><span id="RenderSpecial"><span class="annot"><a href="Language.Drasil.Unicode.html#RenderSpecial"><span class="hs-identifier hs-var">RenderSpecial</span></a></span></span><span> </span><span id="local-6989586621679346693"><span class="annot"><a href="#local-6989586621679346693"><span class="hs-identifier hs-type">r</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-11"></span><span>  </span><span id="special"><span class="annot"><a href="Language.Drasil.Unicode.html#special"><span class="hs-identifier hs-type">special</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679346693"><span class="hs-identifier hs-type">r</span></a></span><span>
 </span><span id="line-12"></span></pre></body></html>

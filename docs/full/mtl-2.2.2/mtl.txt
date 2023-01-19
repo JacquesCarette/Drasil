@@ -1046,7 +1046,7 @@ runContT :: ContT r m a -> (a -> m r) -> m r
 --   <li><pre><a>runContT</a> (<a>mapContT</a> f m) = f . <a>runContT</a>
 --   m</pre></li>
 --   </ul>
-mapContT :: forall k m (r :: k) a. (m r -> m r) -> ContT r m a -> ContT r m a
+mapContT :: forall {k} m (r :: k) a. (m r -> m r) -> ContT r m a -> ContT r m a
 
 -- | Apply a function to transform the continuation passed to a CPS
 --   computation.
@@ -1055,7 +1055,7 @@ mapContT :: forall k m (r :: k) a. (m r -> m r) -> ContT r m a -> ContT r m a
 --   <li><pre><a>runContT</a> (<a>withContT</a> f m) = <a>runContT</a> m .
 --   f</pre></li>
 --   </ul>
-withContT :: forall k b m (r :: k) a. ((b -> m r) -> a -> m r) -> ContT r m a -> ContT r m b
+withContT :: forall {k} b m (r :: k) a. ((b -> m r) -> a -> m r) -> ContT r m a -> ContT r m b
 
 
 -- | The MonadWriter class.

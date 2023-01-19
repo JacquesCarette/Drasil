@@ -99,9 +99,9 @@ vd :: Maybe Int -> TypeData -> Doc -> ValData
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 data VarData
 vard :: Binding -> String -> TypeData -> Doc -> VarData
+instance GHC.Classes.Eq GOOL.Drasil.AST.ScopeTag
 instance GHC.Classes.Ord GOOL.Drasil.AST.QualifiedName
 instance GHC.Classes.Eq GOOL.Drasil.AST.QualifiedName
-instance GHC.Classes.Eq GOOL.Drasil.AST.ScopeTag
 
 module GOOL.Drasil.Helpers
 angles :: Doc -> Doc
@@ -269,32 +269,32 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
-    type family Program r;
+    type Program r;
 }
 prog :: ProgramSym r => Label -> [SFile r] -> GSProgram r
 class (ModuleSym r) => FileSym r where {
-    type family File r;
+    type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
 docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
 class PermanenceSym r where {
-    type family Permanence r;
+    type Permanence r;
 }
 static :: PermanenceSym r => r (Permanence r)
 dynamic :: PermanenceSym r => r (Permanence r)
 class (BlockSym r) => BodySym r where {
-    type family Body r;
+    type Body r;
 }
 body :: BodySym r => [MSBlock r] -> MSBody r
 addComments :: BodySym r => Label -> MSBody r -> MSBody r
 bodyStatements :: BodySym r => [MSStatement r] -> MSBody r
 oneLiner :: BodySym r => MSStatement r -> MSBody r
 class (StatementSym r) => BlockSym r where {
-    type family Block r;
+    type Block r;
 }
 block :: BlockSym r => [MSStatement r] -> MSBlock r
 class TypeSym r where {
-    type family Type r;
+    type Type r;
 }
 bool :: TypeSym r => VSType r
 int :: TypeSym r => VSType r
@@ -314,7 +314,7 @@ class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
 class (TypeSym r) => VariableSym r where {
-    type family Variable r;
+    type Variable r;
 }
 var :: VariableSym r => Label -> VSType r -> SVariable r
 staticVar :: VariableSym r => Label -> VSType r -> SVariable r
@@ -334,7 +334,7 @@ infixl 9 $->
 listOf :: VariableSym r => Label -> VSType r -> SVariable r
 listVar :: VariableSym r => Label -> VSType r -> SVariable r
 class (TypeSym r) => ValueSym r where {
-    type family Value r;
+    type Value r;
 }
 valueType :: ValueSym r => r (Value r) -> r (Type r)
 class (ValueSym r) => Argument r
@@ -437,7 +437,7 @@ objMethodCallNamedArgs :: InternalValueExp r => VSType r -> SValue r -> Label ->
 objMethodCallMixedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallNoParams :: InternalValueExp r => VSType r -> SValue r -> Label -> SValue r
 class (ValueSym r) => FunctionSym r where {
-    type family Function r;
+    type Function r;
 }
 func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
 objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
@@ -460,7 +460,7 @@ listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Ma
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
 class (ValueSym r) => StatementSym r where {
-    type family Statement r;
+    type Statement r;
 }
 valStmt :: StatementSym r => SValue r -> MSStatement r
 multi :: StatementSym r => [MSStatement r] -> MSStatement r
@@ -548,17 +548,17 @@ runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValu
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 class ScopeSym r where {
-    type family Scope r;
+    type Scope r;
 }
 private :: ScopeSym r => r (Scope r)
 public :: ScopeSym r => r (Scope r)
 class (VariableSym r) => ParameterSym r where {
-    type family Parameter r;
+    type Parameter r;
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
 class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r where {
-    type family Method r;
+    type Method r;
 }
 method :: MethodSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 getMethod :: MethodSym r => SVariable r -> SMethod r
@@ -577,7 +577,7 @@ pubMethod :: MethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> 
 initializer :: MethodSym r => [MSParameter r] -> Initializers r -> SMethod r
 nonInitConstructor :: MethodSym r => [MSParameter r] -> MSBody r -> SMethod r
 class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
-    type family StateVar r;
+    type StateVar r;
 }
 stateVar :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
 stateVarDef :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
@@ -586,14 +586,14 @@ privDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
 class (MethodSym r, StateVarSym r) => ClassSym r where {
-    type family Class r;
+    type Class r;
 }
 buildClass :: ClassSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
 extraClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
 implementingClass :: ClassSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> SClass r
 docClass :: ClassSym r => String -> SClass r -> SClass r
 class (ClassSym r) => ModuleSym r where {
-    type family Module r;
+    type Module r;
 }
 buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 convType :: TypeSym r => CodeType -> VSType r
@@ -606,7 +606,7 @@ bottom :: RenderFile r => r (Block r)
 commentedMod :: RenderFile r => SFile r -> FS (r (BlockComment r)) -> SFile r
 fileFromData :: RenderFile r => FilePath -> FSModule r -> SFile r
 class ImportSym r where {
-    type family Import r;
+    type Import r;
 }
 langImport :: ImportSym r => Label -> r (Import r)
 modImport :: ImportSym r => Label -> r (Import r)
@@ -630,7 +630,7 @@ class InternalTypeElim r
 type' :: InternalTypeElim r => r (Type r) -> Doc
 type VSUnOp a = VS (a (UnaryOp a))
 class UnaryOpSym r where {
-    type family UnaryOp r;
+    type UnaryOp r;
 }
 notOp :: UnaryOpSym r => VSUnOp r
 negateOp :: UnaryOpSym r => VSUnOp r
@@ -649,7 +649,7 @@ floorOp :: UnaryOpSym r => VSUnOp r
 ceilOp :: UnaryOpSym r => VSUnOp r
 type VSBinOp a = VS (a (BinaryOp a))
 class BinaryOpSym r where {
-    type family BinaryOp r;
+    type BinaryOp r;
 }
 equalOp :: BinaryOpSym r => VSBinOp r
 notEqualOp :: BinaryOpSym r => VSBinOp r
@@ -726,7 +726,7 @@ class ScopeElim r
 scope :: ScopeElim r => r (Scope r) -> Doc
 type MSMthdType a = MS (a (MethodType a))
 class (TypeSym r) => MethodTypeSym r where {
-    type family MethodType r;
+    type MethodType r;
 }
 mType :: MethodTypeSym r => VSType r -> MSMthdType r
 construct :: MethodTypeSym r => Label -> MSMthdType r
@@ -760,7 +760,7 @@ updateModuleDoc :: RenderMod r => (Doc -> Doc) -> r (Module r) -> r (Module r)
 class ModuleElim r
 module' :: ModuleElim r => r (Module r) -> Doc
 class BlockCommentSym r where {
-    type family BlockComment r;
+    type BlockComment r;
 }
 blockComment :: BlockCommentSym r => [String] -> r (BlockComment r)
 docComment :: BlockCommentSym r => State a [String] -> State a (r (BlockComment r))
@@ -1503,8 +1503,8 @@ CPPC :: x a -> y a -> CppCode x y a
 unCPPC :: CppCode CppSrcCode CppHdrCode a -> a
 cppName :: String
 cppVersion :: String
-instance GHC.Classes.Eq a => GHC.Classes.Eq (GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode a)
 instance GHC.Classes.Eq a => GHC.Classes.Eq (GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode a)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.MethodSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.ClassInterface.MethodSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.MethodElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
@@ -1928,32 +1928,32 @@ type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
-    type family Program r;
+    type Program r;
 }
 prog :: ProgramSym r => Label -> [SFile r] -> GSProgram r
 class (ModuleSym r) => FileSym r where {
-    type family File r;
+    type File r;
 }
 fileDoc :: FileSym r => FSModule r -> SFile r
 docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
 class PermanenceSym r where {
-    type family Permanence r;
+    type Permanence r;
 }
 static :: PermanenceSym r => r (Permanence r)
 dynamic :: PermanenceSym r => r (Permanence r)
 class (BlockSym r) => BodySym r where {
-    type family Body r;
+    type Body r;
 }
 body :: BodySym r => [MSBlock r] -> MSBody r
 addComments :: BodySym r => Label -> MSBody r -> MSBody r
 bodyStatements :: BodySym r => [MSStatement r] -> MSBody r
 oneLiner :: BodySym r => MSStatement r -> MSBody r
 class (StatementSym r) => BlockSym r where {
-    type family Block r;
+    type Block r;
 }
 block :: BlockSym r => [MSStatement r] -> MSBlock r
 class TypeSym r where {
-    type family Type r;
+    type Type r;
 }
 bool :: TypeSym r => VSType r
 int :: TypeSym r => VSType r
@@ -1973,7 +1973,7 @@ class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
 class (ValueSym r) => StatementSym r where {
-    type family Statement r;
+    type Statement r;
 }
 valStmt :: StatementSym r => SValue r -> MSStatement r
 multi :: StatementSym r => [MSStatement r] -> MSStatement r
@@ -2054,7 +2054,7 @@ tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 class (TypeSym r) => VariableSym r where {
-    type family Variable r;
+    type Variable r;
 }
 var :: VariableSym r => Label -> VSType r -> SVariable r
 staticVar :: VariableSym r => Label -> VSType r -> SVariable r
@@ -2074,7 +2074,7 @@ infixl 9 $->
 listOf :: VariableSym r => Label -> VSType r -> SVariable r
 listVar :: VariableSym r => Label -> VSType r -> SVariable r
 class (TypeSym r) => ValueSym r where {
-    type family Value r;
+    type Value r;
 }
 valueType :: ValueSym r => r (Value r) -> r (Type r)
 class (ValueSym r) => Argument r
@@ -2172,7 +2172,7 @@ libNewObj :: ValueExpression r => Library -> PosCtorCall r
 exists :: ValueExpression r => SValue r -> SValue r
 objMethodCallMixedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> NamedArgs r -> SValue r
 class (ValueSym r) => FunctionSym r where {
-    type family Function r;
+    type Function r;
 }
 func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
 objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
@@ -2199,17 +2199,17 @@ notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> MSStatement 
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
 class ScopeSym r where {
-    type family Scope r;
+    type Scope r;
 }
 private :: ScopeSym r => r (Scope r)
 public :: ScopeSym r => r (Scope r)
 class (VariableSym r) => ParameterSym r where {
-    type family Parameter r;
+    type Parameter r;
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
 class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r where {
-    type family Method r;
+    type Method r;
 }
 method :: MethodSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 getMethod :: MethodSym r => SVariable r -> SMethod r
@@ -2228,7 +2228,7 @@ pubMethod :: MethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> 
 initializer :: MethodSym r => [MSParameter r] -> Initializers r -> SMethod r
 nonInitConstructor :: MethodSym r => [MSParameter r] -> MSBody r -> SMethod r
 class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
-    type family StateVar r;
+    type StateVar r;
 }
 stateVar :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
 stateVarDef :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
@@ -2237,14 +2237,14 @@ privDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
 class (MethodSym r, StateVarSym r) => ClassSym r where {
-    type family Class r;
+    type Class r;
 }
 buildClass :: ClassSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
 extraClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
 implementingClass :: ClassSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> SClass r
 docClass :: ClassSym r => String -> SClass r -> SClass r
 class (ClassSym r) => ModuleSym r where {
-    type family Module r;
+    type Module r;
 }
 buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 convType :: TypeSym r => CodeType -> VSType r

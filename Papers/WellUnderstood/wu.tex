@@ -128,10 +128,9 @@
 Not all software is the same. In fact, there is enough variation in the
 context in which developers create various software products to warrant exploring and
 using different processes, depending on the forces~\cite{alexander1977pattern}
-at play. Here we explore two such forces: ``well understood'' and ``long
-lived''.
+at play. Here we explore two such forces: ``well understood'' and ``long-lived''.
 
-We need to be precise about what we mean by ``well understood'' and ``long lived'',
+We need to be precise about what we mean by ``well understood'' and ``long-lived'',
 and thus will start by defining these terms. The definition of ``well understood''
 has three components, which will be successively refined throughout this paper.
 As the codification of what is understood tends to be reliably communicated via
@@ -149,7 +148,7 @@ variants on \emph{automatic programming}. Unlike many of these projects, our
 primary aim is not automation, but rather a combination of raising the level
 of abstraction and knowledge capture. And indeed \emph{domain engineering},
 as coined by Draco's creator James Neighbors, is core to our work. Where we
-differ is our emphasis on all software artifacts and being able to leverage
+differ is our emphasis on all software artifacts, not just code, and being able to leverage
 several decades of theoretical and technological advances. See~\ref{sec:relwork}
 for more details on these and other related projects and ideas.
 
@@ -207,17 +206,17 @@ value comparable, if not greater than, the actual code.
 
 Well understood also applies to \textbf{documentation} aimed
 at humans~\cite{parnas2011precise}. The same three items of
-\ref{defn:well-understood} can be retargetted to apply to
+Definition~\ref{defn:well-understood} can be retargetted to apply to
 documentation as follows:
 \begin{enumerate*}
 \item The meaning of the models is understood at a human-pedagogical level,
-i.e.\ it is explainable.
+i.e., it is explainable.
 \item Combining models is explainable. Thus, the act of combining models
 must simultaneously
 operate on mathematical representations and on explanations. This requires that
 English descriptions also be captured in the same manner as the
 formal-mathematical knowledge.
-\item Similarly, the refinement steps that are performed due to making
+\item The refinement steps that are performed due to making
 software-oriented decisions should be captured with a similar mechanism, and
 also include English explanations.
 \end{enumerate*}
@@ -245,18 +244,18 @@ scripts, READMEs, license documents, process documents, as well as code.
 Our aim is to understand the ``information content'' of each artifact
 sufficiently to construct a Domain Specific Language (DSL) that describes how
 to weave information gleaned from triform theories with instance specific
-choices which is sufficient to enable the generation of each artifact.
+choices that are sufficient to enable the generation of each artifact.
 
 \subsection{Instances}
 \label{subsec:examples-of-context}
 
-When are these well understood and long lived conditions fulfilled? One example
+When are these well understood and long-lived conditions fulfilled? One example
 is \emph{research software} in science and engineering. While the results of
 running various simulations is entirely new, the underlying models and how to
 simulate them are indeed well known. One particularly long-lived example is
 embedded software for space probes (like Pioneer 10). Another would be ocean
-models, such as NEMO~\cite{madec_gurvan_2022_6334656} which can trace its
-origins to OPA 8~\cite{Madec1998}. In fact, most sub-domains of science and
+models, such as NEMO~\cite{madec_gurvan_2022_6334656}, which can trace its
+origins to OPA 8~\cite{Madec1998}. In fact, most subdomains of science and
 engineering harbour their own niche long-lived software. The domain of
 control systems is particularly rich in examples.
 
@@ -272,7 +271,7 @@ not documented.
   \caption{Colors and shapes mapping from captured domain knowledge to generated
   artifacts. Red oval: program name; green rectangle: author name; blue circle:
   symbols for real-valued variables; pink lozenge: assumptions used (load 
-  distribution factor is contant);
+  distribution factor is constant);
   orange cloud: mathematical definition of $B$; gray arrow: option to turn on
   logging; light brown rounded-corners rectangle: how inputs should be ``bundled'';
   purple wavy rectangle: how constants are handled (here: inlined).}
@@ -295,7 +294,7 @@ documentation and computing), encoded in a home-grown ontology somewhat
 resembling the work of Novak~\cite{kook1991representation,novak1994generating}.
 It has also a number of internal DSLs for representing the contents of
 various kinds of documents (specifications, programs, simple build scripts,
-readmes), coupled with DSLs for rendering in various formats (\LaTeX, HTML
+READMEs), coupled with DSLs for rendering in various formats (\LaTeX, HTML
 and plain text, used for specifications, and GOOL~\cite{GOOLPEPM} for
 representing Object-Oriented programs that can be rendered in six different
 languages). There are also DSLs for triform theories, mathematical expressions,
@@ -322,15 +321,15 @@ Makefile). Moreover, our implementation is actually a family of implementations,
 since some design decisions are explicitly exposed as changeable variabilities,
 as described below.
 
-The transformation of captured domain knowledge is illustrated in
-Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper right
-box. Each piece of information in this figure has its own shape and colour
-(orange cloud, pink lozenge, etc). It should be immediately clear that all
-pieces of information reappear in multiple places in the generated artifacts.
-For example, the name of the software (GlassBR) ends up appearing more than 80
-times in the generated artifacts (in the folder structure, requirements, README,
-Makefile and source code). Changing this name would traditionally be extremely
-difficult; we can achieve this by modifying a single place, and regenerating.
+Figure~\ref{Fig_DrasilAndChange} illustrates the transformation of captured
+domain knowledge. Reading this figure starts from the upper right box. Each
+piece of information has its own shape and colour (orange cloud,
+pink lozenge, etc). It should be immediately clear that all pieces of
+information reappear in multiple places in the generated artifacts. For example,
+the name of the software (GlassBR) ends up appearing more than 80 times in the
+generated artifacts (in the folder structure, requirements, README, Makefile and
+source code). Changing this name would traditionally be extremely difficult; we
+can achieve this by modifying a single place, and regenerating.
 
 The first box shows the directory structure of the currently generated
 artifacts; continuing clockwise, we see examples of Makefiles for the Java and
@@ -402,14 +401,14 @@ A recurring idea is the different types of \texttt{Glass}:
   \end{tabular}
 \end{center}
 Some concepts, such as those of \emph{explosion}, \emph{glass slab}, and
-\emph{degree} do not need to be defined mathematically -- an Enlish description
+\emph{degree} do not need to be defined mathematically --- an English description
 is sufficient.
 
 The descriptions in GlassBR are produced using an experimental language using
 specialized markup for describing relations between knowledge. For example, the
 goal of GlassBR (``Predict-Glass-Withstands-Explosion'') is to ``Analyze and
 predict whether the \textit{glass slab} under consideration will be able to
-withstand the \textbf{explosion} of a certain \textbf{degree} which is
+withstand the \textbf{explosion} of a certain \textbf{degree} that is
 calculated based on \textit{user input}.'', where italicized names are ``named
 ideas'', and bold faced names are ``concept chunks'' (named ideas with a domain
 of related ideas). We call this goal a ``concept instance'' (a concept chunk
@@ -423,7 +422,7 @@ to be necessary to generate our artifacts. In other words, we define a
 The most important results of this phase are descriptions of \emph{theories}
 that link all the important concepts together. For example, the description
 of all the elements that comprise Newton's Law $F = m a$,
-i.e. what is a force, a mass, acceleration (and how is it related to
+i.e., what is a force, a mass, acceleration (and how is it related to
 velocity, position and time), what are the units involved, etc.
 
 \subparagraph*{Define the characteristics of a good solution}
@@ -473,7 +472,7 @@ In general, research software tends to involve
 solving ordinary differential equations, computing a solution to
 an optimization problem, etc. Again the reason why a particular differential
 equation is an adequate model of the problem at hand is part of the
-important information we want to capture.
+important information we wish to capture.
 
 In other words, the main narrative of a piece of software is its high level
 design. What are the techniques used to derive the outputs from the inputs,
@@ -536,7 +535,7 @@ a log of the design choices.
 \label{sec:idealized-process}
 
 The above used what we refer to as an \emph{idealized process} for
-the development of software which is both well-understood and
+the development of software that is both well-understood and
 long-lived. Drasil is meant to facilitate this process. In other words,
 as we ourselves better understand this idealized process, we modify Drasil
 to follow suit, rather than the other way around. We can summarize the
@@ -559,7 +558,7 @@ understood}.
 how the problem description can be turned into a deterministic\footnote{A current
 meta-design choice.} input-output process.
   \begin{enumerate}
-  \item Some refinements will involve \emph{specialization} (e.g. from
+  \item Some refinements will involve \emph{specialization} (e.g., from
     \(n\)-dimensional to \(2\)-dimensional, assuming no friction, etc).  These
     \emph{choices} and their \emph{rationale} need to be documented, as a
     crucial part of the solution.  Whether these choices are (un)likely to
@@ -590,7 +589,7 @@ It turns out that many of them are quite straightforward.
 
 Note that in many software projects, steps~\ref{it:problem}
 and~\ref{it:probdesc} are skipped; this is part of the \textbf{tacit knowledge}
-of a lot of software.  Our process requires that this knowledge be made
+of a lot of software.  Our process requires that we make this knowledge
 explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 
 % TODO: insert graphical illustration of the funnel from information to
@@ -598,10 +597,10 @@ explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 
 \section{Related Work}\label{sec:relwork}
 
-As one referee put it, our work is ``old fashioned'', in that its goals
+As one referee put it, our work is ``old-fashioned'', in that its goals
 indeed repeat that of work from decades ago. What we see, however, is
 that only a small slice of those goals has made it into today's
-practices. Thus we think it is worthwhile to revisit these goals.
+practices. Thus, we think it is worthwhile to revisit these goals.
 
 Draco~\cite{neighbors1984draco,neighbors1989draco}, one of the oldest
 such projects, is also one of the closest to Drasil, goal-wise. Many of
@@ -641,11 +640,11 @@ that is more beginner-friendly but has scaling drawbacks. We have
 explicitly decided that it is too early to provide this kind of GUI
 for Drasil.
 
-Thinking of doing large scale work has been strongly incluenced by Eelco
+Thinking of doing large scale work has been strongly influenced by Eelco
 Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
 made it clear that many different artifacts can be generated. He was braver than
 us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
-indeed expected to be long lived, but certainly was not created for a
+indeed expected to be long-lived, but certainly was not created for a
 well-understood domain! The domain analysis of web applications is a non-trivial
 contribution of WebDSL, and may well have moved that domain into the ``well understood''
 column. Whether it is product lines or program families, weaving

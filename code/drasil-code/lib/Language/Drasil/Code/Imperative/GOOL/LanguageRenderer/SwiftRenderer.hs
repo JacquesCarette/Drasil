@@ -32,7 +32,6 @@ instance Applicative SwiftProject where
   (SP f) <*> (SP x) = SP (f x)
 
 instance Monad SwiftProject where
-  return = SP
   SP x >>= f = f x
 
 instance PackageSym SwiftProject where
@@ -53,7 +52,7 @@ instance AuxiliarySym SwiftProject where
   makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig [] []))
 
   auxHelperDoc = unSP
-  auxFromData fp d = return $ ad fp d
+  auxFromData fp d = pure $ ad fp d
 
 -- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

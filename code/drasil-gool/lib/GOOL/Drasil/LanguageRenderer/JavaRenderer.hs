@@ -119,7 +119,6 @@ instance Applicative JavaCode where
   (JC f) <*> (JC x) = JC (f x)
 
 instance Monad JavaCode where
-  return = JC
   JC x >>= f = f x
 
 instance OOProg JavaCode where
@@ -638,7 +637,7 @@ instance RenderMethod JavaCode where
     let excs = map (unJC . toConcreteExc) $ maybe es (nub . (++ es)) 
           (Map.lookup (qualName mn n) mem)
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
-    return $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
+    pure $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = C.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
@@ -1014,4 +1013,4 @@ addConstructorCallExcsCurrMod ot f = do
   mem <- getMethodExcMap
   let tp = getTypeString t
   modify (maybe id addExceptions (Map.lookup (qualName cm tp) mem))
-  f (return t)
+  f (pure t)

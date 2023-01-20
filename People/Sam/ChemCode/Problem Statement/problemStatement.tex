@@ -98,7 +98,7 @@ with the smallest whole number coefficients possible
 \null\newline
 \null\newline
 \noindent\progname~will be developed using Drasil
-\cite{carette_jacquescarettedrasil_2021}, ``a framework for generating
+\cite{carette_drasil_2021}, ``a framework for generating
 high-quality documentation and code for Scientific Computing Software''
 \cite[p. iii]{maclachlan_design_2020} by encapsulating scientific knowledge as
 ``chunks'' to be reused among projects \cite{maclachlan_design_2020}. By 
@@ -116,12 +116,17 @@ reliable external libraries \dots tested by long use''
 \cite[p. 24]{chen_solving_2022}.
 
 Additionally, Drasil can currently generate code in Python, C++, C\#, Java, and
-Swift \cite{chen_solving_2022}, so these will be the languages that will be
-focused on for the \progname~project. While using external ODE solvers in
-Drasil, the developers ``did not find a suitable
-library for Swift'' \cite[p.24]{chen_solving_2022}; a similar problem may
-arise when using external system of linear equations solvers, meaning that
-\progname~may not be generated in all five languages.
+Swift \cite{chen_solving_2022}. The scope of this project will be limited to 
+generating code Python since it is the language in which I \sjc{First person?}
+have the most experience. Python also supports the SciPy library
+\cite{2020SciPy-NMeth}, which is already used by Drasil to solve ODEs
+\cite{chen_solving_2022} and supports solving systems of linear equations \cite{the_scipy_community_scipylinalgsolve_2023}.
+
+%While using external ODE solvers in
+%Drasil, the developers ``did not find a suitable
+%library for Swift'' \cite[p.24]{chen_solving_2022}; a similar problem may
+%arise when using external system of linear equations solvers, meaning that
+%\progname~may not be generated in all five languages.
 
 Since both \progname~and Drasil are purely software systems, the only
 hardware involved is the user's computer used to run \progname.

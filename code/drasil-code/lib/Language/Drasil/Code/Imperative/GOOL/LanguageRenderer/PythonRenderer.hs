@@ -32,7 +32,6 @@ instance Applicative PythonProject where
   (PP f) <*> (PP x) = PP (f x)
 
 instance Monad PythonProject where
-  return = PP
   PP x >>= f = f x
 
 instance PackageSym PythonProject where
@@ -49,13 +48,13 @@ instance AuxiliarySym PythonProject where
         langVersion = pyVersion}
   sampleInput = G.sampleInput
 
-  optimizeDox = return yes
+  optimizeDox = pure yes
 
   makefile _ it cms = G.makefile Nothing (G.noRunIfLib it pyRunnable)
     (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unPP
-  auxFromData fp d = return $ ad fp d
+  auxFromData fp d = pure $ ad fp d
 
 -- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable

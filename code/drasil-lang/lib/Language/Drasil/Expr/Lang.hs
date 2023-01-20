@@ -12,7 +12,7 @@ import           Language.Drasil.Space         (DiscreteDomainDesc,
 import qualified Language.Drasil.Space         as S
 import           Language.Drasil.UID           (UID)
 import           Language.Drasil.WellTyped
-import Data.Either (lefts)
+import Data.Either (lefts, fromLeft)
 import qualified Data.Foldable as NE
 
 -- * Expression Types
@@ -275,7 +275,7 @@ instance Typed Expr Space where
           = either
               (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
               (const False) expT
-        (Left t) = expT
+        t = fromLeft (error "Infer on Matrix had a strong expectation of Left-valued data.") expT -- This error should never occur.
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
     Left sp -> case uf of

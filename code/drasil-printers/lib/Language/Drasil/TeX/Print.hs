@@ -245,9 +245,9 @@ dontCount = "\\/[]{}()_^$:"
 makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
 
--- | Creates the rows for a table.
+-- | Create rows for a table with a single line break between them.
 makeRows :: [[Spec]] -> D
-makeRows = mconcat . map (\c -> makeColumns c %% pure dbs)
+makeRows = foldr ((%%) . (\c -> makeColumns c %% pure dbs)) mempty
 
 -- | Creates the columns for a table.
 makeColumns :: [Spec] -> D
@@ -458,9 +458,10 @@ makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bi
   command "nocite" "*" %% command "bibstyle" bibStyleT %%
   command0 "printbibliography" <> sq (pure $ text "heading=none")
 
--- | Renders a bibliographical reference.
+-- | Renders a bibliographical reference with a single line break between
+-- entries.
 mkBibRef :: PrintingInformation -> BibRef -> D
-mkBibRef sm = mconcat . map (renderF sm)
+mkBibRef sm = foldr ((%%) . renderF sm) mempty
 
 -- | Helper that renders a citation.
 renderF :: PrintingInformation -> Citation -> D

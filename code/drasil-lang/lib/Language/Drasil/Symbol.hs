@@ -76,14 +76,13 @@ instance Semigroup Symbol where
 -- | Symbols can be empty or concatenated.
 instance Monoid Symbol where
   mempty = Empty
-  mappend a b = Concat [a , b]
 
 -- | Gives an 'Ordering' of two lists of 'Symbol's.
 complsy :: [Symbol] -> [Symbol] -> Ordering
 complsy [] [] = EQ
 complsy [] _  = LT
 complsy _  [] = GT
-complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
+complsy (x : xs) (y : ys) = compsy x y <> complsy xs ys
 
 -- | The default compare function that sorts all the lower case symbols after the upper case ones.
 --

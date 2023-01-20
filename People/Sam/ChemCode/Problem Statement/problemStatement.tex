@@ -31,6 +31,7 @@ Goals sections\\
 Jan. 19, 2023 & Sam & Format for Drasil upload; fill in Inputs and Outputs,
 Environment, and Stretch Goals sections; update Stakeholders and Goals
 sections; and move Environment section\\
+Jan. 20, 2023 & Sam & Update Stretch Goals section\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -171,21 +172,22 @@ In descending order of priority, the stretch goals of this project are to\dots
 
 \begin{enumerate}
 	\item add the ability to, given the amount of one substance in a reaction (in
-	moles) calculate the amount of every other substance in the reaction (also in
+	moles), calculate the amount of every other substance in the reaction (also in
 	moles).\footnote{\label{chemProbExs}These examples of problems related to
 		chemical equations were taken from \cite{lund_introduction_2023}.}
-	\item add the ability to determine the limiting reactant(s) in a
+	\item add the ability to, given the amount of each reactant (in moles),
+	determine the limiting reactant(s) in a
 	reaction.\cref{chemProbExs}
-	\item add the ability to, given the limiting reactant(s) of a reaction,
+	\item add the ability to, given the amount of each reactant (in moles),
 	determine the theoretical yield of each product and the amount of excess
-	reactant.\cref{chemProbExs}
+	reactant(s).\cref{chemProbExs}
 	\item generate code for \progname~in the other languages supported by
 	Drasil. (While using external ODE solvers in Drasil, the developers ``did not
 		find a suitable library for Swift'' \cite[p.~24]{chen_solving_2022}; a similar
 		problem may arise when using external system of linear equations solvers,
 		meaning that \progname~may not be generated in all five languages supported
 		by Drasil.)
-	\item do the same as 1.~but in terms of mass.\cref{chemProbExs}
+	\item do the same as 1-3.~but in terms of mass.\cref{chemProbExs}
 	\item add the ability to classify a chemical reaction as ``combination (or
 		synthesis), decomposition, combustion, single replacement, \dots double
 		replacement'' \cite[p.~301]{lund_introduction_2023} or some combination of

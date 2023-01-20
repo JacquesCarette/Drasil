@@ -2,6 +2,10 @@
 
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+\crefformat{footnote}{#2\footnotemark[#1]#3}
 
 \title{Problem Statement and Goals\\\progname}
 
@@ -24,9 +28,9 @@
 \midrule
 Jan. 18, 2023 & Sam & Create document and fill in Problem, Stakeholders, and
 Goals sections\\
-Jan. 19, 2023 & Sam & Format for Drasil upload, fill in Inputs and Outputs
-and Environment sections, update Stakeholders and Goals sections, and move
-Environment section\\
+Jan. 19, 2023 & Sam & Format for Drasil upload; fill in Inputs and Outputs,
+Environment, and Stretch Goals sections; update Stakeholders and Goals
+sections; and move Environment section\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -122,12 +126,6 @@ have the most experience. Python also supports the SciPy library
 \cite{2020SciPy-NMeth}, which is already used by Drasil to solve ODEs
 \cite{chen_solving_2022} and supports solving systems of linear equations \cite{the_scipy_community_scipylinalgsolve_2023}.
 
-%While using external ODE solvers in
-%Drasil, the developers ``did not find a suitable
-%library for Swift'' \cite[p.24]{chen_solving_2022}; a similar problem may
-%arise when using external system of linear equations solvers, meaning that
-%\progname~may not be generated in all five languages.
-
 Since both \progname~and Drasil are purely software systems, the only
 hardware involved is the user's computer used to run \progname.
 
@@ -151,7 +149,7 @@ may be a stakeholder of this project, as they may use this tool in their work.
 
 \section{Goals}
 
-The goals of this project are to develop a program that...
+The goals of this project are to develop a program that\dots
 
 \begin{itemize}
     \item can balance chemical equations (including ones with fractional
@@ -165,7 +163,39 @@ The goals of this project are to develop a program that...
     systems of linear equations (see \cite[Ch. 4]{chen_solving_2022}).
 \end{itemize}
 
+\newpage
+
 \section{Stretch Goals}
+
+In descending order of priority, the stretch goals of this project are to\dots
+
+\begin{enumerate}
+	\item add the ability to, given the amount of one substance in a reaction (in
+	moles) calculate the amount of every other substance in the reaction (also in
+	moles).\footnote{\label{chemProbExs}These examples of problems related to
+		chemical equations were taken from \cite{lund_introduction_2023}.}
+	\item add the ability to determine the limiting reactant(s) in a
+	reaction.\cref{chemProbExs}
+	\item add the ability to, given the limiting reactant(s) of a reaction,
+	determine the theoretical yield of each product and the amount of excess
+	reactant.\cref{chemProbExs}
+	\item generate code for \progname~in the other languages supported by
+	Drasil. (While using external ODE solvers in Drasil, the developers ``did not
+		find a suitable library for Swift'' \cite[p.~24]{chen_solving_2022}; a similar
+		problem may arise when using external system of linear equations solvers,
+		meaning that \progname~may not be generated in all five languages supported
+		by Drasil.)
+	\item do the same as 1.~but in terms of mass.\cref{chemProbExs}
+	\item add the ability to classify a chemical reaction as ``combination (or
+		synthesis), decomposition, combustion, single replacement, \dots double
+		replacement'' \cite[p.~301]{lund_introduction_2023} or some combination of
+		these.\cref{chemProbExs}
+	\item add support for phase labels.\cref{chemProbExs}
+	\item add support for precipitation reactions, including solubility and 
+	identifying when reactions will not take place.\cref{chemProbExs}
+\end{enumerate}
+
+\newpage
 
 \bibliographystyle{ieeetr}
 \bibliography{sources}

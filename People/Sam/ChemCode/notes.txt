@@ -1,0 +1,1 @@
+How much to we want to teach Drasil about chemistry? Should we create some sort of type for elements? compounds? should we reuse our equations for reactions? should we store information about "each" element and compound in drasil-data (e.g. molar mass)?

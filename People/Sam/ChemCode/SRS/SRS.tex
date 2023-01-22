@@ -149,6 +149,8 @@ A program for solving chemistry problems}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Jan. 21, 2023& 0.0 & Start document, fill in title page, and add references\\
+							& 0.1 & Fill in Problem Description and Goal Statements sections, as 
+							well as all relevant definitions\\
 \bottomrule
 \end{tabularx}
 
@@ -484,10 +486,16 @@ the instance models.  \plt{Add any project specific details that are relevant
 
 \subsection{Problem Description} \label{Sec_pd}
 
-\progname{} is intended to solve ... \plt{What problem does your program solve?
-The description here should be in the problem space, not the solution space.}
+\progname{} is intended to balance chemical equations (including ones with
+fractional oxidation states; see \nameref{sec_termsDefs}) so
+they can be useful for other computations \cite{lund_introduction_2023}.
+Additionally, since molecules only exist in whole numbers (since dividing a
+molecule changes its composition into new types of molecules), the coefficients
+used to balance the equation must be whole
+numbers, and by convention should be as small as possible
+\cite{lund_introduction_2023}.
 
-\subsubsection{Terminology and  Definitions}
+\subsubsection{Terminology and  Definitions} \label{sec_termsDefs}
 
 \plt{This section is expressed in words, not with equations.  It provide the
   meaning of the different words and phrases used in the domain of the problem.
@@ -500,9 +508,12 @@ sections and their meaning, with the purpose of reducing ambiguity and making it
 easier to correctly understand the requirements:
 
 \begin{itemize}
+\item \textbf{Fractional Oxidation State}: A property ``used to
+describe the distribution of electrons in a molecule"
+\cite{unacademy_fractional_2023}.
 
-\item 
-
+\item \textbf{Infeasible}: (Refering to a chemical equation) not able to be
+balanced.
 \end{itemize}
 
 \subsubsection{Physical System Description} \label{sec_phySystDescrip}
@@ -544,24 +555,17 @@ includes the following elements:
 % \end{figure}
 
 \subsubsection{Goal Statements}
-
-\plt{The goal statements refine the ``Problem Description''
-  (Section~\ref{Sec_pd}).  A goal is a functional objective the system under
-  consideration should achieve. Goals provide criteria for sufficient
-  completeness of a requirements specification and for requirements
-  pertinence. Goals will be refined in Section “Instanced Models”
-  (Section~\ref{sec_instance}). Large and complex goals should be decomposed
-  into smaller sub-goals.  The goals are written abstractly, with a minimal
-  amount of technical language.  They should be understandable by non-domain
-  experts.}
-
-\noindent Given the \plt{inputs}, the goal statements are:
+Given a representation of a chemical equation, the goal statements 
+of \progname{} are:
 
 \begin{itemize}
 
-\item[GS\refstepcounter{goalnum}\thegoalnum \label{G_meaningfulLabel}:] \plt{One
-    sentence description of the goal.  There may be more than one.  Each Goal
-    should have a meaningful label.}
+\item[GS\refstepcounter{goalnum}\thegoalnum \label{G_feasible}:] Determine if
+a given chemical reaction is infeasible \sjc{Refer to Terms and Defs?}.
+
+\item[GS\refstepcounter{goalnum}\thegoalnum \label{G_balance}:] Balance the
+inputted chemical equation with the smallest whole number coefficients
+possible.
 
 \end{itemize}
 

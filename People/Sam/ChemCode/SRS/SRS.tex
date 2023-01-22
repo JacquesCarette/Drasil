@@ -19,7 +19,7 @@
 \usepackage{pdflscape}
 \usepackage{afterpage}
 
-\usepackage[round]{natbib}
+%\usepackage[round]{natbib}
 
 %\usepackage{refcheck}
 
@@ -148,7 +148,7 @@ A program for solving chemistry problems}
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Jan. 21, 2023& 0.0 & Start document and fill in title page\\
+Jan. 21, 2023& 0.0 & Start document, fill in title page, and add references\\
 \bottomrule
 \end{tabularx}
 
@@ -264,7 +264,7 @@ which heat is transferred in
 
 \pagenumbering{arabic}
 
-\plt{This SRS template is based on \citet{SmithAndLai2005, SmithEtAl2007}.  It
+\plt{This SRS template is based on \cite{SmithAndLai2005, SmithEtAl2007}.  It
   will get you started.  You should not modify the section headings, without
   first discussing the change with the course instructor.  Modification means
   you are not following the template, which loses some of the advantage of a
@@ -382,6 +382,8 @@ expect in the Introduction section.}
   graduate course on advanced quantum mechanics?}
 
 \subsection{Organization of Document}
+This document is based on a template from \cite{smith_captemplate_2022}, which
+is itself based on \cite{SmithAndLai2005, SmithEtAl2007}.
 
 \plt{This section provides a roadmap of the SRS document.  It will help the
   reader orient themselves.  It will provide direction that will help them
@@ -834,7 +836,7 @@ Symbol &$q_C$\\
 \plt{All data types must be used by at least one of the models.}
 
 \plt{For the mathematical notation for expressing types, the recommendation is
-  to use the notation of~\citet{HoffmanAndStrooper1995}.}
+  to use the notation of~\cite{HoffmanAndStrooper1995}.}
 
 This section collects and defines all the data types needed to document the
 models. \plt{Modify the examples below for your problem, and add additional
@@ -1270,8 +1272,8 @@ Their values are defined in this section for easy maintenance.}
 
 \newpage
 
-\bibliographystyle {plainnat}
-\bibliography {../../refs/References}
+\bibliographystyle {ieeetr}
+\bibliography {../sources}
 
 \newpage
 

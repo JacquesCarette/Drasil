@@ -155,6 +155,8 @@ Jan. 22, 2023 & 0.1.1 & Replace the notion of ``fractional oxidation state'' wit
 							``nonstoichiometric compound''\\
 							& 0.1.2 & Fix capTemplate reference\\
 							& 0.1.3 & Update Abbreviations and Acronyms section\\
+							& 0.2 & Add IM for balancing a chemical reaction, along with relevant
+							reference information\\
 \bottomrule
 \end{tabularx}
 
@@ -236,6 +238,7 @@ which heat is transferred in
   \toprule		
   \textbf{symbol} & \textbf{description}\\
   \midrule 
+  1D & One-Dimensional\\
   A & Assumption\\
   DD & Data Definition\\
   GD & General Definition\\
@@ -249,19 +252,18 @@ which heat is transferred in
   \bottomrule
 \end{tabular}\\
 
-\subsection{Mathematical Notation}
+\subsection{Mathematical Notation} \label{sec_mathNot}
 
-\plt{This section is optional, but should be included for projects that make use
-  of notation to convey mathematical information.  For instance, if typographic
-  conventions (like bold face font) are used to distinguish matrices, this
-  should be stated here.  If symbols are used to show mathematical operations,
+Matrices are written in bold uppercase letters (for example $\textbf{A}$), while
+vectors (1D matrices) are written in bold lowercase letters, (for example
+$\textbf{x}$) \cite{osullivan_appendix_2010}. The zero matrix is a special type
+of matrix where each element is zero and is represented as $\textbf{0}$
+\cite{weisstein_zero_2023}.
+
+\plt{If symbols are used to show mathematical operations,
   these should be summarized here.  In some cases the easiest way to summarize
   the notation is to point to a text or other source that explains the
   notation.}
-
-\plt{This section was added to the template because some students use very
-  domain specific notation.  This notation will not be readily understandable to
-  people outside of your domain.  It should be explained.}
 
 \newpage
 
@@ -497,25 +499,26 @@ numbers, and by convention should be as small as possible
 \cite{lund_introduction_2023}.
 
 \subsubsection{Terminology and  Definitions} \label{sec_termsDefs}
-
-\plt{This section is expressed in words, not with equations.  It provide the
-  meaning of the different words and phrases used in the domain of the problem.
-The terminology is used to introduce concepts from the world outside of the
-mathematical model  The terminology provides a real world connection to give the
-mathematical model meaning.}
-
 This subsection provides a list of terms that are used in the subsequent
 sections and their meaning, with the purpose of reducing ambiguity and making it
 easier to correctly understand the requirements:
 
 \begin{itemize}
 \item \textbf{Infeasible}: (Refering to a chemical equation) not able to be
-balanced.
+balanced \cite{hamid_balancing_2019}.
 
 \item \textbf{Nonstoichiometric Compound}: ``Any solid chemical compound in
 which the numbers of atoms of the elements present cannot be expressed as a
 ratio of small whole numbers"
 \cite{the_editors_of_encyclopaedia_britannica_nonstoichiometric_2010}.
+
+\item \textbf{Product}: A substance created by a chemical reaction
+\cite{lund_introduction_2023}.
+
+\item \textbf{Reactant}: A substance present at the beginning of, and involved
+in, a chemical reaction \cite{lund_introduction_2023}.
+
+\item \sjc{Should I include ``matrix'' and/or ``vector''?}
 \end{itemize}
 
 \subsubsection{Physical System Description} \label{sec_phySystDescrip}
@@ -919,6 +922,51 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   \\
   \hline
   Sources& Citation here \\
+  \hline
+  Ref.\ By & \iref{epcm}\\
+  \hline
+\end{tabular}
+\end{minipage}\\
+
+%~\newline
+
+\subsubsection*{Derivation of ...}
+
+\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
+  where the derivation cannot be described under the Description field, it will
+  be necessary to include this subsection.}
+  
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+  \hline
+  \rowcolor[gray]{0.9}
+  Number& IM\refstepcounter{instnum}\theinstnum \label{balance}\\
+  \hline
+  Label& \bf Calculation of compound coefficients\\
+  \hline
+  Input& $\textbf{A}$ from \iref{epcm}\\
+%  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
+  \hline
+  Output& $\textbf{x}$, such that\\
+  &$\textbf{A}\textbf{x} = \textbf{0}$ from \iref{epcm} \\
+  \hline
+  Description&$\textbf{A}$ is a matrix of coefficients so that each entry
+  indicates the amount of a given element in a given compound; each row
+  corresponds to a different element and each column corresponds to a different
+  compound. Positive entries indicate the compound is a reactant, negative
+  entries indicate the compound is a product, and zeroes indicate the
+  corresponding element is not present in the corresponding compound.\\
+  &$\textbf{x}$ is a vector of coefficients for each compound in the reaction 
+  (in the order inputted) so that the equation is balanced.\\
+  &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).\\
+%  & The above equation applies as long as the water is in liquid form,
+%  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
+%  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
+%  \\
+  \hline
+  Sources& \cite{hamid_balancing_2019} \\
   \hline
   Ref.\ By & \iref{epcm}\\
   \hline

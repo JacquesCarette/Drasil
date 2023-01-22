@@ -3,7 +3,6 @@
 module Language.Drasil.TeX.Monad where
 
 import Prelude hiding (print)
-import Text.PrettyPrint (($$))
 import qualified Text.PrettyPrint as TP
 
 import Language.Drasil
@@ -80,16 +79,14 @@ getCtx = PL id
 instance Semigroup (PrintLaTeX TP.Doc) where
   (PL s1) <> (PL s2) = PL $ \ctx -> s1 ctx TP.<> s2 ctx
 
--- very convenient lifting of $$
--- | D is a monad.
+-- | D is a monoid.
 instance Monoid (PrintLaTeX TP.Doc) where
   mempty = pure TP.empty
-  (PL s1) `mappend` (PL s2) = PL $ \ctx -> s1 ctx $$ s2 ctx
 
 -- may revisit later
--- | Since Text.PrettyPrint steals <>, use %% instead for mappend.
+-- | Since Text.PrettyPrint steals <>, use %% instead for $$.
 (%%) :: D -> D -> D
-(%%) = mappend
+(%%) = liftA2 (TP.$$)
 
 -- | Lifts Text.PrettyPrint's $+$. Above, with no overlapping. Associative.
 ($+$) :: D -> D -> D

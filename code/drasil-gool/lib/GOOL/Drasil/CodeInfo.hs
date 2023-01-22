@@ -42,7 +42,6 @@ instance Applicative CodeInfo where
   (CI f) <*> (CI x) = CI (f x)
 
 instance Monad CodeInfo where
-  return = CI
   CI x >>= f = f x
 
 instance OOProg CodeInfo where

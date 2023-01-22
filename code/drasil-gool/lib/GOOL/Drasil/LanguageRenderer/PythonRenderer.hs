@@ -104,7 +104,6 @@ instance Applicative PythonCode where
   (PC f) <*> (PC x) = PC (f x)
 
 instance Monad PythonCode where
-  return = PC
   PC x >>= f = f x
 
 instance OOProg PythonCode
@@ -114,7 +113,7 @@ instance ProgramSym PythonCode where
   prog n files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
-    return $ onCodeList (progD n) fs
+    pure $ onCodeList (progD n) fs
 
 instance RenderSym PythonCode
 
@@ -313,8 +312,8 @@ instance NumericExpression PythonCode where
     v2 <- v2'
     let pyDivision Integer Integer = binExpr (multPrec pyIntDiv)
         pyDivision _ _ = binExpr divideOp
-    pyDivision (getType $ valueType v1) (getType $ valueType v2) (return v1) 
-      (return v2)
+    pyDivision (getType $ valueType v1) (getType $ valueType v2) (pure v1) 
+      (pure v2)
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
 
@@ -619,7 +618,7 @@ instance RenderMethod PythonCode where
     modify (if m then setCurrMain else id)
     bd <- b
     pms <- sequence ps
-    return $ toCode $ mthd $ pyFunction n pms bd
+    pure $ toCode $ mthd $ pyFunction n pms bd
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
@@ -665,7 +664,7 @@ instance ModuleSym PythonCode where
     lis <- getLangImports
     libis <- getLibImports
     mis <- getModuleImports
-    return $ vibcat [
+    pure $ vibcat [
       vcat (map (RC.import' . 
         (langImport :: Label -> PythonCode (Import PythonCode))) lis),
       vcat (map (RC.import' . 
@@ -673,7 +672,7 @@ instance ModuleSym PythonCode where
         libis)),
       vcat (map (RC.import' . 
         (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
-    (return empty) getMainDoc
+    (pure empty) getMainDoc
 
 instance RenderMod PythonCode where
   modFromData n = G.modFromData n (toCode . md n)
@@ -857,7 +856,7 @@ pyStringType = typeFromData String pyString (text pyString)
 
 pyExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing 
-  (getTypeString t) (return t) vs ns)
+  (getTypeString t) (pure t) vs ns)
 
 pyPrint :: Bool -> Maybe (SValue PythonCode) -> SValue PythonCode -> 
   SValue PythonCode -> MSStatement PythonCode
@@ -916,7 +915,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   b <- beg
   e <- end
   s <- step
-  return $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
+  pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
 pyMethod :: (RenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->

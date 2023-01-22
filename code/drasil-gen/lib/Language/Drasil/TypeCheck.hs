@@ -5,7 +5,7 @@ import qualified Data.Map.Strict as M
 
 import Language.Drasil
 import Database.Drasil (symbolTable)
-import Data.Either (isRight)
+import Data.Either (isRight, rights)
 import Control.Lens ((^.))
 import Data.Bifunctor (second)
 import Data.List (partition)
@@ -50,14 +50,16 @@ typeCheckSI
                             else Left $ "`" ++ show t ++ "` OK!") 
                           chkdd
 
+    let errConsumer s = do 
+          putStr "  - ERROR: "
+          putStrLn $ temporaryIndent "  " s
+
     mapM_ (either
             putStrLn
             (\(tMsg, tcs) -> do
               putStrLn tMsg
-              mapM_ (\(Right s) -> do
-                putStr "  - ERROR: "
-                putStrLn $ temporaryIndent "  " s) tcs
-              )
+              mapM_ errConsumer (rights tcs)
+            )
       ) formattedChkd
     putStrLn "=====[ Finished type checking ]====="
 

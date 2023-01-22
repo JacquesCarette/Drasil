@@ -148,9 +148,11 @@ A program for solving chemistry problems}
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Jan. 21, 2023& 0.0 & Start document, fill in title page, and add references\\
+Jan. 21, 2023 & 0.0 & Start document, fill in title page, and add references\\
 							& 0.1 & Fill in Problem Description and Goal Statements sections, as 
 							well as all relevant definitions\\
+Jan. 22, 2023 & 0.1.1 & Replace the notion of ``fractional oxidation state'' with
+							``nonstoichiometric compound''\\
 \bottomrule
 \end{tabularx}
 
@@ -487,7 +489,7 @@ the instance models.  \plt{Add any project specific details that are relevant
 \subsection{Problem Description} \label{Sec_pd}
 
 \progname{} is intended to balance chemical equations (including ones with
-fractional oxidation states; see \nameref{sec_termsDefs}) so
+nonstoichiometric compounds; see \nameref{sec_termsDefs}) so
 they can be useful for other computations \cite{lund_introduction_2023}.
 Additionally, since molecules only exist in whole numbers (since dividing a
 molecule changes its composition into new types of molecules), the coefficients
@@ -508,12 +510,13 @@ sections and their meaning, with the purpose of reducing ambiguity and making it
 easier to correctly understand the requirements:
 
 \begin{itemize}
-\item \textbf{Fractional Oxidation State}: A property ``used to
-describe the distribution of electrons in a molecule"
-\cite{unacademy_fractional_2023}.
-
 \item \textbf{Infeasible}: (Refering to a chemical equation) not able to be
 balanced.
+
+\item \textbf{Nonstoichiometric Compound}: ``Any solid chemical compound in
+which the numbers of atoms of the elements present cannot be expressed as a
+ratio of small whole numbers"
+\cite{the_editors_of_encyclopaedia_britannica_nonstoichiometric_2010}.
 \end{itemize}
 
 \subsubsection{Physical System Description} \label{sec_phySystDescrip}

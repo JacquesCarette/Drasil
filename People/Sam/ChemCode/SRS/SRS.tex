@@ -157,6 +157,8 @@ Jan. 22, 2023 & 0.1.1 & Replace the notion of ``fractional oxidation state'' wit
 							& 0.1.3 & Update Abbreviations and Acronyms section\\
 							& 0.2 & Add IM for balancing a chemical reaction, along with relevant
 							reference information\\
+Jan. 23, 2023 & 0.2.1 & Add IM for determining if a chemical reaction is feasible,
+							along with relevant reference information\\
 \bottomrule
 \end{tabularx}
 
@@ -258,7 +260,13 @@ Matrices are written in bold uppercase letters (for example $\textbf{A}$), while
 vectors (1D matrices) are written in bold lowercase letters, (for example
 $\textbf{x}$) \cite{osullivan_appendix_2010}. The zero matrix is a special type
 of matrix where each element is zero and is represented as $\textbf{0}$
-\cite{weisstein_zero_2023}.
+\cite{weisstein_zero_2023}. Individual entries in a matrix are written in
+lowercase letters with their row and column number, in that order, written as
+subscripts (for example $a_{12}$) \cite{osullivan_appendix_2010}; these
+subscripts are sometimes separated by a comma for clarity (for example
+$a_{12,34}$) \cite{latecki_matrices_2018}. Two (or more) matrices with the same
+number of rows can be joined together to form an ``augmented matrix'', written
+as $\left(\textbf{A}\vert \textbf{B}\right)$ \cite{taboga_augmented_2021}.
 
 \plt{If symbols are used to show mathematical operations,
   these should be summarized here.  In some cases the easiest way to summarize
@@ -504,7 +512,7 @@ sections and their meaning, with the purpose of reducing ambiguity and making it
 easier to correctly understand the requirements:
 
 \begin{itemize}
-\item \textbf{Infeasible}: (Refering to a chemical equation) not able to be
+\item \textbf{Infeasible}: (Referring to a chemical equation) not able to be
 balanced \cite{hamid_balancing_2019}.
 
 \item \textbf{Nonstoichiometric Compound}: ``Any solid chemical compound in
@@ -518,7 +526,13 @@ ratio of small whole numbers"
 \item \textbf{Reactant}: A substance present at the beginning of, and involved
 in, a chemical reaction \cite{lund_introduction_2023}.
 
-\item \sjc{Should I include ``matrix'' and/or ``vector''?}
+\item \textbf{Reduced Row Echelon Form}: A form of a matrix where every row
+with only zeros is at the bottom and every column but the rightmost one
+has all zeroes except for one one (which has only zeroes to its left)
+\cite{taboga_reduced_2021}.
+
+\item \sjc{Should I include ``matrix'', ``vector'', and/or ``augmented
+matrix''?}
 \end{itemize}
 
 \subsubsection{Physical System Description} \label{sec_phySystDescrip}
@@ -942,6 +956,53 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
 \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
   \hline
   \rowcolor[gray]{0.9}
+  Number& IM\refstepcounter{instnum}\theinstnum \label{feasible}\\
+  \hline
+  Label& \bf Determination of feasibility\\
+  \hline
+  Input& $\textbf{A}$ from \iref{epcm}\\
+%  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
+  \hline
+  Output& $r_{m,n-1} = 0 \wedge r_{m,n} \neq 0$\\
+  \hline
+  Description&$\textbf{A}$ is a matrix of coefficients so that each entry
+  indicates the amount of a given element in a given compound; each row
+  corresponds to a different element and each column corresponds to a different
+  compound. Positive entries indicate the compound is a reactant, negative
+  entries indicate the compound is a product, and zeroes indicate the
+  corresponding element is not present in the corresponding compound.\\
+  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
+  as close to row-reduced echelon form as possible from \iref{epcm}.
+  \sjc{Is the relationship between $\textbf{R}$ and $r_{m,n-1}$ clear?}
+  \sjc{Where should $\textbf{R}$ be defined?}\\
+  &$\textbf{0}$ is the zero matrix. 
+  \sjc{Recursive descriptions?}\\
+%  & The above equation applies as long as the water is in liquid form,
+%  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
+%  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
+%  \\
+  \hline
+  Sources& \cite{hamid_balancing_2019}, \cite{pramoditha_how_2021} \\
+  \hline
+  Ref.\ By & \iref{epcm}\\
+  \hline
+\end{tabular}
+\end{minipage}\\
+
+%~\newline
+
+\subsubsection*{Derivation of ...}
+
+\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
+  where the derivation cannot be described under the Description field, it will
+  be necessary to include this subsection.}
+  
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+  \hline
+  \rowcolor[gray]{0.9}
   Number& IM\refstepcounter{instnum}\theinstnum \label{balance}\\
   \hline
   Label& \bf Calculation of compound coefficients\\
@@ -950,17 +1011,19 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
 %  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
   \hline
   Output& $\textbf{x}$, such that\\
-  &$\textbf{A}\textbf{x} = \textbf{0}$ from \iref{epcm} \\
+  &$\textbf{A}\textbf{x} = \textbf{0}$ from \iref{epcm}
+  \sjc{Is this sufficient? Does matrix multiplication need to be explained?}\\
   \hline
   Description&$\textbf{A}$ is a matrix of coefficients so that each entry
   indicates the amount of a given element in a given compound; each row
   corresponds to a different element and each column corresponds to a different
   compound. Positive entries indicate the compound is a reactant, negative
   entries indicate the compound is a product, and zeroes indicate the
-  corresponding element is not present in the corresponding compound.\\
+  corresponding element is not present in the corresponding compound.
+  \sjc{This description should go with whereever $\textbf{A}$ is defined.}\\
   &$\textbf{x}$ is a vector of coefficients for each compound in the reaction 
   (in the order inputted) so that the equation is balanced.\\
-  &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).\\
+  &$\textbf{0}$ is the zero matrix.\\
 %  & The above equation applies as long as the water is in liquid form,
 %  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
 %  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).

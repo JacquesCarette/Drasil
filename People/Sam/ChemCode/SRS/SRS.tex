@@ -155,13 +155,15 @@ Jan. 22, 2023 & 0.1.1 & Replace the notion of ``fractional oxidation state'' wit
 							``nonstoichiometric compound''\\
 							& 0.1.2 & Fix capTemplate reference\\
 							& 0.1.3 & Update Abbreviations and Acronyms section\\
-							& 0.2 & Add IM for balancing a chemical reaction, along with relevant
-							reference information\\
-Jan. 23, 2023 & 0.2.1 & Add IM for determining if a chemical reaction is feasible,
-							along with relevant reference information\\
+							& 0.2 & Add IM for balancing a chemical reaction (\iref{balance}), along
+							with relevant reference information\\
+Jan. 23, 2023 & 0.2.1 & Add IM for determining if a chemical reaction is feasible
+							(\iref{feasible}), along with relevant reference information\\
 Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							definitions\\
 							& 0.2.3 & Abstract \iref{feasible}\\
+							& 0.2.4 & Add IM for converting chemical equation to a matrix
+							(\iref{convert}), along with relevant reference information \\
 \bottomrule
 \end{tabularx}
 
@@ -533,9 +535,6 @@ in, a chemical reaction \cite{lund_introduction_2023}.
 %with only zeros is at the bottom and every column but the rightmost one
 %has all zeroes except for one one (which has only zeroes to its left)
 %\cite{taboga_reduced_2021}.
-
-\item \sjc{Should I include ``matrix'', ``vector'', and/or ``augmented
-matrix''?}
 \end{itemize}
 
 \subsubsection{Physical System Description} \label{sec_phySystDescrip}
@@ -901,14 +900,53 @@ one which is expressed in mathematical terms. It uses concrete symbols defined
 in Section~\ref{sec_datadef} to replace the abstract symbols in the models 
 identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}.
 
-The goals \plt{reference your goals} are solved by \plt{reference your instance
-  models}.  \plt{other details, with cross-references where appropriate.}
-\plt{Modify the examples below for your problem, and add additional models as
-  appropriate.}
+The goals \gsref{G_feasible} and \gsref{G_balance} are solved by \iref{feasible}
+and \iref{balance}, respectively. 
 
 ~\newline
 
-%Instance Model 1
+%\noindent
+%\begin{minipage}{\textwidth}
+%\renewcommand*{\arraystretch}{1.5}
+%\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+%  \hline
+%  \rowcolor[gray]{0.9}
+%  Number& IM\refstepcounter{instnum}\theinstnum \label{ewat}\\
+%  \hline
+%  Label& \bf Energy balance on water to find $T_W$\\
+%  \hline
+%  Input&$m_W$, $C_W$, $h_C$, $A_C$, $h_P$, $A_P$, $t_\text{final}$, $T_C$, 
+%  $T_\text{init}$, $T_P(t)$ from \iref{epcm}\\
+%  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
+%  \hline
+%  Output&$T_W(t)$, $0\leq t \leq t_\text{final}$, such that\\
+%  &$\frac{dT_W}{dt} = \frac{1}{\tau_W}[(T_C - T_W(t)) + {\eta}(T_P(t) - T_W(t))]$,\\
+%  &$T_W(0) = T_P(0) = T_\text{init}$ (\aref{A_InitTemp}) and $T_P(t)$ from \iref{epcm} \\
+%  \hline
+%  Description&$T_W$ is the water temperature (\si{\celsius}).\\
+%  &$T_P$ is the PCM temperature (\si{\celsius}).\\
+%  &$T_C$ is the coil temperature (\si{\celsius}).\\
+%  &$\tau_W = \frac{m_W C_W}{h_C A_C}$ is a constant (\si{\second}).\\
+%  &$\eta = \frac{h_P A_P}{h_C A_C}$ is a constant (dimensionless).\\
+%  & The above equation applies as long as the water is in liquid form,
+%  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
+%  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
+%  \\
+%  \hline
+%  Sources& Citation here \\
+%  \hline
+%  Ref.\ By & \iref{epcm}\\
+%  \hline
+%\end{tabular}
+%\end{minipage}\\
+%
+%%~\newline
+%
+%\subsubsection*{Derivation of ...}
+%
+%\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
+%  where the derivation cannot be described under the Description field, it will
+%  be necessary to include this subsection.}
 
 \noindent
 \begin{minipage}{\textwidth}
@@ -916,31 +954,27 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
 \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
   \hline
   \rowcolor[gray]{0.9}
-  Number& IM\refstepcounter{instnum}\theinstnum \label{ewat}\\
+  Number& IM\refstepcounter{instnum}\theinstnum \label{convert}\\
   \hline
-  Label& \bf Energy balance on water to find $T_W$\\
+  Label& \bf Matrix representation of elements present in reaction\\
   \hline
-  Input&$m_W$, $C_W$, $h_C$, $A_C$, $h_P$, $A_P$, $t_\text{final}$, $T_C$, 
-  $T_\text{init}$, $T_P(t)$ from \iref{epcm}\\
-  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
+  Input& A representation of a chemical equation (see \nameref{sec_termsDefs}).
+  \sjc{Constraints?}\\
   \hline
-  Output&$T_W(t)$, $0\leq t \leq t_\text{final}$, such that\\
-  &$\frac{dT_W}{dt} = \frac{1}{\tau_W}[(T_C - T_W(t)) + {\eta}(T_P(t) - T_W(t))]$,\\
-  &$T_W(0) = T_P(0) = T_\text{init}$ (\aref{A_InitTemp}) and $T_P(t)$ from \iref{epcm} \\
+  Output& A matrix such that each entry
+  indicates the amount of a given element in a given compound; each row
+  corresponds to a different element and each column corresponds to a different
+  compound. Positive entries indicate the compound is a reactant (see
+  \nameref{sec_termsDefs}), negative
+  entries indicate the compound is a product, and zeroes indicate the
+  corresponding element is not present in the corresponding compound. \\
   \hline
-  Description&$T_W$ is the water temperature (\si{\celsius}).\\
-  &$T_P$ is the PCM temperature (\si{\celsius}).\\
-  &$T_C$ is the coil temperature (\si{\celsius}).\\
-  &$\tau_W = \frac{m_W C_W}{h_C A_C}$ is a constant (\si{\second}).\\
-  &$\eta = \frac{h_P A_P}{h_C A_C}$ is a constant (dimensionless).\\
-  & The above equation applies as long as the water is in liquid form,
-  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
-  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
+  Description& N/A
   \\
   \hline
-  Sources& Citation here \\
+  Sources& \cite{hamid_balancing_2019} \\
   \hline
-  Ref.\ By & \iref{epcm}\\
+  Ref.\ By & \iref{feasible}, \iref{balance}\\
   \hline
 \end{tabular}
 \end{minipage}\\
@@ -963,19 +997,14 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   \hline
   Label& \bf Determination of feasibility\\
   \hline
-  Input& $\textbf{A}$ from \iref{epcm}\\
+  Input& $\textbf{A}$ from \iref{convert}\\
 %  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
   \hline
   Output& $\textsc{F}$ if $(\textbf{A} \vert \textbf{0})$ has no solutions and 
   			$\textsc{T}$ otherwise\\
   \hline
-  Description&$\textbf{A}$ is a matrix of coefficients so that each entry
-  indicates the amount of a given element in a given compound; each row
-  corresponds to a different element and each column corresponds to a different
-  compound. Positive entries indicate the compound is a reactant (see
-  \nameref{sec_termsDefs}), negative
-  entries indicate the compound is a product, and zeroes indicate the
-  corresponding element is not present in the corresponding compound.\\
+  Description&$\textbf{A}$ is a matrix representing the amount of each element
+  in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}\\
 %  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
 %  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
 %  from \iref{epcm}.
@@ -990,7 +1019,7 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   Sources& \cite{hamid_balancing_2019} \\
 %  , \cite{pramoditha_how_2021} \\
   \hline
-  Ref.\ By & \iref{epcm}\\
+  Ref.\ By & N/A\\
   \hline
 \end{tabular}
 \end{minipage}\\
@@ -1013,21 +1042,14 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   \hline
   Label& \bf Calculation of compound coefficients\\
   \hline
-  Input& $\textbf{A}$ from \iref{epcm}\\
+  Input& $\textbf{A}$ from \iref{convert}\\
 %  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
   \hline
   Output& $\textbf{x}$, such that\\
-  &$\textbf{A}\textbf{x} = \textbf{0}$ from \iref{epcm}
-  \sjc{Is this sufficient? Does matrix multiplication need to be explained?}\\
+  &$\textbf{A}\textbf{x} = \textbf{0}$ from \iref{epcm}\\
   \hline
-  Description&$\textbf{A}$ is a matrix of coefficients so that each entry
-  indicates the amount of a given element in a given compound; each row
-  corresponds to a different element and each column corresponds to a different
-  compound. Positive entries indicate the compound is a reactant (see
-  \nameref{sec_termsDefs}), negative
-  entries indicate the compound is a product, and zeroes indicate the
-  corresponding element is not present in the corresponding compound.
-  \sjc{This description should go with whereever $\textbf{A}$ is defined.}\\
+  Description&$\textbf{A}$ is a matrix representing the amount of each element
+  in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}\\
   &$\textbf{x}$ is a vector of coefficients for each compound in the reaction 
   (in the order inputted) so that the equation is balanced.\\
   &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).\\
@@ -1038,7 +1060,7 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   \hline
   Sources& \cite{hamid_balancing_2019} \\
   \hline
-  Ref.\ By & \iref{epcm}\\
+  Ref.\ By & N/A\\
   \hline
 \end{tabular}
 \end{minipage}\\

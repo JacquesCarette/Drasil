@@ -13,6 +13,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Citations(laplaceWiki)
 import Drasil.PDController.Unitals
+import Data.Drasil.Quantities.Math (posInf, negInf)
 
 theoreticalModels :: [TheoryModel]
 theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
@@ -20,7 +21,7 @@ theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
 tmLaplace :: TheoryModel
 tmLaplace
   = tm (othModel' laplaceRC)
-      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdPosInf,
+      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw posInf,
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
@@ -36,7 +37,7 @@ laplaceRC = makeRC "laplaceRC" (cn' "Laplace Transform") EmptyS laplaceRel
 laplaceRel :: Relation
 laplaceRel
   = sy qdLaplaceTransform $=
-      defint (eqSymb time) (sy qdNegInf) (sy qdPosInf) (sy qdFxnTDomain 
+      defint (eqSymb time) (sy negInf) (sy posInf) (sy qdFxnTDomain 
       `mulRe` DrasilLang.exp (neg (sy qdFreqDomain) `mulRe` sy time))
 
 laplaceDesc :: Sentence
@@ -52,7 +53,7 @@ laplaceDesc
 tmInvLaplace :: TheoryModel
 tmInvLaplace
   = tm (othModel' invlaplaceRC)
-      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdPosInf,
+      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw posInf,
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
@@ -111,5 +112,3 @@ soSystemDesc
         `S.ofA` phrase secondOrderSystem,
         sParen (S "mass-spring-damper"), 
         S "is characterized by this equation"]
-
-       --------

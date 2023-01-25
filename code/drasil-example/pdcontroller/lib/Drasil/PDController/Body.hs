@@ -19,6 +19,7 @@ import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (second, kilogram)
+import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
@@ -123,7 +124,7 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass])
+symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
   (nw pidControllerSystem : [nw program, nw angular, nw linear] 
   ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
   ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 

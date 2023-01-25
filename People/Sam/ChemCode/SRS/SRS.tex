@@ -165,6 +165,7 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							& 0.2.4 & Add IM for converting chemical equation to a matrix
 							(\iref{convert}), along with relevant reference information \\
 							& 0.2.5 & Rename and add input constraint to \iref{balance}\\
+							& 0.2.6 & Add note about \iref{balance} returning the smallest solution\\
 \bottomrule
 \end{tabularx}
 
@@ -1047,7 +1048,7 @@ and \iref{balance}, respectively.
   & The input is constrained so that $\textbf{A}$ is feasible (\iref{feasible}).
   \sjc{Is this correct?}\\
   \hline
-  Output& $\textbf{x}$, such that\\
+  Output& $\textbf{x}$, such that it is the smallest solution to\\
   &$\textbf{A}\textbf{x} = \textbf{0}$ from \iref{epcm}\\
   \hline
   Description&$\textbf{A}$ is a matrix representing the amount of each element

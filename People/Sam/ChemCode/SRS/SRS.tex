@@ -166,6 +166,7 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							(\iref{convert}), along with relevant reference information \\
 							& 0.2.5 & Rename and add input constraint to \iref{balance}\\
 							& 0.2.6 & Add note about \iref{balance} returning the smallest solution\\
+							& 0.2.7 & Add TM for matrix equation (\tref{T:MatEq})\\
 \bottomrule
 \end{tabularx}
 
@@ -680,60 +681,88 @@ likely change [LC], in which the respective assumption is used.
   physical laws, constitutive equations, relevant conversion factors, etc.}
 
 This section focuses on the general equations and laws that \progname{} is based
-on.  \plt{Modify the examples below for your problem, and add additional models
-  as appropriate.}
+on.
 
-~\newline
+%~\newline
 
 \noindent
 \deftheory
 % #2 refname of theory
-{T:COE}
+{T:MatEq}
 % #3 label
-{Conservation of thermal energy}
+{Matrix equation}
 % #4 equation
 {
-  $-{\bf \nabla \cdot q} + g$ = $\rho C \frac{\partial T}{\partial t}$
+  $\textbf{A}\textbf{x}=\textbf{b}$
 }
 % #5 description
 {
-  The above equation gives the conservation of energy for transient heat transfer in a material
-  of specific heat capacity $C$ (\si{\joule\per\kilogram\per\celsius}) and density $\rho$ 
-  (\si{\kilogram\per\cubic\metre}), where $\bf q$ is the thermal flux vector (\si{\watt\per\square\metre}),
-  $g$ is the volumetric heat generation
-  (\si{\watt\per\cubic\metre}), $T$ is the temperature
-  (\si{\celsius}),  $t$ is time (\si{\second}), and $\nabla$ is
-  the gradient operator.  For this equation to apply, other forms
-  of energy, such as mechanical energy, are assumed to be negligible in the
-  system (\aref{A_OnlyThermalEnergy}).  In general, the material properties ($\rho$ and $C$) depend on temperature.
+  The above equation gives the general form of the matrix equation where
+  $\textbf{A}$ is an $m\times n$ matrix, $\textbf{b}$ is a vector in
+  $\mathbb{R}^m$, and $\textbf{x}$ is a vector in $\mathbb{R}^n$ with unknown
+  values \cite{margalit_matrix_2019}.
 }
 % #6 Notes
 {
-None.
+	For any $\textbf{A}$ and $\textbf{b}$, there is either zero, one, or infinite
+	values for $\textbf{x}$ \cite{zwick_math_2012}. \sjc{Is this a note?}
 }
 % #7 Source
 {
-  \url{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}
+  \url{https://textbooks.math.gatech.edu/ila/matrix-equations.html} \sjc{Is this
+  a good enough source?}
 }
 % #8 Referenced by
 {
-  \dref{ROCT}
+  \iref{balance}
 }
 % #9 Preconditions
 {
-None
+None \sjc{Are size restrictions captured well enough?}
 }
-% #1 derivation - not applicable by default
+% #10 derivation - not applicable by default
 {}
 
-\plt{``Ref.\ By'' is used repeatedly with the different types of information.
-  This stands for Referenced By.  It means that the models, definitions and
-  assumptions listed reference the current model, definition or assumption.
-  This information is given for traceability.  Ref. By provides a pointer in the
-  opposite direction to what we commonly do.  You still need to have a reference
-  in the other direction pointing to the current model, definition or
-  assumption.  As an example, if T1 is referenced by G2, that means that G2 will
-  explicitly include a reference to T1.}
+%\noindent
+%\deftheory
+%% #2 refname of theory
+%{T:COE}
+%% #3 label
+%{Conservation of thermal energy}
+%% #4 equation
+%{
+%  $-{\bf \nabla \cdot q} + g$ = $\rho C \frac{\partial T}{\partial t}$
+%}
+%% #5 description
+%{
+%  The above equation gives the conservation of energy for transient heat transfer in a material
+%  of specific heat capacity $C$ (\si{\joule\per\kilogram\per\celsius}) and density $\rho$ 
+%  (\si{\kilogram\per\cubic\metre}), where $\bf q$ is the thermal flux vector (\si{\watt\per\square\metre}),
+%  $g$ is the volumetric heat generation
+%  (\si{\watt\per\cubic\metre}), $T$ is the temperature
+%  (\si{\celsius}),  $t$ is time (\si{\second}), and $\nabla$ is
+%  the gradient operator.  For this equation to apply, other forms
+%  of energy, such as mechanical energy, are assumed to be negligible in the
+%  system (\aref{A_OnlyThermalEnergy}).  In general, the material properties ($\rho$ and $C$) depend on temperature.
+%}
+%% #6 Notes
+%{
+%None.
+%}
+%% #7 Source
+%{
+%  \url{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}
+%}
+%% #8 Referenced by
+%{
+%  \dref{ROCT}
+%}
+%% #9 Preconditions
+%{
+%None
+%}
+%% #10 derivation - not applicable by default
+%{}
 
 ~\newline
 
@@ -1049,7 +1078,8 @@ and \iref{balance}, respectively.
   \sjc{Is this correct?}\\
   \hline
   Output& $\textbf{x}$, such that it is the smallest solution to\\
-  &$\textbf{A}\textbf{x} = \textbf{0}$ from \iref{epcm}\\
+  &$\textbf{A}\textbf{x} = \textbf{0}$ from \tref{T:MatEq} \sjc{TM refs not
+  working.} \sjc{Is this sufficient?}\\
   \hline
   Description&$\textbf{A}$ is a matrix representing the amount of each element
   in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}\\

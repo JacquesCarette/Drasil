@@ -161,6 +161,7 @@ Jan. 23, 2023 & 0.2.1 & Add IM for determining if a chemical reaction is feasibl
 							along with relevant reference information\\
 Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							definitions\\
+							& 0.2.3 & Abstract \iref{feasible}\\
 \bottomrule
 \end{tabularx}
 
@@ -528,10 +529,10 @@ ratio of small whole numbers"
 \item \textbf{Reactant}: A substance present at the beginning of, and involved
 in, a chemical reaction \cite{lund_introduction_2023}.
 
-\item \textbf{Reduced Row Echelon Form}: A form of a matrix where every row
-with only zeros is at the bottom and every column but the rightmost one
-has all zeroes except for one one (which has only zeroes to its left)
-\cite{taboga_reduced_2021}.
+%\item \textbf{Reduced Row Echelon Form}: A form of a matrix where every row
+%with only zeros is at the bottom and every column but the rightmost one
+%has all zeroes except for one one (which has only zeroes to its left)
+%\cite{taboga_reduced_2021}.
 
 \item \sjc{Should I include ``matrix'', ``vector'', and/or ``augmented
 matrix''?}
@@ -965,7 +966,8 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   Input& $\textbf{A}$ from \iref{epcm}\\
 %  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
   \hline
-  Output& $r_{m,n-1} = 0 \wedge r_{m,n} \neq 0$\\
+  Output& $\textsc{F}$ if $(\textbf{A} \vert \textbf{0})$ has no solutions and 
+  			$\textsc{T}$ otherwise\\
   \hline
   Description&$\textbf{A}$ is a matrix of coefficients so that each entry
   indicates the amount of a given element in a given compound; each row
@@ -974,19 +976,19 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   \nameref{sec_termsDefs}), negative
   entries indicate the compound is a product, and zeroes indicate the
   corresponding element is not present in the corresponding compound.\\
-  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
-  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
-  from \iref{epcm}.
-	\sjc{Is the relationship between $\textbf{R}$ and $r_{m,n-1}$ clear?}
-  \sjc{Where should $\textbf{R}$ be defined?}\\
-  &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}). 
-  \sjc{Recursive descriptions?}\\
+%  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
+%  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
+%  from \iref{epcm}.
+%	\sjc{Is the relationship between $\textbf{R}$ and $r_{m,n-1}$ clear?}
+%  \sjc{Where should $\textbf{R}$ be defined?}\\
+  &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}). \\
 %  & The above equation applies as long as the water is in liquid form,
 %  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
 %  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
 %  \\
   \hline
-  Sources& \cite{hamid_balancing_2019}, \cite{pramoditha_how_2021} \\
+  Sources& \cite{hamid_balancing_2019} \\
+%  , \cite{pramoditha_how_2021} \\
   \hline
   Ref.\ By & \iref{epcm}\\
   \hline

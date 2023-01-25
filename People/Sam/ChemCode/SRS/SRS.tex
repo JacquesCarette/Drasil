@@ -164,6 +164,7 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							& 0.2.3 & Abstract \iref{feasible}\\
 							& 0.2.4 & Add IM for converting chemical equation to a matrix
 							(\iref{convert}), along with relevant reference information \\
+							& 0.2.5 & Rename and add input constraint to \iref{balance}\\
 \bottomrule
 \end{tabularx}
 
@@ -1019,7 +1020,7 @@ and \iref{balance}, respectively.
   Sources& \cite{hamid_balancing_2019} \\
 %  , \cite{pramoditha_how_2021} \\
   \hline
-  Ref.\ By & N/A\\
+  Ref.\ By & \iref{balance}\\
   \hline
 \end{tabular}
 \end{minipage}\\
@@ -1040,10 +1041,11 @@ and \iref{balance}, respectively.
   \rowcolor[gray]{0.9}
   Number& IM\refstepcounter{instnum}\theinstnum \label{balance}\\
   \hline
-  Label& \bf Calculation of compound coefficients\\
+  Label& \bf Vector of compound coefficients in balanced equation\\
   \hline
   Input& $\textbf{A}$ from \iref{convert}\\
-%  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
+  & The input is constrained so that $\textbf{A}$ is feasible (\iref{feasible}).
+  \sjc{Is this correct?}\\
   \hline
   Output& $\textbf{x}$, such that\\
   &$\textbf{A}\textbf{x} = \textbf{0}$ from \iref{epcm}\\

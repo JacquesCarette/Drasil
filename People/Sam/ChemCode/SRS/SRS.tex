@@ -145,7 +145,7 @@ A program for solving chemistry problems}
 
 \section*{Revision History}
 
-\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\begin{tabularx}{\textwidth}{p{2.5cm}p{1.5cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Jan. 21, 2023 & 0.0 & Start document, fill in title page, and add references\\
@@ -159,6 +159,8 @@ Jan. 22, 2023 & 0.1.1 & Replace the notion of ``fractional oxidation state'' wit
 							reference information\\
 Jan. 23, 2023 & 0.2.1 & Add IM for determining if a chemical reaction is feasible,
 							along with relevant reference information\\
+Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
+							definitions\\
 \bottomrule
 \end{tabularx}
 
@@ -580,7 +582,7 @@ of \progname{} are:
 \begin{itemize}
 
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_feasible}:] Determine if
-a given chemical reaction is infeasible \sjc{Refer to Terms and Defs?}.
+a given chemical reaction is infeasible (see \nameref{sec_termsDefs}).
 
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_balance}:] Balance the
 inputted chemical equation with the smallest whole number coefficients
@@ -968,14 +970,16 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   Description&$\textbf{A}$ is a matrix of coefficients so that each entry
   indicates the amount of a given element in a given compound; each row
   corresponds to a different element and each column corresponds to a different
-  compound. Positive entries indicate the compound is a reactant, negative
+  compound. Positive entries indicate the compound is a reactant (see
+  \nameref{sec_termsDefs}), negative
   entries indicate the compound is a product, and zeroes indicate the
   corresponding element is not present in the corresponding compound.\\
   &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
-  as close to row-reduced echelon form as possible from \iref{epcm}.
-  \sjc{Is the relationship between $\textbf{R}$ and $r_{m,n-1}$ clear?}
+  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
+  from \iref{epcm}.
+	\sjc{Is the relationship between $\textbf{R}$ and $r_{m,n-1}$ clear?}
   \sjc{Where should $\textbf{R}$ be defined?}\\
-  &$\textbf{0}$ is the zero matrix. 
+  &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}). 
   \sjc{Recursive descriptions?}\\
 %  & The above equation applies as long as the water is in liquid form,
 %  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
@@ -1017,13 +1021,14 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
   Description&$\textbf{A}$ is a matrix of coefficients so that each entry
   indicates the amount of a given element in a given compound; each row
   corresponds to a different element and each column corresponds to a different
-  compound. Positive entries indicate the compound is a reactant, negative
+  compound. Positive entries indicate the compound is a reactant (see
+  \nameref{sec_termsDefs}), negative
   entries indicate the compound is a product, and zeroes indicate the
   corresponding element is not present in the corresponding compound.
   \sjc{This description should go with whereever $\textbf{A}$ is defined.}\\
   &$\textbf{x}$ is a vector of coefficients for each compound in the reaction 
   (in the order inputted) so that the equation is balanced.\\
-  &$\textbf{0}$ is the zero matrix.\\
+  &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).\\
 %  & The above equation applies as long as the water is in liquid form,
 %  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
 %  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).

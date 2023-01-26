@@ -88,11 +88,7 @@
 \newpage
 \noindent \rule{\textwidth}{0.5mm}
 \paragraph{Number: } T\refstepcounter{theorynum}\thetheorynum
-\phantomsection \label{#2} \sjc{Is this an OK addition?}
-
-\paragraph{RefName: } \textbf{#2} 
-%\phantomsection 
-%\label{#2}
+\phantomsection \label{#2}
 
 \paragraph{Label:} #3
 
@@ -118,15 +114,9 @@
 
 #8
 
-\paragraph{Preconditions for \hyperref[#2]{#2}:}
-\label{#2_precond}
+\paragraph{Derivation for \tref{#2}:}
 
 #9
-
-\paragraph{Derivation for \hyperref[#2]{#2}:}
-\label{#2_deriv}
-
-#1
 
 \noindent \rule{\textwidth}{0.5mm}
 
@@ -160,7 +150,7 @@ Jan. 21, 2023 & 0.0 & Start document, fill in title page, and add references\\
 Jan. 22, 2023 & 0.1.1 & Replace the notion of ``fractional oxidation state'' with
 							``nonstoichiometric compound''\\
 							& 0.1.2 & Fix capTemplate reference\\
-							& 0.1.3 & Update Abbreviations and Acronyms section\\
+							& 0.1.3 & Update \nameref{sec_abbsAcrs}\\
 							& 0.2 & Add IM for balancing a chemical reaction (\iref{balance}), along
 							with relevant reference information\\
 Jan. 23, 2023 & 0.2.1 & Add IM for determining if a chemical reaction is feasible
@@ -178,7 +168,9 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							& 0.2.9 & Add check for Conservation of Mass in \iref{feasible}\\
 Jan. 26, 2023 & 0.3 & Add \nameref{sec_LCs} from Problem Statement, add
 							assumption about difference between number of elements and compounds
-							(\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}.\\
+							(\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}\\
+							& 0.3.1 & Update \tref{T:MatEq} (and TM function) from feedback from
+							presentation\\
 \bottomrule
 \end{tabularx}
 
@@ -255,7 +247,7 @@ which heat is transferred in
 \plt{Use your problems actual symbols.  The si package is a good idea to use for
   units.}
 
-\subsection{Abbreviations and Acronyms}
+\subsection{Abbreviations and Acronyms} \label{sec_abbsAcrs}
 
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{l l} 
@@ -713,12 +705,12 @@ on.
   The above equation gives the general form of the matrix equation where
   $\textbf{A}$ is an $m\times n$ matrix, $\textbf{b}$ is a vector in
   $\mathbb{R}^m$, and $\textbf{x}$ is a vector in $\mathbb{R}^n$ with unknown
-  values \cite{margalit_matrix_2019}.
+  values to be solved for \cite{margalit_matrix_2019}.
 }
 % #6 Notes
 {
 	For any $\textbf{A}$ and $\textbf{b}$, there is either zero, one, or infinite
-	values for $\textbf{x}$ \cite{zwick_math_2012}. \sjc{Is this a note?}
+	values for $\textbf{x}$ \cite{zwick_math_2012}.
 }
 % #7 Source
 {
@@ -729,12 +721,8 @@ on.
 {
   \iref{balance}
 }
-% #9 Preconditions
-{
-None \sjc{Are size restrictions captured well enough?}
-}
-% #10 derivation - not applicable by default
-{}
+% #9 derivation - not applicable by default
+{Not Applicable}
 
 %\noindent
 %\deftheory
@@ -770,12 +758,8 @@ None \sjc{Are size restrictions captured well enough?}
 %{
 %  \dref{ROCT}
 %}
-%% #9 Preconditions
-%{
-%None
-%}
-%% #10 derivation - not applicable by default
-%{}
+%% #9 derivation - not applicable by default
+%{Not Applicable}
 
 ~\newline
 

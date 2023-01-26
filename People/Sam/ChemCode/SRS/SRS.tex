@@ -84,9 +84,12 @@
 {
 \newpage
 \noindent \rule{\textwidth}{0.5mm}
+\paragraph{Number: } T\refstepcounter{theorynum}\thetheorynum
+\phantomsection \label{#2} \sjc{Is this an OK addition?}
 
-\paragraph{RefName: } \textbf{#2} \phantomsection 
-\label{#2}
+\paragraph{RefName: } \textbf{#2} 
+%\phantomsection 
+%\label{#2}
 
 \paragraph{Label:} #3
 
@@ -167,6 +170,8 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							& 0.2.5 & Rename and add input constraint to \iref{balance}\\
 							& 0.2.6 & Add note about \iref{balance} returning the smallest solution\\
 							& 0.2.7 & Add TM for matrix equation (\tref{T:MatEq})\\
+							& 0.2.8 & Improve referencing, mainly for TMs, and add note about
+							potential TM for Conservation of Mass\\
 \bottomrule
 \end{tabularx}
 
@@ -766,6 +771,8 @@ None \sjc{Are size restrictions captured well enough?}
 
 ~\newline
 
+\noindent\sjc{TM for Conservation of Mass, even if there isn't an equation for it?}
+
 \subsubsection{General Definitions}\label{sec_gendef}
 
 \plt{General Definitions (GDs) are a refinement of one or more TMs, and/or of
@@ -989,8 +996,8 @@ and \iref{balance}, respectively.
   \hline
   Label& \bf Matrix representation of elements present in reaction\\
   \hline
-  Input& A representation of a chemical equation (see \nameref{sec_termsDefs}).
-  \sjc{Constraints?}\\
+  Input& A representation of a chemical equation (see
+  \nameref{sec_phySystDescrip}). \sjc{Constraints?}\\
   \hline
   Output& A matrix such that each entry
   indicates the amount of a given element in a given compound; each row
@@ -1078,8 +1085,9 @@ and \iref{balance}, respectively.
   \sjc{Is this correct?}\\
   \hline
   Output& $\textbf{x}$, such that it is the smallest solution to\\
-  &$\textbf{A}\textbf{x} = \textbf{0}$ from \tref{T:MatEq} \sjc{TM refs not
-  working.} \sjc{Is this sufficient?}\\
+  &$\textbf{A}\textbf{x} = \textbf{0}$ from \tref{T:MatEq} 
+%  \sjc{TM refs not working.}
+  \sjc{Is this sufficient?}\\
   \hline
   Description&$\textbf{A}$ is a matrix representing the amount of each element
   in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}\\

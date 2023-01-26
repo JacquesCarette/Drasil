@@ -83,7 +83,7 @@
 \label{sec:intro}
 
 It is an instructive exercise to take a piece of well-written, well-documented
-piece of software and \emph{carefully explain} the provenance and the justification
+piece of software and \emph{carefully explain} the provenance and justification
 for all the parts -- not just the code, but also the documentation, the tests, the
 build scripts, the README, the requirements and design document, and so on.
 One of the striking things of such an explanation is how much repetition it contains.
@@ -91,7 +91,7 @@ Post-facto, this isn't surprising: all these ``pieces'' belong to a single softw
 package that accomplishes a particular task.
 
 What is more surprising is that if such an exercise is conducted multiple times
-on softare from different domains, how much of the ``skeleton'' of the explanation
+on software from different domains, how much of the ``skeleton'' of the explanation
 remains the same. Again, this is because some parts don't change: what artifacts
 are present and what ``knowledge'' is encoded by each is shared by all these different
 pieces of software. What changes are the domain-specific aspects.
@@ -105,7 +105,31 @@ processing.
 
 Thus we thought: what if we pick a particularly well-understood component (such as
 well-documented code), can we turn this explanatory process into a description
-language for documented-code assembly, assuming we already had a 
+language for documented-code assembly, assuming we already had a back-end for
+multi-language code generation?
+
+As we're in a generative setting, we often solve such problems by creating a
+\emph{Domain Specific Language} (DSL), or indeed multiple DSLs, that let us
+capture the fundamental \emph{Domain Knowledge} (DK) embodied in the problem domains.
+We can then write interpreters and/or transpilers that translate from these DSLs
+into forms usually hand-written by humans.
+
+We structure the papers as a rational reconstruction of an idealized discovery
+process: in Section~\ref{sec:problem} we give increasingly detailed illustrations
+of the problem that needs to be solved. The examples are chosen to succinctly
+illustrate the principal design points that will occur later. Section~\ref{sec:analysis}
+analyses the examples to draw out the Domain Knowledge that needs to be encoded.
+Section~\ref{sec:organize} shows out the DK can be organized, leading to the design
+of various DSLs. Actually generating the artifacts is done by what we call
+\emph{recipes}\footnote{but should perhaps just call programs}, and these are documented
+in Section~\ref{sec:recipes}. The amount of code supporting our work is surprisingly
+compact; in Section~\ref{sec:tech} we describe the various technologies we've used
+to achieve that. People familiar with this domain will recognize our goals as being
+far from new, as there was extensive work in the $1980$s and $90$s with similar aim,
+which we document in Section~\ref{sec:relwork}, along with more recent relevant work
+as well as various work that have inspired us. Finally we conclude in Section~\ref{sec:conc},
+in part commenting on why we think resurrecting these ``old fashioned'' ideas is
+worthwhile.
 
 \section{The problem}
 \label{sec:problem}
@@ -118,16 +142,27 @@ Subsection of intro? But give examples, well illustrated. See outline.txt.
 Analyse the actual content of the examples. See what makes them tick.
 
 \section{Organize}
+\label{sec:organize}
 
 The content previously outlined is not a jumble.
 
 \section{Recipes}
+\label{sec:recipes}
 
 The programs that weave together things.
 
 \section{Technology}
+\label{sec:tech}
 
-GOOL, pretty-printing.
+GOOL, pretty-printing. Probably also tagless and classy lenses.
+
+\section{Related Work}
+\label{sec:relwork}
+
+See the Drasil Wiki page for lots.
+
+\section{Conclusion}
+\label{sec:conc}
 
 \acks
 Our zillions of students who built large parts of the software.

@@ -171,6 +171,8 @@ Jan. 26, 2023 & 0.3 & Add \nameref{sec_LCs} from Problem Statement, add
 							(\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}\\
 							& 0.3.1 & Update \tref{T:MatEq} (and TM function) from feedback from
 							presentation\\
+							& 0.3.2 & Fill in \nameref{sec_scope}, fix \aref{A_elemCompDiff} and 
+							change ``infeasible'' to ``feasible''\\
 \bottomrule
 \end{tabularx}
 
@@ -374,22 +376,12 @@ expect in the Introduction section.}
   purpose of the SRS, including communication, planning for the design stage,
   etc.}
 
-\subsection{Scope of Requirements} 
+\subsection{Scope of Requirements} \label{sec_scope}
 
-\plt{Modelling the real world requires simplification.  The full complexity of
-  the actual physics, chemistry, biology is too much for existing models, and
-  for existing computational solution techniques.  Rather than say what is in
-  the scope, it is usually easier to say what is not.  You can think of it as
-  the scope is initially everything, and then it is constrained to create the
-  actual scope.  For instance, the problem can be restricted to 2 dimensions, or
-  it can ignore the effect of temperature (or pressure) on the material
-  properties, etc.}  
-
-\plt{The scope section is related to the assumptions section
-  (Section~\ref{sec_assumpt}).  However, the scope and the assumptions are not
-  at the same level of abstraction.  The scope is at a high level.  The focus is
-  on the ``big picture'' assumptions.  The assumptions section lists, and
-  describes, all of the assumptions.}
+The scope of the requirements includes determining if a given chemical equation
+is feasible (see \nameref{sec_termsDefs}) and, if it is, balancing it using the
+smallest whole number coefficients possible, regardless of whether or not the
+reaction would take place in a real-world setting.
 
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
 
@@ -526,7 +518,7 @@ sections and their meaning, with the purpose of reducing ambiguity and making it
 easier to correctly understand the requirements:
 
 \begin{itemize}
-\item \textbf{Infeasible}: (Referring to a chemical equation) not able to be
+\item \textbf{Feasible}: (Referring to a chemical equation) able to be
 balanced \cite{hamid_balancing_2019}.
 
 \item \textbf{Nonstoichiometric Compound}: ``Any solid chemical compound in
@@ -591,7 +583,7 @@ of \progname{} are:
 \begin{itemize}
 
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_feasible}:] Determine if
-a given chemical reaction is infeasible (see \nameref{sec_termsDefs}).
+a given chemical reaction is feasible (see \nameref{sec_termsDefs}).
 
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_balance}:] Balance the
 inputted chemical equation with the smallest whole number coefficients
@@ -671,8 +663,8 @@ likely change [LC], in which the respective assumption is used.
 \begin{itemize}
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_elemCompDiff}:]
-  For all inputted chemical equations, there is at most one more element than
-  compound. (Through empirical analysis, chemical equations without this
+  For all inputted chemical equations, there is at most one more compound than
+  element. (Through empirical analysis, chemical equations without this
   constraint lead to unexpected results that require a deeper analysis.)
   [\lcref{LC_allEqsPermitted}]
 

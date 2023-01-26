@@ -39,17 +39,16 @@ unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
 
 lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
-lenRod = makeUCWDS "l_rod" (cn "length of the rod")
+lenRod = uc' "l_rod" (cn "length of the rod")
         (phraseNP (len `the_ofThe` rod))
         (sub cL lRod) Real metre
 
--- pendDisplacementAngle = ucsWS "pendDisplacementAngle" (cn "displacement angle of the pendulum")
-pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of the pendulum")
+pendDisplacementAngle = uc' "pendDisplacementAngle" (cn "displacement angle of the pendulum")
         (phraseNP (angle `the_ofThe` pendulum))
         (sub lTheta lP) Real radian
         -- (sub lTheta lP) (mkFunction [Real] Real) radian
 
-initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
+initialPendAngle = uc' "initialPendAngle" (cn "initial pendulum angle")
         (phraseNP (NP.the (CM.iAngle `of_` pendulum)))
         (sub lTheta lI) Real radian
 

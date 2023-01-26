@@ -172,6 +172,7 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							& 0.2.7 & Add TM for matrix equation (\tref{T:MatEq})\\
 							& 0.2.8 & Improve referencing, mainly for TMs, and add note about
 							potential TM for Conservation of Mass\\
+							& 0.2.9 & Add check for Conservation of Mass in \iref{feasible}\\
 \bottomrule
 \end{tabularx}
 
@@ -1038,11 +1039,16 @@ and \iref{balance}, respectively.
   Input& $\textbf{A}$ from \iref{convert}\\
 %  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
   \hline
-  Output& $\textsc{F}$ if $(\textbf{A} \vert \textbf{0})$ has no solutions and 
+  Output& $\textsc{F}$ if a row of $\textbf{A}$ does not have a positive and a
+  			negative entry or if $(\textbf{A} \vert \textbf{0})$ has no solutions and 
   			$\textsc{T}$ otherwise\\
   \hline
   Description&$\textbf{A}$ is a matrix representing the amount of each element
-  in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}\\
+  in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}
+  If a row of $\textbf{A}$ only has either a positive or negative entry, then
+  there is an element that is either a reactant or a product (see
+  \nameref{sec_termsDefs}) but not both, which breaks the Law of Conservation of
+  Mass. \sjc{Add reference.} \sjc{Is this a good place for this?}\\
 %  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
 %  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
 %  from \iref{epcm}.

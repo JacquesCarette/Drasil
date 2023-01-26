@@ -9,6 +9,7 @@
 \usepackage{colortbl}
 \usepackage{xr}
 \usepackage{hyperref}
+\usepackage{cleveref}
 \usepackage{longtable}
 \usepackage{xfrac}
 \usepackage{tabularx}
@@ -22,6 +23,8 @@
 %\usepackage[round]{natbib}
 
 %\usepackage{refcheck}
+
+\crefformat{footnote}{#2\footnotemark[#1]#3}
 
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
@@ -173,6 +176,9 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							& 0.2.8 & Improve referencing, mainly for TMs, and add note about
 							potential TM for Conservation of Mass\\
 							& 0.2.9 & Add check for Conservation of Mass in \iref{feasible}\\
+Jan. 26, 2023 & 0.3 & Add \nameref{sec_LCs} from Problem Statement, add
+							assumption about difference between number of elements and compounds
+							(\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}.\\
 \bottomrule
 \end{tabularx}
 
@@ -181,8 +187,8 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 \section{Reference Material}
 
 This section records information for easy reference.
-
-\subsection{Table of Units}
+ 
+\subsection{Table of Units} \label{sec_ToU}
 
 Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed
 as the unit system.  In addition to the basic units, several derived units are
@@ -195,6 +201,8 @@ description of the unit and the SI name.
   \noindent \begin{tabular}{l l l} 
     \toprule		
     \textbf{symbol} & \textbf{unit} & \textbf{SI}\\
+    \midrule 
+    \si{\mole} & amount of substance & mole\\
     \midrule 
     \si{\metre} & length & metre\\
     \si{\kilogram} & mass	& kilogram\\
@@ -670,12 +678,11 @@ likely change [LC], in which the respective assumption is used.
 
 \begin{itemize}
 
-\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_meaningfulLabel}:]
-  \plt{Short description of each assumption.  Each assumption
-    should have a meaningful label.  Use cross-references to identify the
-    appropriate traceability to T, GD, DD etc., using commands like dref, ddref
-    etc.  Each assumption should be atomic - that is, there should not be an
-    explicit (or implicit) ``and'' in the text of an assumption.}
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_elemCompDiff}:]
+  For all inputted chemical equations, there is at most one more element than
+  compound. (Through empirical analysis, chemical equations without this
+  constraint lead to unexpected results that require a deeper analysis.)
+  [\lcref{LC_allEqsPermitted}]
 
 \end{itemize}
 
@@ -1285,12 +1292,58 @@ be covered in the Verification and Validation document.}
 
 \end{itemize}
 
-\section{Likely Changes}    
+\section{Likely Changes} \label{sec_LCs}
 
 \noindent \begin{itemize}
 
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] \plt{Give
-    the likely changes, with a reference to the related assumption (aref), as appropriate.}
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcMoles}:] Given the amount
+	of one substance in a reaction (in moles), \progname{} will be able to
+	calculate the amount of every other substance in the reaction (also in
+	moles).\footnote{\label{chemProbExs}These examples of problems related to
+		chemical equations were taken from \cite{lund_introduction_2023}.}
+		
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_detLimReag}:] Given the amount
+	of each reactant (in moles) in a reaction, \progname{} will be able to
+	determine the limiting reactant(s).\cref{chemProbExs}
+
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcYield}:] Given the amount
+	of each \sjc{Is ``each'' a requirement?}
+	 reactant (in moles) in a reaction, \progname{} will be able to
+	calculate the theoretical yield of each product (also in
+	moles).\cref{chemProbExs} This is dependent on \lcref{LC_detLimReag}.
+	
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcExcess}:] Given the amount
+	of each \sjc{Is ``each'' a requirement?}
+	reactant (in moles) in a reaction, \progname{} will be able to
+	calculate the amount of excess reactant(s) (also in	moles).\cref{chemProbExs}
+	This is dependent on \lcref{LC_detLimReag}.
+	
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_termsOfMass}:] For ease of use,
+the user should be able to enter the amounts required by \lcref{LC_calcMoles}, 
+\lcref{LC_detLimReag}, \lcref{LC_calcYield}, and \lcref{LC_calcExcess} in terms
+of mass.\cref{chemProbExs}
+
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_allEqsPermitted}:] All chemical
+	equations will be permitted as input and processed as appropriate
+	(\aref{A_elemCompDiff}).
+	
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_classRxns}:] \progname{} will be
+	able to classify a chemical reaction as ``combination (or
+	synthesis), decomposition, combustion, single replacement, \dots double
+	replacement'' \cite[p.~301]{lund_introduction_2023} or some combination of
+	these.\cref{chemProbExs}
+	
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_inputPhaseLabels}:] \progname{}
+	will allow the user to input phase labels.\cref{chemProbExs}
+	
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_identifyPhaseLabels}:]
+	\progname{} will be able to identify the phase labels for compounds, which will
+	involve determining solubility.\cref{chemProbExs} This is dependent on
+	\lcref{LC_inputPhaseLabels}.
+	
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_rxnTakePlace}:] \progname{}
+	will be able to identify when a reaction will not take place.\cref{chemProbExs}
+	This is dependent on \lcref{LC_identifyPhaseLabels}.
 
 \end{itemize}
 
@@ -1300,7 +1353,7 @@ be covered in the Verification and Validation document.}
 
 \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] \plt{Give
     the unlikely changes.  The design can assume that the changes listed will
-    not occur.}
+    not occur.} \sjc{Is this supposed to be ``LC'' or ``UC''?}
 
 \end{itemize}
 

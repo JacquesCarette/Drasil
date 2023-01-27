@@ -135,7 +135,9 @@ genPackage unRepr = do
       prps = show $ sentenceDoc db Implementation Linear 
         (foldlSent $ purpose $ codeSpec g)
       bckgrnd = show $ sentenceDoc db Implementation Linear 
-        (foldlSent $ background $ codeSpec g)  
+        (foldlSent $ background $ codeSpec g)
+      mtvtn = show $ sentenceDoc db Implementation Linear 
+        (foldlSent $ motivation $ codeSpec g)      
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -149,7 +151,8 @@ genPackage unRepr = do
         configFP = cfp,
         caseName = "",
         examplePurpose = prps,
-        exampleDescr = bckgrnd}
+        exampleDescr = bckgrnd,
+        exampleMotivation = mtvtn}
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.

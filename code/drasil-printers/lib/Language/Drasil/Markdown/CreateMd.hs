@@ -18,9 +18,9 @@ makeMd :: [Doc] -> Doc
 makeMd = vcat . punctuate secSep . filtEmp
 
 -- | Example title, authors, and maybe purpose section.
-introInfo :: String -> [String] -> Maybe String -> Doc
-introInfo name auths descr = introSec (text name) (prepName name)
-  (listToDoc auths) (length auths) (maybePurpDoc descr)
+introInfo :: String -> [String] -> Maybe String -> Maybe String -> Doc
+introInfo name auths descr motiv = introSec (text name) (prepName name)
+  (listToDoc auths) (length auths) (maybePurpDoc motiv)
 
 -- | Helper for prepending the example name.
 prepName :: String -> Doc

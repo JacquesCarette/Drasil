@@ -174,6 +174,7 @@ Jan. 26, 2023 & 0.3 & Add \nameref{sec_LCs} from Problem Statement, add
 							& 0.3.2 & Fill in \nameref{sec_scope}, fix \aref{A_elemCompDiff} and 
 							change ``infeasible'' to ``feasible''\\
 Jan. 27, 2023 & 0.3.3 & Improve section referencing in \nameref{sec_revHist}\\
+							& 0.4 & Fill in \nameref{sec_funcReqs}\\
 \bottomrule
 \end{tabularx}
 
@@ -1180,39 +1181,42 @@ A correct solution must exhibit \plt{fill in the details}.  \plt{These
   plan.}
 
 \section{Requirements}
-
-\plt{The requirements refine the goal statement.  They will make heavy use of
-  references to the instance models.}
-
 This section provides the functional requirements, the business tasks that the
 software is expected to complete, and the nonfunctional requirements, the
 qualities that the software is expected to exhibit.
 
-\subsection{Functional Requirements}
+\subsection{Functional Requirements} \label{sec_funcReqs}
 
 \noindent \begin{itemize}
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Inputs}:] \plt{Requirements
-    for the inputs that are supplied by the user.  This information has to be
-    explicit.}
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_input}:] Input a
+	representation of a chemical equation.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_OutputInputs}:] \plt{It isn't
-    always required, but often echoing the inputs as part of the output is a
-    good idea.}
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_convert}:] Convert the
+	inputted equation to matrix form (from \iref{convert}).
+	
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_feasible}:] Determine if the
+	inputted equation is feasible (see \nameref{sec_termsDefs};	from
+	\iref{feasible}).
+	
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_balance}:] If the
+	inputted equation is feasible, balance the chemical equation with the smallest
+	whole number coefficients possible (from \iref{balance}).
+	
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_infeasOutput}:] If the
+	inputted equation is infeasible, output a descriptive message.
+	\sjc{Should this go before \rref{R_balance}?}
+	
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_feasOutput}:] If the
+	inputted equation is feasible, output a balanced form of the equation in the
+	same format as the input, using the coefficients from \iref{balance}.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Calculate}:] \plt{Calculation
-    related requirements.}
-
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_VerifyOutput}:]
-  \plt{Verification related requirements.}
-
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Output}:] \plt{Output related
-    requirements.}
-
+%\item[R\refstepcounter{reqnum}\thereqnum \label{R_VerifyOutput}:]
+%  \plt{Verification related requirements.}
 \end{itemize}
 
-\plt{Every IM should map to at least one requirement, but not every requirement
-  has to map to a corresponding IM.}
+%\plt{Every IM should map to at least one requirement, but not every requirement
+%  has to map to a corresponding IM.}
 
 \subsection{Nonfunctional Requirements}
 

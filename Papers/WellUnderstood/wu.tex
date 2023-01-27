@@ -63,7 +63,7 @@
 \keywords{code generation, document generation, knowledge capture,
   software engineering}
 
-\category{} %optional, e.g. invited paper
+\category{Research} %optional, e.g. invited paper
 
 \relatedversion{}
 
@@ -77,19 +77,20 @@
 \nolinenumbers %uncomment to disable line numbering
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\EventEditors{John Q. Open and Joan R. Access}
-\EventNoEds{2}
-\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
-\EventShortTitle{CVIT 2016}
-\EventAcronym{CVIT}
-\EventYear{2016}
-\EventDate{December 24--27, 2016}
-\EventLocation{Little Whinging, United Kingdom}
+\EventEditors{Ralf L\"{a}mmel, Peter D. Mosses, and Friedrich Steimann}
+\EventNoEds{3}
+\EventLongTitle{Eelco Visser Commemorative Symposium (EVCS 2023)}
+\EventShortTitle{EVCS 2023}
+\EventAcronym{EVCS}
+\EventYear{2023}
+\EventDate{April 5, 2023}
+\EventLocation{Delft, The Netherlands}
 \EventLogo{}
-\SeriesVolume{42}
-\ArticleNo{23}
+\SeriesVolume{109}
+\ArticleNo{1}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Recommended way to typeset C++ from the C++ ISO committee:
 \newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\small\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\small\bf +}}
 
 \lstset{language=haskell, basicstyle=\scriptsize, breaklines=true,
@@ -97,7 +98,6 @@
   escapeinside={\%*}{*)}}
 
 \usepackage{dashbox}
-\usepackage[inline]{enumitem}
 
 \begin{document}
 
@@ -206,20 +206,15 @@ value comparable, if not greater than, the actual code.
 
 Well understood also applies to \textbf{documentation} aimed
 at humans~\cite{parnas2011precise}. The same three items of
-Definition~\ref{defn:well-understood} can be retargetted to apply to
-documentation as follows:
-\begin{enumerate*}
-\item The meaning of the models is understood at a human-pedagogical level,
-i.e., it is explainable.
-\item Combining models is explainable. Thus, the act of combining models
-must simultaneously
-operate on mathematical representations and on explanations. This requires that
-English descriptions also be captured in the same manner as the
-formal-mathematical knowledge.
-\item The refinement steps that are performed due to making
+Definition~\ref{defn:well-understood} can be retargeted to apply to
+documentation as follows: (1) The meaning of the models is understood at a
+human-pedagogical level, i.e., it is explainable.  (2)~Combining models is
+explainable. Thus, the act of combining models must simultaneously operate on
+mathematical representations and on explanations. This requires that English
+descriptions also be captured in the same manner as the formal-mathematical
+knowledge.  (3)~The refinement steps that are performed due to making
 software-oriented decisions should be captured with a similar mechanism, and
 also include English explanations.
-\end{enumerate*}
 
 Coupling together well-understood domains and its documentation, we
 obtain what we call triform theories.

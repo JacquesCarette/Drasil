@@ -20,7 +20,7 @@ makeMd = vcat . punctuate secSep . filtEmp
 -- | Example title, authors, and maybe purpose section.
 introInfo :: String -> [String] -> Maybe String -> Maybe String -> Doc
 introInfo name auths descr motiv = introSec (text name) (prepName name)
-  (listToDoc auths) (length auths) (maybePurpDoc descr)
+  (listToDoc auths) (length auths) (maybeDoc "Purpose" descr) (maybeDoc "Motivation" motiv)
 
 -- | Helper for prepending the example name.
 prepName :: String -> Doc
@@ -32,9 +32,9 @@ instDoc :: [String] -> Doc
 instDoc cfp = regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> configSec cfp 
 
--- | Helper for creating optional Purpose subsection as Doc
-maybePurpDoc :: Maybe String -> Doc
-maybePurpDoc = maybe empty (\descr-> doubleSep <> text "> Purpose:" <+> text descr)
+-- | Helper for creating optional Itro subsection as Doc
+maybeDoc :: String -> Maybe String -> Doc
+maybeDoc role = maybe empty (\content-> doubleSep <> text (role ++ ":") <+> text content)
 
 -- | 'What' section in generated README file, does not display if empty
 whatInfo :: Maybe String -> Doc
@@ -130,9 +130,9 @@ bkQuote3 = text "```"
 -- FIXME as explained in #2224 we still need to add in the purpose section, 
 -- this could be done by adding a third parameter to introSec
 -- | Constructs introduction section from header and message.
-introSec ::  Doc -> Doc -> Doc -> Int -> Doc -> Doc
-introSec hd name ms1 l descr = text "#" <+> hd <+> contSep <> name <> doubleSep <> 
-  (if l == 1 then text "> Author:" else text "> Authors: ") <+> ms1 <> descr
+introSec ::  Doc -> Doc -> Doc -> Int -> Doc -> Doc -> Doc
+introSec hd name ms1 l descr motiv = text "#" <+> hd <+> contSep <> name <> doubleSep <> 
+  (if l == 1 then text "> Author:" else text "> Authors: ") <+> ms1 <> descr <> motiv
 
 -- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc

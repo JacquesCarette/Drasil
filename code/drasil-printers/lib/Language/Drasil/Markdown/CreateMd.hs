@@ -20,7 +20,7 @@ makeMd = vcat . punctuate secSep . filtEmp
 -- | Example title, authors, and maybe purpose section.
 introInfo :: String -> [String] -> Maybe String -> Maybe String -> Doc
 introInfo name auths descr motiv = introSec (text name) (prepName name)
-  (listToDoc auths) (length auths) (maybeDoc "Purpose" descr) (maybeDoc "Motivation" motiv)
+  (listToDoc auths) (length auths) (maybeSub "Purpose" descr) (maybeSub "Motivation" motiv)
 
 -- | Helper for prepending the example name.
 prepName :: String -> Doc
@@ -32,9 +32,10 @@ instDoc :: [String] -> Doc
 instDoc cfp = regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> configSec cfp 
 
--- | Helper for creating optional Itro subsection as Doc
-maybeDoc :: String -> Maybe String -> Doc
-maybeDoc role = maybe empty (\content-> doubleSep <> text (role ++ ":") <+> text content)
+-- | Helper for creating optional Intro subsection as Doc
+maybeSub :: String -> Maybe String -> Doc
+maybeSub role = maybe empty (\content-> doubleSep <> text ("> " ++ role ++ ":") 
+  <+> text content)
 
 -- | 'What' section in generated README file, does not display if empty
 whatInfo :: Maybe String -> Doc

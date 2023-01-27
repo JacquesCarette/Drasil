@@ -24,7 +24,7 @@ introInfo name auths descr motiv = introSec (text name) (prepName name)
 
 -- | Helper for prepending the example name.
 prepName :: String -> Doc
-prepName name = text "> The program documented here is called" <+> text name
+prepName name = text "> The program documented here is called" <+> text name <> text "."
 
 -- | Instruction section, contains 3 paragraphs, Running, Building and Config Files.
 -- The Config file section is only displayed if there are configuration files.

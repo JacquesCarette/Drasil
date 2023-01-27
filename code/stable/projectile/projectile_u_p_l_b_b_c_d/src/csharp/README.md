@@ -1,4 +1,6 @@
 # Projectile 
+> The program documented here is called Projectile
+
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
 ------------------------------------------------------------

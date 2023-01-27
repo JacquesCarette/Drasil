@@ -89,9 +89,12 @@ mkSRS = [TableOfContents,
   Bibliography
   ]
 
+motivation :: Sentence
+motivation = foldlSent [atStart projectile, phrase motion, S "is a common" +:+
+  phraseNP (problem `in_` physics)]
+
 justification, scope :: Sentence
-justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
-  phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
+justification = foldlSent [motivation, S "Therefore, it is useful to have a",
   phrase program, S "to solve and model these types of" +:+. plural problem,
   atStartNP (the program), S "documented here is called", phrase projectileTitle]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
@@ -108,7 +111,7 @@ si = SI {
   _authors     = [samCrawford, brooks, spencerSmith],
   _purpose     = [],
   _background  = [],
-  _motivation  = [],
+  _motivation  = [motivation],
   _scope       = [],
   _sftwr_rev   = [],
   _quants      = symbols,

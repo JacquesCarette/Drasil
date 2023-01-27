@@ -176,6 +176,9 @@ si = SI {
   _authors     = [thulasi],
   _purpose     = [],
   _background  = [],
+  _motivation  = [],
+  _scope       = [],
+  _sftwr_rev   = [],
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.

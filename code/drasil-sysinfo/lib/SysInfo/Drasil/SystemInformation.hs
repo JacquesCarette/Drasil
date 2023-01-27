@@ -10,7 +10,7 @@ module SysInfo.Drasil.SystemInformation (
   -- ** Types
   SystemInformation(..), Block(..),
   -- ** Lenses
-  instModels, datadefs, configFiles, inputs, purpose, background, scope, sftwe_rev,
+  instModels, datadefs, configFiles, inputs, purpose, background, scope, sftwr_rev,
   motivation, defSequence, constraints, constants, sysinfodb, usedinfodb,
   -- ** Lookup Functions
   citeDB, citationsFromBibMap,
@@ -51,7 +51,7 @@ data SystemInformation where
   , _purpose     :: Purpose
   , _background  :: Background
   , _scope       :: Scope
-  , _sftwe_rev   :: SoftwareReview
+  , _sftwr_rev   :: SoftwareReview
   , _motivation  :: Motivation
   , _quants      :: [e]
   , _concepts    :: [f]

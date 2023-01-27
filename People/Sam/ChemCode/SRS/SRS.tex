@@ -139,13 +139,13 @@ A program for solving chemistry problems}
 
 ~\newpage
 
-\section*{Revision History}
+\section*{Revision History} \label{sec_revHist}
 
 \begin{tabularx}{\textwidth}{p{2.5cm}p{1.5cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Jan. 21, 2023 & 0.0 & Start document, fill in title page, and add references\\
-							& 0.1 & Fill in Problem Description and Goal Statements sections, as 
+							& 0.1 & Fill in \nameref{sec_probDesc} and \nameref{sec_goals} sections, as 
 							well as all relevant definitions\\
 Jan. 22, 2023 & 0.1.1 & Replace the notion of ``fractional oxidation state'' with
 							``nonstoichiometric compound''\\
@@ -173,6 +173,7 @@ Jan. 26, 2023 & 0.3 & Add \nameref{sec_LCs} from Problem Statement, add
 							presentation\\
 							& 0.3.2 & Fill in \nameref{sec_scope}, fix \aref{A_elemCompDiff} and 
 							change ``infeasible'' to ``feasible''\\
+Jan. 27, 2023 & 0.3.3 & Improve section referencing in \nameref{sec_revHist}\\
 \bottomrule
 \end{tabularx}
 
@@ -367,8 +368,8 @@ expect in the Introduction section.}
 \subsection{Purpose of Document}
 
 \plt{This section summarizes the purpose of the SRS document.  It does not focus
-  on the problem itself.  The problem is described in the ``Problem
-  Description'' section (Section~\ref{Sec_pd}).  The purpose is for the document
+  on the problem itself.  The problem is described in \nameref{sec_probDesc}.
+  The purpose is for the document
   in the context of the project itself, not in the context of this course.
   Although the ``purpose'' of the document is to get a grade, you should not
   mention this.  Instead, ``fake it'' as if this is a real project.  The purpose
@@ -501,7 +502,7 @@ specification, which presents the assumptions, theories, definitions and finally
 the instance models.  \plt{Add any project specific details that are relevant
   for the section overview.}
 
-\subsection{Problem Description} \label{Sec_pd}
+\subsection{Problem Description} \label{sec_probDesc}
 
 \progname{} is intended to balance chemical equations (including ones with
 nonstoichiometric compounds; see \nameref{sec_termsDefs}) so
@@ -576,7 +577,7 @@ includes the following elements:
 % \end{center}
 % \end{figure}
 
-\subsubsection{Goal Statements}
+\subsubsection{Goal Statements} \label{sec_goals}
 Given a representation of a chemical equation, the goal statements 
 of \progname{} are:
 
@@ -917,7 +918,7 @@ models. \plt{Modify the examples below for your problem, and add additional
   GDs.  This section should remain abstract.  The SRS should specify the
   requirements without considering the implementation.}
 
-This section transforms the problem defined in Section~\ref{Sec_pd} into 
+This section transforms the problem defined in \nameref{sec_probDesc} into 
 one which is expressed in mathematical terms. It uses concrete symbols defined 
 in Section~\ref{sec_datadef} to replace the abstract symbols in the models 
 identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}.

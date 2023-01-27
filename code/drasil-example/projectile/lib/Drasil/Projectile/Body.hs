@@ -89,6 +89,11 @@ mkSRS = [TableOfContents,
   Bibliography
   ]
 
+background :: Sentence
+background = foldlSent [S "Common examples of", phrase projectile, phrase motion, S "include",
+    S "ballistics", plural problem, S "(missiles and bullets)" `S.andThe` S "flight of the balls",
+    S "in various sports (baseball, golf, football, etc.)"]
+
 motivation :: Sentence
 motivation = foldlSent [atStart projectile, phrase motion, S "is a common" +:+
   phraseNP (problem `in_` physics)]
@@ -110,7 +115,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
   _purpose     = [],
-  _background  = [],
+  _background  = [background],
   _motivation  = [motivation],
   _scope       = [],
   _sftwr_rev   = [],

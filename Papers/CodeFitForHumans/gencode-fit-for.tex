@@ -8,6 +8,8 @@
 \addbibresource{../Bib/drasil.bib}
 \addbibresource{../Bib/codegen.bib}
 
+\usepackage{listings}  % for making code pretty
+
 %%%%%%%%%%%%%%%%%%
 %% These data MUST be filled for your submission. (see 5.3)
 \paperdetails{
@@ -47,8 +49,7 @@
 \author[a]{Spencer Smith}
 \affiliation[a]{Department of Computing and Software, McMaster University, Canada}
 
-\keywords{Code generation, documentation, layout, knowledge capture} % please provide 1--5 keywords
-
+\keywords{Code generation, documentation, layout, knowledge capture}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Please go to https://dl.acm.org/ccs/ccs.cfm and generate your Classification
@@ -135,6 +136,22 @@ worthwhile.
 \label{sec:problem}
 
 Subsection of intro? But give examples, well illustrated. See outline.txt.
+
+% - give examples of increasingly fit-for-humans code
+%   - first example:
+%     - multiple versions of code:
+%       - no white-space, obscure identifiers, non-idiomatic, no comment
+%       - + laid out
+%       - + idiomatic (GOOL get us to here)
+%       - + real identifiers
+%       - + proper documentation
+%     - probably give all of the above in one big figure
+%     - accompanying text will give hints as to what's needed to achieve each bit
+%   - second example:
+%     - in multiple languages (probably without documentation, for space reasons? have that online?)
+%     - maybe use HGHC here?
+%   - third example:
+%     - with design choices changed (again, maybe no comments)
 
 \section{Analysis}
 \label{sec:analysis}

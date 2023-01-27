@@ -100,7 +100,17 @@ choiceCombos = [baseChoices,
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
       [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
-  }]
+  },
+  baseChoices {
+    lang = [Python, CSharp],
+    architecture = makeArchit Unmodular Library,
+    dataInfo = makeData Unbundled Inline Const,
+    optFeats = makeOptFeats 
+        (makeDocConfig [] Quiet Hide)
+        (makeLogConfig [] "log.txt")
+        [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+    srsConstraints = makeConstraints Warning Warning
+  } ]
 
 matchToFloats :: SpaceMatch
 matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Rational])

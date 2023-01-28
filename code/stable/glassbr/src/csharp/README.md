@@ -1,5 +1,5 @@
 # GlassBR 
-> The program documented here is called GlassBR
+> The program documented here is called GlassBR.
 
 > Authors:  Nikitha Krithnan, W. Spencer Smith
 

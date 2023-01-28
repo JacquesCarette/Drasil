@@ -1,7 +1,15 @@
 # Projectile 
-> The program documented here is called Projectile
+> The program documented here is called Projectile.
 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
+
+> Purpose: Given the initial velocity vector of the projectile, Projectile determines if the  projectile hits the target.
+
+> Motivation: Projectile motion is a common problem in physics.
+
+------------------------------------------------------------
+## What 
+ Common examples of projectile motion include ballistics problems (missiles and bullets) and the flight of the balls in various sports (baseball, golf, football, etc.).
 
 ------------------------------------------------------------
 ## Version 
